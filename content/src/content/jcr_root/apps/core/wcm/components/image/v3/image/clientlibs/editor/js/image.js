@@ -284,6 +284,7 @@
                 }
 
                 // update the alt field
+                $altTextField.adaptTo("foundation-field").setRequired(!isDecorative.checked);
                 altTextFromPage = $(dialogContentSelector).find(pageImageThumbnailImageSelector).attr("alt");
                 if (imageFromPageImage && imageFromPageImage.checked) {
                     altFromPageTuple.seedTextValue(altTextFromPage);
