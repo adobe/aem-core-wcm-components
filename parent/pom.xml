@@ -379,7 +379,7 @@
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.13</version>
+                    <version>0.16.1</version>
                     <configuration>
                         <excludes combine.children="append">
                             <!--  Used by maven-remote-resources-plugin -->
@@ -492,6 +492,7 @@
             <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
+                <version>0.16.1</version>
             </plugin>
         </plugins>
 
