@@ -131,6 +131,7 @@
             <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
+                <version>0.16.1</version>
                 <configuration>
                     <excludes combine.children="append">
                         <!-- exclude comparison files -->
