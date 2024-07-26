@@ -127,6 +127,7 @@
                         <exclude>**/resources/*.txt</exclude>
                         <exclude>**/*.md</exclude>
                         <exclude>build/</exclude>
+                        <exclude>.wdm.cache/</exclude>
                     </excludes>
                 </configuration>
             </plugin>
