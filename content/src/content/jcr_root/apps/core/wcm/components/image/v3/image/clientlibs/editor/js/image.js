@@ -608,11 +608,7 @@
             mutations.forEach(function(mutation) {
                 if (mutation.type === "attributes") {
                     var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
-                    if (mutation.attributeName === "data-seeded-value" && isAltCheckboxChecked) {
-                        toggleAltTextValidity();
-                    }
-
-                    if (["invalid", "disabled"].includes(mutation.attributeName)) {
+                    if ((mutation.attributeName === "data-seeded-value" && isAltCheckboxChecked) || ["invalid", "disabled"].includes(mutation.attributeName)) {
                         toggleAltTextValidity();
                     }
                 }
