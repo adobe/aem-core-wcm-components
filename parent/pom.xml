@@ -64,7 +64,7 @@
         <mockitio.version>4.8.1</mockitio.version>
         <maven.compiler.source>${aem.java.version}</maven.compiler.source>
         <maven.compiler.target>${aem.java.version}</maven.compiler.target>
-        <aem.selenium.base.it.version>0.2.46</aem.selenium.base.it.version>
+        <aem.selenium.base.it.version>0.2.48</aem.selenium.base.it.version>
         <selenide.version>6.19.1</selenide.version>
         <selenium.version>4.13.0</selenium.version>
     </properties>
@@ -379,7 +379,7 @@
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.13</version>
+                    <version>0.16.1</version>
                     <configuration>
                         <excludes combine.children="append">
                             <!--  Used by maven-remote-resources-plugin -->
@@ -492,6 +492,7 @@
             <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
+                <version>0.16.1</version>
             </plugin>
         </plugins>
 

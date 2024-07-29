@@ -282,10 +282,10 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
 
     @Tag("IgnoreOnSDK")
     @Test
-    @DisplayName("Test : NextGen DM image smart crop : large crop.")
+    @DisplayName("Test : NextGen DM image smart crop : small crop.")
     public void testSmartCropOnNGDMImageV3_SmallCrop() throws TimeoutException, InterruptedException, ClientException {
         addPathtoComponentPolicy(responsiveGridPath, Commons.RT_IMAGE_V3);
-        createComponentPolicy(Commons.RT_IMAGE_V3.substring(Commons.RT_IMAGE_V3.lastIndexOf("/")), new ArrayList<NameValuePair>() {{
+        createComponentPolicy(Commons.RT_IMAGE_V3.substring(Commons.RT_IMAGE_V3.lastIndexOf("/")), new ArrayList<>() {{
             add(new BasicNameValuePair("enableDmFeatures", "true"));
         }});
         imageTests.testSmartCropOnNGDMImageV3("Small");
@@ -298,5 +298,18 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     @DisplayName("Test: set asset from DAM without description as decorative")
     public void testSetAssetWithoutDescriptionAsDecorative() throws TimeoutException, InterruptedException {
         imageTests.testSetAssetWithoutDescriptionAsDecorative(true);
+    }
+    @Tag("IgnoreOn65")
+    @Test
+    @DisplayName("Test: clear asset input field, get Dam info checkboxes become invisible V3")
+    public void testClearAssetInputGetDamInfoCheckboxesNotVisibleSDK() throws InterruptedException, TimeoutException {
+        imageTests.testClearAssetInputGetDamInfoCheckboxesNotVisibleV3("sdk");
+    }
+
+    @Tag("IgnoreOnSDK")
+    @Test
+    @DisplayName("Test: clear asset input field, get Dam info checkboxes become invisible V3")
+    public void testClearAssetInputGetDamInfoCheckboxesNotVisible65() throws InterruptedException, TimeoutException {
+        imageTests.testClearAssetInputGetDamInfoCheckboxesNotVisibleV3("6.5");
     }
 }

@@ -88,6 +88,8 @@
                 $cqFileUpload.on("click", "[coral-fileupload-clear]", function() {
                     altTuple.reset();
                     captionTuple.reset();
+                    captionTuple.hideCheckbox(true);
+                    altTuple.hideCheckbox(true);
                 });
                 $cqFileUpload.on("coral-fileupload:fileadded", function() {
                     if (isDecorative) {
@@ -132,11 +134,15 @@
     $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
         selector: altInputSelector,
         validate: function() {
-            var seededValue = $(altInputSelector).attr("data-seeded-value");
-            var isAltCheckboxChecked = document.querySelector('coral-checkbox[name="./altValueFromDAM"]').checked;
+            var seededValue = document.querySelector(altInputSelector).getAttribute("data-seeded-value");
+            var altFromDAM = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
+            var isAltFromDAMChecked = altFromDAM.checked;
+            var isAltFromDAMDisabled = altFromDAM.disabled;
             var isDecorativeChecked = document.querySelector("coral-checkbox[name='./isDecorative']").checked;
             var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
-            if (isAltCheckboxChecked && !seededValue && !isDecorativeChecked) {
+
+            if (!isDecorativeChecked && !seededValue &&
+                (isAltFromDAMChecked && !isAltFromDAMDisabled)) {
                 return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
             }
         }

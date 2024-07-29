@@ -661,7 +661,7 @@ public class PageTests {
         propertiesPage.clickTab("blueprint", BlueprintTab.class);
 
         rolloutDialog = blueprintTab.rollout();
-
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         // check rollout now
         rolloutDialog.rolloutNow();
 
