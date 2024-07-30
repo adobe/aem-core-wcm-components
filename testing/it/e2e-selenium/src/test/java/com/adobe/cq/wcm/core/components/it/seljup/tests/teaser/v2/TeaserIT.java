@@ -433,6 +433,7 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
         assertEquals(editDialog.getAssetWithoutDescriptionErrorMessage(), "Error: Please provide an asset which has a description that can be used as alt text.");
         editDialog.checkImageFromPageImage();
         editDialog.checkAltTextFromAssetDescription();
+        editDialog.setALTText("alt");
         Commons.saveConfigureDialog();
         Commons.switchContext("ContentFrame");
         assertTrue(!teaser.isImagePresent(testPage), "Image should not be present");
