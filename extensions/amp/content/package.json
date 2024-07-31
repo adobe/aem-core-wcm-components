@@ -1,6 +1,6 @@
 {
     "name": "core.wcm.components.extensions.amp-content",
-    "version": "2.26.0",
+    "version": "2.26.1-SNAPSHOT",
     "description": "Adobe Experience Manager Core WCM Components AMP Extension Content Package",
     "license": "Apache-2.0",
     "private": false,
