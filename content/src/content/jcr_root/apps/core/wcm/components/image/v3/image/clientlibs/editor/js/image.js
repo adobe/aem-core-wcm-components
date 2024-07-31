@@ -196,7 +196,7 @@
         validate: function() {
             var seededValue = document.querySelector(altInputSelector).getAttribute("data-seeded-value");
             var imageFromPageImage = document.querySelector('coral-checkbox[name="./imageFromPageImage"]');
-            var isImageFromPageImageChecked = imageFromPageImage ? imageFromPageImage.checked || false;
+            var isImageFromPageImageChecked = imageFromPageImage ? (imageFromPageImage.checked || false) : false;
             var altFromDAM = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
             var isAltFromDAMChecked = altFromDAM.checked;
             var isAltFromDAMDisabled = altFromDAM.disabled;
