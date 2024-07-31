@@ -85,10 +85,8 @@
                     <detectJavaApiLink>false</detectJavaApiLink>
                     <links>
                         <link>https://docs.oracle.com/javase/${aem.java.version}/docs/api/</link>
-                        <link>https://docs.oracle.com/javaee/7/api/</link>
                         <link>https://docs.adobe.com/docs/en/spec/jsr170/javadocs/jcr-2.0/</link>
                         <link>https://sling.apache.org/apidocs/sling9/</link>
-                        <link>https://helpx.adobe.com/experience-manager/6-5/sites/developing/using/reference-materials/javadoc/</link>
                         <link>https://jackrabbit.apache.org/api/2.12/</link>
                         <link>https://osgi.org/javadoc/r6/core/</link>
                         <link>https://osgi.org/javadoc/r6/annotation/</link>
@@ -359,10 +357,8 @@
                         <detectJavaApiLink>false</detectJavaApiLink>
                         <links>
                             <link>https://docs.oracle.com/javase/${aem.java.version}/docs/api/</link>
-                            <link>https://docs.oracle.com/javaee/7/api/</link>
                             <link>https://docs.adobe.com/docs/en/spec/jsr170/javadocs/jcr-2.0/</link>
                             <link>https://sling.apache.org/apidocs/sling9/</link>
-                            <link>https://helpx.adobe.com/experience-manager/6-5/sites/developing/using/reference-materials/javadoc/</link>
                             <link>https://jackrabbit.apache.org/api/2.12/</link>
                             <link>https://osgi.org/javadoc/r6/core/</link>
                             <link>https://osgi.org/javadoc/r6/annotation/</link>
