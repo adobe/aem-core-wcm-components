@@ -31,7 +31,6 @@ public class TeaserEditDialog {
     private static String titleFromPage = ".cmp-teaser__editor input[name='./titleFromPage']";
     private static String preTitle = ".cmp-teaser__editor input[name='./pretitle']";
     private static String title = ".cmp-teaser__editor input[name='./jcr:title']";
-    private static String altText = ".cmp-teaser__editor input[name='./alt']";
     private static String descriptionFromPage = ".cmp-teaser__editor input[name='./descriptionFromPage']";
     private static String description = ".cmp-teaser__editor div[name='./jcr:description']";
     private static String actionsEnabled = ".cmp-teaser__editor coral-checkbox[name='./actionsEnabled']";
@@ -87,11 +86,6 @@ public class TeaserEditDialog {
     public void setDescription(String value) {
         $(description).clear();
         $(description).sendKeys(value);
-    }
-
-    public void setALTText(String value) {
-        $(altText).clear();
-        $(altText).sendKeys(value);
     }
 
     public void clickTitleFromPage() {
