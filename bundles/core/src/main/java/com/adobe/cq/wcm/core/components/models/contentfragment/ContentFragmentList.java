@@ -90,6 +90,13 @@ public interface ContentFragmentList  extends Component {
     String PN_SORT_ORDER = "sortOrder";
 
     /**
+     * Name of the optional resource property that gives the option to translate the element titles with i18n
+     *
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.6.0
+     */
+    String PN_USE_I18N_FOR_ELEMENT_TITLE = "useI18nForElementTitle";
+
+    /**
      * Returns a list of {@link DAMContentFragment content fragments}.
      *
      * @return the list of content fragments
@@ -110,5 +117,15 @@ public interface ContentFragmentList  extends Component {
     @Override
     default String getExportedType() {
         return "";
+    }
+
+    /**
+     * Use i18n to translate the content fragment title
+     *
+     * @return true if i18n can be used to translate the content fragment title
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.6.0
+     */
+    default boolean useI18nForElementTitle() {
+        return false;
     }
 }

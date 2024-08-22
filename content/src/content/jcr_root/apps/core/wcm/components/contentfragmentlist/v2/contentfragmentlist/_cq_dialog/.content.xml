@@ -138,6 +138,12 @@
                                             jcr:primaryType="nt:unstructured"
                                             cmp-field-path="${requestPathInfo.resourcePath}"/>
                                     </elementNames>
+                                    <useI18nForElementTitle
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        text="Use i18n labels to translate the content fragment element titles"
+                                        name="./useI18nForElementTitle"
+                                        value="true"/>
                                 </items>
                             </column>
                         </items>

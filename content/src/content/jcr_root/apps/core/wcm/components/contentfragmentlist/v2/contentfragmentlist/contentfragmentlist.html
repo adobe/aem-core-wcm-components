@@ -18,7 +18,7 @@
     <section data-sly-list.fragment="${list.listItems}"
              id="${list.id}"
              class="cmp-contentfragmentlist">
-        <sly data-sly-call="${fragmentTemplate.contentFragment @ fragment=fragment, wcmmode=wcmmode}"></sly>
+        <sly data-sly-call="${fragmentTemplate.contentFragment @ fragment=fragment, wcmmode=wcmmode, useI18nForElementTitle=list.useI18nForElementTitle}"></sly>
     </section>
 </sly>
 
