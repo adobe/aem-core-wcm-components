@@ -302,7 +302,7 @@
         var a = document.createElement("a");
         a.href = href;
         return a.pathname;
-    }
+    };
 
     Search.prototype._markResults = function() {
         var nodeList = this._elements.results.querySelectorAll(selectors.item.self);
