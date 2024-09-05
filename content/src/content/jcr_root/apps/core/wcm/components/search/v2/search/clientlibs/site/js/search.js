@@ -301,7 +301,7 @@
     Search.prototype._safeHref = function(href) {
         var a = document.createElement("a");
         a.href = href;
-        return a.pathname;
+        return encodeURI(a.pathname);
     };
 
     Search.prototype._markResults = function() {
