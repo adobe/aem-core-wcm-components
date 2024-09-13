@@ -187,12 +187,14 @@
         var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");
         if (cmpChildrenEditor) {
             if (singleExpansion) {
-                expandedSelect.items.add({
-                    selected: (selectedValues.length === 0),
-                    content: {
-                        textContent: Granite.I18n.get("None")
-                    }
-                });
+                if(!expandedSelect.items._container.textContent.includes("None")){
+                    expandedSelect.items.add({
+                        selected: (selectedValues.length === 0),
+                        content: {
+                            textContent: Granite.I18n.get("None")
+                        }
+                    });
+                }
                 expandedSelect.items.first().set("value", null, true);
             }
             cmpChildrenEditor.items().forEach(function(item) {
