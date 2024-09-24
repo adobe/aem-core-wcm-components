@@ -50,12 +50,12 @@
         <aem.port>4502</aem.port>
         <aem.publish.host>localhost</aem.publish.host>
         <aem.publish.port>4503</aem.publish.port>
-        <aem.contextPath />
+        <aem.contextPath/>
         <sling.user>admin</sling.user>
         <sling.password>admin</sling.password>
         <vault.user>admin</vault.user>
         <vault.password>admin</vault.password>
-        <slf4j.version>1.7.25</slf4j.version>
+        <slf4j.version>1.7.36</slf4j.version>
         <aem.java.version>11</aem.java.version>
         <jacoco.version>0.8.8</jacoco.version>
         <frontend-maven-plugin.version>1.11.3</frontend-maven-plugin.version>
