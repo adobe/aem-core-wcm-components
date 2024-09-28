@@ -194,11 +194,11 @@ public class AdaptiveImageServletMappingConfigurationFactory {
 
     @Override
     public String toString() {
-    	return String.format("{resourceTypes: %s, selectors: %s, extensions: %s, defaultResizeWidth: %s, deliverExistingRenditionsViaRedirect: %s}",
-    			resourceTypes.toString(),
-    			selectors.toString(),
-    			extensions.toString(),
-    			defaultResizeWidth,
-    			deliverExistingRenditionsViaRedirect);
+        return String.format("{resourceTypes: %s, selectors: %s, extensions: %s, defaultResizeWidth: %s, deliverExistingRenditionsViaRedirect: %s}",
+            resourceTypes.toString(),
+            selectors.toString(),
+            extensions.toString(),
+            defaultResizeWidth,
+            deliverExistingRenditionsViaRedirect);
     }
 }
