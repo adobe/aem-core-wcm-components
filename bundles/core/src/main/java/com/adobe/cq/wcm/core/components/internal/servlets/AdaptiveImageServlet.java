@@ -395,23 +395,14 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             LOGGER.debug("GIF or SVG file detected; will render the original file.");
             
             try {
-            Node n = imageFile.adaptTo(Node.class);
-            if (n.isNodeType("nt:file")) {
-                deliverFile(response, imageFile, imageType, imageName);
-            }
+                Node n = imageFile.adaptTo(Node.class);
+                if (n != null && n.isNodeType("nt:file")) {
+                    deliverFile(response, imageFile, imageType, imageName);
+                    return;
+                }
             } catch (RepositoryException e) {
             	throw new IOException(String.format("cannot deliver file %s", imageFile.getPath()),e);
             }
-            
-            
-            Asset asset = imageFile.adaptTo(Asset.class);
-            if (asset != null) {
-                deliverRendition(response, asset.getOriginal(), imageType, imageName);
-            } else {
-                LOGGER.warn("no original rendition available for " + imageFile.getPath());
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            }
-            return;
         }
 
         try (InputStream is = imageFile.adaptTo(InputStream.class)) {
@@ -706,9 +697,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      */
     private void deliverFile(@NotNull SlingHttpServletResponse response, @NotNull Resource fileResource,
             String mimetype, String fileName) throws IOException, RepositoryException {
-       Property p = fileResource.adaptTo(Node.class).getProperty("jcr:content/jcr:data");
-       if (p != null) {
-           Binary originalBinary = p.getBinary();
+       Node n = fileResource.adaptTo(Node.class);
+       if (n != null && n.getProperty("jcr:content/jcr:data") != null) {
+           Binary originalBinary = n.getProperty("jcr:content/jcr:data").getBinary();
            final boolean downloadable = (originalBinary instanceof BinaryDownload);
            if (this.deliverExistingRenditionsViaRedirect && downloadable) {
                BinaryDownload binaryDownload = (BinaryDownload) originalBinary;
