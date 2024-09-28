@@ -32,7 +32,10 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.jcr.Binary;
+import javax.jcr.Node;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
+import javax.jcr.ValueFormatException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
@@ -390,6 +393,17 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         if ("gif".equalsIgnoreCase(mimeTypeService.getExtension(imageType))
                 || "svg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
             LOGGER.debug("GIF or SVG file detected; will render the original file.");
+            
+            try {
+            Node n = imageFile.adaptTo(Node.class);
+            if (n.isNodeType("nt:file")) {
+                deliverFile(response, imageFile, imageType, imageName);
+            }
+            } catch (RepositoryException e) {
+            	throw new IOException(String.format("cannot deliver file %s", imageFile.getPath()),e);
+            }
+            
+            
             Asset asset = imageFile.adaptTo(Asset.class);
             if (asset != null) {
                 deliverRendition(response, asset.getOriginal(), imageType, imageName);
@@ -656,7 +670,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         if (this.deliverExistingRenditionsViaRedirect && downloadable) {
             BinaryDownload binaryDownload = (BinaryDownload) originalBinary;
             BinaryDownloadOptions downloadOptions = BinaryDownloadOptions.builder()
-                    .withMediaType(rendition.getMimeType())
+                    .withMediaType(contentType)
                     .withFileName(imageName)
                     .withDispositionTypeAttachment()
                     .build();
@@ -672,15 +686,58 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 response.sendRedirect(uri.toString());
                 return;
             }
-        } else {
-            // fallback
-            try (InputStream is = rendition.getStream()) {
-                if (is != null) {
-                    stream(response, is, rendition.getMimeType(), imageName);
-                }
-            }
+        }
+        // fallback
+        try (InputStream is = rendition.getStream()) {
+        	if (is != null) {
+        		stream(response, is, contentType, imageName);
+        	}
         }
     }
+    
+    /**
+     * Deliver a file resource (typically backed by an nt:file node in JCR)
+     * @param response the response
+     * @param fileResource the file resource
+     * @param fileName the name of the file (used in the redirect)
+     * @param mimetype the actual mimetype
+     * @throws IOException
+     * @throws RepositoryException
+     */
+    private void deliverFile(@NotNull SlingHttpServletResponse response, @NotNull Resource fileResource,
+            String mimetype, String fileName) throws IOException, RepositoryException {
+       Property p = fileResource.adaptTo(Node.class).getProperty("jcr:content/jcr:data");
+       if (p != null) {
+           Binary originalBinary = p.getBinary();
+           final boolean downloadable = (originalBinary instanceof BinaryDownload);
+           if (this.deliverExistingRenditionsViaRedirect && downloadable) {
+               BinaryDownload binaryDownload = (BinaryDownload) originalBinary;
+               BinaryDownloadOptions downloadOptions = BinaryDownloadOptions.builder()
+                       .withMediaType(mimetype)
+                       .withFileName(fileName)
+                       .withDispositionTypeAttachment()
+                       .build();
+               URI uri = null;
+
+               try {
+                   uri = binaryDownload.getURI(downloadOptions);
+               } catch (RepositoryException e) {
+                   LOGGER.error("error getting binary download URI for asset: " + fileResource.getPath(), e);
+               }
+               if (uri != null) {
+                   response.sendRedirect(uri.toString());
+                   return;
+               }
+           }
+       }
+       // fallback
+       try (InputStream is = fileResource.adaptTo(InputStream.class)) {
+       	if (is != null) {
+       		stream(response, is, mimetype, fileName);
+       	}
+       }
+   }
+    
 
     /**
      * Stream an image from the given input stream.
