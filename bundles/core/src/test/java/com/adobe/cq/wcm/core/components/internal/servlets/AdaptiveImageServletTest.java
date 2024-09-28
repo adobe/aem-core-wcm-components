@@ -73,6 +73,8 @@ import com.google.common.net.HttpHeaders;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.slf4j.LoggerFactory;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mock;
@@ -98,6 +100,9 @@ class AdaptiveImageServletTest extends AbstractImageTest {
     protected static final String PNG_SMALL_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_SMALL_BINARY_NAME;
     private static final String FEATURED_IMAGE_PATH = "/content/test-featured-image/jcr:content/cq:featuredimage/1490005239000/" + PNG_IMAGE_BINARY_NAME;
 
+    private static final String BLOBSTORE_BASE = "https://blostore.local/blostore/";
+    
+    
     @BeforeEach()
     void setUp(TestInfo t) throws Exception {
         internalSetUp(TEST_BASE);
@@ -554,11 +559,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         servlet.doGet(request, response);
-        Assertions.assertTrue(response.getHeader(HttpHeaders.CONTENT_DISPOSITION).startsWith("inline"));
-        ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
-        InputStream directStream =
-                this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.gif");
-        Assertions.assertTrue(IOUtils.contentEquals(stream, directStream));
+        assertValidRedirectToBlobStore(response, "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif/jcr:content/renditions/original");
     }
 
     @Test
@@ -947,13 +948,8 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix(TEMPLATE_IMAGE_PATH.replace(TEMPLATE_PATH, "") + "/1490005239000.png");
         servlet.doGet(request, response);
-        Assertions.assertEquals(200, response.getStatus(), "Expected a 200 response code.");
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(response.getOutput());
-        BufferedImage image = ImageIO.read(byteArrayInputStream);
-        Dimension expectedDimension = new Dimension(ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH);
-        Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
-        Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
-        Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
+        // deliver a redirect to the 1280x1280 renditions
+        assertValidRedirectToBlobStore(response,  "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png/jcr:content/renditions/cq5dam.web.1280.1280.png");
     }
 
     @Test
@@ -1445,5 +1441,13 @@ class AdaptiveImageServletTest extends AbstractImageTest {
             throw new UnsupportedOperationException();
         }
     }
+    
+    private void assertValidRedirectToBlobStore(MockSlingHttpServletResponse response, String expectedLocation ) {
+    	assertEquals(302, response.getStatus());
+    	final String locationHeader = response.getHeader("Location");
+    	assertNotNull(locationHeader);
+    	assertEquals(BLOBSTORE_BASE + expectedLocation, locationHeader);
+    }
+    
 
 }
