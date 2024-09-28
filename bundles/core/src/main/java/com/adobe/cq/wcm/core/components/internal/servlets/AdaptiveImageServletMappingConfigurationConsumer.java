@@ -171,7 +171,8 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
                                         assetStore,
                                         metrics,
                                         oldAISDefaultResizeWidth > 0 ? oldAISDefaultResizeWidth : config.getDefaultResizeWidth(),
-                                        config.getMaxSize()),
+                                        config.getMaxSize(),
+                                        config.getDeliverExistingRenditionsViaRedirect()),
                                 properties
                         )
                 );

@@ -115,6 +115,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String SELECTOR_WIDTH_KEY = "width";
     private int defaultResizeWidth;
     private int maxInputWidth;
+    
+    protected boolean deliverExistingRenditionsViaRedirect;
 
     private AdaptiveImageServletMetrics metrics;
 
@@ -123,12 +125,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private transient AssetStore assetStore;
 
     public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics,
-            int defaultResizeWidth, int maxInputWidth) {
+            int defaultResizeWidth, int maxInputWidth, boolean deliverRenditionsViaRedirect) {
         this.mimeTypeService = mimeTypeService;
         this.assetStore = assetStore;
         this.metrics = metrics;
         this.defaultResizeWidth = defaultResizeWidth > 0 ? defaultResizeWidth : DEFAULT_RESIZE_WIDTH;
         this.maxInputWidth = maxInputWidth > 0 ? maxInputWidth : DEFAULT_MAX_SIZE;
+        this.deliverExistingRenditionsViaRedirect = deliverRenditionsViaRedirect;
     }
 
     @Override
@@ -650,7 +653,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
              String imageName) throws IOException {
         Binary originalBinary = rendition.getBinary();
         final boolean downloadable = (originalBinary instanceof BinaryDownload);
-        if (USE_DELIVERY_VIA_BLOBSTORE && downloadable) {
+        if (this.deliverExistingRenditionsViaRedirect && downloadable) {
             BinaryDownload binaryDownload = (BinaryDownload) originalBinary;
             BinaryDownloadOptions downloadOptions = BinaryDownloadOptions.builder()
                     .withMediaType(rendition.getMimeType())

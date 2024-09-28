@@ -80,6 +80,13 @@ public class AdaptiveImageServletMappingConfigurationFactory {
                         "it and will throw an exception, to avoid running out of memory."
         )
         int maxSize() default AdaptiveImageServlet.DEFAULT_MAX_SIZE;
+        
+        
+        @AttributeDefinition(
+                name="Use Redirects",
+                description="If enabled, when an existing rendition can be used, a redirect to download URI of the blob is "
+                    + "sent; otherwise the binary will be streamed")
+        boolean deliverExistingRenditionsViaRedirect() default false;
 
     }
 
@@ -92,6 +99,8 @@ public class AdaptiveImageServletMappingConfigurationFactory {
     private int defaultResizeWidth;
 
     private int maxSize;
+    
+    private boolean deliverExistingRenditionsViaRedirect;
 
     /**
      * Invoked when a configuration is created or modified.
@@ -106,6 +115,7 @@ public class AdaptiveImageServletMappingConfigurationFactory {
         extensions = getValues(config.extensions());
         defaultResizeWidth = config.defaultResizeWidth();
         maxSize = config.maxSize();
+        deliverExistingRenditionsViaRedirect = config.deliverExistingRenditionsViaRedirect();
     }
 
     /**
@@ -154,6 +164,15 @@ public class AdaptiveImageServletMappingConfigurationFactory {
     public int getMaxSize() {
         return maxSize;
     }
+    
+    /**
+     * Indicates if a redirect to existing binary blobs will sent (if possible) or if the result will always be streamed
+     * @return
+     */
+    public boolean getDeliverExistingRenditionsViaRedirect() {
+    	return deliverExistingRenditionsViaRedirect;
+    }
+    
 
     /**
      * Internal helper for filtering out null and empty values from the configuration options.
@@ -175,7 +194,11 @@ public class AdaptiveImageServletMappingConfigurationFactory {
 
     @Override
     public String toString() {
-        return "{resourceTypes: " + resourceTypes.toString() + ", selectors: " + selectors.toString() + ", extensions: " + extensions
-                .toString() + ", defaultResizeWidth: " + defaultResizeWidth + "}";
+    	return String.format("{resourceTypes: %s, selectors: %s, extensions: %s, defaultResizeWidth: %s, deliverExistingRenditionsViaRedirect: %s}",
+    			resourceTypes.toString(),
+    			selectors.toString(),
+    			extensions.toString(),
+    			defaultResizeWidth,
+    			deliverExistingRenditionsViaRedirect);
     }
 }
