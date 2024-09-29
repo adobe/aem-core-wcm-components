@@ -634,7 +634,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 LOGGER.warn("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px " +
                                 "but the rendition is not of the requested type {}, cannot convert so serving as is",
                         rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth, imageType);
-                deliverRendition(response, rendition.getRendition(), imageType, imageName);
+                deliverRendition(response, rendition.getRendition(), rendition.getMimeType(), imageName);
             } else {
                 LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px " +
                                 "but the rendition is not of the requested type {}, need to convert",
