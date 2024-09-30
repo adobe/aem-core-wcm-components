@@ -117,7 +117,7 @@ class DefaultPathProcessorTest {
         DefaultPathProcessor underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                 "vanityConfig", "shouldBeDefault"));
         assertEquals("/content/site1/en.html", underTest.map(page.getPath() + HTML_EXTENSION, context.request()));
-        assertEquals("https://example.org/content/links/site1/en.html", underTest.externalize(page.getPath() + HTML_EXTENSION, context.request()));
+        assertEquals("https://example.org/content/site1/en.html", underTest.externalize(page.getPath() + HTML_EXTENSION, context.request()));
         context.request().setContextPath("/cp");
         underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                 "vanityConfig", DefaultPathProcessor.VanityConfig.ALWAYS.getValue()));

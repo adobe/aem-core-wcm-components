@@ -25,6 +25,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -246,7 +247,10 @@ public class LinkBuilderImpl implements LinkBuilder {
      */
     @NotNull
     private String getPageLinkURL(@NotNull Page page) {
-        return page.getPath() + HTML_EXTENSION;
+        Resource resource = page.adaptTo(Resource.class);
+        assert resource!=null;
+        ResourceResolver resolver = resource.getResourceResolver();
+        return resolver.map(page.getPath()) + HTML_EXTENSION;
     }
 
     /**
