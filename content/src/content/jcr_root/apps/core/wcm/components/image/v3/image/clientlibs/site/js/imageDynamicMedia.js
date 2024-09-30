@@ -80,7 +80,7 @@
             if (keys.length > 0) {
                 srcset = [];
                 for (var key in autoSmartCrops) {
-                    srcset.push(src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, smartCrops[key]) + " " + key + "w");
+                    srcset.push(src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, smartCrops[key]) + " " + parseInt(key * dpr) + "w");
                 }
             }
             return  srcset.join(",");
