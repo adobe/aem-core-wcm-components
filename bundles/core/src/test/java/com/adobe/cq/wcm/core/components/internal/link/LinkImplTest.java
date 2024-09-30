@@ -19,10 +19,14 @@ import java.util.HashMap;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableMap;
+
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkImpl.*;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
@@ -30,14 +34,17 @@ import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.asser
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
+@ExtendWith(AemContextExtension.class)
 class LinkImplTest {
 
     private static final String URL = "/url.html";
+    
+    private final AemContext context = CoreComponentTestContext.newAemContext();
 
     @Test
     void testValidLink() {
         Link<Page> link = new LinkImpl<>(URL, URL, CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + URL, null, null);
-        assertValidLink(link, URL);
+        assertValidLink(link, URL, context);
         assertNull(link.getReference());
         assertEquals(URL, link.getMappedURL());
     }
@@ -46,7 +53,7 @@ class LinkImplTest {
     void testValidLinkWithTarget() {
         Link<Page> link = new LinkImpl(URL, URL, CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + URL, null,
                 new HashMap<String, String>() {{ put(ATTR_TARGET, "_blank"); }});
-        assertValidLink(link, URL, "_blank");
+        assertValidLink(link, URL, "_blank", context);
         assertNull(link.getReference());
     }
 
@@ -54,7 +61,7 @@ class LinkImplTest {
     void testValidLinkWithoutTarget() {
         Link link = new LinkImpl(URL, URL, CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + URL,null, null);
 
-        assertValidLink(link, URL, (String)null);
+        assertValidLink(link, URL, (String)null, context);
         assertNull(link.getReference());
     }
 
@@ -64,7 +71,7 @@ class LinkImplTest {
         Link<Page> link = new LinkImpl<>(URL, URL, CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + URL, page,
                 new HashMap<String, String>() {{ put(ATTR_TARGET,
                 "_blank"); }});
-        assertValidLink(link, URL, "_blank");
+        assertValidLink(link, URL, "_blank", context);
         assertSame(page, link.getReference());
     }
 
@@ -107,7 +114,7 @@ class LinkImplTest {
         String invalidAttribute = "invalidAttribute";
         Link<Page> link = new LinkImpl<>(URL, URL, CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + URL, page, ImmutableMap.of(invalidAttribute,
                 "invalidValue"));
-        assertValidLink(link, URL);
+        assertValidLink(link, URL,context);
         assertNull(link.getHtmlAttributes().get(invalidAttribute));
     }
 }

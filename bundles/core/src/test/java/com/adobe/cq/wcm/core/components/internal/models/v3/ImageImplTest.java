@@ -300,7 +300,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
             assertEquals(expectedAreas[index][3], area.getHref(), "The image area's href is not as expected.");
             assertEquals(expectedAreas[index][4], area.getTarget(), "The image area's target is not as expected.");
             assertEquals(expectedAreas[index][5], area.getAlt(), "The image area's alt text is not as expected.");
-            assertValidLink(area.getLink(), (String) expectedAreas[index][3], StringUtils.trimToNull((String) expectedAreas[index][4]));
+            assertValidLink(area.getLink(), (String) expectedAreas[index][3], StringUtils.trimToNull((String) expectedAreas[index][4]),context);
             index++;
         }
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE24_PATH));
