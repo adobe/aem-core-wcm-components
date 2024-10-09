@@ -64,6 +64,8 @@
                 var options = CMP.utils.readData(component, IS);
                 that._properties = CMP.utils.setupProperties(options, properties);
                 if (that._properties.dmimage) {
+                    //use encoded src for dynamic media
+                    that._properties.src = options["src"];
                     CMP.image.dynamicMedia.setDMAttributes(component, that._properties);
                 }
             };
