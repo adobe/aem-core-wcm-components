@@ -19,7 +19,7 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.25.5-SNAPSHOT</version>
+    <version>2.27.1-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Parent</name>
     <description>A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.</description>
@@ -64,7 +64,7 @@
         <mockitio.version>4.8.1</mockitio.version>
         <maven.compiler.source>${aem.java.version}</maven.compiler.source>
         <maven.compiler.target>${aem.java.version}</maven.compiler.target>
-        <aem.selenium.base.it.version>0.2.46</aem.selenium.base.it.version>
+        <aem.selenium.base.it.version>0.2.48</aem.selenium.base.it.version>
         <selenide.version>6.19.1</selenide.version>
         <selenium.version>4.13.0</selenium.version>
     </properties>
@@ -85,10 +85,8 @@
                     <detectJavaApiLink>false</detectJavaApiLink>
                     <links>
                         <link>https://docs.oracle.com/javase/${aem.java.version}/docs/api/</link>
-                        <link>https://docs.oracle.com/javaee/7/api/</link>
                         <link>https://docs.adobe.com/docs/en/spec/jsr170/javadocs/jcr-2.0/</link>
                         <link>https://sling.apache.org/apidocs/sling9/</link>
-                        <link>https://helpx.adobe.com/experience-manager/6-5/sites/developing/using/reference-materials/javadoc/</link>
                         <link>https://jackrabbit.apache.org/api/2.12/</link>
                         <link>https://osgi.org/javadoc/r6/core/</link>
                         <link>https://osgi.org/javadoc/r6/annotation/</link>
@@ -359,10 +357,8 @@
                         <detectJavaApiLink>false</detectJavaApiLink>
                         <links>
                             <link>https://docs.oracle.com/javase/${aem.java.version}/docs/api/</link>
-                            <link>https://docs.oracle.com/javaee/7/api/</link>
                             <link>https://docs.adobe.com/docs/en/spec/jsr170/javadocs/jcr-2.0/</link>
                             <link>https://sling.apache.org/apidocs/sling9/</link>
-                            <link>https://helpx.adobe.com/experience-manager/6-5/sites/developing/using/reference-materials/javadoc/</link>
                             <link>https://jackrabbit.apache.org/api/2.12/</link>
                             <link>https://osgi.org/javadoc/r6/core/</link>
                             <link>https://osgi.org/javadoc/r6/annotation/</link>
@@ -379,7 +375,7 @@
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.13</version>
+                    <version>0.16.1</version>
                     <configuration>
                         <excludes combine.children="append">
                             <!--  Used by maven-remote-resources-plugin -->
@@ -492,6 +488,7 @@
             <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
+                <version>0.16.1</version>
             </plugin>
         </plugins>
 

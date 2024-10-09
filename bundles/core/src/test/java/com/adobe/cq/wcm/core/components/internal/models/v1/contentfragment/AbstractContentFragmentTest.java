@@ -17,7 +17,9 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
+import com.day.cq.wcm.api.Page;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
@@ -33,7 +35,9 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.day.cq.search.QueryBuilder;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public abstract class AbstractContentFragmentTest<T> {
 
@@ -148,6 +152,10 @@ public abstract class AbstractContentFragmentTest<T> {
         slingBindings.put(SlingBindings.RESOLVER, resourceResolver);
         slingBindings.put(SlingBindings.RESOURCE, resource);
         slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
+        Page currentPage = mock(Page.class);
+        when(currentPage.getLanguage(anyBoolean())).thenReturn(Locale.getDefault());
+        when(currentPage.getContentResource()).thenReturn(resource);
+        slingBindings.put(WCMBindings.CURRENT_PAGE, currentPage);
         httpServletRequest.setAttribute(SlingBindings.class.getName(), slingBindings);
         httpServletRequest.setContextPath(CONTEXT_PATH);
         return httpServletRequest.adaptTo(getClassType());
