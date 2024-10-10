@@ -50,7 +50,7 @@
         <aem.port>4502</aem.port>
         <aem.publish.host>localhost</aem.publish.host>
         <aem.publish.port>4503</aem.publish.port>
-        <aem.contextPath />
+        <aem.contextPath/>
         <sling.user>admin</sling.user>
         <sling.password>admin</sling.password>
         <vault.user>admin</vault.user>
@@ -679,7 +679,7 @@
             <dependency>
                 <groupId>javax.servlet.jsp</groupId>
                 <artifactId>jsp-api</artifactId>
-                <version>2.1</version>
+                <version>2.2</version>
                 <scope>provided</scope>
             </dependency>
             <!-- JCR -->
