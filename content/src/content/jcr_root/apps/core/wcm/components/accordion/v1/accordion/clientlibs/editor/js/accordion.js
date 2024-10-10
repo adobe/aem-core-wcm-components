@@ -187,12 +187,15 @@
         var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");
         if (cmpChildrenEditor) {
             if (singleExpansion) {
-                expandedSelect.items.add({
-                    selected: (selectedValues.length === 0),
-                    content: {
-                        textContent: Granite.I18n.get("None")
-                    }
-                });
+                // Check "None" option exists or not, if not then add textcontent
+                if(!expandedSelect.items._container.textContent.includes("None")){
+                    expandedSelect.items.add({
+                        selected: (selectedValues.length === 0),
+                        content: {
+                            textContent: Granite.I18n.get("None")
+                        }
+                    });
+                }
                 expandedSelect.items.first().set("value", null, true);
             }
             cmpChildrenEditor.items().forEach(function(item) {
