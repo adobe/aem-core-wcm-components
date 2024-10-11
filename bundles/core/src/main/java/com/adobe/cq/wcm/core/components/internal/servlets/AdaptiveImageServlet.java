@@ -19,6 +19,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +31,11 @@ import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.jcr.Binary;
+import javax.jcr.Node;
+import javax.jcr.Property;
+import javax.jcr.RepositoryException;
+import javax.jcr.ValueFormatException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
@@ -37,6 +43,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.JcrConstants;
+import org.apache.jackrabbit.api.binary.BinaryDownload;
+import org.apache.jackrabbit.api.binary.BinaryDownloadOptions;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.request.RequestPathInfo;
@@ -96,6 +104,9 @@ import static com.adobe.cq.wcm.core.components.internal.helper.image.AdaptiveIma
  */
 public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
+    private static final boolean USE_DELIVERY_VIA_BLOBSTORE = true;
+
+
     public static final String DEFAULT_SELECTOR = "img";
     public static final String CORE_DEFAULT_SELECTOR = "coreimg";
     static final int DEFAULT_RESIZE_WIDTH = 1280;
@@ -107,6 +118,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String SELECTOR_WIDTH_KEY = "width";
     private int defaultResizeWidth;
     private int maxInputWidth;
+    
+    protected boolean deliverExistingRenditionsViaRedirect;
 
     private AdaptiveImageServletMetrics metrics;
 
@@ -115,12 +128,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private transient AssetStore assetStore;
 
     public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics,
-            int defaultResizeWidth, int maxInputWidth) {
+            int defaultResizeWidth, int maxInputWidth, boolean deliverRenditionsViaRedirect) {
         this.mimeTypeService = mimeTypeService;
         this.assetStore = assetStore;
         this.metrics = metrics;
         this.defaultResizeWidth = defaultResizeWidth > 0 ? defaultResizeWidth : DEFAULT_RESIZE_WIDTH;
         this.maxInputWidth = maxInputWidth > 0 ? maxInputWidth : DEFAULT_MAX_SIZE;
+        this.deliverExistingRenditionsViaRedirect = deliverRenditionsViaRedirect;
     }
 
     @Override
@@ -254,11 +268,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         if ("gif".equalsIgnoreCase(extension) || "svg".equalsIgnoreCase(extension)) {
             LOGGER.debug("GIF or SVG asset detected; will render the original rendition.");
             metrics.markOriginalRenditionUsed();
-            try (InputStream is = asset.getOriginal().getStream()) {
-                if (is != null) {
-                    stream(response, is, imageType, imageName);
-                }
-            }
+            deliverRendition(response,asset.getOriginal(),imageType, imageName);
             return;
         }
         int rotationAngle = getRotation(componentProperties);
@@ -372,26 +382,30 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
         } else {
             LOGGER.debug("No need to perform any processing on asset {}; rendering.", asset.getPath());
-            try (InputStream is = getOriginal(asset).getStream()) {
-                if (is != null) {
-                    stream(response, is, imageType, imageName);
-                }
-            }
+            deliverRendition(response, asset.getOriginal(), imageType, imageName);
         }
     }
 
     private void transformAndStreamFile(SlingHttpServletResponse response, ValueMap componentProperties, int
             resizeWidth, double quality, Resource imageFile, String imageType, String imageName) throws
             IOException {
-        try (InputStream is = imageFile.adaptTo(InputStream.class)) {
-            if ("gif".equalsIgnoreCase(mimeTypeService.getExtension(imageType))
-                    || "svg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
-                LOGGER.debug("GIF or SVG file detected; will render the original file.");
-                if (is != null) {
-                    stream(response, is, imageType, imageName);
+
+        if ("gif".equalsIgnoreCase(mimeTypeService.getExtension(imageType))
+                || "svg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
+            LOGGER.debug("GIF or SVG file detected; will render the original file.");
+            
+            try {
+                Node n = imageFile.adaptTo(Node.class);
+                if (n != null && n.isNodeType("nt:file")) {
+                    deliverFile(response, imageFile, imageType, imageName);
+                    return;
                 }
-                return;
+            } catch (RepositoryException e) {
+            	throw new IOException(String.format("cannot deliver file %s", imageFile.getPath()),e);
             }
+        }
+
+        try (InputStream is = imageFile.adaptTo(InputStream.class)) {
             int rotationAngle = getRotation(componentProperties);
             Rectangle rectangle = getCropRect(componentProperties);
             boolean flipHorizontally = componentProperties.get(Image.PN_FLIP_HORIZONTAL, Boolean.FALSE);
@@ -613,22 +627,14 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         if (rendition.getMimeType().equals(imageType)) {
             LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
                     rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);
-            try (InputStream is = rendition.getStream()) {
-                if (is != null) {
-                    stream(response, is, imageType, imageName);
-                }
-            }
+            deliverRendition(response, rendition.getRendition(), imageType, imageName);
         } else {
             Layer layer = getLayer(rendition);
             if (layer == null) {
                 LOGGER.warn("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px " +
                                 "but the rendition is not of the requested type {}, cannot convert so serving as is",
                         rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth, imageType);
-                try (InputStream is = rendition.getStream()) {
-                    if (is != null) {
-                        stream(response, is, rendition.getMimeType(), imageName);
-                    }
-                }
+                deliverRendition(response, rendition.getRendition(), rendition.getMimeType(), imageName);
             } else {
                 LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px " +
                                 "but the rendition is not of the requested type {}, need to convert",
@@ -637,6 +643,92 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
         }
     }
+
+
+    /**
+     * Deliver an existing rendition as-is to the requester. Creates a presigned URL if possible, streaming the content
+     * through the JVM should be last resort.
+     * @param response response
+     * @param rendition the rendition to stream
+     * @param contentType the mimetype of the image
+     * @param imageName the name of the image
+     * @throws IOException
+     */
+    private void deliverRendition(@NotNull SlingHttpServletResponse response, @NotNull Rendition rendition, @NotNull String contentType,
+             String imageName) throws IOException {
+        Binary originalBinary = rendition.getBinary();
+        final boolean downloadable = (originalBinary instanceof BinaryDownload);
+        if (this.deliverExistingRenditionsViaRedirect && downloadable) {
+            BinaryDownload binaryDownload = (BinaryDownload) originalBinary;
+            BinaryDownloadOptions downloadOptions = BinaryDownloadOptions.builder()
+                    .withMediaType(contentType)
+                    .withFileName(imageName)
+                    .withDispositionTypeAttachment()
+                    .build();
+            URI uri = null;
+
+            try {
+                uri = binaryDownload.getURI(downloadOptions);
+            } catch (RepositoryException e) {
+                LOGGER.error("error getting binary download URI for asset: " + rendition.getPath(), e);
+            }
+
+            if (uri != null) {
+                response.sendRedirect(uri.toString());
+                return;
+            }
+        }
+        // fallback
+        try (InputStream is = rendition.getStream()) {
+        	if (is != null) {
+        		stream(response, is, contentType, imageName);
+        	}
+        }
+    }
+    
+    /**
+     * Deliver a file resource (typically backed by an nt:file node in JCR)
+     * @param response the response
+     * @param fileResource the file resource
+     * @param fileName the name of the file (used in the redirect)
+     * @param mimetype the actual mimetype
+     * @throws IOException
+     * @throws RepositoryException
+     */
+    private void deliverFile(@NotNull SlingHttpServletResponse response, @NotNull Resource fileResource,
+            String mimetype, String fileName) throws IOException, RepositoryException {
+       Node n = fileResource.adaptTo(Node.class);
+       if (n != null && n.getProperty("jcr:content/jcr:data") != null) {
+           Binary originalBinary = n.getProperty("jcr:content/jcr:data").getBinary();
+           final boolean downloadable = (originalBinary instanceof BinaryDownload);
+           if (this.deliverExistingRenditionsViaRedirect && downloadable) {
+               BinaryDownload binaryDownload = (BinaryDownload) originalBinary;
+               BinaryDownloadOptions downloadOptions = BinaryDownloadOptions.builder()
+                       .withMediaType(mimetype)
+                       .withFileName(fileName)
+                       .withDispositionTypeAttachment()
+                       .build();
+               URI uri = null;
+
+               try {
+                   uri = binaryDownload.getURI(downloadOptions);
+               } catch (RepositoryException e) {
+                   LOGGER.error("error getting binary download URI for asset: " + fileResource.getPath(), e);
+               }
+               if (uri != null) {
+                   response.sendRedirect(uri.toString());
+                   return;
+               }
+           }
+       }
+       // fallback
+       try (InputStream is = fileResource.adaptTo(InputStream.class)) {
+       	if (is != null) {
+       		stream(response, is, mimetype, fileName);
+       	}
+       }
+   }
+    
 
     /**
      * Stream an image from the given input stream.
