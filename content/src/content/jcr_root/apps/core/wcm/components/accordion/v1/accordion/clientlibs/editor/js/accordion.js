@@ -187,8 +187,8 @@
         var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");
         if (cmpChildrenEditor) {
             if (singleExpansion) {
-                // Check "None" option exists or not, if not then add textcontent
-                if(!expandedSelect.items._container.textContent.includes("None")){
+                // Check if "None" option exists or not, if not then add textContent
+                if (!expandedSelect.items._container.textContent.includes("None")) {
                     expandedSelect.items.add({
                         selected: (selectedValues.length === 0),
                         content: {
