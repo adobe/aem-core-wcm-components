@@ -72,8 +72,8 @@
       "xdm:template": "/conf/coretest/settings/wcm/templates/product-page",
       "xdm:language": "en-GB",
       "xdm:tags": [
-        "three",
         "one",
+        "three",
         "two"
       ],
       "repo:path": "/core/content/page/templated-page.html"
