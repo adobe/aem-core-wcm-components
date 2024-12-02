@@ -331,6 +331,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         properties = resource.getValueMap();
         String fileReference = properties.get("fileReference", String.class);
         String smartCrop = properties.get("smartCropRendition", String.class);
+        String modifiers = properties.get("imageModifiers", String.class);
         if (isNgdmImageReference(fileReference)) {
             int width = currentStyle.get(PN_DESIGN_RESIZE_WIDTH, DEFAULT_NGDM_ASSET_WIDTH);
             NextGenDMImageURIBuilder builder = new NextGenDMImageURIBuilder(nextGenDynamicMediaConfig, fileReference)
@@ -338,6 +339,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 .withWidth(width);
             if(StringUtils.isNotEmpty(smartCrop) && !StringUtils.equals(smartCrop, SMART_CROP_AUTO)) {
                 builder.withSmartCrop(smartCrop);
+            }
+            if (StringUtils.isNotEmpty(modifiers)) {
+                builder.withImageModifiers(modifiers);
             }
             src = builder.build();
             ngdmImage = true;

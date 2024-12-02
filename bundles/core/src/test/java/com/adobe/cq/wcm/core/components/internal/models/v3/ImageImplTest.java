@@ -96,6 +96,8 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     private static final String PAGE3_IMAGE0_PATH = PAGE3 + "/jcr:content/root/page3_image0";
     private static final String NGDM_IMAGE1_PATH = "/content/ngdm_test_page/jcr:content/root/ngdm_test_page_image1";
     private static final String NGDM_SMARTCROP_IMAGE_PATH = "/content/ngdm_test_page/jcr:content/root/ngdm_test_page_smartcrop_image";
+
+    private static final String NGDM_MODIFIERS_IMAGE_PATH = "/content/ngdm_test_page/jcr:content/root/ngdm_test_page_modifiers_image";
     private static final String NGDM_SMARTCROP_AUTO_IMAGE_PATH = "/content/ngdm_test_page/jcr:content/root/ngdm_test_page_smartcrop_image_auto";
 
 
@@ -729,6 +731,19 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
 
         Image image = getImageUnderTest(NGDM_SMARTCROP_IMAGE_PATH);
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, NGDM_SMARTCROP_IMAGE_PATH));
+    }
+
+    @Test
+    void testNgdmImageWithModifiers() {
+        MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
+        config.setEnabled(true);
+        config.setRepositoryId("testrepo");
+        config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
+        context.registerInjectActivateService(config);
+
+        Image image = getImageUnderTest(NGDM_MODIFIERS_IMAGE_PATH);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, NGDM_MODIFIERS_IMAGE_PATH));
+        assertTrue(image.getSrc().contains("&width=100&height=200"));
     }
 
     @Test
