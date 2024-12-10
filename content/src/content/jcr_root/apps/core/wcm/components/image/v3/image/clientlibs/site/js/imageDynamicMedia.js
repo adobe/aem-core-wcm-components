@@ -75,15 +75,9 @@
          * @returns {String} the srcset
          */
         var getSrcSet = function(src, smartCrops) {
-            var srcset;
-            var keys = Object.keys(smartCrops);
-            if (keys.length > 0) {
-                srcset = [];
-                for (var key in autoSmartCrops) {
-                    srcset.push(src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, smartCrops[key]) + " " + key + "w");
-                }
-            }
-            return  srcset.join(",");
+            var srcset = [];
+            srcset.push(src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, smartCrops));
+            return  srcset;
         };
 
         /**
@@ -137,8 +131,8 @@
                 var image = component.querySelector("img");
                 var elemWidth = getWidth(component, component.parentNode);
                 if (properties["smartcroprendition"] === "SmartCrop:Auto") {
-                    image.setAttribute("srcset", CMP.image.dynamicMedia.getSrcSet(src, smartCrops));
-                    width = getOptimalWidth(Object.keys(smartCrops, elemWidth));
+                    width = getOptimalWidth(Object.keys(smartCrops, elemWidth), elemWidth);
+                    image.setAttribute("srcset", CMP.image.dynamicMedia.getSrcSet(src, smartCrops[width]));
                     image.setAttribute("src", CMP.image.dynamicMedia.getSrc(src, smartCrops[width]));
                 } else {
                     width = getOptimalWidth(properties.widths, elemWidth);
