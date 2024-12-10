@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
@@ -31,18 +32,31 @@ import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 
+/**
+ * V2 Language Navigation model implementation.
+ */
 @Model(adaptables = SlingHttpServletRequest.class,
-       adapters = {LanguageNavigation.class, ComponentExporter.class},
-       resourceType = {LanguageNavigationImpl.RESOURCE_TYPE})
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME ,
-          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+    adapters = {LanguageNavigation.class, ComponentExporter.class},
+    resourceType = {LanguageNavigationImpl.RESOURCE_TYPE})
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
+    extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class LanguageNavigationImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.LanguageNavigationImpl implements LanguageNavigation {
 
+    /**
+     * V2 Language Navigation resource type.
+     */
     public static final String RESOURCE_TYPE = "core/wcm/components/languagenavigation/v2/languagenavigation";
 
-    protected LanguageNavigationItem newLanguageNavigationItem(Page page, boolean active, boolean current, @NotNull LinkManager linkManager,
-                                                               int level, List<NavigationItem> children, String title, String parentId,
-                                                               Component component) {
+    @Override
+    protected LanguageNavigationItem newLanguageNavigationItem(@NotNull final Page page,
+                                                               final boolean active,
+                                                               final boolean current,
+                                                               @NotNull final LinkManager linkManager,
+                                                               final int level,
+                                                               @NotNull final Supplier<List<NavigationItem>> children,
+                                                               final String title,
+                                                               final String parentId,
+                                                               final Component component) {
         return new LanguageNavigationItemImpl(page, active, current, linkManager, level, children, title, parentId, component);
     }
 
