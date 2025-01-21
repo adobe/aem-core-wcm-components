@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        java: [11]
+        java: [11, 17, 21]
         profile: [ '', '-Pcloud,adobe-public']
 
     steps:
