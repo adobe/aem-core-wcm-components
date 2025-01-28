@@ -18,11 +18,15 @@ package com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.v2;
 
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.v2.FormText;
 import com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.FormTextTests;
-import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import org.apache.sling.testing.clients.ClientException;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
+
+import java.util.HashMap;
+import java.util.concurrent.TimeoutException;
 
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_FORMTEXT_V2;
 
@@ -37,6 +41,30 @@ public class FormTextIT extends com.adobe.cq.wcm.core.components.it.seljup.tests
     @AfterEach
     public void cleanupAfterEach() throws ClientException, InterruptedException {
         formTextTests.cleanup(authorClient);
+    }
+
+    @Test
+    @DisplayName("Test: display validation message")
+    public void  testDisplayValidationMessageNotExists() throws InterruptedException, TimeoutException, ClientException {
+        formTextTests.testDisplayValidationMessageNotExists();
+    }
+
+    @Test
+    @DisplayName("Test: display validation message")
+    public void  testDisplayValidationMessageDisabled() throws InterruptedException, TimeoutException, ClientException {
+        createComponentPolicy(RT_FORMTEXT_V2.substring(RT_FORMTEXT_V2.lastIndexOf("/")),new HashMap<String,String>() {{
+            put("displayValidation", "false");
+        }});
+        formTextTests.testDisplayValidationMessageNotExists();
+    }
+
+    @Test
+    @DisplayName("Test: display validation message")
+    public void  testDisplayValidationMessageEnabled() throws InterruptedException, TimeoutException, ClientException {
+        createComponentPolicy(RT_FORMTEXT_V2.substring(RT_FORMTEXT_V2.lastIndexOf("/")),new HashMap<String,String>() {{
+            put("displayValidation", "true");
+        }});
+        formTextTests.testDisplayValidationMessageExists();
     }
 
 }

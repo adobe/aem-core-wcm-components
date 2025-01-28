@@ -63,6 +63,7 @@ BLOCK cmp-form-text
     ELEMENT cmp-form-text__help-block
     ELEMENT cmp-form-text__textarea
     ELEMENT cmp-form-text__text
+    ELEMENT cmp-form-text__validation-message
 ```
 
 ## JavaScript Data Attribute Bindings

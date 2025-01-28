@@ -33,4 +33,7 @@ public class FormText extends BaseFormText {
         return $(".cmp-form-text[data-cmp-required-message='" + requiredMessage + "']").isDisplayed();
     }
 
+    public boolean isValidationMessageExisting(String elemName) {
+        return $(".cmp-form-text__validation-message").exists();
+    }
 }

@@ -21,15 +21,18 @@ import com.adobe.cq.testing.selenium.pageobject.EditorPage;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.FormTextEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.BaseFormText;
+import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.v2.FormText;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.codeborne.selenide.SelenideElement;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 import static com.codeborne.selenide.Selenide.$;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FormTextTests {
@@ -328,5 +331,41 @@ public class FormTextTests {
         Commons.switchContext("ContentFrame");
         SelenideElement inputElement = $("input[type='text']");
         assertTrue(formText.elementHasNoAriaDescribedByAttribute(inputElement));
+    }
+
+    public void testDisplayValidationMessage() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("text");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        SelenideElement inputElement = $("input[type='text']");
+        assertTrue(formText.elementHasNoAriaDescribedByAttribute(inputElement));
+    }
+
+    public void testDisplayValidationMessageNotExists() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("text");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        Commons.saveConfigureDialog();
+
+        FormText formTextV2 = (FormText) formText;
+        assertFalse(formTextV2.isValidationMessageExisting(elemName));
+    }
+
+    public void testDisplayValidationMessageExists() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("text");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openAboutTab();
+        Commons.saveConfigureDialog();
+
+        FormText formTextV2 = (FormText) formText;
+        assertTrue(formTextV2.isValidationMessageExisting(elemName));
     }
 }
