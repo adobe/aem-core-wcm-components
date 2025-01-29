@@ -44,27 +44,83 @@ public class FormTextIT extends com.adobe.cq.wcm.core.components.it.seljup.tests
     }
 
     @Test
-    @DisplayName("Test: display validation message")
-    public void  testDisplayValidationMessageNotExists() throws InterruptedException, TimeoutException, ClientException {
+    @DisplayName("Test: display validation message does not exist")
+    public void  testDisplayValidationMessageNotExists() throws InterruptedException, TimeoutException {
         formTextTests.testDisplayValidationMessageNotExists();
     }
 
     @Test
-    @DisplayName("Test: display validation message")
+    @DisplayName("Test: display validation message disabled")
     public void  testDisplayValidationMessageDisabled() throws InterruptedException, TimeoutException, ClientException {
-        createComponentPolicy(RT_FORMTEXT_V2.substring(RT_FORMTEXT_V2.lastIndexOf("/")),new HashMap<String,String>() {{
+        createComponentPolicy(RT_FORMTEXT_V2.substring(RT_FORMTEXT_V2.lastIndexOf("/")),new HashMap<>() {{
             put("displayValidation", "false");
         }});
+
         formTextTests.testDisplayValidationMessageNotExists();
     }
 
     @Test
-    @DisplayName("Test: display validation message")
+    @DisplayName("Test: display validation message enabled")
     public void  testDisplayValidationMessageEnabled() throws InterruptedException, TimeoutException, ClientException {
-        createComponentPolicy(RT_FORMTEXT_V2.substring(RT_FORMTEXT_V2.lastIndexOf("/")),new HashMap<String,String>() {{
+        createComponentPolicy(RT_FORMTEXT_V2.substring(RT_FORMTEXT_V2.lastIndexOf("/")),new HashMap<>() {{
             put("displayValidation", "true");
         }});
+
         formTextTests.testDisplayValidationMessageExists();
     }
 
+    @Test
+    @DisplayName("Test: display and hide validation message")
+    public void  testDisplayValidationMessage() throws InterruptedException, TimeoutException, ClientException {
+        createComponentPolicy(RT_FORMTEXT_V2.substring(RT_FORMTEXT_V2.lastIndexOf("/")),new HashMap<>() {{
+            put("displayValidation", "true");
+        }});
+        createPagePolicy(new HashMap<>() {{ put ("clientlibs", "core.wcm.components.form.text.v2"); }});
+
+        formTextTests.testDisplayValidationMessage();
+    }
+
+    @Test
+    @DisplayName("Test: display and hide validation message for textarea")
+    public void  testDisplayValidationMessageForTextArea() throws InterruptedException, TimeoutException, ClientException {
+        createComponentPolicy(RT_FORMTEXT_V2.substring(RT_FORMTEXT_V2.lastIndexOf("/")),new HashMap<>() {{
+            put("displayValidation", "true");
+        }});
+        createPagePolicy(new HashMap<>() {{ put ("clientlibs", "core.wcm.components.form.text.v2"); }});
+
+        formTextTests.testDisplayValidationMessageForTextarea();
+    }
+
+    @Test
+    @DisplayName("Test: display and hide custom validation message")
+    public void  testDisplayCustomValidationMessage() throws InterruptedException, TimeoutException, ClientException {
+        createComponentPolicy(RT_FORMTEXT_V2.substring(RT_FORMTEXT_V2.lastIndexOf("/")),new HashMap<>() {{
+            put("displayValidation", "true");
+        }});
+        createPagePolicy(new HashMap<>() {{ put ("clientlibs", "core.wcm.components.form.text.v2"); }});
+
+        formTextTests.testDisplayCustomValidationMessage();
+    }
+
+    @Test
+    @DisplayName("Test: display and hide custom validation message for textarea")
+    public void  testDisplayCustomValidationMessageForTextArea() throws InterruptedException, TimeoutException, ClientException {
+        createComponentPolicy(RT_FORMTEXT_V2.substring(RT_FORMTEXT_V2.lastIndexOf("/")),new HashMap<>() {{
+            put("displayValidation", "true");
+        }});
+        createPagePolicy(new HashMap<>() {{ put ("clientlibs", "core.wcm.components.form.text.v2"); }});
+
+        formTextTests.testDisplayCustomValidationMessageForTextArea();
+    }
+
+    @Test
+    @DisplayName("Test: display and hide custom validation message for email")
+    public void  testDisplayCustomValidationMessageForEmail() throws InterruptedException, TimeoutException, ClientException {
+        createComponentPolicy(RT_FORMTEXT_V2.substring(RT_FORMTEXT_V2.lastIndexOf("/")),new HashMap<>() {{
+            put("displayValidation", "true");
+        }});
+        createPagePolicy(new HashMap<>() {{ put ("clientlibs", "core.wcm.components.form.text.v2"); }});
+
+        formTextTests.testDisplayCustomValidationMessageForEmail();
+    }
 }

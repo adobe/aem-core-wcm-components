@@ -28,7 +28,6 @@ import com.codeborne.selenide.SelenideElement;
 import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 
-import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -333,18 +332,6 @@ public class FormTextTests {
         assertTrue(formText.elementHasNoAriaDescribedByAttribute(inputElement));
     }
 
-    public void testDisplayValidationMessage() throws InterruptedException, TimeoutException {
-        Commons.openEditDialog(editorPage, formTextPath);
-        FormTextEditDialog configDialog = formText.getConfigDialog();
-        configDialog.setOptionType("text");
-        configDialog.setMandatoryFields(elemName, label);
-        configDialog.openAboutTab();
-        Commons.saveConfigureDialog();
-        Commons.switchContext("ContentFrame");
-        SelenideElement inputElement = $("input[type='text']");
-        assertTrue(formText.elementHasNoAriaDescribedByAttribute(inputElement));
-    }
-
     public void testDisplayValidationMessageNotExists() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, formTextPath);
         FormTextEditDialog configDialog = formText.getConfigDialog();
@@ -352,8 +339,15 @@ public class FormTextTests {
         configDialog.setMandatoryFields(elemName, label);
         configDialog.openAboutTab();
         Commons.saveConfigureDialog();
-
+        Commons.switchContext("ContentFrame");
         FormText formTextV2 = (FormText) formText;
+        assertFalse(formTextV2.isValidationMessageExisting(elemName));
+
+        Commons.switchToDefaultContext();
+        Commons.openEditDialog(editorPage, formTextPath);
+        configDialog.setOptionType("textarea");
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
         assertFalse(formTextV2.isValidationMessageExisting(elemName));
     }
 
@@ -364,8 +358,84 @@ public class FormTextTests {
         configDialog.setMandatoryFields(elemName, label);
         configDialog.openAboutTab();
         Commons.saveConfigureDialog();
-
+        Commons.switchContext("ContentFrame");
         FormText formTextV2 = (FormText) formText;
         assertTrue(formTextV2.isValidationMessageExisting(elemName));
+
+        Commons.switchToDefaultContext();
+        Commons.openEditDialog(editorPage, formTextPath);
+        configDialog.setOptionType("textarea");
+        Commons.saveConfigureDialog();
+        Commons.switchContext("ContentFrame");
+        assertTrue(formTextV2.isValidationMessageExisting(elemName));
+    }
+
+    public void testDisplayValidationMessage() throws InterruptedException, TimeoutException {
+        testDisplayValidationMessage("text");
+    }
+
+    public void testDisplayValidationMessageForTextarea() throws InterruptedException, TimeoutException {
+        testDisplayValidationMessage("textarea");
+    }
+
+    public void testDisplayCustomValidationMessage() throws InterruptedException, TimeoutException {
+        testDisplayCustomValidationMassage("text");
+    }
+
+    public void testDisplayCustomValidationMessageForTextArea() throws InterruptedException, TimeoutException {
+        testDisplayCustomValidationMassage("textarea");
+    }
+
+    public void testDisplayCustomValidationMessageForEmail() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType("email");
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openConstraintsTab();
+        configDialog.setRequired();
+        configDialog.setRequiredMessage("Custom required message");
+        configDialog.setConstraintMessage("Custom constraint message");
+        Commons.saveConfigureDialog();
+        editorPage.refresh();
+        Commons.switchContext("ContentFrame");
+        FormText formTextV2 = (FormText) formText;
+        assertTrue(formTextV2.isValidationMessageDisplayed(elemName, "Custom required message"));
+        formText.setValue(elemName, "email");
+        assertTrue(formTextV2.isValidationMessageDisplayed(elemName, "Custom constraint message"));
+        formText.setValue(elemName, "email@email.em");
+        assertFalse(formTextV2.isValidationMessageDisplayed(elemName));
+    }
+
+    private void testDisplayValidationMessage(String type) throws TimeoutException, InterruptedException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType(type);
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openConstraintsTab();
+        configDialog.setRequired();
+        Commons.saveConfigureDialog();
+        editorPage.refresh();
+        Commons.switchContext("ContentFrame");
+        FormText formTextV2 = (FormText) formText;
+        assertTrue(formTextV2.isValidationMessageDisplayed(elemName, "*fill out"));
+        formText.setValue(elemName, "text");
+        assertFalse(formTextV2.isValidationMessageDisplayed(elemName));
+    }
+
+    private void testDisplayCustomValidationMassage(String type) throws TimeoutException, InterruptedException {
+        Commons.openEditDialog(editorPage, formTextPath);
+        FormTextEditDialog configDialog = formText.getConfigDialog();
+        configDialog.setOptionType(type);
+        configDialog.setMandatoryFields(elemName, label);
+        configDialog.openConstraintsTab();
+        configDialog.setRequired();
+        configDialog.setRequiredMessage("Custom required message");
+        Commons.saveConfigureDialog();
+        editorPage.refresh();
+        Commons.switchContext("ContentFrame");
+        FormText formTextV2 = (FormText) formText;
+        assertTrue(formTextV2.isValidationMessageDisplayed(elemName, "Custom required message"));
+        formText.setValue(elemName, "text");
+        assertFalse(formTextV2.isValidationMessageDisplayed(elemName));
     }
 }

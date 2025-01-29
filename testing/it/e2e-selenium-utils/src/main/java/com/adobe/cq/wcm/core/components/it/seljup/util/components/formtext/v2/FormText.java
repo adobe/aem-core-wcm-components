@@ -17,6 +17,7 @@
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.v2;
 
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.formtext.BaseFormText;
+import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -34,6 +35,25 @@ public class FormText extends BaseFormText {
     }
 
     public boolean isValidationMessageExisting(String elemName) {
-        return $(".cmp-form-text__validation-message").exists();
+        return $("[name='" + elemName + "'] + .cmp-form-text__validation-message").exists();
+    }
+
+    public boolean isValidationMessageDisplayed(String elemName) {
+        return $("[name='" + elemName + "'] + .cmp-form-text__validation-message").isDisplayed();
+    }
+
+    public boolean isValidationMessageDisplayed(String elemName, String text) {
+        SelenideElement messageElem = $("[name='" + elemName + "'] + .cmp-form-text__validation-message");
+        boolean messageDisplayed = messageElem.exists() && messageElem.isDisplayed();
+        if (!messageDisplayed) {
+            return false;
+        }
+
+        String messageText = messageElem.getText();
+        if (text.startsWith("*")) {
+            return messageDisplayed && messageText.contains(text.substring(1));
+        } else {
+            return messageDisplayed && messageText.equals(text);
+        }
     }
 }
