@@ -206,6 +206,7 @@ public class TextImpl extends AbstractFieldImpl implements Text, ComponentExport
         return hideTitle;
     }
 
+    @Override
     public boolean displayValidation() {
         return displayValidationMassages;
     }
