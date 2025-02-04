@@ -319,4 +319,10 @@ public interface DAMContentFragment extends ComponentExporter {
     default String getEditorJSON() {
         return "";
     }
+
+    @NotNull
+    @JsonIgnore
+    default String getNewEditorUrl() {
+        return "";
+    }
 }
