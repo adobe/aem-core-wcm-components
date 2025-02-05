@@ -21,6 +21,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.imageio.spi.IIORegistry;
 import javax.imageio.spi.ImageReaderSpi;
+import javax.jcr.RepositoryException;
 import javax.servlet.http.HttpServletResponse;
 
 import ch.qos.logback.classic.Level;
@@ -39,6 +42,8 @@ import ch.qos.logback.core.read.ListAppender;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpStatus;
+import org.apache.jackrabbit.api.binary.BinaryDownload;
+import org.apache.jackrabbit.api.binary.BinaryDownloadOptions;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
@@ -49,10 +54,13 @@ import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
 import org.apache.sling.testing.resourceresolver.MockValueMap;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageTest;
@@ -71,6 +79,8 @@ import com.google.common.net.HttpHeaders;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.slf4j.LoggerFactory;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mock;
@@ -81,6 +91,9 @@ import static org.mockito.Mockito.when;
 @ExtendWith(AemContextExtension.class)
 class AdaptiveImageServletTest extends AbstractImageTest {
 
+	
+	private static final String DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT = "deliverExistingRenditionsViaRedirect";
+	
     private static final String TEST_BASE = "/image";
 
     private AdaptiveImageServlet servlet;
@@ -93,8 +106,11 @@ class AdaptiveImageServletTest extends AbstractImageTest {
     protected static final String PNG_SMALL_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_SMALL_BINARY_NAME;
     private static final String FEATURED_IMAGE_PATH = "/content/test-featured-image/jcr:content/cq:featuredimage/1490005239000/" + PNG_IMAGE_BINARY_NAME;
 
-    @BeforeEach
-    void setUp() throws Exception {
+    private static final String BLOBSTORE_BASE = "https://blostore.local/blostore/";
+    
+    
+    @BeforeEach()
+    void setUp(TestInfo t) throws Exception {
         internalSetUp(TEST_BASE);
         context.load().binaryFile("/image/" + PNG_IMAGE_RECTANGLE_BINARY_NAME, PNG_RECTANGLE_ASSET_PATH + "/jcr:content/renditions/original");
         context.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + PNG_IMAGE_BINARY_NAME, PNG_RECTANGLE_ASSET_PATH +
@@ -123,7 +139,14 @@ class AdaptiveImageServletTest extends AbstractImageTest {
             Rendition rendition = invocation.getArgument(0);
             return ImageIO.read(rendition.getStream());
         });
-        servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, metrics, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE);
+        
+        boolean deliverExistingRenditionsViaRedirect = false;
+        if (t.getTags().contains(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)) {
+            deliverExistingRenditionsViaRedirect = true;
+        }
+        
+        servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, metrics,
+                ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, AdaptiveImageServlet.DEFAULT_MAX_SIZE, deliverExistingRenditionsViaRedirect);
     }
 
     @AfterEach
@@ -205,6 +228,20 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
         Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
     }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testRequestWithWidthDesignAllowedRectangleLarge_viaRedirect() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE0_RECTANGLE_PATH,
+            "img.82.3000", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE,
+            "allowedRenditionWidths", new String[] {"500", "1000", "1500", "3000"},
+            "jpegQuality", 82);
+        servlet.doGet(request, response);
+        assertValidRedirectToBlobStore(response, "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_rectangle.png/jcr:content/renditions/original");
+    }
 
     @Test
     void testRequestWithWidthDesignAllowedSmallImageWithLargeRenditionSmall() throws Exception {
@@ -262,6 +299,20 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
         Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
     }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testRequestWithWidthDesignAllowedSmallImageWithLargeRenditionLarge_viaRedirect() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE0_SMALL_PATH,
+            "img.82.1500", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE,
+            "allowedRenditionWidths", new String[] {"100", "500", "1500"},
+            "jpegQuality", 82);
+        servlet.doGet(request, response);
+        assertValidRedirectToBlobStore(response, "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_small.png/jcr:content/renditions/original");
+    }
 
     @Test
     void testRequestWithWidthDesignNotAllowed() throws Exception {
@@ -300,6 +351,17 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered with the default resize configuration width.");
     }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testRequestNoWidthWithDesign_viaRedirect() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE0_PATH, "img", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = spy(requestResponsePair.getRight());
+        servlet.doGet(request, response);
+        assertValidRedirectToBlobStore(response, "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png/jcr:content/renditions/cq5dam.web.1280.1280.png");
+    }
 
 
     @Test
@@ -316,6 +378,17 @@ class AdaptiveImageServletTest extends AbstractImageTest {
                 new Dimension(ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH);
         Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered with the default resize configuration width.");
+    }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testRequestNoWidthNoDesign_viaRedirect() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE0_PATH, "img", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = spy(requestResponsePair.getRight());
+        servlet.doGet(request, response);
+        assertValidRedirectToBlobStore(response, "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png/jcr:content/renditions/cq5dam.web.1280.1280.png");
     }
 
     @Test
@@ -391,9 +464,38 @@ class AdaptiveImageServletTest extends AbstractImageTest {
                 this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.gif");
         Assertions.assertTrue(IOUtils.contentEquals(stream, directStream));
     }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testGIFFileDirectStream_viaRedirect() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE5_PATH, 1489998822138L, "img", "gif");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        servlet.doGet(request, response);
+        ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
+        InputStream directStream =
+                this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.gif");
+        Assertions.assertTrue(IOUtils.contentEquals(stream, directStream));
+    }
 
     @Test
     void testSVGFileDirectStream() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE24_PATH, 1489998822138L, "img", "svg");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        servlet.doGet(request, response);
+        Assertions.assertTrue(response.getHeader(HttpHeaders.CONTENT_DISPOSITION).startsWith("attachment"));
+        ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
+        InputStream directStream =
+                this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.svg");
+        Assertions.assertTrue(IOUtils.contentEquals(stream, directStream));
+    }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testSVGFileDirectStream_viaRedirect() throws Exception {
         Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
                 prepareRequestResponsePair(IMAGE24_PATH, 1489998822138L, "img", "svg");
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
@@ -431,6 +533,17 @@ class AdaptiveImageServletTest extends AbstractImageTest {
                 this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.gif");
         Assertions.assertTrue(IOUtils.contentEquals(stream, directStream));
     }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testGIFUploadedToDAM_viaRedirect() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE6_PATH, "img", "gif");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        servlet.doGet(request, response);
+        assertValidRedirectToBlobStore(response, "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif/jcr:content/renditions/original");
+    }
 
     @Test
     void testSVGUploadedToDAM() throws Exception {
@@ -444,6 +557,17 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         InputStream directStream =
                 this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.svg");
         Assertions.assertTrue(IOUtils.contentEquals(stream, directStream));
+    }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testSVGUploadedToDAM_viaRedirect() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE25_PATH, "img", "svg");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        servlet.doGet(request, response);
+        assertValidRedirectToBlobStore(response, "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.svg/jcr:content/renditions/original");
     }
 
     @Test
@@ -471,6 +595,18 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Assertions.assertTrue(IOUtils.contentEquals(directStream, stream),
             "Expected to get the original asset back, since the requested width is equal to the image's width.");
     }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testCorrectScalingPNGAssetWidth_viaRedirect() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE0_PATH, "img.2000", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, "allowedRenditionWidths", new String[] {"2000"});
+        servlet.doGet(request, response);
+        assertValidRedirectToBlobStore(response, "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png/jcr:content/renditions/original");
+    }
 
     @Test
     void testDAMFileUpscaledPNG() throws Exception {
@@ -484,6 +620,18 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
         Assertions.assertTrue(IOUtils.contentEquals(directStream, stream),
             "Expected to get the original asset back, since the requested width would result in upscaling the image.");
+    }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testDAMFileUpscaledPNG_viaRedirect() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE0_PATH, "img.2500", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, "allowedRenditionWidths", new String[] {"2500"});
+        servlet.doGet(request, response);
+        assertValidRedirectToBlobStore(response, "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png/jcr:content/renditions/original");
     }
 
     @Test
@@ -524,6 +672,20 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         requestPathInfo.setSuffix(TEMPLATE_IMAGE_PATH.replace(TEMPLATE_PATH, "") + "/1490005239000.png");
         servlet.doGet(request, response);
         Assertions.assertEquals(200, response.getStatus(), "Expected a 200 response code.");
+    }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testWithNoImageNameFromTemplate_viaRedirect() throws IOException {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(
+                PAGE, "coreimg", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+
+        requestPathInfo.setSuffix(TEMPLATE_IMAGE_PATH.replace(TEMPLATE_PATH, "") + "/1490005239000.png");
+        servlet.doGet(request, response);
+        assertValidRedirectToBlobStore(response, "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png/jcr:content/renditions/cq5dam.web.1280.1280.png");
     }
 
     @Test
@@ -641,6 +803,17 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
         Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
     }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testFileReferencePriority_viaRedirect() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE20_PATH,
+                "img", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        servlet.doGet(request, response);
+        assertValidRedirectToBlobStore(response, "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png/jcr:content/renditions/cq5dam.web.1280.1280.png");
+    }
 
     @Test
     void testFileReferenceNonexistingAsset() throws Exception {
@@ -732,6 +905,20 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
         Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
     }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testImageFromTemplateStructureNode_viaRedirect() throws IOException {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(PAGE, "img",
+                "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix(TEMPLATE_IMAGE_PATH.replace(TEMPLATE_PATH, "") + "/1490005239000.png");
+        servlet.doGet(request, response);
+        // deliver a redirect to the 1280x1280 renditions
+        assertValidRedirectToBlobStore(response,  "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png/jcr:content/renditions/cq5dam.web.1280.1280.png");
+    }
 
     @Test
     void testImageFromFeaturedImage() throws IOException {
@@ -749,6 +936,19 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
         Assertions.assertEquals("image/png", response.getContentType(), "Expected a PNG image.");
+    }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testImageFromFeaturedImage_viaRedirect() throws IOException {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(LIST01_PATH, "img",
+                "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix(FEATURED_IMAGE_PATH);
+        servlet.doGet(request, response);
+        assertValidRedirectToBlobStore(response, "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png/jcr:content/renditions/cq5dam.web.1280.1280.png");
     }
 
     @Test
@@ -983,6 +1183,28 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
         Assertions.assertEquals(expectedDimension, actualDimension, "Expected image rendered at requested size.");
     }
+    
+    @Test
+    @Tag(DELIVER_EXISTING_RENDITIONS_VIA_REDIRECT)
+    void testTransformAndStreamAssetForTiffRenderedAsJpegWithoutJpegRenditionsNoResize_viaRedirect() throws IOException {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE0_PATH, "img.2000", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+
+        Asset mockAsset = mock(Asset.class);
+        when(mockAsset.getPath()).thenReturn("/content/dam/core/images/funky.tiff");
+        when(mockAsset.getMimeType()).thenReturn("image/tiff");
+        when(mockAsset.getRenditions()).thenReturn(new LinkedList<>());
+        when(mockAsset.getMetadataValue(DamConstants.TIFF_IMAGEWIDTH)).thenReturn("2000");
+        when(mockAsset.getMetadataValue(DamConstants.TIFF_IMAGELENGTH)).thenReturn("2000");
+        Rendition original = mockRendition(mockAsset, "original", 9999999, "image/tiff", 2000, 2000);
+        when(original.getStream()).thenReturn(this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.tiff"));
+        when(mockAsset.getOriginal()).thenReturn(original);
+
+        servlet.transformAndStreamAsset(response, new MockValueMap(request.getResource(), new HashMap<>()), 0, 90, mockAsset, "image/jpeg", "test");
+        assertValidRedirectToBlobStore(response, "/content/dam/core/images/funky.tiff/jcr:content/renditions/original");
+    }
 
     @Test
     void testTransformAndStreamAssetForTiffRenderedAsJpegWithoutJpegRenditionsAndUnableToProcess() throws IOException {
@@ -1070,6 +1292,41 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         when(rendition.getProperties()).thenReturn(mockProperties);
         when(rendition.getSize()).thenReturn(size);
         when(rendition.getAsset()).thenReturn(asset);
+        final String path = asset.getPath() + "/jcr:content/renditions/" + name;
+        when(rendition.getPath()).thenReturn(path);
+        when(rendition.getBinary()).thenReturn(new BinaryDownload() {
+
+            @Override
+            public int read(byte[] b, long position) throws IOException, RepositoryException {
+                return 0;
+            }
+
+            @Override
+            public InputStream getStream() throws RepositoryException {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public long getSize() throws RepositoryException {
+                return 0;
+            }
+
+            @Override
+            public void dispose() {
+                // do nothing
+            }
+
+            @Override
+            public @Nullable URI getURI(BinaryDownloadOptions downloadOptions) throws RepositoryException {
+                try {
+                    return new URI (BLOBSTORE_BASE + rendition.getPath());
+                } catch (URISyntaxException e) {
+                    // ignore
+                }
+                return null;
+            }
+        });
         return rendition;
     }
 
@@ -1174,5 +1431,13 @@ class AdaptiveImageServletTest extends AbstractImageTest {
             throw new UnsupportedOperationException();
         }
     }
+    
+    private void assertValidRedirectToBlobStore(MockSlingHttpServletResponse response, String expectedLocation ) {
+    	assertEquals(302, response.getStatus());
+    	final String locationHeader = response.getHeader("Location");
+    	assertNotNull(locationHeader);
+    	assertEquals(BLOBSTORE_BASE + expectedLocation, locationHeader);
+    }
+    
 
 }
