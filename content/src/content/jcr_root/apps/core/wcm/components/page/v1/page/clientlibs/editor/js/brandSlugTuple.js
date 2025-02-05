@@ -30,13 +30,15 @@
         var $brandSlugTextfield = $(brandSlugTextfieldSelector, $brandSlugSection);
 
         if ($brandSlugCheckbox.length > 0 && $brandSlugTextfield.length > 0) {
-            var inheritedValue = $brandSlugTextfield.data("inheritedValue");
-            var specifiedValue = $brandSlugTextfield.data("specifiedValue");
-            var textfieldFoundation = $brandSlugTextfield.adaptTo("foundation-field");
-            var checkboxFoundation  = $brandSlugCheckbox.adaptTo("foundation-field");
-            changeTextFieldState(textfieldFoundation, checkboxFoundation.getValue() === "true", inheritedValue, specifiedValue);
-            $brandSlugCheckbox.on("change", function() {
-                changeTextFieldState(textfieldFoundation, this.checked, inheritedValue, specifiedValue);
+            $brandSlugCheckbox.on("coral-component:attached", function() {
+                var inheritedValue = $brandSlugTextfield.data("inheritedValue");
+                var specifiedValue = $brandSlugTextfield.data("specifiedValue");
+                var textfieldFoundation = $brandSlugTextfield.adaptTo("foundation-field");
+                var checkboxFoundation  = $brandSlugCheckbox.adaptTo("foundation-field");
+                changeTextFieldState(textfieldFoundation, checkboxFoundation.getValue() === "true", inheritedValue, specifiedValue);
+                $brandSlugCheckbox.on("change", function() {
+                    changeTextFieldState(textfieldFoundation, this.checked, inheritedValue, specifiedValue);
+                });
             });
         }
     });
