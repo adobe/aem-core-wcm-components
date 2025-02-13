@@ -305,7 +305,7 @@
                     <version>5.1.4</version>
                     <configuration>
                         <instructions>
-                            <Bundle-RequiredExecutionEnvironment>JavaSE-${aem.java.version}</Bundle-RequiredExecutionEnvironment>
+                            <Bundle-RequiredExecutionEnvironment>JavaSE-1.${aem.java.version}</Bundle-RequiredExecutionEnvironment>
                         </instructions>
                     </configuration>
                     <executions>
