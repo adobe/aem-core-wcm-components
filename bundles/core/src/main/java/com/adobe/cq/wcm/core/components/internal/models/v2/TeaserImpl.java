@@ -81,7 +81,8 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
         overriddenImageResourceProperties.put(Teaser.PN_ACTIONS_ENABLED, Boolean.valueOf(actionsEnabled).toString());
         overriddenImageResourceProperties.put(PN_ID, String.join(ID_SEPARATOR, this.getId(), IMAGE_ID_PREFIX));
 
-        if (StringUtils.isNotEmpty(getTitle()) || getTeaserActions().size() > 0) {
+        // Only allow image to render links if all other elements are empty
+        if (!(StringUtils.isAllEmpty(getTitle(), getPretitle(), getDescription()) && getTeaserActions().isEmpty())) {
             overriddenImageResourceProperties.put(Teaser.PN_IMAGE_LINK_HIDDEN, Boolean.TRUE.toString());
         }
         super.initImage();
