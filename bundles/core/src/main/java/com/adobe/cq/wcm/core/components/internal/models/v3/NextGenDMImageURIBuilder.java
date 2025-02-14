@@ -37,6 +37,8 @@ public class NextGenDMImageURIBuilder {
     private NextGenDynamicMediaConfig config;
     private String fileReference;
     private String smartCropName;
+    private String previewToken;
+    private String previewTokenExpiry;
     private int width = DEFAULT_NGDM_ASSET_WIDTH;
 
     private int height;
@@ -96,6 +98,24 @@ public class NextGenDMImageURIBuilder {
     }
 
     /**
+     * Set preview token.
+     * @param previewToken
+     */
+    public NextGenDMImageURIBuilder withPreviewToken(String previewToken) {
+        this.previewToken = previewToken;
+        return this;
+    }
+
+    /**
+     * Set preview expiry.
+     * @param previewTokenExpiry
+     */
+    public NextGenDMImageURIBuilder withPreviewTokenExpiry(String previewTokenExpiry) {
+        this.previewTokenExpiry = previewTokenExpiry;
+        return this;
+    }
+
+    /**
      * Use this to create a NextGen Dynamic Media Image URI.
      * @return a uri.
      */
@@ -126,6 +146,12 @@ public class NextGenDMImageURIBuilder {
             }
             if (StringUtils.isNotEmpty(this.smartCropName)) {
                 params.put("smartcrop", this.smartCropName);
+            }
+            if (StringUtils.isNotEmpty(this.previewToken)) {
+                params.put("previewtoken", this.previewToken);
+            }
+            if (StringUtils.isNotEmpty(this.previewTokenExpiry)) {
+                params.put("previewtokenexpiry", this.previewTokenExpiry);
             }
             if(params.size() > 0) {
                 uriBuilder.append("?");
