@@ -148,10 +148,10 @@ public class NextGenDMImageURIBuilder {
                 params.put("smartcrop", this.smartCropName);
             }
             if (StringUtils.isNotEmpty(this.previewToken)) {
-                params.put("token", this.previewToken);
+                params.put("previewtoken", this.previewToken);
             }
             if (StringUtils.isNotEmpty(this.previewTokenExpiry)) {
-                params.put("expiryTime", this.previewTokenExpiry);
+                params.put("previewtokenexpiry", this.previewTokenExpiry);
             }
             if(params.size() > 0) {
                 uriBuilder.append("?");
