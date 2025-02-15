@@ -534,6 +534,12 @@
             <version>4.7.2</version>
             <scope>compile</scope>
         </dependency>
+          <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <version>1.5.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>
