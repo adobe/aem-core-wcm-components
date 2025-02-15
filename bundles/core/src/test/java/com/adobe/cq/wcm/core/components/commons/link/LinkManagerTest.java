@@ -113,7 +113,7 @@ public class LinkManagerTest {
                 PN_LINK_URL, page.getPath());
         context.currentResource(linkResource);
         Link link = getUnderTest().get(linkResource).build();
-        assertValidLink(link, page.getPath() + ".html");
+        assertValidLink(link, context.resourceResolver().map(page.getPath()) + ".html");
         assertEquals(page, link.getReference());
         assertEquals((page.getPath() + ".html").replaceAll("^\\/content\\/links\\/site1\\/(.+)","/content/site1/$1"),
                 link.getMappedURL());
@@ -142,8 +142,8 @@ public class LinkManagerTest {
     void testPageLink() {
         Link link = getUnderTest().get(page).build();
 
-        assertValidLink(link, page.getPath() + ".html");
-        assertEquals("https://example.org" + page.getPath() + ".html", link.getExternalizedURL());
+        assertValidLink(link, context.resourceResolver().map(page.getPath()) + ".html");
+        assertEquals("https://example.org" + context.resourceResolver().map(page.getPath()) + ".html", link.getExternalizedURL());
         assertEquals(page, link.getReference());
     }
 
@@ -167,7 +167,7 @@ public class LinkManagerTest {
     void testLinkURLPageLinkWithTarget() {
         Link link = getUnderTest().get(page.getPath()).withLinkTarget("_blank").build();
 
-        assertValidLink(link, page.getPath() + ".html", "_blank");
+        assertValidLink(link, context.resourceResolver().map(page.getPath()) + ".html", "_blank");
         assertEquals(page, link.getReference());
     }
 
@@ -198,8 +198,8 @@ public class LinkManagerTest {
         Link link = getUnderTest().get(linkResource).build();
 
         assertTrue(link.isValid());
-        assertValidLink(link, targetPage2.getPath() + ".html");
-        assertEquals("https://example.org" + targetPage2.getPath() + ".html", link.getExternalizedURL());
+        assertValidLink(link, context.resourceResolver().map(targetPage2.getPath()) + ".html");
+        assertEquals("https://example.org" + context.resourceResolver().map(targetPage2.getPath()) + ".html", link.getExternalizedURL());
         assertEquals(targetPage2, link.getReference());
     }
 
@@ -225,8 +225,8 @@ public class LinkManagerTest {
         Link link = getUnderTest().get(linkResource).build();
 
         assertTrue(link.isValid());
-        assertValidLink(link, targetPage1.getPath() + ".html");
-        assertEquals("https://example.org" + targetPage1.getPath() + ".html", link.getExternalizedURL());
+        assertValidLink(link, context.resourceResolver().map(targetPage1.getPath()) + ".html");
+        assertEquals("https://example.org" + context.resourceResolver().map(targetPage1.getPath()) + ".html", link.getExternalizedURL());
         assertEquals(targetPage1, link.getReference());
     }
 
@@ -255,8 +255,8 @@ public class LinkManagerTest {
         Link link = getUnderTest().get(linkResource).build();
 
         assertTrue(link.isValid());
-        assertValidLink(link, targetPage1.getPath() + ".html");
-        assertEquals("https://example.org" + targetPage1.getPath() + ".html", link.getExternalizedURL());
+        assertValidLink(link, context.resourceResolver().map(targetPage1.getPath()) + ".html");
+        assertEquals("https://example.org" + context.resourceResolver().map(targetPage1.getPath()) + ".html", link.getExternalizedURL());
         assertEquals(targetPage1, link.getReference());
     }
 
