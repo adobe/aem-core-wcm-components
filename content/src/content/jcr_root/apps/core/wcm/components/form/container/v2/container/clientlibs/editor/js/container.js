@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function(document, $, Coral) {
+ (function(document, $, Coral) {
     "use strict";
 
     var ACTION_TYPE_SETTINGS_SELECTOR = "#cmp-action-type-settings";
@@ -112,16 +112,37 @@
     function setVisibilityAndHandleFieldValidation($element, show) {
         if (show) {
             $element.removeClass("hide");
-            $element.find("input[aria-required=false], coral-multifield[aria-required=false]").
-                filter(":not(.hide>input)").filter(":not(input.hide)").
-                filter(":not(.hide>coral-multifield)").filter(":not(input.coral-multifield)").each(function(index, field) {
-                    toggleValidation($(field));
-                });
+            // for preventing storing as string[], if same name is present in other form dialog
+            $element.find("input").filter(":not(.hide>input)").filter(":not(input.hide)").each(function (index, field) {
+                toggleDisable($(field), false);
+            });
+            // for handling textbox, textarea, select, checkbox, pathfield etc
+            $element.find("[aria-required=false]").filter(":not(.hide>*)").each(function (index, field) {
+                toggleValidation($(field), true);
+            });
         } else {
             $element.addClass("hide");
-            $element.find("input[aria-required=true], coral-multifield[aria-required=true]").each(function(index, field) {
-                toggleValidation($(field));
+            // for preventing storing as string[], if same name is present in other form dialog
+            $element.find("input").each(function (index, field) {
+                toggleDisable($(field), true);
             });
+            // for handling textbox, textarea, select, checkbox, pathfield etc
+            $element.find("[aria-required=true],[required]").each(function (index, field) {
+                toggleValidation($(field), false);
+            });
+        }
+    }
+
+    /**
+     * If the form actions have same name for 2 different form action, we need to disable the form dialog properties from actions which are not selected in the dropdown
+     *
+     * @param {jQuery} $field To disable
+     */
+     function toggleDisable($field, disable) {
+        if (disable) {
+            $field.prop("disabled", true);
+        } else {
+            $field.prop("disabled", false);
         }
     }
 
@@ -130,13 +151,19 @@
      *
      * @param {jQuery} $field To disable / enable required validation.
      */
-    function toggleValidation($field) {
+     function toggleValidation($field, show) {
         var notRequired = false;
-        if ($field.attr("aria-required") === "true") {
+        if (!show) {
             notRequired = true;
             $field.attr("aria-required", "false");
-        } else if ($field.attr("aria-required") === "false") {
-            $field.attr("aria-required", "true");
+            /** Custom AMD Code Starts */
+			$field.removeAttr("required");
+ 			/** Custom AMD Code ends */
+        } else {
+			$field.attr("aria-required", "true");
+			/** Custom AMD Code Starts */
+            $field.attr("required", "required");
+		/** Custom AMD Code ends */
         }
         var api = $field.adaptTo("foundation-validation");
         if (api) {
