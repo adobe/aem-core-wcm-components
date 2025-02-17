@@ -19,6 +19,7 @@ import com.adobe.cq.dam.dmopenapi.DynamicMediaOpenAPIPreviewTokenBuilder;
 import java.awt.*;
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -351,8 +352,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             if (StringUtils.isNotEmpty(modifiers)) {
                 builder.withImageModifiers(modifiers);
             }
-            if (dmOpenAPIPreviewTokenGenerator != null) {
-                String repoId = nextGenDynamicMediaConfig.getRepositoryId();
+            String remoteRepository = nextGenDynamicMediaConfig.getRepositoryId();
+            String repoId = getRepoId(remoteRepository);
+            if (dmOpenAPIPreviewTokenGenerator != null && repoId != null) {
                 Map.Entry<String, String> previewTokenMap = dmOpenAPIPreviewTokenGenerator.buildPreviewToken(repoId, assetId);
                 builder.withPreviewToken(previewTokenMap.getKey());
                 builder.withPreviewTokenExpiry(previewTokenMap.getValue());
@@ -374,6 +376,16 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         srcUriTemplate = src.replaceFirst("width=\\d+", "width=" + URI_WIDTH_PLACEHOLDER_ENCODED);
         String ret = src.replaceFirst("width=\\d+", "width=" + URI_WIDTH_PLACEHOLDER);
         return ret;
+    }
+
+    private String getRepoId(String remoteRepository) {
+        String[] parts = remoteRepository.split("-");
+        if (parts.length == 3) {
+            String programId = parts[1];
+            String environmentId = parts[2].split("\\.")[0];
+            return MessageFormat.format("cm-{0}-{1}", programId, environmentId);
+        }
+        return null;
     }
 
     public static boolean isNgdmImageReference(String fileReference) {
