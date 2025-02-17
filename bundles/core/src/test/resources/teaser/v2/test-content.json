@@ -317,6 +317,23 @@
               "sling:resourceType": "core/wcm/components/teaser/v2/teaser",
               "titleFromPage": true,
               "descriptionFromPage": true
+          },
+          "teaser-27"          : {
+            "jcr:primaryType"     : "nt:unstructured",
+            "linkURL"             : "/content/page1",
+            "fileReference"       : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+            "sling:resourceType"  : "core/wcm/components/teaser/v2/teaser",
+            "pretitle"            : "Teaser Pre-title",
+            "titleFromPage"       : false,
+            "descriptionFromPage" : false
+          },
+          "teaser-28"          : {
+            "jcr:primaryType"     : "nt:unstructured",
+            "linkURL"             : "/content/page1",
+            "fileReference"       : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+            "sling:resourceType"  : "core/wcm/components/teaser/v2/teaser",
+            "titleFromPage"       : false,
+            "descriptionFromPage" : false
           }
         }
       }
