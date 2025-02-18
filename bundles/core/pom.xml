@@ -537,7 +537,7 @@
         <dependency>
             <groupId>com.adobe.cq.dam</groupId>
             <artifactId>asset-delivery</artifactId>
-            <version>1.130-ASSETS-46413-B003</version>
+            <version>1.130-ASSETS-46413-B004</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
