@@ -142,7 +142,7 @@
     </build>
 
     <properties>
-        <cq.java.version>11</cq.java.version>
+        <aem.java.version>11</aem.java.version>
         <excludedGroups>failing,nested</excludedGroups>
         <granite.it.author.url>http://localhost:4502</granite.it.author.url>
         <granite.it.publish.url>http://localhost:4503</granite.it.publish.url>
