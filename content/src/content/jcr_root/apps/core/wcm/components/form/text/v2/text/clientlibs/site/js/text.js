@@ -143,7 +143,7 @@
     };
 
     function onDocumentReady() {
-        var  validationMessages = document.querySelectorAll(selectors.validationMessage);
+        var validationMessages = document.querySelectorAll(selectors.validationMessage);
         if (validationMessages && validationMessages.length > 0) {
             displayValidationMessage = true;
         }
