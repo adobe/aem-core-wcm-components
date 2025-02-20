@@ -15,9 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import com.adobe.cq.dam.dmopenapi.DynamicMediaOpenAPIPreviewTokenBuilder;
 import java.awt.*;
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +81,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @OSGiService
     @Optional
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
+
+    @OSGiService
+    @Optional
+    private DynamicMediaOpenAPIPreviewTokenBuilder dmOpenAPIPreviewTokenGenerator;
 
     @OSGiService
     @Optional
@@ -333,6 +339,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         String smartCrop = properties.get("smartCropRendition", String.class);
         String modifiers = properties.get("imageModifiers", String.class);
         if (isNgdmImageReference(fileReference)) {
+            Scanner scanner = new Scanner(fileReference);
+            scanner.useDelimiter("/");
+            String assetId = scanner.next();
             int width = currentStyle.get(PN_DESIGN_RESIZE_WIDTH, DEFAULT_NGDM_ASSET_WIDTH);
             NextGenDMImageURIBuilder builder = new NextGenDMImageURIBuilder(nextGenDynamicMediaConfig, fileReference)
                 .withPreferWebp(true)
@@ -343,6 +352,13 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             if (StringUtils.isNotEmpty(modifiers)) {
                 builder.withImageModifiers(modifiers);
             }
+            String remoteRepository = nextGenDynamicMediaConfig.getRepositoryId();
+            String repoId = getRepoId(remoteRepository);
+            if (dmOpenAPIPreviewTokenGenerator != null && repoId != null) {
+                Map.Entry<String, String> previewTokenMap = dmOpenAPIPreviewTokenGenerator.buildPreviewToken(repoId, assetId);
+                builder.withPreviewToken(previewTokenMap.getKey());
+                builder.withPreviewTokenExpiry(previewTokenMap.getValue());
+            }
             src = builder.build();
             ngdmImage = true;
             hasContent = true;
@@ -350,9 +366,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 client = clientBuilderFactory.newBuilder().build();
             }
             metadataDeliveryEndpoint = nextGenDynamicMediaConfig.getAssetMetadataPath();
-            Scanner scanner = new Scanner(fileReference);
-            scanner.useDelimiter("/");
-            String assetId = scanner.next();
             metadataDeliveryEndpoint = metadataDeliveryEndpoint.replace(PATH_PLACEHOLDER_ASSET_ID, assetId);
         }
     }
@@ -363,6 +376,16 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         srcUriTemplate = src.replaceFirst("width=\\d+", "width=" + URI_WIDTH_PLACEHOLDER_ENCODED);
         String ret = src.replaceFirst("width=\\d+", "width=" + URI_WIDTH_PLACEHOLDER);
         return ret;
+    }
+
+    private String getRepoId(String remoteRepository) {
+        String[] parts = remoteRepository.split("-");
+        if (parts.length == 3) {
+            String programId = parts[1];
+            String environmentId = parts[2].split("\\.")[0];
+            return MessageFormat.format("cm-{0}-{1}", programId, environmentId);
+        }
+        return null;
     }
 
     public static boolean isNgdmImageReference(String fileReference) {
