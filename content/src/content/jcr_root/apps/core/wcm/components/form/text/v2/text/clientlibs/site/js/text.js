@@ -96,7 +96,7 @@
             }
         }
         if (displayValidationMessage) {
-            let validationMessage = event.target.parentElement.querySelector(".cmp-form-text__validation-message");
+            var validationMessage = event.target.parentElement.querySelector(".cmp-form-text__validation-message");
             if (validationMessage) {
                 validationMessage.innerText = event.target.validationMessage;
             }
@@ -143,7 +143,7 @@
     };
 
     function onDocumentReady() {
-        var validationMessages = document.querySelectorAll(selectors.validationMessage);
+        var  validationMessages = document.querySelectorAll(selectors.validationMessage);
         if (validationMessages && validationMessages.length > 0) {
             displayValidationMessage = true;
         }
