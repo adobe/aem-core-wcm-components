@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -42,6 +44,7 @@ import com.adobe.cq.dam.cfm.ContentElement;
 import com.adobe.cq.dam.cfm.ContentFragment;
 import com.adobe.cq.dam.cfm.FragmentTemplate;
 import com.adobe.cq.export.json.ComponentExporter;
+import com.day.cq.commons.Externalizer;
 import com.day.cq.wcm.api.TemplatedResource;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
@@ -56,6 +59,11 @@ import static com.day.cq.commons.jcr.JcrConstants.JCR_TITLE;
 public class ContentFragmentUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(ContentFragmentUtils.class);
+
+    // constants to build the new editor URL
+    private static final String UNIFIED_SHELL_STAGE_ENDPOINT = "https://experience-stage.adobe.com/";
+    private static final String UNIFIED_SHELL_PROD_ENDPOINT = "https://experience.adobe.com/";
+    private static final String AEM_STAGE_ENV = "cmstg";
 
     /**
      * The default grid type.
@@ -320,5 +328,31 @@ public class ContentFragmentUtils {
             }
         }
         return null;
+    }
+
+    public static String getNewEditorUrl(ResourceResolver resourceResolver, String fragmentPath) {
+        String newEditorUrl = "";
+
+        Externalizer externalizer = resourceResolver.adaptTo(Externalizer.class);
+        if (externalizer != null) {
+            String aemAuthorExternalLink = externalizer.externalLink(resourceResolver, Externalizer.AUTHOR, "/");
+            try {
+                URL aemInstanceUrl = new URL(aemAuthorExternalLink);
+                String aemInstanceHost = aemInstanceUrl.getHost();
+
+                if (aemInstanceHost != null) {
+                    if (aemInstanceHost.contains(AEM_STAGE_ENV)) {
+                        newEditorUrl = UNIFIED_SHELL_STAGE_ENDPOINT;
+                    } else {
+                        newEditorUrl = UNIFIED_SHELL_PROD_ENDPOINT;
+                    }
+
+                    newEditorUrl += "?repo=" + aemInstanceUrl.getHost() + "#/aem/cf/editor" + Text.escapePath(fragmentPath);
+                }
+            } catch (MalformedURLException e) {
+                LOG.error("Cannot create URL for the new Content Fragment Editor, malformed external link: {}", aemAuthorExternalLink);
+            }
+        }
+        return newEditorUrl;
     }
 }
