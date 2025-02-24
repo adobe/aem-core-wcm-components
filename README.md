@@ -2,7 +2,7 @@
 
 [![Test](https://github.com/adobe/aem-core-wcm-components/workflows/Test/badge.svg)](https://github.com/adobe/aem-core-wcm-components/actions?query=workflow%3ATest)
 [![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components)
-![Maven Central](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcom%2Fadobe%2Fcq%2Fcore.wcm.components.all%2Fmaven-metadata.xml)
+[![Maven Central](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcom%2Fadobe%2Fcq%2Fcore.wcm.components.all%2Fmaven-metadata.xml)](https://repo1.maven.org/maven2/com/adobe/cq/core.wcm.components.all/)
 [![javadoc](https://javadoc.io/badge2/com.adobe.cq/core.wcm.components.core/javadoc.svg)](https://javadoc.io/doc/com.adobe.cq/core.wcm.components.core)
 
 Set of standardized Web Content Management (WCM) components for [Adobe Experience Manager (AEM)](https://www.adobe.com/marketing/experience-manager.html) to speed up development time and reduce maintenance cost of your websites.
@@ -91,9 +91,11 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 ### System Requirements
 
-Core Components | AEM as a Cloud Service | AEM 6.5   | Java SE | Maven
-----------------|------------------------|-----------|---------|---------
-[2.25.4+](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.23.4) | Continual | 6.5.21.0+ | 8, <br/>11 | 3.3.9+
+Core Components | AEM as a Cloud Service | AEM 6.5      | Java SE   | Maven
+----------------|------------------------|--------------|-----------|---------
+[>= 2.26.x](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.23.4) | Continual              | \>= 6.5.21.0 | 11        | \>= 3.3.9
+[<= 2.25.x](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.23.4) | Not applicable         | \<= 6.5.21.0 | 8 <br/>11 | \<= 3.3.9
+
 
 For the requirements from previous Core Component releases, see [Historical System Requirements](VERSIONS.md).
 

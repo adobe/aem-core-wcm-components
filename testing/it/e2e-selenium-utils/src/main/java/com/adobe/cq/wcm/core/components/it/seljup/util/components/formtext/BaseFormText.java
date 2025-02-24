@@ -129,4 +129,8 @@ public class BaseFormText {
     public boolean elementHasNoAriaDescribedByAttribute(SelenideElement element) {
         return element.getAttribute("aria-describedby") == null;
     }
+
+    public void setValue(String elemName, String value) {
+        $("[name='" + elemName + "'][data-cmp-hook-form-text=\"input\"]").sendKeys(value);
+    }
 }
