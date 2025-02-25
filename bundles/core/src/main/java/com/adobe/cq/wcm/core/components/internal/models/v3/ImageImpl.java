@@ -379,7 +379,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     }
 
     private String getRepoId(String remoteRepository) {
-        System.out.println("ths is the repository ID " + remoteRepository);
         String[] parts = remoteRepository.split("-");
         if (parts.length >= 3) {
             String programId = parts[1];
