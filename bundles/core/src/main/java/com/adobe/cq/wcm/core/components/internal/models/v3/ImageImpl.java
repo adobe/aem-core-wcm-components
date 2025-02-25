@@ -356,8 +356,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             String repoId = getRepoId(remoteRepository);
             if (dmOpenAPIPreviewTokenGenerator != null && repoId != null) {
                 Map.Entry<String, String> previewTokenMap = dmOpenAPIPreviewTokenGenerator.buildPreviewToken(repoId, assetId);
-                builder.withPreviewToken(previewTokenMap.getKey());
-                builder.withPreviewTokenExpiry(previewTokenMap.getValue());
+                if (null != previewTokenMap) {
+                    builder.withPreviewToken(previewTokenMap.getKey());
+                    builder.withPreviewTokenExpiry(previewTokenMap.getValue());
+                }
             }
             src = builder.build();
             ngdmImage = true;
