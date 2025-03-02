@@ -20,8 +20,6 @@
     var CLASS_CONTENTFRAGMENT = "cmp-contentfragment";
     // name of the attribute on the content fragment storing its path
     var ATTRIBUTE_PATH = "data-cmp-contentfragment-path";
-    // name of the attribute on the content fragment storing the new editor url
-    var ATTRIBUTE_NEW_EDITOR_URL = "data-cmp-contentfragment-neweditorurl";
     // base URL of the editor
     var EDITOR_URL = "/editor.html";
 
@@ -39,21 +37,13 @@
             // get the path of the content fragment
             var fragmentPath = $(editable.dom).find("." + CLASS_CONTENTFRAGMENT).attr(ATTRIBUTE_PATH);
             if (fragmentPath) {
-                var editorUrl = "";
-                // check if the url for new editor is set
-                if (Granite.Toggles && Granite.Toggles.isEnabled("FT_SITES-19326")) {
-                    editorUrl = $(editable.dom).find("." + CLASS_CONTENTFRAGMENT).attr(ATTRIBUTE_NEW_EDITOR_URL);
-                }
-                // if the url for the new editor is set build the URL to the old one
-                if (!editorUrl) {
-                    editorUrl = EDITOR_URL + fragmentPath;
-                    var fragment = ns.CFM.Fragments.adaptToFragment(editable.dom);
-                    if (fragment && typeof fragment.variation !== "undefined" && fragment.variation !== "master") {
-                        editorUrl = editorUrl + "?variation=" + fragment.variation;
-                    }
+                var fragmentEditUrl = EDITOR_URL + fragmentPath;
+                var fragment = ns.CFM.Fragments.adaptToFragment(editable.dom);
+                if (fragment && typeof fragment.variation !== "undefined" && fragment.variation !== "master") {
+                    fragmentEditUrl = fragmentEditUrl + "?variation=" + fragment.variation;
                 }
                 // open the editor in a new window
-                window.open(Granite.HTTP.externalize(editorUrl));
+                window.open(Granite.HTTP.externalize(fragmentEditUrl));
             }
         }
 

@@ -243,12 +243,6 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
             .build();
     }
 
-    @Override
-    @NotNull
-    public String getNewEditorUrl() {
-        return ContentFragmentUtils.getNewEditorUrl(resourceResolver, fragmentPath);
-    }
-
     /**
      * Empty placeholder content fragment.
      */

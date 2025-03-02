@@ -45,7 +45,6 @@ import com.adobe.cq.dam.cfm.ContentFragment;
 import com.adobe.cq.dam.cfm.FragmentTemplate;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.day.cq.commons.Externalizer;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -326,24 +325,6 @@ public class ContentFragmentUtilsTest {
         valueMap.put("metaType", "testMetaType");
         metaType = ContentFragmentUtils.getElementMetaType(element);
         assertEquals("testMetaType", metaType);
-    }
-
-    @Test
-    public void testGetNewEditorUrl() {
-        ResourceResolver resourceResolver = Mockito.mock(ResourceResolver.class);
-        Externalizer externalizer = Mockito.mock(Externalizer.class);
-        Mockito.when(resourceResolver.adaptTo(Externalizer.class)).thenReturn(externalizer);
-        String fragmentPath = "/content/dam/cf1";
-
-        Mockito.when(externalizer.externalLink(resourceResolver, Externalizer.AUTHOR, "/"))
-                .thenReturn("https://author-p12345-e1234.adobeaemcloud.com");
-        assertEquals("https://experience.adobe.com/?repo=author-p12345-e1234.adobeaemcloud.com#/aem/cf/editor/content/dam/cf1",
-                ContentFragmentUtils.getNewEditorUrl(resourceResolver, fragmentPath));
-
-        Mockito.when(externalizer.externalLink(resourceResolver, Externalizer.AUTHOR, "/"))
-                .thenReturn("https://author-p12345-e1234-cmstg.adobeaemcloud.com");
-        assertEquals("https://experience-stage.adobe.com/?repo=author-p12345-e1234-cmstg.adobeaemcloud.com#/aem/cf/editor/content/dam/cf1",
-                ContentFragmentUtils.getNewEditorUrl(resourceResolver, fragmentPath));
     }
 
     /**
