@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import com.adobe.cq.dam.dmopenapi.DynamicMediaOpenAPIPreviewTokenBuilder;
+import com.adobe.cq.wcm.core.components.internal.PreviewTokenBuilderUtils;
 import java.awt.*;
 import java.io.IOException;
 import java.io.StringReader;
@@ -81,10 +81,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @OSGiService
     @Optional
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
-
-    @OSGiService
-    @Optional
-    private DynamicMediaOpenAPIPreviewTokenBuilder dmOpenAPIPreviewTokenGenerator;
 
     @OSGiService
     @Optional
@@ -346,7 +342,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             NextGenDMImageURIBuilder builder = new NextGenDMImageURIBuilder(nextGenDynamicMediaConfig, fileReference)
                 .withPreferWebp(true)
                 .withWidth(width);
-            if(StringUtils.isNotEmpty(smartCrop) && !StringUtils.equals(smartCrop, SMART_CROP_AUTO)) {
+            if (StringUtils.isNotEmpty(smartCrop) && !StringUtils.equals(smartCrop, SMART_CROP_AUTO)) {
                 builder.withSmartCrop(smartCrop);
             }
             if (StringUtils.isNotEmpty(modifiers)) {
@@ -354,11 +350,13 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             }
             String remoteRepository = nextGenDynamicMediaConfig.getRepositoryId();
             String repoId = getRepoId(remoteRepository);
-            if (dmOpenAPIPreviewTokenGenerator != null && repoId != null) {
-                Map.Entry<String, String> previewTokenMap = dmOpenAPIPreviewTokenGenerator.buildPreviewToken(repoId, assetId);
+            if (repoId != null) {
+                Map.Entry<String, String> previewTokenMap = PreviewTokenBuilderUtils.buildPreviewToken(repoId, assetId);
                 if (null != previewTokenMap) {
-                    builder.withPreviewToken(previewTokenMap.getKey());
-                    builder.withPreviewTokenExpiry(previewTokenMap.getValue());
+                    // append p: to indicate that this is a preview token.
+                    // it can also be a token generated using private/public key pair or any other way
+                    builder.withToken("p:" + previewTokenMap.getKey());
+                    builder.withTokenExpiry(previewTokenMap.getValue());
                 }
             }
             src = builder.build();
@@ -380,6 +378,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return ret;
     }
 
+    // convert remote repository provided in delivery-pxxxx-eyyyy.adobeaemcloud.com to cm-pxxxx-eyyyy to use in preview token
     private String getRepoId(String remoteRepository) {
         String[] parts = remoteRepository.split("-");
         if (parts.length >= 3) {

@@ -37,8 +37,8 @@ public class NextGenDMImageURIBuilder {
     private NextGenDynamicMediaConfig config;
     private String fileReference;
     private String smartCropName;
-    private String previewToken;
-    private String previewTokenExpiry;
+    private String token;
+    private String tokenExpiry;
     private int width = DEFAULT_NGDM_ASSET_WIDTH;
 
     private int height;
@@ -98,20 +98,21 @@ public class NextGenDMImageURIBuilder {
     }
 
     /**
-     * Set preview token.
-     * @param previewToken
+     * Set token to be set in delivery URL. It can be a preview token or a token generated
+     * with public/private key pair
+     * @param token - a token to check what version of asset should be delivered
      */
-    public NextGenDMImageURIBuilder withPreviewToken(String previewToken) {
-        this.previewToken = previewToken;
+    public NextGenDMImageURIBuilder withToken(String token) {
+        this.token = token;
         return this;
     }
 
     /**
-     * Set preview expiry.
-     * @param previewTokenExpiry
+     * Set expiry of the token.
+     * @param tokenExpiry - a string indicating whether the token is valid
      */
-    public NextGenDMImageURIBuilder withPreviewTokenExpiry(String previewTokenExpiry) {
-        this.previewTokenExpiry = previewTokenExpiry;
+    public NextGenDMImageURIBuilder withTokenExpiry(String tokenExpiry) {
+        this.tokenExpiry = tokenExpiry;
         return this;
     }
 
@@ -147,11 +148,11 @@ public class NextGenDMImageURIBuilder {
             if (StringUtils.isNotEmpty(this.smartCropName)) {
                 params.put("smartcrop", this.smartCropName);
             }
-            if (StringUtils.isNotEmpty(this.previewToken)) {
-                params.put("previewtoken", this.previewToken);
+            if (StringUtils.isNotEmpty(this.token)) {
+                params.put("token", this.token);
             }
-            if (StringUtils.isNotEmpty(this.previewTokenExpiry)) {
-                params.put("previewtokenexpiry", this.previewTokenExpiry);
+            if (StringUtils.isNotEmpty(this.tokenExpiry)) {
+                params.put("expiryTime", this.tokenExpiry);
             }
             if(params.size() > 0) {
                 uriBuilder.append("?");

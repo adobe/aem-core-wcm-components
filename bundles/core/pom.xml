@@ -534,12 +534,6 @@
             <version>4.7.2</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.adobe.cq.dam</groupId>
-            <artifactId>asset-delivery</artifactId>
-            <version>1.130-ASSETS-46413-B004</version>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 
 </project>
