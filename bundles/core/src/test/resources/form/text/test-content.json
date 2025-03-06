@@ -100,7 +100,43 @@
             "usePlaceholder": "true",
             "rows": 3,
             "hideTitle": true
-          }
+          },
+            "text-v2-2": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:title": "Custom title",
+                "constraintMessage": "The value should be a valid email address",
+                "showHideExpression": "((givenName.equals(\"\"Referees\"\")))",
+                "readOnly": true,
+                "helpMessage": "Custom help/placeholder message",
+                "required": true,
+                "name": "Custom Name",
+                "type": "email",
+                "useTextarea": true,
+                "value": "Prefilled Sample Input",
+                "sling:resourceType": "core/wcm/components/form/text/v2/text",
+                "requiredMessage": "please fill the field",
+                "usePlaceholder": "true",
+                "rows": 3,
+                "hideTitle": true
+            },
+            "text-v2-3": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:title": "Custom title",
+                "constraintMessage": "The value should be a valid email address",
+                "showHideExpression": "((givenName.equals(\"\"Referees\"\")))",
+                "readOnly": true,
+                "helpMessage": "Custom help/placeholder message",
+                "required": true,
+                "name": "Custom Name",
+                "type": "email",
+                "useTextarea": true,
+                "value": "Prefilled Sample Input",
+                "sling:resourceType": "core/wcm/components/form/text/v2/text",
+                "requiredMessage": "please fill the field",
+                "usePlaceholder": "true",
+                "rows": 3,
+                "hideTitle": true
+            }
         }
       }
     }
