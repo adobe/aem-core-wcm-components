@@ -19,7 +19,6 @@ import com.adobe.cq.wcm.core.components.internal.PreviewTokenBuilderUtils;
 import java.awt.*;
 import java.io.IOException;
 import java.io.StringReader;
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;

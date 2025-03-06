@@ -53,7 +53,6 @@ public class PreviewTokenBuilderUtils {
             if (assetId == null || StringUtils.isBlank(secretKey)) {
                 throw new Exception("Invalid input parameters");
             }
-            System.out.println("Should never be coming here");
             LocalDateTime nowPlusThirty = LocalDateTime.now().plusMinutes(30);
             Date expirationTime = Date.from(nowPlusThirty.atZone(ZoneId.systemDefault()).toInstant());
             final String expiryTimeStr = dateFormat.get().format(expirationTime);
