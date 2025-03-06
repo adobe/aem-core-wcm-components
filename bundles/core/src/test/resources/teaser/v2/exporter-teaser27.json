@@ -1,0 +1,20 @@
+{
+    "id"             : "teaser-721d56e29c",
+    "pretitle"       : "Teaser Pre-title",
+    "actionsEnabled" : true,
+    "imageLinkHidden": false,
+    "titleLinkHidden": false,
+    "actions"        : [],
+    "link"           : {
+        "valid": true,
+        "url"  : "/core/content/page1.html"
+    },
+    "imagePath"      : "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-27.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
+    ":type"          : "core/wcm/components/teaser/v2/teaser",
+    "dataLayer"      : {
+        "teaser-721d56e29c": {
+            "@type"         : "core/wcm/components/teaser/v2/teaser",
+            "xdm:linkURL"   : "/core/content/page1.html"
+        }
+    }
+}
