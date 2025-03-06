@@ -47,29 +47,27 @@ public class PreviewTokenBuilderUtils {
         return dateFormat;
     });
 
-    public static Map.Entry<String, String> buildPreviewToken(String repoId, String assetId) {
+    public static Map.Entry<String, String> buildPreviewToken(String assetId) {
         try {
-            if (repoId == null || assetId == null) {
+            String secretKey = readKeyFromEnvVar(PREVIEW_KEY);
+            if (assetId == null || StringUtils.isBlank(secretKey)) {
                 throw new Exception("Invalid input parameters");
             }
+            System.out.println("Should never be coming here");
             LocalDateTime nowPlusThirty = LocalDateTime.now().plusMinutes(30);
             Date expirationTime = Date.from(nowPlusThirty.atZone(ZoneId.systemDefault()).toInstant());
             final String expiryTimeStr = dateFormat.get().format(expirationTime);
-            return new AbstractMap.SimpleEntry<>(computeSignature(repoId, assetId, expiryTimeStr), expiryTimeStr);
+            return new AbstractMap.SimpleEntry<>(computeSignature(assetId, expiryTimeStr, secretKey), expiryTimeStr);
         } catch (Exception e) {
-            LOG.warn("Could not generate preview token for repository {}", repoId, e);
+            LOG.warn("Could not generate preview token for asset {}", assetId, e);
         }
         return null;
     }
 
-    private static String computeSignature(String repoId, String assetId, String expiryTime) throws Exception {
+    private static String computeSignature(String assetId, String expiryTime, String secretKey) throws Exception {
         try {
-            String stringToSign = expiryTime + ":" + repoId + ":" + assetId;
+            String stringToSign = expiryTime + ":" + assetId;
             Mac mac = Mac.getInstance(HMAC_SHA256);
-            String secretKey = readKeyFromEnvVar(PREVIEW_KEY);
-            if (StringUtils.isBlank(secretKey)) {
-                throw new Exception("Preview key not available for " + repoId);
-            }
             mac.init(new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), HMAC_SHA256));
             return Hex.encodeHexString(mac.doFinal(stringToSign.getBytes(StandardCharsets.UTF_8)));
         } catch (NoSuchAlgorithmException | InvalidKeyException nsae) {

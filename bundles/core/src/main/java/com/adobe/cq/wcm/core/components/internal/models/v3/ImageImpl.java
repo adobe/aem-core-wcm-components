@@ -348,16 +348,13 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             if (StringUtils.isNotEmpty(modifiers)) {
                 builder.withImageModifiers(modifiers);
             }
-            String remoteRepository = nextGenDynamicMediaConfig.getRepositoryId();
-            String repoId = getRepoId(remoteRepository);
-            if (repoId != null) {
-                Map.Entry<String, String> previewTokenMap = PreviewTokenBuilderUtils.buildPreviewToken(repoId, assetId);
-                if (null != previewTokenMap) {
-                    // append p: to indicate that this is a preview token.
-                    // it can also be a token generated using private/public key pair or any other way
-                    builder.withToken("p:" + previewTokenMap.getKey());
-                    builder.withTokenExpiry(previewTokenMap.getValue());
-                }
+
+            Map.Entry<String, String> previewTokenMap = PreviewTokenBuilderUtils.buildPreviewToken(assetId);
+            if (null != previewTokenMap) {
+                // append p: to indicate that this is a preview token.
+                // it can also be a token generated using private/public key pair or any other way
+                builder.withToken("p:" + previewTokenMap.getKey());
+                builder.withTokenExpiry(previewTokenMap.getValue());
             }
             src = builder.build();
             ngdmImage = true;
@@ -376,17 +373,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         srcUriTemplate = src.replaceFirst("width=\\d+", "width=" + URI_WIDTH_PLACEHOLDER_ENCODED);
         String ret = src.replaceFirst("width=\\d+", "width=" + URI_WIDTH_PLACEHOLDER);
         return ret;
-    }
-
-    // convert remote repository provided in delivery-pxxxx-eyyyy.adobeaemcloud.com to cm-pxxxx-eyyyy to use in preview token
-    private String getRepoId(String remoteRepository) {
-        String[] parts = remoteRepository.split("-");
-        if (parts.length >= 3) {
-            String programId = parts[1];
-            String environmentId = parts[2].split("\\.")[0];
-            return MessageFormat.format("cm-{0}-{1}", programId, environmentId);
-        }
-        return null;
     }
 
     public static boolean isNgdmImageReference(String fileReference) {

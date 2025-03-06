@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal;
 
 import java.util.Map;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class PreviewTokenBuilderUtilsTest {
 
-    private static final String REPO_ID = "testRepo";
     private static final String ASSET_ID = "testAsset";
     private static final String SECRET_KEY = "testSecretKey";
     private static final String PREVIEW_KEY = "previewKey";
@@ -36,30 +36,29 @@ public class PreviewTokenBuilderUtilsTest {
         System.setProperty(PREVIEW_KEY, SECRET_KEY);
     }
 
+    @AfterAll
+    static void tearDown() {
+        System.clearProperty(PREVIEW_KEY);
+    }
+
     @Test
     void testBuildPreviewToken_Success() {
-        Map.Entry<String, String> result = PreviewTokenBuilderUtils.buildPreviewToken(REPO_ID, ASSET_ID);
+        Map.Entry<String, String> result = PreviewTokenBuilderUtils.buildPreviewToken(ASSET_ID);
         assertNotNull(result);
         assertNotNull(result.getKey());
         assertNotNull(result.getValue());
     }
 
     @Test
-    void testBuildPreviewToken_NullRepoId() {
-        Map.Entry<String, String> result = PreviewTokenBuilderUtils.buildPreviewToken(null, ASSET_ID);
-        assertNull(result);
-    }
-
-    @Test
     void testBuildPreviewToken_NullAssetId() {
-        Map.Entry<String, String> result = PreviewTokenBuilderUtils.buildPreviewToken(REPO_ID, null);
+        Map.Entry<String, String> result = PreviewTokenBuilderUtils.buildPreviewToken(null);
         assertNull(result);
     }
 
     @Test
     void testBuildPreviewToken_MissingSecretKey() {
         System.clearProperty(PREVIEW_KEY);
-        Map.Entry<String, String> result = PreviewTokenBuilderUtils.buildPreviewToken(REPO_ID, ASSET_ID);
+        Map.Entry<String, String> result = PreviewTokenBuilderUtils.buildPreviewToken(ASSET_ID);
         assertNull(result);
     }
 }
