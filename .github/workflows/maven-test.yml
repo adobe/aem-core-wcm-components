@@ -32,7 +32,7 @@ jobs:
       matrix:
         os: [ ubuntu-latest ]
         java: [11, 17, 21]
-        profile: [ '', '-Pcloud,adobe-public']
+        profile: ['-Pcloud,adobe-public']
 
     steps:
       # Check out Git repository
