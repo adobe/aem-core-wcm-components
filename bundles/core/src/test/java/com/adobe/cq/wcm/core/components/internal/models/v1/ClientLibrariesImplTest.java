@@ -210,9 +210,8 @@ class ClientLibrariesImplTest {
         PageManager pageManager = context.pageManager();
         Page page = pageManager.getPage(ROOT_PAGE);
         Map<String, Object> attributes = new HashMap<>();
-        ClientLibrariesImpl clientlibs = Objects.requireNonNull((ClientLibrariesImpl) getClientLibrariesUnderTest(ROOT_PAGE, attributes));
         attributes.put(ClientLibraries.OPTION_RESOURCE_TYPES, Utils.getPageResourceTypes(page, context.request(), mock(ModelFactory.class)));
-        clientlibs = Objects.requireNonNull((ClientLibrariesImpl) getClientLibrariesUnderTest(ROOT_PAGE, attributes));
+        ClientLibrariesImpl clientlibs = Objects.requireNonNull((ClientLibrariesImpl) getClientLibrariesUnderTest(ROOT_PAGE, attributes));
 
         Set<String> categories = new HashSet<>();
         categories.add(TEASER_CATEGORY);
