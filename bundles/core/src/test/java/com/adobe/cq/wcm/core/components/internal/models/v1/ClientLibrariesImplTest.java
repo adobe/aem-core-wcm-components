@@ -17,17 +17,14 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
@@ -92,8 +89,6 @@ class ClientLibrariesImplTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    private Map<String,ClientLibrary> allLibraries; // a map of (path, library) of all the libraries
-    private Map<String,ClientLibrary> librariesMap; // a map of (category, library) of all the libraries
     private Map<String,String> jsIncludes; // expected js includes
     private Map<String,String> cssIncludes; // expected css includes
     private Map<String,String> jsIncludesWithAttributes; // expected js includes when injecting attributes
@@ -156,10 +151,11 @@ class ClientLibrariesImplTest {
         when(carouselClientLibrary.getCategories()).thenReturn(carouselCategories);
         when(carouselClientLibrary.getPath()).thenReturn(CAROUSEL_CLIENTLIB_PATH);
 
-        librariesMap = new HashMap<>();
-        librariesMap.put(TEASER_CATEGORY, teaserClientLibrary);
-        librariesMap.put(ACCORDION_CATEGORY, accordionClientLibrary);
-        librariesMap.put(CAROUSEL_CATEGORY, carouselClientLibrary);
+        // a map of (category, library) of all the libraries
+        Map<String, ClientLibrary> librariesByCategory = new HashMap<>();
+        librariesByCategory.put(TEASER_CATEGORY, teaserClientLibrary);
+        librariesByCategory.put(ACCORDION_CATEGORY, accordionClientLibrary);
+        librariesByCategory.put(CAROUSEL_CATEGORY, carouselClientLibrary);
 
         // Mock HtmlLibrary
         HtmlLibrary teaserJsHtmlLibrary = mock(HtmlLibrary.class);
@@ -186,90 +182,27 @@ class ClientLibrariesImplTest {
         } catch (IOException e) {
             fail(String.format("Unable to get input stream from the library: %s", e.getMessage()));
         }
+        Map<Pair<String, LibraryType>, HtmlLibrary> htmlLibrariesByPathAndType = new HashMap<>();
+        htmlLibrariesByPathAndType.put(Pair.of(TEASER_CLIENTLIB_PATH, LibraryType.JS), teaserJsHtmlLibrary);
+        htmlLibrariesByPathAndType.put(Pair.of(ACCORDION_CLIENTLIB_PATH, LibraryType.JS), accordionJsHtmlLibrary);
+        htmlLibrariesByPathAndType.put(Pair.of(CAROUSEL_CLIENTLIB_PATH, LibraryType.JS), carouselJsHtmlLibrary);
+        htmlLibrariesByPathAndType.put(Pair.of(TEASER_CLIENTLIB_PATH, LibraryType.CSS), teaserCssHtmlLibrary);
+        htmlLibrariesByPathAndType.put(Pair.of(ACCORDION_CLIENTLIB_PATH, LibraryType.CSS), accordionCssHtmlLibrary);
+        htmlLibrariesByPathAndType.put(Pair.of(CAROUSEL_CLIENTLIB_PATH, LibraryType.CSS), carouselCssHtmlLibrary);
 
-        // Mock htmlLibraryManager.getLibraries()
-        allLibraries = new HashMap<>();
-        allLibraries.put(TEASER_CLIENTLIB_PATH, teaserClientLibrary);
-        allLibraries.put(ACCORDION_CLIENTLIB_PATH, accordionClientLibrary);
-        allLibraries.put(CAROUSEL_CLIENTLIB_PATH, carouselClientLibrary);
-        HtmlLibraryManager htmlLibraryManager = context.registerInjectActivateService(mock(MockHtmlLibraryManager.class));
-        when(htmlLibraryManager.getLibraries()).thenReturn(allLibraries);
+        // a map of (path, library) of all the libraries
+        Map<String, ClientLibrary> librariesByPath = new HashMap<>();
+        librariesByPath.put(TEASER_CLIENTLIB_PATH, teaserClientLibrary);
+        librariesByPath.put(ACCORDION_CLIENTLIB_PATH, accordionClientLibrary);
+        librariesByPath.put(CAROUSEL_CLIENTLIB_PATH, carouselClientLibrary);
 
-        // Mock htmlLibraryManager.getLibraries(a, b, c, d)
-        doAnswer(invocation -> {
-            Object[] args = invocation.getArguments();
-            String[] categories = (String[]) args[0];
-            Collection<ClientLibrary> libraries = new ArrayList<>();
-            for (String category : categories) {
-                libraries.add(librariesMap.get(category));
-            }
-            return libraries;
-        }).when(htmlLibraryManager).getLibraries(any(String[].class), any(LibraryType.class), anyBoolean(), anyBoolean());
-
-        // Mock htmlLibraryManager.getLibrary(libraryType, clientlib.getPath())
-        when(htmlLibraryManager.getLibrary(eq(LibraryType.JS), eq(TEASER_CLIENTLIB_PATH))).thenReturn(teaserJsHtmlLibrary);
-        when(htmlLibraryManager.getLibrary(eq(LibraryType.JS), eq(ACCORDION_CLIENTLIB_PATH))).thenReturn(accordionJsHtmlLibrary);
-        when(htmlLibraryManager.getLibrary(eq(LibraryType.JS), eq(CAROUSEL_CLIENTLIB_PATH))).thenReturn(carouselJsHtmlLibrary);
-        when(htmlLibraryManager.getLibrary(eq(LibraryType.CSS), eq(TEASER_CLIENTLIB_PATH))).thenReturn(teaserCssHtmlLibrary);
-        when(htmlLibraryManager.getLibrary(eq(LibraryType.CSS), eq(ACCORDION_CLIENTLIB_PATH))).thenReturn(accordionCssHtmlLibrary);
-        when(htmlLibraryManager.getLibrary(eq(LibraryType.CSS), eq(CAROUSEL_CLIENTLIB_PATH))).thenReturn(carouselCssHtmlLibrary);
-
-        // Mock htmlLibraryManager.writeJsInclude
-        try {
-            doAnswer(invocation -> {
-                Object[] args = invocation.getArguments();
-                StringBuilder scriptIncludes = new StringBuilder();
-                for (int i = 2; i < args.length; i++) {
-                    String category = (String) args[i];
-                    String script = jsIncludes.get(category);
-                    scriptIncludes.append(script);
-                }
-                ((PrintWriter)args[1]).write(scriptIncludes.toString());
-                return null;
-            }).when(htmlLibraryManager).writeJsInclude(any(SlingHttpServletRequest.class), any(Writer.class), any(String.class));
-        } catch (IOException e) {
-            fail(String.format("Unable to write JS include: %s", e.getMessage()));
-        }
-
-        // Mock htmlLibraryManager.writeCssInclude
-        try {
-            doAnswer(invocation -> {
-                Object[] args = invocation.getArguments();
-                StringBuilder linkIncludes = new StringBuilder();
-                for (int i = 2; i < args.length; i++) {
-                    String category = (String) args[i];
-                    String link = cssIncludes.get(category);
-                    linkIncludes.append(link);
-                }
-                ((PrintWriter)args[1]).write(linkIncludes.toString());
-                return null;
-            }).when(htmlLibraryManager).writeCssInclude(any(SlingHttpServletRequest.class), any(Writer.class), any(String.class));
-        } catch (IOException e) {
-            fail(String.format("Unable to write CSS include: %s", e.getMessage()));
-        }
-
-        // Mock htmlLibraryManager.writeIncludes
-        try {
-            doAnswer(invocation -> {
-                Object[] args = invocation.getArguments();
-                StringBuilder includes = new StringBuilder();
-                for (int i = 2; i < args.length; i++) {
-                    String category = (String) args[i];
-                    String script = jsIncludes.get(category);
-                    includes.append(script);
-                }
-                for (int i = 2; i < args.length; i++) {
-                    String category = (String) args[i];
-                    String link = cssIncludes.get(category);
-                    includes.append(link);
-                }
-                ((PrintWriter)args[1]).write(includes.toString());
-                return null;
-            }).when(htmlLibraryManager).writeIncludes(any(SlingHttpServletRequest.class), any(Writer.class), any(String.class));
-        } catch (IOException e) {
-            fail(String.format("Unable to write include: %s", e.getMessage()));
-        }
-
+        HtmlLibraryManager htmlLibraryManager = new MockHtmlLibraryManager(mock(ClientLibrary.class),
+                htmlLibrariesByPathAndType,
+                librariesByPath,
+                librariesByCategory,
+                jsIncludes,
+                cssIncludes);
+        context.registerInjectActivateService(htmlLibraryManager);
     }
 
     @Test
@@ -277,8 +210,9 @@ class ClientLibrariesImplTest {
         PageManager pageManager = context.pageManager();
         Page page = pageManager.getPage(ROOT_PAGE);
         Map<String, Object> attributes = new HashMap<>();
-        attributes.put(ClientLibraries.OPTION_RESOURCE_TYPES, Utils.getPageResourceTypes(page, context.request(), mock(ModelFactory.class)));
         ClientLibrariesImpl clientlibs = Objects.requireNonNull((ClientLibrariesImpl) getClientLibrariesUnderTest(ROOT_PAGE, attributes));
+        attributes.put(ClientLibraries.OPTION_RESOURCE_TYPES, Utils.getPageResourceTypes(page, context.request(), mock(ModelFactory.class)));
+        clientlibs = Objects.requireNonNull((ClientLibrariesImpl) getClientLibrariesUnderTest(ROOT_PAGE, attributes));
 
         Set<String> categories = new HashSet<>();
         categories.add(TEASER_CATEGORY);
@@ -520,7 +454,8 @@ class ClientLibrariesImplTest {
                 }
             }
             context.request().setResource(resource);
-            return context.request().adaptTo(ClientLibraries.class);
+            ClientLibraries clientLibraries = context.request().adaptTo(ClientLibraries.class);
+            return clientLibraries;
         }
         return null;
     }
