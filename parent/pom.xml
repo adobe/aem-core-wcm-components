@@ -61,7 +61,8 @@
         <frontend-maven-plugin.version>1.11.3</frontend-maven-plugin.version>
         <node.version>v16.13.1</node.version>
         <npm.version>8.3.0</npm.version>
-        <mockitio.version>4.8.1</mockitio.version>
+        <mockito.version>5.2.0</mockito.version>
+        <byte-buddy.version>1.14.11</byte-buddy.version>
         <maven.compiler.source>${aem.java.version}</maven.compiler.source>
         <maven.compiler.target>${aem.java.version}</maven.compiler.target>
         <aem.selenium.base.it.version>0.2.48</aem.selenium.base.it.version>
@@ -448,7 +449,7 @@
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
-                    <version>4.7.2.1</version>
+                    <version>4.7.3.6</version>
                     <configuration>
                         <effort>Max</effort>
                         <xmlOutput>true</xmlOutput>
@@ -778,13 +779,25 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>${mockitio.version}</version>
+                <version>${mockito.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
-                <version>${mockitio.version}</version>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${byte-buddy.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-agent</artifactId>
+                <version>${byte-buddy.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
