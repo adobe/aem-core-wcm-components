@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.testing;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 import javax.jcr.RepositoryException;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.osgi.service.component.annotations.Component;
 
@@ -37,7 +39,26 @@ import com.adobe.granite.ui.clientlibs.LibraryType;
 )
 public class MockHtmlLibraryManager implements HtmlLibraryManager {
 
+    private Map<Pair<String, LibraryType>, HtmlLibrary> htmlLibrariesByPathAndType;
     private Collection<ClientLibrary> clientLibraries;
+    private Map<String,ClientLibrary> librariesByPath; // a map of (path, library) of all the libraries
+    private Map<String,ClientLibrary> librariesByCategory; // a map of (category, library) of all the libraries
+    private Map<String,String> jsIncludes; // expected js includes
+    private Map<String,String> cssIncludes; // expected css includes
+
+    public MockHtmlLibraryManager(ClientLibrary mockClientLibrary,
+                                  Map<Pair<String, LibraryType>, HtmlLibrary> htmlLibrariesByPathAndType,
+                                  Map<String,ClientLibrary> librariesByPath,
+                                  Map<String,ClientLibrary> librariesByCategory,
+                                  Map<String,String> jsIncludes,
+                                  Map<String,String> cssIncludes) {
+        clientLibraries = Arrays.asList(mockClientLibrary);
+        this.htmlLibrariesByPathAndType = htmlLibrariesByPathAndType;
+        this.librariesByPath = librariesByPath;
+        this.librariesByCategory = librariesByCategory;
+        this.jsIncludes = jsIncludes;
+        this.cssIncludes = cssIncludes;
+    }
 
     public MockHtmlLibraryManager(ClientLibrary mockClientLibrary) {
         clientLibraries = Arrays.asList(mockClientLibrary);
@@ -45,12 +66,19 @@ public class MockHtmlLibraryManager implements HtmlLibraryManager {
 
     @Override
     public Map<String, ClientLibrary> getLibraries() {
-        return null;
+        return librariesByPath;
     }
 
     @Override
     public void writeJsInclude(SlingHttpServletRequest slingHttpServletRequest, Writer writer, String... strings) throws IOException {
-
+        if (jsIncludes != null) {
+            StringBuilder scriptIncludes = new StringBuilder();
+            for (String category : strings) {
+                String script = jsIncludes.get(category);
+                scriptIncludes.append(script);
+            }
+            writer.write(scriptIncludes.toString());
+        }
     }
 
     @Override
@@ -61,13 +89,19 @@ public class MockHtmlLibraryManager implements HtmlLibraryManager {
 
     @Override
     public void writeCssInclude(SlingHttpServletRequest slingHttpServletRequest, Writer writer, String... strings) throws IOException {
-
+        if (cssIncludes != null) {
+            StringBuilder linkIncludes = new StringBuilder();
+            for (String category : strings) {
+                String link = cssIncludes.get(category);
+                linkIncludes.append(link);
+            }
+            writer.write(linkIncludes.toString());
+        }
     }
 
     @Override
     public void writeCssInclude(SlingHttpServletRequest slingHttpServletRequest, Writer writer, boolean b, String... strings)
             throws IOException {
-
     }
 
     @Override
@@ -77,11 +111,25 @@ public class MockHtmlLibraryManager implements HtmlLibraryManager {
 
     @Override
     public void writeIncludes(SlingHttpServletRequest slingHttpServletRequest, Writer writer, String... strings) throws IOException {
-
+        if (jsIncludes != null && cssIncludes != null) {
+            StringBuilder includes = new StringBuilder();
+            for (String category : strings) {
+                String script = jsIncludes.get(category);
+                includes.append(script);
+            }
+            for (String category : strings) {
+                String link = cssIncludes.get(category);
+                includes.append(link);
+            }
+            writer.write(includes.toString());
+        }
     }
 
     @Override
     public HtmlLibrary getLibrary(LibraryType libraryType, String s) {
+        if (htmlLibrariesByPathAndType != null) {
+            return htmlLibrariesByPathAndType.get(Pair.of(s, libraryType));
+        }
         return null;
     }
 
@@ -107,6 +155,13 @@ public class MockHtmlLibraryManager implements HtmlLibraryManager {
 
     @Override
     public Collection<ClientLibrary> getLibraries(String[] strings, LibraryType libraryType, boolean b, boolean b1) {
+        if (librariesByCategory != null) {
+            Collection<ClientLibrary> libraries = new ArrayList<>();
+            for (String category : strings) {
+                libraries.add(librariesByCategory.get(category));
+            }
+            return libraries;
+        }
         return Collections.unmodifiableCollection(clientLibraries);
     }
 
