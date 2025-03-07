@@ -26,7 +26,7 @@
      data-cmp-data-layer="${teaser.data.json}">
     <a class="cmp-teaser__link"
        data-sly-attribute="${teaser.link.htmlAttributes}"
-       data-sly-unwrap="${!teaser.link.valid || !teaser.actions.empty}"
+       data-sly-unwrap="${!teaser.link.valid || !teaser.actions.empty || !(teaser.pretitle || teaser.title || teaser.description)}"
        data-cmp-clickable="${teaser.data ? true : false}">
         <div class="cmp-teaser__content">
             <sly data-sly-call="${pretitleTemplate.pretitle @ teaser=teaser}"></sly>
