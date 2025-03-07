@@ -453,8 +453,7 @@ class ClientLibrariesImplTest {
                 }
             }
             context.request().setResource(resource);
-            ClientLibraries clientLibraries = context.request().adaptTo(ClientLibraries.class);
-            return clientLibraries;
+            return context.request().adaptTo(ClientLibraries.class);
         }
         return null;
     }
