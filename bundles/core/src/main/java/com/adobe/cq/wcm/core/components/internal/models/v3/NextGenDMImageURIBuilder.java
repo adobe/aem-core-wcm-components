@@ -42,6 +42,8 @@ public class NextGenDMImageURIBuilder {
     private int height;
     private boolean preferWebp = true;
 
+    private String modifiers;
+
     public NextGenDMImageURIBuilder(NextGenDynamicMediaConfig config, String fileReference) {
         this.config = config;
         this.fileReference = fileReference;
@@ -85,6 +87,15 @@ public class NextGenDMImageURIBuilder {
     }
 
     /**
+     * Set extra image modifiers.
+     * @param modifiersStr
+     */
+    public NextGenDMImageURIBuilder withImageModifiers(String modifiersStr) {
+        this.modifiers = modifiersStr;
+        return this;
+    }
+
+    /**
      * Use this to create a NextGen Dynamic Media Image URI.
      * @return a uri.
      */
@@ -123,6 +134,13 @@ public class NextGenDMImageURIBuilder {
                     uriBuilder.append("&");
                 }
                 uriBuilder.deleteCharAt(uriBuilder.length() - 1);
+            }
+            if(StringUtils.isNotEmpty(this.modifiers)) {
+                if (this.modifiers.startsWith("&")) {
+                    uriBuilder.append(this.modifiers);
+                } else {
+                    uriBuilder.append("&" + this.modifiers);
+                }
             }
             return uriBuilder.toString();
         }
