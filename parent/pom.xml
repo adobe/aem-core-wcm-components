@@ -19,7 +19,7 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.27.1-SNAPSHOT</version>
+    <version>2.28.0</version>
 
     <name>Adobe Experience Manager Core WCM Components Parent</name>
     <description>A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.</description>
@@ -28,7 +28,7 @@
         <connection>scm:git:https://github.com/adobe/aem-core-wcm-components.git</connection>
         <developerConnection>scm:git:git@github.com:adobe/aem-core-wcm-components.git</developerConnection>
         <url>https://github.com/adobe/aem-core-wcm-components</url>
-        <tag>HEAD</tag>
+        <tag>core.wcm.components.reactor-2.28.0</tag>
     </scm>
     <licenses>
         <license>
@@ -50,7 +50,7 @@
         <aem.port>4502</aem.port>
         <aem.publish.host>localhost</aem.publish.host>
         <aem.publish.port>4503</aem.publish.port>
-        <aem.contextPath/>
+        <aem.contextPath />
         <sling.user>admin</sling.user>
         <sling.password>admin</sling.password>
         <vault.user>admin</vault.user>
