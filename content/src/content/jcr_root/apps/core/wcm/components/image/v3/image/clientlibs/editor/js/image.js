@@ -173,6 +173,14 @@
                         captionTuple.hideCheckbox(true);
                     }
                 }
+
+                // Ensure alt text from page is visible on initial load if imageFromPageImage is checked
+                if (imageFromPageImage && imageFromPageImage.checked) {
+                    var isAltFromPageImageChecked = document.querySelector('coral-checkbox[name="./altValueFromPageImage"]').checked;
+                    if (isAltFromPageImageChecked && altTextFromPage) {
+                        $altTextField.adaptTo("foundation-field").setValue(altTextFromPage);
+                    }
+                }
             });
         }
 
