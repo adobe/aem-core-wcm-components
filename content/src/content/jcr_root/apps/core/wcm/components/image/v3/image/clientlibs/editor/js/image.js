@@ -45,6 +45,7 @@
     var $pageImageThumbnail;
     var altTextFromPage;
     var altTextFromDAM;
+    var altFromPageCheckboxSelector = "coral-checkbox[name='./altValueFromPageImage']";
     var altCheckboxSelector = "coral-checkbox[name='./altValueFromDAM']";
     var altInputSelector = "input[name='./alt']";
     var altInputAlertIconSelector = "input[name='./alt'] + coral-icon[icon='alert']";
@@ -97,7 +98,7 @@
 
             imageFromPageImage = dialogContent.querySelector("coral-checkbox[name='./imageFromPageImage']");
 
-            altFromPageTuple = new CheckboxTextfieldTuple(dialogContent, "coral-checkbox[name='./altValueFromPageImage']", "input[name='./alt']");
+            altFromPageTuple = new CheckboxTextfieldTuple(dialogContent, altFromPageCheckboxSelector, "input[name='./alt']");
             $pageImageThumbnail = $dialogContent.find(pageImageThumbnailSelector);
             altTextFromPage = $dialogContent.find(pageImageThumbnailImageSelector).attr("alt");
 
@@ -176,7 +177,7 @@
 
                 // Ensure alt text from page is visible on initial load if imageFromPageImage is checked
                 if (imageFromPageImage && imageFromPageImage.checked) {
-                    var isAltFromPageImageChecked = document.querySelector('coral-checkbox[name="./altValueFromPageImage"]').checked;
+                    var isAltFromPageImageChecked = document.querySelector(altFromPageCheckboxSelector).checked;
                     if (isAltFromPageImageChecked && altTextFromPage) {
                         $altTextField.adaptTo("foundation-field").setValue(altTextFromPage);
                     }
@@ -208,7 +209,7 @@
             var altFromDAM = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
             var isAltFromDAMChecked = altFromDAM.checked;
             var isAltFromDAMDisabled = altFromDAM.disabled;
-            var isAltFromPageImageChecked = document.querySelector('coral-checkbox[name="./altValueFromPageImage"]').checked;
+            var isAltFromPageImageChecked = document.querySelector(altFromPageCheckboxSelector).checked;
             var isDecorativeChecked = document.querySelector("coral-checkbox[name='./isDecorative']").checked;
             var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
 
