@@ -98,7 +98,7 @@
 
             imageFromPageImage = dialogContent.querySelector("coral-checkbox[name='./imageFromPageImage']");
 
-            altFromPageTuple = new CheckboxTextfieldTuple(dialogContent, altFromPageCheckboxSelector, "input[name='./alt']");
+            altFromPageTuple = new CheckboxTextfieldTuple(dialogContent, altFromPageCheckboxSelector, altInputSelector);
             $pageImageThumbnail = $dialogContent.find(pageImageThumbnailSelector);
             altTextFromPage = $dialogContent.find(pageImageThumbnailImageSelector).attr("alt");
 
