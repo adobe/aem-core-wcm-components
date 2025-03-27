@@ -179,9 +179,7 @@
     function updateExpandedSelect(childrenEditor, expandedSelect, expandedItemValues, singleExpansion) {
         var selectedValues = (expandedSelect.values.length) ? expandedSelect.values : expandedItemValues;
         expandedSelect.items.getAll().forEach(function(item) {
-            if (item.value !== "") {
-                expandedSelect.items.remove(item);
-            }
+            expandedSelect.items.remove(item);
         });
 
         var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");

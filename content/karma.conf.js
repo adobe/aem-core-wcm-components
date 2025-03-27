@@ -30,11 +30,12 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
+            'test/mocks.js',
             'src/content/jcr_root/apps/core/wcm/components/commons/site/clientlibs/**/js/*.js',
             'src/content/jcr_root/apps/core/wcm/components/image/v3/image/clientlibs/site/**/js/*.js',
+            'src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment/clientlibs/editor/authoring/js/editAction.js',
             'test/**/*Test.js',
-            'test/**/*Test.html',
-            'spec/**/*Test.html'
+            'test/**/*Test.html'
         ],
 
 
