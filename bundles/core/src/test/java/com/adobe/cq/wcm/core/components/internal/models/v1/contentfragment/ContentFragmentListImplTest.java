@@ -15,11 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import javax.jcr.Node;
+import javax.jcr.Property;
 import javax.jcr.Session;
+import javax.jcr.query.Row;
 
+import com.day.cq.search.eval.PredicateEvaluator;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +47,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
@@ -166,7 +175,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
                 "property", "jcr:content/data/cq:model",
                 "value", "foobar"));
         expectedPredicates.put("orderby", ImmutableMap.of(
-                "orderby", "@main",
+                "orderby", ContentFragmentListImpl.CF_COMPARATOR_REF,
                 "sort", "desc"));
 
 
@@ -175,6 +184,45 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
 
         // THEN
         verifyPredicateGroup(expectedPredicates, DEFAULT_NO_MAX_LIMIT_SET);
+    }
+
+    @Test
+    void verifyPredicateEvaluator() {
+        // GIVEN
+        // WHEN
+        ContentFragmentListImpl underTest = (ContentFragmentListImpl) getModelInstanceUnderTest(MODEL_ORDER_BY);
+        Locale locale = Locale.US;
+
+        // THEN
+        PredicateEvaluator pe = underTest.new ContentFragmentPredicateEvaluator(locale);
+        Comparator<Row> comparator = pe.getOrderByComparator(null, null);
+        assertNotNull(comparator);
+
+        ArrayList<Row> rows = new ArrayList<>();
+        Row r1 = createRow("abc");
+        rows.add(r1);
+        Row r2 = createRow("def");
+        rows.add(r2);
+        Row r3 = createRow("ábc");
+        rows.add(r3);
+        Collections.sort(rows, comparator);
+        assertEquals(r1, rows.get(0));
+        assertEquals(r3, rows.get(1));
+        assertEquals(r2, rows.get(2));
+    }
+
+    private Row createRow(String value) {
+        Row row = Mockito.mock(Row.class);
+        try {
+            Node node = Mockito.mock(Node.class);
+            Property property = Mockito.mock(Property.class);
+            when(property.getString()).thenReturn(value);
+            when(node.getProperty(anyString())).thenReturn(property);
+            when(row.getNode()).thenReturn(node);
+        } catch (Exception e) {
+            // ignore
+        }
+        return row;
     }
 
     @Test

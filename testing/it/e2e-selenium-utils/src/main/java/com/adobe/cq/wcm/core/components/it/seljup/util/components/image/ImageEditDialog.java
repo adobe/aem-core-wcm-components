@@ -53,6 +53,8 @@ public class ImageEditDialog extends Dialog {
     private static String altValueFromPageImage = "[name='./altValueFromPageImage']";
     private static String imageFromPageImage = "[name='./imageFromPageImage']";
     private static String titleValueFromDAM = "[name='./titleValueFromDAM']";
+    private static String altValueDoNotProvide = "[name='./isDecorative']";
+    private static String smartCropSelectButton = "[name='./smartCropRendition'] > button";
     private static String linkTarget = "coral-checkbox[name='./linkTarget']";
     private static String smartCropField = ".cmp-image__editor-dynamicmedia-smartcroprendition[name='./smartCropRendition']";
 
@@ -150,6 +152,11 @@ public class ImageEditDialog extends Dialog {
         checkbox.click();
     }
 
+    public void checkAltValueDoNotProvide() {
+        CoralCheckbox checkbox = new CoralCheckbox(altValueDoNotProvide);
+        checkbox.click();
+    }
+
     public void clickLinkTarget() {
         CoralCheckbox checkbox = new CoralCheckbox(linkTarget);
         checkbox.click();
@@ -181,6 +188,7 @@ public class ImageEditDialog extends Dialog {
     }
 
     public void selectSmartCrop(String cropName) {
+        $(smartCropSelectButton).click();
         CoralSelectList coralSelectList = new CoralSelectList($(smartCropField));
         if (!coralSelectList.isVisible()) {
             CoralSelect selectList = new CoralSelect($(smartCropField));

@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.25.5-SNAPSHOT</version>
+        <version>2.28.1-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
@@ -33,7 +33,7 @@
     <!-- ====================================================================== -->
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.it.e2e-selenium-utils</artifactId>
-    <version>2.25.5-SNAPSHOT</version>
+    <version>2.28.1-SNAPSHOT</version>
     <name>Adobe Experience Manager Core WCM Components E2E Testing Utils</name>
     <packaging>jar</packaging>
 
@@ -42,6 +42,7 @@
             <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
+                <version>0.16.1</version>
                 <configuration>
                     <excludes combine.children="append">
                         <!-- exclude comparison files -->

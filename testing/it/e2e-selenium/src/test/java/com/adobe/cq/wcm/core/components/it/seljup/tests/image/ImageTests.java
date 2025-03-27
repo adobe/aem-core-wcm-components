@@ -552,6 +552,7 @@ public class ImageTests {
         ImageEditDialog editDialog = image.getEditDialog();
         editDialog.checkImageFromPageImage();
         editDialog.selectSmartCrop(cropName);
+        editDialog.checkAltValueDoNotProvide();
         Commons.saveConfigureDialog();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
