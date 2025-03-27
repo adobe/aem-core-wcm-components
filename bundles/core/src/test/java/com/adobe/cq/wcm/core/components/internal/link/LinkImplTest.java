@@ -114,7 +114,7 @@ class LinkImplTest {
         String invalidAttribute = "invalidAttribute";
         Link<Page> link = new LinkImpl<>(URL, URL, CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + URL, page, ImmutableMap.of(invalidAttribute,
                 "invalidValue"));
-        assertValidLink(link, URL,context);
+        assertValidLink(link, URL, context);
         assertNull(link.getHtmlAttributes().get(invalidAttribute));
     }
 }
