@@ -73,7 +73,7 @@ public class LinkManagerTest {
         context.currentResource(linkResource);
         Link link = getUnderTest().get(linkResource).build();
 
-        assertValidLink(link, "http://myhost",context);
+        assertValidLink(link, "http://myhost", context);
         assertNull(link.getReference());
         assertEquals("http://myhost", link.getMappedURL());
     }
@@ -103,7 +103,7 @@ public class LinkManagerTest {
         Link link = getUnderTest().get(linkResource).build();
 
         // invalid target or _self target should be stripped away
-        assertValidLink(link, "http://myhost",context);
+        assertValidLink(link, "http://myhost", context);
         assertNull(link.getReference());
     }
 
@@ -168,7 +168,7 @@ public class LinkManagerTest {
     void testLinkURLPageLinkWithTarget() {
         Link link = getUnderTest().get(page.getPath()).withLinkTarget("_blank").build();
 
-        assertValidLink(link, page.getPath() + ".html", "_blank",context);
+        assertValidLink(link, page.getPath() + ".html", "_blank", context);
         assertEquals(page, link.getReference());
     }
 
@@ -176,7 +176,7 @@ public class LinkManagerTest {
     void testLinkWithTargetAsset() {
         Link link = getUnderTest().get(asset).build();
 
-        assertValidLink(link, asset.getPath(),context);
+        assertValidLink(link, asset.getPath(), context);
         assertEquals(asset, link.getReference());
     }
 
@@ -228,7 +228,7 @@ public class LinkManagerTest {
 
         assertTrue(link.isValid());
         final String mappedPath = context.resourceResolver().map(targetPage1.getPath());
-        assertValidLink(link, targetPage1.getPath() + ".html",context);
+        assertValidLink(link, targetPage1.getPath() + ".html", context);
         assertEquals("https://example.org" + mappedPath + ".html", link.getExternalizedURL());
         assertEquals(targetPage1, link.getReference());
     }
@@ -286,7 +286,7 @@ public class LinkManagerTest {
         Link link = getUnderTest().get(linkResource).build();
 
         assertTrue(link.isValid());
-        assertValidLink(link, "http://myhost",context);
+        assertValidLink(link, "http://myhost", context);
         assertEquals(targetPage1, link.getReference());
     }
 
