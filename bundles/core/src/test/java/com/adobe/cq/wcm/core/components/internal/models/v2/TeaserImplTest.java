@@ -89,7 +89,7 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         }
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
-        assertValidLink(teaser.getLink(), LINK);
+        assertValidLink(teaser.getLink(), LINK, context);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser1"));
     }
 
@@ -104,7 +104,7 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         assertEquals("http://www.adobe.com", action.getPath(), "Action link does not match");
         assertEquals("Adobe", action.getTitle(), "Action text does not match");
         assertEquals("http://www.adobe.com", action.getURL());
-        assertValidLink(action.getLink(), "http://www.adobe.com");
+        assertValidLink(action.getLink(), "http://www.adobe.com", context);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser9"));
     }
 
