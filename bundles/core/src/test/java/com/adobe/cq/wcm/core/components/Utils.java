@@ -33,6 +33,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.mockito.Mockito;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.jackson.DefaultMethodSkippingModuleProvider;
@@ -68,11 +70,22 @@ public class Utils {
         } catch (IOException e) {
             fail(String.format("Unable to generate JSON export for model %s: %s", model.getClass().getName(), e.getMessage()));
         }
-        JsonReader outputReader = Json.createReader(IOUtils.toInputStream(writer.toString(), StandardCharsets.UTF_8));
+        String actualJString = writer.toString();
         InputStream is = Utils.class.getResourceAsStream(expectedJsonResource);
         if (is != null) {
-            JsonReader expectedReader = Json.createReader(is);
-            assertEquals(expectedReader.read(), outputReader.read());
+            String expectedJString = "";
+            try {
+                expectedJString = IOUtils.toString(is, StandardCharsets.UTF_8);
+            }
+            catch(IOException e) {
+                fail("Error reading expected JSON resource: " + e.getMessage());
+            }
+            try {
+                JSONAssert.assertEquals(expectedJString, actualJString, JSONCompareMode.NON_EXTENSIBLE);
+            }
+            catch (org.json.JSONException e) {
+                fail(e.getMessage() + ": expected: " + expectedJString + " but was: " + actualJString);
+            }
         } else {
             fail("Unable to find test file " + expectedJsonResource + ".");
         }
