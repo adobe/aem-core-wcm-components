@@ -37,7 +37,7 @@ public class ButtonImplTest {
     protected static final String TEST_ROOT_PAGE_GRID = "/button/jcr:content/root/responsivegrid";
     protected static final String BUTTON_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/button-1";
 
-    private final AemContext context = CoreComponentTestContext.newAemContext();
+    protected    final AemContext context = CoreComponentTestContext.newAemContext();
 
     protected String testBase;
     protected String resourceType;
