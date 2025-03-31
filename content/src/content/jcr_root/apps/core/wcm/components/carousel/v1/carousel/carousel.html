@@ -19,9 +19,8 @@
      data-panelcontainer="${wcmmode.edit && 'carousel'}"
      id="${carousel.id}"
      class="cmp-carousel"
-     role="group"
+     role="region"
      aria-label="${carousel.accessibilityLabel}"
-     aria-live="polite"
      aria-roledescription="carousel"
      data-cmp-is="carousel"
      data-cmp-autoplay="${(wcmmode.edit || wcmmode.preview) ? '' : carousel.autoplay}"
@@ -29,7 +28,21 @@
      data-cmp-autopause-disabled="${carousel.autopauseDisabled}"
      data-cmp-data-layer="${carousel.data.json}"
      data-placeholder-text="${wcmmode.edit && 'Please add Carousel components here' @ i18n}">
-    <sly data-sly-call="${controlsTemplate.controls @ carousel=carousel}" data-sly-test="${carousel.controlsPrepended}"></sly>
+	<sly data-sly-call="${controlsTemplate.controls @ carousel=carousel}" data-sly-test="${carousel.controlsPrepended}"></sly>
+	<ol class="cmp-carousel__indicators"
+		role="tablist"
+		aria-label="${carousel.accessibilityTablist || 'Choose a slide to display' @ i18n}"
+		data-cmp-hook-carousel="indicators">
+		<li data-sly-repeat.item="${items}"
+			id="${item.id}-tab"
+			class="cmp-carousel__indicator${item.name == carousel.activeItem ? ' cmp-carousel__indicator--active' : ''}"
+			role="tab"
+			aria-controls="${item.id}-tabpanel"
+			title="${'Slide {0}' @ format=[itemList.count], i18n}"		
+			data-cmp-hook-carousel="indicator"
+			aria-selected="${item.name == carousel.activeItem ? true : false}" 
+			tabindex="${item.name == carousel.activeItem ? '0' : '-1'}">${'Slide {0}' @ format=[itemList.count], i18n}</li>
+	</ol>
     <div data-sly-set.items="${carousel.children || carousel.items}"
          data-sly-test="${items && items.size > 0}"
          class="cmp-carousel__content"
@@ -40,24 +53,12 @@
              id="${item.id}-tabpanel"
              class="cmp-carousel__item${item.name == carousel.activeItem ? ' cmp-carousel__item--active' : ''}"
              role="tabpanel"
-             aria-labelledby="${item.id}-tab"
              aria-roledescription="slide"
              aria-label="${(carousel.accessibilityAutoItemTitles && item.title) || 'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
              data-cmp-data-layer="${item.data.json}"
-             data-cmp-hook-carousel="item"></div>
+             data-cmp-hook-carousel="item"
+             tabindex="-1"></div>
         <sly data-sly-call="${controlsTemplate.controls @ carousel=carousel}" data-sly-test="${!carousel.controlsPrepended}"></sly>
-        <ol class="cmp-carousel__indicators"
-            role="tablist"
-            aria-label="${carousel.accessibilityTablist || 'Choose a slide to display' @ i18n}"
-            data-cmp-hook-carousel="indicators">
-            <li data-sly-repeat.item="${items}"
-                id="${item.id}-tab"
-                class="cmp-carousel__indicator${item.name == carousel.activeItem ? ' cmp-carousel__indicator--active' : ''}"
-                role="tab"
-                aria-controls="${item.id}-tabpanel"
-                aria-label="${'Slide {0}' @ format=[itemList.count], i18n}"
-                data-cmp-hook-carousel="indicator">${item.title}</li>
-        </ol>
     </div>
     <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
          data-sly-test="${(wcmmode.edit || wcmmode.preview) && items.size < 1}"></sly>
