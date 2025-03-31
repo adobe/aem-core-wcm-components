@@ -1,0 +1,12 @@
+{
+    "id": "image-06acc3dd21",
+    "src": "https://testrepo/adobe/dynamicmedia/deliver/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png?width=640&preferwebp=true&width=100&height=200",
+    "lazyEnabled": true,
+    "sizes": "",
+    "dataLayer": {
+        "image-06acc3dd21": {
+            "@type": "core/wcm/components/image/v3/image"
+        }
+    },
+    ":type": "core/wcm/components/image/v3/image"
+}

@@ -17,9 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Objects;
 
-import com.adobe.cq.ui.wcm.commons.config.NextGenDynamicMediaConfig;
-import com.adobe.cq.wcm.core.components.models.Component;
-import com.adobe.cq.wcm.core.components.testing.MockNextGenDynamicMediaConfig;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,16 +25,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.models.Component;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
+import com.adobe.cq.wcm.core.components.testing.MockNextGenDynamicMediaConfig;
+import com.day.cq.wcm.foundation.Image;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(AemContextExtension.class)
 public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImplTest {
@@ -45,6 +43,8 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
     private static final String TEST_BASE = "/teaser/v2";
     private static final String TEASER_25 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-25";
     private static final String TEASER_26 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-26";
+    private static final String TEASER_27 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-27";
+    private static final String TEASER_28 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-28";
 
     @BeforeEach
     protected void setUp() {
@@ -89,7 +89,7 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         }
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
-        assertValidLink(teaser.getLink(), LINK);
+        assertValidLink(teaser.getLink(), LINK, context);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser1"));
     }
 
@@ -104,7 +104,7 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         assertEquals("http://www.adobe.com", action.getPath(), "Action link does not match");
         assertEquals("Adobe", action.getTitle(), "Action text does not match");
         assertEquals("http://www.adobe.com", action.getURL());
-        assertValidLink(action.getLink(), "http://www.adobe.com");
+        assertValidLink(action.getLink(), "http://www.adobe.com", context);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser9"));
     }
 
@@ -205,5 +205,29 @@ public class TeaserImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         }
         assertEquals("Teasers Test", teaser.getTitle());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser26"));
+    }
+
+    @Test
+    protected void testTeaserWithImageAndLinkAndNoTitleAndPretitleAndNoDescription() {
+        Teaser teaser = getTeaserUnderTest(TEASER_27);
+        assertEquals("Teaser Pre-title", teaser.getPretitle());
+        assertNull(teaser.getTitle());
+        assertNull(teaser.getDescription());
+        ValueMap imageValueMap = teaser.getImageResource().getValueMap();
+        assertEquals("/content/page1", imageValueMap.get(Image.PN_LINK_URL));
+        assertTrue(imageValueMap.get(Teaser.PN_IMAGE_LINK_HIDDEN, Boolean.class));
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser27"));
+    }
+
+    @Test
+    protected void testTeaserWithImageAndLinkAndNoTitleAndNoPretitleAndNoDescription() {
+        Teaser teaser = getTeaserUnderTest(TEASER_28);
+        assertNull(teaser.getPretitle());
+        assertNull(teaser.getTitle());
+        assertNull(teaser.getDescription());
+        ValueMap imageValueMap = teaser.getImageResource().getValueMap();
+        assertEquals("/content/page1", imageValueMap.get(Image.PN_LINK_URL));
+        assertNull(imageValueMap.get(Teaser.PN_IMAGE_LINK_HIDDEN, Boolean.class));
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(testBase, "teaser28"));
     }
 }
