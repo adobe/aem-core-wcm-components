@@ -29,20 +29,21 @@
      data-cmp-data-layer="${carousel.data.json}"
      data-placeholder-text="${wcmmode.edit && 'Please add Carousel components here' @ i18n}">
 	<sly data-sly-call="${controlsTemplate.controls @ carousel=carousel}" data-sly-test="${carousel.controlsPrepended}"></sly>
-	<ol class="cmp-carousel__indicators"
+	<div class="cmp-carousel__indicators"
 		role="tablist"
 		aria-label="${carousel.accessibilityTablist || 'Choose a slide to display' @ i18n}"
 		data-cmp-hook-carousel="indicators">
-		<li data-sly-repeat.item="${items}"
+		<button data-sly-repeat.item="${items}"
 			id="${item.id}-tab"
 			class="cmp-carousel__indicator${item.name == carousel.activeItem ? ' cmp-carousel__indicator--active' : ''}"
 			role="tab"
+			type="button"
 			aria-controls="${item.id}-tabpanel"
 			title="${'Slide {0}' @ format=[itemList.count], i18n}"		
 			data-cmp-hook-carousel="indicator"
-			aria-selected="${item.name == carousel.activeItem ? true : false}" 
-			tabindex="${item.name == carousel.activeItem ? '0' : '-1'}">${'Slide {0}' @ format=[itemList.count], i18n}</li>
-	</ol>
+			aria-selected="${item.name == carousel.activeItem ? 'true' : 'false'}" 
+			tabindex="${item.name == carousel.activeItem ? '0' : '-1'}">${'Slide {0}' @ format=[itemList.count], i18n}</button>
+	</div>
     <div data-sly-set.items="${carousel.children || carousel.items}"
          data-sly-test="${items && items.size > 0}"
          class="cmp-carousel__content"
