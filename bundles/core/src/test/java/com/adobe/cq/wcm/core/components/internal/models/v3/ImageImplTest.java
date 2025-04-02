@@ -15,10 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
+import com.adobe.cq.wcm.core.components.internal.PreviewTokenBuilderUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 
 import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
@@ -41,6 +45,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -56,6 +61,7 @@ import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.designer.Style;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.slf4j.LoggerFactory;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_RESIZE_WIDTH;
@@ -65,6 +71,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -100,6 +107,9 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     private static final String NGDM_MODIFIERS_IMAGE_PATH = "/content/ngdm_test_page/jcr:content/root/ngdm_test_page_modifiers_image";
     private static final String NGDM_SMARTCROP_AUTO_IMAGE_PATH = "/content/ngdm_test_page/jcr:content/root/ngdm_test_page_smartcrop_image_auto";
 
+    private static final String SECRET_KEY = "testSecretKey";
+    private static final String PREVIEW_KEY = "previewKey";
+
 
     @BeforeEach
     @Override
@@ -130,6 +140,8 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
 
     @Mock
     private Style currentStyle;
+
+    private Logger logger;
 
     @Test
     void testImageWithLazyThreshold() {
@@ -731,6 +743,45 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
 
         Image image = getImageUnderTest(NGDM_SMARTCROP_IMAGE_PATH);
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, NGDM_SMARTCROP_IMAGE_PATH));
+    }
+
+    @Test
+    void testNgdmImageWithPreviewToken() {
+        MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
+        config.setEnabled(true);
+        config.setRepositoryId("testrepo");
+        config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
+        context.registerInjectActivateService(config);
+        System.setProperty(PREVIEW_KEY, SECRET_KEY);
+
+        Image image = getImageUnderTest(NGDM_IMAGE1_PATH);
+        assertTrue(image.getSrc().contains("&token=p:"));
+        assertTrue(image.getSrc().contains("&expiryTime"));
+
+        System.clearProperty(PREVIEW_KEY);
+    }
+
+    @Test
+    void testNgdmImageExceptionWithNoPreviewSecretSet() {
+        Logger logger = (Logger) LoggerFactory.getLogger(PreviewTokenBuilderUtils.class);
+        logger.setLevel(Level.DEBUG);
+        Appender<ILoggingEvent> mockAppender = mock(Appender.class);
+        logger.addAppender(mockAppender);
+        ArgumentCaptor<ILoggingEvent> captor = ArgumentCaptor.forClass(ILoggingEvent.class);
+        doNothing().when(mockAppender).doAppend(captor.capture());
+
+        MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
+        config.setEnabled(true);
+        config.setRepositoryId("testrepo");
+        config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
+        context.registerInjectActivateService(config);
+        Image image = getImageUnderTest(NGDM_IMAGE1_PATH);
+
+        List<ILoggingEvent> logEvents = captor.getAllValues();
+        boolean logFound = logEvents.stream()
+            .anyMatch(event -> event.getMessage().contains("Could not generate preview token for asset {}"));
+
+        assertTrue(logFound, "Expected debug log was not found!");
     }
 
     @Test

@@ -58,7 +58,9 @@ public class PreviewTokenBuilderUtils {
             final String expiryTimeStr = dateFormat.get().format(expirationTime);
             return new AbstractMap.SimpleEntry<>(computeSignature(assetId, expiryTimeStr, secretKey), expiryTimeStr);
         } catch (Exception e) {
-            LOG.warn("Could not generate preview token for asset {}", assetId, e);
+            // we do not want to put warn or error here because for most of the customers preview key will not be set
+            // in that case normal flow should work for them without any warnings.
+            LOG.debug("Could not generate preview token for asset {}. Exception : {}", assetId, e.getMessage());
         }
         return null;
     }
