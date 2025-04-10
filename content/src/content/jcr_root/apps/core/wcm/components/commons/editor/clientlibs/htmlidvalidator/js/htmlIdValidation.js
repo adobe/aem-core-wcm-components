@@ -54,7 +54,8 @@
                 success: function(data) {
                     var idList;
                     if (data) {
-                        idList = $(data).find('[id="' + $.escapeSelector(currentVal) + '"]');
+                        var parsedHtml = $.parseHTML(data, document, false);
+                        idList = $(parsedHtml).find('[id="' + currentVal + '"]');
                         if (idList) {
                             idCount = idList.length;
                         }
