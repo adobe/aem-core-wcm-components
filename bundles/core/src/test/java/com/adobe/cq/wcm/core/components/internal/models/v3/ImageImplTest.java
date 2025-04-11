@@ -19,7 +19,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
-import com.adobe.cq.wcm.core.components.internal.PreviewTokenBuilderUtils;
+import com.adobe.cq.wcm.core.components.util.ngdm.PreviewTokenBuilderUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -108,7 +108,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     private static final String NGDM_SMARTCROP_AUTO_IMAGE_PATH = "/content/ngdm_test_page/jcr:content/root/ngdm_test_page_smartcrop_image_auto";
 
     private static final String SECRET_KEY = "testSecretKey";
-    private static final String PREVIEW_KEY = "previewKey";
+    private static final String PREVIEW_KEY = "ASSET_DELIVERY_PREVIEW_KEY";
 
 
     @BeforeEach

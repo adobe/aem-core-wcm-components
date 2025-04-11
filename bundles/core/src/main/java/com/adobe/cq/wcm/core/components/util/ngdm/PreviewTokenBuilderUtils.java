@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal;
+package com.adobe.cq.wcm.core.components.util.ngdm;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
@@ -38,7 +38,7 @@ public class PreviewTokenBuilderUtils {
 
     private final static String HMAC_SHA256 = "HmacSHA256";
     private final static String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    private final static String PREVIEW_KEY = "previewKey";
+    private final static String PREVIEW_KEY = "ASSET_DELIVERY_PREVIEW_KEY";
     private final static String UTC = "UTC";
 
     private static final ThreadLocal<SimpleDateFormat> dateFormat = ThreadLocal.withInitial(() -> {

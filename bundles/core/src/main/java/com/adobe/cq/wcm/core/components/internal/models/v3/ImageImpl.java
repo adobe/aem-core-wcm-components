@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import com.adobe.cq.wcm.core.components.internal.PreviewTokenBuilderUtils;
+import com.adobe.cq.wcm.core.components.util.ngdm.PreviewTokenBuilderUtils;
 import java.awt.*;
 import java.io.IOException;
 import java.io.StringReader;

@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
+import com.adobe.cq.wcm.core.components.util.ngdm.PreviewTokenBuilderUtils;
 import java.util.Map;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +28,7 @@ public class PreviewTokenBuilderUtilsTest {
 
     private static final String ASSET_ID = "testAsset";
     private static final String SECRET_KEY = "testSecretKey";
-    private static final String PREVIEW_KEY = "previewKey";
+    private static final String PREVIEW_KEY = "ASSET_DELIVERY_PREVIEW_KEY";
 
     PreviewTokenBuilderUtils previewTokenBuilderUtils;
 
