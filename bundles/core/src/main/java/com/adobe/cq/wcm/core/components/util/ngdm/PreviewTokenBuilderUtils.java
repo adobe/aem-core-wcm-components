@@ -51,16 +51,14 @@ public class PreviewTokenBuilderUtils {
         try {
             String secretKey = readKeyFromEnvVar(PREVIEW_KEY);
             if (assetId == null || StringUtils.isBlank(secretKey)) {
-                throw new Exception("Invalid input parameters");
+                return null;
             }
             LocalDateTime nowPlusThirty = LocalDateTime.now().plusMinutes(30);
             Date expirationTime = Date.from(nowPlusThirty.atZone(ZoneId.systemDefault()).toInstant());
             final String expiryTimeStr = dateFormat.get().format(expirationTime);
             return new AbstractMap.SimpleEntry<>(computeSignature(assetId, expiryTimeStr, secretKey), expiryTimeStr);
         } catch (Exception e) {
-            // we do not want to put warn or error here because for most of the customers preview key will not be set
-            // in that case normal flow should work for them without any warnings.
-            LOG.debug("Could not generate preview token for asset {}. Exception : {}", assetId, e.getMessage());
+            LOG.error("Could not generate preview token for asset {}. Exception : {}", assetId, e.getMessage());
         }
         return null;
     }

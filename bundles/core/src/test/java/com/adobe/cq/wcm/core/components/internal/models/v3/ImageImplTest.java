@@ -763,25 +763,15 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
 
     @Test
     void testNgdmImageExceptionWithNoPreviewSecretSet() {
-        Logger logger = (Logger) LoggerFactory.getLogger(PreviewTokenBuilderUtils.class);
-        logger.setLevel(Level.DEBUG);
-        Appender<ILoggingEvent> mockAppender = mock(Appender.class);
-        logger.addAppender(mockAppender);
-        ArgumentCaptor<ILoggingEvent> captor = ArgumentCaptor.forClass(ILoggingEvent.class);
-        doNothing().when(mockAppender).doAppend(captor.capture());
-
         MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
         config.setEnabled(true);
         config.setRepositoryId("testrepo");
         config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
         context.registerInjectActivateService(config);
+
         Image image = getImageUnderTest(NGDM_IMAGE1_PATH);
-
-        List<ILoggingEvent> logEvents = captor.getAllValues();
-        boolean logFound = logEvents.stream()
-            .anyMatch(event -> event.getMessage().contains("Could not generate preview token for asset {}"));
-
-        assertTrue(logFound, "Expected debug log was not found!");
+        assertFalse(image.getSrc().contains("&token=p:"));
+        assertFalse(image.getSrc().contains("&expiryTime"));
     }
 
     @Test
