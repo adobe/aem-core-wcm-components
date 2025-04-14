@@ -24,9 +24,20 @@
         validate: function(el) {
             var compPath = $(el.closest("form")).attr("action");
 
-            // Only allow internal paths
-            if (!compPath || compPath.indexOf("http") === 0) {
+            if (!compPath) {
                 return;
+            }
+
+            if (compPath.indexOf("://") > -1) {
+                try {
+                    var urlObj = new URL(compPath, window.location.origin);
+                    if (urlObj.origin !== window.location.origin) {
+                        console.log("Different origin detected: " + urlObj.origin + " from window origin " + window.location.origin + " generated from compPath: " + compPath);
+                        return;
+                    }
+                } catch (e) {
+                    return;
+                }
             }
 
             var pagePath = compPath.split("/_jcr_content")[0];
