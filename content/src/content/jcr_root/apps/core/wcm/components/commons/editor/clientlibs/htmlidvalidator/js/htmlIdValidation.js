@@ -23,6 +23,12 @@
         selector: "[data-validation=html-unique-id-validator]",
         validate: function(el) {
             var compPath = $(el.closest("form")).attr("action");
+
+            // Only allow internal paths
+            if (!compPath || compPath.indexOf("http") === 0) {
+                return;
+            }
+
             var pagePath = compPath.split("/_jcr_content")[0];
             var preConfiguredVal;
             /* Get the pre configured value if any */
@@ -54,8 +60,7 @@
                 success: function(data) {
                     var idList;
                     if (data) {
-                        var parsedHtml = $.parseHTML(data, document, false);
-                        idList = $(parsedHtml).find('[id="' + currentVal + '"]');
+                        idList = $(data).find("[id='" + currentVal + "']");
                         if (idList) {
                             idCount = idList.length;
                         }
