@@ -32,6 +32,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Utility class to build preview token for Dynamic Media with OpenAPI Asset.
+ */
 public class PreviewTokenBuilderUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(PreviewTokenBuilderUtils.class);
@@ -47,6 +50,11 @@ public class PreviewTokenBuilderUtils {
         return dateFormat;
     });
 
+    /**
+     * Builds the preview token for the given assetId.
+     * @param assetId - the assetId for which the preview token is to be generated.
+     * @return a Map.Entry containing the token and the expiry time as a string.
+     */
     public static Map.Entry<String, String> buildPreviewToken(String assetId) {
         try {
             String secretKey = readKeyFromEnvVar(PREVIEW_KEY);
