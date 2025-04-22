@@ -91,11 +91,11 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 ### System Requirements
 
-Core Components | AEM as a Cloud Service | AEM 6.5      | Java SE    | Maven
-----------------|------------------------|--------------|------------|---------
-[>= 2.28.x](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.28.0) | Continual              | \>= 6.5.21.0 | 8 <br/>11 | \>= 3.3.9
-[<= 2.27.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.27.0) <br/> [>= 2.26.x](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.26.0) | Continual              | \>= 6.5.21.0 | 11        | \>= 3.3.9
-[<= 2.25.x](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.25.0) | Not applicable         | \<= 6.5.21.0 | 8 <br/>11 | \<= 3.3.9
+Core Components | AEM as a Cloud Service | AEM 6.5 LTS | AEM 6.5 | Java SE | Maven
+----------------|------------------------|-------------|---------|---------|-------
+[>= 2.28.x](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.28.0) | Continual              | >= 6.5 LTS GA | \>= 6.5.21.0 | 8 <br/>11 | \>= 3.3.9
+[<= 2.27.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.27.0) <br/> [>= 2.26.x](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.26.0) | Continual              | Not applicable | \>= 6.5.21.0 | 11        | \>= 3.3.9
+[<= 2.25.x](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.25.0) | Not applicable         | Not applicable | \<= 6.5.21.0 | 8 <br/>11 | \<= 3.3.9
 
 
 For the requirements from previous Core Component releases, see [Historical System Requirements](VERSIONS.md).
