@@ -28,20 +28,22 @@
      data-cmp-hook-image="imageV3"
      class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}"
      itemscope itemtype="http://schema.org/ImageObject">
-    <a data-sly-unwrap="${!image.imageLink.valid}"
-       class="cmp-image__link"
-       data-sly-attribute="${image.imageLink.htmlAttributes}"
-       data-cmp-clickable="${image.data ? true : false}">
-        <img src="${image.src}"
-             srcset="${image.srcset}"
-             loading="${image.lazyEnabled ? 'lazy' : ''}"
-             class="cmp-image__image"
-             itemprop="contentUrl"
-             width="${image.width}" height="${image.height}"
-             sizes="${image.sizes}"
-             alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
-    </a>
-    <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">${image.title}</span>
-    <meta itemprop="caption" content="${image.title}" data-sly-test="${image.displayPopupTitle && image.title}">
+	<figure role="figure" aria-label="${image.title}" data-sly-unwrap="${image.displayPopupTitle || !image.title}">
+		<a data-sly-unwrap="${!image.imageLink.valid}"
+		   class="cmp-image__link"
+		   data-sly-attribute="${image.imageLink.htmlAttributes}"
+		   data-cmp-clickable="${image.data ? true : false}">
+			<img src="${image.src}"
+				 srcset="${image.srcset}"
+				 loading="${image.lazyEnabled ? 'lazy' : ''}"
+				 class="cmp-image__image"
+				 itemprop="contentUrl"
+				 width="${image.width}" height="${image.height}"
+				 sizes="${image.sizes}"
+				 alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
+        </a>
+		<figcaption class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">${image.title}</figcaption>
+		<meta itemprop="caption" content="${image.title}" data-sly-test="${image.displayPopupTitle && image.title}">
+	</figure>
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty = !image.src, classAppend = 'cmp-image cq-dd-image'}"></sly>
