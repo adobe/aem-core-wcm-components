@@ -16,10 +16,21 @@
 <div data-sly-use.languageNavigation="com.adobe.cq.wcm.core.components.models.LanguageNavigation"
      data-sly-use.commonsTemplates="core/wcm/components/commons/v1/templates.html"
      data-sly-use.groupTemplate="group.html"
-     data-sly-call="${groupTemplate.group @ items=languageNavigation.items, label=languageNavigation.accessibilityLabel}"
      data-sly-test.hasContent="${languageNavigation.items.size > 1}"
      data-cmp-data-layer="${languageNavigation.data.json}"
-     id="${languageNavigation.id}"
      class="cmp-languagenavigation">
+    <sly data-sly-list.item="${languageNavigation.items}"
+         data-sly-test="${languageNavigation.isDropdown}">
+        <button data-sly-test="${item.active}"
+                class="cmp-languagenavigation-button"
+                type="button"
+                aria-controls="${languageNavigation.id}"
+                aria-label="${languageNavigation.accessibilityLabel} : ${item.language} – ${item.title}"
+                aria-expanded="false">
+            <span>${item.language}</span>
+            <span>${item.title}</span>
+        </button>
+    </sly>
+    <sly data-sly-call="${groupTemplate.group @ items=languageNavigation.items, label=languageNavigation.accessibilityLabel, id=languageNavigation.id}"></sly>
 </div>
 <sly data-sly-call="${commonsTemplates.placeholder @ isEmpty = !hasContent, classAppend='cmp-languagenavigation'}"></sly>
