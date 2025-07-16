@@ -38,4 +38,15 @@
     <Match>
         <Bug pattern="EI_EXPOSE_REP2" />
     </Match>
+    <!-- The two fields below need to be transient -->
+    <Match>
+        <Class name="com.adobe.cq.wcm.core.components.internal.services.embed.OEmbedXMLResponseImpl" />
+        <Field name="any" />
+        <Bug pattern="SE_TRANSIENT_FIELD_NOT_RESTORED" />
+    </Match>
+    <Match>
+        <Class name="com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbedUrlProcessorServlet" />
+        <Field name="urlProcessors" />
+        <Bug pattern="SE_TRANSIENT_FIELD_NOT_RESTORED" />
+    </Match>
 </FindBugsFilter>
