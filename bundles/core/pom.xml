@@ -529,12 +529,6 @@
             <artifactId>uber-jar</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs-annotations</artifactId>
-            <version>4.7.2</version>
-            <scope>compile</scope>
-        </dependency>
-          <dependency>
             <groupId>org.skyscreamer</groupId>
             <artifactId>jsonassert</artifactId>
             <version>1.5.1</version>
