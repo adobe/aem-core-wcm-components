@@ -57,6 +57,12 @@ class LinkUtilTest {
     }
 
     @Test
+    void test_withQueryStringAndFragment() {
+        assertEquals("https://www.adobe.come?q=hello&w=world#home", LinkUtil.escape("https://www.adobe.come", "q=hello&w=world", "home"));
+        assertEquals("https://www.adobe.come/home.html?q=hello&w=world#home", LinkUtil.escape("https://www.adobe.come/home.html", "q=hello&w=world", "home"));
+    }
+
+    @Test
     void escape_whenEscapingPathWithFragment_thenFragmentForwardSlashIsNotEncoded() throws UnsupportedEncodingException {
         String path = "https://google.com";
         String fragment = "/assets/2/1529/RES176341/report";
