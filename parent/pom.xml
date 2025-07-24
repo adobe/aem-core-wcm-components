@@ -50,7 +50,7 @@
         <aem.port>4502</aem.port>
         <aem.publish.host>localhost</aem.publish.host>
         <aem.publish.port>4503</aem.publish.port>
-        <aem.contextPath />
+        <aem.contextPath/>
         <sling.user>admin</sling.user>
         <sling.password>admin</sling.password>
         <vault.user>admin</vault.user>
@@ -701,7 +701,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.12.0</version>
+                <version>3.18.0</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
