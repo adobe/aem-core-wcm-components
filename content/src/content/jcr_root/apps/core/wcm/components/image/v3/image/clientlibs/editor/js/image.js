@@ -228,15 +228,15 @@
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./isDecorative']", function(e) {
         toggleAlternativeFieldsAndLink(imageFromPageImage, e.target);
 
-            var altValue = $altTextField.adaptTo("foundation-field").getValue();
-            if (!altValue || altValue.trim() === "") {
-                var altFromDAMCheckbox = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
-                if (altFromDAMCheckbox && !altFromDAMCheckbox.checked) {
-                    altFromDAMCheckbox.checked = true;
-                    altFromDAMCheckbox.trigger("change");
-                    clearAltInvalidState();
-                }
+        var altValue = $altTextField.adaptTo("foundation-field").getValue();
+        if (!altValue || altValue.trim() === "") {
+            var altFromDAMCheckbox = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
+            if (altFromDAMCheckbox && !altFromDAMCheckbox.checked) {
+                altFromDAMCheckbox.checked = true;
+                altFromDAMCheckbox.trigger("change");
+                clearAltInvalidState();
             }
+        }
     });
 
 
