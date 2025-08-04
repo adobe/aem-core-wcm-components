@@ -227,7 +227,42 @@
 
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./isDecorative']", function(e) {
         toggleAlternativeFieldsAndLink(imageFromPageImage, e.target);
+
+            var altValue = $altTextField.adaptTo("foundation-field").getValue();
+            if (!altValue || altValue.trim() === "") {
+                var altFromDAMCheckbox = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
+                if (altFromDAMCheckbox && !altFromDAMCheckbox.checked) {
+                    altFromDAMCheckbox.checked = true;
+                    altFromDAMCheckbox.trigger("change");
+                    clearAltInvalidState();
+                }
+            }
     });
+
+
+    function clearAltInvalidState() {
+        // remove error from alt value
+        var altInput = document.querySelector("input[name='./alt']");
+        if (altInput) {
+            altInput.classList.remove("is-invalid");
+            altInput.removeAttribute("invalid");
+            altInput.removeAttribute("aria-invalid");
+            $(altInput).removeClass("is-invalid").removeAttr("aria-invalid").removeAttr("invalid");
+        }
+
+        // remove tab error
+        document.querySelectorAll("coral-tab.is-invalid").forEach(function(tab) {
+            tab.classList.remove("is-invalid");
+            tab.removeAttribute("invalid");
+            tab.removeAttribute("aria-invalid");
+            $(tab).removeClass("is-invalid").removeAttr("aria-invalid").removeAttr("invalid");
+        });
+
+        // remove error labels
+        document.querySelectorAll("label.coral-Form-errorlabel").forEach(function(label) {
+            label.remove();
+        });
+    }
 
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./imageFromPageImage']", function(e) {
         togglePageImageInherited(e.target, isDecorative);
