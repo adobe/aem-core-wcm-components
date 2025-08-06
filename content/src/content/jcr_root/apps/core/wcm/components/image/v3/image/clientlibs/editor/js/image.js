@@ -64,9 +64,6 @@
     var imagePresetRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='imagePreset']";
     var smartCropRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='smartCrop']";
     var remoteFileReference;
-    var IS_INVALID_CLASS = "is-invalid";
-    var INVALID_ATTR = "invalid";
-    var ARIA_INVALID_ATTR = "aria-invalid";
 
     $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
@@ -231,15 +228,18 @@
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./isDecorative']", function(e) {
         toggleAlternativeFieldsAndLink(imageFromPageImage, e.target);
 
-            var altValue = $altTextField.adaptTo("foundation-field").getValue();
-            if (!altValue || altValue.trim() === "") {
-                var altFromDAMCheckbox = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
-                if (altFromDAMCheckbox && !altFromDAMCheckbox.checked) {
-                    altFromDAMCheckbox.checked = true;
-                    altFromDAMCheckbox.trigger("change");
-                    clearAltInvalidState();
-                }
+        var IS_INVALID_CLASS = "is-invalid";
+        var INVALID_ATTR = "invalid";
+        var ARIA_INVALID_ATTR = "aria-invalid";
+        var altValue = $altTextField.adaptTo("foundation-field").getValue();
+        if (!altValue || altValue.trim() === "") {
+            var altFromDAMCheckbox = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
+            if (altFromDAMCheckbox && !altFromDAMCheckbox.checked) {
+                altFromDAMCheckbox.checked = true;
+                altFromDAMCheckbox.trigger("change");
+                clearAltInvalidState();
             }
+        }
     });
 
 
