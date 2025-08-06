@@ -228,9 +228,6 @@
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./isDecorative']", function(e) {
         toggleAlternativeFieldsAndLink(imageFromPageImage, e.target);
 
-        var IS_INVALID_CLASS = "is-invalid";
-        var INVALID_ATTR = "invalid";
-        var ARIA_INVALID_ATTR = "aria-invalid";
         var altValue = $altTextField.adaptTo("foundation-field").getValue();
         if (!altValue || altValue.trim() === "") {
             var altFromDAMCheckbox = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
@@ -244,6 +241,10 @@
 
 
     function clearAltInvalidState() {
+        var IS_INVALID_CLASS = "is-invalid";
+        var INVALID_ATTR = "invalid";
+        var ARIA_INVALID_ATTR = "aria-invalid";
+        
         // remove error from alt value
         var altInput = document.querySelector("input[name='./alt']");
         if (altInput) {
