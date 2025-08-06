@@ -244,7 +244,6 @@
         var IS_INVALID_CLASS = "is-invalid";
         var INVALID_ATTR = "invalid";
         var ARIA_INVALID_ATTR = "aria-invalid";
-        
         // remove error from alt value
         var altInput = document.querySelector("input[name='./alt']");
         if (altInput) {
