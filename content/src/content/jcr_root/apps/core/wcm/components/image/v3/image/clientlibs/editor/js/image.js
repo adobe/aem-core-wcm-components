@@ -254,7 +254,7 @@
         }
 
         // remove tab error
-        document.querySelectorAll("coral-tab.is-invalid").forEach(function(tab) {
+        document.querySelectorAll("coral-tab." + IS_INVALID_CLASS).forEach(function(tab) {
             tab.classList.remove(IS_INVALID_CLASS);
             tab.removeAttribute(INVALID_ATTR);
             tab.removeAttribute(ARIA_INVALID_ATTR);
