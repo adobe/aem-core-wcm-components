@@ -64,6 +64,9 @@
     var imagePresetRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='imagePreset']";
     var smartCropRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='smartCrop']";
     var remoteFileReference;
+    var IS_INVALID_CLASS = "is-invalid";
+    var INVALID_ATTR = "invalid";
+    var ARIA_INVALID_ATTR = "aria-invalid";
 
     $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
@@ -228,15 +231,15 @@
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./isDecorative']", function(e) {
         toggleAlternativeFieldsAndLink(imageFromPageImage, e.target);
 
-        var altValue = $altTextField.adaptTo("foundation-field").getValue();
-        if (!altValue || altValue.trim() === "") {
-            var altFromDAMCheckbox = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
-            if (altFromDAMCheckbox && !altFromDAMCheckbox.checked) {
-                altFromDAMCheckbox.checked = true;
-                altFromDAMCheckbox.trigger("change");
-                clearAltInvalidState();
+            var altValue = $altTextField.adaptTo("foundation-field").getValue();
+            if (!altValue || altValue.trim() === "") {
+                var altFromDAMCheckbox = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
+                if (altFromDAMCheckbox && !altFromDAMCheckbox.checked) {
+                    altFromDAMCheckbox.checked = true;
+                    altFromDAMCheckbox.trigger("change");
+                    clearAltInvalidState();
+                }
             }
-        }
     });
 
 
@@ -244,18 +247,18 @@
         // remove error from alt value
         var altInput = document.querySelector("input[name='./alt']");
         if (altInput) {
-            altInput.classList.remove("is-invalid");
-            altInput.removeAttribute("invalid");
-            altInput.removeAttribute("aria-invalid");
-            $(altInput).removeClass("is-invalid").removeAttr("aria-invalid").removeAttr("invalid");
+            altInput.classList.remove(IS_INVALID_CLASS);
+            altInput.removeAttribute(INVALID_ATTR);
+            altInput.removeAttribute(ARIA_INVALID_ATTR);
+            $(altInput).removeClass(IS_INVALID_CLASS).removeAttr(ARIA_INVALID_ATTR).removeAttr(INVALID_ATTR);
         }
 
         // remove tab error
         document.querySelectorAll("coral-tab.is-invalid").forEach(function(tab) {
-            tab.classList.remove("is-invalid");
-            tab.removeAttribute("invalid");
-            tab.removeAttribute("aria-invalid");
-            $(tab).removeClass("is-invalid").removeAttr("aria-invalid").removeAttr("invalid");
+            tab.classList.remove(IS_INVALID_CLASS);
+            tab.removeAttribute(INVALID_ATTR);
+            tab.removeAttribute(ARIA_INVALID_ATTR);
+            $(tab).removeClass(IS_INVALID_CLASS).removeAttr(ARIA_INVALID_ATTR).removeAttr(INVALID_ATTR);
         });
 
         // remove error labels
