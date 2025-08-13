@@ -347,6 +347,7 @@
             if (checkbox.checked) {
                 $cqFileUpload.hide();
                 $pageImageThumbnail.show();
+                // dynamic media options are not relevant if image is inherited from page image
                 $dynamicMediaGroup.hide();
             } else {
                 $cqFileUpload.show();
@@ -441,6 +442,7 @@
                 if (isFileDM === undefined || isFileDM.trim() === "" || !areDMFeaturesEnabled) {
                     $dynamicMediaGroup.hide();
                 } else {
+                    // show dynamic media options only if the shown image is not inherited from page image
                     if (!imageFromPageImage.checked) {
                         $dynamicMediaGroup.show();
                     }
@@ -484,6 +486,7 @@
         imagePropertiesRequest.setRequestHeader("X-Adobe-Accept-Experimental", "1");
         imagePropertiesRequest.onload = function() {
             if (imagePropertiesRequest.status >= 200 && imagePropertiesRequest.status < 400) {
+                // show dynamic media options only if the shown image is not inherited from page image
                 if (!imageFromPageImage.checked) {
                     $dynamicMediaGroup.show();
                 }
