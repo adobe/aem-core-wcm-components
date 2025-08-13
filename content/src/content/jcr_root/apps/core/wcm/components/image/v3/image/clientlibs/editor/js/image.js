@@ -442,7 +442,7 @@
                 if (isFileDM === undefined || isFileDM.trim() === "" || !areDMFeaturesEnabled) {
                     $dynamicMediaGroup.hide();
                 } else {
-                    // show dynamic media options only if the shown image is not inherited from page image
+                    // show dynamic media options only if the featured image is not inherited from page image
                     if (!imageFromPageImage.checked) {
                         $dynamicMediaGroup.show();
                     }
