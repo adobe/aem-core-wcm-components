@@ -347,6 +347,8 @@
             if (checkbox.checked) {
                 $cqFileUpload.hide();
                 $pageImageThumbnail.show();
+                // dynamic media options are not relevant if image is inherited from page image
+                $dynamicMediaGroup.hide();
             } else {
                 $cqFileUpload.show();
                 $pageImageThumbnail.hide();
@@ -440,7 +442,10 @@
                 if (isFileDM === undefined || isFileDM.trim() === "" || !areDMFeaturesEnabled) {
                     $dynamicMediaGroup.hide();
                 } else {
-                    $dynamicMediaGroup.show();
+                    // show dynamic media options only if the featured image is not inherited from page image
+                    if (!imageFromPageImage.checked) {
+                        $dynamicMediaGroup.show();
+                    }
                     getSmartCropRenditions(data["dam:scene7File"]);
                 }
             }
@@ -481,7 +486,10 @@
         imagePropertiesRequest.setRequestHeader("X-Adobe-Accept-Experimental", "1");
         imagePropertiesRequest.onload = function() {
             if (imagePropertiesRequest.status >= 200 && imagePropertiesRequest.status < 400) {
-                $dynamicMediaGroup.show();
+                // show dynamic media options only if the shown image is not inherited from page image
+                if (!imageFromPageImage.checked) {
+                    $dynamicMediaGroup.show();
+                }
                 $(imagePresetRadio).parent().hide();
                 $(smartCropRadio).prop("checked", true);
                 var responseText = imagePropertiesRequest.responseText;
