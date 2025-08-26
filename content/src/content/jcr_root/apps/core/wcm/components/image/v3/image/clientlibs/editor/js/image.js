@@ -211,12 +211,12 @@
             var isAltFromDAMDisabled = altFromDAM.disabled;
             var isAltFromPageImageChecked = document.querySelector(altFromPageCheckboxSelector).checked;
             var isDecorativeChecked = document.querySelector("coral-checkbox[name='./isDecorative']").checked;
-            var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
+            var assetWithoutDescriptionErrorMessage = Granite.I18n.get("Error: Please provide an asset which has a description that can be used as alt text.");
 
             if (!isDecorativeChecked && !seededValue &&
                 ((isImageFromPageImageChecked && isAltFromPageImageChecked) ||
                     (!isImageFromPageImageChecked && isAltFromDAMChecked && !isAltFromDAMDisabled))) {
-                return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
+                return assetWithoutDescriptionErrorMessage;
             }
         }
     });
