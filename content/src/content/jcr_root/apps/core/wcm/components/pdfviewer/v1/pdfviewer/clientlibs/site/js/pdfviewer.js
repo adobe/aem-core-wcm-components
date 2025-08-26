@@ -59,7 +59,8 @@
         var adobeDCView = new window.AdobeDC.View({
             clientId: component.dataset.cmpClientId,
             divId: component.id + "-content",
-            reportSuiteId: component.dataset.cmpReportSuiteId
+            reportSuiteId: component.dataset.cmpReportSuiteId,
+            locale: Granite.I18n.getLocale()
         });
         adobeDCView.previewFile({
             content: { location: { url: component.dataset.cmpDocumentPath } },
