@@ -14,7 +14,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.redirect="${ @ redirectTarget}">
-    <p class="cmp-page__redirect">${'This page redirects to' @ i18n}
+    <p class="cmp-page__redirect">${'This page redirects to' @ i18n, locale=request.locale}
         <a data-sly-attribute="${redirectTarget.link.htmlAttributes}" data-sly-unwrap="${!redirectTarget.link.valid}">${redirectTarget.page.title || redirectTarget.link.URL}</a>
     </p>
 </template>
