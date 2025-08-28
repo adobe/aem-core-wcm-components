@@ -16,12 +16,12 @@
 <sly data-sly-template.icon="${@ item}">
     <span class="cmp-childreneditor__item-icon"
           data-cmp-hook-childreneditor="itemIcon">
-        <coral-icon data-sly-test="${item.iconName}" icon="${item.iconName}" title="${item.title}"></coral-icon>
-        <img data-sly-test="${!item.iconName && item.iconPath}" src="${item.iconPath}" title="${item.title}"/>
+        <coral-icon data-sly-test="${item.iconName}" icon="${item.iconName}" title="${item.title @ i18n}"></coral-icon>
+        <img data-sly-test="${!item.iconName && item.iconPath}" src="${item.iconPath}" title="${item.title @ i18n}"/>
         <coral-tag data-sly-test="${!item.iconName && !item.iconPath && item.iconAbbreviation}"
                    class="cmp-childreneditor__item-tag"
                    color="grey"
                    size="M"
-                   title="${item.title}">${item.iconAbbreviation}</coral-tag>
+                   title="${item.title @ i18n}">${item.iconAbbreviation}</coral-tag>
     </span>
 </sly>
