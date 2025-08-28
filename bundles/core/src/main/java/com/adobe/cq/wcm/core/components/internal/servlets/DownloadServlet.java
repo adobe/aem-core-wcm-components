@@ -17,6 +17,9 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -182,6 +185,10 @@ public class DownloadServlet extends SlingAllMethodsServlet {
         return Optional.ofNullable(fileResource.getValueMap().get(JcrConstants.JCR_DATA, InputStream.class));
     }
 
+    private String encodeFileName(String fileName) throws UnsupportedEncodingException {
+        return URLEncoder.encode(fileName, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20");  
+    }
+
     private void sendResponse(InputStream stream, long size, String mimeType, String filename, long lastModifiedDate, SlingHttpServletResponse response,
             boolean inline) throws IOException {
         response.setContentType(mimeType);
@@ -191,10 +198,10 @@ public class DownloadServlet extends SlingAllMethodsServlet {
             response.setContentLength((int) size);
         }
         if (inline) {
-            response.setHeader(CONTENT_DISPOSITION_HEADER, "inline; filename=\"" + filename + "\"");
+            response.setHeader(CONTENT_DISPOSITION_HEADER, String.format("inline; filename=\"%s\"; filename*=UTF-8''%s", filename, encodeFileName(filename)));
             response.setHeader(CSP_HEADER, "sandbox");
         } else {
-            response.setHeader(CONTENT_DISPOSITION_HEADER, "attachment; filename=\"" + filename + "\"");
+            response.setHeader(CONTENT_DISPOSITION_HEADER, String.format("attachment; filename=\"%s\"; filename*=UTF-8''%s", filename, encodeFileName(filename)));
         }
         if (lastModifiedDate > 0) {
             response.setHeader(HttpConstants.HEADER_LAST_MODIFIED, getLastModifiedDate(lastModifiedDate));
