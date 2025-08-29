@@ -54,3 +54,14 @@
         background-color: rgb(46,108,163);
     }
 }
+
+:lang(de), :lang(es), :lang(fr) {
+    .cmp-progressbar {
+        .cmp-progressbar__label--completed:after {
+            content: ' %';
+        }
+    	.cmp-progressbar__label--remaining:after {
+            content: ' %';
+        }
+    }
+}
