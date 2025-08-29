@@ -592,7 +592,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>1.1.0</version>
+                        <version>0.8.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>central</serverId>

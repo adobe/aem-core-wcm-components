@@ -14,7 +14,7 @@
 # limitations under the License.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-name: Deploy to OSSRH
+name: Deploy to Central Repository
 
 # Run workflow on commits to default branch
 on: workflow_dispatch
