@@ -24,9 +24,9 @@
             </activation>
             <properties>
                 <releaseRepository-Id>central</releaseRepository-Id>
-                <releaseRepository-URL>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</releaseRepository-URL>
+                <releaseRepository-URL>https://central.sonatype.com/repository/maven-releases/</releaseRepository-URL>
                 <snapshotRepository-Id>central</snapshotRepository-Id>
-                <snapshotRepository-URL>https://s01.oss.sonatype.org/content/repositories/snapshots</snapshotRepository-URL>
+                <snapshotRepository-URL>https://central.sonatype.com/repository/maven-snapshots/</snapshotRepository-URL>
                 <project.scm.id>github</project.scm.id>
                 <gpg.executable>gpg</gpg.executable>
                 <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
