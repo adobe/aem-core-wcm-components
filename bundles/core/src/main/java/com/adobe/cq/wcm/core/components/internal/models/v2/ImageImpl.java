@@ -99,6 +99,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      * The path of the delegated content policy.
      */
     private static final String CONTENT_POLICY_DELEGATE_PATH = "contentPolicyDelegatePath";
+    /**
+     * Auto-preserve PNG transparency configuration property.
+     */
+    private static final String PN_DESIGN_AUTO_PRESERVE_PNG_TRANSPARENCY = "autoPreservePngTransparency";
 
     /**
      * Server path for dynamic media
@@ -159,11 +163,12 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         // if content policy delegate path is provided pass it to the image Uri
         String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
         String dmImageUrl = null;
+        Asset asset = null;
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
             final Resource assetResource = request.getResourceResolver().getResource(fileReference);
             if (assetResource != null) {
-                Asset asset = assetResource.adaptTo(Asset.class);
+                asset = assetResource.adaptTo(Asset.class);
                 if (asset != null) {
                     if (!uuidDisabled) {
                         uuid = asset.getID();
@@ -289,6 +294,20 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     srcUriTemplate += imagePresetCommand;
                     src += imagePresetCommand;
                 }
+
+                // Auto-preserve PNG transparency if enabled and asset has transparency
+                boolean autoPreservePngTransparency = currentStyle.get(PN_DESIGN_AUTO_PRESERVE_PNG_TRANSPARENCY, false);
+                if (autoPreservePngTransparency && hasPngTransparency(asset)) {
+                    String pngAlphaModifier = "fmt=png-alpha";
+                    if (StringUtils.isNotBlank(imageModifiers)) {
+                        // Append to existing modifiers
+                        imageModifiers += "&" + pngAlphaModifier;
+                    } else {
+                        // Set as the only modifier
+                        imageModifiers = pngAlphaModifier;
+                    }
+                }
+
                 if (StringUtils.isNotBlank(imageModifiers)){
                     String imageModifiersCommand = (srcUriTemplate.contains("?") ? '&':'?') + imageModifiers;
                     srcUriTemplate += imageModifiersCommand;
@@ -402,5 +421,33 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return new ImageAreaImpl(shape, coordinates, relativeCoordinates, link, alt);
     }
 
+    /**
+     * Checks if a PNG asset has transparency based on its bits per pixel metadata.
+     * @param asset The DAM asset to check
+     * @return true if the PNG has transparency (32 bits), false otherwise
+     */
+    private boolean hasPngTransparency(Asset asset) {
+        if (asset == null) {
+            return false;
+        }
+        
+        String mimeType = asset.getMimeType();
+        if (!"image/png".equals(mimeType)) {
+            return false;
+        }
+        
+        String bitsPerPixel = asset.getMetadataValue("dam:Bitsperpixel");
+        if (StringUtils.isEmpty(bitsPerPixel)) {
+            return false;
+        }
+        
+        try {
+            int bits = Integer.parseInt(bitsPerPixel);
+            return bits == 32; // 32 bits indicates PNG with alpha channel
+        } catch (NumberFormatException e) {
+            LOGGER.debug("Could not parse bits per pixel value: {}", bitsPerPixel);
+            return false;
+        }
+    }
 
 }
