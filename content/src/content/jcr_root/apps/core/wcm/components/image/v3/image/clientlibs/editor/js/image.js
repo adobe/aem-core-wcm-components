@@ -45,6 +45,7 @@
     var $pageImageThumbnail;
     var altTextFromPage;
     var altTextFromDAM;
+    var altFromPageCheckboxSelector = "coral-checkbox[name='./altValueFromPageImage']";
     var altCheckboxSelector = "coral-checkbox[name='./altValueFromDAM']";
     var altInputSelector = "input[name='./alt']";
     var altInputAlertIconSelector = "input[name='./alt'] + coral-icon[icon='alert']";
@@ -98,7 +99,7 @@
 
             imageFromPageImage = dialogContent.querySelector("coral-checkbox[name='./imageFromPageImage']");
 
-            altFromPageTuple = new CheckboxTextfieldTuple(dialogContent, "coral-checkbox[name='./altValueFromPageImage']", "input[name='./alt']");
+            altFromPageTuple = new CheckboxTextfieldTuple(dialogContent, altFromPageCheckboxSelector, altInputSelector);
             $pageImageThumbnail = $dialogContent.find(pageImageThumbnailSelector);
             altTextFromPage = $dialogContent.find(pageImageThumbnailImageSelector).attr("alt");
 
@@ -131,6 +132,7 @@
                     }
                 });
                 $cqFileUpload.on("click", "[coral-fileupload-clear]", function() {
+                    $altTextField.adaptTo("foundation-field").setRequired(false);
                     altTuple.reset();
                     captionTuple.reset();
                     captionTuple.hideCheckbox(true);
@@ -140,6 +142,7 @@
                     if (isDecorative) {
                         altTuple.hideTextfield(isDecorative.checked);
                     }
+                    $altTextField.adaptTo("foundation-field").setRequired(!isDecorative.checked);
                     altTuple.hideCheckbox(true);
                     captionTuple.hideTextfield(false);
                     captionTuple.hideCheckbox(true);
@@ -161,6 +164,14 @@
                     } else {
                         altTuple.hideCheckbox(true);
                         captionTuple.hideCheckbox(true);
+                    }
+                }
+
+                // Ensure alt text from page is visible on initial load if imageFromPageImage is checked
+                if (imageFromPageImage && imageFromPageImage.checked) {
+                    var isAltFromPageImageChecked = document.querySelector(altFromPageCheckboxSelector).checked;
+                    if (isAltFromPageImageChecked && altTextFromPage) {
+                        $altTextField.adaptTo("foundation-field").setValue(altTextFromPage);
                     }
                 }
             });
@@ -185,18 +196,19 @@
         selector: altInputSelector,
         validate: function() {
             var seededValue = document.querySelector(altInputSelector).getAttribute("data-seeded-value");
-            var isImageFromPageImageChecked = document.querySelector('coral-checkbox[name="./imageFromPageImage"]').checked;
+            var imageFromPageImage = document.querySelector('coral-checkbox[name="./imageFromPageImage"]');
+            var isImageFromPageImageChecked = imageFromPageImage ? (imageFromPageImage.checked || false) : false;
             var altFromDAM = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
             var isAltFromDAMChecked = altFromDAM.checked;
             var isAltFromDAMDisabled = altFromDAM.disabled;
-            var isAltFromPageImageChecked = document.querySelector('coral-checkbox[name="./altValueFromPageImage"]').checked;
+            var isAltFromPageImageChecked = document.querySelector(altFromPageCheckboxSelector).checked;
             var isDecorativeChecked = document.querySelector("coral-checkbox[name='./isDecorative']").checked;
-            var assetWithoutDescriptionErrorMessage = "Error: Please provide an asset which has a description that can be used as alt text.";
+            var assetWithoutDescriptionErrorMessage = Granite.I18n.get("Error: Please provide an asset which has a description that can be used as alt text.");
 
             if (!isDecorativeChecked && !seededValue &&
                 ((isImageFromPageImageChecked && isAltFromPageImageChecked) ||
                     (!isImageFromPageImageChecked && isAltFromDAMChecked && !isAltFromDAMDisabled))) {
-                return Granite.I18n.get(assetWithoutDescriptionErrorMessage);
+                return assetWithoutDescriptionErrorMessage;
             }
         }
     });
@@ -207,7 +219,45 @@
 
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./isDecorative']", function(e) {
         toggleAlternativeFieldsAndLink(imageFromPageImage, e.target);
+
+        var altValue = $altTextField.adaptTo("foundation-field").getValue();
+        if (!altValue || altValue.trim() === "") {
+            var altFromDAMCheckbox = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
+            if (altFromDAMCheckbox && !altFromDAMCheckbox.checked) {
+                altFromDAMCheckbox.checked = true;
+                altFromDAMCheckbox.trigger("change");
+                clearAltInvalidState();
+            }
+        }
     });
+
+
+    function clearAltInvalidState() {
+        var IS_INVALID_CLASS = "is-invalid";
+        var INVALID_ATTR = "invalid";
+        var ARIA_INVALID_ATTR = "aria-invalid";
+        // remove error from alt value
+        var altInput = document.querySelector("input[name='./alt']");
+        if (altInput) {
+            altInput.classList.remove(IS_INVALID_CLASS);
+            altInput.removeAttribute(INVALID_ATTR);
+            altInput.removeAttribute(ARIA_INVALID_ATTR);
+            $(altInput).removeClass(IS_INVALID_CLASS).removeAttr(ARIA_INVALID_ATTR).removeAttr(INVALID_ATTR);
+        }
+
+        // remove tab error
+        document.querySelectorAll("coral-tab." + IS_INVALID_CLASS).forEach(function(tab) {
+            tab.classList.remove(IS_INVALID_CLASS);
+            tab.removeAttribute(INVALID_ATTR);
+            tab.removeAttribute(ARIA_INVALID_ATTR);
+            $(tab).removeClass(IS_INVALID_CLASS).removeAttr(ARIA_INVALID_ATTR).removeAttr(INVALID_ATTR);
+        });
+
+        // remove error labels
+        document.querySelectorAll("label.coral-Form-errorlabel").forEach(function(label) {
+            label.remove();
+        });
+    }
 
     $(document).on("change", dialogContentSelector + " coral-checkbox[name='./imageFromPageImage']", function(e) {
         togglePageImageInherited(e.target, isDecorative);
@@ -289,6 +339,7 @@
                 }
 
                 // update the alt field
+                $altTextField.adaptTo("foundation-field").setRequired(!isDecorative.checked);
                 altTextFromPage = $(dialogContentSelector).find(pageImageThumbnailImageSelector).attr("alt");
                 if (imageFromPageImage && imageFromPageImage.checked) {
                     altFromPageTuple.seedTextValue(altTextFromPage);
@@ -304,6 +355,8 @@
             if (checkbox.checked) {
                 $cqFileUpload.hide();
                 $pageImageThumbnail.show();
+                // dynamic media options are not relevant if image is inherited from page image
+                $dynamicMediaGroup.hide();
             } else {
                 $cqFileUpload.show();
                 $pageImageThumbnail.hide();
@@ -397,7 +450,10 @@
                 if (isFileDM === undefined || isFileDM.trim() === "" || !areDMFeaturesEnabled) {
                     $dynamicMediaGroup.hide();
                 } else {
-                    $dynamicMediaGroup.show();
+                    // show dynamic media options only if the featured image is not inherited from page image
+                    if (!imageFromPageImage.checked) {
+                        $dynamicMediaGroup.show();
+                    }
                     getSmartCropRenditions(data["dam:scene7File"]);
                 }
             }
@@ -442,7 +498,10 @@
         imagePropertiesRequest.setRequestHeader("X-Adobe-Accept-Experimental", "1");
         imagePropertiesRequest.onload = function() {
             if (imagePropertiesRequest.status >= 200 && imagePropertiesRequest.status < 400) {
-                $dynamicMediaGroup.show();
+                // show dynamic media options only if the shown image is not inherited from page image
+                if (!imageFromPageImage.checked) {
+                    $dynamicMediaGroup.show();
+                }
                 $(imagePresetRadio).parent().hide();
                 $(smartCropRadio).prop("checked", true);
                 var responseText = imagePropertiesRequest.responseText;
@@ -616,49 +675,8 @@
             mutations.forEach(function(mutation) {
                 if (mutation.type === "attributes") {
                     var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
-                    var alertIcon = $(altInputAlertIconSelector);
-                    var assetTab = $(assetTabSelector);
-                    var assetTabAlertIcon = $(assetTabAlertIconSelector);
-                    if (mutation.attributeName === "data-seeded-value") {
-                        if (isAltCheckboxChecked) {
-                            if ($(altInputSelector).val()) {
-                                if (alertIcon.length) {
-                                    $(altInputSelector).removeClass("is-invalid");
-                                    alertIcon.hide();
-                                    assetTab.removeClass("is-invalid");
-                                    assetTabAlertIcon.hide();
-                                }
-                            } else {
-                                if (alertIcon.length) {
-                                    $(altInputSelector).addClass("is-invalid");
-                                    alertIcon.show();
-                                    assetTab.addClass("is-invalid");
-                                    assetTabAlertIcon.show();
-                                }
-                            }
-                        }
-                    }
-
-                    if (mutation.attributeName === "disabled") {
-                        if ($(altInputSelector).val()) {
-                            if (alertIcon.length) {
-                                $(altInputSelector).removeClass("is-invalid");
-                                alertIcon.hide();
-                                assetTab.removeClass("is-invalid");
-                                assetTabAlertIcon.hide();
-                            }
-                        }
-                    }
-
-                    if (mutation.attributeName === "invalid") {
-                        if (!$(altInputSelector).val()) {
-                            if (alertIcon.length) {
-                                $(altInputSelector).addClass("is-invalid");
-                                alertIcon.show();
-                                assetTab.addClass("is-invalid");
-                                assetTabAlertIcon.show();
-                            }
-                        }
+                    if ((mutation.attributeName === "data-seeded-value" && isAltCheckboxChecked) || ["invalid", "disabled"].includes(mutation.attributeName)) {
+                        toggleAltTextValidity();
                     }
                 }
             });
@@ -669,6 +687,31 @@
             observer.observe(altInput, {
                 attributeFilter: ["data-seeded-value", "disabled", "invalid"]
             });
+        }
+    }
+
+    /**
+     * Toggles alt text validity based on the value of the alt text field
+     */
+    function toggleAltTextValidity() {
+        var alertIcon = $(altInputAlertIconSelector);
+        if (!alertIcon.length) {
+            return;
+        }
+
+        var assetTab = $(assetTabSelector);
+        var assetTabAlertIcon = $(assetTabAlertIconSelector);
+
+        if ($(altInputSelector).val()) {
+            $(altInputSelector).removeClass("is-invalid");
+            alertIcon.hide();
+            assetTab.removeClass("is-invalid");
+            assetTabAlertIcon.hide();
+        } else {
+            $(altInputSelector).addClass("is-invalid");
+            alertIcon.show();
+            assetTab.addClass("is-invalid");
+            assetTabAlertIcon.show();
         }
     }
 

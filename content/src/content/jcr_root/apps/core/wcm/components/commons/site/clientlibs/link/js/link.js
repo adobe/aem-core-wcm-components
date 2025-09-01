@@ -38,11 +38,11 @@
     function onDocumentReady() {
         var linkAccessibilityText = getLinkAccessibilityText();
         if (linkAccessibilityText) {
-            var linkAccessibilityElement = document.createElement("span");
-            linkAccessibilityElement.classList.add(linkAccessibilityClass);
-            linkAccessibilityElement.innerText = linkAccessibilityText;
             document.querySelectorAll("a[target='_blank']").forEach(function(link) {
                 if (!link.querySelector(selectors.linkAccessibility)) {
+                    var linkAccessibilityElement = document.createElement("span");
+                    linkAccessibilityElement.classList.add(linkAccessibilityClass);
+                    linkAccessibilityElement.innerText = linkAccessibilityText;
                     link.insertAdjacentElement("beforeend", linkAccessibilityElement);
                 }
             });

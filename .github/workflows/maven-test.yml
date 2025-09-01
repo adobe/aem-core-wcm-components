@@ -16,8 +16,13 @@
 
 name: Test
 
-on: [push, pull_request]
-
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
   build:
@@ -26,8 +31,8 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        java: [11]
-        profile: [ '', '-Pcloud,adobe-public']
+        java: [11, 17, 21]
+        profile: ['-Pcloud,adobe-public']
 
     steps:
       # Check out Git repository
@@ -42,7 +47,7 @@ jobs:
 
       # Set up dependency cache
       - name: Cache local Maven repository
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}

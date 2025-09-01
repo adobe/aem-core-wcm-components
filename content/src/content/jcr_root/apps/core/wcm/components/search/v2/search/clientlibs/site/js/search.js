@@ -155,8 +155,8 @@
     function updateSearchResultsStatusMessageElement(searchElementId, totalResults) {
         var searchResultsStatusMessage = document.querySelector("#" + searchElementId + "> .cmp_search__info");
         searchResultsStatusMessage.style.visibility = "visible";
-        var searchResultsFoundMessage = totalResults === 1 ? totalResults + " result" : totalResults + " results";
-        var searchResultsNotFoundMessage = "No results";
+        var searchResultsFoundMessage = totalResults === 1 ? Granite.I18n.get("{0} result", totalResults) : Granite.I18n.get("{0} results", totalResults);
+        var searchResultsNotFoundMessage = Granite.I18n.get("No results");
         searchResultsStatusMessage.innerText = totalResults > 0 ? searchResultsFoundMessage : searchResultsNotFoundMessage;
     }
 
@@ -293,9 +293,15 @@
             var el = document.createElement("span");
             el.innerHTML = self._elements.itemTemplate.innerHTML;
             el.querySelectorAll(selectors.item.title)[0].appendChild(document.createTextNode(item.title));
-            el.querySelectorAll(selectors.item.self)[0].setAttribute("href", item.url);
+            el.querySelectorAll(selectors.item.self)[0].setAttribute("href", self._safeHref(item.url));
             results.innerHTML += el.innerHTML;
         });
+    };
+
+    Search.prototype._safeHref = function(href) {
+        var a = document.createElement("a");
+        a.href = href;
+        return a.pathname;
     };
 
     Search.prototype._markResults = function() {
