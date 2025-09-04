@@ -45,6 +45,7 @@ import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
+import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.dam.scene7.api.constants.Scene7AssetType;
 import com.day.cq.dam.scene7.api.constants.Scene7Constants;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -99,10 +100,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      * The path of the delegated content policy.
      */
     private static final String CONTENT_POLICY_DELEGATE_PATH = "contentPolicyDelegatePath";
-    /**
-     * Auto-preserve PNG transparency configuration property.
-     */
-    private static final String PN_DESIGN_AUTO_PRESERVE_PNG_TRANSPARENCY = "autoPreservePngTransparency";
 
     /**
      * Server path for dynamic media
@@ -296,15 +293,13 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 }
 
                 // Auto-preserve PNG transparency if enabled and asset has transparency
-                boolean autoPreservePngTransparency = currentStyle.get(PN_DESIGN_AUTO_PRESERVE_PNG_TRANSPARENCY, false);
-                if (autoPreservePngTransparency && hasPngTransparency(asset)) {
-                    String pngAlphaModifier = "fmt=png-alpha";
+                if (shouldApplyPngAlphaModifier(asset)) {
                     if (StringUtils.isNotBlank(imageModifiers)) {
                         // Append to existing modifiers
-                        imageModifiers += "&" + pngAlphaModifier;
+                        imageModifiers += "&" + Image.PNG_ALPHA_FORMAT_MODIFIER;
                     } else {
                         // Set as the only modifier
-                        imageModifiers = pngAlphaModifier;
+                        imageModifiers = Image.PNG_ALPHA_FORMAT_MODIFIER;
                     }
                 }
 
@@ -422,22 +417,36 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     }
 
     /**
+     * Convenience method to determine if the PNG alpha format modifier should be applied.
+     * This evaluates both the configuration setting and asset transparency.
+     * 
+     * @param asset The DAM asset to check
+     * @return true if the PNG alpha modifier should be applied, false otherwise
+     */
+    protected boolean shouldApplyPngAlphaModifier(Asset asset) {
+        boolean autoPreservePngTransparency = currentStyle.get(Image.PN_DESIGN_AUTO_PRESERVE_PNG_TRANSPARENCY, false);
+        return autoPreservePngTransparency && hasPngTransparency(asset);
+    }
+
+    /**
      * Checks if a PNG asset has transparency based on its bits per pixel metadata.
+     * 
      * @param asset The DAM asset to check
      * @return true if the PNG has transparency (32 bits), false otherwise
      */
-    private boolean hasPngTransparency(Asset asset) {
+    protected boolean hasPngTransparency(Asset asset) {
         if (asset == null) {
             return false;
         }
         
         String mimeType = asset.getMimeType();
-        if (!"image/png".equals(mimeType)) {
+        if (!StandardImageHandler.PNG1_MIMETYPE.equals(mimeType)) {
             return false;
         }
         
-        String bitsPerPixel = asset.getMetadataValue("dam:Bitsperpixel");
+        String bitsPerPixel = asset.getMetadataValue(Image.DAM_BITS_PER_PIXEL);
         if (StringUtils.isEmpty(bitsPerPixel)) {
+            LOGGER.debug("No bits per pixel metadata found for PNG asset");
             return false;
         }
         

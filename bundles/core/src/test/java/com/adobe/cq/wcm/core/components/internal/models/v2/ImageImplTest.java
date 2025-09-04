@@ -599,10 +599,10 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
 
 
     @Test
-    void testPngTransparencyFeatureConfiguration() {
+    protected void testPngTransparencyFeatureConfiguration() {
         // Test that the auto-preserve PNG transparency feature can be configured
         context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true);
-        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, "autoPreservePngTransparency", true);
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_AUTO_PRESERVE_PNG_TRANSPARENCY, true);
         
         // This test verifies that the feature configuration is properly handled
         // The actual PNG transparency logic is tested in the ImageImpl class itself

@@ -77,10 +77,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private static final String EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
     static final int DEFAULT_NGDM_ASSET_WIDTH = 640;
 
-    /**
-     * Auto-preserve PNG transparency configuration property.
-     */
-    private static final String PN_DESIGN_AUTO_PRESERVE_PNG_TRANSPARENCY = "autoPreservePngTransparency";
 
     @OSGiService
     @Optional
@@ -351,19 +347,14 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             }
 
             // Auto-preserve PNG transparency if enabled
-            boolean autoPreservePngTransparency = currentStyle.get(PN_DESIGN_AUTO_PRESERVE_PNG_TRANSPARENCY, false);
-            if (autoPreservePngTransparency) {
-                // Get the asset to check for PNG transparency
-                Resource assetResource = resource.getResourceResolver().getResource(fileReference);
-                if (assetResource != null) {
-                    Asset asset = assetResource.adaptTo(Asset.class);
-                    if (hasPngTransparency(asset)) {
-                        String pngAlphaModifier = "fmt=png-alpha";
-                        if (StringUtils.isNotEmpty(modifiers)) {
-                            modifiers += "&" + pngAlphaModifier;
-                        } else {
-                            modifiers = pngAlphaModifier;
-                        }
+            Resource assetResource = resource.getResourceResolver().getResource(fileReference);
+            if (assetResource != null) {
+                Asset asset = assetResource.adaptTo(Asset.class);
+                if (shouldApplyPngAlphaModifier(asset)) {
+                    if (StringUtils.isNotEmpty(modifiers)) {
+                        modifiers += "&" + Image.PNG_ALPHA_FORMAT_MODIFIER;
+                    } else {
+                        modifiers = Image.PNG_ALPHA_FORMAT_MODIFIER;
                     }
                 }
             }
@@ -402,32 +393,4 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return StringUtils.isNotBlank(fileReference) && fileReference.startsWith("/urn:");
     }
 
-    /**
-     * Checks if a PNG asset has transparency based on its bits per pixel metadata.
-     * @param asset The DAM asset to check
-     * @return true if the PNG has transparency (32 bits), false otherwise
-     */
-    private boolean hasPngTransparency(Asset asset) {
-        if (asset == null) {
-            return false;
-        }
-        
-        String mimeType = asset.getMimeType();
-        if (!"image/png".equals(mimeType)) {
-            return false;
-        }
-        
-        String bitsPerPixel = asset.getMetadataValue("dam:Bitsperpixel");
-        if (StringUtils.isEmpty(bitsPerPixel)) {
-            return false;
-        }
-        
-        try {
-            int bits = Integer.parseInt(bitsPerPixel);
-            return bits == 32; // 32 bits indicates PNG with alpha channel
-        } catch (NumberFormatException e) {
-            LOGGER.debug("Could not parse bits per pixel value: {}", bitsPerPixel);
-            return false;
-        }
-    }
 }
