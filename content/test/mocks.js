@@ -34,22 +34,19 @@ class JQueryArray extends Array {
 }
 
 function jQuery(obj) {
-    if (typeof obj === 'string') {
-        // Handle selector strings
-        return new JQueryArray();
-    }
+    const result = new JQueryArray(obj);
+
     if (obj === window) {
-        // Return a special object for window that has adaptTo
-        return {
-            adaptTo: function(type) {
-                if (type === 'foundation-registry') {
-                    return window.foundationRegistry;
-                }
-                return null;
+        // Add adaptTo method for window objects
+        result.adaptTo = function(type) {
+            if (type === 'foundation-registry') {
+                return window.foundationRegistry;
             }
+            return null;
         };
     }
-    return new JQueryArray(obj);
+
+    return result;
 }
 
 // Add $ as alias for jQuery
