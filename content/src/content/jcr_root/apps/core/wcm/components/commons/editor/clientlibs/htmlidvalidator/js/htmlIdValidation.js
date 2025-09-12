@@ -43,7 +43,7 @@
             var pagePath = compPath.split("/_jcr_content")[0];
 
             // Remove any path traversal attempts and normalize the path
-            pagePath = pagePath.replace(/\.\./g, '').replace(/\/+/g, '/');
+            pagePath = pagePath.replace(/\.\./g, "").replace(/\/+/g, "/");
 
             // Validate that the path starts with / and doesn't contain dangerous patterns
             if (!/^\//.test(pagePath) || /[<>"|*?]/.test(pagePath)) {
@@ -51,7 +51,7 @@
                 return;
             }
             // Use encodeURIComponent to safely encode the path for URL construction
-            var encodedPagePath = encodeURIComponent(pagePath).replace(/%2F/g, '/');
+            var encodedPagePath = encodeURIComponent(pagePath).replace(/%2F/g, "/");
 
             var preConfiguredVal;
             /* Get the pre configured value if any */
