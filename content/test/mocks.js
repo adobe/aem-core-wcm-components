@@ -15,18 +15,42 @@
  ******************************************************************************/
 class JQueryArray extends Array {
     find(selector) {
-        const elem = this[0].querySelector(selector)
+        const elem = this[0] ? this[0].querySelector(selector) : null;
         return elem ? new JQueryArray(elem) : new JQueryArray();
     }
 
     attr(name) {
         return this[0] ? this[0].getAttribute(name) : null;
     }
+
+    closest(selector) {
+        // Simple mock implementation
+        return this;
+    }
+
+    val() {
+        return this[0] ? this[0].value : '';
+    }
 }
 
 function jQuery(obj) {
-    return new JQueryArray(obj);
+    const result = new JQueryArray(obj);
+
+    if (obj === window) {
+        // Add adaptTo method for window objects
+        result.adaptTo = function(type) {
+            if (type === 'foundation-registry') {
+                return window.foundationRegistry;
+            }
+            return null;
+        };
+    }
+
+    return result;
 }
+
+// Add $ as alias for jQuery
+window.$ = jQuery;
 
 Granite = {
     author: {
@@ -88,4 +112,51 @@ Granite = {
             return url;
         }
     },
+    I18n: {
+        get: function(message) {
+            return message;
+        }
+    }
+};
+
+// Mock foundation registry
+window.foundationRegistry = {
+    validators: [],
+    register: function(type, config) {
+        if (type === 'foundation.validation.validator') {
+            this.validators.push(config);
+        }
+    }
+};
+
+// Enhance jQuery with adaptTo method for foundation registry
+jQuery.fn = jQuery.prototype;
+jQuery.fn.adaptTo = function(type) {
+    if (type === 'foundation-registry') {
+        return window.foundationRegistry;
+    }
+    return null;
+};
+
+// Make sure $ also has the adaptTo method
+jQuery.adaptTo = function(type) {
+    if (type === 'foundation-registry') {
+        return window.foundationRegistry;
+    }
+    return null;
+};
+
+// Mock window.adaptTo as well
+window.adaptTo = function(type) {
+    if (type === 'foundation-registry') {
+        return window.foundationRegistry;
+    }
+    return null;
+};
+
+// Mock document object
+window.document = window.document || {
+    addEventListener: function() {},
+    querySelector: function() { return null; },
+    querySelectorAll: function() { return []; }
 };
