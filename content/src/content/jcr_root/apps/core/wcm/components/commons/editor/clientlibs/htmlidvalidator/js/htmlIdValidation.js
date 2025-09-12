@@ -41,6 +41,18 @@
             }
 
             var pagePath = compPath.split("/_jcr_content")[0];
+
+            // Remove any path traversal attempts and normalize the path
+            pagePath = pagePath.replace(/\.\./g, '').replace(/\/+/g, '/');
+
+            // Validate that the path starts with / and doesn't contain dangerous patterns
+            if (!/^\//.test(pagePath) || /[<>"|*?]/.test(pagePath)) {
+                console.warn("Invalid page path detected: " + pagePath);
+                return;
+            }
+            // Use encodeURIComponent to safely encode the path for URL construction
+            var encodedPagePath = encodeURIComponent(pagePath).replace(/%2F/g, '/');
+
             var preConfiguredVal;
             /* Get the pre configured value if any */
             $.ajax({
@@ -60,7 +72,7 @@
             if (!currentVal || currentVal === preConfiguredVal) {
                 return;
             }
-            var url = pagePath + ".html?wcmmode=disabled";
+            var url = encodedPagePath + ".html?wcmmode=disabled";
             var idCount = 0;
             /* Check if same ID already exist on the page */
             $.ajax({
