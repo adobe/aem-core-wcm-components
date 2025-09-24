@@ -155,8 +155,8 @@
     function updateSearchResultsStatusMessageElement(searchElementId, totalResults) {
         var searchResultsStatusMessage = document.querySelector("#" + searchElementId + "> .cmp_search__info");
         searchResultsStatusMessage.style.visibility = "visible";
-        var searchResultsFoundMessage = totalResults === 1 ? Granite.I18n.get("{0} result", totalResults) : Granite.I18n.get("{0} results", totalResults);
-        var searchResultsNotFoundMessage = Granite.I18n.get("No results");
+        var searchResultsFoundMessage = totalResults === 1 ? totalResults + " result" : totalResults + " results";
+        var searchResultsNotFoundMessage = "No results";
         searchResultsStatusMessage.innerText = totalResults > 0 ? searchResultsFoundMessage : searchResultsNotFoundMessage;
     }
 
