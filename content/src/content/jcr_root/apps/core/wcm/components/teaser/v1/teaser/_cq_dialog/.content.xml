@@ -373,6 +373,7 @@
                                                             jcr:primaryType="nt:unstructured"
                                                             sling:resourceType="cq/gui/components/coral/common/form/pagefield"
                                                             emptyText="Link"
+                                                            fieldLabel="Link"
                                                             name="link"
                                                             required="{Boolean}true"
                                                             rootPath="/content">
@@ -385,6 +386,7 @@
                                                             jcr:primaryType="nt:unstructured"
                                                             sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                             emptyText="Text"
+                                                            fieldLabel="Text"
                                                             name="text"
                                                             required="{Boolean}true">
                                                             <granite:data
