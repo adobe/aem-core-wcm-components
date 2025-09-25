@@ -15,8 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
@@ -230,6 +233,18 @@ public interface Image extends Component {
      */
     default String getAlt() {
         return null;
+    }
+
+    /**
+     * Returns the value for the {@code alt} attribute of the image as a map.
+     *
+     * @return the value for the image's {@code alt} attribute as map with a single key 'alt' and value if one was set,
+     * or empty map otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.30.0
+     */
+    default Map<String, String> getAltAsMap() {
+        final String alt = getAlt();
+        return StringUtils.isBlank(alt) ? Collections.emptyMap() : Collections.singletonMap("alt", alt);
     }
 
     /**

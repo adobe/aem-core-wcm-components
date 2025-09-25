@@ -39,7 +39,7 @@
              itemprop="contentUrl"
              width="${image.width}" height="${image.height}"
              sizes="${image.sizes}"
-             alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
+             alt="" data-sly-attribute="${image.altAsMap}" title="${image.displayPopupTitle && image.title}"/>
     </a>
     <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">${image.title}</span>
     <meta itemprop="caption" content="${image.title}" data-sly-test="${image.displayPopupTitle && image.title}">
