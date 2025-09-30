@@ -236,13 +236,15 @@ public interface Image extends Component {
     }
 
     /**
-     * Returns the value for the {@code alt} attribute of the image as a map.
+     * Returns a Map with attributes for HTML {@code img} tag if the attributes have a non-empty value.
+     * If an attribute has empty vlue the attribute is not added to the map.
+     * Currently only alt is returned by this method in order to properly render alt="" in HTL.
      *
-     * @return the value for the image's {@code alt} attribute as map with a single key 'alt' and value if one was set,
-     * or empty map otherwise
+     * @return {@link Map} with HTML-specific {@code img} attributes with non-empty values*
      * @since com.adobe.cq.wcm.core.components.models 12.30.0
      */
-    default Map<String, String> getAltAsMap() {
+    @NotNull
+    default Map<String, String> getHtmlAttributes() {
         final String alt = getAlt();
         return StringUtils.isBlank(alt) ? Collections.emptyMap() : Collections.singletonMap("alt", alt);
     }

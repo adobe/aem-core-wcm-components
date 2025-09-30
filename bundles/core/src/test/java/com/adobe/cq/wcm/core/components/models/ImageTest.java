@@ -27,29 +27,29 @@ import static org.mockito.Mockito.when;
 public class ImageTest {
 
     @Test
-    public void testGetAltAsMap() {
+    public void testGetHtmlAttributes() {
         Image mockImage = mock(Image.class);
 
         // Test with non-empty alt text
         when(mockImage.getAlt()).thenReturn("Sample alt text");
-        when(mockImage.getAltAsMap()).thenCallRealMethod();
-        Map<String, String> altMap = mockImage.getAltAsMap();
+        when(mockImage.getHtmlAttributes()).thenCallRealMethod();
+        Map<String, String> altMap = mockImage.getHtmlAttributes();
         assertEquals(1, altMap.size());
         assertEquals("Sample alt text", altMap.get("alt"));
 
         // Test with empty alt text
         when(mockImage.getAlt()).thenReturn("");
-        altMap = mockImage.getAltAsMap();
+        altMap = mockImage.getHtmlAttributes();
         assertTrue(altMap.isEmpty());
 
         // Test with null alt text
         when(mockImage.getAlt()).thenReturn(null);
-        altMap = mockImage.getAltAsMap();
+        altMap = mockImage.getHtmlAttributes();
         assertTrue(altMap.isEmpty());
 
         // Test with whitespace-only alt text
         when(mockImage.getAlt()).thenReturn("   ");
-        altMap = mockImage.getAltAsMap();
+        altMap = mockImage.getHtmlAttributes();
         assertTrue(altMap.isEmpty());
     }
 }
