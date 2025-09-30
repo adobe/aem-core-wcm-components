@@ -102,6 +102,15 @@ class DefaultPathProcessorTest {
     void testVanityUrl() {
         Page page = context.create().page("/content/links/site1/en", "/conf/example",
                 ImmutableMap.of("sling:vanityPath", "vanity.html"));
+        
+        Externalizer externalizer = context.getService(Externalizer.class);
+        if (externalizer == null) {
+            externalizer = mock(Externalizer.class);
+            when(externalizer.publishLink(any(ResourceResolver.class), anyString()))
+                .thenAnswer(invocation -> "https://example.org" + invocation.getArgument(1, String.class));
+            context.registerService(Externalizer.class, externalizer);
+        }
+        
         DefaultPathProcessor underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                 "vanityConfig", DefaultPathProcessor.VanityConfig.MAPPING.getValue()));
         assertTrue(underTest.accepts(page.getPath() + HTML_EXTENSION, context.request()));
@@ -114,6 +123,15 @@ class DefaultPathProcessorTest {
     void testVanityConfig() {
         Page page = context.create().page("/content/links/site1/en", "/conf/example",
                 ImmutableMap.of("sling:vanityPath", "vanity.html"));
+        
+        Externalizer externalizer = context.getService(Externalizer.class);
+        if (externalizer == null) {
+            externalizer = mock(Externalizer.class);
+            when(externalizer.publishLink(any(ResourceResolver.class), anyString()))
+                .thenAnswer(invocation -> "https://example.org" + invocation.getArgument(1, String.class));
+            context.registerService(Externalizer.class, externalizer);
+        }
+        
         DefaultPathProcessor underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                 "vanityConfig", "shouldBeDefault"));
         assertEquals("/content/site1/en.html", underTest.map(page.getPath() + HTML_EXTENSION, context.request()));
