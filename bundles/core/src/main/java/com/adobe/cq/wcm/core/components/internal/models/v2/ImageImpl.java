@@ -153,6 +153,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         super.initModel();
         boolean altValueFromDAM = properties.get(PN_ALT_VALUE_FROM_DAM, currentStyle.get(PN_ALT_VALUE_FROM_DAM, true));
         boolean titleValueFromDAM = properties.get(PN_TITLE_VALUE_FROM_DAM, currentStyle.get(PN_TITLE_VALUE_FROM_DAM, true));
+        boolean langValueFromDAM = properties.get(PN_LANG_VALUE_FROM_DAM, currentStyle.get(PN_LANG_VALUE_FROM_DAM, true));
         boolean isDmFeaturesEnabled = currentStyle.get(PN_DESIGN_DYNAMIC_MEDIA_ENABLED, false);
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, true));
         boolean uuidDisabled = currentStyle.get(PN_UUID_DISABLED, false);
@@ -181,6 +182,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     }
                     if (titleValueFromDAM) {
                         title = StringUtils.trimToNull(asset.getMetadataValue(DamConstants.DC_TITLE));
+                    }
+                    if (langValueFromDAM) {
+                        lang = asset.getMetadataValue(DamConstants.DC_LANGUAGE);
                     }
 
                     //check "Enable DM features" checkbox
