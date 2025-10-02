@@ -237,7 +237,7 @@ public interface Image extends Component {
 
     /**
      * Returns a Map with attributes for HTML {@code img} tag if the attributes have a non-empty value.
-     * If an attribute has empty vlue the attribute is not added to the map.
+     * If an attribute has empty value the attribute is not added to the map.
      * Currently only alt is returned by this method in order to properly render alt="" in HTL.
      *
      * @return {@link Map} with HTML-specific {@code img} attributes with non-empty values*
