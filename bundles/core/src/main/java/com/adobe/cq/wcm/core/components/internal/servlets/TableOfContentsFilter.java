@@ -119,7 +119,7 @@ public class TableOfContentsFilter implements Filter {
         }
 
         CharResponseWrapper responseWrapper = new CharResponseWrapper((HttpServletResponse) response);
-        chain.doFilter(request, responseWrapper);
+        chain.doFilter(request, response);
         String originalContent = responseWrapper.toString();
 
         Boolean containsTableOfContents = (Boolean) request.getAttribute(TableOfContentsImpl.TOC_REQUEST_ATTR_FLAG);
