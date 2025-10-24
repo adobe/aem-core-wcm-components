@@ -409,7 +409,7 @@
     }
 
     function retrieveDAMInfo(fileReference) {
-        if (typeof fileReference === 'string' && fileReference.startsWith("/urn:aaid:aem")) {
+        if (typeof fileReference === "string" && fileReference.startsWith("/urn:aaid:aem")) {
             return new Promise((resolve, reject) => {
                 fileReference = fileReference.substring(0, fileReference.lastIndexOf("/"));
                 if (isPolarisEnabled && areDMFeaturesEnabled) {
