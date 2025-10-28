@@ -151,12 +151,24 @@
         }
     }
 
+    function localizeMessage(searchElementId, message, values = []) {
+        const i18nMessages = JSON.parse(document.querySelector("#" + searchElementId).getAttribute("data-i18n-messages"));
+        let translation = i18nMessages[message];
+        // Insert values
+        if (values.length > 0) {
+            translation = translation.replace(/{(\d+)}/g, function(match, index) {
+                return typeof values[index] !== "undefined" ? values[index] : match;
+            });
+        }
+        return translation;
+    }
+
     // useful for Accessibility, helping users with low vision and users with cognitive disabilities to identify the change in results
     function updateSearchResultsStatusMessageElement(searchElementId, totalResults) {
         var searchResultsStatusMessage = document.querySelector("#" + searchElementId + "> .cmp_search__info");
         searchResultsStatusMessage.style.visibility = "visible";
-        var searchResultsFoundMessage = totalResults === 1 ? totalResults + " result" : totalResults + " results";
-        var searchResultsNotFoundMessage = "No results";
+        var searchResultsFoundMessage = localizeMessage(searchElementId, totalResults === 1 ? "{0} result" : "{0} results", [totalResults]);
+        var searchResultsNotFoundMessage = localizeMessage(searchElementId, "No results");
         searchResultsStatusMessage.innerText = totalResults > 0 ? searchResultsFoundMessage : searchResultsNotFoundMessage;
     }
 
