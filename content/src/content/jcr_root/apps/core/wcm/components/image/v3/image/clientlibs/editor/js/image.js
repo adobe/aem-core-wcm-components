@@ -203,7 +203,6 @@
     $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
         selector: altInputSelector,
         validate: function() {
-            var seededValue = document.querySelector(altInputSelector).getAttribute("data-seeded-value");
             var imageFromPageImage = document.querySelector('coral-checkbox[name="./imageFromPageImage"]');
             var isImageFromPageImageChecked = imageFromPageImage ? (imageFromPageImage.checked || false) : false;
             var altFromDAM = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
@@ -213,7 +212,12 @@
             var isDecorativeChecked = document.querySelector("coral-checkbox[name='./isDecorative']").checked;
             var assetWithoutDescriptionErrorMessage = Granite.I18n.get("Error: Please provide an asset which has a description that can be used as alt text.");
 
-            if (!isDecorativeChecked && !seededValue &&
+            var altEl = document.querySelector(altInputSelector);
+            var dataSeededValue = altEl ? altEl.getAttribute("data-seeded-value") : "";
+            var currentValue = altEl ? altEl.value : "";
+            var effectiveAlt = (currentValue && currentValue.trim()) || (dataSeededValue && dataSeededValue.trim());
+
+            if (!isDecorativeChecked && !effectiveAlt &&
                 ((isImageFromPageImageChecked && isAltFromPageImageChecked) ||
                     (!isImageFromPageImageChecked && isAltFromDAMChecked && !isAltFromDAMDisabled))) {
                 return assetWithoutDescriptionErrorMessage;
@@ -279,6 +283,39 @@
     // Update the image thumbnail when the calls to action are updated, removed or reordered
     $(document).on("change", dialogContentSelector + " .cmp-teaser__editor-multifield_actions", function(e) {
         updateImageThumbnail();
+    });
+
+    // trigger alt validation after value inserted
+    $(document).on("change", ".cmp-image__editor coral-checkbox[name='./altValueFromDAM']", function (e) {
+        var altEl = document.querySelector(altInputSelector);
+        if (!altEl) return;
+
+        if (e.target.checked) {
+            if (typeof altTextFromDAM === "string" && altTextFromDAM.trim() !== "") {
+                altEl.value = altTextFromDAM;
+                altEl.setAttribute("data-seeded-value", altTextFromDAM);
+            } else {
+                altEl.value = "";
+                altEl.setAttribute("data-seeded-value", "");
+            }
+        } else {
+            altEl.setAttribute("data-seeded-value", "");
+            if (!altEl.value.trim()) {
+                var fieldAPI = $(altEl).adaptTo("foundation-field");
+                var msg = Granite.I18n.get("Error: Alternative text for accessibility field is required");
+                fieldAPI.setInvalid(true, msg);
+            }
+        }
+
+        toggleAltTextValidity();
+    });
+
+    $(document).on("input change", altInputSelector, function () {
+        var el = this;
+        if (el && el.getAttribute) {
+            el.setAttribute("data-seeded-value", "");
+        }
+        toggleAltTextValidity();
     });
 
     $(document).on("change", dialogContentSelector + " " + presetTypeSelector, function(e) {
@@ -371,9 +408,14 @@
                 altFromPageTuple.hideCheckbox(!fromPageCheckbox.checked);
                 if (fromPageCheckbox.checked) {
                     altFromPageTuple.seedTextValue(altTextFromPage);
+                    var altEl = document.querySelector(altInputSelector);
+                    var seeded = fromPageCheckbox.checked ? altTextFromPage : altTextFromDAM;
+                    if (altEl && seeded) { altEl.setAttribute("data-seeded-value", seeded); }
+                    toggleAltTextValidity();
                     altFromPageTuple.update();
                 } else if (!isRemoteFileReference(remoteFileReference)) {
                     altTuple.seedTextValue(altTextFromDAM);
+                    toggleAltTextValidity();
                     altTuple.update();
                 }
             }
@@ -430,6 +472,11 @@
                     }
                     altTuple.seedTextValue(altTextFromDAM);
                     altTuple.update();
+                    var altEl = document.querySelector(altInputSelector);
+                    if (altEl && altTextFromDAM) {
+                        altEl.setAttribute("data-seeded-value", altTextFromDAM);
+                    }
+                    toggleAltTextValidity();
                     toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
                 }
                 if (captionTuple) {
@@ -662,8 +709,8 @@
         var observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 if (mutation.type === "attributes") {
-                    var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
-                    if ((mutation.attributeName === "data-seeded-value" && isAltCheckboxChecked) || ["invalid", "disabled"].includes(mutation.attributeName)) {
+                    var isAltCheckboxChecked = $(altCheckboxSelector).prop("checked");
+                    if ((mutation.attributeName === "data-seeded-value" && isAltCheckboxChecked) || mutation.attributeName === "disabled") {
                         toggleAltTextValidity();
                     }
                 }
@@ -673,7 +720,7 @@
         var altInput = document.querySelector(altInputSelector);
         if (altInput) {
             observer.observe(altInput, {
-                attributeFilter: ["data-seeded-value", "disabled", "invalid"]
+                attributeFilter: ["data-seeded-value", "disabled"]
             });
         }
     }
@@ -690,12 +737,41 @@
         var assetTab = $(assetTabSelector);
         var assetTabAlertIcon = $(assetTabAlertIconSelector);
 
-        if ($(altInputSelector).val()) {
+        var $alt = $(altInputSelector);
+        var altEl = $alt.length ? $alt[0] : null;
+        var val = altEl ? altEl.value : "";
+        var seeded = altEl ? altEl.getAttribute("data-seeded-value") : "";
+        var hasAlt = (val && val.trim() !== "") || (seeded && seeded.trim() !== "");
+
+        var fieldAPI = $alt.length ? $alt.adaptTo("foundation-field") : null;
+        var msg = Granite.I18n.get("Error: Alternative text for accessibility field is required");
+
+        if (hasAlt) {
+            if (fieldAPI) {
+                fieldAPI.setInvalid(false);
+            }
             $(altInputSelector).removeClass("is-invalid");
             alertIcon.hide();
             assetTab.removeClass("is-invalid");
             assetTabAlertIcon.hide();
+            var $wrapper = $alt.closest(".coral-Form-fieldwrapper");
+            if (!$wrapper.length) {
+                $wrapper = $alt.parent();
+            }
+            $wrapper.find("label.coral-Form-errorlabel").remove();
         } else {
+            if (fieldAPI) {
+                fieldAPI.setInvalid(true, msg);
+            }
+            var $wrapper = $alt.closest(".coral-Form-fieldwrapper");
+            if (!$wrapper.length) {
+                $wrapper = $alt.parent();
+            }
+            if ($wrapper.find("label.coral-Form-errorlabel").length === 0) {
+                $('<label class="coral-Form-errorlabel" role="alert">')
+                    .text(msg)
+                    .appendTo($wrapper);
+            }
             $(altInputSelector).addClass("is-invalid");
             alertIcon.show();
             assetTab.addClass("is-invalid");
