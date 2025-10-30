@@ -286,9 +286,11 @@
     });
 
     // trigger alt validation after value inserted
-    $(document).on("change", ".cmp-image__editor coral-checkbox[name='./altValueFromDAM']", function (e) {
+    $(document).on("change", ".cmp-image__editor coral-checkbox[name='./altValueFromDAM']", function(e) {
         var altEl = document.querySelector(altInputSelector);
-        if (!altEl) return;
+        if (!altEl) {
+            return;
+        }
 
         if (e.target.checked) {
             if (typeof altTextFromDAM === "string" && altTextFromDAM.trim() !== "") {
@@ -310,7 +312,7 @@
         toggleAltTextValidity();
     });
 
-    $(document).on("input change", altInputSelector, function () {
+    $(document).on("input change", altInputSelector, function() {
         var el = this;
         if (el && el.getAttribute) {
             el.setAttribute("data-seeded-value", "");
@@ -410,7 +412,9 @@
                     altFromPageTuple.seedTextValue(altTextFromPage);
                     var altEl = document.querySelector(altInputSelector);
                     var seeded = fromPageCheckbox.checked ? altTextFromPage : altTextFromDAM;
-                    if (altEl && seeded) { altEl.setAttribute("data-seeded-value", seeded); }
+                    if (altEl && seeded) {
+                        altEl.setAttribute("data-seeded-value", seeded);
+                    }
                     toggleAltTextValidity();
                     altFromPageTuple.update();
                 } else if (!isRemoteFileReference(remoteFileReference)) {
@@ -745,6 +749,7 @@
 
         var fieldAPI = $alt.length ? $alt.adaptTo("foundation-field") : null;
         var msg = Granite.I18n.get("Error: Alternative text for accessibility field is required");
+        var $wrapper;
 
         if (hasAlt) {
             if (fieldAPI) {
@@ -754,7 +759,7 @@
             alertIcon.hide();
             assetTab.removeClass("is-invalid");
             assetTabAlertIcon.hide();
-            var $wrapper = $alt.closest(".coral-Form-fieldwrapper");
+            $wrapper = $alt.closest(".coral-Form-fieldwrapper");
             if (!$wrapper.length) {
                 $wrapper = $alt.parent();
             }
@@ -763,7 +768,7 @@
             if (fieldAPI) {
                 fieldAPI.setInvalid(true, msg);
             }
-            var $wrapper = $alt.closest(".coral-Form-fieldwrapper");
+            $wrapper = $alt.closest(".coral-Form-fieldwrapper");
             if (!$wrapper.length) {
                 $wrapper = $alt.parent();
             }
