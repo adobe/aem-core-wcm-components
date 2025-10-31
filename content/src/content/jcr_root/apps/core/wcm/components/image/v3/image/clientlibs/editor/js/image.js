@@ -64,6 +64,7 @@
     var imagePresetRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='imagePreset']";
     var smartCropRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='smartCrop']";
     var remoteFileReference;
+    var dataSeededValueAttr = "data-seeded-value";
 
     $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
@@ -213,7 +214,7 @@
             var assetWithoutDescriptionErrorMessage = Granite.I18n.get("Error: Please provide an asset which has a description that can be used as alt text.");
 
             var altEl = document.querySelector(altInputSelector);
-            var dataSeededValue = altEl ? altEl.getAttribute("data-seeded-value") : "";
+            var dataSeededValue = altEl ? altEl.getAttribute(dataSeededValueAttr) : "";
             var currentValue = altEl ? altEl.value : "";
             var effectiveAlt = (currentValue && currentValue.trim()) || (dataSeededValue && dataSeededValue.trim());
 
@@ -286,22 +287,19 @@
     });
 
     // trigger alt validation after value inserted
-    $(document).on("change", ".cmp-image__editor coral-checkbox[name='./altValueFromDAM']", function(e) {
+    $(document).on("change", dialogContentSelector + " " + altCheckboxSelector, function(e) {
         var altEl = document.querySelector(altInputSelector);
         if (!altEl) {
             return;
         }
 
         if (e.target.checked) {
-            if (typeof altTextFromDAM === "string" && altTextFromDAM.trim() !== "") {
-                altEl.value = altTextFromDAM;
-                altEl.setAttribute("data-seeded-value", altTextFromDAM);
-            } else {
-                altEl.value = "";
-                altEl.setAttribute("data-seeded-value", "");
-            }
+            var useAltFromDAM = typeof altTextFromDAM === "string" && altTextFromDAM.trim() !== "";
+            var value = useAltFromDAM ? altTextFromDAM : "";
+            altEl.value = value;
+            altEl.setAttribute(dataSeededValueAttr, value);
         } else {
-            altEl.setAttribute("data-seeded-value", "");
+            altEl.setAttribute(dataSeededValueAttr, "");
             if (!altEl.value.trim()) {
                 var fieldAPI = $(altEl).adaptTo("foundation-field");
                 var msg = Granite.I18n.get("Error: Alternative text for accessibility field is required");
@@ -315,7 +313,7 @@
     $(document).on("input change", altInputSelector, function() {
         var el = this;
         if (el && el.getAttribute) {
-            el.setAttribute("data-seeded-value", "");
+            el.setAttribute(dataSeededValueAttr, "");
         }
         toggleAltTextValidity();
     });
@@ -413,7 +411,7 @@
                     var altEl = document.querySelector(altInputSelector);
                     var seeded = fromPageCheckbox.checked ? altTextFromPage : altTextFromDAM;
                     if (altEl && seeded) {
-                        altEl.setAttribute("data-seeded-value", seeded);
+                        altEl.setAttribute(dataSeededValueAttr, seeded);
                     }
                     toggleAltTextValidity();
                     altFromPageTuple.update();
@@ -478,7 +476,7 @@
                     altTuple.update();
                     var altEl = document.querySelector(altInputSelector);
                     if (altEl && altTextFromDAM) {
-                        altEl.setAttribute("data-seeded-value", altTextFromDAM);
+                        altEl.setAttribute(dataSeededValueAttr, altTextFromDAM);
                     }
                     toggleAltTextValidity();
                     toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
@@ -714,7 +712,7 @@
             mutations.forEach(function(mutation) {
                 if (mutation.type === "attributes") {
                     var isAltCheckboxChecked = $(altCheckboxSelector).prop("checked");
-                    if ((mutation.attributeName === "data-seeded-value" && isAltCheckboxChecked) || mutation.attributeName === "disabled") {
+                    if ((mutation.attributeName === dataSeededValueAttr && isAltCheckboxChecked) || mutation.attributeName === "disabled") {
                         toggleAltTextValidity();
                     }
                 }
@@ -724,7 +722,7 @@
         var altInput = document.querySelector(altInputSelector);
         if (altInput) {
             observer.observe(altInput, {
-                attributeFilter: ["data-seeded-value", "disabled"]
+                attributeFilter: [dataSeededValueAttr, "disabled"]
             });
         }
     }
@@ -744,12 +742,17 @@
         var $alt = $(altInputSelector);
         var altEl = $alt.length ? $alt[0] : null;
         var val = altEl ? altEl.value : "";
-        var seeded = altEl ? altEl.getAttribute("data-seeded-value") : "";
+        var seeded = altEl ? altEl.getAttribute(dataSeededValueAttr) : "";
         var hasAlt = (val && val.trim() !== "") || (seeded && seeded.trim() !== "");
 
         var fieldAPI = $alt.length ? $alt.adaptTo("foundation-field") : null;
         var msg = Granite.I18n.get("Error: Alternative text for accessibility field is required");
-        var $wrapper;
+
+        var $wrapper = $alt.closest(".coral-Form-fieldwrapper");
+        if (!$wrapper.length) {
+            $wrapper = $alt.parent();
+        }
+        var $errorLabel = $wrapper.find("label.coral-Form-errorlabel");
 
         if (hasAlt) {
             if (fieldAPI) {
@@ -759,23 +762,19 @@
             alertIcon.hide();
             assetTab.removeClass("is-invalid");
             assetTabAlertIcon.hide();
-            $wrapper = $alt.closest(".coral-Form-fieldwrapper");
-            if (!$wrapper.length) {
-                $wrapper = $alt.parent();
+            if ($errorLabel.length) {
+                $errorLabel.remove();
             }
-            $wrapper.find("label.coral-Form-errorlabel").remove();
         } else {
             if (fieldAPI) {
                 fieldAPI.setInvalid(true, msg);
             }
-            $wrapper = $alt.closest(".coral-Form-fieldwrapper");
-            if (!$wrapper.length) {
-                $wrapper = $alt.parent();
-            }
-            if ($wrapper.find("label.coral-Form-errorlabel").length === 0) {
+            if ($errorLabel.length === 0) {
                 $('<label class="coral-Form-errorlabel" role="alert">')
                     .text(msg)
                     .appendTo($wrapper);
+            } else {
+                $errorLabel.text(msg);
             }
             $(altInputSelector).addClass("is-invalid");
             alertIcon.show();
