@@ -34,6 +34,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.servlets.annotations.SlingServletFilter;
 import org.apache.sling.servlets.annotations.SlingServletFilterScope;
 import org.jsoup.Jsoup;
@@ -114,6 +115,14 @@ public class TableOfContentsFilter implements Filter {
 
         if (!enabled) {
             LOGGER.debug("{} not enabled, bypassing it", TableOfContentsFilter.class.getName());
+            chain.doFilter(request, response);
+            return;
+        }
+
+        SlingHttpServletRequest slingRequest = (SlingHttpServletRequest) request;
+        String path = slingRequest.getResource().getPath();
+        if (path.startsWith("/content/experience-fragments")) {
+            LOGGER.debug("{} not enabled for experience fragments, bypassing it", TableOfContentsFilter.class.getName());
             chain.doFilter(request, response);
             return;
         }
