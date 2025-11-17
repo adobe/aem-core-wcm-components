@@ -307,6 +307,7 @@
                     <configuration>
                         <instructions>
                             <Bundle-RequiredExecutionEnvironment>JavaSE-1.${aem.java.version}</Bundle-RequiredExecutionEnvironment>
+                            <_noee>true</_noee>
                         </instructions>
                     </configuration>
                     <executions>
@@ -335,7 +336,7 @@
                                     </requireMavenVersion>
                                     <requireJavaVersion>
                                         <message>Project must be compiled with Java ${aem.java.version} or higher</message>
-                                        <version>${aem.java.version}</version>
+                                        <version>1.8</version>
                                     </requireJavaVersion>
                                 </rules>
                             </configuration>

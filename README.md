@@ -1,3 +1,8 @@
+Java 8 Build:
+```
+mvn clean install -pl 'parent,bundles/core,content,config,all,examples,extensions/amp' -Dmaven.test.skip=true
+```
+
 # AEM WCM Core Components
 
 [![Test](https://github.com/adobe/aem-core-wcm-components/workflows/Test/badge.svg)](https://github.com/adobe/aem-core-wcm-components/actions?query=workflow%3ATest)

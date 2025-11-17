@@ -75,6 +75,7 @@
                             javax.annotation;version=0.0.0,
                             *
                         </Import-Package>
+                        <_noee>true</_noee>
                     </instructions>
                 </configuration>
                 <dependencies>
@@ -356,12 +357,12 @@
         </dependency>
 
         <!-- Testing dependencies -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>core.wcm.components.junit.core</artifactId>
-            <scope>test</scope>
-            <version>${project.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>${project.groupId}</groupId>-->
+<!--            <artifactId>core.wcm.components.junit.core</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
