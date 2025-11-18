@@ -14,7 +14,7 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* global CQ */
-(function($, ns, channel) {
+(function($, ns, channel, window, undefined) {
     "use strict";
 
     var selectors = {
@@ -49,14 +49,14 @@
      */
     channel.on("cq-editor-loaded", function(event) {
         var editables = ns.editables;
-
-        for (var i = 0; i < editables.length; i++) {
+        Coral.commons.nextFrame(function() {
+            for (var i = 0; i < editables.length; i++) {
             var editable = editables[i];
 
             if (CQ.CoreComponents.panelcontainer.v1.utils.isPanelContainer(editable)) {
                 updatePanelContainerOverlayState(editable);
             }
-        }
+        }})
     });
 
     /**
@@ -133,12 +133,15 @@
 
         var activeIndex = panelContainer.getActiveIndex();
         var items = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerItems(editable);
+        var slides = panelContainer.getSlides();
 
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].overlay) {
-                items[i].overlay.setDisabled((activeIndex !== i));
+        for (var [i,item] of items.entries()) {
+            if (item.overlay) {
+                var disable = i < activeIndex || i >= activeIndex + slides
+                item.overlay.setDisabled( disable );
             }
         }
+		ns.overlayManager.reposition();
     }
 
-}(jQuery, Granite.author, jQuery(document)));
+}(jQuery, Granite.author, jQuery(document), this));

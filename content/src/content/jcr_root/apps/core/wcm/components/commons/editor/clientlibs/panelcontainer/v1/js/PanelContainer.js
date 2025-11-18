@@ -14,14 +14,14 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* global CQ */
-(function($, ns, channel) {
+(function($, ns, channel, window, undefined) {
     "use strict";
 
     var GET_DATA_SUFFIX = ".model.json";
     var DATA_ITEMS_KEY = ":items";
     var POST_SUFFIX = ".container.html";
     var MESSAGE_ID = "cmp.panelcontainer";
-    var NAVIGATE_DELAY = 200;
+    var NAVIGATE_DELAY = 400;
 
     /**
      * @typedef {Object} PanelContainerConfig Represents a Panel Container configuration object
@@ -93,6 +93,19 @@
             }
         },
 
+         /**
+         * Gets the number of slides per page
+         *
+         * @returns {Number}
+         */
+        getSlides: function() {
+            var that = this;
+            if (that._config.el && that._config.panelContainerType) {
+ 				return parseInt(that._config.el.dataset.cmpSlides);
+            }
+        },
+
+
         /**
          * Gets the index of the currently active panel
          *
@@ -115,7 +128,7 @@
                     }
                 });
             }
-            return activeIndex;
+            return parseInt(activeIndex);
         },
 
         /**
@@ -180,7 +193,7 @@
                 type: "POST",
                 url: url,
                 data: {
-                    "itemOrder": ordered.join()
+                    "itemOrder": ordered.join(),
                 }
             });
         }
@@ -195,4 +208,4 @@
          */
     });
 
-}(jQuery, Granite.author, jQuery(document)));
+}(jQuery, Granite.author, jQuery(document), this));

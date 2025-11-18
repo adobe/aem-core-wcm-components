@@ -1,3 +1,4 @@
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ~ Copyright 2018 Adobe
  ~
@@ -173,12 +174,20 @@
             var children = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerItems(that._config.editable);
             that._panelContainer.getItems().done(function(panelContainerItems) {
                 var items = [];
-
                 children.forEach(function(child, index) {
+                  var image;
+                  if (panelContainerItems[child.name].panelImage) {
+                    image = panelContainerItems[child.name].panelImage;
+                  } else if (panelContainerItems[child.name].fileReference) {
+                    image = panelContainerItems[child.name].fileReference;
+                  } else {
+                    image = '/content/dam/images/golfdigest/fullset/2015/08/01/55bce3ceadd713143b44aad0_golf-digest-logo.png';
+                  }
                     items.push({
                         id: child.path,
                         name: child.name,
-                        title: that.getTitle(child, panelContainerItems[child.name], index + 1)
+                        title: that.getTitle(child, panelContainerItems[child.name], index + 1),
+                        imageSrc: image
                     });
                 });
 
@@ -201,6 +210,7 @@
             var activeIndex = this._panelContainer.getActiveIndex();
             this._elements.reorderButtons = [];
 
+
             for (var i = 0; i < items.length; i++) {
                 var row = this._elements.table.items.add({});
                 row.dataset.id = items[i].id;
@@ -208,6 +218,11 @@
                 var titleCell = new Coral.Table.Cell().set({
                     content: {
                         innerHTML: items[i].title
+                    }
+                });
+                var imageCell = new Coral.Table.Cell().set({
+                    content: {
+                        innerHTML: `<img style="width:50px;height:50px;" src="${items[i].imageSrc}"/>`
                     }
                 });
                 var button = new Coral.Button().set({
@@ -221,7 +236,11 @@
                 this._elements.reorderButtons.push(button);
 
                 row.appendChild(titleCell);
+                if (items[i].imageSrc) {
+                  row.appendChild(imageCell);
+                }
                 row.appendChild(dragHandleCell);
+
 
                 if (activeIndex === i) {
                     row.selected = true;
@@ -453,5 +472,4 @@
             ns.EditorFrame.editableToolbar.registerAction("PANEL_SELECT", panelSelect);
         }
     });
-
 }(jQuery, Granite.author, jQuery(document), this));
