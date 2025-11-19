@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017 Adobe
+ * Copyright 2017 Adobe Systems Incorporated
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@
         var select = $(DEFAULT_SIZE_SELECTOR).get(0);
         var $checkboxes = $(ALLOWED_SIZES_SELECTOR);
         var checkedTotal = 0;
+        var firstCheckedValue = "";
         var selectValue = "";
 
         if (select === null || select === undefined) {
@@ -62,9 +63,18 @@
             }
         });
 
+        // get the value of the first checked box
+        $checkboxes.each(function(i, checkbox) {
+            if (checkbox.checked) {
+                firstCheckedValue = checkbox.value;
+                return false;
+            }
+        });
+
         // set the default value of the size dropdown
         if (checkboxToggled) {
-            selectValue = getAppropriateCheckedBoxValue($checkboxes, select.value);
+            // the default value is the first checked box
+            selectValue = firstCheckedValue;
         } else {
             // the default value is read from the repository
             selectValue = select.value;
@@ -134,7 +144,21 @@
 
     // Update the default size select when an allowed size is checked/unchecked
     $document.on("change", ALLOWED_SIZES_SELECTOR, function(e) {
+        // update default size dropdown as before
         updateDefaultSizeSelect(true);
+
+        // re-validate all Allowed Types / Sizes checkboxes in this group
+        var $checkboxes = $(this)
+            .closest(".core-title-sizes-allowed")
+            .find(ALLOWED_SIZES_SELECTOR);
+
+        $checkboxes.each(function(index, field) {
+            var api = $(field).adaptTo("foundation-validation");
+            if (api) {
+                api.checkValidity();
+                api.updateUI();
+            }
+        });
     });
 
     $document.on("foundation-contentloaded", function(e) {
@@ -182,35 +206,32 @@
         selector: ALLOWED_SIZES_SELECTOR,
         validate: function(el) {
 
-            var $checkboxes = $(el).parent().children(ALLOWED_SIZES_SELECTOR);
-            var firstEl = $checkboxes.get(0);
-            var isValid = $(firstEl).data(DATA_ATTR_VALIDATION_STATE);
-            var validationDone = isValid !== undefined;
-
-            // if the validation has already been done, we get the status from the first checkbox
-            if (validationDone) {
-                $(firstEl).removeData(DATA_ATTR_VALIDATION_STATE);
-                if (!isValid) {
-                    return Granite.I18n.get("Select at least one size option.");
-                } else {
-                    return;
-                }
+            // all Allowed Types / Sizes checkboxes in the same group
+            var $group = $(el).closest(".core-title-sizes-allowed");
+            if ($group.length === 0) {
+                return;
             }
 
-            // set the validation status on the first checkbox
-            isValid = false;
-            $checkboxes.each(function(i, checkbox) {
-                if (checkbox.checked) {
-                    isValid = true;
-                    return false;
+            var $inputs = $group.find('input[type="checkbox"][name="./allowedTypes"]');
+            if ($inputs.length === 0) {
+                return;
+            }
+
+            // check if at least one checkbox is selected
+            var anyChecked = false;
+            $inputs.each(function(index, inputEl) {
+                if ($(inputEl).prop("checked") === true) {
+                    anyChecked = true;
+                    return false; // break
                 }
             });
-            $(firstEl).data(DATA_ATTR_VALIDATION_STATE, isValid);
 
-            // trigger the validation on the first checkbox
-            var api = $(firstEl).adaptTo("foundation-validation");
-            api.checkValidity();
-            api.updateUI();
+            // if all are unchecked, return error message
+            if (!anyChecked) {
+                return Granite.I18n.get("Select at least one size option.");
+            }
+
+            // no return = valid
         },
         show: function(el, message) {
             var $el = $(el);
