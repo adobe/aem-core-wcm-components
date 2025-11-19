@@ -1,3 +1,20 @@
+## GD Specific Changes
+
+### Java 8 Build Support
+- Updated Maven POM files across the project to enable Java 8 compatibility
+- Modified parent, core bundle, and AMP extension configurations
+- Added Java 8 build instructions for legacy environments
+
+### Editor Client Library Enhancements
+- **Panel Container Improvements:** Added multi-slide support with configurable slides per page, enhanced overlay management for better panel visibility control
+  - Modified: `content/src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/panelcontainer/v1/js/PanelContainer.js`
+- **Content Tree Enhancements:** Improved panel state management with better disabled state handling for non-visible panels
+  - Modified: `content/src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/panelcontainer/v1/js/contentTree.js`
+- **Panel Selection UI:** Added thumbnail image previews in the panel selection dialog, improved visual feedback with drag-and-drop functionality
+  - Modified: `content/src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/panelselect/js/panelselect.js`
+
+---
+
 Java 8 Build:
 ```
 mvn clean install -pl 'parent,bundles/core,content,config,all,examples,extensions/amp' -Dmaven.test.skip=true
