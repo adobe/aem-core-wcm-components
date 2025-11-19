@@ -14,7 +14,7 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* global CQ */
-(function($, ns, channel, window, undefined) {
+(function($, ns, channel, window) {
     "use strict";
 
     var GET_DATA_SUFFIX = ".model.json";
@@ -93,15 +93,15 @@
             }
         },
 
-         /**
+        /**
          * Gets the number of slides per page
          *
-         * @returns {Number}
+         * @returns {Number} The number of slides per page
          */
         getSlides: function() {
             var that = this;
             if (that._config.el && that._config.panelContainerType) {
- 				return parseInt(that._config.el.dataset.cmpSlides);
+                return parseInt(that._config.el.dataset.cmpSlides);
             }
         },
 
@@ -193,7 +193,7 @@
                 type: "POST",
                 url: url,
                 data: {
-                    "itemOrder": ordered.join(),
+                    "itemOrder": ordered.join()
                 }
             });
         }

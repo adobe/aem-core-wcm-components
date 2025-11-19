@@ -175,14 +175,14 @@
             that._panelContainer.getItems().done(function(panelContainerItems) {
                 var items = [];
                 children.forEach(function(child, index) {
-                  var image;
-                  if (panelContainerItems[child.name].panelImage) {
-                    image = panelContainerItems[child.name].panelImage;
-                  } else if (panelContainerItems[child.name].fileReference) {
-                    image = panelContainerItems[child.name].fileReference;
-                  } else {
-                    image = '/content/dam/images/golfdigest/fullset/2015/08/01/55bce3ceadd713143b44aad0_golf-digest-logo.png';
-                  }
+                    var image;
+                    if (panelContainerItems[child.name].panelImage) {
+                        image = panelContainerItems[child.name].panelImage;
+                    } else if (panelContainerItems[child.name].fileReference) {
+                        image = panelContainerItems[child.name].fileReference;
+                    } else {
+                        image = "/content/dam/images/golfdigest/fullset/2015/08/01/55bce3ceadd713143b44aad0_golf-digest-logo.png";
+                    }
                     items.push({
                         id: child.path,
                         name: child.name,
@@ -237,7 +237,7 @@
 
                 row.appendChild(titleCell);
                 if (items[i].imageSrc) {
-                  row.appendChild(imageCell);
+                    row.appendChild(imageCell);
                 }
                 row.appendChild(dragHandleCell);
 
