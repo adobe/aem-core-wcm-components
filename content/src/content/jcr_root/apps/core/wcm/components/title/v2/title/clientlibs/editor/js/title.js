@@ -30,7 +30,6 @@
     var DEFAULT_SIZE_SELECTOR       = "coral-select.core-title-size-default";
     var DEFAULT_SIZES_SELECTOR      = "coral-select.core-title-sizes-default";
     var ALLOWED_SIZES_SELECTOR      = ".core-title-sizes-allowed coral-checkbox";
-    var DATA_ATTR_VALIDATION_STATE  = "checkboxes.validation.state";
     var SIZES_SELECTOR              = "coral-select.core-title-sizes";
     var LINK_URL_SELECTOR           = ".cmp-title-link-url";
     var LINK_LABEL_SELECTOR         = ".cmp-title-link-label";
@@ -90,31 +89,6 @@
                 $(select).parent().show();
             }
         });
-    }
-
-    // get the appropriate checked box value by checking if the current value of the default type is a valid option in the list of allowed types/sizes
-    function getAppropriateCheckedBoxValue(checkboxes, currentDefaultTypeValue) {
-        var isCurrentDefaultTypeValueValidOption = false;
-        checkboxes.each(function(i, checkbox) {
-            if (checkbox.checked && checkbox.value === currentDefaultTypeValue) {
-                isCurrentDefaultTypeValueValidOption = true;
-                return false;
-            }
-        });
-        // if the current value of the default type is a valid option, it will return it
-        if (isCurrentDefaultTypeValueValidOption) {
-            return currentDefaultTypeValue;
-        } else {
-            // if the current value of the default type is a not valid option, it will return the value of the first checked box
-            var firstCheckedValue = "";
-            checkboxes.each(function(i, checkbox) {
-                if (checkbox.checked) {
-                    firstCheckedValue = checkbox.value;
-                    return false;
-                }
-            });
-            return firstCheckedValue;
-        }
     }
 
     // toggles the disable attribute of the Link Label and Link Title Attribute inputs, based on the Link Url existence
