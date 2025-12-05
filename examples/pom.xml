@@ -23,12 +23,12 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.30.3</version>
+        <version>2.30.5-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.examples</artifactId>
-    <version>2.30.3</version>
+    <version>2.30.5-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Adobe Experience Manager Core WCM Components Examples Reactor</name>
