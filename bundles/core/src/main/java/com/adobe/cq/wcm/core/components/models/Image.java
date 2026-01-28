@@ -15,8 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
@@ -230,6 +233,20 @@ public interface Image extends Component {
      */
     default String getAlt() {
         return null;
+    }
+
+    /**
+     * Returns a Map with attributes for HTML {@code img} tag if the attributes have a non-empty value.
+     * If an attribute has empty value the attribute is not added to the map.
+     * Currently only alt is returned by this method in order to properly render alt="" in HTL.
+     *
+     * @return {@link Map} with HTML-specific {@code img} attributes with non-empty values*
+     * @since com.adobe.cq.wcm.core.components.models 12.30.0
+     */
+    @NotNull
+    default Map<String, String> getHtmlAttributes() {
+        final String alt = getAlt();
+        return StringUtils.isBlank(alt) ? Collections.emptyMap() : Collections.singletonMap("alt", alt);
     }
 
     /**
