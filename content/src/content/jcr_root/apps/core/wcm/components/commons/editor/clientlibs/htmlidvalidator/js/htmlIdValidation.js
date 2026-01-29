@@ -71,9 +71,6 @@
                 if (!encodedPagePath) {
                     return;
                 }
-            } else {
-                // Legacy behavior without sanitization
-                encodedPagePath = encodeURIComponent(pagePath).replace(/%2F/g, "/");
             }
 
             var preConfiguredVal;
@@ -95,7 +92,7 @@
             if (!currentVal || currentVal === preConfiguredVal) {
                 return;
             }
-            var url = encodedPagePath + ".html?wcmmode=disabled";
+            var url = (encodedPagePath || pagePath) + ".html?wcmmode=disabled";
             var idCount = 0;
             /* Check if same ID already exist on the page */
             $.ajax({
