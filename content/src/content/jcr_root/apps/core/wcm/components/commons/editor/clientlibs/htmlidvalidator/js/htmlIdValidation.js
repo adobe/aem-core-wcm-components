@@ -17,7 +17,7 @@
     "use strict";
     /* Adapting window object to foundation-registry */
     var registry = $(window).adaptTo("foundation-registry");
-    // feature toggle enabling opening the cf in the new editor
+    // code toggle enabling sanitizing and encoding page paths
     var CT_SANITIZE_ENCODE_PATH = "CT_SITES-33116";
 
     /**
