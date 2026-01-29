@@ -17,6 +17,28 @@
     "use strict";
     /* Adapting window object to foundation-registry */
     var registry = $(window).adaptTo("foundation-registry");
+    // feature toggle enabling opening the cf in the new editor
+    var CT_SANITIZE_ENCODE_PATH = "CT_SITES-33116";
+
+    /**
+     * Sanitizes and encodes a page path for safe URL construction.
+     * Removes path traversal attempts, validates the path format, and encodes it.
+     *
+     * @param {string} pagePath - The page path to sanitize
+     * @returns {string|null} The sanitized and encoded path, or null if invalid
+     */
+    function sanitizeAndEncodePath(pagePath) {
+        // Remove any path traversal attempts and normalize the path
+        pagePath = pagePath.replace(/\.\./g, "").replace(/\/+/g, "/");
+
+        // Validate that the path starts with / and doesn't contain dangerous patterns
+        if (!/^\//.test(pagePath) || /[<>"|*?]/.test(pagePath)) {
+            console.warn("Invalid page path detected: " + pagePath);
+            return null;
+        }
+        // Use encodeURIComponent to safely encode the path for URL construction
+        return encodeURIComponent(pagePath).replace(/%2F/g, "/");
+    }
 
     /* Validator for TextField - Validation for duplicate HTML ID authored through dialog */
     registry.register("foundation.validation.validator", {
@@ -41,6 +63,16 @@
             }
 
             var pagePath = compPath.split("/_jcr_content")[0];
+            var encodedPagePath;
+
+            // Use sanitization function if toggle is enabled
+            if (window.Granite && window.Granite.Toggles && window.Granite.Toggles.isEnabled(CT_SANITIZE_ENCODE_PATH)) {
+                encodedPagePath = sanitizeAndEncodePath(pagePath);
+                if (!encodedPagePath) {
+                    return;
+                }
+            }
+
             var preConfiguredVal;
             /* Get the pre configured value if any */
             $.ajax({
@@ -60,7 +92,7 @@
             if (!currentVal || currentVal === preConfiguredVal) {
                 return;
             }
-            var url = pagePath + ".html?wcmmode=disabled";
+            var url = (encodedPagePath || pagePath) + ".html?wcmmode=disabled";
             var idCount = 0;
             /* Check if same ID already exist on the page */
             $.ajax({
