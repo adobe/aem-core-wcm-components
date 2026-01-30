@@ -44,7 +44,7 @@ public class NavigationItemImplTest {
         when(linkBuilder.build()).thenReturn(link);
         when(linkManager.get(page)).thenReturn(linkBuilder);
         Component component = mock(Component.class);
-        NavigationItemImpl navigationItem = new NavigationItemImpl(page, true, true, linkManager, 0, Collections.emptyList(), "id", component);
+        NavigationItemImpl navigationItem = new NavigationItemImpl(page, true, true, linkManager, 0, Collections::emptyList, "id", component);
         assertEquals(page, navigationItem.getPage());
         assertTrue(navigationItem.isActive());
         assertEquals(Collections.emptyList(), navigationItem.getChildren());
