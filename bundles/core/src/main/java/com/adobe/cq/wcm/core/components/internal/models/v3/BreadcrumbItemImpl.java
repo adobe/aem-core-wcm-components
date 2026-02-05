@@ -16,7 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import java.util.List;
+import java.util.Collections;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,12 +32,29 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import static org.apache.sling.api.SlingConstants.PROPERTY_PATH;
 
-@JsonIgnoreProperties(value = {"page", "children", "level", "description", "lastModified",PROPERTY_PATH})
+/**
+ * V3 Breadcrumb Item Implementation.
+ */
+@JsonIgnoreProperties(value = {"page", "children", "level", "description", "lastModified", PROPERTY_PATH})
 public class BreadcrumbItemImpl extends NavigationItemImpl implements NavigationItem {
 
-    public BreadcrumbItemImpl(Page page, boolean active, @NotNull LinkManager linkManager, int level,
-                              List<NavigationItem> children, String parentId, Component component) {
-        super(page, active, active, linkManager, level, children, parentId, component);
+    /**
+     * Construct a Breadcrumb Item.
+     *
+     * @param page        The page for which to create a breadcrumb item.
+     * @param active      Flag indicating if the breadcrumb item is active.
+     * @param linkManager Link manager service.
+     * @param level       Depth level of the navigation item.
+     * @param parentId    ID of the parent navigation component.
+     * @param component   The parent navigation {@link Component}.
+     */
+    public BreadcrumbItemImpl(@NotNull final Page page,
+                              final boolean active,
+                              @NotNull final LinkManager linkManager,
+                              final int level,
+                              final String parentId,
+                              final Component component) {
+        super(page, active, active, linkManager, level, Collections::emptyList, parentId, component);
     }
 
     @Override
