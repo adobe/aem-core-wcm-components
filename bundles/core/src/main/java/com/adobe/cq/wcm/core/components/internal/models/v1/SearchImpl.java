@@ -18,8 +18,10 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import javax.annotation.PostConstruct;
 
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
+import com.day.cq.i18n.I18n;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -37,7 +39,11 @@ import com.adobe.cq.wcm.core.components.models.Search;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.designer.Style;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  * Search model implementation.
@@ -114,6 +120,12 @@ public class SearchImpl extends AbstractComponentImpl implements Search {
     private String searchRootPagePath;
 
     /**
+     * The localized messages.
+     */
+    private final Map<String, String> i18nMessagesMap = new HashMap<>();
+
+
+    /**
      * Initialize the model.
      */
     @PostConstruct
@@ -161,4 +173,18 @@ public class SearchImpl extends AbstractComponentImpl implements Search {
         return request.getResource().getResourceType();
     }
 
+    public String getI18nMessages() {
+        Locale pageLocale = currentPage.getLanguage(false);
+        ResourceBundle resourceBundle = request.getResourceBundle(pageLocale);
+        I18n i18n = new I18n(resourceBundle);
+        i18nMessagesMap.put("{0} result", i18n.get("{0} result"));
+        i18nMessagesMap.put("{0} results", i18n.get("{0} results"));
+        i18nMessagesMap.put("No results", i18n.get("No results"));
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(i18nMessagesMap);
+        } catch (Exception e) {
+            return "{}"; 
+        }
+    }
 }
