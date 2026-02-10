@@ -184,6 +184,33 @@
                                                 text="Disable lazy loading"
                                                 deleteHint="{Boolean}true"
                                                 value="{Boolean}true"/>
+                                            <fetchPriority
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                granite:hide="${!cqDesign.allowFetchPriorityOverride}"
+                                                fieldDescription="Hint for the browser to prioritize fetching this image. Use 'high' for important images like hero images to improve Largest Contentful Paint (LCP)."
+                                                fieldLabel="Fetch Priority"
+                                                name="./fetchPriority"
+                                                deleteHint="{Boolean}true">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <default
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Default (from policy)"
+                                                        value=""/>
+                                                    <high
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="High"
+                                                        value="high"/>
+                                                    <low
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Low"
+                                                        value="low"/>
+                                                    <auto
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Auto"
+                                                        value="auto"/>
+                                                </items>
+                                            </fetchPriority>
                                         </items>
                                     </column>
                                 </items>
