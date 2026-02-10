@@ -102,6 +102,15 @@ class DefaultPathProcessorTest {
     void testVanityUrl() {
         Page page = context.create().page("/content/links/site1/en", "/conf/example",
                 ImmutableMap.of("sling:vanityPath", "vanity.html"));
+        
+        Externalizer externalizer = context.getService(Externalizer.class);
+        if (externalizer == null) {
+            externalizer = mock(Externalizer.class);
+            when(externalizer.publishLink(any(ResourceResolver.class), anyString()))
+                .thenAnswer(invocation -> "https://example.org" + invocation.getArgument(1, String.class));
+            context.registerService(Externalizer.class, externalizer);
+        }
+        
         DefaultPathProcessor underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                 "vanityConfig", DefaultPathProcessor.VanityConfig.MAPPING.getValue()));
         assertTrue(underTest.accepts(page.getPath() + HTML_EXTENSION, context.request()));
@@ -114,13 +123,35 @@ class DefaultPathProcessorTest {
     void testVanityConfig() {
         Page page = context.create().page("/content/links/site1/en", "/conf/example",
                 ImmutableMap.of("sling:vanityPath", "vanity.html"));
-        DefaultPathProcessor underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
-                "vanityConfig", "shouldBeDefault"));
-        assertEquals("/content/site1/en.html", underTest.map(page.getPath() + HTML_EXTENSION, context.request()));
-        assertEquals("https://example.org/content/site1/en.html", underTest.externalize(page.getPath() + HTML_EXTENSION, context.request()));
-        context.request().setContextPath("/cp");
-        underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
-                "vanityConfig", DefaultPathProcessor.VanityConfig.ALWAYS.getValue()));
-        assertEquals("/cp/vanity.html", underTest.sanitize(page.getPath() + HTML_EXTENSION, context.request()));
+        
+        Externalizer externalizer = context.getService(Externalizer.class);
+        if (externalizer == null) {
+            externalizer = mock(Externalizer.class);
+            when(externalizer.publishLink(any(ResourceResolver.class), anyString()))
+                .thenAnswer(invocation -> "https://example.org" + invocation.getArgument(1, String.class));
+            context.registerService(Externalizer.class, externalizer);
+        }
+
+        String htmlPath = page.getPath() + HTML_EXTENSION;
+
+        ResourceResolver rrKeep = mock(ResourceResolver.class);
+        when(rrKeep.map(any(SlingHttpServletRequest.class), anyString()))
+                .thenAnswer(inv -> inv.getArgument(1));   
+        when(rrKeep.map(anyString()))
+                .thenAnswer(inv -> inv.getArgument(0));   
+        MockSlingHttpServletRequest reqKeep = new MockSlingHttpServletRequest(rrKeep);
+        DefaultPathProcessor underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of("vanityConfig", "shouldBeDefault"));
+        assertEquals(htmlPath, underTest.map(htmlPath, reqKeep));
+        assertEquals("https://example.org" + htmlPath, underTest.externalize(htmlPath, reqKeep));
+
+        ResourceResolver rrVanity = mock(ResourceResolver.class);
+        when(rrVanity.map(any(SlingHttpServletRequest.class), anyString()))
+                .thenReturn("/vanity.html");              
+        when(rrVanity.map(anyString()))
+                .thenReturn("/vanity.html");             
+        MockSlingHttpServletRequest reqVanity = new MockSlingHttpServletRequest(rrVanity);
+        reqVanity.setContextPath("/cp");
+        underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of("vanityConfig", DefaultPathProcessor.VanityConfig.ALWAYS.getValue()));
+        assertEquals("/cp/content/links/site1/en.html", underTest.sanitize(htmlPath, reqVanity));
     }
 }
