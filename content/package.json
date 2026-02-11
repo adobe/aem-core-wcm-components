@@ -34,9 +34,9 @@
         "karma-html2js-preprocessor": "^1.1.0",
         "karma-jasmine": "^5.1.0",
         "npm-run-all": "^4.1.5",
-        "stylelint": "^13.13.1",
-        "stylelint-config-recommended": "^5.0.0",
-        "stylelint-selector-bem-pattern": "^2.1.1",
+        "stylelint": "^16.2.1",
+        "stylelint-config-recommended": "^14.0.0",
+        "stylelint-selector-bem-pattern": "^3.0.1",
         "sync-pom-version-to-package": "^1.6.1",
         "watchify": "^4.0.0"
     },
