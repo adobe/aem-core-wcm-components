@@ -28,7 +28,7 @@
      data-cmp-hook-image="imageV3"
      class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}"
      itemscope itemtype="http://schema.org/ImageObject">
-	<figure role="figure" aria-label="${image.title}" data-sly-unwrap="${image.displayPopupTitle || !image.title}">
+	<figure data-sly-unwrap="${image.displayPopupTitle || !image.title}">
 		<a data-sly-unwrap="${!image.imageLink.valid}"
 		   class="cmp-image__link"
 		   data-sly-attribute="${image.imageLink.htmlAttributes}"
