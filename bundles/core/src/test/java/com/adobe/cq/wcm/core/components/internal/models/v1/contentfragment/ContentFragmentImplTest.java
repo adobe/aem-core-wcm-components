@@ -328,6 +328,13 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
     }
 
     @Test
+    void vcfPublishUrlNullWhenNoFragmentId() {
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-no-fragment-id");
+        assertNull(fragment.getFragmentId());
+        assertNull(fragment.getVcfPublishUrl());
+    }
+
+    @Test
     void fragmentIdNullWhenInvalidPath() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NON_EXISTING_PATH);
         assertNull(fragment.getFragmentId());
