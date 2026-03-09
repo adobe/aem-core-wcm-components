@@ -91,8 +91,8 @@ function jQuery(obj) {
 
 jQuery.getJSON = function(url) {
     let _resolve, _reject;
-    const deferred = { // NOSONAR - intentionally mimicking jQuery deferred API
-        then: function(onResolve, onReject) {
+    const deferred = {
+        then: function(onResolve, onReject) { // NOSONAR - mimicking jQuery deferred API
             _resolve = onResolve;
             _reject = onReject;
             return deferred;
@@ -108,8 +108,8 @@ jQuery.getJSON = function(url) {
 
 jQuery.ajax = function(options) {
     let _resolve, _reject;
-    const deferred = { // NOSONAR - intentionally mimicking jQuery deferred API
-        then: function(onResolve, onReject) {
+    const deferred = {
+        then: function(onResolve, onReject) { // NOSONAR - mimicking jQuery deferred API
             _resolve = onResolve;
             _reject = onReject;
             return deferred;
