@@ -90,23 +90,37 @@ function jQuery(obj) {
 }
 
 jQuery.getJSON = function(url) {
-    return new Promise(function(resolve, reject) {
-        if (jQuery._getJSONHandler) {
-            setTimeout(function() {
-                jQuery._getJSONHandler(url, resolve, reject);
-            }, 0);
+    let _resolve, _reject;
+    const deferred = { // NOSONAR - intentionally mimicking jQuery deferred API
+        then: function(onResolve, onReject) {
+            _resolve = onResolve;
+            _reject = onReject;
+            return deferred;
         }
-    });
+    };
+    if (jQuery._getJSONHandler) {
+        setTimeout(function() {
+            jQuery._getJSONHandler(url, _resolve, _reject);
+        }, 0);
+    }
+    return deferred;
 };
 
 jQuery.ajax = function(options) {
-    return new Promise(function(resolve, reject) {
-        if (jQuery._ajaxHandler) {
-            setTimeout(function() {
-                jQuery._ajaxHandler(options, resolve, reject);
-            }, 0);
+    let _resolve, _reject;
+    const deferred = { // NOSONAR - intentionally mimicking jQuery deferred API
+        then: function(onResolve, onReject) {
+            _resolve = onResolve;
+            _reject = onReject;
+            return deferred;
         }
-    });
+    };
+    if (jQuery._ajaxHandler) {
+        setTimeout(function() {
+            jQuery._ajaxHandler(options, _resolve, _reject);
+        }, 0);
+    }
+    return deferred;
 };
 
 // Add $ as alias for jQuery
