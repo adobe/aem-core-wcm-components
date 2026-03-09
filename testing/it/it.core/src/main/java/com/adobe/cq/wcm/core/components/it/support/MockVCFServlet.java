@@ -69,9 +69,8 @@ public class MockVCFServlet extends SlingAllMethodsServlet {
         }
 
         if ("templates".equals(selectorString)) {
-            String modelId = request.getParameter("modelId");
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write(buildTemplatesJson(modelId));
+            response.getWriter().write(buildTemplatesJson());
             return;
         }
 
@@ -87,7 +86,7 @@ public class MockVCFServlet extends SlingAllMethodsServlet {
         response.setStatus(SlingHttpServletResponse.SC_NOT_FOUND);
     }
 
-    private String buildTemplatesJson(String modelId) {
+    private String buildTemplatesJson() {
         StringBuilder sb = new StringBuilder();
         sb.append("{\"items\":[");
         for (int i = 0; i < MOCK_TEMPLATES.length; i++) {
