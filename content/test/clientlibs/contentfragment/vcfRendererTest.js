@@ -38,7 +38,7 @@ describe("Test VCF renderer for", function() {
         const contentFrameDoc = document.createElement("div");
         const vcfElement = document.createElement("div");
         vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
-        vcfElement.dataset.cmpContentfragmentPath = "/content/dam/test/fragment";
+        vcfElement.dataset.cmpContentfragmentId = FRAGMENT_UUID;
         vcfElement.dataset.cmpContentfragmentVcfTemplate = "person";
         contentFrameDoc.appendChild(vcfElement);
 
@@ -46,23 +46,14 @@ describe("Test VCF renderer for", function() {
             document: contentFrameDoc
         };
 
-        let getJSONCalled = false;
-        jQuery._getJSONHandler = function(url, resolve) {
-            if (url === "/content/dam/test/fragment/jcr:content.json") {
-                getJSONCalled = true;
-                resolve({"jcr:uuid": FRAGMENT_UUID});
-            }
-        };
-
         jQuery._ajaxHandler = function(options, resolve) {
             expect(options.url).toContain("/preview");
-            expect(options.url).toContain(encodeURIComponent(FRAGMENT_UUID));
+            expect(options.url).toContain(FRAGMENT_UUID);
             expect(options.url).toContain("templateId=person");
             resolve("<div>VCF Preview Content</div>");
 
             setTimeout(function() {
                 expect(vcfElement.innerHTML).toBe("<div>VCF Preview Content</div>");
-                expect(getJSONCalled).toBeTrue();
                 done();
             }, 0);
         };
@@ -74,17 +65,13 @@ describe("Test VCF renderer for", function() {
         const contentFrameDoc = document.createElement("div");
         const vcfElement = document.createElement("div");
         vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
-        vcfElement.dataset.cmpContentfragmentPath = "/content/dam/test/fragment2";
+        vcfElement.dataset.cmpContentfragmentId = FRAGMENT_UUID;
         vcfElement.dataset.cmpContentfragmentVcfTemplate = "card";
         vcfElement.dataset.cmpContentfragmentVariation = "summary";
         contentFrameDoc.appendChild(vcfElement);
 
         Granite.author.ContentFrame.contentWindow = {
             document: contentFrameDoc
-        };
-
-        jQuery._getJSONHandler = function(url, resolve) {
-            resolve({"jcr:uuid": FRAGMENT_UUID});
         };
 
         jQuery._ajaxHandler = function(options, resolve) {
@@ -101,7 +88,7 @@ describe("Test VCF renderer for", function() {
         channel.trigger("cq-editor-loaded");
     });
 
-    it("skips elements without fragment path", function(done) {
+    it("skips elements without fragment id", function(done) {
         const contentFrameDoc = document.createElement("div");
         const vcfElement = document.createElement("div");
         vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
@@ -111,8 +98,8 @@ describe("Test VCF renderer for", function() {
             document: contentFrameDoc
         };
 
-        jQuery._getJSONHandler = function() {
-            fail("getJSON should not be called for elements without fragment path");
+        jQuery._ajaxHandler = function() {
+            fail("ajax should not be called for elements without fragment id");
         };
 
         channel.trigger("cq-editor-loaded");
@@ -126,8 +113,8 @@ describe("Test VCF renderer for", function() {
     it("handles missing content frame gracefully", function(done) {
         Granite.author.ContentFrame.contentWindow = null;
 
-        jQuery._getJSONHandler = function() {
-            fail("getJSON should not be called when content frame is unavailable");
+        jQuery._ajaxHandler = function() {
+            fail("ajax should not be called when content frame is unavailable");
         };
 
         channel.trigger("cq-editor-loaded");
@@ -137,23 +124,21 @@ describe("Test VCF renderer for", function() {
         }, 50);
     });
 
-    it("handles failed fragment ID resolution", function(done) {
+    it("does not load element already being loaded", function(done) {
         const contentFrameDoc = document.createElement("div");
         const vcfElement = document.createElement("div");
         vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
-        vcfElement.dataset.cmpContentfragmentPath = "/content/dam/test/missing";
+        vcfElement.dataset.cmpContentfragmentId = FRAGMENT_UUID;
+        vcfElement.dataset.cmpContentfragmentVcfTemplate = "person";
+        vcfElement.setAttribute("data-vcf-loading", "true");
         contentFrameDoc.appendChild(vcfElement);
 
         Granite.author.ContentFrame.contentWindow = {
             document: contentFrameDoc
         };
 
-        jQuery._getJSONHandler = function(url, resolve, reject) {
-            reject();
-        };
-
         jQuery._ajaxHandler = function() {
-            fail("ajax should not be called when fragment ID resolution fails");
+            fail("ajax should not be called for elements already being loaded");
         };
 
         channel.trigger("cq-editor-loaded");
