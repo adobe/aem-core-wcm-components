@@ -45,10 +45,10 @@ class JQueryArray extends Array {
     }
 
     trigger(event) {
-        var eventName = typeof event === 'string' ? event : event.type;
-        var handlers = this._events[eventName] || [];
-        for (var i = 0; i < handlers.length; i++) {
-            handlers[i](event);
+        const eventName = typeof event === 'string' ? event : event.type;
+        const handlers = this._events[eventName] || [];
+        for (const handler of handlers) {
+            handler(event);
         }
         return this;
     }
@@ -64,7 +64,7 @@ class JQueryArray extends Array {
 }
 
 function jQuery(obj) {
-    if (obj && obj.__jqWrapped) {
+    if (obj?.__jqWrapped) {
         return obj.__jqWrapped;
     }
 
@@ -90,37 +90,23 @@ function jQuery(obj) {
 }
 
 jQuery.getJSON = function(url) {
-    var _resolve, _reject;
-    var promise = {
-        then: function(onResolve, onReject) {
-            _resolve = onResolve;
-            _reject = onReject;
-            return promise;
+    return new Promise(function(resolve, reject) {
+        if (jQuery._getJSONHandler) {
+            setTimeout(function() {
+                jQuery._getJSONHandler(url, resolve, reject);
+            }, 0);
         }
-    };
-    if (jQuery._getJSONHandler) {
-        setTimeout(function() {
-            jQuery._getJSONHandler(url, _resolve, _reject);
-        }, 0);
-    }
-    return promise;
+    });
 };
 
 jQuery.ajax = function(options) {
-    var _resolve, _reject;
-    var promise = {
-        then: function(onResolve, onReject) {
-            _resolve = onResolve;
-            _reject = onReject;
-            return promise;
+    return new Promise(function(resolve, reject) {
+        if (jQuery._ajaxHandler) {
+            setTimeout(function() {
+                jQuery._ajaxHandler(options, resolve, reject);
+            }, 0);
         }
-    };
-    if (jQuery._ajaxHandler) {
-        setTimeout(function() {
-            jQuery._ajaxHandler(options, _resolve, _reject);
-        }, 0);
-    }
-    return promise;
+    });
 };
 
 // Add $ as alias for jQuery

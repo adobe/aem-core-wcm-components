@@ -71,7 +71,7 @@
                     var loader = script.previousElementSibling;
                     var el = script.parentElement;
                     if (!el || !loader) return;
-                    var url = loader.getAttribute("data-vcf-url");
+                    var url = loader.dataset.vcfUrl;
                     if (!url) return;
                     loader.remove();
                     var shadow = el.attachShadow({ mode: "open" });
