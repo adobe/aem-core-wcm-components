@@ -42,10 +42,10 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
                                         deleteHint="{Boolean}false"
-                                        fieldDescription="Single Text Element mode allows selection of one multiline text element and enables paragraph control options. Multiple Elements mode allows selection of one or more elements of the Content Fragment."
+                                        fieldDescription="Single Text Element mode allows selection of one multiline text element and enables paragraph control options. Multiple Elements mode allows selection of one or more elements. Content Fragment Visualization mode allows selection of an HTML template for rendering a Visual Content Fragment."
                                         fieldLabel="Display Mode"
                                         name="./displayMode"
-                                        vertical="{Boolean}false">
+                                        vertical="{Boolean}true">
                                         <granite:data
                                             jcr:primaryType="nt:unstructured"
                                             display-mode-radio-group="{Boolean}true"/>
@@ -59,6 +59,10 @@
                                                 checked="{Boolean}true"
                                                 text="Multiple Elements"
                                                 value="multi"/>
+                                            <vcf
+                                                jcr:primaryType="nt:unstructured"
+                                                text="Content Fragment Visualization"
+                                                value="vcf"/>
                                         </items>
                                     </displayMode>
                                     <elementNames
@@ -117,8 +121,30 @@
                                         <granite:data
                                             jcr:primaryType="nt:unstructured"
                                             element-names-container="{Boolean}true"
+                                            element-mode-field="{Boolean}true"
                                             field-path="${requestPathInfo.resourcePath}"/>
                                     </elementNames>
+                                    <vcfTemplateContainer
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <granite:data
+                                            jcr:primaryType="nt:unstructured"
+                                            vcf-mode-field="{Boolean}true"/>
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <vcfTemplate
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                emptyText="Select a template"
+                                                fieldDescription="Select an HTML template for rendering the Visual Content Fragment."
+                                                fieldLabel="Visualization Template"
+                                                name="./vcfTemplate">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    vcf-template-selector="{Boolean}true"/>
+                                                <items jcr:primaryType="nt:unstructured"/>
+                                            </vcfTemplate>
+                                        </items>
+                                    </vcfTemplateContainer>
                                     <variationName
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/select"

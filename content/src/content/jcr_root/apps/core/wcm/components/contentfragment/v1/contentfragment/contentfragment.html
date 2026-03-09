@@ -15,7 +15,12 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-use.fragment="com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment"
      data-sly-test="${properties.fragmentPath}" data-sly-use.cfTemplates="templates.html">
-    <sly data-sly-call="${cfTemplates.contentFragment @ fragment=fragment, fragmentPath=properties.fragmentPath, wcmmode=wcmmode}"></sly>
+    <sly data-sly-test="${properties.displayMode != 'vcf'}">
+        <sly data-sly-call="${cfTemplates.contentFragment @ fragment=fragment, fragmentPath=properties.fragmentPath, wcmmode=wcmmode}"></sly>
+    </sly>
+    <sly data-sly-test="${properties.displayMode == 'vcf'}">
+        <sly data-sly-call="${cfTemplates.vcfFragment @ fragment=fragment, fragmentPath=properties.fragmentPath, vcfTemplate=properties.vcfTemplate, variationName=properties.variationName, wcmmode=wcmmode}"></sly>
+    </sly>
 </sly>
 
 <sly data-sly-use.template="core/wcm/components/commons/v1/templates.html"

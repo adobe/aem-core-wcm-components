@@ -53,3 +53,39 @@
         <sly data-sly-call="${elementTemplate.element @ element=element}"></sly>
     </dl>
 </template>
+
+<template data-sly-template.vcfFragment="${@ fragment='The content fragment', fragmentPath='', vcfTemplate='', variationName='', wcmmode='WCM mode'}">
+    <div id="${fragment.id}"
+         class="cmp-contentfragment cmp-contentfragment--vcf cmp-contentfragment--${fragment.name}"
+         data-cmp-contentfragment-model="${fragment.type}"
+         data-sly-attribute.data-cmp-contentfragment-path="${fragmentPath}"
+         data-sly-attribute.data-cmp-contentfragment-id="${fragment.fragmentId}"
+         data-sly-attribute.data-cmp-contentfragment-vcf-template="${vcfTemplate}"
+         data-sly-attribute.data-cmp-contentfragment-variation="${variationName}"
+         data-cmp-data-layer="${fragment.data.json}">
+        <sly data-sly-test="${wcmmode.disabled && fragment.vcfPublishUrl}">
+            <div data-sly-attribute.data-vcf-url="${fragment.vcfPublishUrl}" class="cmp-contentfragment__vcf-loader" style="display:none"></div>
+            <script>
+                (function() {
+                    var script = document.currentScript;
+                    var loader = script.previousElementSibling;
+                    var el = script.parentElement;
+                    if (!el || !loader) return;
+                    var url = loader.getAttribute("data-vcf-url");
+                    if (!url) return;
+                    loader.remove();
+                    var shadow = el.attachShadow({ mode: "open" });
+                    var body = document.createElement("body");
+                    body.style.display = "none";
+                    shadow.appendChild(body);
+                    fetch(url)
+                        .then(function(r) { return r.ok ? r.text() : Promise.reject(r.status); })
+                        .then(function(html) {
+                            body.innerHTML = html;
+                            body.style.display = "";
+                        });
+                })();
+            </script>
+        </sly>
+    </div>
+</template>

@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -45,6 +46,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
+
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContentFragmentDataImpl;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
@@ -106,7 +108,16 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     @Nullable
     private String displayMode;
 
+    @ValueMapValue(name = "vcfTemplate", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    private String vcfTemplate;
+
     private DAMContentFragment damContentFragment = new EmptyContentFragment();
+
+    private String fragmentId;
+
+    private static final String MASTER_VARIATION = "master";
+    private static final String VCF_PUBLISH_URL_FORMAT = "/adobe/experimental/previewtemplates-expires-20260301/contentFragments/%s/%s/%s.html";
 
     @PostConstruct
     private void initModel() {
@@ -114,6 +125,13 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
             Resource fragmentResource = resourceResolver.getResource(fragmentPath);
             if (fragmentResource != null) {
                 damContentFragment = new DAMContentFragmentImpl(fragmentResource, contentTypeConverter, variationName, elementNames);
+                fragmentId = fragmentResource.getValueMap().get("jcr:uuid", String.class);
+                if (fragmentId == null) {
+                    Resource jcrContent = fragmentResource.getChild("jcr:content");
+                    if (jcrContent != null) {
+                        fragmentId = jcrContent.getValueMap().get("jcr:uuid", String.class);
+                    }
+                }
             }
         }
     }
@@ -222,6 +240,23 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
 
         // split into paragraphs
         return content.split("(?=(<p>|<h1>|<h2>|<h3>|<h4>|<h5>|<h6>))");
+    }
+
+    @Nullable
+    @Override
+    public String getFragmentId() {
+        return fragmentId;
+    }
+
+    @Nullable
+    @Override
+    public String getVcfPublishUrl() {
+        if (!"vcf".equals(displayMode) || StringUtils.isEmpty(vcfTemplate) || StringUtils.isEmpty(fragmentId)) {
+            return null;
+        }
+        String variation = StringUtils.isNotEmpty(variationName) && !MASTER_VARIATION.equals(variationName)
+            ? variationName : "main";
+        return String.format(VCF_PUBLISH_URL_FORMAT, vcfTemplate, fragmentId, variation);
     }
 
     @Override

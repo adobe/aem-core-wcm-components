@@ -28,6 +28,9 @@
     var SELECTOR_VARIATION_NAME = "[name='./variationName']";
     var SELECTOR_DISPLAY_MODE_RADIO_GROUP = "[data-display-mode-radio-group='true']";
     var SELECTOR_DISPLAY_MODE_CHECKED = "[name='./displayMode']:checked";
+    var SELECTOR_ELEMENT_MODE_FIELDS = "[data-element-mode-field='true']";
+    var SELECTOR_VCF_MODE_FIELDS = "[data-vcf-mode-field='true']";
+    var SELECTOR_VCF_TEMPLATE = "[data-vcf-template-selector='true']";
     var SELECTOR_PARAGRAPH_CONTROLS = ".cmp-contentfragment__editor-paragraph-controls";
     var SELECTOR_PARAGRAPH_SCOPE = "[name='./paragraphScope']";
     var SELECTOR_PARAGRAPH_RANGE = "[name='./paragraphRange']";
@@ -35,6 +38,12 @@
 
     // mode in which only one multiline text element could be selected for display
     var SINGLE_TEXT_DISPLAY_MODE = "singleText";
+
+    // mode for Content Fragment Visualization
+    var VCF_DISPLAY_MODE = "vcf";
+
+    // Content Fragment Visualization API base path (relative to AEM author host)
+    var VCF_TEMPLATES_API_BASE = "/adobe/experimental/previewtemplates-expires-20260301/sites/cf/models";
 
     // ui helper
     var ui = $(window).adaptTo("foundation-ui");
@@ -54,6 +63,14 @@
     var paragraphControls;
     // the tab containing paragraph control
     var paragraphControlsTab;
+
+    // fields visible only for element-based modes (singleText / multi)
+    var elementModeFields;
+    // fields visible only for Content Fragment Visualization mode
+    var vcfModeFields;
+
+    // the VCF template selector (coral-select)
+    var vcfTemplateSelector;
 
     // keeps track of the current fragment path
     var currentFragmentPath;
@@ -360,6 +377,84 @@
         this._updateFields();
     };
 
+    /**
+     * Resolves the Content Fragment Model ID from a fragment's JCR path.
+     * Reads the fragment's data node to find the cq:model path, then
+     * base64-encodes it to produce the model ID expected by the VCF API.
+     *
+     * @param {String} cfPath - JCR path of the content fragment
+     * @param {Function} callback - receives the model ID string, or null on failure
+     */
+    function resolveModelId(cfPath, callback) {
+        if (!cfPath) {
+            callback(null);
+            return;
+        }
+        $.getJSON(cfPath + "/jcr:content/data.json").then(function(data) {
+            var modelPath = data["cq:model"];
+            if (!modelPath) {
+                callback(null);
+                return;
+            }
+            callback(btoa(modelPath));
+        }, function() {
+            callback(null);
+        });
+    }
+
+    /**
+     * Fetches HTML templates for the given model ID from the Content Fragment
+     * Visualization API and populates the vcfTemplateSelector dropdown.
+     *
+     * @param {String} modelId - UUID of the Content Fragment Model
+     */
+    function fetchVcfTemplates(modelId) {
+        if (!modelId || !vcfTemplateSelector) {
+            return;
+        }
+        var currentValue = vcfTemplateSelector.value;
+        var url = VCF_TEMPLATES_API_BASE + "/" + encodeURIComponent(modelId) + "/templates?limit=50";
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json"
+        }).then(function(response) {
+            vcfTemplateSelector.items.clear();
+
+            if (response && response.items) {
+                response.items.forEach(function(template) {
+                    var item = new Coral.Select.Item();
+                    item.content.textContent = template.name;
+                    item.value = template.id;
+                    if (template.id === currentValue) {
+                        item.selected = true;
+                    }
+                    vcfTemplateSelector.items.add(item);
+                });
+            }
+        }, function() {
+            vcfTemplateSelector.items.clear();
+        });
+    }
+
+    /**
+     * Loads HTML templates for the currently selected fragment.
+     * Resolves the model ID from the fragment path, then fetches templates.
+     */
+    function loadVcfTemplatesForCurrentFragment() {
+        var checkedRadio = editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED);
+        var displayMode = checkedRadio ? checkedRadio.value : null;
+        if (displayMode !== VCF_DISPLAY_MODE || !fragmentPath.value) {
+            return;
+        }
+        resolveModelId(fragmentPath.value, function(modelId) {
+            if (modelId) {
+                fetchVcfTemplates(modelId);
+            }
+        });
+    }
+
     function initialize(dialog) {
         // get path of component being edited
         editDialog = dialog;
@@ -368,6 +463,10 @@
         fragmentPath = dialog.querySelector(SELECTOR_FRAGMENT_PATH);
         paragraphControls = dialog.querySelector(SELECTOR_PARAGRAPH_CONTROLS);
         paragraphControlsTab = dialog.querySelector("coral-tabview").tabList.items.getAll()[1];
+
+        elementModeFields = dialog.querySelectorAll(SELECTOR_ELEMENT_MODE_FIELDS);
+        vcfModeFields = dialog.querySelectorAll(SELECTOR_VCF_MODE_FIELDS);
+        vcfTemplateSelector = dialog.querySelector(SELECTOR_VCF_TEMPLATE);
 
         // initialize state variables
         currentFragmentPath = fragmentPath.value;
@@ -379,15 +478,24 @@
         }
         // enable / disable the paragraph controls
         setParagraphControlsState();
+        // set initial display mode field visibility
+        updateDisplayModeFieldVisibility();
         // hide/show paragraph control tab
         updateParagraphControlTabState();
+        // load VCF templates if the dialog opens in vcf mode with a fragment already set
+        loadVcfTemplatesForCurrentFragment();
 
         // register change listener
         $(fragmentPath).off("foundation-field-change").on("foundation-field-change", onFragmentPathChange);
         $(document).on("change", SELECTOR_PARAGRAPH_SCOPE, setParagraphControlsState);
         var $radioGroup = $(dialog).find(SELECTOR_DISPLAY_MODE_RADIO_GROUP);
         $radioGroup.on("change", function(e) {
-            elementsController.fetchAndUpdateElementsHTML(e.target.value);
+            updateDisplayModeFieldVisibility();
+            if (e.target.value === VCF_DISPLAY_MODE) {
+                loadVcfTemplatesForCurrentFragment();
+            } else {
+                elementsController.fetchAndUpdateElementsHTML(e.target.value);
+            }
             updateParagraphControlTabState();
         });
     }
@@ -399,6 +507,7 @@
     function onFragmentPathChange() {
         // if the fragment was reset (i.e. the fragment path was deleted)
         if (!fragmentPath.value) {
+            clearVcfTemplates();
             var canKeepConfig = elementsController.testStateForUpdate();
             if (canKeepConfig) {
                 // There was no current configuration. We just need to disable fields.
@@ -412,7 +521,15 @@
             return;
         }
 
-        elementsController.testGetHTML(editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED).value, function() {
+        var displayMode = editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED).value;
+
+        if (displayMode === VCF_DISPLAY_MODE) {
+            currentFragmentPath = fragmentPath.value;
+            loadVcfTemplatesForCurrentFragment();
+            return;
+        }
+
+        elementsController.testGetHTML(displayMode, function() {
             // check if we can keep the current configuration, in which case no confirmation dialog is necessary
             var canKeepConfig = elementsController.testStateForUpdate();
             if (canKeepConfig) {
@@ -429,6 +546,15 @@
                 elementsController.saveFetchedState, elementsController);
         });
 
+    }
+
+    /**
+     * Clears all items from the VCF template dropdown.
+     */
+    function clearVcfTemplates() {
+        if (vcfTemplateSelector) {
+            vcfTemplateSelector.items.clear();
+        }
     }
 
     /**
@@ -512,6 +638,21 @@
                 headings.setAttribute("disabled", "");
             }
         }
+    }
+
+    /**
+     * Shows or hides element-mode fields vs VCF-mode fields depending on the selected display mode.
+     */
+    function updateDisplayModeFieldVisibility() {
+        var displayMode = editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED).value;
+        var isVcf = displayMode === VCF_DISPLAY_MODE;
+
+        elementModeFields.forEach(function(field) {
+            field.hidden = isVcf;
+        });
+        vcfModeFields.forEach(function(field) {
+            field.hidden = !isVcf;
+        });
     }
 
     // Toggles the display of paragraph control tab depending on display mode

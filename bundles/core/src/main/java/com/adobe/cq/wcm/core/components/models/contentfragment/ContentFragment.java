@@ -118,4 +118,30 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
     default String[] getParagraphs() {
         return null;
     }
+
+    /**
+     * Returns the JCR UUID of the referenced content fragment, or {@code null}
+     * if the fragment does not exist or has no UUID.
+     *
+     * @return the fragment UUID, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
+     */
+    @Nullable
+    @JsonIgnore
+    default String getFragmentId() {
+        return null;
+    }
+
+    /**
+     * Returns the publish delivery URL for a Visual Content Fragment, or {@code null}
+     * when VCF display mode is not active or the required configuration is missing.
+     *
+     * @return the publish VCF URL, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
+     */
+    @Nullable
+    @JsonIgnore
+    default String getVcfPublishUrl() {
+        return null;
+    }
 }

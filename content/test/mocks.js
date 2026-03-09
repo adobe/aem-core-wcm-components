@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2025 Adobe
+ * Copyright 2026 Adobe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,11 @@
  * limitations under the License.
  ******************************************************************************/
 class JQueryArray extends Array {
+    constructor(...args) {
+        super(...args);
+        this._events = {};
+    }
+
     find(selector) {
         const elem = this[0] ? this[0].querySelector(selector) : null;
         return elem ? new JQueryArray(elem) : new JQueryArray();
@@ -24,20 +29,55 @@ class JQueryArray extends Array {
     }
 
     closest(selector) {
-        // Simple mock implementation
         return this;
     }
 
     val() {
         return this[0] ? this[0].value : '';
     }
+
+    on(event, handler) {
+        if (!this._events[event]) {
+            this._events[event] = [];
+        }
+        this._events[event].push(handler);
+        return this;
+    }
+
+    trigger(event) {
+        var eventName = typeof event === 'string' ? event : event.type;
+        var handlers = this._events[eventName] || [];
+        for (var i = 0; i < handlers.length; i++) {
+            handlers[i](event);
+        }
+        return this;
+    }
+
+    off(event) {
+        if (event) {
+            delete this._events[event];
+        } else {
+            this._events = {};
+        }
+        return this;
+    }
 }
 
 function jQuery(obj) {
+    if (obj && obj.__jqWrapped) {
+        return obj.__jqWrapped;
+    }
+
     const result = new JQueryArray(obj);
 
+    if (obj === document) {
+        if (!jQuery._docChannel) {
+            jQuery._docChannel = result;
+        }
+        return jQuery._docChannel;
+    }
+
     if (obj === window) {
-        // Add adaptTo method for window objects
         result.adaptTo = function(type) {
             if (type === 'foundation-registry') {
                 return window.foundationRegistry;
@@ -48,6 +88,40 @@ function jQuery(obj) {
 
     return result;
 }
+
+jQuery.getJSON = function(url) {
+    var _resolve, _reject;
+    var promise = {
+        then: function(onResolve, onReject) {
+            _resolve = onResolve;
+            _reject = onReject;
+            return promise;
+        }
+    };
+    if (jQuery._getJSONHandler) {
+        setTimeout(function() {
+            jQuery._getJSONHandler(url, _resolve, _reject);
+        }, 0);
+    }
+    return promise;
+};
+
+jQuery.ajax = function(options) {
+    var _resolve, _reject;
+    var promise = {
+        then: function(onResolve, onReject) {
+            _resolve = onResolve;
+            _reject = onReject;
+            return promise;
+        }
+    };
+    if (jQuery._ajaxHandler) {
+        setTimeout(function() {
+            jQuery._ajaxHandler(options, _resolve, _reject);
+        }, 0);
+    }
+    return promise;
+};
 
 // Add $ as alias for jQuery
 window.$ = jQuery;
@@ -85,6 +159,9 @@ Granite = {
             register: function (type, editor) {
                 this[type] = editor;
             }
+        },
+        ContentFrame: {
+            contentWindow: null
         },
         CFM: {
             Fragments: {

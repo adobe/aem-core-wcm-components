@@ -265,6 +265,75 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
     }
 
     @Test
+    void vcfPublishUrlWithTemplate() {
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-template");
+        assertEquals(
+            "/adobe/experimental/previewtemplates-expires-20260301/contentFragments/hero-banner/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/main.html",
+            fragment.getVcfPublishUrl());
+    }
+
+    @Test
+    void vcfPublishUrlWithVariation() {
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-template-and-variation");
+        assertEquals(
+            "/adobe/experimental/previewtemplates-expires-20260301/contentFragments/hero-banner/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/teaser.html",
+            fragment.getVcfPublishUrl());
+    }
+
+    @Test
+    void vcfPublishUrlWithoutTemplate() {
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-without-template");
+        assertNull(fragment.getVcfPublishUrl());
+    }
+
+    @Test
+    void vcfPublishUrlNonVcfMode() {
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
+        assertNull(fragment.getVcfPublishUrl());
+    }
+
+    @Test
+    void vcfPublishUrlMasterVariationMapsToMain() {
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-master-variation");
+        assertEquals(
+            "/adobe/experimental/previewtemplates-expires-20260301/contentFragments/hero-banner/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/main.html",
+            fragment.getVcfPublishUrl());
+    }
+
+    @Test
+    void vcfPublishUrlWithJcrContentUuid() {
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-structured-fragment");
+        assertEquals("b2a7f9c1-3e5d-4f8a-9c1e-d7b3a2f5e8c4", fragment.getFragmentId());
+        assertEquals(
+            "/adobe/experimental/previewtemplates-expires-20260301/contentFragments/hero-banner/b2a7f9c1-3e5d-4f8a-9c1e-d7b3a2f5e8c4/main.html",
+            fragment.getVcfPublishUrl());
+    }
+
+    @Test
+    void fragmentIdFromDirectNode() {
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
+        assertEquals("5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4", fragment.getFragmentId());
+    }
+
+    @Test
+    void fragmentIdFromJcrContent() {
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED);
+        assertEquals("b2a7f9c1-3e5d-4f8a-9c1e-d7b3a2f5e8c4", fragment.getFragmentId());
+    }
+
+    @Test
+    void fragmentIdNullWhenNoPath() {
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NO_PATH);
+        assertNull(fragment.getFragmentId());
+    }
+
+    @Test
+    void fragmentIdNullWhenInvalidPath() {
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NON_EXISTING_PATH);
+        assertNull(fragment.getFragmentId());
+    }
+
+    @Test
     void testDataLayerJson() {
         Utils.enableDataLayer(context, true);
         String expected = "{\"contentfragment-bb4058160c\":{\"@type\":\"core/wcm/components/contentfragment/v1/contentfragment\",\"dc:title\":\"Test Content Fragment\",\"elements\":[{\"xdm:text\":\"<p>Main content</p>\",\"xdm:title\":\"Main\"},{\"xdm:text\":\"Second content\",\"xdm:title\":\"Second\"}]}}";
