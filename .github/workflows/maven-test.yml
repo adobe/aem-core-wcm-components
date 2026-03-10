@@ -43,6 +43,7 @@ jobs:
       - name: Setup JDK
         uses: actions/setup-java@v5
         with:
+          distribution: 'oracle'
           java-version: ${{ matrix.java }}
 
       # Set up dependency cache
