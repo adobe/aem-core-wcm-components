@@ -14,7 +14,7 @@
 # limitations under the License.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-name: Release to OSSRH
+name: Release to Central Repository
 
 # Run workflow on commits to default branch
 on:
@@ -68,12 +68,12 @@ jobs:
           git config user.email "Grp-opensourceoffice@adobe.com"
           git config user.name "${X_GITHUB_USERNAME}"
 
-      # Build and deploy to OSSRH, which will automatically sync to Central Repository
+      # Build and deploy to Central Repository
       - name: Deploy to Central Repository
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           X_GITHUB_USERNAME: ${{ secrets.ADOBE_BOT_GITHUB_USERNAME  }}
           X_GITHUB_PASSWORD: ${{ secrets.ADOBE_BOT_GITHUB_PASSWORD }}
-        run: mvn -B -Prelease,cloud,ossrh,adobe-public -s ./.github/workflows/settings.xml clean release:prepare release:perform -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdryRun=${{ github.event.inputs.dryRun }} -Dmaven.javadoc.failOnError=false
+        run: mvn -B -Prelease,cloud,central,adobe-public -s ./.github/workflows/settings.xml clean release:prepare release:perform -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdryRun=${{ github.event.inputs.dryRun }} -Dmaven.javadoc.failOnError=false
