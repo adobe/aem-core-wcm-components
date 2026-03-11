@@ -45,7 +45,7 @@
                    name="./${item.name}/cq:panelTitle"
                    value="${item.value}"
                    data-sly-attribute.disabled="${item.isLiveCopy}"
-                   placeholder="${item.title}" required>
+                   placeholder="${item.title @ i18n}" required>
         </div>
     </coral-multifield-item>
     <input type="hidden" name="itemOrder" data-cmp-hook-childreneditor="order">

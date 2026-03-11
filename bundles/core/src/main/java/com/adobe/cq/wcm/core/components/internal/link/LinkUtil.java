@@ -115,7 +115,7 @@ public class LinkUtil {
      */
     public static String escape(final String path, final String queryString, final String fragment) {
         boolean pathContainsFragment = false;
-        if (StringUtils.contains(path, fragment)) {
+        if (StringUtils.contains(path, "#" + fragment)) {
             pathContainsFragment = true;
         }
         final Map<String, String> placeholders = new LinkedHashMap<>();
