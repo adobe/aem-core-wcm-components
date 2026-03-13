@@ -244,6 +244,51 @@
                             reference="../../component"/>
                     </info>
                 </demo_26077943>
+                <title_1523809412
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Content Fragment Visualization"
+                    sling:resourceType="core-components-examples/components/title"/>
+                <text_1523809413
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Content Fragment Visualization mode renders a visual representation of a content fragment using an HTML template. Instead of displaying raw elements, the component delegates rendering to the Content Fragment Visualization API, which combines the fragment data with a selected template. The visual preview requires AEM as a Cloud Service.&lt;/p>"
+                    textIsRich="true"/>
+                <demo_1523809414
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo"
+                    fullWidth="{Boolean}true">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <contentfragment
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/contentfragment"
+                            displayMode="vcf"
+                            fragmentPath="/content/dam/core-components-examples/library/sample-assets/adobe-headquarters"
+                            variationName="master"
+                            vcfTemplate="hero-banner"/>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_1523809414>
             </responsivegrid>
         </root>
         <image jcr:primaryType="nt:unstructured">
