@@ -79,6 +79,11 @@
 
     var elementsController;
 
+    // deferred that resolves with the stored vcfTemplate value read from
+    // the component resource; needed because the dynamically-populated
+    // Coral Select has no items at load time and loses the JCR value
+    var storedVcfTemplateDeferred;
+
     /**
      * A class which encapsulates the logic related to element selectors and variation name selector.
      */
@@ -412,29 +417,33 @@
         if (!modelId || !vcfTemplateSelector) {
             return;
         }
-        var currentValue = vcfTemplateSelector.value;
-        var url = VCF_TEMPLATES_API_BASE + "/" + encodeURIComponent(modelId) + "/templates?limit=50";
 
-        $.ajax({
-            url: url,
-            type: "GET",
-            dataType: "json"
-        }).then(function(response) {
-            vcfTemplateSelector.items.clear();
+        storedVcfTemplateDeferred.done(function(storedValue) {
+            var currentValue = vcfTemplateSelector.value || storedValue;
+            storedVcfTemplateDeferred = $.Deferred().resolve("");
+            var url = VCF_TEMPLATES_API_BASE + "/" + encodeURIComponent(modelId) + "/templates?limit=50";
 
-            if (response && response.items) {
-                response.items.forEach(function(template) {
-                    var item = new Coral.Select.Item();
-                    item.content.textContent = template.name;
-                    item.value = template.id;
-                    if (template.id === currentValue) {
-                        item.selected = true;
-                    }
-                    vcfTemplateSelector.items.add(item);
-                });
-            }
-        }, function() {
-            vcfTemplateSelector.items.clear();
+            $.ajax({
+                url: url,
+                type: "GET",
+                dataType: "json"
+            }).then(function(response) {
+                vcfTemplateSelector.items.clear();
+
+                if (response && response.items) {
+                    response.items.forEach(function(template) {
+                        var item = new Coral.Select.Item();
+                        item.content.textContent = template.name;
+                        item.value = template.id;
+                        if (template.id === currentValue) {
+                            item.selected = true;
+                        }
+                        vcfTemplateSelector.items.add(item);
+                    });
+                }
+            }, function() {
+                vcfTemplateSelector.items.clear();
+            });
         });
     }
 
@@ -467,6 +476,22 @@
         elementModeFields = dialog.querySelectorAll(SELECTOR_ELEMENT_MODE_FIELDS);
         vcfModeFields = dialog.querySelectorAll(SELECTOR_VCF_MODE_FIELDS);
         vcfTemplateSelector = dialog.querySelector(SELECTOR_VCF_TEMPLATE);
+
+        storedVcfTemplateDeferred = $.Deferred();
+        var componentPathEl = dialog.querySelector("[data-component-path]");
+        var componentPath = componentPathEl ? componentPathEl.dataset.componentPath : null;
+        if (componentPath) {
+            $.getJSON(componentPath + ".json").then(
+                function(data) {
+                    storedVcfTemplateDeferred.resolve((data && data.vcfTemplate) || "");
+                },
+                function() {
+                    storedVcfTemplateDeferred.resolve("");
+                }
+            );
+        } else {
+            storedVcfTemplateDeferred.resolve("");
+        }
 
         // initialize state variables
         currentFragmentPath = fragmentPath.value;

@@ -82,6 +82,9 @@ function jQuery(obj) {
             if (type === 'foundation-registry') {
                 return window.foundationRegistry;
             }
+            if (type === 'foundation-ui') {
+                return { prompt: function() {} };
+            }
             return null;
         };
     }
@@ -120,6 +123,34 @@ jQuery.ajax = function(options) {
             jQuery._ajaxHandler(options, _resolve, _reject);
         }, 0);
     }
+    return deferred;
+};
+
+jQuery.Deferred = function() {
+    var callbacks = [];
+    var resolved = false;
+    var resolvedValue;
+    var deferred = {
+        resolve: function(value) {
+            resolved = true;
+            resolvedValue = value;
+            var cbs = callbacks.slice();
+            callbacks = [];
+            cbs.forEach(function(cb) { cb(value); });
+            return deferred;
+        },
+        done: function(callback) {
+            if (resolved) {
+                callback(resolvedValue);
+            } else {
+                callbacks.push(callback);
+            }
+            return deferred;
+        },
+        promise: function() {
+            return deferred;
+        }
+    };
     return deferred;
 };
 
@@ -229,6 +260,21 @@ window.adaptTo = function(type) {
         return window.foundationRegistry;
     }
     return null;
+};
+
+window.Coral = {
+    commons: {
+        ready: function(el, callback) {
+            callback(el);
+        }
+    },
+    Select: {
+        Item: function() {
+            this.content = { textContent: "" };
+            this.value = "";
+            this.selected = false;
+        }
+    }
 };
 
 // Mock document object
