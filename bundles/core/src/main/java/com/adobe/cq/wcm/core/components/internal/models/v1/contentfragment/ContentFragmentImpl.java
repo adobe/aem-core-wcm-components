@@ -37,6 +37,7 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.models.factory.ModelFactory;
+import org.apache.sling.settings.SlingSettingsService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -74,6 +75,12 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
      */
     public static final String RESOURCE_TYPE = "core/wcm/components/contentfragment/v1/contentfragment";
 
+    private static final String MASTER_VARIATION = "master";
+    private static final String PUBLISH_RUN_MODE = "publish";
+    private static final String VCF_API_BASE = "/adobe/experimental/previewtemplates-expires-20260301";
+    private static final String VCF_AUTHOR_URL_FORMAT = VCF_API_BASE + "/sites/cf/fragments/%s/preview";
+    private static final String VCF_PUBLISH_URL_FORMAT = VCF_API_BASE + "/contentFragments/%s/%s/%s.html";
+
     @Self(injectionStrategy = InjectionStrategy.REQUIRED)
     private SlingHttpServletRequest slingHttpServletRequest;
 
@@ -85,6 +92,9 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
 
     @OSGiService
     private ModelFactory modelFactory;
+
+    @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private SlingSettingsService slingSettingsService;
 
     @SlingObject
     private ResourceResolver resourceResolver;
@@ -115,9 +125,6 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     private DAMContentFragment damContentFragment = new EmptyContentFragment();
 
     private String fragmentId;
-
-    private static final String MASTER_VARIATION = "master";
-    private static final String VCF_PUBLISH_URL_FORMAT = "/adobe/experimental/previewtemplates-expires-20260301/contentFragments/%s/%s/%s.html";
 
     @PostConstruct
     private void initModel() {
@@ -250,13 +257,39 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
 
     @Nullable
     @Override
-    public String getVcfPublishUrl() {
-        if (!"vcf".equals(displayMode) || StringUtils.isEmpty(vcfTemplate) || StringUtils.isEmpty(fragmentId)) {
+    public String getVcfRenderUrl() {
+        if (!"vcf".equals(displayMode) || StringUtils.isEmpty(fragmentId)) {
             return null;
         }
-        String variation = StringUtils.isNotEmpty(variationName) && !MASTER_VARIATION.equals(variationName)
-            ? variationName : "main";
+        return isPublishRunMode() ? buildPublishUrl() : buildAuthorPreviewUrl();
+    }
+
+    private String buildPublishUrl() {
+        if (StringUtils.isEmpty(vcfTemplate)) {
+            return null;
+        }
+        String variation = hasNonMasterVariation() ? variationName : "main";
         return String.format(VCF_PUBLISH_URL_FORMAT, vcfTemplate, fragmentId, variation);
+    }
+
+    private String buildAuthorPreviewUrl() {
+        String url = String.format(VCF_AUTHOR_URL_FORMAT, fragmentId);
+        List<String> params = new ArrayList<>();
+        if (StringUtils.isNotEmpty(vcfTemplate)) {
+            params.add("templateId=" + vcfTemplate);
+        }
+        if (hasNonMasterVariation()) {
+            params.add("variation=" + variationName);
+        }
+        return params.isEmpty() ? url : url + "?" + String.join("&", params);
+    }
+
+    private boolean hasNonMasterVariation() {
+        return StringUtils.isNotEmpty(variationName) && !MASTER_VARIATION.equals(variationName);
+    }
+
+    private boolean isPublishRunMode() {
+        return slingSettingsService != null && slingSettingsService.getRunModes().contains(PUBLISH_RUN_MODE);
     }
 
     @Override

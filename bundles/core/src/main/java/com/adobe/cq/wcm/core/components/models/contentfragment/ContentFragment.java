@@ -133,15 +133,17 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
     }
 
     /**
-     * Returns the publish delivery URL for a Visual Content Fragment, or {@code null}
+     * Returns the render URL for a Visual Content Fragment, or {@code null}
      * when VCF display mode is not active or the required configuration is missing.
+     * On author instances the URL points to the preview API; on publish instances
+     * it points to the publish delivery endpoint.
      *
-     * @return the publish VCF URL, or {@code null}
+     * @return the VCF render URL, or {@code null}
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
      */
     @Nullable
     @JsonIgnore
-    default String getVcfPublishUrl() {
+    default String getVcfRenderUrl() {
         return null;
     }
 }

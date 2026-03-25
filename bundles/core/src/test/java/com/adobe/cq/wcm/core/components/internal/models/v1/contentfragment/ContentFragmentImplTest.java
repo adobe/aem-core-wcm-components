@@ -264,49 +264,51 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
         assertArrayEquals(new String[]{MAIN_CONTENT}, contentFragment.getParagraphs());
     }
 
+    // Publish mode tests (default mock context has "publish" run mode)
+
     @Test
-    void vcfPublishUrlWithTemplate() {
+    void vcfRenderUrlWithTemplate() {
         ContentFragment fragment = getModelInstanceUnderTest("vcf-with-template");
         assertEquals(
             "/adobe/experimental/previewtemplates-expires-20260301/contentFragments/hero-banner/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/main.html",
-            fragment.getVcfPublishUrl());
+            fragment.getVcfRenderUrl());
     }
 
     @Test
-    void vcfPublishUrlWithVariation() {
+    void vcfRenderUrlWithVariation() {
         ContentFragment fragment = getModelInstanceUnderTest("vcf-with-template-and-variation");
         assertEquals(
             "/adobe/experimental/previewtemplates-expires-20260301/contentFragments/hero-banner/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/teaser.html",
-            fragment.getVcfPublishUrl());
+            fragment.getVcfRenderUrl());
     }
 
     @Test
-    void vcfPublishUrlWithoutTemplate() {
+    void vcfRenderUrlWithoutTemplate() {
         ContentFragment fragment = getModelInstanceUnderTest("vcf-without-template");
-        assertNull(fragment.getVcfPublishUrl());
+        assertNull(fragment.getVcfRenderUrl());
     }
 
     @Test
-    void vcfPublishUrlNonVcfMode() {
+    void vcfRenderUrlNonVcfMode() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
-        assertNull(fragment.getVcfPublishUrl());
+        assertNull(fragment.getVcfRenderUrl());
     }
 
     @Test
-    void vcfPublishUrlMasterVariationMapsToMain() {
+    void vcfRenderUrlMasterVariationMapsToMain() {
         ContentFragment fragment = getModelInstanceUnderTest("vcf-with-master-variation");
         assertEquals(
             "/adobe/experimental/previewtemplates-expires-20260301/contentFragments/hero-banner/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/main.html",
-            fragment.getVcfPublishUrl());
+            fragment.getVcfRenderUrl());
     }
 
     @Test
-    void vcfPublishUrlWithJcrContentUuid() {
+    void vcfRenderUrlWithJcrContentUuid() {
         ContentFragment fragment = getModelInstanceUnderTest("vcf-with-structured-fragment");
         assertEquals("b2a7f9c1-3e5d-4f8a-9c1e-d7b3a2f5e8c4", fragment.getFragmentId());
         assertEquals(
             "/adobe/experimental/previewtemplates-expires-20260301/contentFragments/hero-banner/b2a7f9c1-3e5d-4f8a-9c1e-d7b3a2f5e8c4/main.html",
-            fragment.getVcfPublishUrl());
+            fragment.getVcfRenderUrl());
     }
 
     @Test
@@ -328,10 +330,10 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
     }
 
     @Test
-    void vcfPublishUrlNullWhenNoFragmentId() {
+    void vcfRenderUrlNullWhenNoFragmentId() {
         ContentFragment fragment = getModelInstanceUnderTest("vcf-no-fragment-id");
         assertNull(fragment.getFragmentId());
-        assertNull(fragment.getVcfPublishUrl());
+        assertNull(fragment.getVcfRenderUrl());
     }
 
     @Test
