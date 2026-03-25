@@ -264,6 +264,44 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
         assertArrayEquals(new String[]{MAIN_CONTENT}, contentFragment.getParagraphs());
     }
 
+    // Author mode tests (override SlingSettingsService to remove "publish" run mode)
+
+    @Test
+    void vcfAuthorRenderUrlWithTemplate() {
+        context.runMode("author");
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-template");
+        assertEquals(
+            "/adobe/experimental/previewtemplates-expires-20260301/sites/cf/fragments/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/preview?templateId=hero-banner",
+            fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfAuthorRenderUrlWithVariation() {
+        context.runMode("author");
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-template-and-variation");
+        assertEquals(
+            "/adobe/experimental/previewtemplates-expires-20260301/sites/cf/fragments/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/preview?templateId=hero-banner&variation=teaser",
+            fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfAuthorRenderUrlMasterVariation() {
+        context.runMode("author");
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-master-variation");
+        assertEquals(
+            "/adobe/experimental/previewtemplates-expires-20260301/sites/cf/fragments/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/preview?templateId=hero-banner",
+            fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfAuthorRenderUrlWithoutTemplate() {
+        context.runMode("author");
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-without-template");
+        assertEquals(
+            "/adobe/experimental/previewtemplates-expires-20260301/sites/cf/fragments/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/preview",
+            fragment.getVcfRenderUrl());
+    }
+
     // Publish mode tests (default mock context has "publish" run mode)
 
     @Test
