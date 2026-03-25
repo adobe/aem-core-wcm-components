@@ -73,10 +73,15 @@
                     if (!el) return;
                     var url = script.getAttribute("data-vcf-url");
                     if (!url) return;
+                    var shadow = el.attachShadow({ mode: "open" });
+                    var body = document.createElement("body");
+                    body.style.display = "none";
+                    shadow.appendChild(body);
                     fetch(url)
                         .then(function(r) { return r.ok ? r.text() : Promise.reject(r.status); })
                         .then(function(html) {
-                            el.innerHTML = html;
+                            body.innerHTML = html;
+                            body.style.display = "";
                         });
                 })();
             </script>
