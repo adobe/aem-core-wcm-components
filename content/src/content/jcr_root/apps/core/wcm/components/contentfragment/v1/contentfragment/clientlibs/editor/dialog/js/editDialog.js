@@ -435,11 +435,13 @@
                         var item = new Coral.Select.Item();
                         item.content.textContent = template.name;
                         item.value = template.id;
-                        if (template.id === currentValue) {
-                            item.selected = true;
-                        }
                         vcfTemplateSelector.items.add(item);
                     });
+                }
+                // Set value after all items are added so Coral Select
+                // recognises the selection reliably
+                if (currentValue) {
+                    vcfTemplateSelector.value = currentValue;
                 }
             }, function() {
                 vcfTemplateSelector.items.clear();
