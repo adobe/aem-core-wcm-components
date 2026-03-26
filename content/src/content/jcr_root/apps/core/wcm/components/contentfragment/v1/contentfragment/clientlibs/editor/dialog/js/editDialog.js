@@ -42,8 +42,9 @@
     // mode for Content Fragment Visualization
     var VCF_DISPLAY_MODE = "vcf";
 
-    // Content Fragment Visualization API base path (relative to AEM author host)
-    var VCF_TEMPLATES_API_BASE = "/adobe/experimental/previewtemplates-expires-20260301/sites/cf/models";
+    // VCF templates API base path — read from the component's data attribute at dialog init
+    var vcfTemplatesApiBase;
+    var vcfTemplatesApiDeferred;
 
     // ui helper
     var ui = $(window).adaptTo("foundation-ui");
@@ -418,10 +419,13 @@
             return;
         }
 
-        storedVcfTemplateDeferred.done(function(storedValue) {
+        $.when(vcfTemplatesApiDeferred, storedVcfTemplateDeferred).done(function(_, storedValue) {
+            if (!vcfTemplatesApiBase) {
+                return;
+            }
             var currentValue = vcfTemplateSelector.value || storedValue;
             storedVcfTemplateDeferred = $.Deferred().resolve("");
-            var url = VCF_TEMPLATES_API_BASE + "/" + encodeURIComponent(modelId) + "/templates?limit=50";
+            var url = vcfTemplatesApiBase + "/" + encodeURIComponent(modelId) + "/templates?limit=50";
 
             $.ajax({
                 url: url,
@@ -479,10 +483,37 @@
         vcfModeFields = dialog.querySelectorAll(SELECTOR_VCF_MODE_FIELDS);
         vcfTemplateSelector = dialog.querySelector(SELECTOR_VCF_TEMPLATE);
 
+        // read VCF templates API base from any content fragment element in the content frame
+        vcfTemplatesApiBase = null;
+        try {
+            var contentDoc = Granite.author.ContentFrame.contentWindow.document;
+            var vcfEl = contentDoc.querySelector("[data-cmp-contentfragment-vcf-templates-api]");
+            if (vcfEl) {
+                vcfTemplatesApiBase = vcfEl.getAttribute("data-cmp-contentfragment-vcf-templates-api");
+            }
+        } catch (e) {
+            // content frame not available
+        }
+
         storedVcfTemplateDeferred = $.Deferred();
         var componentPathEl = dialog.querySelector("[data-component-path]");
         var componentPath = componentPathEl ? componentPathEl.dataset.componentPath : null;
         if (componentPath) {
+            // resolve vcfTemplatesApiBase: use DOM value if available, otherwise fetch component HTML
+            if (vcfTemplatesApiBase) {
+                vcfTemplatesApiDeferred = $.Deferred().resolve();
+            } else {
+                vcfTemplatesApiDeferred = $.Deferred();
+                $.get(componentPath + ".html").done(function(html) {
+                    var match = html.match(/data-cmp-contentfragment-vcf-templates-api="([^"]*)"/);
+                    if (match) {
+                        vcfTemplatesApiBase = match[1];
+                    }
+                }).always(function() {
+                    vcfTemplatesApiDeferred.resolve();
+                });
+            }
+
             $.getJSON(componentPath + ".json").then(
                 function(data) {
                     storedVcfTemplateDeferred.resolve((data && data.vcfTemplate) || "");
@@ -493,6 +524,7 @@
             );
         } else {
             storedVcfTemplateDeferred.resolve("");
+            vcfTemplatesApiDeferred = $.Deferred().resolve();
         }
 
         // initialize state variables

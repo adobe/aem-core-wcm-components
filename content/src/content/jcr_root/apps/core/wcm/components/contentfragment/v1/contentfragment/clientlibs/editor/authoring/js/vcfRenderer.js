@@ -17,34 +17,17 @@
     "use strict";
 
     var VCF_SELECTOR = ".cmp-contentfragment--vcf";
-    var ATTR_FRAGMENT_ID = "data-cmp-contentfragment-id";
-    var ATTR_VCF_TEMPLATE = "data-cmp-contentfragment-vcf-template";
-    var ATTR_VARIATION = "data-cmp-contentfragment-variation";
-    var VCF_API_BASE = "/adobe/experimental/previewtemplates-expires-20260301/sites/cf/fragments";
+    var ATTR_VCF_URL = "data-cmp-contentfragment-vcf-url";
     var LOADING_ATTR = "data-vcf-loading";
 
     var _observer = null;
 
     function loadVisualContentFragment(element) {
-        var fragmentId = element.getAttribute(ATTR_FRAGMENT_ID);
-        var templateId = element.getAttribute(ATTR_VCF_TEMPLATE);
-        if (!fragmentId || element.getAttribute(LOADING_ATTR)) {
+        var url = element.getAttribute(ATTR_VCF_URL);
+        if (!url || element.getAttribute(LOADING_ATTR)) {
             return;
         }
         element.setAttribute(LOADING_ATTR, "true");
-
-        var url = VCF_API_BASE + "/" + fragmentId + "/preview";
-        var params = [];
-        if (templateId) {
-            params.push("templateId=" + encodeURIComponent(templateId));
-        }
-        var variation = element.getAttribute(ATTR_VARIATION);
-        if (variation && variation !== "master") {
-            params.push("variation=" + encodeURIComponent(variation));
-        }
-        if (params.length > 0) {
-            url += "?" + params.join("&");
-        }
 
         $.ajax({
             url: url,
@@ -56,13 +39,16 @@
                 var contentDoc = getContentFrameDocument();
                 if (contentDoc) {
                     target = contentDoc.querySelector(
-                        VCF_SELECTOR + "[" + ATTR_FRAGMENT_ID + "=\"" + fragmentId + "\"]"
+                        VCF_SELECTOR + "[" + ATTR_VCF_URL + "=\"" + url + "\"]"
                     );
                 }
             }
             if (target) {
                 target.innerHTML = html;
+                target.removeAttribute(LOADING_ATTR);
             }
+        }, function() {
+            element.removeAttribute(LOADING_ATTR);
         });
     }
 

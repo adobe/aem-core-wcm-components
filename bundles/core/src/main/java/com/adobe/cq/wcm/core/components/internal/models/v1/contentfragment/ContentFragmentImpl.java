@@ -77,9 +77,11 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
 
     private static final String MASTER_VARIATION = "master";
     private static final String PUBLISH_RUN_MODE = "publish";
+    private static final String VCF_DISPLAY_MODE = "vcf";
     private static final String VCF_API_BASE = "/adobe/experimental/previewtemplates-expires-20260301";
     private static final String VCF_AUTHOR_URL_FORMAT = VCF_API_BASE + "/sites/cf/fragments/%s/preview";
     private static final String VCF_PUBLISH_URL_FORMAT = VCF_API_BASE + "/contentFragments/%s/%s/%s.html";
+    private static final String VCF_TEMPLATES_API_BASE = VCF_API_BASE + "/sites/cf/models";
 
     @Self(injectionStrategy = InjectionStrategy.REQUIRED)
     private SlingHttpServletRequest slingHttpServletRequest;
@@ -258,10 +260,25 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     @Nullable
     @Override
     public String getVcfRenderUrl() {
-        if (!"vcf".equals(displayMode) || StringUtils.isEmpty(fragmentId)) {
+        if (!isVcfMode() || StringUtils.isEmpty(fragmentId)) {
             return null;
         }
         return isPublishRunMode() ? buildPublishUrl() : buildAuthorPreviewUrl();
+    }
+
+    @Override
+    public boolean isVcfAuthRequired() {
+        return isVcfMode() && !isPublishRunMode();
+    }
+
+    @Nullable
+    @Override
+    public String getVcfTemplatesApiBase() {
+        return VCF_TEMPLATES_API_BASE;
+    }
+
+    private boolean isVcfMode() {
+        return VCF_DISPLAY_MODE.equals(displayMode);
     }
 
     private String buildPublishUrl() {

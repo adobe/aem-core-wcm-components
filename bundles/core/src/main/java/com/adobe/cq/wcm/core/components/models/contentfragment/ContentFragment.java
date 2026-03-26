@@ -146,4 +146,31 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
     default String getVcfRenderUrl() {
         return null;
     }
+
+    /**
+     * Returns whether the VCF preview API requires authentication.
+     * This is {@code true} on author instances (where an IMS Bearer token
+     * must be sent) and {@code false} on publish instances.
+     *
+     * @return {@code true} if VCF auth is required
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
+     */
+    @JsonIgnore
+    default boolean isVcfAuthRequired() {
+        return false;
+    }
+
+    /**
+     * Returns the base URL for the VCF templates API, or {@code null} when VCF
+     * display mode is not active. The dialog appends
+     * {@code /{modelId}/templates} to this base.
+     *
+     * @return the VCF templates API base URL, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
+     */
+    @Nullable
+    @JsonIgnore
+    default String getVcfTemplatesApiBase() {
+        return null;
+    }
 }
