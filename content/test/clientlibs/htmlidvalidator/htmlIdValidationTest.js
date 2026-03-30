@@ -15,6 +15,7 @@
  ******************************************************************************/
 describe("HTML ID Validator Path Sanitization", function() {
     let originalAjax;
+    let originalIsEnabled;
     let ajaxCalls = [];
 
     beforeAll(function() {
@@ -26,6 +27,7 @@ describe("HTML ID Validator Path Sanitization", function() {
 
         // Store original AJAX and replace with spy
         originalAjax = window.$.ajax;
+        originalIsEnabled = window.Granite.Toggles.isEnabled;
         ajaxCalls = [];
 
         window.$.ajax = function(options) {
@@ -36,6 +38,16 @@ describe("HTML ID Validator Path Sanitization", function() {
             } else if (options.url.endsWith('.html?wcmmode=disabled')) {
                 options.success?.('<div>no matching ids</div>');
             }
+        };
+
+        // Helper function to enable/disable the CT_SANITIZE_ENCODE_PATH toggle
+        this.setToggleEnabled = function(enabled) {
+            window.Granite.Toggles.isEnabled = function(feature) {
+                if (feature === "CT_SITES-33116") {
+                    return enabled;
+                }
+                return false;
+            };
         };
 
         // Helper function to create mock elements
@@ -71,12 +83,79 @@ describe("HTML ID Validator Path Sanitization", function() {
         this.clearAjaxCalls = function() {
             ajaxCalls = [];
         };
+
+        // Helper function to get the validator
+        this.getValidator = function() {
+            return window.foundationRegistry.validators[0];
+        };
+
+        // Helper function to reset state for toggle disabled test
+        this.resetForDisabledToggle = function() {
+            this.clearAjaxCalls();
+            this.setToggleEnabled(false);
+        };
+
+        // Helper function to assert path was blocked (toggle enabled behavior)
+        this.expectPathBlocked = function() {
+            expect(console.warn).toHaveBeenCalledWith(jasmine.stringMatching(/Invalid page path detected/));
+            expect(ajaxCalls.length).toBe(0);
+        };
+
+        // Helper function to assert path was allowed (toggle disabled/legacy behavior)
+        this.expectPathAllowed = function() {
+            expect(console.warn).not.toHaveBeenCalled();
+            expect(ajaxCalls.length).toBeGreaterThan(0);
+        };
+
+        // Helper function to reset console.warn spy
+        this.resetWarnSpy = function() {
+            if (console.warn.calls) {
+                console.warn.calls.reset();
+            }
+        };
+
+        // Helper function to validate and get the HTML URL
+        this.validateAndGetHtmlUrl = function(mockElement) {
+            this.getValidator().validate(mockElement);
+            const url = this.getLastAjaxUrl();
+            return url?.endsWith('.html?wcmmode=disabled') ? url : null;
+        };
+
+        // Helper function to test path is allowed in both toggle states
+        this.expectPathAllowedInBothStates = function(mockElement) {
+            const validator = this.getValidator();
+
+            this.setToggleEnabled(true);
+            validator.validate(mockElement);
+            expect(ajaxCalls.length).toBeGreaterThan(0);
+
+            this.resetForDisabledToggle();
+            validator.validate(mockElement);
+            expect(ajaxCalls.length).toBeGreaterThan(0);
+        };
+
+        // Helper function to test path is blocked when enabled, allowed when disabled
+        this.expectBlockedWhenEnabledAllowedWhenDisabled = function(mockElement) {
+            const validator = this.getValidator();
+
+            this.setToggleEnabled(true);
+            validator.validate(mockElement);
+            this.expectPathBlocked();
+
+            this.resetWarnSpy();
+            this.resetForDisabledToggle();
+            validator.validate(mockElement);
+            this.expectPathAllowed();
+        };
     });
 
     afterEach(function() {
-        // Restore original AJAX
+        // Restore original AJAX and toggle
         if (originalAjax) {
             window.$.ajax = originalAjax;
+        }
+        if (originalIsEnabled) {
+            window.Granite.Toggles.isEnabled = originalIsEnabled;
         }
         fixture.cleanup();
     });
@@ -86,16 +165,19 @@ describe("HTML ID Validator Path Sanitization", function() {
             spyOn(console, 'warn');
             const mockElement = this.createMockElement('/content/../../../etc/passwd/_jcr_content/root/component', 'unique-id');
 
-            // Get the validator from foundation registry
-            const validator = window.foundationRegistry.validators[0];
-            validator.validate(mockElement);
-
-            // Check that the AJAX call was made with sanitized URL
-            const ajaxUrl = this.getLastAjaxUrl();
-            if (ajaxUrl?.endsWith('.html?wcmmode=disabled')) {
-                // The URL should have path traversal sequences removed
+            // Test with toggle ENABLED - should sanitize path traversal
+            this.setToggleEnabled(true);
+            let ajaxUrl = this.validateAndGetHtmlUrl(mockElement);
+            if (ajaxUrl) {
                 expect(ajaxUrl).toMatch(/^\/content\/etc\/passwd\.html/);
                 expect(ajaxUrl).not.toContain('..');
+            }
+
+            // Test with toggle DISABLED - should encode but not sanitize
+            this.resetForDisabledToggle();
+            ajaxUrl = this.validateAndGetHtmlUrl(mockElement);
+            if (ajaxUrl) {
+                expect(ajaxUrl).toContain('%2E%2E');
             }
         });
 
@@ -103,35 +185,20 @@ describe("HTML ID Validator Path Sanitization", function() {
             spyOn(console, 'warn');
 
             const dangerousChars = ['<', '>', '"', '|', '*', '?'];
-            const validator = window.foundationRegistry.validators[0];
 
             dangerousChars.forEach(function(char) {
-                console.warn.calls.reset(); // Reset spy between iterations
-                this.clearAjaxCalls(); // Clear previous AJAX calls
+                this.resetWarnSpy();
+                this.clearAjaxCalls();
 
                 const mockElement = this.createMockElement('/content/test' + char + 'malicious/_jcr_content/root/component', 'test-id');
-
-                validator.validate(mockElement);
-
-                // Should log a warning for dangerous characters
-                expect(console.warn).toHaveBeenCalledWith(jasmine.stringMatching(/Invalid page path detected/));
-
-                // Should not make AJAX call for invalid paths
-                expect(ajaxCalls.length).toBe(0);
+                this.expectBlockedWhenEnabledAllowedWhenDisabled(mockElement);
             }.bind(this));
         });
 
         it("should prevent XSS attempts in paths", function() {
             spyOn(console, 'warn');
-
             const mockElement = this.createMockElement('/content/test<script>alert("xss")</script>/_jcr_content/root/component', 'test-id');
-            const validator = window.foundationRegistry.validators[0];
-
-            validator.validate(mockElement);
-
-            expect(console.warn).toHaveBeenCalledWith(jasmine.stringMatching(/Invalid page path detected/));
-            // Should not make AJAX call for invalid paths
-            expect(ajaxCalls.length).toBe(0);
+            this.expectBlockedWhenEnabledAllowedWhenDisabled(mockElement);
         });
 
         it("should allow valid AEM paths", function() {
@@ -142,106 +209,90 @@ describe("HTML ID Validator Path Sanitization", function() {
                 '/content/mysite/en/page.with.dots/_jcr_content/root/component'
             ];
 
-            const validator = window.foundationRegistry.validators[0];
-
             validPaths.forEach(function(path) {
                 this.clearAjaxCalls();
                 const mockElement = this.createMockElement(path, 'unique-id');
-
-                validator.validate(mockElement);
-
-                // Should make AJAX calls for valid paths (indicating they passed sanitization)
-                expect(ajaxCalls.length).toBeGreaterThan(0);
+                this.expectPathAllowedInBothStates(mockElement);
             }.bind(this));
         });
 
         it("should normalize multiple slashes in paths", function() {
             const mockElement = this.createMockElement('/content//test///page/_jcr_content/root/component', 'test-id');
-            const validator = window.foundationRegistry.validators[0];
 
-            validator.validate(mockElement);
-
-            // Check that the AJAX call was made with normalized URL
-            const ajaxUrl = this.getLastAjaxUrl();
-            if (ajaxUrl?.endsWith('.html?wcmmode=disabled')) {
-                // Verify the URL has normalized slashes
+            // Test with toggle ENABLED - should normalize slashes
+            this.setToggleEnabled(true);
+            let ajaxUrl = this.validateAndGetHtmlUrl(mockElement);
+            if (ajaxUrl) {
                 expect(ajaxUrl).toMatch(/^\/content\/test\/page\.html/);
-                expect(ajaxUrl).not.toMatch(/\/\//); // Should not contain double slashes
+                expect(ajaxUrl).not.toMatch(/\/\//);
+            }
+
+            // Test with toggle DISABLED - should NOT normalize slashes
+            this.resetForDisabledToggle();
+            ajaxUrl = this.validateAndGetHtmlUrl(mockElement);
+            if (ajaxUrl) {
+                expect(ajaxUrl).toContain('%2F%2F');
             }
         });
 
         it("should reject paths that don't start with forward slash", function() {
             spyOn(console, 'warn');
-
             const mockElement = this.createMockElement('content/test/page/_jcr_content/root/component', 'test-id');
-            const validator = window.foundationRegistry.validators[0];
-
-            validator.validate(mockElement);
-
-            expect(console.warn).toHaveBeenCalledWith(jasmine.stringMatching(/Invalid page path detected/));
-            // Should not make AJAX call for invalid paths
-            expect(ajaxCalls.length).toBe(0);
+            this.expectBlockedWhenEnabledAllowedWhenDisabled(mockElement);
         });
 
         it("should handle null or undefined compPath", function() {
-            const validator = window.foundationRegistry.validators[0];
-            const mockElement1 = this.createMockElement(null, 'test-id');
-            const mockElement2 = this.createMockElement(undefined, 'test-id');
-            const mockElement3 = this.createMockElement('', 'test-id');
+            const validator = this.getValidator();
+            const mockElements = [
+                this.createMockElement(null, 'test-id'),
+                this.createMockElement(undefined, 'test-id'),
+                this.createMockElement('', 'test-id')
+            ];
 
-            // All should return early due to invalid compPath - no AJAX calls should be made
-            validator.validate(mockElement1);
-            validator.validate(mockElement2);
-            validator.validate(mockElement3);
+            // Test with toggle ENABLED
+            this.setToggleEnabled(true);
+            mockElements.forEach(function(el) { validator.validate(el); });
+            expect(ajaxCalls.length).toBe(0);
 
+            // Test with toggle DISABLED - same behavior
+            this.resetForDisabledToggle();
+            mockElements.forEach(function(el) { validator.validate(el); });
             expect(ajaxCalls.length).toBe(0);
         });
 
         it("should properly encode paths with spaces for URL construction", function() {
             const mockElement = this.createMockElement('/content/my site/en/page with spaces/_jcr_content/root/component', 'test-id');
-            const validator = window.foundationRegistry.validators[0];
+            const expectedPattern = /\/content\/my%20site\/en\/page%20with%20spaces\.html/;
 
-            validator.validate(mockElement);
+            // Test with toggle ENABLED
+            this.setToggleEnabled(true);
+            let ajaxUrl = this.validateAndGetHtmlUrl(mockElement);
+            if (ajaxUrl) {
+                expect(ajaxUrl).toMatch(expectedPattern);
+            }
 
-            // Check that the AJAX call was made with properly encoded URL
-            const ajaxUrl = this.getLastAjaxUrl();
-            if (ajaxUrl?.endsWith('.html?wcmmode=disabled')) {
-                // Verify spaces are properly encoded but slashes are preserved
-                expect(ajaxUrl).toMatch(/\/content\/my%20site\/en\/page%20with%20spaces\.html/);
+            // Test with toggle DISABLED - same encoding behavior
+            this.resetForDisabledToggle();
+            ajaxUrl = this.validateAndGetHtmlUrl(mockElement);
+            if (ajaxUrl) {
+                expect(ajaxUrl).toMatch(expectedPattern);
             }
         });
 
         it("should handle paths with dots correctly", function() {
             const mockElement = this.createMockElement('/content/mysite/en/page.with.dots/_jcr_content/root/component', 'test-id');
-            const validator = window.foundationRegistry.validators[0];
-
-            validator.validate(mockElement);
-
-            // Should make AJAX calls for valid paths with dots
-            expect(ajaxCalls.length).toBeGreaterThan(0);
+            this.expectPathAllowedInBothStates(mockElement);
         });
 
         it("should handle paths with underscores and hyphens", function() {
             const mockElement = this.createMockElement('/content/my-site/en/page_with_underscores/_jcr_content/root/component', 'test-id');
-            const validator = window.foundationRegistry.validators[0];
-
-            validator.validate(mockElement);
-
-            // Should make AJAX calls for valid paths with underscores and hyphens
-            expect(ajaxCalls.length).toBeGreaterThan(0);
+            this.expectPathAllowedInBothStates(mockElement);
         });
 
         it("should block paths ending with question mark", function() {
             spyOn(console, 'warn');
-
             const mockElement = this.createMockElement('/content/test/page?/_jcr_content/root/component', 'test-id');
-            const validator = window.foundationRegistry.validators[0];
-
-            validator.validate(mockElement);
-
-            expect(console.warn).toHaveBeenCalledWith(jasmine.stringMatching(/Invalid page path detected/));
-            // Should not make AJAX call for invalid paths
-            expect(ajaxCalls.length).toBe(0);
+            this.expectBlockedWhenEnabledAllowedWhenDisabled(mockElement);
         });
     });
 });
