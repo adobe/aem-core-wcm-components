@@ -349,6 +349,103 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
             fragment.getVcfRenderUrl());
     }
 
+    // ====== GA (FT_CFVS_GA enabled) Author mode tests ======
+
+    @Test
+    void vcfGaAuthorRenderUrlWithTemplate() {
+        configureGaVcfUrls();
+        context.runMode("author");
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-template");
+        assertEquals(
+            "/adobe/contentFragments/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/preview?templateId=hero-banner",
+            fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaAuthorRenderUrlWithVariation() {
+        configureGaVcfUrls();
+        context.runMode("author");
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-template-and-variation");
+        assertEquals(
+            "/adobe/contentFragments/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/preview?templateId=hero-banner&variation=teaser",
+            fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaAuthorRenderUrlMasterVariation() {
+        configureGaVcfUrls();
+        context.runMode("author");
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-master-variation");
+        assertEquals(
+            "/adobe/contentFragments/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/preview?templateId=hero-banner",
+            fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaAuthorRenderUrlWithoutTemplate() {
+        configureGaVcfUrls();
+        context.runMode("author");
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-without-template");
+        assertEquals(
+            "/adobe/contentFragments/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/preview",
+            fragment.getVcfRenderUrl());
+    }
+
+    // ====== GA (FT_CFVS_GA enabled) Publish mode tests ======
+
+    @Test
+    void vcfGaRenderUrlWithTemplate() {
+        configureGaVcfUrls();
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-template");
+        assertEquals(
+            "/adobe/contentFragments/hero-banner/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/main.html",
+            fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaRenderUrlWithVariation() {
+        configureGaVcfUrls();
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-template-and-variation");
+        assertEquals(
+            "/adobe/contentFragments/hero-banner/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/teaser.html",
+            fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaRenderUrlWithoutTemplate() {
+        configureGaVcfUrls();
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-without-template");
+        assertNull(fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaRenderUrlMasterVariationMapsToMain() {
+        configureGaVcfUrls();
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-master-variation");
+        assertEquals(
+            "/adobe/contentFragments/hero-banner/5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4/main.html",
+            fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaRenderUrlWithJcrContentUuid() {
+        configureGaVcfUrls();
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-structured-fragment");
+        assertEquals("b2a7f9c1-3e5d-4f8a-9c1e-d7b3a2f5e8c4", fragment.getFragmentId());
+        assertEquals(
+            "/adobe/contentFragments/hero-banner/b2a7f9c1-3e5d-4f8a-9c1e-d7b3a2f5e8c4/main.html",
+            fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaTemplatesApiBase() {
+        configureGaVcfUrls();
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-template");
+        assertEquals("/adobe/contentFragments/models", fragment.getVcfTemplatesApiBase());
+    }
+
+    // ====== Fragment ID tests ======
+
     @Test
     void fragmentIdFromDirectNode() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);

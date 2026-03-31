@@ -77,6 +77,7 @@
                             com.day.cq.dam.api.handler;version="[2,3)",
                             com.adobe.cq.dam.cfm.content;version="[1.1,2)",
                             com.adobe.cq.dam.cfm.converter;version="[1,2)",
+                            com.adobe.cq.dam.cfm.vcf;version="[1.0,2)",
                             *
                         </Import-Package>
                     </instructions>
@@ -523,6 +524,12 @@
             <artifactId>imageio-tiff</artifactId>
             <version>3.8.1</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.cq.dam</groupId>
+            <artifactId>cq-dam-cfm-api</artifactId>
+            <version>1.4.61-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.adobe.aem</groupId>

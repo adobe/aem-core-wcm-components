@@ -41,6 +41,7 @@ import org.apache.sling.settings.SlingSettingsService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.adobe.cq.dam.cfm.vcf.VcfUrlProvider;
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
 import com.adobe.cq.export.json.ComponentExporter;
@@ -78,10 +79,6 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     private static final String MASTER_VARIATION = "master";
     private static final String PUBLISH_RUN_MODE = "publish";
     private static final String VCF_DISPLAY_MODE = "vcf";
-    private static final String VCF_API_BASE = "/adobe/experimental/previewtemplates-expires-20260301";
-    private static final String VCF_AUTHOR_URL_FORMAT = VCF_API_BASE + "/sites/cf/fragments/%s/preview";
-    private static final String VCF_PUBLISH_URL_FORMAT = VCF_API_BASE + "/contentFragments/%s/%s/%s.html";
-    private static final String VCF_TEMPLATES_API_BASE = VCF_API_BASE + "/sites/cf/models";
 
     @Self(injectionStrategy = InjectionStrategy.REQUIRED)
     private SlingHttpServletRequest slingHttpServletRequest;
@@ -97,6 +94,9 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
 
     @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
     private SlingSettingsService slingSettingsService;
+
+    @OSGiService
+    private VcfUrlProvider vcfUrlProvider;
 
     @SlingObject
     private ResourceResolver resourceResolver;
@@ -274,7 +274,7 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     @Nullable
     @Override
     public String getVcfTemplatesApiBase() {
-        return VCF_TEMPLATES_API_BASE;
+        return vcfUrlProvider.getVcfTemplatesApiBase();
     }
 
     private boolean isVcfMode() {
@@ -286,11 +286,11 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
             return null;
         }
         String variation = hasNonMasterVariation() ? variationName : "main";
-        return String.format(VCF_PUBLISH_URL_FORMAT, vcfTemplate, fragmentId, variation);
+        return String.format(vcfUrlProvider.getVcfPublishUrlFormat(), vcfTemplate, fragmentId, variation);
     }
 
     private String buildAuthorPreviewUrl() {
-        String url = String.format(VCF_AUTHOR_URL_FORMAT, fragmentId);
+        String url = String.format(vcfUrlProvider.getVcfAuthorUrlFormat(), fragmentId);
         List<String> params = new ArrayList<>();
         if (StringUtils.isNotEmpty(vcfTemplate)) {
             params.add("templateId=" + vcfTemplate);

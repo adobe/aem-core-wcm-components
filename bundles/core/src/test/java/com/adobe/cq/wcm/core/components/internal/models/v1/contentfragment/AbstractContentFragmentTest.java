@@ -28,6 +28,7 @@ import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
+import com.adobe.cq.dam.cfm.vcf.VcfUrlProvider;
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
 import com.adobe.cq.sightly.WCMBindings;
@@ -96,6 +97,29 @@ public abstract class AbstractContentFragmentTest<T> {
     }
 
     static FragmentRenderService fragmentRenderService;
+    static VcfUrlProvider vcfUrlProviderMock;
+
+    /**
+     * Configures the VcfUrlProvider mock to return legacy (FT disabled) URLs.
+     */
+    static void configureLegacyVcfUrls() {
+        String vcfApiBase = "/adobe/experimental/previewtemplates-expires-20260301";
+        when(vcfUrlProviderMock.getVcfApiBase()).thenReturn(vcfApiBase);
+        when(vcfUrlProviderMock.getVcfAuthorUrlFormat()).thenReturn(vcfApiBase + "/sites/cf/fragments/%s/preview");
+        when(vcfUrlProviderMock.getVcfPublishUrlFormat()).thenReturn(vcfApiBase + "/contentFragments/%s/%s/%s.html");
+        when(vcfUrlProviderMock.getVcfTemplatesApiBase()).thenReturn(vcfApiBase + "/sites/cf/models");
+    }
+
+    /**
+     * Configures the VcfUrlProvider mock to return GA (FT enabled) URLs.
+     */
+    static void configureGaVcfUrls() {
+        String vcfApiBase = "/adobe";
+        when(vcfUrlProviderMock.getVcfApiBase()).thenReturn(vcfApiBase);
+        when(vcfUrlProviderMock.getVcfAuthorUrlFormat()).thenReturn(vcfApiBase + "/contentFragments/%s/preview");
+        when(vcfUrlProviderMock.getVcfPublishUrlFormat()).thenReturn(vcfApiBase + "/contentFragments/%s/%s/%s.html");
+        when(vcfUrlProviderMock.getVcfTemplatesApiBase()).thenReturn(vcfApiBase + "/contentFragments/models");
+    }
 
     QueryBuilder queryBuilderMock;
 
@@ -132,6 +156,10 @@ public abstract class AbstractContentFragmentTest<T> {
         fragmentRenderService = mock(FragmentRenderService.class);
         context.registerService(FragmentRenderService.class, fragmentRenderService);
         context.registerService(ContentTypeConverter.class, mock(ContentTypeConverter.class));
+
+        vcfUrlProviderMock = mock(VcfUrlProvider.class);
+        configureLegacyVcfUrls();
+        context.registerService(VcfUrlProvider.class, vcfUrlProviderMock);
 
         queryBuilderMock = Mockito.mock(QueryBuilder.class);
     }
