@@ -65,6 +65,8 @@ public class LinkUtil {
 
     private static final String TEL_PATTERN = "tel";
 
+    private static final String QUICKVIEW_PATTERN = "quickview";
+
     //SITES-18137: imitate the exact behavior of com.google.common.net.URL_FRAGMENT_ESCAPER
     private static final BitSet URL_FRAGMENT_SAFE_CHARS = new BitSet(256);
 
@@ -152,7 +154,11 @@ public class LinkUtil {
             }
 
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            if (parsed != null && isQuickviewLink(parsed.getScheme())) {
+                LOG.info("Quickview URL detected, using fallback construction: {}", path);
+            } else {
+                LOG.error(e.getMessage(), e);
+            }
             StringBuilder sb = new StringBuilder(path);
             if (queryString != null) {
                 sb.append("?").append(maskedQueryString);
@@ -283,6 +289,14 @@ public class LinkUtil {
     private static boolean isTelLink(String link) {
         if (link != null) {
             return link.startsWith(TEL_PATTERN);
+        } else {
+            return false;
+        }
+    }
+
+    private static boolean isQuickviewLink(String link) {
+        if (link != null) {
+            return link.startsWith(QUICKVIEW_PATTERN);
         } else {
             return false;
         }

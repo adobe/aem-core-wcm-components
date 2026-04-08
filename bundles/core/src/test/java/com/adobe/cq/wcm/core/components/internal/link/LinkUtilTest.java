@@ -71,16 +71,23 @@ class LinkUtilTest {
     }
 
     @Test
-    void escape_mailToLinkNotThrowException() throws UnsupportedEncodingException {
+    void escape_mailToLinkNotThrowException() {
         String path = "mailto:mail@example.com";
         String escapedMailTo = LinkUtil.escape(path, null, null);
         assertEquals(path, escapedMailTo);
     }
 
     @Test
-    void escape_telLinkNotThrowException() throws UnsupportedEncodingException {
+    void escape_telLinkNotThrowException() {
         String path = "tel:1800";
         String escapedTel = LinkUtil.escape(path, null, null);
         assertEquals(path, escapedTel);
+    }
+
+    @Test
+    void escape_quickviewLinkResultEqualToInput(){
+        String path = "quickview:fragment=Camping in Western Australia&size=400,300&reservedVal_productPath=/content/experience-fragments/wknd/ca/en/featured/camping-western-australia";
+        String escapedQuickview = LinkUtil.escape(path, null, null);
+        assertEquals(path, escapedQuickview);
     }
 }
