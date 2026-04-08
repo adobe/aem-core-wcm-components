@@ -155,6 +155,8 @@ public class LinkUtil {
 
         } catch (Exception e) {
             if (parsed != null && isQuickviewLink(parsed.getScheme())) {
+                // SITES-42596 Since quickview URLs are supported OOTB by the product,
+                // do not log error for them
                 LOG.info("Quickview URL detected, using fallback construction: {}", path);
             } else {
                 LOG.error(e.getMessage(), e);
