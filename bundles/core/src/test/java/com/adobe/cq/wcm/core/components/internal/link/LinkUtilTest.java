@@ -85,7 +85,7 @@ class LinkUtilTest {
     }
 
     @Test
-    void escape_quickviewLinkResultEqualToInput(){
+    void escape_quickviewLinkResultEqualToInput() {
         String path = "quickview:fragment=Camping in Western Australia&size=400,300&reservedVal_productPath=/content/experience-fragments/wknd/ca/en/featured/camping-western-australia";
         String escapedQuickview = LinkUtil.escape(path, null, null);
         assertEquals(path, escapedQuickview);
