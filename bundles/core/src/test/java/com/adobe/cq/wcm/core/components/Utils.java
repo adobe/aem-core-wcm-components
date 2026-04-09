@@ -22,12 +22,12 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonStructure;
 
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.sling.api.resource.Resource;
@@ -39,7 +39,10 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.jackson.DefaultMethodSkippingModuleProvider;
 import com.adobe.cq.wcm.core.components.internal.jackson.PageModuleProvider;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.jackson.ComponentDataModelSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -65,6 +68,7 @@ public class Utils {
         mapper.registerModule(pageModuleProvider.getModule());
         DefaultMethodSkippingModuleProvider defaultMethodSkippingModuleProvider = new DefaultMethodSkippingModuleProvider();
         mapper.registerModule(defaultMethodSkippingModuleProvider.getModule());
+        mapper.registerModule(new SimpleModule().addSerializer(ComponentData.class, new ComponentDataModelSerializer()));
         try {
             mapper.writer().writeValue(writer, model);
         } catch (IOException e) {
