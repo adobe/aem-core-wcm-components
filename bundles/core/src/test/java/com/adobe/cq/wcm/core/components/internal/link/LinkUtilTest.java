@@ -90,4 +90,17 @@ class LinkUtilTest {
         String escapedQuickview = LinkUtil.escape(path, null, null);
         assertEquals(path, escapedQuickview);
     }
+
+    @Test
+    void escape_nullInputs() {
+        String escaped = LinkUtil.escape(null, null, null);
+        assertNull(null, escaped);
+    }
+
+    @Test
+    void escape_customLinkResultEqualToInput() {
+        String path = "custom:abc";
+        String escaped = LinkUtil.escape(path, null, null);
+        assertEquals(path, escaped);
+    }
 }
