@@ -33,9 +33,9 @@ import org.mockito.Mockito;
 import com.adobe.cq.dam.cfm.ContentFragment;
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
-import com.adobe.cq.wcm.core.components.internal.contentfragment.VcfUrlProviderBridge;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.services.contentfragment.VcfUrlProvider;
 import com.day.cq.search.QueryBuilder;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import org.osgi.framework.Constants;
@@ -103,28 +103,29 @@ public abstract class AbstractContentFragmentTest<T> {
     static FragmentRenderService fragmentRenderService;
     static StubVcfUrlProvider vcfUrlProviderStub;
 
-    /**
-     * Test double for the DAM {@code com.adobe.cq.dam.cfm.vcf.VcfUrlProvider} OSGi service (same method names as the
-     * product interface; registered under that interface name without {@code cq-dam-cfm-api} on the classpath).
-     */
-    static final class StubVcfUrlProvider {
+    /** Test double for {@link VcfUrlProvider}. */
+    static final class StubVcfUrlProvider implements VcfUrlProvider {
         String vcfApiBase;
         String vcfAuthorUrlFormat;
         String vcfPublishUrlFormat;
         String vcfTemplatesApiBase;
 
+        @Override
         public String getVcfApiBase() {
             return vcfApiBase;
         }
 
+        @Override
         public String getVcfAuthorUrlFormat() {
             return vcfAuthorUrlFormat;
         }
 
+        @Override
         public String getVcfPublishUrlFormat() {
             return vcfPublishUrlFormat;
         }
 
+        @Override
         public String getVcfTemplatesApiBase() {
             return vcfTemplatesApiBase;
         }
@@ -196,8 +197,7 @@ public abstract class AbstractContentFragmentTest<T> {
         configureLegacyVcfUrls();
         Hashtable<String, Object> vcfProps = new Hashtable<>();
         vcfProps.put(Constants.SERVICE_RANKING, Integer.MAX_VALUE);
-        context.bundleContext().registerService(
-                new String[] { VcfUrlProviderBridge.VCF_URL_PROVIDER_CLASS_NAME }, vcfUrlProviderStub, vcfProps);
+        context.registerService(VcfUrlProvider.class, vcfUrlProviderStub, vcfProps);
 
         queryBuilderMock = Mockito.mock(QueryBuilder.class);
 
@@ -220,7 +220,6 @@ public abstract class AbstractContentFragmentTest<T> {
         Mockito.doReturn(queryBuilderMock).when(resourceResolver).adaptTo(Mockito.eq(QueryBuilder.class));
         Resource resource = resourceResolver.getResource(path);
         MockSlingHttpServletRequest httpServletRequest = new MockSlingHttpServletRequest(resourceResolver, context.bundleContext());
-        httpServletRequest.setAttribute(VcfUrlProviderBridge.MOCK_BUNDLE_CONTEXT_REQUEST_ATTRIBUTE, context.bundleContext());
         httpServletRequest.setResource(resource);
         SlingBindings slingBindings = new SlingBindings();
         slingBindings.put(SlingBindings.RESOLVER, resourceResolver);
@@ -232,12 +231,7 @@ public abstract class AbstractContentFragmentTest<T> {
         slingBindings.put(WCMBindings.CURRENT_PAGE, currentPage);
         httpServletRequest.setAttribute(SlingBindings.class.getName(), slingBindings);
         httpServletRequest.setContextPath(CONTEXT_PATH);
-        try {
-            VcfUrlProviderBridge.pushResolveBundleContextOverride(context.bundleContext());
-            return httpServletRequest.adaptTo(getClassType());
-        } finally {
-            VcfUrlProviderBridge.clearResolveBundleContextOverride();
-        }
+        return httpServletRequest.adaptTo(getClassType());
     }
 
     /**
