@@ -77,7 +77,7 @@
                             com.day.cq.dam.api.handler;version="[2,3)",
                             com.adobe.cq.dam.cfm.content;version="[1.1,2)",
                             com.adobe.cq.dam.cfm.converter;version="[1,2)",
-                            com.adobe.cq.dam.cfm.vcf;version="[1.0,2)",
+                            com.adobe.cq.dam.cfm.vcf;version="[1.0,2)";resolution:=optional,
                             *
                         </Import-Package>
                     </instructions>

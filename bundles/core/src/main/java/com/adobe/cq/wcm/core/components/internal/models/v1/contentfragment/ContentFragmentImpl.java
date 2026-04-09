@@ -95,7 +95,8 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
     private SlingSettingsService slingSettingsService;
 
-    @OSGiService
+    @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private VcfUrlProvider vcfUrlProvider;
 
     @SlingObject
@@ -260,7 +261,7 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     @Nullable
     @Override
     public String getVcfRenderUrl() {
-        if (!isVcfMode() || StringUtils.isEmpty(fragmentId)) {
+        if (!isVcfMode() || StringUtils.isEmpty(fragmentId) || vcfUrlProvider == null) {
             return null;
         }
         return isPublishRunMode() ? buildPublishUrl() : buildAuthorPreviewUrl();
@@ -268,12 +269,15 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
 
     @Override
     public boolean isVcfAuthRequired() {
-        return isVcfMode() && !isPublishRunMode();
+        return isVcfMode() && !isPublishRunMode() && vcfUrlProvider != null;
     }
 
     @Nullable
     @Override
     public String getVcfTemplatesApiBase() {
+        if (vcfUrlProvider == null) {
+            return null;
+        }
         return vcfUrlProvider.getVcfTemplatesApiBase();
     }
 
@@ -282,6 +286,9 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     }
 
     private String buildPublishUrl() {
+        if (vcfUrlProvider == null) {
+            return null;
+        }
         if (StringUtils.isEmpty(vcfTemplate)) {
             return null;
         }
@@ -290,6 +297,9 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     }
 
     private String buildAuthorPreviewUrl() {
+        if (vcfUrlProvider == null) {
+            return null;
+        }
         String url = String.format(vcfUrlProvider.getVcfAuthorUrlFormat(), fragmentId);
         List<String> params = new ArrayList<>();
         if (StringUtils.isNotEmpty(vcfTemplate)) {
