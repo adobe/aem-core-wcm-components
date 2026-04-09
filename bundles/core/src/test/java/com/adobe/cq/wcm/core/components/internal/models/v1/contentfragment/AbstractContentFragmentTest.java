@@ -17,7 +17,9 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Hashtable;
 import java.util.Locale;
+import java.util.function.Function;
 
 import com.day.cq.wcm.api.Page;
 import org.apache.sling.api.resource.Resource;
@@ -28,13 +30,16 @@ import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
-import com.adobe.cq.dam.cfm.vcf.VcfUrlProvider;
+import com.adobe.cq.dam.cfm.ContentFragment;
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
+import com.adobe.cq.dam.cfm.vcf.VcfUrlProvider;
+import com.adobe.cq.wcm.core.components.internal.contentfragment.VcfUrlProviderBridge;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.day.cq.search.QueryBuilder;
 import io.wcm.testing.mock.aem.junit5.AemContext;
+import org.osgi.framework.Constants;
 
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.mock;
@@ -97,34 +102,66 @@ public abstract class AbstractContentFragmentTest<T> {
     }
 
     static FragmentRenderService fragmentRenderService;
-    static VcfUrlProvider vcfUrlProviderMock;
+    static StubVcfUrlProvider vcfUrlProviderStub;
 
-    /**
-     * Configures the VcfUrlProvider mock to return legacy (FT disabled) URLs.
-     */
-    static void configureLegacyVcfUrls() {
-        String vcfApiBase = "/adobe/experimental/previewtemplates-expires-20260301";
-        when(vcfUrlProviderMock.getVcfApiBase()).thenReturn(vcfApiBase);
-        when(vcfUrlProviderMock.getVcfAuthorUrlFormat()).thenReturn(vcfApiBase + "/sites/cf/fragments/%s/preview");
-        when(vcfUrlProviderMock.getVcfPublishUrlFormat()).thenReturn(vcfApiBase + "/contentFragments/%s/%s/%s.html");
-        when(vcfUrlProviderMock.getVcfTemplatesApiBase()).thenReturn(vcfApiBase + "/sites/cf/models");
+    /** Test double for the DAM {@link VcfUrlProvider} OSGi service (test classpath only). */
+    static final class StubVcfUrlProvider implements VcfUrlProvider {
+        String vcfApiBase;
+        String vcfAuthorUrlFormat;
+        String vcfPublishUrlFormat;
+        String vcfTemplatesApiBase;
+
+        @Override
+        public String getVcfApiBase() {
+            return vcfApiBase;
+        }
+
+        @Override
+        public String getVcfAuthorUrlFormat() {
+            return vcfAuthorUrlFormat;
+        }
+
+        @Override
+        public String getVcfPublishUrlFormat() {
+            return vcfPublishUrlFormat;
+        }
+
+        @Override
+        public String getVcfTemplatesApiBase() {
+            return vcfTemplatesApiBase;
+        }
     }
 
     /**
-     * Configures the VcfUrlProvider mock to return GA (FT enabled) URLs.
+     * Configures the stub to return legacy (FT disabled) URLs.
+     */
+    static void configureLegacyVcfUrls() {
+        String vcfApiBase = "/adobe/experimental/previewtemplates-expires-20260301";
+        vcfUrlProviderStub.vcfApiBase = vcfApiBase;
+        vcfUrlProviderStub.vcfAuthorUrlFormat = vcfApiBase + "/sites/cf/fragments/%s/preview";
+        vcfUrlProviderStub.vcfPublishUrlFormat = vcfApiBase + "/contentFragments/%s/%s/%s.html";
+        vcfUrlProviderStub.vcfTemplatesApiBase = vcfApiBase + "/sites/cf/models";
+    }
+
+    /**
+     * Configures the stub to return GA (FT enabled) URLs.
      */
     static void configureGaVcfUrls() {
         String vcfApiBase = "/adobe";
-        when(vcfUrlProviderMock.getVcfApiBase()).thenReturn(vcfApiBase);
-        when(vcfUrlProviderMock.getVcfAuthorUrlFormat()).thenReturn(vcfApiBase + "/contentFragments/%s/preview");
-        when(vcfUrlProviderMock.getVcfPublishUrlFormat()).thenReturn(vcfApiBase + "/contentFragments/%s/%s/%s.html");
-        when(vcfUrlProviderMock.getVcfTemplatesApiBase()).thenReturn(vcfApiBase + "/contentFragments/models");
+        vcfUrlProviderStub.vcfApiBase = vcfApiBase;
+        vcfUrlProviderStub.vcfAuthorUrlFormat = vcfApiBase + "/contentFragments/%s/preview";
+        vcfUrlProviderStub.vcfPublishUrlFormat = vcfApiBase + "/contentFragments/%s/%s/%s.html";
+        vcfUrlProviderStub.vcfTemplatesApiBase = vcfApiBase + "/contentFragments/models";
     }
 
     QueryBuilder queryBuilderMock;
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
+    /**
+     * JUnit 5 runs subclass {@code @BeforeEach} before superclass {@code @BeforeEach}. Subclasses that need extra
+     * fixtures override {@link #additionalSetUp()} so it runs after this base setup.
+     */
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
         context.load().json("/contentfragment" + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
@@ -150,18 +187,27 @@ public abstract class AbstractContentFragmentTest<T> {
             path + "subassets/second/jcr:content/renditions/" + VARIATION_NAME, secondVariation.contentType);
 
         // register an adapter that adapts resources to mocks of content fragments
-        context.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, CONTENT_FRAGMENT_ADAPTER);
+        context.registerAdapter(Resource.class, ContentFragment.class, CONTENT_FRAGMENT_ADAPTER);
 
         // register dummy services to be injected into the model
         fragmentRenderService = mock(FragmentRenderService.class);
         context.registerService(FragmentRenderService.class, fragmentRenderService);
         context.registerService(ContentTypeConverter.class, mock(ContentTypeConverter.class));
 
-        vcfUrlProviderMock = mock(VcfUrlProvider.class);
+        vcfUrlProviderStub = new StubVcfUrlProvider();
         configureLegacyVcfUrls();
-        context.registerService(VcfUrlProvider.class, vcfUrlProviderMock);
+        Hashtable<String, Object> vcfProps = new Hashtable<>();
+        vcfProps.put(Constants.SERVICE_RANKING, Integer.MAX_VALUE);
+        context.registerService(VcfUrlProvider.class, vcfUrlProviderStub, vcfProps);
 
         queryBuilderMock = Mockito.mock(QueryBuilder.class);
+
+        additionalSetUp();
+    }
+
+    @SuppressWarnings("unused")
+    protected void additionalSetUp() throws NoSuchFieldException, IllegalAccessException {
+        // optional hook for subclasses (runs after base setUp)
     }
 
     /**
@@ -175,6 +221,7 @@ public abstract class AbstractContentFragmentTest<T> {
         Mockito.doReturn(queryBuilderMock).when(resourceResolver).adaptTo(Mockito.eq(QueryBuilder.class));
         Resource resource = resourceResolver.getResource(path);
         MockSlingHttpServletRequest httpServletRequest = new MockSlingHttpServletRequest(resourceResolver, context.bundleContext());
+        httpServletRequest.setAttribute(VcfUrlProviderBridge.MOCK_BUNDLE_CONTEXT_REQUEST_ATTRIBUTE, context.bundleContext());
         httpServletRequest.setResource(resource);
         SlingBindings slingBindings = new SlingBindings();
         slingBindings.put(SlingBindings.RESOLVER, resourceResolver);
@@ -186,7 +233,12 @@ public abstract class AbstractContentFragmentTest<T> {
         slingBindings.put(WCMBindings.CURRENT_PAGE, currentPage);
         httpServletRequest.setAttribute(SlingBindings.class.getName(), slingBindings);
         httpServletRequest.setContextPath(CONTEXT_PATH);
-        return httpServletRequest.adaptTo(getClassType());
+        try {
+            VcfUrlProviderBridge.pushResolveBundleContextOverride(context.bundleContext());
+            return httpServletRequest.adaptTo(getClassType());
+        } finally {
+            VcfUrlProviderBridge.clearResolveBundleContextOverride();
+        }
     }
 
     /**
@@ -201,9 +253,9 @@ public abstract class AbstractContentFragmentTest<T> {
     protected abstract String getTestResourcesParentPath();
 
     /**
-     * Adapter using "new" {@link java.util.function.Function}s.
+     * Adapter using "new" {@link Function}s.
      */
-    public static final java.util.function.Function<Resource, com.adobe.cq.dam.cfm.ContentFragment> CONTENT_FRAGMENT_ADAPTER =
+    public static final Function<Resource, ContentFragment> CONTENT_FRAGMENT_ADAPTER =
         new ContentFragmentMockAdapter();
 
 

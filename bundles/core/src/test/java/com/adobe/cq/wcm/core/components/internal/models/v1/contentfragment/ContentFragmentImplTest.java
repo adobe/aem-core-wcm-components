@@ -23,7 +23,6 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -57,11 +56,6 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
     @Override
     protected Class<ContentFragment> getClassType() {
         return ContentFragment.class;
-    }
-
-    @BeforeEach
-    void setUp() throws NoSuchFieldException, IllegalAccessException {
-        super.setUp();
     }
 
     @Test

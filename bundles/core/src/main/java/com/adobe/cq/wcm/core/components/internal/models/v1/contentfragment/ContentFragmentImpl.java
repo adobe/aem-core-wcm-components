@@ -40,14 +40,15 @@ import org.apache.sling.models.factory.ModelFactory;
 import org.apache.sling.settings.SlingSettingsService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.osgi.framework.BundleContext;
 
-import com.adobe.cq.dam.cfm.vcf.VcfUrlProvider;
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
+import com.adobe.cq.wcm.core.components.internal.contentfragment.VcfUrlProviderBridge;
 
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContentFragmentDataImpl;
@@ -95,10 +96,6 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
     private SlingSettingsService slingSettingsService;
 
-    @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    private VcfUrlProvider vcfUrlProvider;
-
     @SlingObject
     private ResourceResolver resourceResolver;
 
@@ -129,8 +126,12 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
 
     private String fragmentId;
 
+    @Nullable
+    private BundleContext coreBundleContext;
+
     @PostConstruct
     private void initModel() {
+        coreBundleContext = VcfUrlProviderBridge.resolveBundleContext(slingHttpServletRequest);
         if (StringUtils.isNotEmpty(fragmentPath)) {
             Resource fragmentResource = resourceResolver.getResource(fragmentPath);
             if (fragmentResource != null) {
@@ -261,7 +262,7 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     @Nullable
     @Override
     public String getVcfRenderUrl() {
-        if (!isVcfMode() || StringUtils.isEmpty(fragmentId) || vcfUrlProvider == null) {
+        if (!isVcfMode() || StringUtils.isEmpty(fragmentId) || !VcfUrlProviderBridge.isServicePresent(coreBundleContext)) {
             return null;
         }
         return isPublishRunMode() ? buildPublishUrl() : buildAuthorPreviewUrl();
@@ -269,16 +270,13 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
 
     @Override
     public boolean isVcfAuthRequired() {
-        return isVcfMode() && !isPublishRunMode() && vcfUrlProvider != null;
+        return isVcfMode() && !isPublishRunMode() && VcfUrlProviderBridge.isServicePresent(coreBundleContext);
     }
 
     @Nullable
     @Override
     public String getVcfTemplatesApiBase() {
-        if (vcfUrlProvider == null) {
-            return null;
-        }
-        return vcfUrlProvider.getVcfTemplatesApiBase();
+        return VcfUrlProviderBridge.getVcfTemplatesApiBase(coreBundleContext);
     }
 
     private boolean isVcfMode() {
@@ -286,21 +284,23 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     }
 
     private String buildPublishUrl() {
-        if (vcfUrlProvider == null) {
+        String format = VcfUrlProviderBridge.getVcfPublishUrlFormat(coreBundleContext);
+        if (format == null) {
             return null;
         }
         if (StringUtils.isEmpty(vcfTemplate)) {
             return null;
         }
         String variation = hasNonMasterVariation() ? variationName : "main";
-        return String.format(vcfUrlProvider.getVcfPublishUrlFormat(), vcfTemplate, fragmentId, variation);
+        return String.format(format, vcfTemplate, fragmentId, variation);
     }
 
     private String buildAuthorPreviewUrl() {
-        if (vcfUrlProvider == null) {
+        String authorFormat = VcfUrlProviderBridge.getVcfAuthorUrlFormat(coreBundleContext);
+        if (authorFormat == null) {
             return null;
         }
-        String url = String.format(vcfUrlProvider.getVcfAuthorUrlFormat(), fragmentId);
+        String url = String.format(authorFormat, fragmentId);
         List<String> params = new ArrayList<>();
         if (StringUtils.isNotEmpty(vcfTemplate)) {
             params.add("templateId=" + vcfTemplate);
