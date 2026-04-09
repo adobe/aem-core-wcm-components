@@ -40,7 +40,7 @@ describe("Test VCF renderer for", function() {
         const vcfElement = document.createElement("div");
         vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
         const previewUrl = "/cf/preview?" + FRAGMENT_UUID + "&templateId=person";
-        vcfElement.setAttribute("data-cmp-contentfragment-vcf-url", previewUrl);
+        vcfElement.dataset.cmpContentfragmentVcfUrl = previewUrl;
         contentFrameDoc.appendChild(vcfElement);
 
         Granite.author.ContentFrame.contentWindow = {
@@ -67,7 +67,7 @@ describe("Test VCF renderer for", function() {
         const vcfElement = document.createElement("div");
         vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
         const previewUrl = "/cf/preview?templateId=card&variation=summary";
-        vcfElement.setAttribute("data-cmp-contentfragment-vcf-url", previewUrl);
+        vcfElement.dataset.cmpContentfragmentVcfUrl = previewUrl;
         contentFrameDoc.appendChild(vcfElement);
 
         Granite.author.ContentFrame.contentWindow = {
@@ -128,8 +128,8 @@ describe("Test VCF renderer for", function() {
         const contentFrameDoc = document.createElement("div");
         const vcfElement = document.createElement("div");
         vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
-        vcfElement.setAttribute("data-cmp-contentfragment-vcf-url", "/cf/preview?" + FRAGMENT_UUID);
-        vcfElement.setAttribute("data-vcf-loading", "true");
+        vcfElement.dataset.cmpContentfragmentVcfUrl = "/cf/preview?" + FRAGMENT_UUID;
+        vcfElement.dataset.vcfLoading = "true";
         contentFrameDoc.appendChild(vcfElement);
 
         Granite.author.ContentFrame.contentWindow = {

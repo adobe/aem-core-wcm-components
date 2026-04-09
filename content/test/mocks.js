@@ -117,14 +117,14 @@ jQuery.get = function(url, data, success, dataType) {
     if (typeof url === 'object' && url !== null) {
         return jQuery.ajax(Object.assign({ type: 'GET' }, url));
     }
-    var state = { doneCb: null, alwaysCb: null, scheduled: false };
+    const state = { doneCb: null, alwaysCb: null, scheduled: false };
     function schedule() {
         if (state.scheduled) {
             return;
         }
         state.scheduled = true;
         setTimeout(function() {
-            var html = '';
+            let html = '';
             if (jQuery._getHandler) {
                 jQuery._getHandler(url, function(h) {
                     html = (h !== undefined && h !== null) ? h : '';
@@ -152,10 +152,10 @@ jQuery.get = function(url, data, success, dataType) {
         fail: function() {
             return this;
         },
-        then: function(onSucc, onFail) {
-            this.done(function() {
+        then: function(onSucc, onFail) { // NOSONAR - mimicking jQuery deferred API
+            this.done(function(...args) {
                 if (onSucc) {
-                    onSucc.apply(null, arguments);
+                    onSucc(...args);
                 }
             });
             return this;
@@ -167,31 +167,31 @@ jQuery.get = function(url, data, success, dataType) {
  * Resolves when all arguments with {@code .done} or {@code .then} have completed (used by editDialog).
  */
 jQuery.when = function() {
-    var args = Array.prototype.slice.call(arguments);
+    const args = Array.prototype.slice.call(arguments);
     if (args.length === 0) {
         return {
             done: function(cb) {
                 setTimeout(cb, 0);
                 return this;
             },
-            then: function(ok) {
+            then: function(ok) { // NOSONAR - mimicking jQuery deferred API
                 this.done(ok || function() {});
                 return this;
             }
         };
     }
-    var remaining = args.length;
-    var results = new Array(args.length);
-    var pendingDone = [];
+    let remaining = args.length;
+    const results = new Array(args.length);
+    const pendingDone = [];
 
     function flush() {
         if (remaining !== 0) {
             return;
         }
-        var copy = pendingDone.slice();
+        const copy = pendingDone.slice();
         pendingDone.length = 0;
         copy.forEach(function(cb) {
-            cb.apply(null, results);
+            cb(...results);
         });
     }
 
@@ -214,17 +214,17 @@ jQuery.when = function() {
         done: function(cb) {
             if (remaining === 0) {
                 setTimeout(function() {
-                    cb.apply(null, results);
+                    cb(...results);
                 }, 0);
             } else {
                 pendingDone.push(cb);
             }
             return this;
         },
-        then: function(onOk, onFail) {
-            this.done(function() {
+        then: function(onOk, onFail) { // NOSONAR - mimicking jQuery deferred API
+            this.done(function(...args) {
                 if (onOk) {
-                    onOk.apply(null, arguments);
+                    onOk(...args);
                 }
             });
             return this;
@@ -250,23 +250,23 @@ jQuery.ajax = function(options) {
 };
 
 jQuery.Deferred = function() {
-    var callbacks = [];
-    var resolved = false;
-    var resolvedArgs = [];
-    var deferred = {
+    const callbacks = [];
+    let resolved = false;
+    let resolvedArgs = [];
+    const deferred = {
         resolve: function() {
             resolved = true;
             resolvedArgs = Array.prototype.slice.call(arguments);
-            var cbs = callbacks.slice();
-            callbacks = [];
+            const cbs = callbacks.slice();
+            callbacks.length = 0;
             cbs.forEach(function(cb) {
-                cb.apply(null, resolvedArgs);
+                cb(...resolvedArgs);
             });
             return deferred;
         },
         done: function(callback) {
             if (resolved) {
-                callback.apply(null, resolvedArgs);
+                callback(...resolvedArgs);
             } else {
                 callbacks.push(callback);
             }
@@ -286,22 +286,22 @@ Granite = {
     author: {
         util: {
             mixin: function (dest, src) {
-                for (var prop in src) {
-                    if (src.hasOwnProperty(prop)) {
+                for (const prop in src) {
+                    if (Object.prototype.hasOwnProperty.call(src, prop)) {
                         dest[prop] = src[prop];
                     }
                 }
             },
             createClass: function (classDefinition) {
-                var methods = {};
+                const methods = {};
 
                 if (!classDefinition.constructor) {
                     classDefinition.constructor = function () {
                     };
                 }
 
-                for (var prop in classDefinition) {
-                    if (classDefinition.hasOwnProperty(prop) && prop !== "constructor") {
+                for (const prop in classDefinition) {
+                    if (Object.prototype.hasOwnProperty.call(classDefinition, prop) && prop !== "constructor") {
                         methods[prop] = classDefinition[prop];
                     }
                 }

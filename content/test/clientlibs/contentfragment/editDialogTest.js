@@ -15,11 +15,11 @@
  ******************************************************************************/
 describe("Test editDialog VCF template retention for", function() {
 
-    var channel;
-    var COMPONENT_PATH = "/content/test-page/jcr:content/root/cf";
-    var FRAGMENT_PATH = "/content/dam/test/my-fragment";
-    var MODEL_PATH = "/conf/test/settings/dam/cfm/models/person";
-    var TEMPLATES_RESPONSE = {
+    let channel;
+    const COMPONENT_PATH = "/content/test-page/jcr:content/root/cf";
+    const FRAGMENT_PATH = "/content/dam/test/my-fragment";
+    const MODEL_PATH = "/conf/test/settings/dam/cfm/models/person";
+    const TEMPLATES_RESPONSE = {
         items: [
             { id: "hero-banner", name: "Hero Banner" },
             { id: "card", name: "Card" },
@@ -35,7 +35,7 @@ describe("Test editDialog VCF template retention for", function() {
     beforeEach(function() {
         this.result = fixture.load("editDialogTest.html");
 
-        var tabView = fixture.el.querySelector("coral-tabview");
+        const tabView = fixture.el.querySelector("coral-tabview");
         tabView.tabList = {
             items: {
                 getAll: function() {
@@ -44,7 +44,7 @@ describe("Test editDialog VCF template retention for", function() {
             }
         };
 
-        var vcfSelect = fixture.el.querySelector("[data-vcf-template-selector='true']");
+        const vcfSelect = fixture.el.querySelector("[data-vcf-template-selector='true']");
         vcfSelect._selectedValue = "";
         vcfSelect.items = {
             _items: [],
@@ -66,7 +66,7 @@ describe("Test editDialog VCF template retention for", function() {
         });
 
         jQuery._getHandler = function(url, deliver) {
-            if (typeof url === "string" && url.indexOf(".html") >= 0) {
+            if (typeof url === "string" && url.includes(".html")) {
                 deliver("<span data-cmp-contentfragment-vcf-templates-api=\"/mock/vcf-templates-api\"></span>");
             } else {
                 deliver("");
@@ -93,13 +93,13 @@ describe("Test editDialog VCF template retention for", function() {
      */
     function initDialogAndAssert(options, done) {
         jQuery._getJSONHandler = function(url, resolve, reject) {
-            if (url.indexOf("jcr:content/data") >= 0) {
+            if (url.includes("jcr:content/data")) {
                 resolve({ "cq:model": MODEL_PATH });
-            } else if (url.indexOf(COMPONENT_PATH) >= 0) {
-                if (options.componentData !== null) {
-                    resolve(options.componentData);
-                } else {
+            } else if (url.includes(COMPONENT_PATH)) {
+                if (options.componentData === null) {
                     reject();
+                } else {
+                    resolve(options.componentData);
                 }
             }
         };
@@ -111,9 +111,9 @@ describe("Test editDialog VCF template retention for", function() {
         channel.trigger({ type: "foundation-contentloaded", target: fixture.el });
 
         setTimeout(function() {
-            var vcfSelect = fixture.el.querySelector("[data-vcf-template-selector='true']");
-            expect(vcfSelect.items._items.length).toBe(options.expectedItemCount);
-            expect(vcfSelect.value).toBe(options.expectedTemplate);
+            const vcfSelectAfter = fixture.el.querySelector("[data-vcf-template-selector='true']");
+            expect(vcfSelectAfter.items._items.length).toBe(options.expectedItemCount);
+            expect(vcfSelectAfter.value).toBe(options.expectedTemplate);
             done();
         }, 100);
     }
@@ -144,10 +144,10 @@ describe("Test editDialog VCF template retention for", function() {
 
     it("templates are not loaded when no fragment is selected", function(done) {
         fixture.el.querySelector("[name='./fragmentPath']").value = "";
-        var ajaxCalled = false;
+        let ajaxCalled = false;
 
         jQuery._getJSONHandler = function(url, resolve) {
-            if (url.indexOf(COMPONENT_PATH) >= 0) {
+            if (url.includes(COMPONENT_PATH)) {
                 resolve({});
             }
         };
@@ -159,8 +159,8 @@ describe("Test editDialog VCF template retention for", function() {
         channel.trigger({ type: "foundation-contentloaded", target: fixture.el });
 
         setTimeout(function() {
-            var vcfSelect = fixture.el.querySelector("[data-vcf-template-selector='true']");
-            expect(vcfSelect.items._items.length).toBe(0);
+            const vcfSelectAfter = fixture.el.querySelector("[data-vcf-template-selector='true']");
+            expect(vcfSelectAfter.items._items.length).toBe(0);
             expect(ajaxCalled).toBe(false);
             done();
         }, 100);
