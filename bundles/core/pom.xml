@@ -528,7 +528,7 @@
         <dependency>
             <groupId>com.adobe.cq.dam</groupId>
             <artifactId>cq-dam-cfm-api</artifactId>
-            <version>1.4.61-SNAPSHOT</version>
+            <version>1.4.62</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
