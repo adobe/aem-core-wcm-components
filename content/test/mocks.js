@@ -109,6 +109,129 @@ jQuery.getJSON = function(url) {
     return deferred;
 };
 
+/**
+ * Minimal {@code $.get} for string URLs (editDialog HTML fetch) or settings objects (delegates to {@link jQuery.ajax}).
+ * String form uses optional {@code jQuery._getHandler(url, deliverHtml)} for tests.
+ */
+jQuery.get = function(url, data, success, dataType) {
+    if (typeof url === 'object' && url !== null) {
+        return jQuery.ajax(Object.assign({ type: 'GET' }, url));
+    }
+    var state = { doneCb: null, alwaysCb: null, scheduled: false };
+    function schedule() {
+        if (state.scheduled) {
+            return;
+        }
+        state.scheduled = true;
+        setTimeout(function() {
+            var html = '';
+            if (jQuery._getHandler) {
+                jQuery._getHandler(url, function(h) {
+                    html = (h !== undefined && h !== null) ? h : '';
+                });
+            }
+            if (state.doneCb) {
+                state.doneCb(html);
+            }
+            if (state.alwaysCb) {
+                state.alwaysCb();
+            }
+        }, 0);
+    }
+    return {
+        done: function(cb) {
+            state.doneCb = cb;
+            schedule();
+            return this;
+        },
+        always: function(cb) {
+            state.alwaysCb = cb;
+            schedule();
+            return this;
+        },
+        fail: function() {
+            return this;
+        },
+        then: function(onSucc, onFail) {
+            this.done(function() {
+                if (onSucc) {
+                    onSucc.apply(null, arguments);
+                }
+            });
+            return this;
+        }
+    };
+};
+
+/**
+ * Resolves when all arguments with {@code .done} or {@code .then} have completed (used by editDialog).
+ */
+jQuery.when = function() {
+    var args = Array.prototype.slice.call(arguments);
+    if (args.length === 0) {
+        return {
+            done: function(cb) {
+                setTimeout(cb, 0);
+                return this;
+            },
+            then: function(ok) {
+                this.done(ok || function() {});
+                return this;
+            }
+        };
+    }
+    var remaining = args.length;
+    var results = new Array(args.length);
+    var pendingDone = [];
+
+    function flush() {
+        if (remaining !== 0) {
+            return;
+        }
+        var copy = pendingDone.slice();
+        pendingDone.length = 0;
+        copy.forEach(function(cb) {
+            cb.apply(null, results);
+        });
+    }
+
+    args.forEach(function(arg, i) {
+        function one(v) {
+            results[i] = v;
+            remaining--;
+            flush();
+        }
+        if (arg && typeof arg.done === 'function') {
+            arg.done(one);
+        } else if (arg && typeof arg.then === 'function') {
+            arg.then(one, function() {});
+        } else {
+            one(arg);
+        }
+    });
+
+    return {
+        done: function(cb) {
+            if (remaining === 0) {
+                setTimeout(function() {
+                    cb.apply(null, results);
+                }, 0);
+            } else {
+                pendingDone.push(cb);
+            }
+            return this;
+        },
+        then: function(onOk, onFail) {
+            this.done(function() {
+                if (onOk) {
+                    onOk.apply(null, arguments);
+                }
+            });
+            return this;
+        }
+    };
+};
+
 jQuery.ajax = function(options) {
     let _resolve, _reject;
     const deferred = {
@@ -129,19 +252,21 @@ jQuery.ajax = function(options) {
 jQuery.Deferred = function() {
     var callbacks = [];
     var resolved = false;
-    var resolvedValue;
+    var resolvedArgs = [];
     var deferred = {
-        resolve: function(value) {
+        resolve: function() {
             resolved = true;
-            resolvedValue = value;
+            resolvedArgs = Array.prototype.slice.call(arguments);
             var cbs = callbacks.slice();
             callbacks = [];
-            cbs.forEach(function(cb) { cb(value); });
+            cbs.forEach(function(cb) {
+                cb.apply(null, resolvedArgs);
+            });
             return deferred;
         },
         done: function(callback) {
             if (resolved) {
-                callback(resolvedValue);
+                callback.apply(null, resolvedArgs);
             } else {
                 callbacks.push(callback);
             }

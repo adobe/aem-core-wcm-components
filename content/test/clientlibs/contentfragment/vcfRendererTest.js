@@ -31,6 +31,7 @@ describe("Test VCF renderer for", function() {
         fixture.cleanup();
         jQuery._getJSONHandler = null;
         jQuery._ajaxHandler = null;
+        jQuery._getHandler = null;
         Granite.author.ContentFrame.contentWindow = null;
     });
 
@@ -38,8 +39,8 @@ describe("Test VCF renderer for", function() {
         const contentFrameDoc = document.createElement("div");
         const vcfElement = document.createElement("div");
         vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
-        vcfElement.dataset.cmpContentfragmentId = FRAGMENT_UUID;
-        vcfElement.dataset.cmpContentfragmentVcfTemplate = "person";
+        const previewUrl = "/cf/preview?" + FRAGMENT_UUID + "&templateId=person";
+        vcfElement.setAttribute("data-cmp-contentfragment-vcf-url", previewUrl);
         contentFrameDoc.appendChild(vcfElement);
 
         Granite.author.ContentFrame.contentWindow = {
@@ -65,9 +66,8 @@ describe("Test VCF renderer for", function() {
         const contentFrameDoc = document.createElement("div");
         const vcfElement = document.createElement("div");
         vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
-        vcfElement.dataset.cmpContentfragmentId = FRAGMENT_UUID;
-        vcfElement.dataset.cmpContentfragmentVcfTemplate = "card";
-        vcfElement.dataset.cmpContentfragmentVariation = "summary";
+        const previewUrl = "/cf/preview?templateId=card&variation=summary";
+        vcfElement.setAttribute("data-cmp-contentfragment-vcf-url", previewUrl);
         contentFrameDoc.appendChild(vcfElement);
 
         Granite.author.ContentFrame.contentWindow = {
@@ -88,7 +88,7 @@ describe("Test VCF renderer for", function() {
         channel.trigger("cq-editor-loaded");
     });
 
-    it("skips elements without fragment id", function(done) {
+    it("skips elements without VCF preview URL", function(done) {
         const contentFrameDoc = document.createElement("div");
         const vcfElement = document.createElement("div");
         vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
@@ -128,8 +128,7 @@ describe("Test VCF renderer for", function() {
         const contentFrameDoc = document.createElement("div");
         const vcfElement = document.createElement("div");
         vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
-        vcfElement.dataset.cmpContentfragmentId = FRAGMENT_UUID;
-        vcfElement.dataset.cmpContentfragmentVcfTemplate = "person";
+        vcfElement.setAttribute("data-cmp-contentfragment-vcf-url", "/cf/preview?" + FRAGMENT_UUID);
         vcfElement.setAttribute("data-vcf-loading", "true");
         contentFrameDoc.appendChild(vcfElement);
 

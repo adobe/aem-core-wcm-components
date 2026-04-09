@@ -33,7 +33,6 @@ import org.mockito.Mockito;
 import com.adobe.cq.dam.cfm.ContentFragment;
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
-import com.adobe.cq.dam.cfm.vcf.VcfUrlProvider;
 import com.adobe.cq.wcm.core.components.internal.contentfragment.VcfUrlProviderBridge;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
@@ -104,29 +103,28 @@ public abstract class AbstractContentFragmentTest<T> {
     static FragmentRenderService fragmentRenderService;
     static StubVcfUrlProvider vcfUrlProviderStub;
 
-    /** Test double for the DAM {@link VcfUrlProvider} OSGi service (test classpath only). */
-    static final class StubVcfUrlProvider implements VcfUrlProvider {
+    /**
+     * Test double for the DAM {@code com.adobe.cq.dam.cfm.vcf.VcfUrlProvider} OSGi service (same method names as the
+     * product interface; registered under that interface name without {@code cq-dam-cfm-api} on the classpath).
+     */
+    static final class StubVcfUrlProvider {
         String vcfApiBase;
         String vcfAuthorUrlFormat;
         String vcfPublishUrlFormat;
         String vcfTemplatesApiBase;
 
-        @Override
         public String getVcfApiBase() {
             return vcfApiBase;
         }
 
-        @Override
         public String getVcfAuthorUrlFormat() {
             return vcfAuthorUrlFormat;
         }
 
-        @Override
         public String getVcfPublishUrlFormat() {
             return vcfPublishUrlFormat;
         }
 
-        @Override
         public String getVcfTemplatesApiBase() {
             return vcfTemplatesApiBase;
         }
@@ -198,7 +196,8 @@ public abstract class AbstractContentFragmentTest<T> {
         configureLegacyVcfUrls();
         Hashtable<String, Object> vcfProps = new Hashtable<>();
         vcfProps.put(Constants.SERVICE_RANKING, Integer.MAX_VALUE);
-        context.registerService(VcfUrlProvider.class, vcfUrlProviderStub, vcfProps);
+        context.bundleContext().registerService(
+                new String[] { VcfUrlProviderBridge.VCF_URL_PROVIDER_CLASS_NAME }, vcfUrlProviderStub, vcfProps);
 
         queryBuilderMock = Mockito.mock(QueryBuilder.class);
 

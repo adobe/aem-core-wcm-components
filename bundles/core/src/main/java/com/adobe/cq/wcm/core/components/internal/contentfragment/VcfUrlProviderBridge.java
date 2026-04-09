@@ -32,7 +32,8 @@ import org.osgi.framework.ServiceReference;
  */
 public final class VcfUrlProviderBridge {
 
-    static final String VCF_URL_PROVIDER_CLASS = "com.adobe.cq.dam.cfm.vcf.VcfUrlProvider";
+    /** OSGi service interface name for {@code VcfUrlProvider} (no compile-time dependency on {@code cq-dam-cfm-api}). */
+    public static final String VCF_URL_PROVIDER_CLASS_NAME = "com.adobe.cq.dam.cfm.vcf.VcfUrlProvider";
 
     /**
      * Unit tests set this on the {@link SlingHttpServletRequest} so {@link #resolveBundleContext} uses the Sling OSGi
@@ -87,7 +88,7 @@ public final class VcfUrlProviderBridge {
             return false;
         }
         try {
-            ServiceReference<?>[] refs = ctx.getServiceReferences(VCF_URL_PROVIDER_CLASS, null);
+            ServiceReference<?>[] refs = ctx.getServiceReferences(VCF_URL_PROVIDER_CLASS_NAME, null);
             return refs != null && refs.length > 0;
         } catch (IllegalArgumentException | InvalidSyntaxException e) {
             return false;
@@ -116,7 +117,7 @@ public final class VcfUrlProviderBridge {
         }
         ServiceReference<?>[] refs;
         try {
-            refs = ctx.getServiceReferences(VCF_URL_PROVIDER_CLASS, null);
+            refs = ctx.getServiceReferences(VCF_URL_PROVIDER_CLASS_NAME, null);
         } catch (IllegalArgumentException | InvalidSyntaxException e) {
             return null;
         }

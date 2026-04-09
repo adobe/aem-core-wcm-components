@@ -25,7 +25,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import com.adobe.cq.dam.cfm.vcf.VcfUrlProvider;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -49,23 +48,19 @@ class VcfUrlProviderBridgeTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    private static final class TestVcfUrlProvider implements VcfUrlProvider {
-        @Override
+    private static final class TestVcfUrlProvider {
         public String getVcfApiBase() {
             return "api-base";
         }
 
-        @Override
         public String getVcfAuthorUrlFormat() {
             return "author-%s";
         }
 
-        @Override
         public String getVcfPublishUrlFormat() {
             return "publish-%s-%s-%s";
         }
 
-        @Override
         public String getVcfTemplatesApiBase() {
             return "templates-base";
         }
@@ -73,7 +68,10 @@ class VcfUrlProviderBridgeTest {
 
     @BeforeEach
     void setUp() {
-        context.registerService(VcfUrlProvider.class, new TestVcfUrlProvider(), new Hashtable<>());
+        context.bundleContext().registerService(
+                new String[] { VcfUrlProviderBridge.VCF_URL_PROVIDER_CLASS_NAME },
+                new TestVcfUrlProvider(),
+                new Hashtable<>());
     }
 
     @AfterEach
@@ -123,7 +121,7 @@ class VcfUrlProviderBridgeTest {
     @Test
     void isServicePresent_catchesIllegalArgumentFromGetServiceReferences() throws Exception {
         BundleContext bc = mock(BundleContext.class);
-        when(bc.getServiceReferences(eq(VcfUrlProvider.class.getName()), isNull()))
+        when(bc.getServiceReferences(eq(VcfUrlProviderBridge.VCF_URL_PROVIDER_CLASS_NAME), isNull()))
             .thenThrow(new IllegalArgumentException("test"));
         assertFalse(VcfUrlProviderBridge.isServicePresent(bc));
     }
@@ -147,7 +145,7 @@ class VcfUrlProviderBridgeTest {
     void invokeString_skipsWhenGetServiceReturnsNull() throws Exception {
         BundleContext bc = mock(BundleContext.class);
         ServiceReference<?> ref = mock(ServiceReference.class);
-        when(bc.getServiceReferences(eq(VcfUrlProvider.class.getName()), isNull()))
+        when(bc.getServiceReferences(eq(VcfUrlProviderBridge.VCF_URL_PROVIDER_CLASS_NAME), isNull()))
             .thenReturn(new ServiceReference<?>[] { ref });
         doReturn(null).when(bc).getService(ref);
         assertNull(VcfUrlProviderBridge.getVcfPublishUrlFormat(bc));
@@ -157,7 +155,7 @@ class VcfUrlProviderBridgeTest {
     void invokeString_skipsServiceMissingMethod() throws Exception {
         BundleContext bc = mock(BundleContext.class);
         ServiceReference<?> ref = mock(ServiceReference.class);
-        when(bc.getServiceReferences(eq(VcfUrlProvider.class.getName()), isNull()))
+        when(bc.getServiceReferences(eq(VcfUrlProviderBridge.VCF_URL_PROVIDER_CLASS_NAME), isNull()))
             .thenReturn(new ServiceReference<?>[] { ref });
         doReturn(new Object()).when(bc).getService(ref);
         assertNull(VcfUrlProviderBridge.getVcfPublishUrlFormat(bc));
@@ -174,7 +172,7 @@ class VcfUrlProviderBridgeTest {
                 return 42;
             }
         };
-        when(bc.getServiceReferences(eq(VcfUrlProvider.class.getName()), isNull()))
+        when(bc.getServiceReferences(eq(VcfUrlProviderBridge.VCF_URL_PROVIDER_CLASS_NAME), isNull()))
             .thenReturn(new ServiceReference<?>[] { ref1, ref2 });
         doReturn(returnsInteger).when(bc).getService(ref1);
         doReturn(new TestVcfUrlProvider()).when(bc).getService(ref2);

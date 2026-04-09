@@ -64,12 +64,21 @@ describe("Test editDialog VCF template retention for", function() {
             set: function(v) { this._selectedValue = v; },
             configurable: true
         });
+
+        jQuery._getHandler = function(url, deliver) {
+            if (typeof url === "string" && url.indexOf(".html") >= 0) {
+                deliver("<span data-cmp-contentfragment-vcf-templates-api=\"/mock/vcf-templates-api\"></span>");
+            } else {
+                deliver("");
+            }
+        };
     });
 
     afterEach(function() {
         fixture.cleanup();
         jQuery._getJSONHandler = null;
         jQuery._ajaxHandler = null;
+        jQuery._getHandler = null;
     });
 
     /**
