@@ -94,7 +94,7 @@ class LinkUtilTest {
     @Test
     void escape_nullInputs() {
         String escaped = LinkUtil.escape(null, null, null);
-        assertNull(null, escaped);
+        assertEquals("", escaped);
     }
 
     @Test

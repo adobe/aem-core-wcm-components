@@ -154,10 +154,10 @@ public class LinkUtil {
             }
 
         } catch (Exception e) {
-            if (parsed != null && isQuickviewLink(parsed.getScheme())) {
+            if (parsed != null && isQuickviewScheme(parsed.getScheme())) {
                 // SITES-42596 Since quickview URLs are supported OOTB by the product,
                 // do not log error for them
-                LOG.info("Quickview URL detected, using fallback construction: {}", path);
+                LOG.debug("Quickview URL detected, using fallback construction: {}", path);
             } else {
                 LOG.error(e.getMessage(), e);
             }
@@ -296,11 +296,7 @@ public class LinkUtil {
         }
     }
 
-    private static boolean isQuickviewLink(String link) {
-        if (link != null) {
-            return link.startsWith(QUICKVIEW_PATTERN);
-        } else {
-            return false;
-        }
+    private static boolean isQuickviewScheme(String scheme) {
+        return QUICKVIEW_PATTERN.equals(scheme);
     }
 }
