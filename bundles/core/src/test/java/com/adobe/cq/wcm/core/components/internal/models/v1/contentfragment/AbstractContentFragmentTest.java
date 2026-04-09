@@ -17,18 +17,17 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Hashtable;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.function.Function;
 
-import com.day.cq.wcm.api.Page;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mockito;
+import org.osgi.framework.Constants;
 
 import com.adobe.cq.dam.cfm.ContentFragment;
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
@@ -37,16 +36,28 @@ import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.services.contentfragment.VcfUrlProvider;
 import com.day.cq.search.QueryBuilder;
+import com.day.cq.wcm.api.Page;
 import io.wcm.testing.mock.aem.junit5.AemContext;
-import org.osgi.framework.Constants;
 
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 public abstract class AbstractContentFragmentTest<T> {
 
     private static final String CONTEXT_PATH = "/core";
+
+    /** Experimental legacy VCF base; keep in sync with {@link #configureLegacyVcfUrls()}. */
+    static final String LEGACY_VCF_TEST_BASE = "/adobe/experimental/previewtemplates-expires-20260301";
+
+    /** GA VCF content root; keep in sync with {@link #configureGaVcfUrls()}. */
+    static final String GA_VCF_CONTENT_ROOT = "/adobe/contentFragments";
+
+    /** Value for {@link VcfUrlProvider#getVcfApiBase()} in GA stub; keep in sync with {@link #configureGaVcfUrls()}. */
+    static final String GA_VCF_API_BASE = "/adobe";
 
     /* names of the content fragment component instances to test */
 
@@ -131,26 +142,29 @@ public abstract class AbstractContentFragmentTest<T> {
         }
     }
 
-    /**
-     * Configures the stub to return legacy (FT disabled) URLs.
-     */
-    static void configureLegacyVcfUrls() {
-        String vcfApiBase = "/adobe/experimental/previewtemplates-expires-20260301";
-        vcfUrlProviderStub.vcfApiBase = vcfApiBase;
-        vcfUrlProviderStub.vcfAuthorUrlFormat = vcfApiBase + "/sites/cf/fragments/%s/preview";
-        vcfUrlProviderStub.vcfPublishUrlFormat = vcfApiBase + "/contentFragments/%s/%s/%s.html";
-        vcfUrlProviderStub.vcfTemplatesApiBase = vcfApiBase + "/sites/cf/models";
+    private static void applyVcfStubUrls(String apiBase, String authorFormat, String publishFormat, String templatesApiBase) {
+        vcfUrlProviderStub.vcfApiBase = apiBase;
+        vcfUrlProviderStub.vcfAuthorUrlFormat = authorFormat;
+        vcfUrlProviderStub.vcfPublishUrlFormat = publishFormat;
+        vcfUrlProviderStub.vcfTemplatesApiBase = templatesApiBase;
     }
 
-    /**
-     * Configures the stub to return GA (FT enabled) URLs.
-     */
+    /** Legacy (pre-GA) VCF URL layout under the experimental base path. */
+    static void configureLegacyVcfUrls() {
+        String base = LEGACY_VCF_TEST_BASE;
+        applyVcfStubUrls(base,
+            base + "/sites/cf/fragments/%s/preview",
+            base + "/contentFragments/%s/%s/%s.html",
+            base + "/sites/cf/models");
+    }
+
+    /** GA VCF URL layout under {@link #GA_VCF_CONTENT_ROOT}. */
     static void configureGaVcfUrls() {
-        String vcfApiBase = "/adobe";
-        vcfUrlProviderStub.vcfApiBase = vcfApiBase;
-        vcfUrlProviderStub.vcfAuthorUrlFormat = vcfApiBase + "/contentFragments/%s/preview";
-        vcfUrlProviderStub.vcfPublishUrlFormat = vcfApiBase + "/contentFragments/%s/%s/%s.html";
-        vcfUrlProviderStub.vcfTemplatesApiBase = vcfApiBase + "/contentFragments/models";
+        String root = GA_VCF_CONTENT_ROOT;
+        applyVcfStubUrls(GA_VCF_API_BASE,
+            root + "/%s/preview",
+            root + "/%s/%s/%s.html",
+            root + "/models");
     }
 
     QueryBuilder queryBuilderMock;
@@ -195,11 +209,10 @@ public abstract class AbstractContentFragmentTest<T> {
 
         vcfUrlProviderStub = new StubVcfUrlProvider();
         configureLegacyVcfUrls();
-        Hashtable<String, Object> vcfProps = new Hashtable<>();
-        vcfProps.put(Constants.SERVICE_RANKING, Integer.MAX_VALUE);
-        context.registerService(VcfUrlProvider.class, vcfUrlProviderStub, vcfProps);
+        context.registerService(VcfUrlProvider.class, vcfUrlProviderStub,
+            Collections.singletonMap(Constants.SERVICE_RANKING, Integer.MAX_VALUE));
 
-        queryBuilderMock = Mockito.mock(QueryBuilder.class);
+        queryBuilderMock = mock(QueryBuilder.class);
 
         additionalSetUp();
     }
@@ -216,8 +229,8 @@ public abstract class AbstractContentFragmentTest<T> {
         String path = getTestResourcesParentPath() + "/" + resourceName;
         ResourceResolver originalResourceResolver = context.resourceResolver();
         // Replace resource resolver with stubbed version of itself so we can verify query builder interaction
-        ResourceResolver resourceResolver = Mockito.spy(originalResourceResolver);
-        Mockito.doReturn(queryBuilderMock).when(resourceResolver).adaptTo(Mockito.eq(QueryBuilder.class));
+        ResourceResolver resourceResolver = spy(originalResourceResolver);
+        doReturn(queryBuilderMock).when(resourceResolver).adaptTo(eq(QueryBuilder.class));
         Resource resource = resourceResolver.getResource(path);
         MockSlingHttpServletRequest httpServletRequest = new MockSlingHttpServletRequest(resourceResolver, context.bundleContext());
         httpServletRequest.setResource(resource);

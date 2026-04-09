@@ -27,7 +27,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -47,14 +46,14 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
-import com.adobe.cq.wcm.core.components.services.contentfragment.VcfUrlProvider;
-import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContentFragmentDataImpl;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.services.contentfragment.VcfUrlProvider;
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 
 @Model(
         adaptables = SlingHttpServletRequest.class,
@@ -120,7 +119,7 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     @Nullable
     private String displayMode;
 
-    @ValueMapValue(name = "vcfTemplate", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = ContentFragment.PN_VCF_TEMPLATE, injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private String vcfTemplate;
 
@@ -260,41 +259,41 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     @Nullable
     @Override
     public String getVcfRenderUrl() {
-        if (!isVcfMode() || StringUtils.isEmpty(fragmentId) || vcfUrlProvider == null) {
+        VcfUrlProvider urls = vcfUrlProvider;
+        if (!isVcfMode() || StringUtils.isEmpty(fragmentId) || urls == null) {
             return null;
         }
-        return isPublishRunMode() ? buildPublishUrl() : buildAuthorPreviewUrl();
+        return isPublishRunMode() ? buildPublishUrl(urls) : buildAuthorPreviewUrl(urls);
     }
 
     @Override
     public boolean isVcfAuthRequired() {
-        return isVcfMode() && !isPublishRunMode() && vcfUrlProvider != null;
+        VcfUrlProvider urls = vcfUrlProvider;
+        return isVcfMode() && !isPublishRunMode() && urls != null;
     }
 
     @Nullable
     @Override
     public String getVcfTemplatesApiBase() {
-        return vcfUrlProvider != null ? vcfUrlProvider.getVcfTemplatesApiBase() : null;
+        VcfUrlProvider urls = vcfUrlProvider;
+        return urls == null ? null : urls.getVcfTemplatesApiBase();
     }
 
     private boolean isVcfMode() {
         return VCF_DISPLAY_MODE.equals(displayMode);
     }
 
-    private String buildPublishUrl() {
-        String format = vcfUrlProvider != null ? vcfUrlProvider.getVcfPublishUrlFormat() : null;
-        if (format == null) {
-            return null;
-        }
-        if (StringUtils.isEmpty(vcfTemplate)) {
+    private String buildPublishUrl(VcfUrlProvider urls) {
+        String format = urls.getVcfPublishUrlFormat();
+        if (format == null || StringUtils.isEmpty(vcfTemplate)) {
             return null;
         }
         String variation = hasNonMasterVariation() ? variationName : "main";
         return String.format(format, vcfTemplate, fragmentId, variation);
     }
 
-    private String buildAuthorPreviewUrl() {
-        String authorFormat = vcfUrlProvider != null ? vcfUrlProvider.getVcfAuthorUrlFormat() : null;
+    private String buildAuthorPreviewUrl(VcfUrlProvider urls) {
+        String authorFormat = urls.getVcfAuthorUrlFormat();
         if (authorFormat == null) {
             return null;
         }

@@ -19,38 +19,27 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * Provides URL patterns and API bases for Visual Content Fragment (VCF) preview and template listing.
- * <p>
- * Register an implementation of this interface as an OSGi service (typically from the DAM Content Fragment
- * implementation bundle). The Core Content Fragment component consumes it optionally when {@code displayMode} is VCF.
- * </p>
+ * Optional OSGi service: VCF preview URL patterns and templates API base. Implemented by DAM Content Fragment;
+ * consumed by Core when the Content Fragment component uses {@code displayMode} {@code vcf}.
  *
  * @since com.adobe.cq.wcm.core.components.services.contentfragment 1.0.0
  */
 @ConsumerType
 public interface VcfUrlProvider {
 
-    /**
-     * @return base path for VCF-related APIs, or {@code null} if not configured
-     */
+    /** @return API root (optional for Core), or {@code null} */
     @Nullable
     String getVcfApiBase();
 
-    /**
-     * @return author preview URL format string with a single {@code %s} placeholder for the fragment id, or {@code null}
-     */
+    /** @return author preview format, one {@code %s} for fragment id, or {@code null} */
     @Nullable
     String getVcfAuthorUrlFormat();
 
-    /**
-     * @return publish URL format with placeholders {@code %s} for template id, fragment id, and variation key, or {@code null}
-     */
+    /** @return publish HTML format, three {@code %s}: template id, fragment id, variation, or {@code null} */
     @Nullable
     String getVcfPublishUrlFormat();
 
-    /**
-     * @return base URL for the VCF templates API, or {@code null} if not configured
-     */
+    /** @return templates API base (dialog appends {@code /{modelId}/templates?...}), or {@code null} */
     @Nullable
     String getVcfTemplatesApiBase();
 }

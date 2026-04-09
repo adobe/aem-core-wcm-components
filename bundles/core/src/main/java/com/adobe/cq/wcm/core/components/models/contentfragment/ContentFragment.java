@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.wcm.core.components.models.Component;
+import com.adobe.cq.wcm.core.components.services.contentfragment.VcfUrlProvider;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -62,6 +63,13 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     String PN_DISPLAY_MODE = "displayMode";
+
+    /**
+     * Name of the optional resource property that stores the VCF visualization template id.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
+     */
+    String PN_VCF_TEMPLATE = "vcfTemplate";
 
     /**
      * Returns resource type that is used for the internal responsive grid.
@@ -133,10 +141,8 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
     }
 
     /**
-     * Returns the render URL for a Visual Content Fragment, or {@code null}
-     * when VCF display mode is not active or the required configuration is missing.
-     * On author instances the URL points to the preview API; on publish instances
-     * it points to the publish delivery endpoint.
+     * Returns the VCF render URL, or {@code null} when display mode is not VCF, the fragment has no id, or
+     * {@link VcfUrlProvider} is missing or incomplete. Author uses the preview API; publish uses the HTML delivery URL.
      *
      * @return the VCF render URL, or {@code null}
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
@@ -148,9 +154,7 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
     }
 
     /**
-     * Returns whether the VCF preview API requires authentication.
-     * This is {@code true} on author instances (where an IMS Bearer token
-     * must be sent) and {@code false} on publish instances.
+     * {@code true} on author in VCF mode when a {@link VcfUrlProvider} is present; {@code false} on publish.
      *
      * @return {@code true} if VCF auth is required
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
@@ -161,11 +165,10 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
     }
 
     /**
-     * Returns the base URL for the VCF templates API, or {@code null} when VCF
-     * display mode is not active. The dialog appends
-     * {@code /{modelId}/templates} to this base.
+     * Base URL for the VCF templates API; the dialog appends {@code /{modelId}/templates?limit=...}.
+     * {@code null} if {@link VcfUrlProvider} is absent or provides no base.
      *
-     * @return the VCF templates API base URL, or {@code null}
+     * @return templates API base, or {@code null}
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
      */
     @Nullable
