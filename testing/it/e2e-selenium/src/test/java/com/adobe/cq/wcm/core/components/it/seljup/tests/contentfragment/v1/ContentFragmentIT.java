@@ -36,6 +36,8 @@ import com.codeborne.selenide.ElementsCollection;
 
 import java.util.concurrent.TimeoutException;
 
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_CONTENTFRAGMENT_V1;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -227,5 +229,42 @@ public class ContentFragmentIT extends AuthorBaseUITest {
             "Content Fragment first element title should be correctly displayed");
         assertTrue(contentFragmentElementValues.get(0).isDisplayed() && contentFragmentElementValues.get(0).innerHtml().trim().equals("Image"),
             "Content Fragment first element value should be correctly displayed");
+    }
+
+    /**
+     * Content Fragment Visualization (VCF) display mode should reveal the HTML template selector in the edit dialog.
+     */
+    @Test
+    @DisplayName("VCF display mode shows visualization template field")
+    public void testVcfDisplayModeShowsVisualizationTemplateField() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, cmpPath);
+        contentFragment.getEditDialog().setFragmentPath(fragmentPath1);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        contentFragment.getEditDialog().setDisplayMode("vcf");
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+
+        $("coral-radio[name='./displayMode'][value='vcf']").shouldBe(visible);
+        $("coral-select[name='./vcfTemplate']").shouldBe(visible);
+    }
+
+    /**
+     * After saving with VCF display mode, the page preview should render the VCF wrapper (author preview uses
+     * {@code vcfRenderer.js}; published preview uses {@code vcf.js} when a preview URL is available).
+     */
+    @Test
+    @DisplayName("VCF display mode renders wrapper in preview")
+    public void testVcfDisplayModeRendersWrapperInPreview() throws InterruptedException, TimeoutException {
+        Commons.openEditDialog(editorPage, cmpPath);
+        contentFragment.getEditDialog().setFragmentPath(fragmentPath1);
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        contentFragment.getEditDialog().setDisplayMode("vcf");
+        Commons.saveConfigureDialog();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+
+        editorPage.enterPreviewMode();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+        Commons.switchContext("ContentFrame");
+
+        $(".cmp-contentfragment--vcf").shouldBe(visible);
     }
 }
