@@ -13,6 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+
+function flushMicrotasksForVcfSiteTests() {
+    return new Promise(function(resolve) {
+        setTimeout(resolve, 0);
+    });
+}
+
 describe("Test site vcf.js for", function() {
 
     const VCF_SCRIPT = "/base/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment/clientlibs/site/js/vcf.js";
@@ -20,12 +27,6 @@ describe("Test site vcf.js for", function() {
     const IMS_TOKEN_KEY_PREFIX = "adobeid_ims_access_token/";
 
     let originalFetch;
-
-    function flushPromises() {
-        return new Promise(function(resolve) {
-            setTimeout(resolve, 0);
-        });
-    }
 
     function appendVcfElement(options) {
         const el = document.createElement("div");
@@ -73,7 +74,7 @@ describe("Test site vcf.js for", function() {
 
         const el = appendVcfElement({});
         await loadVcfScript();
-        await flushPromises();
+        await flushMicrotasksForVcfSiteTests();
 
         expect(globalThis.fetch.calls.mostRecent().args[0]).toBe(PREVIEW_URL);
         expect(globalThis.fetch.calls.mostRecent().args[1].headers).toEqual({});
@@ -98,7 +99,7 @@ describe("Test site vcf.js for", function() {
 
         appendVcfElement({ withAuth: true });
         await loadVcfScript();
-        await flushPromises();
+        await flushMicrotasksForVcfSiteTests();
 
         expect(globalThis.fetch.calls.mostRecent().args[0]).toBe(PREVIEW_URL);
         expect(globalThis.fetch.calls.mostRecent().args[1].headers.Authorization).toBe("Bearer unit-test-token");
@@ -114,7 +115,7 @@ describe("Test site vcf.js for", function() {
 
         appendVcfElement({ withAuth: true });
         await loadVcfScript();
-        await flushPromises();
+        await flushMicrotasksForVcfSiteTests();
 
         expect(globalThis.fetch.calls.mostRecent().args[0]).toBe(PREVIEW_URL);
         expect(globalThis.fetch.calls.mostRecent().args[1].headers).toEqual({});
@@ -131,7 +132,7 @@ describe("Test site vcf.js for", function() {
 
         const el = appendVcfElement({});
         await loadVcfScript();
-        await flushPromises();
+        await flushMicrotasksForVcfSiteTests();
 
         const body = el.shadowRoot.querySelector("body");
         expect(body.style.display).toBe("none");
