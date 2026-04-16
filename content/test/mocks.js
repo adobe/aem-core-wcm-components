@@ -115,7 +115,7 @@ jQuery.getJSON = function(url) {
  */
 jQuery.get = function(url, data, success, dataType) {
     if (typeof url === 'object' && url !== null) {
-        return jQuery.ajax(Object.assign({ type: 'GET' }, url));
+        return jQuery.ajax({ type: 'GET', ...url });
     }
     const state = { doneCb: null, alwaysCb: null, scheduled: false };
     function schedule() {
@@ -287,7 +287,7 @@ Granite = {
         util: {
             mixin: function (dest, src) {
                 for (const prop in src) {
-                    if (Object.prototype.hasOwnProperty.call(src, prop)) {
+                    if (Object.hasOwn(src, prop)) {
                         dest[prop] = src[prop];
                     }
                 }
@@ -301,7 +301,7 @@ Granite = {
                 }
 
                 for (const prop in classDefinition) {
-                    if (Object.prototype.hasOwnProperty.call(classDefinition, prop) && prop !== "constructor") {
+                    if (Object.hasOwn(classDefinition, prop) && prop !== "constructor") {
                         methods[prop] = classDefinition[prop];
                     }
                 }
@@ -387,7 +387,7 @@ window.adaptTo = function(type) {
     return null;
 };
 
-window.Coral = {
+globalThis.Coral = {
     commons: {
         ready: function(el, callback) {
             callback(el);

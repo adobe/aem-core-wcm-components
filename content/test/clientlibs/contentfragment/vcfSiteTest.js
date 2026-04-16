@@ -17,15 +17,22 @@ describe("Test site vcf.js for", function() {
 
     const VCF_SCRIPT = "/base/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment/clientlibs/site/js/vcf.js";
     const PREVIEW_URL = "/content/dam/test/cf-preview";
+    const IMS_TOKEN_KEY_PREFIX = "adobeid_ims_access_token/";
 
     let originalFetch;
+
+    function flushPromises() {
+        return new Promise(function(resolve) {
+            setTimeout(resolve, 0);
+        });
+    }
 
     function appendVcfElement(options) {
         const el = document.createElement("div");
         el.className = "cmp-contentfragment cmp-contentfragment--vcf";
-        el.setAttribute("data-cmp-contentfragment-vcf-url", options.url || PREVIEW_URL);
+        el.dataset.cmpContentfragmentVcfUrl = options.url || PREVIEW_URL;
         if (options.withAuth) {
-            el.setAttribute("data-cmp-contentfragment-vcf-auth", "");
+            el.dataset.cmpContentfragmentVcfAuth = "";
         }
         document.body.appendChild(el);
         return el;
@@ -41,33 +48,23 @@ describe("Test site vcf.js for", function() {
         });
     }
 
-    function flushPromises() {
-        return new Promise(function(resolve) {
-            setTimeout(resolve, 0);
-        });
-    }
-
     beforeEach(function() {
-        originalFetch = window.fetch;
+        originalFetch = globalThis.fetch;
     });
 
     afterEach(function() {
-        window.fetch = originalFetch;
+        globalThis.fetch = originalFetch;
         document.body.innerHTML = "";
-        try {
-            const keys = Object.keys(sessionStorage);
-            for (let i = 0; i < keys.length; i++) {
-                if (keys[i].indexOf("adobeid_ims_access_token/") === 0) {
-                    sessionStorage.removeItem(keys[i]);
-                }
+        const keys = Object.keys(sessionStorage);
+        for (const key of keys) {
+            if (key.startsWith(IMS_TOKEN_KEY_PREFIX)) {
+                sessionStorage.removeItem(key);
             }
-        } catch (e) {
-            // ignore
         }
     });
 
     it("fetches preview HTML and renders it inside shadow DOM", async function() {
-        window.fetch = jasmine.createSpy("fetch").and.returnValue(Promise.resolve({
+        globalThis.fetch = jasmine.createSpy("fetch").and.returnValue(Promise.resolve({
             ok: true,
             text: function() {
                 return Promise.resolve("<div class=\"vcf-preview\">Rendered</div>");
@@ -78,8 +75,8 @@ describe("Test site vcf.js for", function() {
         await loadVcfScript();
         await flushPromises();
 
-        expect(window.fetch.calls.mostRecent().args[0]).toBe(PREVIEW_URL);
-        expect(window.fetch.calls.mostRecent().args[1].headers).toEqual({});
+        expect(globalThis.fetch.calls.mostRecent().args[0]).toBe(PREVIEW_URL);
+        expect(globalThis.fetch.calls.mostRecent().args[1].headers).toEqual({});
         expect(el.shadowRoot).toBeTruthy();
         const body = el.shadowRoot.querySelector("body");
         expect(body.style.display).toBe("");
@@ -92,7 +89,7 @@ describe("Test site vcf.js for", function() {
             JSON.stringify({ tokenValue: "unit-test-token" })
         );
 
-        window.fetch = jasmine.createSpy("fetch").and.returnValue(Promise.resolve({
+        globalThis.fetch = jasmine.createSpy("fetch").and.returnValue(Promise.resolve({
             ok: true,
             text: function() {
                 return Promise.resolve("<span>ok</span>");
@@ -103,12 +100,12 @@ describe("Test site vcf.js for", function() {
         await loadVcfScript();
         await flushPromises();
 
-        expect(window.fetch.calls.mostRecent().args[0]).toBe(PREVIEW_URL);
-        expect(window.fetch.calls.mostRecent().args[1].headers.Authorization).toBe("Bearer unit-test-token");
+        expect(globalThis.fetch.calls.mostRecent().args[0]).toBe(PREVIEW_URL);
+        expect(globalThis.fetch.calls.mostRecent().args[1].headers.Authorization).toBe("Bearer unit-test-token");
     });
 
     it("does not send Authorization when auth attribute is set but no IMS token", async function() {
-        window.fetch = jasmine.createSpy("fetch").and.returnValue(Promise.resolve({
+        globalThis.fetch = jasmine.createSpy("fetch").and.returnValue(Promise.resolve({
             ok: true,
             text: function() {
                 return Promise.resolve("<span>ok</span>");
@@ -119,12 +116,12 @@ describe("Test site vcf.js for", function() {
         await loadVcfScript();
         await flushPromises();
 
-        expect(window.fetch.calls.mostRecent().args[0]).toBe(PREVIEW_URL);
-        expect(window.fetch.calls.mostRecent().args[1].headers).toEqual({});
+        expect(globalThis.fetch.calls.mostRecent().args[0]).toBe(PREVIEW_URL);
+        expect(globalThis.fetch.calls.mostRecent().args[1].headers).toEqual({});
     });
 
     it("leaves shadow body hidden when the response is not OK", async function() {
-        window.fetch = jasmine.createSpy("fetch").and.returnValue(Promise.resolve({
+        globalThis.fetch = jasmine.createSpy("fetch").and.returnValue(Promise.resolve({
             ok: false,
             status: 502,
             text: function() {
@@ -142,14 +139,14 @@ describe("Test site vcf.js for", function() {
     });
 
     it("does not fetch when the element already has a shadow root", async function() {
-        window.fetch = jasmine.createSpy("fetch");
+        globalThis.fetch = jasmine.createSpy("fetch");
 
         const el = appendVcfElement({});
         el.attachShadow({ mode: "open" });
 
         await loadVcfScript();
 
-        expect(window.fetch).not.toHaveBeenCalled();
+        expect(globalThis.fetch).not.toHaveBeenCalled();
     });
 
 });
