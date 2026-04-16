@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import javax.servlet.Servlet;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
@@ -132,10 +133,7 @@ public class MockVCFServlet extends SlingAllMethodsServlet {
         if (input == null) {
             return "";
         }
-        return input.replace("&", "&amp;")
-                     .replace("<", "&lt;")
-                     .replace(">", "&gt;")
-                     .replace("\"", "&quot;");
+        return StringEscapeUtils.escapeHtml4(input);
     }
 
     private static String escapeJson(String input) {
