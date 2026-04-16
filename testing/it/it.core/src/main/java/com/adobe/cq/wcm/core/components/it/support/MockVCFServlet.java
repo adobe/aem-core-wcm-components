@@ -19,12 +19,12 @@ import java.io.IOException;
 
 import javax.servlet.Servlet;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.servlets.annotations.SlingServletPaths;
 import org.osgi.service.component.annotations.Component;
+import org.owasp.encoder.Encode;
 
 /**
  * Local-development mock for the Content Fragment Visualization API.
@@ -133,7 +133,7 @@ public class MockVCFServlet extends SlingAllMethodsServlet {
         if (input == null) {
             return "";
         }
-        return StringEscapeUtils.escapeHtml4(input);
+        return Encode.forHtmlContent(input);
     }
 
     private static String escapeJson(String input) {
