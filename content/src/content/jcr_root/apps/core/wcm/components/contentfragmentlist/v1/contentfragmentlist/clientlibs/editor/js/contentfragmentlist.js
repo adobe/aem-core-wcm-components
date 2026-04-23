@@ -26,6 +26,56 @@
     var SELECTOR_ELEMENT_NAMES = "[data-granite-coral-multifield-name='./elementNames']";
     var SELECTOR_ELEMENT_NAMES_ADD = SELECTOR_ELEMENT_NAMES + " > [is=coral-button]";
 
+    /**
+     * @param {String} path - resource path or URL as stored on the dialog field (cmp-field-path)
+     * @returns {Boolean} true if resolving the path yields a same-origin URL suitable for datasource requests
+     */
+    function isSameOriginDatasourcePath(path) {
+        if (path === undefined || path === null) {
+            return false;
+        }
+        var str = String(path).trim();
+        if (str.length === 0) {
+            return false;
+        }
+        if (/^(javascript|data|vbscript):/i.test(str)) {
+            return false;
+        }
+        var external = Granite.HTTP.externalize(str);
+        var resolved;
+        try {
+            resolved = new URL(external, window.location.href);
+        } catch (e) {
+            return false;
+        }
+        return resolved.origin === window.location.origin;
+    }
+
+    /**
+     * Parses HTML returned by a trusted same-origin datasource.
+     *
+     * @param {String} html - response body
+     * @returns {Document} parsed document
+     */
+    function parseDatasourceDocument(html) {
+        return new DOMParser().parseFromString(html, "text/html");
+    }
+
+    /**
+     * Extracts inner markup to mirror prior jQuery(html)[0].innerHTML behavior for a single root under body.
+     *
+     * @param {String} html - response body
+     * @returns {String} HTML to assign to the element names container
+     */
+    function getInnerHtmlFromDatasourceResponse(html) {
+        var doc = parseDatasourceDocument(html);
+        var body = doc.body;
+        if (!body || !body.firstElementChild) {
+            return "";
+        }
+        return body.firstElementChild.innerHTML;
+    }
+
     // ui helper
     var ui = $(window).adaptTo("foundation-ui");
 
@@ -126,6 +176,9 @@
      * @returns {Object} the resulting request object
      */
     ContentFragmentListController.prototype.prepareDataSourceRequest = function(url) {
+        if (!isSameOriginDatasourcePath(url)) {
+            return $.Deferred().reject().promise();
+        }
         var data = {
             modelPath: modelPath.value
         };
@@ -147,8 +200,10 @@
         var self = this;
         // wait for requests to load
         $.when(elementNamesRequest, orderByRequest).done(function(elementNamesResult, orderByResult) {
-            var newElementNames = $(elementNamesResult[0]).find(SELECTOR_ELEMENT_NAMES)[0];
-            var orderBy = $(orderByResult[0]).find(SELECTOR_ORDER_BY)[0];
+            var elementNamesDoc = parseDatasourceDocument(elementNamesResult[0]);
+            var orderByDoc = parseDatasourceDocument(orderByResult[0]);
+            var newElementNames = elementNamesDoc.querySelector(SELECTOR_ELEMENT_NAMES);
+            var orderBy = orderByDoc.querySelector(SELECTOR_ORDER_BY);
             self.fetchedState = {
                 elementNames: newElementNames,
                 elementNamesContainerHTML: elementNamesResult[0],
@@ -176,8 +231,9 @@
             }
             // compare the items of the current and new element names fields
             var currentElementNamesItems = this.elementNames.template.content.querySelectorAll("coral-select-item");
-            var newElementNamesItems = $(this.fetchedState.elementNamesContainerHTML).find("coral-select-item").toArray();
-            var newOrderByItems = $(this.fetchedState.orderBy).find("coral-select-item").toArray();
+            var elementNamesMarkup = parseDatasourceDocument(this.fetchedState.elementNamesContainerHTML);
+            var newElementNamesItems = elementNamesMarkup.querySelectorAll("coral-select-item");
+            var newOrderByItems = this.fetchedState.orderBy.querySelectorAll("coral-select-item");
             if (!itemsAreEqual(currentElementNamesItems, newElementNamesItems) ||
                 !itemsAreEqual(this.orderBy.items.getAll(), newOrderByItems)) {
                 return false;
@@ -212,17 +268,21 @@
      * @param {String} html - outerHTML value for elementNamesContainer
      */
     ContentFragmentListController.prototype._updateElementsHTML = function(html) {
-        this.elementNamesContainer.innerHTML = $(html)[0].innerHTML;
+        this.elementNamesContainer.innerHTML = getInnerHtmlFromDatasourceResponse(html);
         this._updateElementNamesField();
     };
 
     /**
      * Replaces the html of orderBy select item.
      *
-     * @param {String} html - html value for orderBy
+     * @param {Element} orderByNode - coral-select markup for orderBy from a parsed datasource response
      */
-    ContentFragmentListController.prototype._updateOrderByHTML = function(html) {
-        this.orderBy.replaceWith(html);
+    ContentFragmentListController.prototype._updateOrderByHTML = function(orderByNode) {
+        if (!orderByNode) {
+            return;
+        }
+        var imported = document.importNode(orderByNode, true);
+        this.orderBy.replaceWith(imported);
         this.orderBy = editDialog.querySelector(SELECTOR_ORDER_BY);
     };
 
