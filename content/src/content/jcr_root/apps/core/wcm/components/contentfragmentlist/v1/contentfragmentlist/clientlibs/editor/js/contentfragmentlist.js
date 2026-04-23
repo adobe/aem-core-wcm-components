@@ -28,7 +28,7 @@
 
     /**
      * @param {String} path - resource path or URL as stored on the dialog field (cmp-field-path)
-     * @returns {Boolean} true if resolving the path yields a same-origin URL suitable for datasource requests
+     * @returns {Boolean} true if the path resolves to a URL on the current page origin
      */
     function isSameOriginDatasourcePath(path) {
         if (path === undefined || path === null) {
@@ -52,7 +52,7 @@
     }
 
     /**
-     * Parses HTML returned by a trusted same-origin datasource.
+     * Parses HTML from a datasource response.
      *
      * @param {String} html - response body
      * @returns {Document} parsed document
@@ -62,10 +62,10 @@
     }
 
     /**
-     * Extracts inner markup to mirror prior jQuery(html)[0].innerHTML behavior for a single root under body.
+     * Returns the inner HTML of the first child of the parsed document body.
      *
      * @param {String} html - response body
-     * @returns {String} HTML to assign to the element names container
+     * @returns {String} markup for the element names container
      */
     function getInnerHtmlFromDatasourceResponse(html) {
         var doc = parseDatasourceDocument(html);
@@ -275,7 +275,7 @@
     /**
      * Replaces the html of orderBy select item.
      *
-     * @param {Element} orderByNode - coral-select markup for orderBy from a parsed datasource response
+     * @param {Element} orderByNode - coral-select element to insert
      */
     ContentFragmentListController.prototype._updateOrderByHTML = function(orderByNode) {
         if (!orderByNode) {
