@@ -62,6 +62,50 @@
 
     var elementsController;
 
+    function pathExternalizesToCurrentHost(path) {
+        if (path === undefined || path === null) {
+            return false;
+        }
+        var str = String(path).trim();
+        if (str.length === 0) {
+            return false;
+        }
+        var lowerStr = str.toLowerCase();
+        if (
+            lowerStr.indexOf("javascript:") === 0 ||
+            lowerStr.indexOf("data:") === 0 ||
+            lowerStr.indexOf("vbscript:") === 0
+        ) {
+            return false;
+        }
+        var decoded;
+        try {
+            decoded = decodeURIComponent(str.split("+").join(" "));
+        } catch (e) {
+            return false;
+        }
+        if (decoded.indexOf("..") !== -1) {
+            return false;
+        }
+        var external = Granite.HTTP.externalize(str);
+        var resolved;
+        try {
+            resolved = new URL(external, window.location.href);
+        } catch (ex) {
+            return false;
+        }
+        return resolved.origin === window.location.origin;
+    }
+
+    function innerHtmlFromMarkupFirstWrapper(markup) {
+        var doc = new DOMParser().parseFromString(markup, "text/html");
+        var body = doc.body;
+        if (!body || !body.firstElementChild) {
+            return "";
+        }
+        return body.firstElementChild.innerHTML;
+    }
+
     /**
      * A class which encapsulates the logic related to element selectors and variation name selector.
      */
@@ -147,6 +191,10 @@
     ElementsController.prototype.prepareRequest = function(displayMode, type) {
         if (typeof displayMode === "undefined") {
             displayMode = editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED).value;
+        }
+        var pathForRequest = type === "variation" ? this.variationNamePath : this.elementsContainerPath;
+        if (!pathExternalizesToCurrentHost(pathForRequest)) {
+            return $.Deferred().reject().promise();
         }
         var data = {
             fragmentPath: fragmentPath.value,
@@ -305,7 +353,7 @@
      * @param {String} html - outerHTML value for elementNamesContainer
      */
     ElementsController.prototype._updateElementsHTML = function(html) {
-        this.elementNamesContainer.innerHTML = $(html)[0].innerHTML;
+        this.elementNamesContainer.innerHTML = innerHtmlFromMarkupFirstWrapper(html);
         this._updateFields();
     };
 
@@ -318,14 +366,15 @@
      */
     ElementsController.prototype._updateElementsDOM = function(dom) {
         this._updateFields();
-        if (dom.tagName === "CORAL-MULTIFIELD") {
+        var element = dom.ownerDocument !== document ? document.importNode(dom, true) : dom;
+        if (element.tagName === "CORAL-MULTIFIELD") {
             // replace the element names multifield's template
-            this.elementNames.template = dom.template;
+            this.elementNames.template = element.template;
         } else {
             this._clearValidationError(this.singleTextSelector);
-            dom.value = this.singleTextSelector.value;
-            this.singleTextSelector.parentNode.replaceChild(dom, this.singleTextSelector);
-            this.singleTextSelector = dom;
+            element.value = this.singleTextSelector.value;
+            this.singleTextSelector.parentNode.replaceChild(element, this.singleTextSelector);
+            this.singleTextSelector = element;
             this.singleTextSelector.removeAttribute("disabled");
         }
         this._updateFields();
@@ -353,9 +402,10 @@
      */
     ElementsController.prototype._updateVariationDOM = function(dom) {
         // replace the variation name select, keeping its value
-        dom.value = this.variationName.value;
-        this.variationName.parentNode.replaceChild(dom, this.variationName);
-        this.variationName = dom;
+        var element = dom.ownerDocument !== document ? document.importNode(dom, true) : dom;
+        element.value = this.variationName.value;
+        this.variationName.parentNode.replaceChild(element, this.variationName);
+        this.variationName = element;
         this.variationName.removeAttribute("disabled");
         this._updateFields();
     };
