@@ -40,6 +40,47 @@
         return encodeURIComponent(pagePath).replace(/%2F/g, "/");
     }
 
+    function authoringViewUrlForPath(resolvedPath) {
+        if (!resolvedPath) {
+            return null;
+        }
+        var u;
+        try {
+            u = new URL(String(resolvedPath), window.location.href);
+        } catch (err) {
+            return null;
+        }
+        if (u.origin !== window.location.origin) {
+            return null;
+        }
+        u.search = "";
+        u.hash = "";
+        if (!/\.html$/i.test(u.pathname)) {
+            u.pathname = u.pathname + ".html";
+        }
+        u.searchParams.set("wcmmode", "disabled");
+        return u.toString();
+    }
+
+    function countElementsWithIdInHtml(markup, elementId) {
+        if (elementId === null || elementId === undefined) {
+            return 0;
+        }
+        var expected = String(elementId);
+        if (expected.length === 0) {
+            return 0;
+        }
+        var root = (new window.DOMParser()).parseFromString(markup, "text/html");
+        var nodes = root.querySelectorAll("[id]");
+        var count = 0;
+        for (var n = 0; n < nodes.length; n++) {
+            if (nodes[n].id === expected) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     /* Validator for TextField - Validation for duplicate HTML ID authored through dialog */
     registry.register("foundation.validation.validator", {
         selector: "[data-validation=html-unique-id-validator]",
@@ -63,14 +104,15 @@
             }
 
             var pagePath = compPath.split("/_jcr_content")[0];
-            var encodedPagePath;
+            var pathToResolve = pagePath;
 
             // Use sanitization function if toggle is enabled
             if (window.Granite && window.Granite.Toggles && window.Granite.Toggles.isEnabled(CT_SANITIZE_ENCODE_PATH)) {
-                encodedPagePath = sanitizeAndEncodePath(pagePath);
+                var encodedPagePath = sanitizeAndEncodePath(pagePath);
                 if (!encodedPagePath) {
                     return;
                 }
+                pathToResolve = encodedPagePath;
             }
 
             var preConfiguredVal;
@@ -92,21 +134,20 @@
             if (!currentVal || currentVal === preConfiguredVal) {
                 return;
             }
-            var url = (encodedPagePath || pagePath) + ".html?wcmmode=disabled";
+            var viewUrl = authoringViewUrlForPath(pathToResolve);
+            if (!viewUrl) {
+                return;
+            }
             var idCount = 0;
             /* Check if same ID already exist on the page */
             $.ajax({
                 type: "GET",
-                url: url,
+                url: viewUrl,
                 dataType: "html",
                 async: false,
                 success: function(data) {
-                    var idList;
                     if (data) {
-                        idList = $(data).find("[id='" + currentVal + "']");
-                        if (idList) {
-                            idCount = idList.length;
-                        }
+                        idCount = countElementsWithIdInHtml(data, currentVal);
                     }
                 }
             });
