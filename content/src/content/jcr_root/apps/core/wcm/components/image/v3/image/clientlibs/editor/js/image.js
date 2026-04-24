@@ -66,6 +66,53 @@
     var remoteFileReference;
     var dataSeededValueAttr = "data-seeded-value";
 
+    function formatSmartCropOptionLabel(value) {
+        if (value === undefined || value === null) {
+            return "";
+        }
+        var div = document.createElement("div");
+        div.textContent = String(value);
+        return div.innerHTML;
+    }
+
+    function isDamScene7FileEligible(path) {
+        if (path === undefined || path === null) {
+            return false;
+        }
+        var str = String(path).trim();
+        if (str.length === 0) {
+            return false;
+        }
+        var lowerStr = str.toLowerCase();
+        if (
+            lowerStr.indexOf("javascript:") === 0 ||
+            lowerStr.indexOf("data:") === 0 ||
+            lowerStr.indexOf("vbscript:") === 0
+        ) {
+            return false;
+        }
+        var decoded;
+        try {
+            decoded = decodeURIComponent(str.split("+").join(" "));
+        } catch (e) {
+            return false;
+        }
+        if (decoded.indexOf("..") !== -1) {
+            return false;
+        }
+        var isAbsoluteHttp =
+            lowerStr.indexOf("https://") === 0 ||
+            lowerStr.indexOf("http://") === 0;
+        if (isAbsoluteHttp) {
+            try {
+                return new URL(str).origin === window.location.origin;
+            } catch (ex) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
         altTextFromDAM = undefined;
@@ -495,7 +542,12 @@
                     if (!imageFromPageImage.checked) {
                         $dynamicMediaGroup.show();
                     }
-                    getSmartCropRenditions(data["dam:scene7File"]);
+                    if (isDamScene7FileEligible(data["dam:scene7File"])) {
+                        getSmartCropRenditions(data["dam:scene7File"]);
+                    } else {
+                        $dynamicMediaGroup.find(presetTypeSelector).parent().hide();
+                        selectPresetType($(presetTypeSelector), "imagePreset");
+                    }
                 }
             }
         });
@@ -551,13 +603,14 @@
                     addSmartCropDropDownItem("NONE", "", true);
                     // "AUTO" would trigger automatic smart crop operation; also we need to check "AUTO" was chosed in previous session
                     addSmartCropDropDownItem("Auto", "SmartCrop:Auto", (smartCropRenditionFromJcr === "SmartCrop:Auto"));
-                    for (var i in smartcropnames) {
+                    for (var p = 0; p < smartcropnames.length; p++) {
+                        var cropName = smartcropnames[p];
                         smartCropRenditionsDropDown.items.add({
                             content: {
-                                innerHTML: smartcropnames[i]
+                                innerHTML: formatSmartCropOptionLabel(cropName)
                             },
                             disabled: false,
-                            selected: (smartCropRenditionFromJcr === smartcropnames[i])
+                            selected: (smartCropRenditionFromJcr === cropName)
                         });
                     }
                 } else {
@@ -574,11 +627,21 @@
      * @param {String} imageUrl The link to image asset
      */
     function getSmartCropRenditions(imageUrl) {
+        if (!isDamScene7FileEligible(imageUrl)) {
+            return;
+        }
         if (imagePropertiesRequest) {
             imagePropertiesRequest.abort();
         }
         imagePropertiesRequest = new XMLHttpRequest();
         var url = window.location.origin + "/is/image/" + imageUrl + "?req=set,json";
+        try {
+            if (new URL(url).origin !== window.location.origin) {
+                return;
+            }
+        } catch (err) {
+            return;
+        }
         imagePropertiesRequest.open("GET", url, true);
         imagePropertiesRequest.onload = function() {
             if (imagePropertiesRequest.status >= 200 && imagePropertiesRequest.status < 400) {
@@ -605,12 +668,15 @@
                     // "AUTO" would trigger automatic smart crop operation; also we need to check "AUTO" was chosed in previous session
                     addSmartCropDropDownItem("Auto", "SmartCrop:Auto", (smartCropRenditionFromJcr === "SmartCrop:Auto"));
                     for (var i = 0; i < payload.set.relation.length; i++) {
+                        var row = payload.set.relation[i];
+                        var userdata = row.userdata || {};
+                        var smartCropDef = userdata.SmartCropDef;
                         smartCropRenditionsDropDown.items.add({
                             content: {
-                                innerHTML: payload.set.relation[i].userdata.SmartCropDef
+                                innerHTML: formatSmartCropOptionLabel(smartCropDef)
                             },
                             disabled: false,
-                            selected: (smartCropRenditionFromJcr === payload.set.relation[i].userdata.SmartCropDef)
+                            selected: (smartCropRenditionFromJcr === smartCropDef)
                         });
                     }
                     $dynamicMediaGroup.find(presetTypeSelector).parent().show();
