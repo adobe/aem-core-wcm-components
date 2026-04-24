@@ -24,8 +24,8 @@
      * Sanitizes and encodes a page path for safe URL construction.
      * Removes path traversal attempts, validates the path format, and encodes it.
      *
-     * @param {string} pagePath - The page path to sanitize
-     * @returns {string|null} The sanitized and encoded path, or null if invalid
+     * @param {String} pagePath - The page path to sanitize
+     * @returns {String|null} The sanitized and encoded path, or null if invalid
      */
     function sanitizeAndEncodePath(pagePath) {
         // Remove any path traversal attempts and normalize the path
