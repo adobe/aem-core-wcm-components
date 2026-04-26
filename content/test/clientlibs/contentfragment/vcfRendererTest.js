@@ -88,7 +88,7 @@ describe("Test VCF renderer for", function() {
         channel.trigger("cq-editor-loaded");
     });
 
-    it("skips elements without VCF preview URL", function(done) {
+    it("shows an unavailable placeholder when there is no VCF preview URL", function(done) {
         const contentFrameDoc = document.createElement("div");
         const vcfElement = document.createElement("div");
         vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
@@ -99,13 +99,14 @@ describe("Test VCF renderer for", function() {
         };
 
         jQuery._ajaxHandler = function() {
-            fail("ajax should not be called for elements without fragment id");
+            fail("ajax should not be called for elements without preview URL");
         };
 
         channel.trigger("cq-editor-loaded");
 
         setTimeout(function() {
-            expect(vcfElement.innerHTML).toBe("");
+            expect(vcfElement.innerHTML).toContain("cmp-contentfragment__vcf-placeholder");
+            expect(vcfElement.innerHTML).toContain("Visualization preview unavailable");
             done();
         }, 50);
     });

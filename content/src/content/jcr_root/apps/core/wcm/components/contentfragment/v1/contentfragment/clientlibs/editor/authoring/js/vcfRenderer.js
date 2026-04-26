@@ -19,12 +19,110 @@
     var VCF_SELECTOR = ".cmp-contentfragment--vcf";
     var ATTR_VCF_URL = "data-cmp-contentfragment-vcf-url";
     var LOADING_ATTR = "data-vcf-loading";
+    var ATTR_LOAD_FAILED = "data-cmp-contentfragment-vcf-load-failed";
+    var ATTR_NO_PREVIEW = "data-cmp-contentfragment-vcf-no-preview";
 
     var _observer = null;
 
+    function i18n(message) {
+        if (typeof window !== "undefined" && window.Granite && window.Granite.I18n) {
+            return window.Granite.I18n.get(message);
+        }
+        return message;
+    }
+
+    /**
+     * Builds placeholder markup for the author preview; uses DOM so translated strings are escaped.
+     */
+    function buildVcfPlaceholderOuterHtml(modifier, role, surfaceCss, accentCss, titleMessage, detailMessage) {
+        var root = document.createElement("div");
+        root.className = "cmp-contentfragment__vcf-placeholder cmp-contentfragment__vcf-placeholder--" + modifier;
+        root.setAttribute("role", role);
+        root.style.cssText = [
+            "box-sizing:border-box",
+            "padding:20px 24px",
+            surfaceCss,
+            "color:#505050",
+            "font-family:Adobe Clean,Helvetica,sans-serif",
+            "font-size:14px",
+            "line-height:1.45"
+        ].join(";");
+
+        var titleEl = document.createElement("strong");
+        titleEl.style.cssText = [
+            "display:block",
+            "margin-bottom:8px",
+            accentCss,
+            "font-size:13px",
+            "text-transform:uppercase",
+            "letter-spacing:.06em"
+        ].join(";");
+        titleEl.textContent = i18n(titleMessage);
+
+        var detailEl = document.createElement("span");
+        detailEl.textContent = i18n(detailMessage);
+
+        root.appendChild(titleEl);
+        root.appendChild(detailEl);
+        return root.outerHTML;
+    }
+
+    function buildLoadFailedPlaceholderHtml() {
+        return buildVcfPlaceholderOuterHtml(
+            "error",
+            "alert",
+            "border:2px dashed #d7373f;border-radius:8px;background:#fff4f4",
+            "color:#c9252d",
+            "Visualization could not be loaded",
+            "Check that preview services are available and the fragment configuration is valid."
+        );
+    }
+
+    function buildNoPreviewPlaceholderHtml() {
+        return buildVcfPlaceholderOuterHtml(
+            "unavailable",
+            "status",
+            "border:2px dashed #b0b0b0;border-radius:8px;background:#f5f5f5",
+            "color:#6e6e6e",
+            "Visualization preview unavailable",
+            "A preview URL is not available for this content fragment in the editor."
+        );
+    }
+
+    function applyNoPreviewPlaceholder(element) {
+        if (!element || element.getAttribute(ATTR_NO_PREVIEW) === "true") {
+            return;
+        }
+        if (element.getAttribute(ATTR_VCF_URL)) {
+            return;
+        }
+        element.setAttribute(ATTR_NO_PREVIEW, "true");
+        element.innerHTML = buildNoPreviewPlaceholderHtml();
+    }
+
+    function resolveVcfTargetElement(element, url) {
+        var target = element;
+        if (!target.ownerDocument || !target.ownerDocument.contains(target)) {
+            var contentDoc = getContentFrameDocument();
+            if (contentDoc) {
+                var found = contentDoc.querySelector(
+                    VCF_SELECTOR + "[" + ATTR_VCF_URL + "=\"" + url + "\"]"
+                );
+                if (found) {
+                    target = found;
+                }
+            }
+        }
+        return target;
+    }
+
     function loadVisualContentFragment(element) {
         var url = element.getAttribute(ATTR_VCF_URL);
-        if (!url || element.getAttribute(LOADING_ATTR)) {
+        if (!url) {
+            applyNoPreviewPlaceholder(element);
+            return;
+        }
+        if (element.getAttribute(ATTR_LOAD_FAILED) === "true" || element.getAttribute(LOADING_ATTR)) {
             return;
         }
         element.setAttribute(LOADING_ATTR, "true");
@@ -34,20 +132,26 @@
             type: "GET",
             dataType: "html"
         }).then(function(html) {
-            var target = element;
-            if (!target.ownerDocument || !target.ownerDocument.contains(target)) {
-                var contentDoc = getContentFrameDocument();
-                if (contentDoc) {
-                    target = contentDoc.querySelector(
-                        VCF_SELECTOR + "[" + ATTR_VCF_URL + "=\"" + url + "\"]"
-                    );
-                }
-            }
+            var target = resolveVcfTargetElement(element, url);
             if (target) {
-                target.innerHTML = html;
+                if (typeof html === "string" && html.trim().length === 0) {
+                    target.setAttribute(ATTR_LOAD_FAILED, "true");
+                    target.innerHTML = buildLoadFailedPlaceholderHtml();
+                } else {
+                    target.removeAttribute(ATTR_LOAD_FAILED);
+                    target.removeAttribute(ATTR_NO_PREVIEW);
+                    target.innerHTML = html;
+                }
                 target.removeAttribute(LOADING_ATTR);
             }
+            element.removeAttribute(LOADING_ATTR);
         }, function() {
+            var target = resolveVcfTargetElement(element, url);
+            if (target) {
+                target.setAttribute(ATTR_LOAD_FAILED, "true");
+                target.innerHTML = buildLoadFailedPlaceholderHtml();
+                target.removeAttribute(LOADING_ATTR);
+            }
             element.removeAttribute(LOADING_ATTR);
         });
     }

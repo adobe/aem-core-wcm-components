@@ -121,7 +121,7 @@ describe("Test site vcf.js for", function() {
         expect(globalThis.fetch.calls.mostRecent().args[1].headers).toEqual({});
     });
 
-    it("leaves shadow body hidden when the response is not OK", async function() {
+    it("shows an error placeholder in shadow DOM when the response is not OK", async function() {
         globalThis.fetch = jasmine.createSpy("fetch").and.returnValue(Promise.resolve({
             ok: false,
             status: 502,
@@ -135,8 +135,9 @@ describe("Test site vcf.js for", function() {
         await flushMicrotasksForVcfSiteTests();
 
         const body = el.shadowRoot.querySelector("body");
-        expect(body.style.display).toBe("none");
-        expect(body.innerHTML).toBe("");
+        expect(body.style.display).toBe("");
+        expect(body.innerHTML).toContain("cmp-contentfragment__vcf-placeholder--error");
+        expect(body.innerHTML).toContain("Visualization could not be loaded");
     });
 
     it("does not fetch when the element already has a shadow root", async function() {

@@ -20,6 +20,60 @@
     var ATTR_VCF_AUTH = "data-cmp-contentfragment-vcf-auth";
     var VCF_SELECTOR = ".cmp-contentfragment--vcf[" + ATTR_VCF_URL + "]";
 
+    function i18n(message) {
+        if (typeof window !== "undefined" && window.Granite && window.Granite.I18n) {
+            return window.Granite.I18n.get(message);
+        }
+        return message;
+    }
+
+    /**
+     * Builds placeholder markup for the VCF shadow root; uses DOM so translated strings are escaped.
+     */
+    function buildVcfPlaceholderOuterHtml(modifier, role, surfaceCss, accentCss, titleMessage, detailMessage) {
+        var root = document.createElement("div");
+        root.className = "cmp-contentfragment__vcf-placeholder cmp-contentfragment__vcf-placeholder--" + modifier;
+        root.setAttribute("role", role);
+        root.style.cssText = [
+            "box-sizing:border-box",
+            "padding:20px 24px",
+            surfaceCss,
+            "color:#505050",
+            "font-family:Adobe Clean,Helvetica,sans-serif",
+            "font-size:14px",
+            "line-height:1.45"
+        ].join(";");
+
+        var titleEl = document.createElement("strong");
+        titleEl.style.cssText = [
+            "display:block",
+            "margin-bottom:8px",
+            accentCss,
+            "font-size:13px",
+            "text-transform:uppercase",
+            "letter-spacing:.06em"
+        ].join(";");
+        titleEl.textContent = i18n(titleMessage);
+
+        var detailEl = document.createElement("span");
+        detailEl.textContent = i18n(detailMessage);
+
+        root.appendChild(titleEl);
+        root.appendChild(detailEl);
+        return root.outerHTML;
+    }
+
+    function buildLoadFailedPlaceholderHtml() {
+        return buildVcfPlaceholderOuterHtml(
+            "error",
+            "alert",
+            "border:2px dashed #d7373f;border-radius:8px;background:#fff4f4",
+            "color:#c9252d",
+            "Visualization could not be loaded",
+            "The content fragment visualization could not be displayed."
+        );
+    }
+
     function documentReady(fn) {
         if (document.readyState !== "loading") {
             fn();
@@ -78,11 +132,16 @@
                 return response.ok ? response.text() : Promise.reject(response.status);
             })
             .then(function(html) {
-                body.innerHTML = html;
+                if (typeof html === "string" && html.trim().length === 0) {
+                    body.innerHTML = buildLoadFailedPlaceholderHtml();
+                } else {
+                    body.innerHTML = html;
+                }
                 body.style.display = "";
             })
             .catch(function() {
-                // silently fail — component remains empty
+                body.innerHTML = buildLoadFailedPlaceholderHtml();
+                body.style.display = "";
             });
     }
 
