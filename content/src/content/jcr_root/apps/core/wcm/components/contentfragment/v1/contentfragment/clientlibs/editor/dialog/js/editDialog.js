@@ -370,6 +370,18 @@
     };
 
     /**
+     * Clears validation UI on element-mode fields when switching to a mode where they are hidden
+     * (e.g. VCF). Otherwise a required Single Text Element select can stay invalid in the DOM and
+     * keep the dialog error after the user changes display mode.
+     */
+    ElementsController.prototype.clearElementModeValidationIfNeeded = function() {
+        this._updateFields();
+        if (this.singleTextSelector) {
+            this._clearValidationError(this.singleTextSelector);
+        }
+    };
+
+    /**
      * Updates dom of variation name select dropdown.
      *
      * @param {HTMLElement} dom - dom for variation name dropdown
@@ -470,6 +482,63 @@
         });
     }
 
+    /**
+     * After the user confirms replacing the fragment in VCF mode, clears the visualization template
+     * and reloads templates for the fragment now shown in the path field.
+     */
+    function applyVcfFragmentReplaceConfirmed() {
+        clearVcfTemplates();
+        if (vcfTemplateSelector) {
+            vcfTemplateSelector.value = "";
+        }
+        loadVcfTemplatesForCurrentFragment();
+    }
+
+    /**
+     * Shows the standard fragment-replace warning, then refreshes VCF template state on confirm.
+     */
+    function promptVcfFragmentReplaceConfirmation() {
+        confirmFragmentChange(null, null, applyVcfFragmentReplaceConfirmed, null);
+    }
+
+    /**
+     * When display mode is VCF, changing the fragment may invalidate the visualization template.
+     * If the new fragment uses a different CF model than the previous one (or model data cannot be
+     * read), show the same confirmation dialog as for element modes; if the model is unchanged,
+     * reload templates without prompting.
+     *
+     * @param {String} newFragmentPath - path from the fragment picker (already applied to the field)
+     */
+    function maybeConfirmVcfFragmentChange(newFragmentPath) {
+        if (!currentFragmentPath) {
+            currentFragmentPath = newFragmentPath;
+            loadVcfTemplatesForCurrentFragment();
+            return;
+        }
+        if (newFragmentPath === currentFragmentPath) {
+            return;
+        }
+        var previousPath = currentFragmentPath;
+        $.when(
+            $.getJSON(previousPath + "/jcr:content/data.json"),
+            $.getJSON(newFragmentPath + "/jcr:content/data.json")
+        ).then(
+            function(oldRes, newRes) {
+                var oldModel = oldRes[0] && oldRes[0]["cq:model"];
+                var newModel = newRes[0] && newRes[0]["cq:model"];
+                if (oldModel && newModel && oldModel === newModel) {
+                    currentFragmentPath = newFragmentPath;
+                    loadVcfTemplatesForCurrentFragment();
+                } else {
+                    promptVcfFragmentReplaceConfirmation();
+                }
+            },
+            function() {
+                promptVcfFragmentReplaceConfirmation();
+            }
+        );
+    }
+
     function initialize(dialog) {
         // get path of component being edited
         editDialog = dialog;
@@ -551,6 +620,7 @@
         $radioGroup.on("change", function(e) {
             updateDisplayModeFieldVisibility();
             if (e.target.value === VCF_DISPLAY_MODE) {
+                elementsController.clearElementModeValidationIfNeeded();
                 loadVcfTemplatesForCurrentFragment();
             } else {
                 elementsController.fetchAndUpdateElementsHTML(e.target.value);
@@ -583,8 +653,7 @@
         var displayMode = editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED).value;
 
         if (displayMode === VCF_DISPLAY_MODE) {
-            currentFragmentPath = fragmentPath.value;
-            loadVcfTemplatesForCurrentFragment();
+            maybeConfirmVcfFragmentChange(fragmentPath.value);
             return;
         }
 
