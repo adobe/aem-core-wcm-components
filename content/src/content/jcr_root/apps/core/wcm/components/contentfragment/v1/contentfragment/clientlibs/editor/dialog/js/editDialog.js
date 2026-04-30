@@ -396,6 +396,21 @@
     };
 
     /**
+     * UTF-8 safe base64 encoding. The native btoa() only accepts characters
+     * in the Latin1 range and throws for code points above 0xFF, so model
+     * paths containing non-ASCII characters must first be UTF-8 encoded
+     * to a binary string before being passed to btoa().
+     *
+     * @param {String} str - the string to encode
+     * @returns {String} base64 encoding of the UTF-8 bytes of {@code str}
+     */
+    function base64EncodeUtf8(str) {
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, hex) {
+            return String.fromCharCode(parseInt(hex, 16));
+        }));
+    }
+
+    /**
      * Resolves the Content Fragment Model ID from a fragment's JCR path.
      * Reads the fragment's data node to find the cq:model path, then
      * base64-encodes it to produce the model ID expected by the VCF API.
@@ -414,7 +429,7 @@
                 callback(null);
                 return;
             }
-            callback(btoa(modelPath));
+            callback(base64EncodeUtf8(modelPath));
         }, function() {
             callback(null);
         });
