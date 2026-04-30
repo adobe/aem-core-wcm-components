@@ -323,6 +323,29 @@
     };
 
     /**
+     * Retrieve the variation names for the currently selected fragment and swap the
+     * variation name {@code <coral-select>} with the freshly rendered one. Used by the
+     * VCF display mode, where {@link #testGetHTML} is not invoked on fragment change.
+     *
+     * @param {String} displayMode - selected display mode of the component
+     */
+    ElementsController.prototype.fetchAndUpdateVariations = function(displayMode) {
+        var variationNameRequest = this.prepareRequest(displayMode, "variation");
+        var self = this;
+        $.when(variationNameRequest).then(function(result) {
+            var newVariationName = $(result).find(SELECTOR_VARIATION_NAME)[0];
+            if (!newVariationName) {
+                return;
+            }
+            Coral.commons.ready(newVariationName, function() {
+                self._updateVariationDOM(newVariationName);
+            });
+        }, function() {
+            ui.prompt(errorDialogTitle, errorDialogMessage, "error");
+        });
+    };
+
+    /**
      * Updates inner html of element container.
      *
      * @param {String} html - outerHTML value for elementNamesContainer
@@ -498,36 +521,62 @@
     }
 
     /**
-     * After the user confirms replacing the fragment in VCF mode, clears the visualization template
-     * and reloads templates for the fragment now shown in the path field.
+     * Refreshes the variation name dropdown for the currently selected fragment.
+     * Element-mode flows refresh variations as part of {@link ElementsController#testGetHTML};
+     * VCF mode skips that branch in {@link onFragmentPathChange}, so the variations DOM
+     * would otherwise keep entries from the previously selected fragment.
+     */
+    function refreshVariationsForCurrentFragment() {
+        var checkedRadio = editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED);
+        var displayMode = checkedRadio ? checkedRadio.value : null;
+        if (displayMode !== VCF_DISPLAY_MODE || !fragmentPath.value || !elementsController) {
+            return;
+        }
+        elementsController.fetchAndUpdateVariations(VCF_DISPLAY_MODE);
+    }
+
+    /**
+     * Reloads every VCF-mode dialog field whose contents depend on the selected fragment:
+     * the visualization template list (driven by the fragment's CF model) and the variation
+     * dropdown (driven by the fragment itself).
+     */
+    function reloadVcfFragmentDependentFields() {
+        loadVcfTemplatesForCurrentFragment();
+        refreshVariationsForCurrentFragment();
+    }
+
+    /**
+     * After the user confirms replacing the fragment in VCF mode, clears the visualization
+     * template selection and reloads all fragment-dependent fields for the new fragment.
      */
     function applyVcfFragmentReplaceConfirmed() {
         clearVcfTemplates();
         if (vcfTemplateSelector) {
             vcfTemplateSelector.value = "";
         }
-        loadVcfTemplatesForCurrentFragment();
+        reloadVcfFragmentDependentFields();
     }
 
     /**
-     * Shows the standard fragment-replace warning, then refreshes VCF template state on confirm.
+     * Shows the standard fragment-replace warning, then refreshes VCF fragment-dependent
+     * fields on confirm.
      */
     function promptVcfFragmentReplaceConfirmation() {
         confirmFragmentChange(null, null, applyVcfFragmentReplaceConfirmed, null);
     }
 
     /**
-     * When display mode is VCF, changing the fragment may invalidate the visualization template.
-     * If the new fragment uses a different CF model than the previous one (or model data cannot be
-     * read), show the same confirmation dialog as for element modes; if the model is unchanged,
-     * reload templates without prompting.
+     * When display mode is VCF, changing the fragment may invalidate the visualization template
+     * and the variation list. If the new fragment uses a different CF model than the previous one
+     * (or model data cannot be read), show the same confirmation dialog as for element modes; if
+     * the model is unchanged, reload the fragment-dependent fields without prompting.
      *
      * @param {String} newFragmentPath - path from the fragment picker (already applied to the field)
      */
     function maybeConfirmVcfFragmentChange(newFragmentPath) {
         if (!currentFragmentPath) {
             currentFragmentPath = newFragmentPath;
-            loadVcfTemplatesForCurrentFragment();
+            reloadVcfFragmentDependentFields();
             return;
         }
         if (newFragmentPath === currentFragmentPath) {
@@ -543,7 +592,7 @@
                 var newModel = newRes[0] && newRes[0]["cq:model"];
                 if (oldModel && newModel && oldModel === newModel) {
                     currentFragmentPath = newFragmentPath;
-                    loadVcfTemplatesForCurrentFragment();
+                    reloadVcfFragmentDependentFields();
                 } else {
                     promptVcfFragmentReplaceConfirmation();
                 }
