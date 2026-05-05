@@ -137,7 +137,7 @@ describe("Test site vcf.js for", function() {
         const body = el.shadowRoot.querySelector("body");
         expect(body.style.display).toBe("");
         expect(body.innerHTML).toContain("cmp-contentfragment__vcf-placeholder--error");
-        expect(body.innerHTML).toContain("Visualization could not be loaded");
+        expect(body.innerHTML).toContain("Visual Content Fragment could not be loaded");
     });
 
     it("does not fetch when the element already has a shadow root", async function() {

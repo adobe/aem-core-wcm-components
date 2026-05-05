@@ -65,7 +65,7 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
     String PN_DISPLAY_MODE = "displayMode";
 
     /**
-     * Name of the optional resource property that stores the VCF visualization template id.
+     * Name of the optional resource property that stores the Visual Content Fragment template id.
      *
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
      */

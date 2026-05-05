@@ -106,7 +106,7 @@ describe("Test VCF renderer for", function() {
 
         setTimeout(function() {
             expect(vcfElement.innerHTML).toContain("cmp-contentfragment__vcf-placeholder");
-            expect(vcfElement.innerHTML).toContain("Visualization preview unavailable");
+            expect(vcfElement.innerHTML).toContain("Visual Content Fragment preview unavailable");
             done();
         }, 50);
     });

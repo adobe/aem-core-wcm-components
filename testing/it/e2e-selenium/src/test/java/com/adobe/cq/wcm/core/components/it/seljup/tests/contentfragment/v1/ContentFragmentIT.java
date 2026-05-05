@@ -232,7 +232,7 @@ public class ContentFragmentIT extends AuthorBaseUITest {
     }
 
     /**
-     * Content Fragment Visualization (VCF) display mode should reveal the HTML template selector in the edit dialog.
+     * Visual Content Fragment (VCF) display mode should reveal the HTML template selector in the edit dialog.
      */
     @Test
     @DisplayName("Switching to VCF clears single-text element validation after failed save")
@@ -250,12 +250,12 @@ public class ContentFragmentIT extends AuthorBaseUITest {
         editDialog.setDisplayMode("vcf");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         assertEquals(0, editDialog.getErrorLabels().size(),
-            "Validation error should clear when Content Fragment Visualization mode hides the element field");
+            "Validation error should clear when Visual Content Fragment mode hides the element field");
     }
 
     @Test
-    @DisplayName("VCF display mode shows visualization template field")
-    public void testVcfDisplayModeShowsVisualizationTemplateField() throws InterruptedException, TimeoutException {
+    @DisplayName("VCF display mode shows VCF template field")
+    public void testVcfDisplayModeShowsVcfTemplateField() throws InterruptedException, TimeoutException {
         Commons.openEditDialog(editorPage, cmpPath);
         contentFragment.getEditDialog().setFragmentPath(fragmentPath1);
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);

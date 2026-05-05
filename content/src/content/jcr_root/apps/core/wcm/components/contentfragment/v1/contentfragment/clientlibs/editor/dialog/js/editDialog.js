@@ -39,7 +39,7 @@
     // mode in which only one multiline text element could be selected for display
     var SINGLE_TEXT_DISPLAY_MODE = "singleText";
 
-    // mode for Content Fragment Visualization
+    // mode for Visual Content Fragment
     var VCF_DISPLAY_MODE = "vcf";
 
     // VCF templates API base path — read from the component's data attribute at dialog init
@@ -67,7 +67,7 @@
 
     // fields visible only for element-based modes (singleText / multi)
     var elementModeFields;
-    // fields visible only for Content Fragment Visualization mode
+    // fields visible only for Visual Content Fragment mode
     var vcfModeFields;
 
     // the VCF template selector (coral-select)
@@ -537,7 +537,7 @@
 
     /**
      * Reloads every VCF-mode dialog field whose contents depend on the selected fragment:
-     * the visualization template list (driven by the fragment's CF model) and the variation
+     * the VCF template list (driven by the fragment's CF model) and the variation
      * dropdown (driven by the fragment itself).
      */
     function reloadVcfFragmentDependentFields() {
@@ -546,8 +546,8 @@
     }
 
     /**
-     * After the user confirms replacing the fragment in VCF mode, clears the visualization
-     * template selection and reloads all fragment-dependent fields for the new fragment.
+     * After the user confirms replacing the fragment in VCF mode, clears the VCF template
+     * selection and reloads all fragment-dependent fields for the new fragment.
      */
     function applyVcfFragmentReplaceConfirmed() {
         clearVcfTemplates();
@@ -566,7 +566,7 @@
     }
 
     /**
-     * When display mode is VCF, changing the fragment may invalidate the visualization template
+     * When display mode is VCF, changing the fragment may invalidate the VCF template
      * and the variation list. If the new fragment uses a different CF model than the previous one
      * (or model data cannot be read), show the same confirmation dialog as for element modes; if
      * the model is unchanged, reload the fragment-dependent fields without prompting.

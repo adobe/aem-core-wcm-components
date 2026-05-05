@@ -69,8 +69,8 @@
             "alert",
             "border:2px dashed #d7373f;border-radius:8px;background:#fff4f4",
             "color:#c9252d",
-            "Visualization could not be loaded",
-            "The content fragment visualization could not be displayed."
+            "Visual Content Fragment could not be loaded",
+            "The Visual Content Fragment could not be displayed."
         );
     }
 

@@ -247,12 +247,12 @@
                 <title_1523809412
                     cq:styleIds="[1544759676459]"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Content Fragment Visualization"
+                    jcr:title="Visual Content Fragment"
                     sling:resourceType="core-components-examples/components/title"/>
                 <text_1523809413
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/text"
-                    text="&lt;p>Content Fragment Visualization mode renders a visual representation of a content fragment using an HTML template. Instead of displaying raw elements, the component delegates rendering to the Content Fragment Visualization API, which combines the fragment data with a selected template. The visual preview requires AEM as a Cloud Service.&lt;/p>"
+                    text="&lt;p>Visual Content Fragment mode renders a visual representation of a content fragment using an HTML template. Instead of displaying raw elements, the component delegates rendering to the Content Fragment Visualization API, which combines the fragment data with a selected template. The visual preview requires AEM as a Cloud Service.&lt;/p>"
                     textIsRich="true"/>
                 <demo_1523809414
                     jcr:primaryType="nt:unstructured"

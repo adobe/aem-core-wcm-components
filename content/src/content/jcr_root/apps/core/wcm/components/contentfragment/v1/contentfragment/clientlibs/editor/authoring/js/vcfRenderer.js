@@ -73,7 +73,7 @@
             "alert",
             "border:2px dashed #d7373f;border-radius:8px;background:#fff4f4",
             "color:#c9252d",
-            "Visualization could not be loaded",
+            "Visual Content Fragment could not be loaded",
             "Check that preview services are available and the fragment configuration is valid."
         );
     }
@@ -84,7 +84,7 @@
             "status",
             "border:2px dashed #b0b0b0;border-radius:8px;background:#f5f5f5",
             "color:#6e6e6e",
-            "Visualization preview unavailable",
+            "Visual Content Fragment preview unavailable",
             "A preview URL is not available for this content fragment in the editor."
         );
     }

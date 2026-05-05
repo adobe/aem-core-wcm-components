@@ -42,7 +42,7 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
                                         deleteHint="{Boolean}false"
-                                        fieldDescription="Single Text Element mode allows selection of one multiline text element and enables paragraph control options. Multiple Elements mode allows selection of one or more elements. Content Fragment Visualization mode allows selection of an HTML template for rendering a Visual Content Fragment."
+                                        fieldDescription="Single Text Element mode allows selection of one multiline text element and enables paragraph control options. Multiple Elements mode allows selection of one or more elements. Visual Content Fragment mode allows selection of an HTML template for rendering a Visual Content Fragment."
                                         fieldLabel="Display Mode"
                                         name="./displayMode"
                                         vertical="{Boolean}true">
@@ -61,7 +61,7 @@
                                                 value="multi"/>
                                             <vcf
                                                 jcr:primaryType="nt:unstructured"
-                                                text="Content Fragment Visualization"
+                                                text="Visual Content Fragment"
                                                 value="vcf"/>
                                         </items>
                                     </displayMode>
@@ -136,7 +136,7 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                 emptyText="Select a template"
                                                 fieldDescription="Select an HTML template for rendering the Visual Content Fragment."
-                                                fieldLabel="Visualization Template"
+                                                fieldLabel="Visual Content Fragment Template"
                                                 name="./vcfTemplate">
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
