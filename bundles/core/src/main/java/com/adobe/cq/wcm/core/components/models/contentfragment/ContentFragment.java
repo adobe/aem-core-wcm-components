@@ -67,7 +67,7 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
     /**
      * Name of the optional resource property that stores the Visual Content Fragment template id.
      *
-     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.6.0
      */
     String PN_VCF_TEMPLATE = "vcfTemplate";
 
@@ -132,7 +132,7 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
      * if the fragment does not exist or has no UUID.
      *
      * @return the fragment UUID, or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.6.0
      */
     @Nullable
     @JsonIgnore
@@ -145,7 +145,7 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
      * {@link VcfUrlProvider} is missing or incomplete. Author uses the preview API; publish uses the HTML delivery URL.
      *
      * @return the VCF render URL, or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.6.0
      */
     @Nullable
     @JsonIgnore
@@ -157,7 +157,7 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
      * {@code true} on author in VCF mode when a {@link VcfUrlProvider} is present; {@code false} on publish.
      *
      * @return {@code true} if VCF auth is required
-     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.6.0
      */
     @JsonIgnore
     default boolean isVcfAuthRequired() {
@@ -169,7 +169,7 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter, 
      * {@code null} if {@link VcfUrlProvider} is absent or provides no base.
      *
      * @return templates API base, or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.7.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.6.0
      */
     @Nullable
     @JsonIgnore
