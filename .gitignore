@@ -24,3 +24,5 @@ core.wcm.components.commons.datalayer.*
 **/coverage/**
 node
 **/node_modules/**
+
+.cursor/

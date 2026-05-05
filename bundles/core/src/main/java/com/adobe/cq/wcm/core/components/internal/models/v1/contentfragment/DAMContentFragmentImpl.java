@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.ContentFragmentCompositeUtils;
 import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
 
@@ -40,11 +41,6 @@ import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragmen
 public class DAMContentFragmentImpl implements DAMContentFragment {
 
     private static final Logger LOG = LoggerFactory.getLogger(DAMContentFragmentImpl.class);
-
-    /**
-     * The name of the master variation.
-     */
-    private static final String MASTER_VARIATION = "master";
 
     private final com.adobe.cq.dam.cfm.ContentFragment contentFragment;
     private final String variationName;
@@ -93,14 +89,15 @@ public class DAMContentFragmentImpl implements DAMContentFragment {
             while (contentElementIterator.hasNext()) {
                 final ContentElement contentElement = contentElementIterator.next();
                 ContentVariation variation = null;
-                if (StringUtils.isNotEmpty(variationName) && !MASTER_VARIATION.equals(variationName)) {
+                if (StringUtils.isNotEmpty(variationName)
+                        && !ContentFragmentCompositeUtils.MASTER_VARIATION.equals(variationName)) {
                     variation = contentElement.getVariation(variationName);
                     if (variation == null) {
                         LOG.warn("Non-existing variation '{}' of element '{}'", variationName, contentElement.getName());
                     }
                 }
                 this.exportedElements.put(contentElement.getName(),
-                        new DAMContentElementImpl(contentTypeConverter, contentElement, variation));
+                        new DAMContentElementImpl(contentTypeConverter, contentElement, variation, variationName));
             }
 
             this.elements = new ArrayList<>(exportedElements.values());
@@ -186,20 +183,28 @@ public class DAMContentFragmentImpl implements DAMContentFragment {
         private final ContentTypeConverter converter;
         private final ContentElement element;
         private final ContentVariation variation;
+        private final String configuredVariationName;
 
         private String htmlValue;
 
         /**
-         * @param converter the converter to use to convert the value of text elements to HTML
-         * @param element   the original element
-         * @param variation the configured variation of the element, or {@code null}
+         * @param converter                 the converter to use to convert the value of text elements to HTML
+         * @param element                     the original element
+         * @param variation                   the configured variation of the element, or {@code null}
+         * @param configuredVariationName     variation name from the component (may be blank or master)
          */
         public DAMContentElementImpl(@NotNull ContentTypeConverter converter,
                                      @NotNull ContentElement element,
-                                     @Nullable ContentVariation variation) {
+                                     @Nullable ContentVariation variation,
+                                     @Nullable String configuredVariationName) {
             this.converter = converter;
             this.element = element;
             this.variation = variation;
+            this.configuredVariationName = configuredVariationName;
+        }
+
+        private boolean isCompositeField() {
+            return ContentFragmentCompositeUtils.isCompositeElement(element);
         }
 
 
@@ -225,24 +230,42 @@ public class DAMContentFragmentImpl implements DAMContentFragment {
         @NotNull
         @Override
         public String getDataType() {
+            if (isCompositeField()) {
+                return DAMContentFragment.COMPOSITE_DATA_TYPE;
+            }
             return getData().getDataType().getTypeString();
         }
 
         @Nullable
         @Override
         public Object getValue() {
+            if (isCompositeField()) {
+                return null;
+            }
             return getData().getValue();
         }
 
         @Nullable
         @Override
         public <T> T getValue(Class<T> var1) {
+            if (isCompositeField()) {
+                return null;
+            }
             return getData().getValue(var1);
+        }
+
+        @Nullable
+        @Override
+        public Object getComposite() {
+            return ContentFragmentCompositeUtils.buildCompositeExport(element, configuredVariationName);
         }
 
         @NotNull
         @Override
         public String getExportedType() {
+            if (isCompositeField()) {
+                return DAMContentFragment.COMPOSITE_DATA_TYPE;
+            }
             final FragmentData value = getData();
             // Mime type for text-based data types
             String type = value.getContentType();
@@ -262,6 +285,9 @@ public class DAMContentFragmentImpl implements DAMContentFragment {
 
         @Override
         public boolean isMultiLine() {
+            if (isCompositeField()) {
+                return false;
+            }
             String metaType = ContentFragmentUtils.getElementMetaType(element);
             if ("text-multi".equals(metaType)) {
                 return true;
@@ -277,12 +303,19 @@ public class DAMContentFragmentImpl implements DAMContentFragment {
 
         @Override
         public boolean isMultiValue() {
+            if (isCompositeField()) {
+                FragmentData data = element.getValue();
+                return data != null && data.getDataType().isMultiValue();
+            }
             return getData().getDataType().isMultiValue();
         }
 
         @Nullable
         @Override
         public String getHtml() {
+            if (isCompositeField()) {
+                return null;
+            }
             // restrict this method to text elements
             if (!isMultiLine()) {
                 return null;

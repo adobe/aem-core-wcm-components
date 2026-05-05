@@ -51,6 +51,9 @@ public class ContentFragmentDataImpl extends ComponentDataImpl implements Conten
 
         @Override
         public String getText() {
+            if (DAMContentFragment.COMPOSITE_DATA_TYPE.equals(contentElement.getDataType())) {
+                return null;
+            }
             return contentElement.getValue(String.class);
         }
     }

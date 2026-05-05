@@ -26,6 +26,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -60,6 +61,20 @@ public interface DAMContentFragment extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     String JSON_PN_ELEMENTS_ORDER = "elementsOrder";
+
+    /**
+     * Value of {@link DAMContentElement#getDataType()} for composite (nested structured) fields.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.6.0
+     */
+    String COMPOSITE_DATA_TYPE = "composite";
+
+    /**
+     * Name of the property (in JSON export) that provides structured composite field data (nested maps/lists).
+     *
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.6.0
+     */
+    String JSON_PN_COMPOSITE = "composite";
 
     /**
      * Represents a content element of a content fragment.
@@ -184,6 +199,21 @@ public interface DAMContentFragment extends ComponentExporter {
         @Nullable
         @JsonIgnore
         default String getHtml() {
+            return null;
+        }
+
+        /**
+         * Returns structured data for composite (nested) fields; {@code null} for scalar elements.
+         * For single-valued composites this is a {@link java.util.Map}; for multi-valued composites a
+         * {@link java.util.List} of maps (JSON array of objects).
+         *
+         * @return composite payload or {@code null}
+         * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.6.0
+         */
+        @Nullable
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        @JsonProperty(JSON_PN_COMPOSITE)
+        default Object getComposite() {
             return null;
         }
     }

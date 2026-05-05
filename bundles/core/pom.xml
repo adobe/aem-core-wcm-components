@@ -173,6 +173,8 @@
                                         <!-- private enum; cannot test valueOf / values -->
                                         <exclude>com/adobe/cq/wcm/core/components/internal/models/v1/SocialMediaHelperImpl$WebsiteMetadata$Type.class</exclude>
                                         <exclude>com/adobe/cq/wcm/core/components/internal/servlets/AdaptiveImageServlet$Source.class</exclude>
+                                        <!-- Reflection-only bridge to cq-dam-cfm-extensions; exercised on AEM, not unit-testable without CFM extension types -->
+                                        <exclude>com/adobe/cq/wcm/core/components/internal/ContentFragmentCompositeUtils.class</exclude>
                                     </excludes>
                                 </configuration>
                             </execution>
