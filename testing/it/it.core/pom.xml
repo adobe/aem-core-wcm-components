@@ -61,6 +61,8 @@
                         <_dsannotations>*</_dsannotations>
                         <!-- Enable processing of OSGI metatype annotations -->
                         <_metatypeannotations>*</_metatypeannotations>
+                        <!-- OWASP Encoder is not on AEM by default; embed for MockVCFServlet HTML escaping (CodeQL XSS). -->
+                        <Embed-Dependency>encoder;groupId=org.owasp.encoder;inline=true</Embed-Dependency>
                     </instructions>
                 </configuration>
             </plugin>
@@ -196,6 +198,16 @@
         <dependency>
             <groupId>com.adobe.aem</groupId>
             <artifactId>uber-jar</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.servlets.annotations</artifactId>
+            <version>1.2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.owasp.encoder</groupId>
+            <artifactId>encoder</artifactId>
+            <version>1.4.0</version>
         </dependency>
     </dependencies>
 

@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-@Version("1.6.0")
-package com.adobe.cq.wcm.core.components.models.contentfragment;
+@Version("2.31.0")
+package com.adobe.cq.wcm.core.components.it.support;
 
 import org.osgi.annotation.versioning.Version;
