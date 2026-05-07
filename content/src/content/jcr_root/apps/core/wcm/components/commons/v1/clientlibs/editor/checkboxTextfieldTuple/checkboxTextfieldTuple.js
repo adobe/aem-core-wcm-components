@@ -27,9 +27,10 @@
      * @param {String} checkboxSelector The selector for the checkbox.
      * @param {String} textfieldSelector The selector for the text field.
      * @param {Boolean} isRichText Defines whether the text field is a rich text editor.
+     * @param {Boolean} useReadOnlyWhenDisabled Defines whether readonly should be used instead of disabled.
      * @constructor
      */
-    var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1 = function(dialog, checkboxSelector, textfieldSelector, isRichText) {
+    var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1 = function(dialog, checkboxSelector, textfieldSelector, isRichText, useReadOnlyWhenDisabled) {
         var self                  = this;
         self.ATTR_PREVIOUS_VALUE  = "data-previous-value";
         self.ATTR_SEEDED_VALUE    = "data-seeded-value";
@@ -41,6 +42,7 @@
         self._textfieldSelector   = textfieldSelector;
         self._textfieldFoundation = $(self._textfield).adaptTo("foundation-field");
         self._isRichText          = isRichText;
+        self._useReadOnlyWhenDisabled = !!useReadOnlyWhenDisabled;
         if (self._isRichText) {
             self._richTextInstance = $(self._textfield).data("rteinstance");
         }
@@ -256,6 +258,10 @@
     CheckboxTextfieldTuple.prototype._disableTextfield = function(disabled) {
         if (this._isRichText) {
             $(this._textfield).attr("contenteditable", !disabled);
+        } else if (this._useReadOnlyWhenDisabled) {
+            this._textfieldFoundation.setDisabled(false);
+            this._textfield.readOnly = disabled;
+            this._textfield.setAttribute("aria-readonly", disabled ? "true" : "false");
         } else {
             this._textfieldFoundation.setDisabled(disabled);
         }
