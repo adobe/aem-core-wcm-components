@@ -30,7 +30,6 @@ import javax.jcr.query.Row;
 import com.day.cq.search.eval.PredicateEvaluator;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -75,11 +74,9 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         return "/content/tests/contentfragmentlist/jcr:content/root/responsivegrid";
     }
 
-    @BeforeEach
+    @Override
     @SuppressWarnings("unchecked")
-    void setUp() throws NoSuchFieldException, IllegalAccessException {
-        super.setUp();
-
+    protected void additionalSetUp() throws NoSuchFieldException, IllegalAccessException {
         // Load additional content for content list model
         context.load().json(TEST_BASE + "/test-content.json", "/content/tests");
         context.load().json("/contentfragmentlist/test-content-dam-contentfragments.json", "/content/dam/contentfragments-for-list");

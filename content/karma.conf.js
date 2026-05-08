@@ -34,6 +34,13 @@ module.exports = function(config) {
             'src/content/jcr_root/apps/core/wcm/components/commons/site/clientlibs/**/js/*.js',
             'src/content/jcr_root/apps/core/wcm/components/image/v3/image/clientlibs/site/**/js/*.js',
             'src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment/clientlibs/editor/authoring/js/editAction.js',
+            'src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment/clientlibs/editor/authoring/js/vcfRenderer.js',
+            'src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment/clientlibs/editor/dialog/js/editDialog.js',
+            {
+                pattern: 'src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment/clientlibs/site/js/vcf.js',
+                included: false,
+                served: true
+            },
             'src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/htmlidvalidator/js/*.js',
             'test/**/*Test.js',
             'test/**/*Test.html'
@@ -50,7 +57,8 @@ module.exports = function(config) {
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
             '**/*.html'   : ['html2js'],
-            'src/content/jcr_root/apps/core/wcm/components/commons/site/clientlibs/**/js/*.js': ['coverage']
+            'src/content/jcr_root/apps/core/wcm/components/commons/site/clientlibs/**/js/*.js': ['coverage'],
+            'src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment/clientlibs/site/js/vcf.js': ['coverage']
         },
         // test results reporter to use
         // possible values: 'dots', 'progress'
