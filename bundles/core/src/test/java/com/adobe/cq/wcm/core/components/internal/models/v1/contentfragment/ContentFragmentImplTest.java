@@ -21,9 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.json.Json;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -32,8 +33,6 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-
-import javax.json.Json;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,6 +48,22 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
     private static final String MAIN_CONTENT = "<p>Main content</p>";
     private static final String TEST_BASE = "/contentfragment";
 
+    /** UUID of text-only test DAM asset (matches test JSON). */
+    private static final String VCF_TEXT_FRAG_UUID = "5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4";
+    /** UUID under jcr:content for structured test fragment. */
+    private static final String VCF_STRUCT_FRAG_UUID = "b2a7f9c1-3e5d-4f8a-9c1e-d7b3a2f5e8c4";
+    /** Matches test JSON; JCR property {@link ContentFragment#PN_VCF_TEMPLATE}. */
+    private static final String VCF_TEMPLATE_ID = "hero-banner";
+
+    private static final String VCF_Q_TEMPLATE = "templateId=" + VCF_TEMPLATE_ID;
+    private static final String VCF_Q_TEMPLATE_VAR = VCF_Q_TEMPLATE + "&variation=" + VARIATION_NAME;
+
+    private static final String LEGACY_AUTHOR_PREVIEW =
+        LEGACY_VCF_TEST_BASE + "/sites/cf/fragments/" + VCF_TEXT_FRAG_UUID + "/preview";
+    private static final String GA_AUTHOR_PREVIEW = GA_VCF_CONTENT_ROOT + "/" + VCF_TEXT_FRAG_UUID + "/preview";
+    private static final String LEGACY_PUBLISH_PREFIX = LEGACY_VCF_TEST_BASE + "/contentFragments/";
+    private static final String GA_PUBLISH_PREFIX = GA_VCF_CONTENT_ROOT + "/";
+
     @Override
     protected String getTestResourcesParentPath() {
         return "/content/contentfragments/jcr:content/root/responsivegrid";
@@ -59,9 +74,39 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
         return ContentFragment.class;
     }
 
-    @BeforeEach
-    void setUp() throws NoSuchFieldException, IllegalAccessException {
-        super.setUp();
+    private static String withQuery(String path, String query) {
+        return query.isEmpty() ? path : path + "?" + query;
+    }
+
+    private static String publishHtml(String pathBeforeTemplate, String fragmentUuid, String htmlFile) {
+        return pathBeforeTemplate + VCF_TEMPLATE_ID + "/" + fragmentUuid + "/" + htmlFile;
+    }
+
+    /**
+     * GA VCF URL stubs ({@link AbstractContentFragmentTest#configureGaVcfUrls()}), then adapts the model.
+     *
+     * @param authorMode {@code true} to run as author (preview URLs)
+     */
+    private ContentFragment gaVcfModel(String componentName, boolean authorMode) {
+        configureGaVcfUrls();
+        if (authorMode) {
+            context.runMode("author");
+        }
+        return getModelInstanceUnderTest(componentName);
+    }
+
+    private ContentFragment gaVcfModel(String componentName) {
+        return gaVcfModel(componentName, false);
+    }
+
+    private ContentFragment gaVcfModelAuthor(String componentName) {
+        return gaVcfModel(componentName, true);
+    }
+
+    /** Legacy VCF stubs (from {@code @BeforeEach}) with author run mode. */
+    private ContentFragment legacyVcfModelAuthor(String componentName) {
+        context.runMode("author");
+        return getModelInstanceUnderTest(componentName);
     }
 
     @Test
@@ -262,6 +307,171 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
         ContentFragment contentFragment = getModelInstanceUnderTest(CF_STRUCTURED_SINGLE_ELEMENT_MAIN);
 
         assertArrayEquals(new String[]{MAIN_CONTENT}, contentFragment.getParagraphs());
+    }
+
+    // Author mode tests (override SlingSettingsService to remove "publish" run mode)
+
+    @Test
+    void vcfAuthorRenderUrlWithTemplate() {
+        ContentFragment fragment = legacyVcfModelAuthor("vcf-with-template");
+        assertEquals(withQuery(LEGACY_AUTHOR_PREVIEW, VCF_Q_TEMPLATE), fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfAuthorRenderUrlWithVariation() {
+        ContentFragment fragment = legacyVcfModelAuthor("vcf-with-template-and-variation");
+        assertEquals(
+            withQuery(LEGACY_AUTHOR_PREVIEW, VCF_Q_TEMPLATE_VAR),
+            fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfAuthorRenderUrlMasterVariation() {
+        ContentFragment fragment = legacyVcfModelAuthor("vcf-with-master-variation");
+        assertEquals(withQuery(LEGACY_AUTHOR_PREVIEW, VCF_Q_TEMPLATE), fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfAuthorRenderUrlWithoutTemplate() {
+        ContentFragment fragment = legacyVcfModelAuthor("vcf-without-template");
+        assertEquals(withQuery(LEGACY_AUTHOR_PREVIEW, ""), fragment.getVcfRenderUrl());
+    }
+
+    // Publish mode tests (default mock context has "publish" run mode)
+
+    @Test
+    void vcfRenderUrlWithTemplate() {
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-template");
+        assertEquals(publishHtml(LEGACY_PUBLISH_PREFIX, VCF_TEXT_FRAG_UUID, "main.html"), fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfRenderUrlWithVariation() {
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-template-and-variation");
+        assertEquals(publishHtml(LEGACY_PUBLISH_PREFIX, VCF_TEXT_FRAG_UUID, VARIATION_NAME + ".html"), fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfRenderUrlWithoutTemplate() {
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-without-template");
+        assertNull(fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfRenderUrlNonVcfMode() {
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
+        assertNull(fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfRenderUrlMasterVariationMapsToMain() {
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-master-variation");
+        assertEquals(publishHtml(LEGACY_PUBLISH_PREFIX, VCF_TEXT_FRAG_UUID, "main.html"), fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfRenderUrlWithJcrContentUuid() {
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-with-structured-fragment");
+        assertEquals(VCF_STRUCT_FRAG_UUID, fragment.getFragmentId());
+        assertEquals(publishHtml(LEGACY_PUBLISH_PREFIX, VCF_STRUCT_FRAG_UUID, "main.html"), fragment.getVcfRenderUrl());
+    }
+
+    // ====== GA (FT_CFVS_GA enabled) Author mode tests ======
+
+    @Test
+    void vcfGaAuthorRenderUrlWithTemplate() {
+        ContentFragment fragment = gaVcfModelAuthor("vcf-with-template");
+        assertEquals(withQuery(GA_AUTHOR_PREVIEW, VCF_Q_TEMPLATE), fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaAuthorRenderUrlWithVariation() {
+        ContentFragment fragment = gaVcfModelAuthor("vcf-with-template-and-variation");
+        assertEquals(
+            withQuery(GA_AUTHOR_PREVIEW, VCF_Q_TEMPLATE_VAR),
+            fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaAuthorRenderUrlMasterVariation() {
+        ContentFragment fragment = gaVcfModelAuthor("vcf-with-master-variation");
+        assertEquals(withQuery(GA_AUTHOR_PREVIEW, VCF_Q_TEMPLATE), fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaAuthorRenderUrlWithoutTemplate() {
+        ContentFragment fragment = gaVcfModelAuthor("vcf-without-template");
+        assertEquals(withQuery(GA_AUTHOR_PREVIEW, ""), fragment.getVcfRenderUrl());
+    }
+
+    // ====== GA (FT_CFVS_GA enabled) Publish mode tests ======
+
+    @Test
+    void vcfGaRenderUrlWithTemplate() {
+        ContentFragment fragment = gaVcfModel("vcf-with-template");
+        assertEquals(publishHtml(GA_PUBLISH_PREFIX, VCF_TEXT_FRAG_UUID, "main.html"), fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaRenderUrlWithVariation() {
+        ContentFragment fragment = gaVcfModel("vcf-with-template-and-variation");
+        assertEquals(publishHtml(GA_PUBLISH_PREFIX, VCF_TEXT_FRAG_UUID, VARIATION_NAME + ".html"), fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaRenderUrlWithoutTemplate() {
+        assertNull(gaVcfModel("vcf-without-template").getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaRenderUrlMasterVariationMapsToMain() {
+        ContentFragment fragment = gaVcfModel("vcf-with-master-variation");
+        assertEquals(publishHtml(GA_PUBLISH_PREFIX, VCF_TEXT_FRAG_UUID, "main.html"), fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaRenderUrlWithJcrContentUuid() {
+        ContentFragment fragment = gaVcfModel("vcf-with-structured-fragment");
+        assertEquals(VCF_STRUCT_FRAG_UUID, fragment.getFragmentId());
+        assertEquals(publishHtml(GA_PUBLISH_PREFIX, VCF_STRUCT_FRAG_UUID, "main.html"), fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void vcfGaTemplatesApiBase() {
+        assertEquals(GA_VCF_CONTENT_ROOT + "/models", gaVcfModel("vcf-with-template").getVcfTemplatesApiBase());
+    }
+
+    // ====== Fragment ID tests ======
+
+    @Test
+    void fragmentIdFromDirectNode() {
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
+        assertEquals(VCF_TEXT_FRAG_UUID, fragment.getFragmentId());
+    }
+
+    @Test
+    void fragmentIdFromJcrContent() {
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED);
+        assertEquals(VCF_STRUCT_FRAG_UUID, fragment.getFragmentId());
+    }
+
+    @Test
+    void fragmentIdNullWhenNoPath() {
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NO_PATH);
+        assertNull(fragment.getFragmentId());
+    }
+
+    @Test
+    void vcfRenderUrlNullWhenNoFragmentId() {
+        ContentFragment fragment = getModelInstanceUnderTest("vcf-no-fragment-id");
+        assertNull(fragment.getFragmentId());
+        assertNull(fragment.getVcfRenderUrl());
+    }
+
+    @Test
+    void fragmentIdNullWhenInvalidPath() {
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NON_EXISTING_PATH);
+        assertNull(fragment.getFragmentId());
     }
 
     @Test
