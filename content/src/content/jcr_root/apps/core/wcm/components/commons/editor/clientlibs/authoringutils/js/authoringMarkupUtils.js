@@ -17,8 +17,10 @@
     "use strict";
 
     /**
+     * Parses an HTML document string into a Document instance.
+     *
      * @param {String} markup - HTML document string from a datasource response
-     * @returns {Document}
+     * @returns {Document} parsed document
      */
     function parseMarkupDocument(markup) {
         return new window.DOMParser().parseFromString(markup, "text/html");
