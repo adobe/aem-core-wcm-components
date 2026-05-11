@@ -14,7 +14,7 @@
 # limitations under the License.
 ###############################################################################
 
-#base=./js
+#base=js
 authoringPathUtils.js
 authoringMarkupUtils.js
 authoringImageUtils.js
