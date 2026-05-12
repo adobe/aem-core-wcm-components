@@ -71,11 +71,55 @@
         return resolved.origin === window.location.origin;
     }
 
+    /**
+     * Whether a value from a dialog data attribute is a safe repository path segment for URL building (blocks missing attrs, traversal, schemes).
+     *
+     * @param {*} value - attribute string from the DOM (e.g. data-thumbnail-config-path)
+     * @returns {Boolean}
+     */
+    function isRepoPathAttributeValue(value) {
+        if (value === undefined || value === null) {
+            return false;
+        }
+        if (typeof value !== "string") {
+            return false;
+        }
+        var str = value.trim();
+        if (str.length === 0) {
+            return false;
+        }
+        if (str.charAt(0) !== "/") {
+            return false;
+        }
+        if (/[<>"]/.test(str)) {
+            return false;
+        }
+        var decoded;
+        try {
+            decoded = decodeURIComponent(str.split("+").join(" "));
+        } catch (e) {
+            return false;
+        }
+        if (decoded.indexOf("..") !== -1) {
+            return false;
+        }
+        var lower = str.toLowerCase();
+        if (
+            lower.indexOf("javascript:") !== -1 ||
+            lower.indexOf("data:") !== -1 ||
+            lower.indexOf("vbscript:") !== -1
+        ) {
+            return false;
+        }
+        return true;
+    }
+
     window.CQ = window.CQ || {};
     window.CQ.CoreComponents = window.CQ.CoreComponents || {};
     window.CQ.CoreComponents.AuthoringEditorUtils = window.CQ.CoreComponents.AuthoringEditorUtils || {};
     window.CQ.CoreComponents.AuthoringEditorUtils.path = {
-        pathExternalizesToSameOrigin: pathExternalizesToSameOrigin
+        pathExternalizesToSameOrigin: pathExternalizesToSameOrigin,
+        isRepoPathAttributeValue: isRepoPathAttributeValue
     };
 
 })(window);

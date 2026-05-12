@@ -66,49 +66,43 @@
     var remoteFileReference;
     var dataSeededValueAttr = "data-seeded-value";
 
+    var FT_SITES_41279 = "FT_SITES_41279";
+
+    /**
+     * FT_SITES_41279: smart crop label escaping, dam:scene7File / JSONP URL checks, and page-image thumbnail fetch + DOM insertion.
+     * When disabled, Image v3 editor authoring behavior matches the pre-hardening implementation.
+     */
+    function isSmartCropAuthoringHardeningEnabled() {
+        return Boolean(Granite.Toggles && Granite.Toggles.isEnabled(FT_SITES_41279));
+    }
+
+    function getImageAuthoringUtils() {
+        return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.image;
+    }
+
+    function getAuthoringPathUtils() {
+        return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.path;
+    }
+
+    /**
+     * Label HTML for smart crop dropdown items; behavior depends on FT_SITES_41279 when enabled.
+     */
     function formatSmartCropOptionLabel(value) {
+        if (isSmartCropAuthoringHardeningEnabled()) {
+            return getImageAuthoringUtils().formatPlainTextForMarkup(value);
+        }
         if (value === undefined || value === null) {
             return "";
         }
-        var div = document.createElement("div");
-        div.textContent = String(value);
-        return div.innerHTML;
+        return String(value);
     }
 
+    /**
+     * Whether dam:scene7File may be used for image service requests; when FT_SITES_41279 is off, always true.
+     */
     function isDamScene7FileEligible(path) {
-        if (path === undefined || path === null) {
-            return false;
-        }
-        var str = String(path).trim();
-        if (str.length === 0) {
-            return false;
-        }
-        var lowerStr = str.toLowerCase();
-        if (
-            lowerStr.indexOf("javascript:") === 0 ||
-            lowerStr.indexOf("data:") === 0 ||
-            lowerStr.indexOf("vbscript:") === 0
-        ) {
-            return false;
-        }
-        var decoded;
-        try {
-            decoded = decodeURIComponent(str.split("+").join(" "));
-        } catch (e) {
-            return false;
-        }
-        if (decoded.indexOf("..") !== -1) {
-            return false;
-        }
-        var isAbsoluteHttp =
-            lowerStr.indexOf("https://") === 0 ||
-            lowerStr.indexOf("http://") === 0;
-        if (isAbsoluteHttp) {
-            try {
-                return new URL(str).origin === window.location.origin;
-            } catch (ex) {
-                return false;
-            }
+        if (isSmartCropAuthoringHardeningEnabled()) {
+            return getImageAuthoringUtils().isDamScene7PathEligible(path);
         }
         return true;
     }
@@ -386,6 +380,17 @@
         var linkValue;
         var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
         var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
+        if (isSmartCropAuthoringHardeningEnabled()) {
+            var pathUtils = getAuthoringPathUtils();
+            if (
+                !pathUtils ||
+                typeof pathUtils.isRepoPathAttributeValue !== "function" ||
+                !pathUtils.isRepoPathAttributeValue(thumbnailConfigPath) ||
+                !pathUtils.isRepoPathAttributeValue(thumbnailComponentPath)
+            ) {
+                return $.Deferred().resolve().promise();
+            }
+        }
         $firstCtaLinkField = $dialogContent.find(firstCtaLinkFieldSelector);
         if ($linkURLField && $linkURLField.adaptTo("foundation-field") && $linkURLField.adaptTo("foundation-field").getValue()) {
             linkValue = $linkURLField.adaptTo("foundation-field").getValue();
@@ -404,9 +409,20 @@
             }
         }).done(function(data) {
             if (data) {
-
-                // update the thumbnail image
-                $pageImageThumbnail.replaceWith(data);
+                if (isSmartCropAuthoringHardeningEnabled()) {
+                    var imageAuthoringUtils = getImageAuthoringUtils();
+                    var safeThumb =
+                        imageAuthoringUtils &&
+                        typeof imageAuthoringUtils.sanitizedPageImageThumbnailFromMarkup === "function"
+                            ? imageAuthoringUtils.sanitizedPageImageThumbnailFromMarkup(data, document)
+                            : null;
+                    if (!safeThumb) {
+                        return;
+                    }
+                    $pageImageThumbnail.replaceWith(safeThumb);
+                } else {
+                    $pageImageThumbnail.replaceWith(data);
+                }
                 $pageImageThumbnail = $(dialogContentSelector).find(pageImageThumbnailSelector);
                 if (imageFromPageImage && imageFromPageImage.checked) {
                     $pageImageThumbnail.show();
@@ -635,12 +651,14 @@
         }
         imagePropertiesRequest = new XMLHttpRequest();
         var url = window.location.origin + "/is/image/" + imageUrl + "?req=set,json";
-        try {
-            if (new URL(url).origin !== window.location.origin) {
+        if (isSmartCropAuthoringHardeningEnabled()) {
+            try {
+                if (new URL(url).origin !== window.location.origin) {
+                    return;
+                }
+            } catch (err) {
                 return;
             }
-        } catch (err) {
-            return;
         }
         imagePropertiesRequest.open("GET", url, true);
         imagePropertiesRequest.onload = function() {

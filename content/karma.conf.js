@@ -42,6 +42,7 @@ module.exports = function(config) {
                 served: true
             },
             'src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/htmlidvalidator/js/*.js',
+            'src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/authoringutils/js/*.js',
             'test/**/*Test.js',
             'test/**/*Test.html'
         ],
