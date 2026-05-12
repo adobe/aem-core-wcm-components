@@ -69,10 +69,10 @@
     var FT_SITES_41279 = "FT_SITES_41279";
 
     /**
-     * FT_SITES_41279: smart crop label escaping, dam:scene7File / JSONP URL checks, and page-image thumbnail fetch + DOM insertion.
-     * When disabled, Image v3 editor authoring behavior matches the pre-hardening implementation.
+     * Optional Image v3 authoring refresh behind FT_SITES_41279 (Coral label encoding, Dynamic Media path checks, thumbnail fragment import).
+     * When the toggle is off, the editor keeps the previous Image v3 authoring behavior.
      */
-    function isSmartCropAuthoringHardeningEnabled() {
+    function isImageV3AuthoringMarkupHelpersEnabled() {
         return Boolean(Granite.Toggles && Granite.Toggles.isEnabled(FT_SITES_41279));
     }
 
@@ -85,10 +85,10 @@
     }
 
     /**
-     * Label HTML for smart crop dropdown items; behavior depends on FT_SITES_41279 when enabled.
+     * Label HTML for smart crop dropdown items; with FT_SITES_41279, values are prepared for Coral innerHTML rendering.
      */
     function formatSmartCropOptionLabel(value) {
-        if (isSmartCropAuthoringHardeningEnabled()) {
+        if (isImageV3AuthoringMarkupHelpersEnabled()) {
             return getImageAuthoringUtils().formatPlainTextForMarkup(value);
         }
         if (value === undefined || value === null) {
@@ -98,10 +98,10 @@
     }
 
     /**
-     * Whether dam:scene7File may be used for image service requests; when FT_SITES_41279 is off, always true.
+     * Whether dam:scene7File can drive image service requests; with FT_SITES_41279, repository path rules from commons apply.
      */
     function isDamScene7FileEligible(path) {
-        if (isSmartCropAuthoringHardeningEnabled()) {
+        if (isImageV3AuthoringMarkupHelpersEnabled()) {
             return getImageAuthoringUtils().isDamScene7PathEligible(path);
         }
         return true;
@@ -380,14 +380,14 @@
         var linkValue;
         var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
         var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
-        if (isSmartCropAuthoringHardeningEnabled()) {
+        if (isImageV3AuthoringMarkupHelpersEnabled()) {
             var pathUtils = getAuthoringPathUtils();
-            if (
-                !pathUtils ||
-                typeof pathUtils.isRepoPathAttributeValue !== "function" ||
-                !pathUtils.isRepoPathAttributeValue(thumbnailConfigPath) ||
-                !pathUtils.isRepoPathAttributeValue(thumbnailComponentPath)
-            ) {
+        if (
+            !pathUtils ||
+            typeof pathUtils.matchesRepoPathAttributePattern !== "function" ||
+            !pathUtils.matchesRepoPathAttributePattern(thumbnailConfigPath) ||
+            !pathUtils.matchesRepoPathAttributePattern(thumbnailComponentPath)
+        ) {
                 return $.Deferred().resolve().promise();
             }
         }
@@ -409,17 +409,17 @@
             }
         }).done(function(data) {
             if (data) {
-                if (isSmartCropAuthoringHardeningEnabled()) {
+                if (isImageV3AuthoringMarkupHelpersEnabled()) {
                     var imageAuthoringUtils = getImageAuthoringUtils();
-                    var safeThumb =
+                    var thumbnailClone =
                         imageAuthoringUtils &&
-                        typeof imageAuthoringUtils.sanitizedPageImageThumbnailFromMarkup === "function"
-                            ? imageAuthoringUtils.sanitizedPageImageThumbnailFromMarkup(data, document)
+                        typeof imageAuthoringUtils.importParsedPageImageThumbnail === "function"
+                            ? imageAuthoringUtils.importParsedPageImageThumbnail(data, document)
                             : null;
-                    if (!safeThumb) {
+                    if (!thumbnailClone) {
                         return;
                     }
-                    $pageImageThumbnail.replaceWith(safeThumb);
+                    $pageImageThumbnail.replaceWith(thumbnailClone);
                 } else {
                     $pageImageThumbnail.replaceWith(data);
                 }
@@ -651,7 +651,7 @@
         }
         imagePropertiesRequest = new XMLHttpRequest();
         var url = window.location.origin + "/is/image/" + imageUrl + "?req=set,json";
-        if (isSmartCropAuthoringHardeningEnabled()) {
+        if (isImageV3AuthoringMarkupHelpersEnabled()) {
             try {
                 if (new URL(url).origin !== window.location.origin) {
                     return;

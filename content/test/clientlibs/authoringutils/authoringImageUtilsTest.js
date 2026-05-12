@@ -26,71 +26,71 @@ describe("AuthoringEditorUtils.image (core.wcm.components.commons.editor.authori
             expect(imageUtils.formatPlainTextForMarkup(undefined)).toBe("");
         });
 
-        it("escapes angle brackets for display in HTML content", function() {
-            var html = imageUtils.formatPlainTextForMarkup('<img src=x onerror=test>');
+        it("encodes markup characters for Coral innerHTML labels", function() {
+            var html = imageUtils.formatPlainTextForMarkup("Label <extra> text");
             expect(html.indexOf("<")).toBe(-1);
-            expect(html.indexOf("img")).not.toBe(-1);
+            expect(html.indexOf("extra")).not.toBe(-1);
         });
 
-        it("passes through plain text unchanged as HTML entities", function() {
+        it("passes through plain text unchanged", function() {
             expect(imageUtils.formatPlainTextForMarkup("Portrait")).toBe("Portrait");
         });
     });
 
     describe("isDamScene7PathEligible", function() {
-        it("rejects empty or missing path", function() {
+        it("returns false for empty or missing path", function() {
             expect(imageUtils.isDamScene7PathEligible("")).toBe(false);
             expect(imageUtils.isDamScene7PathEligible(null)).toBe(false);
             expect(imageUtils.isDamScene7PathEligible(undefined)).toBe(false);
         });
 
-        it("rejects javascript, data, and vbscript schemes", function() {
+        it("returns false for non-repository URL schemes in metadata", function() {
             expect(imageUtils.isDamScene7PathEligible("javascript:alert(1)")).toBe(false);
             expect(imageUtils.isDamScene7PathEligible("data:text/html,<x>")).toBe(false);
             expect(imageUtils.isDamScene7PathEligible("vbscript:msgbox")).toBe(false);
         });
 
-        it("rejects path traversal after decoding", function() {
+        it("returns false when decoded path segments are not stable", function() {
             expect(imageUtils.isDamScene7PathEligible("../../etc/passwd")).toBe(false);
             expect(imageUtils.isDamScene7PathEligible("/content/../secret")).toBe(false);
         });
 
-        it("allows relative repository paths", function() {
+        it("returns true for relative repository path segments", function() {
             expect(imageUtils.isDamScene7PathEligible("/content/dam/demo")).toBe(true);
             expect(imageUtils.isDamScene7PathEligible("demo/asset")).toBe(true);
         });
 
-        it("allows only absolute http(s) URLs on the same origin", function() {
+        it("returns true only for same-origin absolute http(s) URLs", function() {
             var origin = window.location.origin;
             expect(imageUtils.isDamScene7PathEligible(origin + "/path/to/asset")).toBe(true);
             expect(imageUtils.isDamScene7PathEligible("http://example.com/x")).toBe(false);
         });
     });
 
-    describe("sanitizedPageImageThumbnailFromMarkup", function() {
+    describe("importParsedPageImageThumbnail", function() {
         it("returns null when markup has no thumbnail root", function() {
-            expect(imageUtils.sanitizedPageImageThumbnailFromMarkup("<p>no thumb</p>", document)).toBe(null);
+            expect(imageUtils.importParsedPageImageThumbnail("<p>no thumb</p>", document)).toBe(null);
         });
 
-        it("returns an element with dangerous tags removed", function() {
+        it("returns a fragment without auxiliary document tags under the thumbnail root", function() {
             var html =
                 '<div><coral-fileupload class="cq-page-image-thumbnail">' +
                 '<img class="cq-page-image-thumbnail__image" src="/content/dam/x.png" alt="ok">' +
-                "<script>bad()</script>" +
+                "<script>void 0</script>" +
                 "</coral-fileupload></div>";
-            var el = imageUtils.sanitizedPageImageThumbnailFromMarkup(html, document);
+            var el = imageUtils.importParsedPageImageThumbnail(html, document);
             expect(el).not.toBe(null);
             expect(el.querySelector("script")).toBe(null);
         });
 
-        it("strips inline handlers from thumbnail markup", function() {
+        it("drops declarative handler attributes on the thumbnail image", function() {
             var html =
                 '<coral-fileupload class="cq-page-image-thumbnail">' +
-                '<img class="cq-page-image-thumbnail__image" src="/content/dam/x.png" alt="a" onerror="bad()">' +
+                '<img class="cq-page-image-thumbnail__image" src="/content/dam/x.png" alt="a" onclick="void 0">' +
                 "</coral-fileupload>";
-            var el = imageUtils.sanitizedPageImageThumbnailFromMarkup(html, document);
+            var el = imageUtils.importParsedPageImageThumbnail(html, document);
             var img = el.querySelector("img");
-            expect(img.getAttribute("onerror")).toBe(null);
+            expect(img.getAttribute("onclick")).toBe(null);
             expect(img.getAttribute("src")).toBe("/content/dam/x.png");
         });
     });

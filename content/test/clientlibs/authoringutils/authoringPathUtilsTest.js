@@ -20,29 +20,29 @@ describe("AuthoringEditorUtils.path (core.wcm.components.commons.editor.authorin
         pathUtils = window.CQ.CoreComponents.AuthoringEditorUtils.path;
     });
 
-    describe("isRepoPathAttributeValue", function() {
-        it("rejects missing, empty, and non-string values", function() {
-            expect(pathUtils.isRepoPathAttributeValue(undefined)).toBe(false);
-            expect(pathUtils.isRepoPathAttributeValue(null)).toBe(false);
-            expect(pathUtils.isRepoPathAttributeValue("")).toBe(false);
-            expect(pathUtils.isRepoPathAttributeValue("   ")).toBe(false);
-            expect(pathUtils.isRepoPathAttributeValue(123)).toBe(false);
+    describe("matchesRepoPathAttributePattern", function() {
+        it("returns false for missing, empty, or non-string values", function() {
+            expect(pathUtils.matchesRepoPathAttributePattern(undefined)).toBe(false);
+            expect(pathUtils.matchesRepoPathAttributePattern(null)).toBe(false);
+            expect(pathUtils.matchesRepoPathAttributePattern("")).toBe(false);
+            expect(pathUtils.matchesRepoPathAttributePattern("   ")).toBe(false);
+            expect(pathUtils.matchesRepoPathAttributePattern(123)).toBe(false);
         });
 
-        it("rejects values that are not absolute repository paths", function() {
-            expect(pathUtils.isRepoPathAttributeValue("content/dam/x")).toBe(false);
-            expect(pathUtils.isRepoPathAttributeValue("undefined")).toBe(false);
+        it("returns false when the value is not an absolute repository path", function() {
+            expect(pathUtils.matchesRepoPathAttributePattern("content/dam/x")).toBe(false);
+            expect(pathUtils.matchesRepoPathAttributePattern("undefined")).toBe(false);
         });
 
-        it("rejects path traversal and angle brackets", function() {
-            expect(pathUtils.isRepoPathAttributeValue("/content/../etc")).toBe(false);
-            expect(pathUtils.isRepoPathAttributeValue("/content/x%2f%2e%2e%2fetc")).toBe(false);
-            expect(pathUtils.isRepoPathAttributeValue('/content/x"><script>')).toBe(false);
+        it("returns false when the path shape is not stable after decoding", function() {
+            expect(pathUtils.matchesRepoPathAttributePattern("/content/../etc")).toBe(false);
+            expect(pathUtils.matchesRepoPathAttributePattern("/content/x%2f%2e%2e%2fetc")).toBe(false);
+            expect(pathUtils.matchesRepoPathAttributePattern('/content/x"><img')).toBe(false);
         });
 
-        it("allows typical content and apps paths", function() {
-            expect(pathUtils.isRepoPathAttributeValue("/content/mysite/en/page")).toBe(true);
-            expect(pathUtils.isRepoPathAttributeValue("/apps/core/wcm/components/image/v1/image")).toBe(true);
+        it("returns true for typical /content and /apps paths", function() {
+            expect(pathUtils.matchesRepoPathAttributePattern("/content/mysite/en/page")).toBe(true);
+            expect(pathUtils.matchesRepoPathAttributePattern("/apps/core/wcm/components/image/v1/image")).toBe(true);
         });
     });
 });

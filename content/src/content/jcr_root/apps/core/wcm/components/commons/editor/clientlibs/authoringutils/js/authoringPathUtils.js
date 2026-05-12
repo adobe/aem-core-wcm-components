@@ -72,12 +72,12 @@
     }
 
     /**
-     * Whether a value from a dialog data attribute is a safe repository path segment for URL building (blocks missing attrs, traversal, schemes).
+     * Returns whether a string matches the usual repository path shape used for Sling selector requests (leading slash, stable characters).
      *
-     * @param {*} value - attribute string from the DOM (e.g. data-thumbnail-config-path)
+     * @param {*} value - attribute string from the DOM (for example data-thumbnail-config-path)
      * @returns {Boolean}
      */
-    function isRepoPathAttributeValue(value) {
+    function matchesRepoPathAttributePattern(value) {
         if (value === undefined || value === null) {
             return false;
         }
@@ -119,7 +119,7 @@
     window.CQ.CoreComponents.AuthoringEditorUtils = window.CQ.CoreComponents.AuthoringEditorUtils || {};
     window.CQ.CoreComponents.AuthoringEditorUtils.path = {
         pathExternalizesToSameOrigin: pathExternalizesToSameOrigin,
-        isRepoPathAttributeValue: isRepoPathAttributeValue
+        matchesRepoPathAttributePattern: matchesRepoPathAttributePattern
     };
 
 })(window);

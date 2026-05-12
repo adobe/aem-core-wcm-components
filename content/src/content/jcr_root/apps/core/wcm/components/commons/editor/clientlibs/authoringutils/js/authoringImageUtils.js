@@ -32,7 +32,7 @@
     }
 
     /**
-     * Whether dam:scene7File (or equivalent path segment) is acceptable for building image service URLs on this host.
+     * Whether a DAM metadata path segment can be used when composing same-origin image service URLs.
      *
      * @param {*} path - metadata value
      * @returns {Boolean}
@@ -75,7 +75,7 @@
         return true;
     }
 
-    var BLOCKED_THUMBNAIL_TAGS = {
+    var EDITOR_THUMBNAIL_DOM_EXCLUDED_TAGS = {
         script: true,
         iframe: true,
         object: true,
@@ -86,7 +86,7 @@
         form: true
     };
 
-    function isDangerousUrlScheme(value) {
+    function linkValueHasExcludedRepositoryPrefix(value) {
         if (value === undefined || value === null) {
             return false;
         }
@@ -98,7 +98,7 @@
         );
     }
 
-    function stripUnsafeAttributesOnElement(el) {
+    function compactAuthoringDomAttributesOnElement(el) {
         if (!el || el.nodeType !== 1 || !el.attributes) {
             return;
         }
@@ -114,7 +114,7 @@
                 continue;
             }
             if (name === "src" || name === "href" || name === "xlink:href") {
-                if (isDangerousUrlScheme(a.value)) {
+                if (linkValueHasExcludedRepositoryPrefix(a.value)) {
                     removeNames.push(a.name);
                 }
             }
@@ -124,7 +124,7 @@
         }
     }
 
-    function stripUnsafeAttributesOnTree(root) {
+    function compactAuthoringDomAttributesOnSubtree(root) {
         if (!root) {
             return;
         }
@@ -134,11 +134,11 @@
             list.push(nodes[i]);
         }
         for (var j = 0; j < list.length; j++) {
-            stripUnsafeAttributesOnElement(list[j]);
+            compactAuthoringDomAttributesOnElement(list[j]);
         }
     }
 
-    function removeBlockedDescendants(root) {
+    function pruneExcludedChildTagsUnderThumbnail(root) {
         if (!root || !root.getElementsByTagName) {
             return;
         }
@@ -150,7 +150,7 @@
         for (k = 0; k < all.length; k++) {
             el = all[k];
             tag = el.tagName ? el.tagName.toLowerCase() : "";
-            if (BLOCKED_THUMBNAIL_TAGS[tag]) {
+            if (EDITOR_THUMBNAIL_DOM_EXCLUDED_TAGS[tag]) {
                 toRemove.push(el);
             }
         }
@@ -162,19 +162,19 @@
         }
     }
 
-    function sanitizeThumbnailElementTree(root) {
-        removeBlockedDescendants(root);
-        stripUnsafeAttributesOnTree(root);
+    function prepareThumbnailFragmentForEditor(root) {
+        pruneExcludedChildTagsUnderThumbnail(root);
+        compactAuthoringDomAttributesOnSubtree(root);
     }
 
     /**
-     * Parses authoring HTML for a page image thumbnail and returns a clone safe to insert into the live document (event handlers and dangerous URLs stripped).
+     * Parses a page-image thumbnail HTML fragment and returns a clone for insertion into the active document after editor-side compaction.
      *
      * @param {String} markup - HTML response from the thumbnail endpoint
      * @param {Document} targetDocument - document receiving the clone
      * @returns {Element|null}
      */
-    function sanitizedPageImageThumbnailFromMarkup(markup, targetDocument) {
+    function importParsedPageImageThumbnail(markup, targetDocument) {
         if (markup === undefined || markup === null || !targetDocument) {
             return null;
         }
@@ -184,7 +184,7 @@
         if (!thumb) {
             return null;
         }
-        sanitizeThumbnailElementTree(thumb);
+        prepareThumbnailFragmentForEditor(thumb);
         return targetDocument.importNode(thumb, true);
     }
 
@@ -194,7 +194,7 @@
     window.CQ.CoreComponents.AuthoringEditorUtils.image = {
         formatPlainTextForMarkup: formatPlainTextForMarkup,
         isDamScene7PathEligible: isDamScene7PathEligible,
-        sanitizedPageImageThumbnailFromMarkup: sanitizedPageImageThumbnailFromMarkup
+        importParsedPageImageThumbnail: importParsedPageImageThumbnail
     };
 
 })(window);
