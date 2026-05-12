@@ -43,7 +43,7 @@
     var smartCropRenditionFromJcr;
     var smartCropRenditionsDropDown;
 
-    var FT_SITES_41320 = "FT_SITES_41320";
+    var FT_SITES_41320 = "FT_SITES-41320";
     /*
      * Granite feature toggle FT_SITES_41320 gates Image v2 editor markup helpers (Coral crop labels and Dynamic Media request paths).
      * Helpers stay on unless the toggle is explicitly false—use false only as a short operator rollback while investigating regressions;
