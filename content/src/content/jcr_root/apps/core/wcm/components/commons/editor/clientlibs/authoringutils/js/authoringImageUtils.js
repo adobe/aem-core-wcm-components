@@ -16,6 +16,10 @@
 (function(window) {
     "use strict";
 
+    function getMarkupUtils() {
+        return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.markup;
+    }
+
     /**
      * Formats a display string for Coral select item labels that use HTML content.
      *
@@ -32,7 +36,7 @@
     }
 
     /**
-     * Whether dam:scene7File (or equivalent path segment) is acceptable for building image service URLs on this host.
+     * Whether a DAM metadata path segment can be used when composing same-origin image service URLs.
      *
      * @param {*} path - metadata value
      * @returns {Boolean}
@@ -45,14 +49,22 @@
         if (str.length === 0) {
             return false;
         }
-        var lowerStr = str.toLowerCase();
-        if (
-            lowerStr.indexOf("javascript:") === 0 ||
-            lowerStr.indexOf("data:") === 0 ||
-            lowerStr.indexOf("vbscript:") === 0
-        ) {
-            return false;
+        var markupApi = getMarkupUtils();
+        if (markupApi && typeof markupApi.linkValueHasExcludedRepositoryPrefix === "function") {
+            if (markupApi.linkValueHasExcludedRepositoryPrefix(str)) {
+                return false;
+            }
+        } else {
+            var schemeProbe = str.toLowerCase();
+            if (
+                schemeProbe.indexOf("javascript:") === 0 ||
+                schemeProbe.indexOf("data:") === 0 ||
+                schemeProbe.indexOf("vbscript:") === 0
+            ) {
+                return false;
+            }
         }
+        var lowerStr = str.toLowerCase();
         var decoded;
         try {
             decoded = decodeURIComponent(str.split("+").join(" "));
@@ -75,12 +87,37 @@
         return true;
     }
 
+    /**
+     * Parses a page-image thumbnail HTML fragment and returns a shell element for insertion (delegates markup allowlist rules).
+     *
+     * @param {String} markup - HTML response from the thumbnail endpoint
+     * @param {Document} targetDocument - document receiving the clone
+     * @returns {Element|null}
+     */
+    function importParsedPageImageThumbnail(markup, targetDocument) {
+        if (markup === undefined || markup === null || !targetDocument) {
+            return null;
+        }
+        var str = String(markup);
+        var parsed = new window.DOMParser().parseFromString(str, "text/html");
+        var thumb = parsed.querySelector(".cq-page-image-thumbnail");
+        if (!thumb) {
+            return null;
+        }
+        var markupApi = getMarkupUtils();
+        if (!markupApi || typeof markupApi.buildPageImageThumbnailShellForEditor !== "function") {
+            return null;
+        }
+        return markupApi.buildPageImageThumbnailShellForEditor(thumb, targetDocument);
+    }
+
     window.CQ = window.CQ || {};
     window.CQ.CoreComponents = window.CQ.CoreComponents || {};
     window.CQ.CoreComponents.AuthoringEditorUtils = window.CQ.CoreComponents.AuthoringEditorUtils || {};
     window.CQ.CoreComponents.AuthoringEditorUtils.image = {
         formatPlainTextForMarkup: formatPlainTextForMarkup,
-        isDamScene7PathEligible: isDamScene7PathEligible
+        isDamScene7PathEligible: isDamScene7PathEligible,
+        importParsedPageImageThumbnail: importParsedPageImageThumbnail
     };
 
 })(window);

@@ -66,6 +66,71 @@
     var remoteFileReference;
     var dataSeededValueAttr = "data-seeded-value";
 
+    var FT_SITES_41279 = "FT_SITES-41279";
+    /*
+     * Granite feature toggle FT_SITES-41279 gates Image v3 editor markup helpers (Coral crop labels, Dynamic Media path checks,
+     * page-image thumbnail shell import). Helpers stay on unless the toggle is explicitly false—use false only as a short
+     * operator rollback while investigating regressions; Cloud environments should ship with this enabled.
+     */
+
+    function isImageV3AuthoringMarkupHelpersEnabled() {
+        if (!Granite || !Granite.Toggles || typeof Granite.Toggles.isEnabled !== "function") {
+            return true;
+        }
+        return Granite.Toggles.isEnabled(FT_SITES_41279) !== false;
+    }
+
+    function getImageAuthoringUtils() {
+        return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.image;
+    }
+
+    /**
+     * Label HTML for smart crop dropdown items; with FT_SITES-41279, values are prepared for Coral innerHTML rendering.
+     *
+     * @param {*} value smart crop label or related value
+     * @returns {String} label text or HTML-safe markup suitable for Coral rendering when FT_SITES-41279 applies
+     */
+    function formatSmartCropOptionLabel(value) {
+        if (isImageV3AuthoringMarkupHelpersEnabled()) {
+            var utils = getImageAuthoringUtils();
+            if (!utils) {
+                return String(value == null ? "" : value);
+            }
+            if (typeof utils.formatPlainTextForMarkup !== "function") {
+                return String(value == null ? "" : value);
+            }
+            return utils.formatPlainTextForMarkup(value);
+        }
+        if (value === undefined || value === null) {
+            return "";
+        }
+        return String(value);
+    }
+
+    /**
+     * Whether dam:scene7File can drive image service requests; with FT_SITES-41279, repository path rules from commons apply.
+     *
+     * @param {*} path dam:scene7File or equivalent metadata path
+     * @returns {Boolean} whether the path is allowed for scene7-style requests when FT_SITES-41279 applies
+     */
+    function isDamScene7FileEligible(path) {
+        if (isImageV3AuthoringMarkupHelpersEnabled()) {
+            var utils = getImageAuthoringUtils();
+            if (!utils) {
+                return true;
+            }
+            if (typeof utils.isDamScene7PathEligible !== "function") {
+                return true;
+            }
+            return utils.isDamScene7PathEligible(path);
+        }
+        return true;
+    }
+
+    function getAuthoringPathUtils() {
+        return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.path;
+    }
+
     $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
         altTextFromDAM = undefined;
@@ -339,6 +404,17 @@
         var linkValue;
         var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
         var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
+        if (isImageV3AuthoringMarkupHelpersEnabled()) {
+            var pathUtils = getAuthoringPathUtils();
+            if (
+                !pathUtils ||
+                typeof pathUtils.matchesRepoPathAttributePattern !== "function" ||
+                !pathUtils.matchesRepoPathAttributePattern(thumbnailConfigPath) ||
+                !pathUtils.matchesRepoPathAttributePattern(thumbnailComponentPath)
+            ) {
+                return $.Deferred().resolve().promise();
+            }
+        }
         $firstCtaLinkField = $dialogContent.find(firstCtaLinkFieldSelector);
         if ($linkURLField && $linkURLField.adaptTo("foundation-field") && $linkURLField.adaptTo("foundation-field").getValue()) {
             linkValue = $linkURLField.adaptTo("foundation-field").getValue();
@@ -357,9 +433,20 @@
             }
         }).done(function(data) {
             if (data) {
-
-                // update the thumbnail image
-                $pageImageThumbnail.replaceWith(data);
+                if (isImageV3AuthoringMarkupHelpersEnabled()) {
+                    var imageAuthoringUtils = getImageAuthoringUtils();
+                    var thumbnailClone =
+                        imageAuthoringUtils &&
+                        typeof imageAuthoringUtils.importParsedPageImageThumbnail === "function"
+                            ? imageAuthoringUtils.importParsedPageImageThumbnail(data, document)
+                            : null;
+                    if (!thumbnailClone) {
+                        return;
+                    }
+                    $pageImageThumbnail.replaceWith(thumbnailClone);
+                } else {
+                    $pageImageThumbnail.replaceWith(data);
+                }
                 $pageImageThumbnail = $(dialogContentSelector).find(pageImageThumbnailSelector);
                 if (imageFromPageImage && imageFromPageImage.checked) {
                     $pageImageThumbnail.show();
@@ -495,7 +582,12 @@
                     if (!imageFromPageImage.checked) {
                         $dynamicMediaGroup.show();
                     }
-                    getSmartCropRenditions(data["dam:scene7File"]);
+                    if (isDamScene7FileEligible(data["dam:scene7File"])) {
+                        getSmartCropRenditions(data["dam:scene7File"]);
+                    } else {
+                        $dynamicMediaGroup.find(presetTypeSelector).parent().hide();
+                        selectPresetType($(presetTypeSelector), "imagePreset");
+                    }
                 }
             }
         });
@@ -551,13 +643,14 @@
                     addSmartCropDropDownItem("NONE", "", true);
                     // "AUTO" would trigger automatic smart crop operation; also we need to check "AUTO" was chosed in previous session
                     addSmartCropDropDownItem("Auto", "SmartCrop:Auto", (smartCropRenditionFromJcr === "SmartCrop:Auto"));
-                    for (var i in smartcropnames) {
+                    for (var p = 0; p < smartcropnames.length; p++) {
+                        var cropName = smartcropnames[p];
                         smartCropRenditionsDropDown.items.add({
                             content: {
-                                innerHTML: smartcropnames[i]
+                                innerHTML: formatSmartCropOptionLabel(cropName)
                             },
                             disabled: false,
-                            selected: (smartCropRenditionFromJcr === smartcropnames[i])
+                            selected: (smartCropRenditionFromJcr === cropName)
                         });
                     }
                 } else {
@@ -574,11 +667,23 @@
      * @param {String} imageUrl The link to image asset
      */
     function getSmartCropRenditions(imageUrl) {
+        if (!isDamScene7FileEligible(imageUrl)) {
+            return;
+        }
         if (imagePropertiesRequest) {
             imagePropertiesRequest.abort();
         }
         imagePropertiesRequest = new XMLHttpRequest();
         var url = window.location.origin + "/is/image/" + imageUrl + "?req=set,json";
+        if (isImageV3AuthoringMarkupHelpersEnabled()) {
+            try {
+                if (new URL(url).origin !== window.location.origin) {
+                    return;
+                }
+            } catch (err) {
+                return;
+            }
+        }
         imagePropertiesRequest.open("GET", url, true);
         imagePropertiesRequest.onload = function() {
             if (imagePropertiesRequest.status >= 200 && imagePropertiesRequest.status < 400) {
@@ -605,12 +710,15 @@
                     // "AUTO" would trigger automatic smart crop operation; also we need to check "AUTO" was chosed in previous session
                     addSmartCropDropDownItem("Auto", "SmartCrop:Auto", (smartCropRenditionFromJcr === "SmartCrop:Auto"));
                     for (var i = 0; i < payload.set.relation.length; i++) {
+                        var row = payload.set.relation[i];
+                        var userdata = row.userdata || {};
+                        var smartCropDef = userdata.SmartCropDef;
                         smartCropRenditionsDropDown.items.add({
                             content: {
-                                innerHTML: payload.set.relation[i].userdata.SmartCropDef
+                                innerHTML: formatSmartCropOptionLabel(smartCropDef)
                             },
                             disabled: false,
-                            selected: (smartCropRenditionFromJcr === payload.set.relation[i].userdata.SmartCropDef)
+                            selected: (smartCropRenditionFromJcr === smartCropDef)
                         });
                     }
                     $dynamicMediaGroup.find(presetTypeSelector).parent().show();
@@ -781,6 +889,27 @@
             assetTab.addClass("is-invalid");
             assetTabAlertIcon.show();
         }
+    }
+
+    var imageV3EditorTestApiHost = typeof globalThis === "undefined" ? window : globalThis;
+
+    /* Karma (mocks.js) sets __IMAGE_V3_EDITOR_TEST_API on the global object; AEM runtime leaves it undefined. */
+    if (imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API) {
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.formatSmartCropOptionLabel = formatSmartCropOptionLabel;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.isDamScene7FileEligible = isDamScene7FileEligible;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.isImageV3AuthoringMarkupHelpersEnabled = isImageV3AuthoringMarkupHelpersEnabled;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.getImageAuthoringUtils = getImageAuthoringUtils;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.getAuthoringPathUtils = getAuthoringPathUtils;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.importPageImageThumbnailFromMarkup = function(markup, targetDocument) {
+            var imageAuthoringUtils = getImageAuthoringUtils();
+            if (
+                !imageAuthoringUtils ||
+                typeof imageAuthoringUtils.importParsedPageImageThumbnail !== "function"
+            ) {
+                return null;
+            }
+            return imageAuthoringUtils.importParsedPageImageThumbnail(markup, targetDocument);
+        };
     }
 
 })(jQuery, Granite);

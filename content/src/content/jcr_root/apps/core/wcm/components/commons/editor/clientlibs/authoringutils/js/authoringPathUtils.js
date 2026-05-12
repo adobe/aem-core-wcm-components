@@ -71,11 +71,55 @@
         return resolved.origin === window.location.origin;
     }
 
+    /**
+     * Returns whether a string matches the usual repository path shape used for Sling selector requests (leading slash, stable characters).
+     *
+     * @param {*} value - attribute string from the DOM (for example data-thumbnail-config-path)
+     * @returns {Boolean}
+     */
+    function matchesRepoPathAttributePattern(value) {
+        if (value === undefined || value === null) {
+            return false;
+        }
+        if (typeof value !== "string") {
+            return false;
+        }
+        var str = value.trim();
+        if (str.length === 0) {
+            return false;
+        }
+        if (str.charAt(0) !== "/") {
+            return false;
+        }
+        if (/[<>"]/.test(str)) {
+            return false;
+        }
+        var decoded;
+        try {
+            decoded = decodeURIComponent(str.split("+").join(" "));
+        } catch (e) {
+            return false;
+        }
+        if (decoded.indexOf("..") !== -1) {
+            return false;
+        }
+        var lower = str.toLowerCase();
+        if (
+            lower.indexOf("javascript:") !== -1 ||
+            lower.indexOf("data:") !== -1 ||
+            lower.indexOf("vbscript:") !== -1
+        ) {
+            return false;
+        }
+        return true;
+    }
+
     window.CQ = window.CQ || {};
     window.CQ.CoreComponents = window.CQ.CoreComponents || {};
     window.CQ.CoreComponents.AuthoringEditorUtils = window.CQ.CoreComponents.AuthoringEditorUtils || {};
     window.CQ.CoreComponents.AuthoringEditorUtils.path = {
-        pathExternalizesToSameOrigin: pathExternalizesToSameOrigin
+        pathExternalizesToSameOrigin: pathExternalizesToSameOrigin,
+        matchesRepoPathAttributePattern: matchesRepoPathAttributePattern
     };
 
 })(window);
