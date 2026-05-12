@@ -408,3 +408,21 @@ window.document = window.document || {
     querySelector: function() { return null; },
     querySelectorAll: function() { return []; }
 };
+
+window.CQ = window.CQ || {};
+window.CQ.CoreComponents = window.CQ.CoreComponents || {};
+if (!window.CQ.CoreComponents.CheckboxTextfieldTuple) {
+    window.CQ.CoreComponents.CheckboxTextfieldTuple = {
+        v1: function CheckboxTextfieldTupleStub() {
+            this.hideCheckbox = function() {};
+            this.reset = function() {};
+            this.reinitCheckbox = function() {};
+            this.hideTextfield = function() {};
+            this.seedTextValue = function() {};
+            this.update = function() {};
+        }
+    };
+}
+
+/** Filled by Image v3 editor image.js when present (Karma loads that script after mocks). */
+globalThis.__IMAGE_V3_EDITOR_TEST_API = {};

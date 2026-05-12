@@ -891,4 +891,23 @@
         }
     }
 
+    /* Karma (mocks.js) sets globalThis.__IMAGE_V3_EDITOR_TEST_API; AEM runtime leaves it undefined. */
+    if (globalThis.__IMAGE_V3_EDITOR_TEST_API) {
+        globalThis.__IMAGE_V3_EDITOR_TEST_API.formatSmartCropOptionLabel = formatSmartCropOptionLabel;
+        globalThis.__IMAGE_V3_EDITOR_TEST_API.isDamScene7FileEligible = isDamScene7FileEligible;
+        globalThis.__IMAGE_V3_EDITOR_TEST_API.isImageV3AuthoringMarkupHelpersEnabled = isImageV3AuthoringMarkupHelpersEnabled;
+        globalThis.__IMAGE_V3_EDITOR_TEST_API.getImageAuthoringUtils = getImageAuthoringUtils;
+        globalThis.__IMAGE_V3_EDITOR_TEST_API.getAuthoringPathUtils = getAuthoringPathUtils;
+        globalThis.__IMAGE_V3_EDITOR_TEST_API.importPageImageThumbnailFromMarkup = function(markup, targetDocument) {
+            var imageAuthoringUtils = getImageAuthoringUtils();
+            if (
+                !imageAuthoringUtils ||
+                typeof imageAuthoringUtils.importParsedPageImageThumbnail !== "function"
+            ) {
+                return null;
+            }
+            return imageAuthoringUtils.importParsedPageImageThumbnail(markup, targetDocument);
+        };
+    }
+
 })(jQuery, Granite);
