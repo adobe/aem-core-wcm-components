@@ -18,33 +18,33 @@
  * {@code globalThis.__IMAGE_V3_EDITOR_TEST_API}. Depends on {@code authoringImageUtilsTest.js} loading first for
  * {@code AuthoringutilsThumbnailFixtures} (Karma name order).
  */
+function imageV3EditorImageTestFtOn() {
+    globalThis.Granite.Toggles.isEnabled = function() {
+        return true;
+    };
+}
+
+function imageV3EditorImageTestFtOff() {
+    globalThis.Granite.Toggles.isEnabled = function(key) {
+        return key !== "FT_SITES-41279";
+    };
+}
+
 describe("Image v3 editor image.js (Karma-loaded)", function() {
     let api;
     let imageUtils;
     let F;
     let togglesIsEnabled;
 
-    function ftOn() {
-        Granite.Toggles.isEnabled = function() {
-            return true;
-        };
-    }
-
-    function ftOff() {
-        Granite.Toggles.isEnabled = function(key) {
-            return key === "FT_SITES-41279" ? false : true;
-        };
-    }
-
     beforeAll(function() {
         api = globalThis.__IMAGE_V3_EDITOR_TEST_API;
         imageUtils = globalThis.CQ.CoreComponents.AuthoringEditorUtils.image;
         F = globalThis.AuthoringutilsThumbnailFixtures;
-        togglesIsEnabled = Granite.Toggles.isEnabled;
+        togglesIsEnabled = globalThis.Granite.Toggles.isEnabled;
     });
 
     afterEach(function() {
-        Granite.Toggles.isEnabled = togglesIsEnabled;
+        globalThis.Granite.Toggles.isEnabled = togglesIsEnabled;
         globalThis.CQ.CoreComponents.AuthoringEditorUtils.image = imageUtils;
     });
 
@@ -72,62 +72,62 @@ describe("Image v3 editor image.js (Karma-loaded)", function() {
 
     describe("isImageV3AuthoringMarkupHelpersEnabled (Granite toggle)", function() {
         it("treats missing Granite.Toggles as enabled", function() {
-            const saved = Granite.Toggles;
-            Granite.Toggles = undefined;
+            const saved = globalThis.Granite.Toggles;
+            globalThis.Granite.Toggles = undefined;
             expect(api.isImageV3AuthoringMarkupHelpersEnabled()).toBe(true);
-            Granite.Toggles = saved;
+            globalThis.Granite.Toggles = saved;
         });
 
         it("returns false when FT_SITES-41279 is explicitly disabled", function() {
-            Granite.Toggles.isEnabled = function(key) {
-                return key === "FT_SITES-41279" ? false : true;
+            globalThis.Granite.Toggles.isEnabled = function(key) {
+                return key !== "FT_SITES-41279";
             };
             expect(api.isImageV3AuthoringMarkupHelpersEnabled()).toBe(false);
         });
 
         it("returns true when FT_SITES-41279 is enabled", function() {
-            ftOn();
+            imageV3EditorImageTestFtOn();
             expect(api.isImageV3AuthoringMarkupHelpersEnabled()).toBe(true);
         });
     });
 
     describe("formatSmartCropOptionLabel", function() {
         it("keeps legacy string behaviour when FT is off", function() {
-            ftOff();
+            imageV3EditorImageTestFtOff();
             expect(api.formatSmartCropOptionLabel("a<b>c")).toBe("a<b>c");
             expect(api.formatSmartCropOptionLabel(null)).toBe("");
             expect(api.formatSmartCropOptionLabel(undefined)).toBe("");
         });
 
         it("delegates to AuthoringEditorUtils.image when FT is on", function() {
-            ftOn();
+            imageV3EditorImageTestFtOn();
             const html = api.formatSmartCropOptionLabel("x < y");
             expect(html.indexOf("<")).toBe(-1);
         });
 
         it("encodes crop names that contain script-like markup when FT is on", function() {
-            ftOn();
+            imageV3EditorImageTestFtOn();
             const encoded = api.formatSmartCropOptionLabel('SmartCrop<script>alert(1)</script>');
             expect(encoded.indexOf("<script>")).toBe(-1);
             expect(encoded.indexOf("SmartCrop")).not.toBe(-1);
         });
 
         it("encodes angle brackets for arbitrary label strings when FT is on", function() {
-            ftOn();
+            imageV3EditorImageTestFtOn();
             const html = api.formatSmartCropOptionLabel("16:9 <extra>");
             expect(html.indexOf("<")).toBe(-1);
             expect(html.indexOf("16:9")).not.toBe(-1);
         });
 
         it("falls back when FT is on but image utils are missing", function() {
-            ftOn();
+            imageV3EditorImageTestFtOn();
             globalThis.CQ.CoreComponents.AuthoringEditorUtils.image = undefined;
             expect(api.formatSmartCropOptionLabel("plain")).toBe("plain");
             expect(api.formatSmartCropOptionLabel(null)).toBe("");
         });
 
         it("falls back when FT is on but formatPlainTextForMarkup is not a function", function() {
-            ftOn();
+            imageV3EditorImageTestFtOn();
             globalThis.CQ.CoreComponents.AuthoringEditorUtils.image = { isDamScene7PathEligible: imageUtils.isDamScene7PathEligible };
             expect(api.formatSmartCropOptionLabel("x")).toBe("x");
             globalThis.CQ.CoreComponents.AuthoringEditorUtils.image = imageUtils;
@@ -136,13 +136,13 @@ describe("Image v3 editor image.js (Karma-loaded)", function() {
 
     describe("isDamScene7FileEligible", function() {
         it("is permissive when FT is off", function() {
-            ftOff();
+            imageV3EditorImageTestFtOff();
             expect(api.isDamScene7FileEligible("javascript:alert(1)")).toBe(true);
             expect(api.isDamScene7FileEligible("data:text/html,x")).toBe(true);
         });
 
         it("delegates when FT is on", function() {
-            ftOn();
+            imageV3EditorImageTestFtOn();
             expect(api.isDamScene7FileEligible("/content/dam/x")).toBe(true);
             expect(api.isDamScene7FileEligible("javascript:alert(1)")).toBe(false);
             expect(api.isDamScene7FileEligible("data:text/html,<x>")).toBe(false);
@@ -150,18 +150,18 @@ describe("Image v3 editor image.js (Karma-loaded)", function() {
         });
 
         it("rejects unstable path segments when FT is on", function() {
-            ftOn();
+            imageV3EditorImageTestFtOn();
             expect(api.isDamScene7FileEligible("../../etc/passwd")).toBe(false);
         });
 
         it("returns true when FT is on but image utils are missing", function() {
-            ftOn();
+            imageV3EditorImageTestFtOn();
             globalThis.CQ.CoreComponents.AuthoringEditorUtils.image = undefined;
             expect(api.isDamScene7FileEligible("javascript:x")).toBe(true);
         });
 
         it("returns true when FT is on but isDamScene7PathEligible is not a function", function() {
-            ftOn();
+            imageV3EditorImageTestFtOn();
             globalThis.CQ.CoreComponents.AuthoringEditorUtils.image = { formatPlainTextForMarkup: imageUtils.formatPlainTextForMarkup };
             expect(api.isDamScene7FileEligible("/content/dam/x")).toBe(true);
             globalThis.CQ.CoreComponents.AuthoringEditorUtils.image = imageUtils;

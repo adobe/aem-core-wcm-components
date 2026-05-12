@@ -45,7 +45,7 @@
             return "<div>" + shell(inner) + "</div>";
         }
     };
-})(typeof globalThis !== "undefined" ? globalThis : window);
+})(globalThis);
 
 describe("AuthoringEditorUtils.image (core.wcm.components.commons.editor.authoringutils)", function() {
     let imageUtils;
