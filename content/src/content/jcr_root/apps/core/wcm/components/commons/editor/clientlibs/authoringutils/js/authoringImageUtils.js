@@ -32,7 +32,7 @@
     }
 
     /**
-     * Whether dam:scene7File (or equivalent path segment) is acceptable for building image service URLs on this host.
+     * Whether a DAM metadata path segment can be used when composing same-origin image service URLs.
      *
      * @param {*} path - metadata value
      * @returns {Boolean}
@@ -75,12 +75,126 @@
         return true;
     }
 
+    var EDITOR_THUMBNAIL_DOM_EXCLUDED_TAGS = {
+        script: true,
+        iframe: true,
+        object: true,
+        embed: true,
+        link: true,
+        meta: true,
+        base: true,
+        form: true
+    };
+
+    function linkValueHasExcludedRepositoryPrefix(value) {
+        if (value === undefined || value === null) {
+            return false;
+        }
+        var t = String(value).trim().toLowerCase();
+        return (
+            t.indexOf("javascript:") === 0 ||
+            t.indexOf("data:") === 0 ||
+            t.indexOf("vbscript:") === 0
+        );
+    }
+
+    function compactAuthoringDomAttributesOnElement(el) {
+        if (!el || el.nodeType !== 1 || !el.attributes) {
+            return;
+        }
+        var removeNames = [];
+        var i;
+        var a;
+        var name;
+        for (i = 0; i < el.attributes.length; i++) {
+            a = el.attributes[i];
+            name = a.name.toLowerCase();
+            if (name.indexOf("on") === 0) {
+                removeNames.push(a.name);
+                continue;
+            }
+            if (name === "src" || name === "href" || name === "xlink:href") {
+                if (linkValueHasExcludedRepositoryPrefix(a.value)) {
+                    removeNames.push(a.name);
+                }
+            }
+        }
+        for (i = 0; i < removeNames.length; i++) {
+            el.removeAttribute(removeNames[i]);
+        }
+    }
+
+    function compactAuthoringDomAttributesOnSubtree(root) {
+        if (!root) {
+            return;
+        }
+        var list = [root];
+        var nodes = root.querySelectorAll("*");
+        for (var i = 0; i < nodes.length; i++) {
+            list.push(nodes[i]);
+        }
+        for (var j = 0; j < list.length; j++) {
+            compactAuthoringDomAttributesOnElement(list[j]);
+        }
+    }
+
+    function pruneExcludedChildTagsUnderThumbnail(root) {
+        if (!root || !root.getElementsByTagName) {
+            return;
+        }
+        var toRemove = [];
+        var all = root.getElementsByTagName("*");
+        var k;
+        var el;
+        var tag;
+        for (k = 0; k < all.length; k++) {
+            el = all[k];
+            tag = el.tagName ? el.tagName.toLowerCase() : "";
+            if (EDITOR_THUMBNAIL_DOM_EXCLUDED_TAGS[tag]) {
+                toRemove.push(el);
+            }
+        }
+        for (k = 0; k < toRemove.length; k++) {
+            el = toRemove[k];
+            if (el.parentNode) {
+                el.parentNode.removeChild(el);
+            }
+        }
+    }
+
+    function prepareThumbnailFragmentForEditor(root) {
+        pruneExcludedChildTagsUnderThumbnail(root);
+        compactAuthoringDomAttributesOnSubtree(root);
+    }
+
+    /**
+     * Parses a page-image thumbnail HTML fragment and returns a clone for insertion into the active document after editor-side compaction.
+     *
+     * @param {String} markup - HTML response from the thumbnail endpoint
+     * @param {Document} targetDocument - document receiving the clone
+     * @returns {Element|null}
+     */
+    function importParsedPageImageThumbnail(markup, targetDocument) {
+        if (markup === undefined || markup === null || !targetDocument) {
+            return null;
+        }
+        var str = String(markup);
+        var parsed = new window.DOMParser().parseFromString(str, "text/html");
+        var thumb = parsed.querySelector(".cq-page-image-thumbnail");
+        if (!thumb) {
+            return null;
+        }
+        prepareThumbnailFragmentForEditor(thumb);
+        return targetDocument.importNode(thumb, true);
+    }
+
     window.CQ = window.CQ || {};
     window.CQ.CoreComponents = window.CQ.CoreComponents || {};
     window.CQ.CoreComponents.AuthoringEditorUtils = window.CQ.CoreComponents.AuthoringEditorUtils || {};
     window.CQ.CoreComponents.AuthoringEditorUtils.image = {
         formatPlainTextForMarkup: formatPlainTextForMarkup,
-        isDamScene7PathEligible: isDamScene7PathEligible
+        isDamScene7PathEligible: isDamScene7PathEligible,
+        importParsedPageImageThumbnail: importParsedPageImageThumbnail
     };
 
 })(window);
