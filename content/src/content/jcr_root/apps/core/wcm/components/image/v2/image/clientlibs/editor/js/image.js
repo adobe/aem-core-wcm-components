@@ -43,49 +43,55 @@
     var smartCropRenditionFromJcr;
     var smartCropRenditionsDropDown;
 
+    var FT_SITES_41320 = "FT_SITES_41320";
+    /*
+     * Granite feature toggle FT_SITES_41320 gates Image v2 editor markup helpers (Coral crop labels and Dynamic Media request paths).
+     * Helpers stay on unless the toggle is explicitly false—use false only as a short operator rollback while investigating regressions;
+     * Cloud environments should ship with this enabled.
+     */
+
+    /**
+     * Optional Image v2 authoring refresh behind FT_SITES_41320 (see block comment on FT_SITES_41320).
+     * When Granite reports the toggle as false, the editor matches earlier Image v2 authoring behavior.
+     *
+     * @returns {Boolean}
+     */
+    function isImageV2AuthoringMarkupHelpersEnabled() {
+        if (!Granite || !Granite.Toggles || typeof Granite.Toggles.isEnabled !== "function") {
+            return true;
+        }
+        return Granite.Toggles.isEnabled(FT_SITES_41320) !== false;
+    }
+
+    function getImageAuthoringUtils() {
+        return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.image;
+    }
+
+    /**
+     * Label HTML for smart crop dropdown items; with FT_SITES_41320, values are prepared for Coral innerHTML rendering.
+     *
+     * @param {*} value smart crop label or related value
+     * @returns {String}
+     */
     function formatSmartCropOptionLabel(value) {
+        if (isImageV2AuthoringMarkupHelpersEnabled()) {
+            return getImageAuthoringUtils().formatPlainTextForMarkup(value);
+        }
         if (value === undefined || value === null) {
             return "";
         }
-        var div = document.createElement("div");
-        div.textContent = String(value);
-        return div.innerHTML;
+        return String(value);
     }
 
+    /**
+     * Whether dam:scene7File can drive image service requests; with FT_SITES_41320, repository path rules from commons apply.
+     *
+     * @param {*} path dam:scene7File or equivalent metadata path
+     * @returns {Boolean}
+     */
     function isDamScene7FileEligible(path) {
-        if (path === undefined || path === null) {
-            return false;
-        }
-        var str = String(path).trim();
-        if (str.length === 0) {
-            return false;
-        }
-        var lowerStr = str.toLowerCase();
-        if (
-            lowerStr.indexOf("javascript:") === 0 ||
-            lowerStr.indexOf("data:") === 0 ||
-            lowerStr.indexOf("vbscript:") === 0
-        ) {
-            return false;
-        }
-        var decoded;
-        try {
-            decoded = decodeURIComponent(str.split("+").join(" "));
-        } catch (e) {
-            return false;
-        }
-        if (decoded.indexOf("..") !== -1) {
-            return false;
-        }
-        var isAbsoluteHttp =
-            lowerStr.indexOf("https://") === 0 ||
-            lowerStr.indexOf("http://") === 0;
-        if (isAbsoluteHttp) {
-            try {
-                return new URL(str).origin === window.location.origin;
-            } catch (ex) {
-                return false;
-            }
+        if (isImageV2AuthoringMarkupHelpersEnabled()) {
+            return getImageAuthoringUtils().isDamScene7PathEligible(path);
         }
         return true;
     }
@@ -307,12 +313,14 @@
         }
         imagePropertiesRequest = new XMLHttpRequest();
         var url = window.location.origin + "/is/image/" + imageUrl + "?req=set,json";
-        try {
-            if (new URL(url).origin !== window.location.origin) {
+        if (isImageV2AuthoringMarkupHelpersEnabled()) {
+            try {
+                if (new URL(url).origin !== window.location.origin) {
+                    return;
+                }
+            } catch (err) {
                 return;
             }
-        } catch (err) {
-            return;
         }
         imagePropertiesRequest.open("GET", url, true);
         imagePropertiesRequest.onload = function() {
