@@ -71,6 +71,8 @@
     /**
      * Optional Image v3 authoring refresh behind FT_SITES_41279 (Coral label encoding, Dynamic Media path checks, thumbnail fragment import).
      * When the toggle is off, the editor keeps the previous Image v3 authoring behavior.
+     *
+     * @returns {Boolean}
      */
     function isImageV3AuthoringMarkupHelpersEnabled() {
         return Boolean(Granite.Toggles && Granite.Toggles.isEnabled(FT_SITES_41279));
@@ -86,6 +88,9 @@
 
     /**
      * Label HTML for smart crop dropdown items; with FT_SITES_41279, values are prepared for Coral innerHTML rendering.
+     *
+     * @param {*} value smart crop label or related value
+     * @returns {String}
      */
     function formatSmartCropOptionLabel(value) {
         if (isImageV3AuthoringMarkupHelpersEnabled()) {
@@ -99,6 +104,9 @@
 
     /**
      * Whether dam:scene7File can drive image service requests; with FT_SITES_41279, repository path rules from commons apply.
+     *
+     * @param {*} path dam:scene7File or equivalent metadata path
+     * @returns {Boolean}
      */
     function isDamScene7FileEligible(path) {
         if (isImageV3AuthoringMarkupHelpersEnabled()) {
@@ -382,12 +390,12 @@
         var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
         if (isImageV3AuthoringMarkupHelpersEnabled()) {
             var pathUtils = getAuthoringPathUtils();
-        if (
-            !pathUtils ||
-            typeof pathUtils.matchesRepoPathAttributePattern !== "function" ||
-            !pathUtils.matchesRepoPathAttributePattern(thumbnailConfigPath) ||
-            !pathUtils.matchesRepoPathAttributePattern(thumbnailComponentPath)
-        ) {
+            if (
+                !pathUtils ||
+                typeof pathUtils.matchesRepoPathAttributePattern !== "function" ||
+                !pathUtils.matchesRepoPathAttributePattern(thumbnailConfigPath) ||
+                !pathUtils.matchesRepoPathAttributePattern(thumbnailComponentPath)
+            ) {
                 return $.Deferred().resolve().promise();
             }
         }
