@@ -67,15 +67,23 @@
     var dataSeededValueAttr = "data-seeded-value";
 
     var FT_SITES_41279 = "FT_SITES_41279";
+    /*
+     * Granite feature toggle FT_SITES_41279 gates Image v3 editor markup helpers (Coral crop labels, Dynamic Media path checks,
+     * page-image thumbnail shell import). Helpers stay on unless the toggle is explicitly false—use false only as a short
+     * operator rollback while investigating regressions; Cloud environments should ship with this enabled.
+     */
 
     /**
-     * Optional Image v3 authoring refresh behind FT_SITES_41279 (Coral label encoding, Dynamic Media path checks, thumbnail fragment import).
-     * When the toggle is off, the editor keeps the previous Image v3 authoring behavior.
+     * Optional Image v3 authoring refresh behind FT_SITES_41279 (see block comment on FT_SITES_41279).
+     * When Granite reports the toggle as false, the editor matches earlier Image v3 authoring behavior.
      *
      * @returns {Boolean}
      */
     function isImageV3AuthoringMarkupHelpersEnabled() {
-        return Boolean(Granite.Toggles && Granite.Toggles.isEnabled(FT_SITES_41279));
+        if (!Granite || !Granite.Toggles || typeof Granite.Toggles.isEnabled !== "function") {
+            return true;
+        }
+        return Granite.Toggles.isEnabled(FT_SITES_41279) !== false;
     }
 
     function getImageAuthoringUtils() {

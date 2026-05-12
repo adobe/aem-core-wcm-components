@@ -16,6 +16,10 @@
 (function(window) {
     "use strict";
 
+    function getMarkupUtils() {
+        return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.markup;
+    }
+
     /**
      * Formats a display string for Coral select item labels that use HTML content.
      *
@@ -45,14 +49,22 @@
         if (str.length === 0) {
             return false;
         }
-        var lowerStr = str.toLowerCase();
-        if (
-            lowerStr.indexOf("javascript:") === 0 ||
-            lowerStr.indexOf("data:") === 0 ||
-            lowerStr.indexOf("vbscript:") === 0
-        ) {
-            return false;
+        var markupApi = getMarkupUtils();
+        if (markupApi && typeof markupApi.linkValueHasExcludedRepositoryPrefix === "function") {
+            if (markupApi.linkValueHasExcludedRepositoryPrefix(str)) {
+                return false;
+            }
+        } else {
+            var schemeProbe = str.toLowerCase();
+            if (
+                schemeProbe.indexOf("javascript:") === 0 ||
+                schemeProbe.indexOf("data:") === 0 ||
+                schemeProbe.indexOf("vbscript:") === 0
+            ) {
+                return false;
+            }
         }
+        var lowerStr = str.toLowerCase();
         var decoded;
         try {
             decoded = decodeURIComponent(str.split("+").join(" "));
@@ -75,100 +87,8 @@
         return true;
     }
 
-    var EDITOR_THUMBNAIL_DOM_EXCLUDED_TAGS = {
-        script: true,
-        iframe: true,
-        object: true,
-        embed: true,
-        link: true,
-        meta: true,
-        base: true,
-        form: true
-    };
-
-    function linkValueHasExcludedRepositoryPrefix(value) {
-        if (value === undefined || value === null) {
-            return false;
-        }
-        var t = String(value).trim().toLowerCase();
-        return (
-            t.indexOf("javascript:") === 0 ||
-            t.indexOf("data:") === 0 ||
-            t.indexOf("vbscript:") === 0
-        );
-    }
-
-    function compactAuthoringDomAttributesOnElement(el) {
-        if (!el || el.nodeType !== 1 || !el.attributes) {
-            return;
-        }
-        var removeNames = [];
-        var i;
-        var a;
-        var name;
-        for (i = 0; i < el.attributes.length; i++) {
-            a = el.attributes[i];
-            name = a.name.toLowerCase();
-            if (name.indexOf("on") === 0) {
-                removeNames.push(a.name);
-                continue;
-            }
-            if (name === "src" || name === "href" || name === "xlink:href") {
-                if (linkValueHasExcludedRepositoryPrefix(a.value)) {
-                    removeNames.push(a.name);
-                }
-            }
-        }
-        for (i = 0; i < removeNames.length; i++) {
-            el.removeAttribute(removeNames[i]);
-        }
-    }
-
-    function compactAuthoringDomAttributesOnSubtree(root) {
-        if (!root) {
-            return;
-        }
-        var list = [root];
-        var nodes = root.querySelectorAll("*");
-        for (var i = 0; i < nodes.length; i++) {
-            list.push(nodes[i]);
-        }
-        for (var j = 0; j < list.length; j++) {
-            compactAuthoringDomAttributesOnElement(list[j]);
-        }
-    }
-
-    function pruneExcludedChildTagsUnderThumbnail(root) {
-        if (!root || !root.getElementsByTagName) {
-            return;
-        }
-        var toRemove = [];
-        var all = root.getElementsByTagName("*");
-        var k;
-        var el;
-        var tag;
-        for (k = 0; k < all.length; k++) {
-            el = all[k];
-            tag = el.tagName ? el.tagName.toLowerCase() : "";
-            if (EDITOR_THUMBNAIL_DOM_EXCLUDED_TAGS[tag]) {
-                toRemove.push(el);
-            }
-        }
-        for (k = 0; k < toRemove.length; k++) {
-            el = toRemove[k];
-            if (el.parentNode) {
-                el.parentNode.removeChild(el);
-            }
-        }
-    }
-
-    function prepareThumbnailFragmentForEditor(root) {
-        pruneExcludedChildTagsUnderThumbnail(root);
-        compactAuthoringDomAttributesOnSubtree(root);
-    }
-
     /**
-     * Parses a page-image thumbnail HTML fragment and returns a clone for insertion into the active document after editor-side compaction.
+     * Parses a page-image thumbnail HTML fragment and returns a shell element for insertion (delegates markup allowlist rules).
      *
      * @param {String} markup - HTML response from the thumbnail endpoint
      * @param {Document} targetDocument - document receiving the clone
@@ -184,8 +104,11 @@
         if (!thumb) {
             return null;
         }
-        prepareThumbnailFragmentForEditor(thumb);
-        return targetDocument.importNode(thumb, true);
+        var markupApi = getMarkupUtils();
+        if (!markupApi || typeof markupApi.buildPageImageThumbnailShellForEditor !== "function") {
+            return null;
+        }
+        return markupApi.buildPageImageThumbnailShellForEditor(thumb, targetDocument);
     }
 
     window.CQ = window.CQ || {};
