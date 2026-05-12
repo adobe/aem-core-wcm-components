@@ -45,16 +45,16 @@
 
     var FT_SITES_41320 = "FT_SITES-41320";
     /*
-     * Granite feature toggle FT_SITES_41320 gates Image v2 editor markup helpers (Coral crop labels and Dynamic Media request paths).
-     * Helpers stay on unless the toggle is explicitly false—use false only as a short operator rollback while investigating regressions;
-     * Cloud environments should ship with this enabled.
+     * Granite feature toggle FT_SITES_41320 gates Coral label preparation and Dynamic Media request URL checks
+     * in the Image v2 author dialog. When Granite or the toggle API is missing, helpers behave as enabled; set the
+     * toggle to false only to restore the previous Image v2 dialog behaviour.
      */
 
     /**
-     * Optional Image v2 authoring refresh behind FT_SITES_41320 (see block comment on FT_SITES_41320).
-     * When Granite reports the toggle as false, the editor matches earlier Image v2 authoring behavior.
+     * Whether Coral smart-crop labels and Dynamic Media URL handling use commons authoring helpers.
+     * When Granite reports FT_SITES_41320 as disabled, the dialog matches earlier Image v2 behaviour.
      *
-     * @returns {Boolean}
+     * @returns {Boolean} true when helpers apply, false when the toggle explicitly disables them
      */
     function isImageV2AuthoringMarkupHelpersEnabled() {
         if (!Granite || !Granite.Toggles || typeof Granite.Toggles.isEnabled !== "function") {
@@ -71,11 +71,18 @@
      * Label HTML for smart crop dropdown items; with FT_SITES_41320, values are prepared for Coral innerHTML rendering.
      *
      * @param {*} value smart crop label or related value
-     * @returns {String}
+     * @returns {String} label text or HTML-safe markup suitable for Coral rendering when FT_SITES_41320 applies
      */
     function formatSmartCropOptionLabel(value) {
         if (isImageV2AuthoringMarkupHelpersEnabled()) {
-            return getImageAuthoringUtils().formatPlainTextForMarkup(value);
+            var utils = getImageAuthoringUtils();
+            if (!utils) {
+                return String(value == null ? "" : value);
+            }
+            if (typeof utils.formatPlainTextForMarkup !== "function") {
+                return String(value == null ? "" : value);
+            }
+            return utils.formatPlainTextForMarkup(value);
         }
         if (value === undefined || value === null) {
             return "";
@@ -87,11 +94,18 @@
      * Whether dam:scene7File can drive image service requests; with FT_SITES_41320, repository path rules from commons apply.
      *
      * @param {*} path dam:scene7File or equivalent metadata path
-     * @returns {Boolean}
+     * @returns {Boolean} whether the path is allowed for scene7-style requests when FT_SITES_41320 applies
      */
     function isDamScene7FileEligible(path) {
         if (isImageV2AuthoringMarkupHelpersEnabled()) {
-            return getImageAuthoringUtils().isDamScene7PathEligible(path);
+            var utils = getImageAuthoringUtils();
+            if (!utils) {
+                return true;
+            }
+            if (typeof utils.isDamScene7PathEligible !== "function") {
+                return true;
+            }
+            return utils.isDamScene7PathEligible(path);
         }
         return true;
     }
@@ -380,7 +394,7 @@
     function addSmartCropDropDownItem(label, value, selected) {
         smartCropRenditionsDropDown.items.add({
             content: {
-                innerHTML: label,
+                innerHTML: formatSmartCropOptionLabel(label),
                 value: value
             },
             disabled: false,
@@ -511,6 +525,16 @@
                 attributeFilter: ["data-seeded-value", "disabled", "invalid"]
             });
         }
+    }
+
+    var imageV2EditorTestApiHost = typeof globalThis === "undefined" ? window : globalThis;
+
+    /* Karma (mocks.js) sets globalThis.__IMAGE_V2_EDITOR_TEST_API; AEM runtime leaves it undefined. */
+    if (imageV2EditorTestApiHost.__IMAGE_V2_EDITOR_TEST_API) {
+        imageV2EditorTestApiHost.__IMAGE_V2_EDITOR_TEST_API.formatSmartCropOptionLabel = formatSmartCropOptionLabel;
+        imageV2EditorTestApiHost.__IMAGE_V2_EDITOR_TEST_API.isDamScene7FileEligible = isDamScene7FileEligible;
+        imageV2EditorTestApiHost.__IMAGE_V2_EDITOR_TEST_API.isImageV2AuthoringMarkupHelpersEnabled = isImageV2AuthoringMarkupHelpersEnabled;
+        imageV2EditorTestApiHost.__IMAGE_V2_EDITOR_TEST_API.getImageAuthoringUtils = getImageAuthoringUtils;
     }
 
 })(jQuery, Granite);
