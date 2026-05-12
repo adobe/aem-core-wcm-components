@@ -14,10 +14,10 @@
  * limitations under the License.
  ******************************************************************************/
 describe("AuthoringEditorUtils.image (core.wcm.components.commons.editor.authoringutils)", function() {
-    var imageUtils;
+    let imageUtils;
 
     beforeAll(function() {
-        imageUtils = window.CQ.CoreComponents.AuthoringEditorUtils.image;
+        imageUtils = globalThis.CQ.CoreComponents.AuthoringEditorUtils.image;
     });
 
     describe("formatPlainTextForMarkup", function() {
@@ -27,7 +27,7 @@ describe("AuthoringEditorUtils.image (core.wcm.components.commons.editor.authori
         });
 
         it("encodes markup characters for Coral innerHTML labels", function() {
-            var html = imageUtils.formatPlainTextForMarkup("Label <extra> text");
+            const html = imageUtils.formatPlainTextForMarkup("Label <extra> text");
             expect(html.indexOf("<")).toBe(-1);
             expect(html.indexOf("extra")).not.toBe(-1);
         });
@@ -61,7 +61,7 @@ describe("AuthoringEditorUtils.image (core.wcm.components.commons.editor.authori
         });
 
         it("returns true only for same-origin absolute http(s) URLs", function() {
-            var origin = window.location.origin;
+            const origin = globalThis.location.origin;
             expect(imageUtils.isDamScene7PathEligible(origin + "/path/to/asset")).toBe(true);
             expect(imageUtils.isDamScene7PathEligible("http://example.com/x")).toBe(false);
         });
@@ -69,27 +69,27 @@ describe("AuthoringEditorUtils.image (core.wcm.components.commons.editor.authori
 
     describe("importParsedPageImageThumbnail", function() {
         it("returns null when markup has no thumbnail root", function() {
-            expect(imageUtils.importParsedPageImageThumbnail("<p>no thumb</p>", document)).toBe(null);
+            expect(imageUtils.importParsedPageImageThumbnail("<p>no thumb</p>", globalThis.document)).toBe(null);
         });
 
         it("returns a fragment without auxiliary document tags under the thumbnail root", function() {
-            var html =
+            const html =
                 '<div><coral-fileupload class="cq-page-image-thumbnail">' +
                 '<img class="cq-page-image-thumbnail__image" src="/content/dam/x.png" alt="ok">' +
                 "<script>void 0</script>" +
                 "</coral-fileupload></div>";
-            var el = imageUtils.importParsedPageImageThumbnail(html, document);
+            const el = imageUtils.importParsedPageImageThumbnail(html, globalThis.document);
             expect(el).not.toBe(null);
             expect(el.querySelector("script")).toBe(null);
         });
 
         it("drops declarative handler attributes on the thumbnail image", function() {
-            var html =
+            const html =
                 '<coral-fileupload class="cq-page-image-thumbnail">' +
                 '<img class="cq-page-image-thumbnail__image" src="/content/dam/x.png" alt="a" onclick="void 0">' +
                 "</coral-fileupload>";
-            var el = imageUtils.importParsedPageImageThumbnail(html, document);
-            var img = el.querySelector("img");
+            const el = imageUtils.importParsedPageImageThumbnail(html, globalThis.document);
+            const img = el.querySelector("img");
             expect(img.getAttribute("onclick")).toBe(null);
             expect(img.getAttribute("src")).toBe("/content/dam/x.png");
         });

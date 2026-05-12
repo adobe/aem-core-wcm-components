@@ -14,10 +14,10 @@
  * limitations under the License.
  ******************************************************************************/
 describe("AuthoringEditorUtils.path (core.wcm.components.commons.editor.authoringutils)", function() {
-    var pathUtils;
+    let pathUtils;
 
     beforeAll(function() {
-        pathUtils = window.CQ.CoreComponents.AuthoringEditorUtils.path;
+        pathUtils = globalThis.CQ.CoreComponents.AuthoringEditorUtils.path;
     });
 
     describe("matchesRepoPathAttributePattern", function() {
