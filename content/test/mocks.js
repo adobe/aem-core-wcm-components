@@ -425,4 +425,4 @@ if (!globalThis.CQ.CoreComponents.CheckboxTextfieldTuple) {
 }
 
 /** Filled by Image v3 editor image.js when present (Karma loads that script after mocks). */
-(typeof globalThis !== "undefined" ? globalThis : window).__IMAGE_V3_EDITOR_TEST_API = {};
+globalThis.__IMAGE_V3_EDITOR_TEST_API = {};

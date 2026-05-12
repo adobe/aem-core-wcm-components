@@ -891,7 +891,7 @@
         }
     }
 
-    var imageV3EditorTestApiHost = typeof globalThis !== "undefined" ? globalThis : window;
+    var imageV3EditorTestApiHost = typeof globalThis === "undefined" ? window : globalThis;
 
     /* Karma (mocks.js) sets __IMAGE_V3_EDITOR_TEST_API on the global object; AEM runtime leaves it undefined. */
     if (imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API) {
