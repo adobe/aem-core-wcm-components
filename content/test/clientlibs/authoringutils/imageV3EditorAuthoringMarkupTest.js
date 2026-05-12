@@ -204,7 +204,7 @@ describe("Image v3 editor — authoringutils contract (FT_SITES-41279)", functio
             expect(el.querySelector("img.cq-page-image-thumbnail__image").getAttribute("src")).toBe("/content/dam/nested.png");
             const edit = el.querySelector("button.cq-FileUpload-edit");
             expect(edit).not.toBe(null);
-            expect(edit.getAttribute("data-cq-fileupload-filereference")).toBe("/content/dam/ref");
+            expect(edit.dataset.cqFileuploadFilereference).toBe("/content/dam/ref");
         });
 
         it("collects edit, picker, and clear from a deeply nested cq-FileUpload-thumbnail subtree", function() {
