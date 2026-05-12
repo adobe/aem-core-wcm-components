@@ -15,7 +15,7 @@
  ******************************************************************************/
 /**
  * Covers Image v3 editor {@code image.js} markup-helper surface (FT_SITES-41279) wired through
- * {@code globalThis.__IMAGE_V3_EDITOR_TEST_API}. Depends on {@code authoringImageUtilsTest.js} loading first for
+ * {@code __IMAGE_V3_EDITOR_TEST_API} on the global object (see {@code image.js} host resolution). Depends on {@code authoringImageUtilsTest.js} loading first for
  * {@code AuthoringutilsThumbnailFixtures} (Karma name order).
  */
 function imageV3EditorImageTestFtOn() {
@@ -37,7 +37,7 @@ describe("Image v3 editor image.js (Karma-loaded)", function() {
     let togglesIsEnabled;
 
     beforeAll(function() {
-        api = globalThis.__IMAGE_V3_EDITOR_TEST_API;
+        api = (typeof globalThis !== "undefined" ? globalThis : window).__IMAGE_V3_EDITOR_TEST_API;
         imageUtils = globalThis.CQ.CoreComponents.AuthoringEditorUtils.image;
         F = globalThis.AuthoringutilsThumbnailFixtures;
         togglesIsEnabled = globalThis.Granite.Toggles.isEnabled;

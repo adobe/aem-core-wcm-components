@@ -88,7 +88,7 @@
      * Label HTML for smart crop dropdown items; with FT_SITES-41279, values are prepared for Coral innerHTML rendering.
      *
      * @param {*} value smart crop label or related value
-     * @returns {String}
+     * @returns {String} label text or HTML-safe markup suitable for Coral rendering when FT_SITES-41279 applies
      */
     function formatSmartCropOptionLabel(value) {
         if (isImageV3AuthoringMarkupHelpersEnabled()) {
@@ -111,7 +111,7 @@
      * Whether dam:scene7File can drive image service requests; with FT_SITES-41279, repository path rules from commons apply.
      *
      * @param {*} path dam:scene7File or equivalent metadata path
-     * @returns {Boolean}
+     * @returns {Boolean} whether the path is allowed for scene7-style requests when FT_SITES-41279 applies
      */
     function isDamScene7FileEligible(path) {
         if (isImageV3AuthoringMarkupHelpersEnabled()) {
@@ -891,14 +891,16 @@
         }
     }
 
-    /* Karma (mocks.js) sets globalThis.__IMAGE_V3_EDITOR_TEST_API; AEM runtime leaves it undefined. */
-    if (globalThis.__IMAGE_V3_EDITOR_TEST_API) {
-        globalThis.__IMAGE_V3_EDITOR_TEST_API.formatSmartCropOptionLabel = formatSmartCropOptionLabel;
-        globalThis.__IMAGE_V3_EDITOR_TEST_API.isDamScene7FileEligible = isDamScene7FileEligible;
-        globalThis.__IMAGE_V3_EDITOR_TEST_API.isImageV3AuthoringMarkupHelpersEnabled = isImageV3AuthoringMarkupHelpersEnabled;
-        globalThis.__IMAGE_V3_EDITOR_TEST_API.getImageAuthoringUtils = getImageAuthoringUtils;
-        globalThis.__IMAGE_V3_EDITOR_TEST_API.getAuthoringPathUtils = getAuthoringPathUtils;
-        globalThis.__IMAGE_V3_EDITOR_TEST_API.importPageImageThumbnailFromMarkup = function(markup, targetDocument) {
+    var imageV3EditorTestApiHost = typeof globalThis !== "undefined" ? globalThis : window;
+
+    /* Karma (mocks.js) sets __IMAGE_V3_EDITOR_TEST_API on the global object; AEM runtime leaves it undefined. */
+    if (imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API) {
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.formatSmartCropOptionLabel = formatSmartCropOptionLabel;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.isDamScene7FileEligible = isDamScene7FileEligible;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.isImageV3AuthoringMarkupHelpersEnabled = isImageV3AuthoringMarkupHelpersEnabled;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.getImageAuthoringUtils = getImageAuthoringUtils;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.getAuthoringPathUtils = getAuthoringPathUtils;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.importPageImageThumbnailFromMarkup = function(markup, targetDocument) {
             var imageAuthoringUtils = getImageAuthoringUtils();
             if (
                 !imageAuthoringUtils ||
