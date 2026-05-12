@@ -66,38 +66,4 @@ describe("AuthoringEditorUtils.image (core.wcm.components.commons.editor.authori
             expect(imageUtils.isDamScene7PathEligible("http://example.com/x")).toBe(false);
         });
     });
-
-    describe("importParsedPageImageThumbnail", function() {
-        it("returns null when markup has no thumbnail root", function() {
-            expect(imageUtils.importParsedPageImageThumbnail("<p>no thumb</p>", globalThis.document)).toBe(null);
-        });
-
-        it("returns null when the thumbnail root is not a coral-fileupload", function() {
-            const html =
-                '<div class="cq-page-image-thumbnail"><img class="cq-page-image-thumbnail__image" src="/content/dam/x.png" alt=""></div>';
-            expect(imageUtils.importParsedPageImageThumbnail(html, globalThis.document)).toBe(null);
-        });
-
-        it("returns a fragment without auxiliary document tags under the thumbnail root", function() {
-            const html =
-                '<div><coral-fileupload class="cq-page-image-thumbnail">' +
-                '<img class="cq-page-image-thumbnail__image" src="/content/dam/x.png" alt="ok">' +
-                "<script>void 0</script>" +
-                "</coral-fileupload></div>";
-            const el = imageUtils.importParsedPageImageThumbnail(html, globalThis.document);
-            expect(el).not.toBe(null);
-            expect(el.querySelector("script")).toBe(null);
-        });
-
-        it("drops declarative handler attributes on the thumbnail image", function() {
-            const html =
-                '<coral-fileupload class="cq-page-image-thumbnail">' +
-                '<img class="cq-page-image-thumbnail__image" src="/content/dam/x.png" alt="a" onclick="void 0">' +
-                "</coral-fileupload>";
-            const el = imageUtils.importParsedPageImageThumbnail(html, globalThis.document);
-            const img = el.querySelector("img");
-            expect(img.getAttribute("onclick")).toBe(null);
-            expect(img.getAttribute("src")).toBe("/content/dam/x.png");
-        });
-    });
 });

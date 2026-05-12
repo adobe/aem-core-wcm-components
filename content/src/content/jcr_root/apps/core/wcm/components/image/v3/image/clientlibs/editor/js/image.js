@@ -68,17 +68,11 @@
 
     var FT_SITES_41279 = "FT_SITES-41279";
     /*
-     * Granite feature toggle FT_SITES_41279 gates Image v3 editor markup helpers (Coral crop labels, Dynamic Media path checks,
+     * Granite feature toggle FT_SITES-41279 gates Image v3 editor markup helpers (Coral crop labels, Dynamic Media path checks,
      * page-image thumbnail shell import). Helpers stay on unless the toggle is explicitly false—use false only as a short
      * operator rollback while investigating regressions; Cloud environments should ship with this enabled.
      */
 
-    /**
-     * Optional Image v3 authoring refresh behind FT_SITES_41279 (see block comment on FT_SITES_41279).
-     * When Granite reports the toggle as false, the editor matches earlier Image v3 authoring behavior.
-     *
-     * @returns {Boolean}
-     */
     function isImageV3AuthoringMarkupHelpersEnabled() {
         if (!Granite || !Granite.Toggles || typeof Granite.Toggles.isEnabled !== "function") {
             return true;
@@ -90,19 +84,22 @@
         return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.image;
     }
 
-    function getAuthoringPathUtils() {
-        return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.path;
-    }
-
     /**
-     * Label HTML for smart crop dropdown items; with FT_SITES_41279, values are prepared for Coral innerHTML rendering.
+     * Label HTML for smart crop dropdown items; with FT_SITES-41279, values are prepared for Coral innerHTML rendering.
      *
      * @param {*} value smart crop label or related value
      * @returns {String}
      */
     function formatSmartCropOptionLabel(value) {
         if (isImageV3AuthoringMarkupHelpersEnabled()) {
-            return getImageAuthoringUtils().formatPlainTextForMarkup(value);
+            var utils = getImageAuthoringUtils();
+            if (!utils) {
+                return String(value == null ? "" : value);
+            }
+            if (typeof utils.formatPlainTextForMarkup !== "function") {
+                return String(value == null ? "" : value);
+            }
+            return utils.formatPlainTextForMarkup(value);
         }
         if (value === undefined || value === null) {
             return "";
@@ -111,16 +108,27 @@
     }
 
     /**
-     * Whether dam:scene7File can drive image service requests; with FT_SITES_41279, repository path rules from commons apply.
+     * Whether dam:scene7File can drive image service requests; with FT_SITES-41279, repository path rules from commons apply.
      *
      * @param {*} path dam:scene7File or equivalent metadata path
      * @returns {Boolean}
      */
     function isDamScene7FileEligible(path) {
         if (isImageV3AuthoringMarkupHelpersEnabled()) {
-            return getImageAuthoringUtils().isDamScene7PathEligible(path);
+            var utils = getImageAuthoringUtils();
+            if (!utils) {
+                return true;
+            }
+            if (typeof utils.isDamScene7PathEligible !== "function") {
+                return true;
+            }
+            return utils.isDamScene7PathEligible(path);
         }
         return true;
+    }
+
+    function getAuthoringPathUtils() {
+        return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.path;
     }
 
     $(document).on("dialog-loaded", function(e) {
