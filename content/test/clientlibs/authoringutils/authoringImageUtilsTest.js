@@ -72,6 +72,12 @@ describe("AuthoringEditorUtils.image (core.wcm.components.commons.editor.authori
             expect(imageUtils.importParsedPageImageThumbnail("<p>no thumb</p>", globalThis.document)).toBe(null);
         });
 
+        it("returns null when the thumbnail root is not a coral-fileupload", function() {
+            const html =
+                '<div class="cq-page-image-thumbnail"><img class="cq-page-image-thumbnail__image" src="/content/dam/x.png" alt=""></div>';
+            expect(imageUtils.importParsedPageImageThumbnail(html, globalThis.document)).toBe(null);
+        });
+
         it("returns a fragment without auxiliary document tags under the thumbnail root", function() {
             const html =
                 '<div><coral-fileupload class="cq-page-image-thumbnail">' +
