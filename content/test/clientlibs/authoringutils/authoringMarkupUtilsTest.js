@@ -54,7 +54,7 @@ describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.author
             expect(built).not.toBe(null);
             expect(built.classList.contains("extra-unknown")).toBe(false);
             expect(built.classList.contains("cq-page-image-thumbnail")).toBe(true);
-            expect(built.getAttribute("data-thumbnail-config-path")).toBe("/content/site/en");
+            expect(built.dataset.thumbnailConfigPath).toBe("/content/site/en");
         });
     });
 });
