@@ -13,23 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+/** Uses {@code globalThis.AuthoringutilsThumbnailFixtures} from {@code authoringImageUtilsTest.js} (load order: name before this file in Karma). */
 describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.authoringutils)", function() {
     let markupUtils;
+    let F;
 
     beforeAll(function() {
         markupUtils = globalThis.CQ.CoreComponents.AuthoringEditorUtils.markup;
+        F = globalThis.AuthoringutilsThumbnailFixtures;
     });
 
     describe("linkValueHasExcludedRepositoryPrefix", function() {
-        it("returns false for typical repository paths", function() {
+        it("returns false for typical repository paths and normal http(s) page URLs", function() {
             expect(markupUtils.linkValueHasExcludedRepositoryPrefix("/content/dam/x")).toBe(false);
             expect(markupUtils.linkValueHasExcludedRepositoryPrefix("")).toBe(false);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("/content/dam/page.html")).toBe(false);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("/content/dam/page.html#frag")).toBe(false);
         });
 
-        it("returns true for URL values outside repository http(s) conventions", function() {
+        it("returns true for javascript, data, and vbscript schemes (any casing and trim)", function() {
             expect(markupUtils.linkValueHasExcludedRepositoryPrefix("javascript:void(0)")).toBe(true);
             expect(markupUtils.linkValueHasExcludedRepositoryPrefix("data:text/plain,x")).toBe(true);
             expect(markupUtils.linkValueHasExcludedRepositoryPrefix("vbscript:x")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("data:text/html,<x>")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("VbScRiPt:msgbox")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("JavaScript:alert(1)")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("DATA:image/png;base64,xx")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("  javascript:x  ")).toBe(true);
         });
     });
 
@@ -55,6 +65,93 @@ describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.author
             expect(built.classList.contains("extra-unknown")).toBe(false);
             expect(built.classList.contains("cq-page-image-thumbnail")).toBe(true);
             expect(built.dataset.thumbnailConfigPath).toBe("/content/site/en");
+        });
+
+        it("omits the preview image when src uses disallowed schemes", function() {
+            const srcJs = F.parseShellRoot(F.imgTag("javascript:alert(1)", "x"));
+            const builtJs = markupUtils.buildPageImageThumbnailShellForEditor(srcJs, globalThis.document);
+            expect(builtJs.querySelector("img.cq-page-image-thumbnail__image")).toBe(null);
+            expect(builtJs.querySelector("coral-icon[icon=\"image\"]")).not.toBe(null);
+
+            const srcMixed = F.parseShellRoot(F.imgTag("JaVaScRiPt:alert(1)", "x"));
+            const builtMixed = markupUtils.buildPageImageThumbnailShellForEditor(srcMixed, globalThis.document);
+            expect(builtMixed.querySelector("img")).toBe(null);
+
+            const srcData = F.parseShellRoot(F.imgTag("data:text/html,&lt;script&gt;", "x"));
+            const builtData = markupUtils.buildPageImageThumbnailShellForEditor(srcData, globalThis.document);
+            expect(builtData.querySelector("img")).toBe(null);
+        });
+
+        it("finds a deeply nested thumbnail image and copies only safe attributes", function() {
+            const inner =
+                "<div><div><div>" +
+                F.imgTag("/content/dam/deep/nested.png", "deep", 'onClick="void 0" ONMOUSEOVER="void 0"') +
+                "</div></div></div>";
+            const src = F.parseShellRoot(inner);
+            const built = markupUtils.buildPageImageThumbnailShellForEditor(src, globalThis.document);
+            const img = built.querySelector("img.cq-page-image-thumbnail__image");
+            expect(img).not.toBe(null);
+            expect(img.getAttribute("src")).toBe("/content/dam/deep/nested.png");
+            expect(img.getAttribute("alt")).toBe("deep");
+            expect(img.getAttribute("onclick")).toBe(null);
+            expect(img.getAttribute("onmouseover")).toBe(null);
+        });
+
+        it("recurses into nested thumbnail markup for allowlisted buttons", function() {
+            const inner =
+                F.imgTag("/content/dam/x.png", "") +
+                '<div class="cq-FileUpload-thumbnail">' +
+                '<div class="cq-FileUpload-thumbnail-img">' +
+                '<img src="/content/dam/x.png">' +
+                "</div>" +
+                '<div><div>' +
+                '<button type="button" class="cq-FileUpload-clear _coral-Button">' +
+                '<coral-button-label class="_coral-Button-label">Clear</coral-button-label>' +
+                "</button></div></div></div>";
+            const src = F.parseShellRoot(inner);
+            const built = markupUtils.buildPageImageThumbnailShellForEditor(src, globalThis.document);
+            const clearBtn = built.querySelector("button.cq-FileUpload-clear");
+            expect(clearBtn).not.toBe(null);
+            expect(clearBtn.querySelector("coral-button-label").textContent).toBe("Clear");
+        });
+
+        it("walks a deep subtree for image, controls, and ignores injected link nodes", function() {
+            const deepWrap =
+                "<div><div><div><div><div><div><div><div><div><div>" +
+                F.imgTag("/content/dam/deep.png", "d") +
+                '<a href="javascript:alert(1)">bad</a>' +
+                "</div></div></div></div></div></div></div></div></div></div>";
+            const inner =
+                deepWrap +
+                '<div class="cq-FileUpload-thumbnail">' +
+                '<div><div><div><div>' +
+                '<button type="button" class="cq-FileUpload-edit _coral-Button" data-cq-fileupload-filereference="/content/dam/a">' +
+                '<coral-button-label class="_coral-Button-label">E</coral-button-label>' +
+                "</button>" +
+                '<div><div><div>' +
+                '<button type="button" class="cq-FileUpload-picker _coral-Button">' +
+                '<coral-button-label class="_coral-Button-label">P</coral-button-label>' +
+                "</button></div></div></div>" +
+                '<button type="button" class="cq-FileUpload-clear _coral-Button">' +
+                '<coral-button-label class="_coral-Button-label">C</coral-button-label>' +
+                "</button>" +
+                "</div></div></div></div></div>";
+            const src = F.parseShellRoot(inner);
+            const built = markupUtils.buildPageImageThumbnailShellForEditor(src, globalThis.document);
+            expect(built.querySelector("a")).toBe(null);
+            expect(built.querySelector("img.cq-page-image-thumbnail__image").getAttribute("src")).toBe("/content/dam/deep.png");
+            expect(built.querySelectorAll("button.cq-FileUpload-edit").length).toBe(1);
+            expect(built.querySelectorAll("button.cq-FileUpload-picker").length).toBe(1);
+            expect(built.querySelectorAll("button.cq-FileUpload-clear").length).toBe(1);
+        });
+
+        it("does not copy a non-allowlisted href from the source thumbnail image (only src and alt)", function() {
+            const src = F.parseShellRoot(F.imgTag("/content/dam/x.png", "ok", 'href="javascript:alert(1)"'));
+            const built = markupUtils.buildPageImageThumbnailShellForEditor(src, globalThis.document);
+            const img = built.querySelector("img.cq-page-image-thumbnail__image");
+            expect(img).not.toBe(null);
+            expect(img.getAttribute("href")).toBe(null);
+            expect(img.getAttribute("src")).toBe("/content/dam/x.png");
         });
     });
 });

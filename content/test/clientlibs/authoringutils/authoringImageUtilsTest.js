@@ -13,6 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+/**
+ * Registers {@code globalThis.AuthoringutilsThumbnailFixtures} for page-image thumbnail HTML used in this file and in
+ * {@code authoringMarkupUtilsTest.js} and {@code imageV3EditorImageTest.js}. Karma loads test modules in name order;
+ * keep this filename before those files so the fixtures exist when tests run.
+ */
+(function(global) {
+    "use strict";
+
+    var CORAL_OPEN = '<coral-fileupload class="cq-page-image-thumbnail">';
+    var CORAL_CLOSE = "</coral-fileupload>";
+
+    function imgTag(src, alt, extraAttr) {
+        var al = alt !== undefined && alt !== null ? alt : "x";
+        var ex = extraAttr ? " " + extraAttr : "";
+        return '<img class="cq-page-image-thumbnail__image" src="' + src + '" alt="' + al + '"' + ex + ">";
+    }
+
+    function shell(inner) {
+        return CORAL_OPEN + inner + CORAL_CLOSE;
+    }
+
+    global.AuthoringutilsThumbnailFixtures = {
+        shell: shell,
+        imgTag: imgTag,
+        parseShellRoot: function(inner) {
+            var doc = new global.DOMParser().parseFromString(shell(inner), "text/html");
+            return doc.querySelector(".cq-page-image-thumbnail");
+        },
+        importMarkup: function(inner) {
+            return "<div>" + shell(inner) + "</div>";
+        }
+    };
+})(globalThis);
+
 describe("AuthoringEditorUtils.image (core.wcm.components.commons.editor.authoringutils)", function() {
     let imageUtils;
 
@@ -50,6 +84,12 @@ describe("AuthoringEditorUtils.image (core.wcm.components.commons.editor.authori
             expect(imageUtils.isDamScene7PathEligible("vbscript:msgbox")).toBe(false);
         });
 
+        it("returns false for mixed-case dangerous schemes after normalisation", function() {
+            expect(imageUtils.isDamScene7PathEligible("JaVaScRiPt:alert(1)")).toBe(false);
+            expect(imageUtils.isDamScene7PathEligible("DaTa:text/html,x")).toBe(false);
+            expect(imageUtils.isDamScene7PathEligible("VbScRiPt:x")).toBe(false);
+        });
+
         it("returns false when decoded path segments are not stable", function() {
             expect(imageUtils.isDamScene7PathEligible("../../etc/passwd")).toBe(false);
             expect(imageUtils.isDamScene7PathEligible("/content/../secret")).toBe(false);
@@ -64,40 +104,6 @@ describe("AuthoringEditorUtils.image (core.wcm.components.commons.editor.authori
             const origin = globalThis.location.origin;
             expect(imageUtils.isDamScene7PathEligible(origin + "/path/to/asset")).toBe(true);
             expect(imageUtils.isDamScene7PathEligible("http://example.com/x")).toBe(false);
-        });
-    });
-
-    describe("importParsedPageImageThumbnail", function() {
-        it("returns null when markup has no thumbnail root", function() {
-            expect(imageUtils.importParsedPageImageThumbnail("<p>no thumb</p>", globalThis.document)).toBe(null);
-        });
-
-        it("returns null when the thumbnail root is not a coral-fileupload", function() {
-            const html =
-                '<div class="cq-page-image-thumbnail"><img class="cq-page-image-thumbnail__image" src="/content/dam/x.png" alt=""></div>';
-            expect(imageUtils.importParsedPageImageThumbnail(html, globalThis.document)).toBe(null);
-        });
-
-        it("returns a fragment without auxiliary document tags under the thumbnail root", function() {
-            const html =
-                '<div><coral-fileupload class="cq-page-image-thumbnail">' +
-                '<img class="cq-page-image-thumbnail__image" src="/content/dam/x.png" alt="ok">' +
-                "<script>void 0</script>" +
-                "</coral-fileupload></div>";
-            const el = imageUtils.importParsedPageImageThumbnail(html, globalThis.document);
-            expect(el).not.toBe(null);
-            expect(el.querySelector("script")).toBe(null);
-        });
-
-        it("drops declarative handler attributes on the thumbnail image", function() {
-            const html =
-                '<coral-fileupload class="cq-page-image-thumbnail">' +
-                '<img class="cq-page-image-thumbnail__image" src="/content/dam/x.png" alt="a" onclick="void 0">' +
-                "</coral-fileupload>";
-            const el = imageUtils.importParsedPageImageThumbnail(html, globalThis.document);
-            const img = el.querySelector("img");
-            expect(img.getAttribute("onclick")).toBe(null);
-            expect(img.getAttribute("src")).toBe("/content/dam/x.png");
         });
     });
 });

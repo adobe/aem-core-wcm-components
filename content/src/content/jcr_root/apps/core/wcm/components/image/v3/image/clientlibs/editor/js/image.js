@@ -66,19 +66,13 @@
     var remoteFileReference;
     var dataSeededValueAttr = "data-seeded-value";
 
-    var FT_SITES_41279 = "FT_SITES_41279";
+    var FT_SITES_41279 = "FT_SITES-41279";
     /*
-     * Granite feature toggle FT_SITES_41279 gates Image v3 editor markup helpers (Coral crop labels, Dynamic Media path checks,
+     * Granite feature toggle FT_SITES-41279 gates Image v3 editor markup helpers (Coral crop labels, Dynamic Media path checks,
      * page-image thumbnail shell import). Helpers stay on unless the toggle is explicitly false—use false only as a short
      * operator rollback while investigating regressions; Cloud environments should ship with this enabled.
      */
 
-    /**
-     * Optional Image v3 authoring refresh behind FT_SITES_41279 (see block comment on FT_SITES_41279).
-     * When Granite reports the toggle as false, the editor matches earlier Image v3 authoring behavior.
-     *
-     * @returns {Boolean}
-     */
     function isImageV3AuthoringMarkupHelpersEnabled() {
         if (!Granite || !Granite.Toggles || typeof Granite.Toggles.isEnabled !== "function") {
             return true;
@@ -90,19 +84,22 @@
         return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.image;
     }
 
-    function getAuthoringPathUtils() {
-        return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.path;
-    }
-
     /**
-     * Label HTML for smart crop dropdown items; with FT_SITES_41279, values are prepared for Coral innerHTML rendering.
+     * Label HTML for smart crop dropdown items; with FT_SITES-41279, values are prepared for Coral innerHTML rendering.
      *
      * @param {*} value smart crop label or related value
-     * @returns {String}
+     * @returns {String} label text or HTML-safe markup suitable for Coral rendering when FT_SITES-41279 applies
      */
     function formatSmartCropOptionLabel(value) {
         if (isImageV3AuthoringMarkupHelpersEnabled()) {
-            return getImageAuthoringUtils().formatPlainTextForMarkup(value);
+            var utils = getImageAuthoringUtils();
+            if (!utils) {
+                return String(value == null ? "" : value);
+            }
+            if (typeof utils.formatPlainTextForMarkup !== "function") {
+                return String(value == null ? "" : value);
+            }
+            return utils.formatPlainTextForMarkup(value);
         }
         if (value === undefined || value === null) {
             return "";
@@ -111,16 +108,27 @@
     }
 
     /**
-     * Whether dam:scene7File can drive image service requests; with FT_SITES_41279, repository path rules from commons apply.
+     * Whether dam:scene7File can drive image service requests; with FT_SITES-41279, repository path rules from commons apply.
      *
      * @param {*} path dam:scene7File or equivalent metadata path
-     * @returns {Boolean}
+     * @returns {Boolean} whether the path is allowed for scene7-style requests when FT_SITES-41279 applies
      */
     function isDamScene7FileEligible(path) {
         if (isImageV3AuthoringMarkupHelpersEnabled()) {
-            return getImageAuthoringUtils().isDamScene7PathEligible(path);
+            var utils = getImageAuthoringUtils();
+            if (!utils) {
+                return true;
+            }
+            if (typeof utils.isDamScene7PathEligible !== "function") {
+                return true;
+            }
+            return utils.isDamScene7PathEligible(path);
         }
         return true;
+    }
+
+    function getAuthoringPathUtils() {
+        return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.path;
     }
 
     $(document).on("dialog-loaded", function(e) {
@@ -881,6 +889,27 @@
             assetTab.addClass("is-invalid");
             assetTabAlertIcon.show();
         }
+    }
+
+    var imageV3EditorTestApiHost = typeof globalThis === "undefined" ? window : globalThis;
+
+    /* Karma (mocks.js) sets __IMAGE_V3_EDITOR_TEST_API on the global object; AEM runtime leaves it undefined. */
+    if (imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API) {
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.formatSmartCropOptionLabel = formatSmartCropOptionLabel;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.isDamScene7FileEligible = isDamScene7FileEligible;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.isImageV3AuthoringMarkupHelpersEnabled = isImageV3AuthoringMarkupHelpersEnabled;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.getImageAuthoringUtils = getImageAuthoringUtils;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.getAuthoringPathUtils = getAuthoringPathUtils;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.importPageImageThumbnailFromMarkup = function(markup, targetDocument) {
+            var imageAuthoringUtils = getImageAuthoringUtils();
+            if (
+                !imageAuthoringUtils ||
+                typeof imageAuthoringUtils.importParsedPageImageThumbnail !== "function"
+            ) {
+                return null;
+            }
+            return imageAuthoringUtils.importParsedPageImageThumbnail(markup, targetDocument);
+        };
     }
 
 })(jQuery, Granite);
