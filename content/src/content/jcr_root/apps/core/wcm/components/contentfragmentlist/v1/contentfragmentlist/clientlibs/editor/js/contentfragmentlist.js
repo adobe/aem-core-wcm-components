@@ -26,6 +26,133 @@
     var SELECTOR_ELEMENT_NAMES = "[data-granite-coral-multifield-name='./elementNames']";
     var SELECTOR_ELEMENT_NAMES_ADD = SELECTOR_ELEMENT_NAMES + " > [is=coral-button]";
 
+    var CT_SITES_41317 = "CT_SITES-41317";
+
+    /**
+     * Granite feature toggle CT_SITES-41317 gates datasource HTML handling for the Content Fragment List editor.
+     * When Granite or {@code Toggles} is unavailable, helpers are treated as enabled.
+     * When the toggle is explicitly disabled, behaviour matches earlier editor revisions.
+     *
+     * @returns {Boolean} True when markup helpers are active for this editor.
+     */
+    function isContentFragmentListV1EditorMarkupHelpersEnabled() {
+        if (typeof Granite === "undefined" || !Granite.Toggles || typeof Granite.Toggles.isEnabled !== "function") {
+            return true;
+        }
+        return Granite.Toggles.isEnabled(CT_SITES_41317) !== false;
+    }
+
+    /**
+     * Returns the shared authoring markup utilities module when Core Components authoring clientlibs are loaded.
+     *
+     * @returns {Object|null} The AuthoringEditorUtils.markup namespace, or null when not available.
+     */
+    function getAuthoringMarkupUtils() {
+        if (window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils) {
+            return window.CQ.CoreComponents.AuthoringEditorUtils.markup;
+        }
+        return null;
+    }
+
+    /**
+     * Whether the given cmp-field-path value may be requested as a same-origin datasource URL.
+     *
+     * @param {String} path - resource path or URL as stored on the dialog field (cmp-field-path)
+     * @returns {Boolean} True when the path resolves to the current page origin.
+     */
+    function isSameOriginDatasourcePath(path) {
+        if (path === undefined || path === null) {
+            return false;
+        }
+        var str = String(path).trim();
+        if (str.length === 0) {
+            return false;
+        }
+        var markupUtils = getAuthoringMarkupUtils();
+        if (markupUtils && typeof markupUtils.linkValueHasExcludedRepositoryPrefix === "function") {
+            if (markupUtils.linkValueHasExcludedRepositoryPrefix(str)) {
+                return false;
+            }
+        } else if (/^(javascript|data|vbscript):/i.test(str)) {
+            return false;
+        }
+        var external = Granite.HTTP.externalize(str);
+        var resolved;
+        try {
+            resolved = new URL(external, window.location.href);
+        } catch (e) {
+            return false;
+        }
+        return resolved.origin === window.location.origin;
+    }
+
+    /**
+     * Parses HTML from a datasource response.
+     *
+     * @param {String} html - response body
+     * @returns {Document} parsed document
+     */
+    function parseDatasourceDocument(html) {
+        var markupUtils = getAuthoringMarkupUtils();
+        if (markupUtils && typeof markupUtils.parseMarkupDocument === "function") {
+            return markupUtils.parseMarkupDocument(html);
+        }
+        return new DOMParser().parseFromString(String(html == null ? "" : html), "text/html");
+    }
+
+    /**
+     * Parses datasource HTML for editor flows, applying markup normalisation when editor helpers apply.
+     *
+     * @param {String} html - response body
+     * @returns {Document} parsed document
+     */
+    function parseDatasourceDocumentForEditor(html) {
+        if (!isContentFragmentListV1EditorMarkupHelpersEnabled()) {
+            return parseDatasourceDocument(html);
+        }
+        var markupUtils = getAuthoringMarkupUtils();
+        if (markupUtils && typeof markupUtils.parseAndNormalizeAuthoringDatasourceMarkup === "function") {
+            return markupUtils.parseAndNormalizeAuthoringDatasourceMarkup(html);
+        }
+        return parseDatasourceDocument(html);
+    }
+
+    /**
+     * Returns the inner HTML of the first child of the parsed document body (legacy extraction).
+     *
+     * @param {String} html - response body
+     * @returns {String} Markup for the element names container.
+     */
+    function getInnerHtmlFromDatasourceResponse(html) {
+        var markupUtils = getAuthoringMarkupUtils();
+        if (markupUtils && typeof markupUtils.innerHtmlFromFirstBodyChild === "function") {
+            return markupUtils.innerHtmlFromFirstBodyChild(html);
+        }
+        var doc = parseDatasourceDocument(html);
+        var body = doc.body;
+        if (!body || !body.firstElementChild) {
+            return "";
+        }
+        return body.firstElementChild.innerHTML;
+    }
+
+    /**
+     * Resolves inner HTML for the element names container from a datasource response string.
+     *
+     * @param {String} html - response body
+     * @returns {String} Markup assigned to the element names container wrapper.
+     */
+    function resolveElementNamesContainerInnerHtmlForEditor(html) {
+        if (!isContentFragmentListV1EditorMarkupHelpersEnabled()) {
+            return getInnerHtmlFromDatasourceResponse(html);
+        }
+        var markupUtils = getAuthoringMarkupUtils();
+        if (markupUtils && typeof markupUtils.sanitizeAuthoringEditorResponseMarkup === "function") {
+            return markupUtils.sanitizeAuthoringEditorResponseMarkup(html);
+        }
+        return getInnerHtmlFromDatasourceResponse(html);
+    }
+
     // ui helper
     var ui = $(window).adaptTo("foundation-ui");
 
@@ -126,6 +253,9 @@
      * @returns {Object} the resulting request object
      */
     ContentFragmentListController.prototype.prepareDataSourceRequest = function(url) {
+        if (!isSameOriginDatasourcePath(url)) {
+            return $.Deferred().reject().promise();
+        }
         var data = {
             modelPath: modelPath.value
         };
@@ -147,8 +277,10 @@
         var self = this;
         // wait for requests to load
         $.when(elementNamesRequest, orderByRequest).done(function(elementNamesResult, orderByResult) {
-            var newElementNames = $(elementNamesResult[0]).find(SELECTOR_ELEMENT_NAMES)[0];
-            var orderBy = $(orderByResult[0]).find(SELECTOR_ORDER_BY)[0];
+            var elementNamesDoc = parseDatasourceDocumentForEditor(elementNamesResult[0]);
+            var orderByDoc = parseDatasourceDocumentForEditor(orderByResult[0]);
+            var newElementNames = elementNamesDoc.querySelector(SELECTOR_ELEMENT_NAMES);
+            var orderBy = orderByDoc.querySelector(SELECTOR_ORDER_BY);
             self.fetchedState = {
                 elementNames: newElementNames,
                 elementNamesContainerHTML: elementNamesResult[0],
@@ -176,8 +308,9 @@
             }
             // compare the items of the current and new element names fields
             var currentElementNamesItems = this.elementNames.template.content.querySelectorAll("coral-select-item");
-            var newElementNamesItems = $(this.fetchedState.elementNamesContainerHTML).find("coral-select-item").toArray();
-            var newOrderByItems = $(this.fetchedState.orderBy).find("coral-select-item").toArray();
+            var elementNamesMarkup = parseDatasourceDocumentForEditor(this.fetchedState.elementNamesContainerHTML);
+            var newElementNamesItems = elementNamesMarkup.querySelectorAll("coral-select-item");
+            var newOrderByItems = this.fetchedState.orderBy.querySelectorAll("coral-select-item");
             if (!itemsAreEqual(currentElementNamesItems, newElementNamesItems) ||
                 !itemsAreEqual(this.orderBy.items.getAll(), newOrderByItems)) {
                 return false;
@@ -212,17 +345,21 @@
      * @param {String} html - outerHTML value for elementNamesContainer
      */
     ContentFragmentListController.prototype._updateElementsHTML = function(html) {
-        this.elementNamesContainer.innerHTML = $(html)[0].innerHTML;
+        this.elementNamesContainer.innerHTML = resolveElementNamesContainerInnerHtmlForEditor(html);
         this._updateElementNamesField();
     };
 
     /**
      * Replaces the html of orderBy select item.
      *
-     * @param {String} html - html value for orderBy
+     * @param {Element} orderByNode - coral-select element to insert
      */
-    ContentFragmentListController.prototype._updateOrderByHTML = function(html) {
-        this.orderBy.replaceWith(html);
+    ContentFragmentListController.prototype._updateOrderByHTML = function(orderByNode) {
+        if (!orderByNode) {
+            return;
+        }
+        var imported = document.importNode(orderByNode, true);
+        this.orderBy.replaceWith(imported);
         this.orderBy = editDialog.querySelector(SELECTOR_ORDER_BY);
     };
 
@@ -357,5 +494,15 @@
             });
         }
     });
+
+    var cflEditorTestApiHost = typeof globalThis !== "undefined" ? globalThis : window;
+    /* Karma (mocks.js) sets __CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API on the global object; AEM runtime leaves it undefined. */
+    if (cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API) {
+        cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API.isContentFragmentListV1EditorMarkupHelpersEnabled =
+            isContentFragmentListV1EditorMarkupHelpersEnabled;
+        cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API.resolveElementNamesContainerInnerHtmlForEditor =
+            resolveElementNamesContainerInnerHtmlForEditor;
+        cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API.getAuthoringMarkupUtils = getAuthoringMarkupUtils;
+    }
 
 })(window, jQuery, jQuery(document), Granite, Coral);

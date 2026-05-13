@@ -159,6 +159,7 @@
         "jcr:created"    : "Wed Aug 30 2017 13:35:42 GMT+0200",
         "jcr:content"    : {
             "jcr:primaryType"   : "dam:AssetContent",
+            "jcr:uuid"          : "b2a7f9c1-3e5d-4f8a-9c1e-d7b3a2f5e8c4",
             "jcr:title"         : "Test Content Fragment",
             "jcr:description"   : "This is a test content fragment.",
             "jcr:lastModifiedBy": "admin",
