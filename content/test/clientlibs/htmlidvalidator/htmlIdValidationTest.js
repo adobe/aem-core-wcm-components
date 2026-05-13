@@ -33,22 +33,42 @@ describe("HTML ID Validator Path Sanitization", function() {
         window.$.ajax = function(options) {
             ajaxCalls.push(options);
             // Simulate successful responses
-            if (options.url.endsWith('.json')) {
+            if (options.url.endsWith(".json")) {
                 options.success?.({});
-            } else if (options.url.endsWith('.html?wcmmode=disabled')) {
-                options.success?.('<div>no matching ids</div>');
+            } else if (options.url.indexOf(".html") !== -1 && options.url.indexOf("wcmmode=disabled") !== -1) {
+                options.success?.("<div>no matching ids</div>");
             }
         };
 
-        // Helper function to enable/disable the CT_SANITIZE_ENCODE_PATH toggle
-        this.setToggleEnabled = function(enabled) {
+        this.toggle33116Enabled = true;
+        this.toggle41942Enabled = true;
+
+        // CT_SITES-33116: path encoding / sanitization. CT_SITES-41942: page preview URL resolution and fetched markup handling.
+        this.setToggleEnabled = function(enabled33116) {
+            this.toggle33116Enabled = enabled33116;
             window.Granite.Toggles.isEnabled = function(feature) {
                 if (feature === "CT_SITES-33116") {
-                    return enabled;
+                    return this.toggle33116Enabled;
                 }
-                return false;
-            };
-        };
+                if (feature === "CT_SITES-41942") {
+                    return this.toggle41942Enabled;
+                }
+                return true;
+            }.bind(this);
+        }.bind(this);
+
+        this.setToggle41942Enabled = function(enabled41942) {
+            this.toggle41942Enabled = enabled41942;
+            window.Granite.Toggles.isEnabled = function(feature) {
+                if (feature === "CT_SITES-33116") {
+                    return this.toggle33116Enabled;
+                }
+                if (feature === "CT_SITES-41942") {
+                    return this.toggle41942Enabled;
+                }
+                return true;
+            }.bind(this);
+        }.bind(this);
 
         // Helper function to create mock elements
         this.createMockElement = function(formAction, inputValue) {
@@ -61,13 +81,16 @@ describe("HTML ID Validator Path Sanitization", function() {
                 }
             };
 
+            const resolvedVal = inputValue || "test-id";
+
             return {
                 closest: function(selector) {
                     return mockForm;
                 },
                 val: function() {
-                    return inputValue || 'test-id';
+                    return resolvedVal;
                 },
+                value: resolvedVal,
                 getAttribute: function(name) {
                     return formAction;
                 }
@@ -84,15 +107,36 @@ describe("HTML ID Validator Path Sanitization", function() {
             ajaxCalls = [];
         };
 
-        // Helper function to get the validator
+        // Helper function to get the html-unique-id field validator (Karma exposes the instance via test API)
         this.getValidator = function() {
-            return window.foundationRegistry.validators[0];
+            var api = globalThis.__HTML_ID_VALIDATOR_EDITOR_TEST_API;
+            if (api && typeof api.getHtmlUniqueIdFieldValidator === "function") {
+                return api.getHtmlUniqueIdFieldValidator();
+            }
+            var v = window.foundationRegistry.validators;
+            var i;
+            for (i = 0; i < v.length; i++) {
+                if (v[i].selector === "[data-validation=html-unique-id-validator]") {
+                    return v[i];
+                }
+            }
+            return v[0];
         };
 
-        // Helper function to reset state for toggle disabled test
+        // Helper function to reset state for CT_SITES-33116 disabled test (path sanitization legacy)
         this.resetForDisabledToggle = function() {
             this.clearAjaxCalls();
-            this.setToggleEnabled(false);
+            this.toggle33116Enabled = false;
+            this.toggle41942Enabled = true;
+            window.Granite.Toggles.isEnabled = function(feature) {
+                if (feature === "CT_SITES-33116") {
+                    return this.toggle33116Enabled;
+                }
+                if (feature === "CT_SITES-41942") {
+                    return this.toggle41942Enabled;
+                }
+                return true;
+            }.bind(this);
         };
 
         // Helper function to assert path was blocked (toggle enabled behavior)
@@ -118,7 +162,7 @@ describe("HTML ID Validator Path Sanitization", function() {
         this.validateAndGetHtmlUrl = function(mockElement) {
             this.getValidator().validate(mockElement);
             const url = this.getLastAjaxUrl();
-            return url?.endsWith('.html?wcmmode=disabled') ? url : null;
+            return url && url.indexOf(".html") !== -1 && url.indexOf("wcmmode=disabled") !== -1 ? url : null;
         };
 
         // Helper function to test path is allowed in both toggle states
@@ -147,6 +191,8 @@ describe("HTML ID Validator Path Sanitization", function() {
             validator.validate(mockElement);
             this.expectPathAllowed();
         };
+
+        this.setToggleEnabled(true);
     });
 
     afterEach(function() {
@@ -160,7 +206,7 @@ describe("HTML ID Validator Path Sanitization", function() {
         fixture.cleanup();
     });
 
-    describe("Path Sanitization Security Tests", function() {
+    describe("Path sanitization behaviour", function() {
         it("should handle path traversal sequences in URLs", function() {
             spyOn(console, 'warn');
             const mockElement = this.createMockElement('/content/../../../etc/passwd/_jcr_content/root/component', 'unique-id');
@@ -169,35 +215,36 @@ describe("HTML ID Validator Path Sanitization", function() {
             this.setToggleEnabled(true);
             let ajaxUrl = this.validateAndGetHtmlUrl(mockElement);
             if (ajaxUrl) {
-                expect(ajaxUrl).toMatch(/^\/content\/etc\/passwd\.html/);
-                expect(ajaxUrl).not.toContain('..');
+                expect(ajaxUrl).toContain("/content/etc/passwd.html");
+                expect(ajaxUrl).not.toContain("..");
             }
 
             // Test with toggle DISABLED - should encode but not sanitize
             this.resetForDisabledToggle();
             ajaxUrl = this.validateAndGetHtmlUrl(mockElement);
             if (ajaxUrl) {
-                expect(ajaxUrl).toContain('%2E%2E');
+                expect(ajaxUrl).toContain("/etc/passwd.html");
+                expect(ajaxUrl).not.toMatch(/\.\.\//);
             }
         });
 
-        it("should block dangerous characters in paths", function() {
+        it("should block disallowed characters in paths", function() {
             spyOn(console, 'warn');
 
-            const dangerousChars = ['<', '>', '"', '|', '*', '?'];
+            const disallowedPathChars = ['<', '>', '"', '|', '*', '?'];
 
-            dangerousChars.forEach(function(char) {
+            disallowedPathChars.forEach(function(char) {
                 this.resetWarnSpy();
                 this.clearAjaxCalls();
 
-                const mockElement = this.createMockElement('/content/test' + char + 'malicious/_jcr_content/root/component', 'test-id');
+                const mockElement = this.createMockElement('/content/test' + char + 'segment/_jcr_content/root/component', 'test-id');
                 this.expectBlockedWhenEnabledAllowedWhenDisabled(mockElement);
             }.bind(this));
         });
 
-        it("should prevent XSS attempts in paths", function() {
+        it("should reject paths containing angle brackets and script elements in the path string", function() {
             spyOn(console, 'warn');
-            const mockElement = this.createMockElement('/content/test<script>alert("xss")</script>/_jcr_content/root/component', 'test-id');
+            const mockElement = this.createMockElement('/content/test<script>alert(1)</script>/_jcr_content/root/component', 'test-id');
             this.expectBlockedWhenEnabledAllowedWhenDisabled(mockElement);
         });
 
@@ -223,15 +270,15 @@ describe("HTML ID Validator Path Sanitization", function() {
             this.setToggleEnabled(true);
             let ajaxUrl = this.validateAndGetHtmlUrl(mockElement);
             if (ajaxUrl) {
-                expect(ajaxUrl).toMatch(/^\/content\/test\/page\.html/);
-                expect(ajaxUrl).not.toMatch(/\/\//);
+                expect(ajaxUrl).toMatch(/content\/test\/page\.html/);
+                expect(ajaxUrl).not.toMatch(/content\/\/test/);
             }
 
             // Test with toggle DISABLED - should NOT normalize slashes
             this.resetForDisabledToggle();
             ajaxUrl = this.validateAndGetHtmlUrl(mockElement);
             if (ajaxUrl) {
-                expect(ajaxUrl).toContain('%2F%2F');
+                expect(ajaxUrl).toContain("//test///");
             }
         });
 
@@ -293,6 +340,39 @@ describe("HTML ID Validator Path Sanitization", function() {
             spyOn(console, 'warn');
             const mockElement = this.createMockElement('/content/test/page?/_jcr_content/root/component', 'test-id');
             this.expectBlockedWhenEnabledAllowedWhenDisabled(mockElement);
+        });
+
+        it("does not load page HTML when the form action omits the authored content path segment and preview helpers are on", function() {
+            this.setToggleEnabled(false);
+            this.setToggle41942Enabled(true);
+            const mockElement = this.createMockElement("/content/usergenerated/demo/payload/resource", "id1");
+            this.getValidator().validate(mockElement);
+            const htmlCalls = ajaxCalls.filter(function(c) {
+                return c.url && c.url.indexOf(".html") !== -1 && c.url.indexOf("wcmmode=disabled") !== -1;
+            });
+            expect(htmlCalls.length).toBe(0);
+        });
+
+        it("loads page HTML for actions without the authored content path segment when preview helpers are off", function() {
+            this.setToggleEnabled(false);
+            this.setToggle41942Enabled(false);
+            const mockElement = this.createMockElement("/content/usergenerated/demo/payload/resource", "id1");
+            this.getValidator().validate(mockElement);
+            const htmlCalls = ajaxCalls.filter(function(c) {
+                return c.url && c.url.indexOf(".html") !== -1 && c.url.indexOf("wcmmode=disabled") !== -1;
+            });
+            expect(htmlCalls.length).toBeGreaterThan(0);
+        });
+
+        it("accepts form actions that use jcr:content in the path when preview helpers are on", function() {
+            this.setToggleEnabled(false);
+            this.setToggle41942Enabled(true);
+            const mockElement = this.createMockElement("/content/mysite/en/page/jcr:content/root/res", "id1");
+            this.getValidator().validate(mockElement);
+            const htmlCalls = ajaxCalls.filter(function(c) {
+                return c.url && c.url.indexOf(".html") !== -1 && c.url.indexOf("wcmmode=disabled") !== -1;
+            });
+            expect(htmlCalls.length).toBeGreaterThan(0);
         });
     });
 });

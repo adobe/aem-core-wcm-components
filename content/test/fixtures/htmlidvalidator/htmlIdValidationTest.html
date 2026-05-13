@@ -23,12 +23,12 @@
     
     <!-- Test form with path traversal attempt -->
     <form action="/content/../../../etc/passwd/_jcr_content/root/component">
-        <input type="text" data-validation="html-unique-id-validator" value="malicious-id" />
+        <input type="text" data-validation="html-unique-id-validator" value="traversal-id" />
     </form>
     
-    <!-- Test form with dangerous characters -->
-    <form action="/content/test<script>alert('xss')</script>/_jcr_content/root/component">
-        <input type="text" data-validation="html-unique-id-validator" value="xss-id" />
+    <!-- Test form with disallowed characters in path -->
+    <form action="/content/test<script>alert(1)</script>/_jcr_content/root/component">
+        <input type="text" data-validation="html-unique-id-validator" value="markup-path-id" />
     </form>
     
     <!-- Test form with spaces in path -->
