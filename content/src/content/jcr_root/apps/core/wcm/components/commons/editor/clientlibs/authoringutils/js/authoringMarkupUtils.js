@@ -222,6 +222,21 @@
         return body.firstElementChild.innerHTML;
     }
 
+    /**
+     * Parses datasource HTML into a document whose body subtree is normalised the same way as for
+     * {@code sanitizeAuthoringEditorResponseMarkup}, without collapsing to the first child inner string.
+     *
+     * @param {String} markup - HTML document string from a datasource response
+     * @returns {Document} parsed document with a normalised body subtree
+     */
+    function parseAndNormalizeAuthoringDatasourceMarkup(markup) {
+        var doc = parseMarkupDocument(String(markup == null ? "" : markup));
+        if (doc.body) {
+            sanitizeAuthoringMarkupSubtree(doc.body);
+        }
+        return doc;
+    }
+
     function filterClassAttribute(raw, allowedTokens) {
         if (!raw || typeof raw !== "string") {
             return "";
@@ -359,8 +374,10 @@
         innerHtmlFromFirstBodyChild: innerHtmlFromFirstBodyChild,
         adoptNodeForDocument: adoptNodeForDocument,
         linkValueHasExcludedRepositoryPrefix: linkValueHasExcludedRepositoryPrefix,
+        stripAsciiControlsAndWhitespaceForSchemeCheck: stripAsciiControlsAndWhitespaceForSchemeCheck,
         buildPageImageThumbnailShellForEditor: buildPageImageThumbnailShellForEditor,
-        sanitizeAuthoringEditorResponseMarkup: sanitizeAuthoringEditorResponseMarkup
+        sanitizeAuthoringEditorResponseMarkup: sanitizeAuthoringEditorResponseMarkup,
+        parseAndNormalizeAuthoringDatasourceMarkup: parseAndNormalizeAuthoringDatasourceMarkup
     };
 
 })(window);

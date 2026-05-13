@@ -427,5 +427,7 @@ if (!globalThis.CQ.CoreComponents.CheckboxTextfieldTuple) {
 /** Filled by Image v2 or v3 editor image.js when present (Karma loads those scripts after mocks). */
 globalThis.__IMAGE_V2_EDITOR_TEST_API = {};
 globalThis.__IMAGE_V3_EDITOR_TEST_API = {};
-/** Filled by Content Fragment v1 editDialog.js when present (Karma loads that script after mocks). */
+/** Filled by Content Fragment v1 editor editDialog.js when present (Karma loads that script after mocks). */
 globalThis.__CONTENTFRAGMENT_V1_DIALOG_TEST_API = {};
+/** Filled by Content Fragment List v1 editor contentfragmentlist.js when present (Karma loads that script after mocks). */
+globalThis.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API = {};

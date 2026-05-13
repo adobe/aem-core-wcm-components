@@ -57,6 +57,11 @@ describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.author
             expect(markupUtils.linkValueHasExcludedRepositoryPrefix(null)).toBe(false);
             expect(markupUtils.linkValueHasExcludedRepositoryPrefix(undefined)).toBe(false);
         });
+
+        it("exposes stripAsciiControlsAndWhitespaceForSchemeCheck for the same normalisation as link checks", function() {
+            expect(typeof markupUtils.stripAsciiControlsAndWhitespaceForSchemeCheck).toBe("function");
+            expect(markupUtils.stripAsciiControlsAndWhitespaceForSchemeCheck("java\tscript:x")).toBe("javascript:x");
+        });
     });
 
     describe("buildPageImageThumbnailShellForEditor", function() {
@@ -213,6 +218,16 @@ describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.author
             expect(out.indexOf("<base")).toBe(-1);
             expect(out.indexOf("<form")).toBe(-1);
             expect(out.indexOf(">ok</p>")).not.toBe(-1);
+        });
+
+        it("parseAndNormalizeAuthoringDatasourceMarkup normalises the full body subtree for querying", function() {
+            const html =
+                "<div><script>x</script><coral-select name=\"./orderBy\">" +
+                "<coral-select-item value=\"a\">b</coral-select-item></coral-select></div>";
+            const doc = markupUtils.parseAndNormalizeAuthoringDatasourceMarkup(html);
+            const sel = doc.querySelector("coral-select[name=\"./orderBy\"]");
+            expect(sel).not.toBe(null);
+            expect(doc.body.innerHTML.indexOf("<script")).toBe(-1);
         });
 
         it("returns empty string when body has no element child", function() {
