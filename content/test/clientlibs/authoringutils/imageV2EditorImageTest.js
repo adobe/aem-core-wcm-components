@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 /**
- * Covers Image v2 editor {@code image.js} (FT_SITES-41320) and related {@code AuthoringEditorUtils.image} checks
+ * Covers Image v2 editor {@code image.js} (CT_SITES-41320) and related {@code AuthoringEditorUtils.image} checks
  * wired through {@code globalThis.__IMAGE_V2_EDITOR_TEST_API}. Karma loads {@code image/v2/.../image.js} after {@code authoringutils}.
  */
 function imageV2EditorImageTestFtOn() {
@@ -25,7 +25,7 @@ function imageV2EditorImageTestFtOn() {
 
 function imageV2EditorImageTestFtOff() {
     globalThis.Granite.Toggles.isEnabled = function(key) {
-        return key !== "FT_SITES-41320";
+        return key !== "CT_SITES-41320";
     };
 }
 
@@ -67,14 +67,14 @@ describe("Image v2 editor image.js (Karma-loaded)", function() {
             globalThis.Granite.Toggles = saved;
         });
 
-        it("returns false when FT_SITES-41320 is explicitly disabled", function() {
+        it("returns false when CT_SITES-41320 is explicitly disabled", function() {
             globalThis.Granite.Toggles.isEnabled = function(key) {
-                return key !== "FT_SITES-41320";
+                return key !== "CT_SITES-41320";
             };
             expect(api.isImageV2AuthoringMarkupHelpersEnabled()).toBe(false);
         });
 
-        it("returns true when FT_SITES-41320 is enabled", function() {
+        it("returns true when CT_SITES-41320 is enabled", function() {
             imageV2EditorImageTestFtOn();
             expect(api.isImageV2AuthoringMarkupHelpersEnabled()).toBe(true);
         });
