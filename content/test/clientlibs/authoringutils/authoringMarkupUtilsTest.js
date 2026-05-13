@@ -215,6 +215,16 @@ describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.author
             expect(out.indexOf(">ok</p>")).not.toBe(-1);
         });
 
+        it("parseAndNormalizeAuthoringDatasourceMarkup normalises the full body subtree for querying", function() {
+            const html =
+                "<div><script>x</script><coral-select name=\"./orderBy\">" +
+                "<coral-select-item value=\"a\">b</coral-select-item></coral-select></div>";
+            const doc = markupUtils.parseAndNormalizeAuthoringDatasourceMarkup(html);
+            const sel = doc.querySelector("coral-select[name=\"./orderBy\"]");
+            expect(sel).not.toBe(null);
+            expect(doc.body.innerHTML.indexOf("<script")).toBe(-1);
+        });
+
         it("returns empty string when body has no element child", function() {
             expect(markupUtils.sanitizeAuthoringEditorResponseMarkup("")).toBe("");
         });
