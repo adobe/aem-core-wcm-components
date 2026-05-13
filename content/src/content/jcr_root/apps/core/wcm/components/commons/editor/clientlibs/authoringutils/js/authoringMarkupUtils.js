@@ -95,21 +95,43 @@
     }
 
     /**
+     * Drops ASCII C0 controls, DEL, and whitespace so scheme prefix checks cannot be bypassed with
+     * characters the URL layer may normalise away (e.g. TAB inside {@code javascript:}).
+     *
+     * @param {String} str - raw attribute value
+     * @returns {String} characters kept for scheme prefix checks
+     */
+    function stripAsciiControlsAndWhitespaceForSchemeCheck(str) {
+        var out = "";
+        var i;
+        var ch;
+        var c;
+        for (i = 0; i < str.length; i++) {
+            ch = str.charAt(i);
+            c = str.charCodeAt(i);
+            if (c <= 31 || c === 127) {
+                continue;
+            }
+            if (/\s/.test(ch)) {
+                continue;
+            }
+            out += ch;
+        }
+        return out;
+    }
+
+    /**
      * Whether a link-like attribute value uses a non-http(s) scheme prefix that authoring dialogs do not treat as repository paths.
      * Leading C0 control characters, DEL, and whitespace are stripped before the check so values cannot hide schemes from prefix matching.
      *
      * @param {*} value - attribute value (typically after DOM parsing, so entities are decoded)
-     * @returns {Boolean}
+     * @returns {Boolean} true when the normalised value starts with javascript, data, or vbscript
      */
     function linkValueHasExcludedRepositoryPrefix(value) {
         if (value === undefined || value === null) {
             return false;
         }
-        // Strip C0 controls (incl. NUL, TAB, LF, CR) and all whitespace so
-        // browser URL-parser normalisations like "java\tscript:" can't bypass
-        // the prefix check. Values reach this helper post-DOM-parse, so HTML
-        // entities are already decoded by the parser.
-        var t = String(value).replace(/[\u0000-\u001F\u007F\s]+/g, "").toLowerCase();
+        var t = stripAsciiControlsAndWhitespaceForSchemeCheck(String(value)).toLowerCase();
         return (
             t.indexOf("javascript:") === 0 ||
             t.indexOf("data:") === 0 ||
