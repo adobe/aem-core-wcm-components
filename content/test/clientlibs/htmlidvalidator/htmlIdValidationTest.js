@@ -33,9 +33,9 @@ describe("HTML ID Validator Path Sanitization", function() {
         globalThis.$.ajax = function(options) {
             ajaxCalls.push(options);
             // Simulate successful responses
-            if (options.url.endsWith(".json")) {
+            if (options.url?.endsWith(".json")) {
                 options.success?.({});
-            } else if (options.url.includes(".html") && options.url.includes("wcmmode=disabled")) {
+            } else if (options.url?.includes(".html") && options.url?.includes("wcmmode=disabled")) {
                 options.success?.("<div>no matching ids</div>");
             }
         };
@@ -99,7 +99,7 @@ describe("HTML ID Validator Path Sanitization", function() {
 
         // Helper function to get the last AJAX call URL
         this.getLastAjaxUrl = function() {
-            return ajaxCalls.length > 0 ? ajaxCalls[ajaxCalls.length - 1].url : null;
+            return ajaxCalls.at(-1)?.url ?? null;
         };
 
         // Helper function to clear AJAX calls
@@ -110,13 +110,16 @@ describe("HTML ID Validator Path Sanitization", function() {
         // Helper function to get the html-unique-id field validator (Karma exposes the instance via test API)
         this.getValidator = function() {
             const api = globalThis.__HTML_ID_VALIDATOR_EDITOR_TEST_API;
-            if (api && typeof api.getHtmlUniqueIdFieldValidator === "function") {
+            if (typeof api?.getHtmlUniqueIdFieldValidator === "function") {
                 return api.getHtmlUniqueIdFieldValidator();
             }
-            const v = globalThis.foundationRegistry.validators;
-            for (let i = 0; i < v.length; i++) {
-                if (v[i].selector === "[data-validation=html-unique-id-validator]") {
-                    return v[i];
+            const v = globalThis.foundationRegistry?.validators;
+            if (v == null) {
+                return undefined;
+            }
+            for (const entry of v) {
+                if (entry?.selector === "[data-validation=html-unique-id-validator]") {
+                    return entry;
                 }
             }
             return v[0];
@@ -152,16 +155,14 @@ describe("HTML ID Validator Path Sanitization", function() {
 
         // Helper function to reset console.warn spy
         this.resetWarnSpy = function() {
-            if (console.warn.calls) {
-                console.warn.calls.reset();
-            }
+            console.warn.calls?.reset();
         };
 
         // Helper function to validate and get the HTML URL
         this.validateAndGetHtmlUrl = function(mockElement) {
             this.getValidator().validate(mockElement);
             const url = this.getLastAjaxUrl();
-            return url && url.includes(".html") && url.includes("wcmmode=disabled") ? url : null;
+            return url?.includes(".html") && url?.includes("wcmmode=disabled") ? url : null;
         };
 
         // Helper function to test path is allowed in both toggle states
@@ -347,7 +348,7 @@ describe("HTML ID Validator Path Sanitization", function() {
             const mockElement = this.createMockElement("/content/usergenerated/demo/payload/resource", "id1");
             this.getValidator().validate(mockElement);
             const htmlCalls = ajaxCalls.filter(function(c) {
-                return c.url && c.url.includes(".html") && c.url.includes("wcmmode=disabled");
+                return c?.url?.includes(".html") && c?.url?.includes("wcmmode=disabled");
             });
             expect(htmlCalls.length).toBe(0);
         });
@@ -358,7 +359,7 @@ describe("HTML ID Validator Path Sanitization", function() {
             const mockElement = this.createMockElement("/content/usergenerated/demo/payload/resource", "id1");
             this.getValidator().validate(mockElement);
             const htmlCalls = ajaxCalls.filter(function(c) {
-                return c.url && c.url.includes(".html") && c.url.includes("wcmmode=disabled");
+                return c?.url?.includes(".html") && c?.url?.includes("wcmmode=disabled");
             });
             expect(htmlCalls.length).toBeGreaterThan(0);
         });
@@ -369,7 +370,7 @@ describe("HTML ID Validator Path Sanitization", function() {
             const mockElement = this.createMockElement("/content/mysite/en/page/jcr:content/root/res", "id1");
             this.getValidator().validate(mockElement);
             const htmlCalls = ajaxCalls.filter(function(c) {
-                return c.url && c.url.includes(".html") && c.url.includes("wcmmode=disabled");
+                return c?.url?.includes(".html") && c?.url?.includes("wcmmode=disabled");
             });
             expect(htmlCalls.length).toBeGreaterThan(0);
         });
