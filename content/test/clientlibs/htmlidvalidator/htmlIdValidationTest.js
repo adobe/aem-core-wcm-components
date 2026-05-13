@@ -26,16 +26,16 @@ describe("HTML ID Validator Path Sanitization", function() {
         this.result = fixture.load('htmlIdValidationTest.html');
 
         // Store original AJAX and replace with spy
-        originalAjax = window.$.ajax;
-        originalIsEnabled = window.Granite.Toggles.isEnabled;
+        originalAjax = globalThis.$.ajax;
+        originalIsEnabled = globalThis.Granite.Toggles.isEnabled;
         ajaxCalls = [];
 
-        window.$.ajax = function(options) {
+        globalThis.$.ajax = function(options) {
             ajaxCalls.push(options);
             // Simulate successful responses
             if (options.url.endsWith(".json")) {
                 options.success?.({});
-            } else if (options.url.indexOf(".html") !== -1 && options.url.indexOf("wcmmode=disabled") !== -1) {
+            } else if (options.url.includes(".html") && options.url.includes("wcmmode=disabled")) {
                 options.success?.("<div>no matching ids</div>");
             }
         };
@@ -46,7 +46,7 @@ describe("HTML ID Validator Path Sanitization", function() {
         // CT_SITES-33116: path encoding / sanitization. CT_SITES-41942: page preview URL resolution and fetched markup handling.
         this.setToggleEnabled = function(enabled33116) {
             this.toggle33116Enabled = enabled33116;
-            window.Granite.Toggles.isEnabled = function(feature) {
+            globalThis.Granite.Toggles.isEnabled = function(feature) {
                 if (feature === "CT_SITES-33116") {
                     return this.toggle33116Enabled;
                 }
@@ -59,7 +59,7 @@ describe("HTML ID Validator Path Sanitization", function() {
 
         this.setToggle41942Enabled = function(enabled41942) {
             this.toggle41942Enabled = enabled41942;
-            window.Granite.Toggles.isEnabled = function(feature) {
+            globalThis.Granite.Toggles.isEnabled = function(feature) {
                 if (feature === "CT_SITES-33116") {
                     return this.toggle33116Enabled;
                 }
@@ -71,7 +71,7 @@ describe("HTML ID Validator Path Sanitization", function() {
         }.bind(this);
 
         // Helper function to create mock elements
-        this.createMockElement = function(formAction, inputValue) {
+        this.createMockElement = function(formAction, inputValue = "test-id") {
             const mockForm = {
                 attr: function(name) {
                     return formAction;
@@ -109,13 +109,12 @@ describe("HTML ID Validator Path Sanitization", function() {
 
         // Helper function to get the html-unique-id field validator (Karma exposes the instance via test API)
         this.getValidator = function() {
-            var api = globalThis.__HTML_ID_VALIDATOR_EDITOR_TEST_API;
+            const api = globalThis.__HTML_ID_VALIDATOR_EDITOR_TEST_API;
             if (api && typeof api.getHtmlUniqueIdFieldValidator === "function") {
                 return api.getHtmlUniqueIdFieldValidator();
             }
-            var v = window.foundationRegistry.validators;
-            var i;
-            for (i = 0; i < v.length; i++) {
+            const v = globalThis.foundationRegistry.validators;
+            for (let i = 0; i < v.length; i++) {
                 if (v[i].selector === "[data-validation=html-unique-id-validator]") {
                     return v[i];
                 }
@@ -128,7 +127,7 @@ describe("HTML ID Validator Path Sanitization", function() {
             this.clearAjaxCalls();
             this.toggle33116Enabled = false;
             this.toggle41942Enabled = true;
-            window.Granite.Toggles.isEnabled = function(feature) {
+            globalThis.Granite.Toggles.isEnabled = function(feature) {
                 if (feature === "CT_SITES-33116") {
                     return this.toggle33116Enabled;
                 }
@@ -162,7 +161,7 @@ describe("HTML ID Validator Path Sanitization", function() {
         this.validateAndGetHtmlUrl = function(mockElement) {
             this.getValidator().validate(mockElement);
             const url = this.getLastAjaxUrl();
-            return url && url.indexOf(".html") !== -1 && url.indexOf("wcmmode=disabled") !== -1 ? url : null;
+            return url && url.includes(".html") && url.includes("wcmmode=disabled") ? url : null;
         };
 
         // Helper function to test path is allowed in both toggle states
@@ -198,10 +197,10 @@ describe("HTML ID Validator Path Sanitization", function() {
     afterEach(function() {
         // Restore original AJAX and toggle
         if (originalAjax) {
-            window.$.ajax = originalAjax;
+            globalThis.$.ajax = originalAjax;
         }
         if (originalIsEnabled) {
-            window.Granite.Toggles.isEnabled = originalIsEnabled;
+            globalThis.Granite.Toggles.isEnabled = originalIsEnabled;
         }
         fixture.cleanup();
     });
@@ -348,7 +347,7 @@ describe("HTML ID Validator Path Sanitization", function() {
             const mockElement = this.createMockElement("/content/usergenerated/demo/payload/resource", "id1");
             this.getValidator().validate(mockElement);
             const htmlCalls = ajaxCalls.filter(function(c) {
-                return c.url && c.url.indexOf(".html") !== -1 && c.url.indexOf("wcmmode=disabled") !== -1;
+                return c.url && c.url.includes(".html") && c.url.includes("wcmmode=disabled");
             });
             expect(htmlCalls.length).toBe(0);
         });
@@ -359,7 +358,7 @@ describe("HTML ID Validator Path Sanitization", function() {
             const mockElement = this.createMockElement("/content/usergenerated/demo/payload/resource", "id1");
             this.getValidator().validate(mockElement);
             const htmlCalls = ajaxCalls.filter(function(c) {
-                return c.url && c.url.indexOf(".html") !== -1 && c.url.indexOf("wcmmode=disabled") !== -1;
+                return c.url && c.url.includes(".html") && c.url.includes("wcmmode=disabled");
             });
             expect(htmlCalls.length).toBeGreaterThan(0);
         });
@@ -370,7 +369,7 @@ describe("HTML ID Validator Path Sanitization", function() {
             const mockElement = this.createMockElement("/content/mysite/en/page/jcr:content/root/res", "id1");
             this.getValidator().validate(mockElement);
             const htmlCalls = ajaxCalls.filter(function(c) {
-                return c.url && c.url.indexOf(".html") !== -1 && c.url.indexOf("wcmmode=disabled") !== -1;
+                return c.url && c.url.includes(".html") && c.url.includes("wcmmode=disabled");
             });
             expect(htmlCalls.length).toBeGreaterThan(0);
         });
