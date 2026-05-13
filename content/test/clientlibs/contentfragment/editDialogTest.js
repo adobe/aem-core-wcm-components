@@ -13,6 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+/**
+ * Helpers for {@code Granite.Toggles} during editDialog markup-helper test suites
+ * ({@code globalThis.__CONTENTFRAGMENT_V1_DIALOG_TEST_API}).
+ */
+function editDialogTest_graniteAllOn() {
+    globalThis.Granite.Toggles.isEnabled = function() {
+        return true;
+    };
+}
+
+function editDialogTest_graniteCt41323Off() {
+    globalThis.Granite.Toggles.isEnabled = function(key) {
+        return key !== "CT_SITES-41323";
+    };
+}
+
 describe("Test editDialog VCF template retention for", function() {
 
     let channel;
@@ -166,4 +182,68 @@ describe("Test editDialog VCF template retention for", function() {
         }, 100);
     });
 
+});
+
+/**
+ * Covers Content Fragment v1 editor {@code editDialog.js} (CT_SITES-41323) wired through
+ * {@code globalThis.__CONTENTFRAGMENT_V1_DIALOG_TEST_API}. Karma loads {@code authoringutils} before {@code editDialog.js}.
+ */
+describe("Content Fragment v1 editor editDialog.js (Karma-loaded)", function() {
+    let api;
+    let togglesIsEnabled;
+
+    beforeAll(function() {
+        api = globalThis.__CONTENTFRAGMENT_V1_DIALOG_TEST_API;
+        togglesIsEnabled = globalThis.Granite.Toggles.isEnabled;
+    });
+
+    afterEach(function() {
+        globalThis.Granite.Toggles.isEnabled = togglesIsEnabled;
+    });
+
+    describe("__CONTENTFRAGMENT_V1_DIALOG_TEST_API", function() {
+        it("exposes resolve and toggle helpers", function() {
+            expect(api).toBeDefined();
+            expect(typeof api.resolveElementNamesContainerInnerHtml).toBe("function");
+            expect(typeof api.isContentFragmentV1DialogAuthoringMarkupHelpersEnabled).toBe("function");
+            expect(typeof api.getAuthoringMarkupUtils).toBe("function");
+        });
+    });
+
+    describe("isContentFragmentV1DialogAuthoringMarkupHelpersEnabled", function() {
+        it("treats missing Granite.Toggles as enabled", function() {
+            const saved = globalThis.Granite.Toggles;
+            globalThis.Granite.Toggles = undefined;
+            expect(api.isContentFragmentV1DialogAuthoringMarkupHelpersEnabled()).toBe(true);
+            globalThis.Granite.Toggles = saved;
+        });
+
+        it("returns false when CT_SITES-41323 is explicitly disabled", function() {
+            editDialogTest_graniteCt41323Off();
+            expect(api.isContentFragmentV1DialogAuthoringMarkupHelpersEnabled()).toBe(false);
+        });
+
+        it("returns true when CT_SITES-41323 is enabled", function() {
+            editDialogTest_graniteAllOn();
+            expect(api.isContentFragmentV1DialogAuthoringMarkupHelpersEnabled()).toBe(true);
+        });
+    });
+
+    describe("resolveElementNamesContainerInnerHtml", function() {
+        it("normalizes markup when helpers are enabled", function() {
+            editDialogTest_graniteAllOn();
+            const doc =
+                "<div><div data-element-names-container=\"true\"><img src=\"x\" onerror=\"alert(1)\"></div></div>";
+            const inner = api.resolveElementNamesContainerInnerHtml(doc);
+            expect(inner.indexOf("onerror")).toBe(-1);
+        });
+
+        it("keeps legacy parsing when helpers are disabled", function() {
+            editDialogTest_graniteCt41323Off();
+            const doc =
+                "<div><div data-element-names-container=\"true\"><img src=\"x\" onerror=\"alert(1)\"></div></div>";
+            const inner = api.resolveElementNamesContainerInnerHtml(doc);
+            expect(inner.indexOf("onerror")).not.toBe(-1);
+        });
+    });
 });

@@ -77,10 +77,10 @@ function jQuery(obj) {
         return jQuery._docChannel;
     }
 
-    if (obj === window) {
+    if (obj === globalThis) {
         result.adaptTo = function(type) {
             if (type === 'foundation-registry') {
-                return window.foundationRegistry;
+                return globalThis.foundationRegistry;
             }
             if (type === 'foundation-ui') {
                 return { prompt: function() {} };
@@ -280,7 +280,7 @@ jQuery.Deferred = function() {
 };
 
 // Add $ as alias for jQuery
-window.$ = jQuery;
+globalThis.$ = jQuery;
 
 Granite = {
     author: {
@@ -353,7 +353,7 @@ Granite = {
 };
 
 // Mock foundation registry
-window.foundationRegistry = {
+globalThis.foundationRegistry = {
     validators: [],
     register: function(type, config) {
         if (type === 'foundation.validation.validator') {
@@ -366,7 +366,7 @@ window.foundationRegistry = {
 jQuery.fn = jQuery.prototype;
 jQuery.fn.adaptTo = function(type) {
     if (type === 'foundation-registry') {
-        return window.foundationRegistry;
+        return globalThis.foundationRegistry;
     }
     return null;
 };
@@ -374,15 +374,15 @@ jQuery.fn.adaptTo = function(type) {
 // Make sure $ also has the adaptTo method
 jQuery.adaptTo = function(type) {
     if (type === 'foundation-registry') {
-        return window.foundationRegistry;
+        return globalThis.foundationRegistry;
     }
     return null;
 };
 
-// Mock window.adaptTo as well
-window.adaptTo = function(type) {
+// Mock adaptTo on the global object as well
+globalThis.adaptTo = function(type) {
     if (type === 'foundation-registry') {
-        return window.foundationRegistry;
+        return globalThis.foundationRegistry;
     }
     return null;
 };
@@ -403,8 +403,33 @@ globalThis.Coral = {
 };
 
 // Mock document object
-window.document = window.document || {
+globalThis.document = globalThis.document || {
     addEventListener: function() {},
     querySelector: function() { return null; },
     querySelectorAll: function() { return []; }
 };
+
+globalThis.CQ = globalThis.CQ || {};
+globalThis.CQ.CoreComponents = globalThis.CQ.CoreComponents || {};
+if (!globalThis.CQ.CoreComponents.CheckboxTextfieldTuple) {
+    globalThis.CQ.CoreComponents.CheckboxTextfieldTuple = {
+        v1: function CheckboxTextfieldTupleStub() {
+            this.hideCheckbox = function() {};
+            this.reset = function() {};
+            this.reinitCheckbox = function() {};
+            this.hideTextfield = function() {};
+            this.seedTextValue = function() {};
+            this.update = function() {};
+        }
+    };
+}
+
+/** Filled by Image v2 or v3 editor image.js when present (Karma loads those scripts after mocks). */
+globalThis.__IMAGE_V2_EDITOR_TEST_API = {};
+globalThis.__IMAGE_V3_EDITOR_TEST_API = {};
+/** Filled by Content Fragment v1 editor editDialog.js when present (Karma loads that script after mocks). */
+globalThis.__CONTENTFRAGMENT_V1_DIALOG_TEST_API = {};
+/** Filled by Content Fragment List v1 editor contentfragmentlist.js when present (Karma loads that script after mocks). */
+globalThis.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API = {};
+/** Filled by commons htmlIdValidation.js when present (Karma loads that script after mocks). */
+globalThis.__HTML_ID_VALIDATOR_EDITOR_TEST_API = {};
