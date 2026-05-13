@@ -154,4 +154,32 @@ describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.author
             expect(img.getAttribute("src")).toBe("/content/dam/x.png");
         });
     });
+
+    describe("sanitizeAuthoringEditorResponseMarkup", function() {
+        it("returns inner markup of the first body child with event attributes removed", function() {
+            const html =
+                "<html><body><div><span onmouseover=\"x\"><img src=\"x\" onerror=\"alert(1)\"></span></div></body></html>";
+            const out = markupUtils.sanitizeAuthoringEditorResponseMarkup(html);
+            expect(out.indexOf("onerror")).toBe(-1);
+            expect(out.indexOf("onmouseover")).toBe(-1);
+            expect(out.indexOf("<img")).not.toBe(-1);
+        });
+
+        it("drops script tags from nested markup", function() {
+            const html = "<div><script>z</script><p>ok</p></div>";
+            const out = markupUtils.sanitizeAuthoringEditorResponseMarkup(html);
+            expect(out.indexOf("<script>")).toBe(-1);
+            expect(out.indexOf(">ok</p>")).not.toBe(-1);
+        });
+
+        it("removes href with disallowed schemes", function() {
+            const html = "<div><a href=\"javascript:void(0)\">t</a></div>";
+            const out = markupUtils.sanitizeAuthoringEditorResponseMarkup(html);
+            expect(out.indexOf("javascript")).toBe(-1);
+        });
+
+        it("returns empty string when body has no element child", function() {
+            expect(markupUtils.sanitizeAuthoringEditorResponseMarkup("")).toBe("");
+        });
+    });
 });

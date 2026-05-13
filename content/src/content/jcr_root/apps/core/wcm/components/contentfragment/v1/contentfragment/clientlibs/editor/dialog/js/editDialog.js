@@ -49,6 +49,71 @@
     // ui helper
     var ui = $(window).adaptTo("foundation-ui");
 
+    var CT_SITES_41323 = "CT_SITES-41323";
+
+    /**
+     * Granite feature toggle CT_SITES-41323 gates datasource HTML handling for the element names container.
+     * When Granite or {@code Toggles} is unavailable, helpers are treated as enabled.
+     * When the toggle is explicitly disabled, behaviour matches earlier dialog revisions.
+     *
+     * @returns {Boolean}
+     */
+    function isContentFragmentV1DialogAuthoringMarkupHelpersEnabled() {
+        if (typeof Granite === "undefined" || !Granite.Toggles || typeof Granite.Toggles.isEnabled !== "function") {
+            return true;
+        }
+        return Granite.Toggles.isEnabled(CT_SITES_41323) !== false;
+    }
+
+    /**
+     * @returns {Object|null} {@code CQ.CoreComponents.AuthoringEditorUtils.markup} when present
+     */
+    function getAuthoringMarkupUtils() {
+        if (window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils) {
+            return window.CQ.CoreComponents.AuthoringEditorUtils.markup;
+        }
+        return null;
+    }
+
+    function extractFirstParsedInnerHtml(html) {
+        if (typeof $ === "function" && typeof $.parseHTML === "function") {
+            var nodes = $.parseHTML(String(html == null ? "" : html), document, true);
+            var i;
+            for (i = 0; i < nodes.length; i++) {
+                if (nodes[i].nodeType === 1) {
+                    return nodes[i].innerHTML;
+                }
+            }
+            return "";
+        }
+        var fallbackMarkup = getAuthoringMarkupUtils();
+        if (fallbackMarkup && typeof fallbackMarkup.innerHtmlFromFirstBodyChild === "function") {
+            return fallbackMarkup.innerHtmlFromFirstBodyChild(html);
+        }
+        var first = $(html)[0];
+        if (!first || typeof first.innerHTML !== "string") {
+            return "";
+        }
+        return first.innerHTML;
+    }
+
+    /**
+     * Resolves inner HTML for the element names container from a datasource response string.
+     *
+     * @param {String} html - outer HTML for the element names container
+     * @returns {String}
+     */
+    function resolveElementNamesContainerInnerHtml(html) {
+        if (!isContentFragmentV1DialogAuthoringMarkupHelpersEnabled()) {
+            return extractFirstParsedInnerHtml(html);
+        }
+        var markupUtils = getAuthoringMarkupUtils();
+        if (markupUtils && typeof markupUtils.sanitizeAuthoringEditorResponseMarkup === "function") {
+            return markupUtils.sanitizeAuthoringEditorResponseMarkup(html);
+        }
+        return extractFirstParsedInnerHtml(html);
+    }
+
     // dialog texts
     var confirmationDialogTitle = Granite.I18n.get("Warning");
     var confirmationDialogMessage = Granite.I18n.get("Please confirm replacing the current content fragment and its configuration");
@@ -351,7 +416,7 @@
      * @param {String} html - outerHTML value for elementNamesContainer
      */
     ElementsController.prototype._updateElementsHTML = function(html) {
-        this.elementNamesContainer.innerHTML = $(html)[0].innerHTML;
+        this.elementNamesContainer.innerHTML = resolveElementNamesContainerInnerHtml(html);
         this._updateFields();
     };
 
@@ -867,5 +932,15 @@
             });
         }
     });
+
+    var cfV1DialogTestApiHost = typeof globalThis !== "undefined" ? globalThis : window;
+    /* Karma (mocks.js) sets __CONTENTFRAGMENT_V1_DIALOG_TEST_API on the global object; AEM runtime leaves it undefined. */
+    if (cfV1DialogTestApiHost.__CONTENTFRAGMENT_V1_DIALOG_TEST_API) {
+        cfV1DialogTestApiHost.__CONTENTFRAGMENT_V1_DIALOG_TEST_API.resolveElementNamesContainerInnerHtml =
+            resolveElementNamesContainerInnerHtml;
+        cfV1DialogTestApiHost.__CONTENTFRAGMENT_V1_DIALOG_TEST_API.isContentFragmentV1DialogAuthoringMarkupHelpersEnabled =
+            isContentFragmentV1DialogAuthoringMarkupHelpersEnabled;
+        cfV1DialogTestApiHost.__CONTENTFRAGMENT_V1_DIALOG_TEST_API.getAuthoringMarkupUtils = getAuthoringMarkupUtils;
+    }
 
 })(window, jQuery, jQuery(document), Granite, Coral);

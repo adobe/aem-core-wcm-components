@@ -99,6 +99,83 @@
         );
     }
 
+    /**
+     * Normalizes parsed authoring markup under a root element: drops disallowed subtrees and clears
+     * event-handler and disallowed URL schemes on link-like attributes.
+     *
+     * @param {Element} rootElement - parsed subtree root (typically {@code document.body})
+     */
+    function sanitizeAuthoringMarkupSubtree(rootElement) {
+        if (!rootElement || rootElement.nodeType !== 1) {
+            return;
+        }
+        var all = rootElement.querySelectorAll("*");
+        var list = [];
+        var i;
+        for (i = 0; i < all.length; i++) {
+            list.push(all[i]);
+        }
+        list.push(rootElement);
+        var removeEls = [];
+        for (i = 0; i < list.length; i++) {
+            var el = list[i];
+            if (el.nodeType !== 1) {
+                continue;
+            }
+            var tag = el.tagName;
+            if (tag === "SCRIPT" || tag === "IFRAME" || tag === "OBJECT" || tag === "EMBED") {
+                removeEls.push(el);
+                continue;
+            }
+            var attrs = el.attributes;
+            var names = [];
+            var j;
+            for (j = 0; attrs && j < attrs.length; j++) {
+                names.push(attrs[j].name);
+            }
+            for (j = 0; j < names.length; j++) {
+                var name = names[j];
+                var val = el.getAttribute(name);
+                var nl = name.toLowerCase();
+                if (/^on/i.test(name)) {
+                    el.removeAttribute(name);
+                    continue;
+                }
+                if (
+                    (nl === "href" || nl === "src" || nl === "formaction" || nl === "xlink:href") &&
+                    linkValueHasExcludedRepositoryPrefix(val)
+                ) {
+                    el.removeAttribute(name);
+                }
+            }
+        }
+        for (i = 0; i < removeEls.length; i++) {
+            var node = removeEls[i];
+            if (node.parentNode) {
+                node.parentNode.removeChild(node);
+            }
+        }
+    }
+
+    /**
+     * Parses datasource HTML and returns the inner markup of the first body child, after subtree
+     * normalization is applied to the parsed document body.
+     *
+     * @param {String} markup - HTML document string from a datasource response
+     * @returns {String} normalized inner markup (empty string when the parsed body has no element child)
+     */
+    function sanitizeAuthoringEditorResponseMarkup(markup) {
+        var doc = parseMarkupDocument(String(markup == null ? "" : markup));
+        if (doc.body) {
+            sanitizeAuthoringMarkupSubtree(doc.body);
+        }
+        var body = doc.body;
+        if (!body || !body.firstElementChild) {
+            return "";
+        }
+        return body.firstElementChild.innerHTML;
+    }
+
     function filterClassAttribute(raw, allowedTokens) {
         if (!raw || typeof raw !== "string") {
             return "";
@@ -236,7 +313,8 @@
         innerHtmlFromFirstBodyChild: innerHtmlFromFirstBodyChild,
         adoptNodeForDocument: adoptNodeForDocument,
         linkValueHasExcludedRepositoryPrefix: linkValueHasExcludedRepositoryPrefix,
-        buildPageImageThumbnailShellForEditor: buildPageImageThumbnailShellForEditor
+        buildPageImageThumbnailShellForEditor: buildPageImageThumbnailShellForEditor,
+        sanitizeAuthoringEditorResponseMarkup: sanitizeAuthoringEditorResponseMarkup
     };
 
 })(window);
