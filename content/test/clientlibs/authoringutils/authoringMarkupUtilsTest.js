@@ -57,6 +57,11 @@ describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.author
             expect(markupUtils.linkValueHasExcludedRepositoryPrefix(null)).toBe(false);
             expect(markupUtils.linkValueHasExcludedRepositoryPrefix(undefined)).toBe(false);
         });
+
+        it("exposes stripAsciiControlsAndWhitespaceForSchemeCheck for the same normalisation as link checks", function() {
+            expect(typeof markupUtils.stripAsciiControlsAndWhitespaceForSchemeCheck).toBe("function");
+            expect(markupUtils.stripAsciiControlsAndWhitespaceForSchemeCheck("java\tscript:x")).toBe("javascript:x");
+        });
     });
 
     describe("buildPageImageThumbnailShellForEditor", function() {
