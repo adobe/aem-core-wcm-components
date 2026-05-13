@@ -28,6 +28,9 @@
     var SELECTOR_VARIATION_NAME = "[name='./variationName']";
     var SELECTOR_DISPLAY_MODE_RADIO_GROUP = "[data-display-mode-radio-group='true']";
     var SELECTOR_DISPLAY_MODE_CHECKED = "[name='./displayMode']:checked";
+    var SELECTOR_ELEMENT_MODE_FIELDS = "[data-element-mode-field='true']";
+    var SELECTOR_VCF_MODE_FIELDS = "[data-vcf-mode-field='true']";
+    var SELECTOR_VCF_TEMPLATE = "[data-vcf-template-selector='true']";
     var SELECTOR_PARAGRAPH_CONTROLS = ".cmp-contentfragment__editor-paragraph-controls";
     var SELECTOR_PARAGRAPH_SCOPE = "[name='./paragraphScope']";
     var SELECTOR_PARAGRAPH_RANGE = "[name='./paragraphRange']";
@@ -35,6 +38,13 @@
 
     // mode in which only one multiline text element could be selected for display
     var SINGLE_TEXT_DISPLAY_MODE = "singleText";
+
+    // mode for Visual Content Fragment
+    var VCF_DISPLAY_MODE = "vcf";
+
+    // VCF templates API base path — read from the component's data attribute at dialog init
+    var vcfTemplatesApiBase;
+    var vcfTemplatesApiDeferred;
 
     // ui helper
     var ui = $(window).adaptTo("foundation-ui");
@@ -55,6 +65,14 @@
     // the tab containing paragraph control
     var paragraphControlsTab;
 
+    // fields visible only for element-based modes (singleText / multi)
+    var elementModeFields;
+    // fields visible only for Visual Content Fragment mode
+    var vcfModeFields;
+
+    // the VCF template selector (coral-select)
+    var vcfTemplateSelector;
+
     // keeps track of the current fragment path
     var currentFragmentPath;
 
@@ -62,49 +80,10 @@
 
     var elementsController;
 
-    function pathExternalizesToCurrentHost(path) {
-        if (path === undefined || path === null) {
-            return false;
-        }
-        var str = String(path).trim();
-        if (str.length === 0) {
-            return false;
-        }
-        var lowerStr = str.toLowerCase();
-        if (
-            lowerStr.indexOf("javascript:") === 0 ||
-            lowerStr.indexOf("data:") === 0 ||
-            lowerStr.indexOf("vbscript:") === 0
-        ) {
-            return false;
-        }
-        var decoded;
-        try {
-            decoded = decodeURIComponent(str.split("+").join(" "));
-        } catch (e) {
-            return false;
-        }
-        if (decoded.indexOf("..") !== -1) {
-            return false;
-        }
-        var external = Granite.HTTP.externalize(str);
-        var resolved;
-        try {
-            resolved = new URL(external, window.location.href);
-        } catch (ex) {
-            return false;
-        }
-        return resolved.origin === window.location.origin;
-    }
-
-    function innerHtmlFromMarkupFirstWrapper(markup) {
-        var doc = new DOMParser().parseFromString(markup, "text/html");
-        var body = doc.body;
-        if (!body || !body.firstElementChild) {
-            return "";
-        }
-        return body.firstElementChild.innerHTML;
-    }
+    // deferred that resolves with the stored vcfTemplate value read from
+    // the component resource; needed because the dynamically-populated
+    // Coral Select has no items at load time and loses the JCR value
+    var storedVcfTemplateDeferred;
 
     /**
      * A class which encapsulates the logic related to element selectors and variation name selector.
@@ -191,10 +170,6 @@
     ElementsController.prototype.prepareRequest = function(displayMode, type) {
         if (typeof displayMode === "undefined") {
             displayMode = editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED).value;
-        }
-        var pathForRequest = type === "variation" ? this.variationNamePath : this.elementsContainerPath;
-        if (!pathExternalizesToCurrentHost(pathForRequest)) {
-            return $.Deferred().reject().promise();
         }
         var data = {
             fragmentPath: fragmentPath.value,
@@ -348,12 +323,35 @@
     };
 
     /**
+     * Retrieve the variation names for the currently selected fragment and swap the
+     * variation name {@code <coral-select>} with the freshly rendered one. Used by the
+     * VCF display mode, where {@link #testGetHTML} is not invoked on fragment change.
+     *
+     * @param {String} displayMode - selected display mode of the component
+     */
+    ElementsController.prototype.fetchAndUpdateVariations = function(displayMode) {
+        var variationNameRequest = this.prepareRequest(displayMode, "variation");
+        var self = this;
+        $.when(variationNameRequest).then(function(result) {
+            var newVariationName = $(result).find(SELECTOR_VARIATION_NAME)[0];
+            if (!newVariationName) {
+                return;
+            }
+            Coral.commons.ready(newVariationName, function() {
+                self._updateVariationDOM(newVariationName);
+            });
+        }, function() {
+            ui.prompt(errorDialogTitle, errorDialogMessage, "error");
+        });
+    };
+
+    /**
      * Updates inner html of element container.
      *
      * @param {String} html - outerHTML value for elementNamesContainer
      */
     ElementsController.prototype._updateElementsHTML = function(html) {
-        this.elementNamesContainer.innerHTML = innerHtmlFromMarkupFirstWrapper(html);
+        this.elementNamesContainer.innerHTML = $(html)[0].innerHTML;
         this._updateFields();
     };
 
@@ -366,15 +364,14 @@
      */
     ElementsController.prototype._updateElementsDOM = function(dom) {
         this._updateFields();
-        var element = dom.ownerDocument !== document ? document.importNode(dom, true) : dom;
-        if (element.tagName === "CORAL-MULTIFIELD") {
+        if (dom.tagName === "CORAL-MULTIFIELD") {
             // replace the element names multifield's template
-            this.elementNames.template = element.template;
+            this.elementNames.template = dom.template;
         } else {
             this._clearValidationError(this.singleTextSelector);
-            element.value = this.singleTextSelector.value;
-            this.singleTextSelector.parentNode.replaceChild(element, this.singleTextSelector);
-            this.singleTextSelector = element;
+            dom.value = this.singleTextSelector.value;
+            this.singleTextSelector.parentNode.replaceChild(dom, this.singleTextSelector);
+            this.singleTextSelector = dom;
             this.singleTextSelector.removeAttribute("disabled");
         }
         this._updateFields();
@@ -396,19 +393,215 @@
     };
 
     /**
+     * Clears validation UI on element-mode fields when switching to a mode where they are hidden
+     * (e.g. VCF). Otherwise a required Single Text Element select can stay invalid in the DOM and
+     * keep the dialog error after the user changes display mode.
+     */
+    ElementsController.prototype.clearElementModeValidationIfNeeded = function() {
+        this._updateFields();
+        if (this.singleTextSelector) {
+            this._clearValidationError(this.singleTextSelector);
+        }
+    };
+
+    /**
      * Updates dom of variation name select dropdown.
      *
      * @param {HTMLElement} dom - dom for variation name dropdown
      */
     ElementsController.prototype._updateVariationDOM = function(dom) {
         // replace the variation name select, keeping its value
-        var element = dom.ownerDocument !== document ? document.importNode(dom, true) : dom;
-        element.value = this.variationName.value;
-        this.variationName.parentNode.replaceChild(element, this.variationName);
-        this.variationName = element;
+        dom.value = this.variationName.value;
+        this.variationName.parentNode.replaceChild(dom, this.variationName);
+        this.variationName = dom;
         this.variationName.removeAttribute("disabled");
         this._updateFields();
     };
+
+    /**
+     * UTF-8 safe base64 encoding. The native btoa() only accepts characters
+     * in the Latin1 range and throws for code points above 0xFF, so model
+     * paths containing non-ASCII characters must first be UTF-8 encoded
+     * to a binary string before being passed to btoa().
+     *
+     * @param {String} str - the string to encode
+     * @returns {String} base64 encoding of the UTF-8 bytes of {@code str}
+     */
+    function base64EncodeUtf8(str) {
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, hex) {
+            return String.fromCharCode(parseInt(hex, 16));
+        }));
+    }
+
+    /**
+     * Resolves the Content Fragment Model ID from a fragment's JCR path.
+     * Reads the fragment's data node to find the cq:model path, then
+     * base64-encodes it to produce the model ID expected by the VCF API.
+     *
+     * @param {String} cfPath - JCR path of the content fragment
+     * @param {Function} callback - receives the model ID string, or null on failure
+     */
+    function resolveModelId(cfPath, callback) {
+        if (!cfPath) {
+            callback(null);
+            return;
+        }
+        $.getJSON(cfPath + "/jcr:content/data.json").then(function(data) {
+            var modelPath = data["cq:model"];
+            if (!modelPath) {
+                callback(null);
+                return;
+            }
+            callback(base64EncodeUtf8(modelPath));
+        }, function() {
+            callback(null);
+        });
+    }
+
+    /**
+     * Fetches HTML templates for the given model ID from the Content Fragment
+     * Visualization API and populates the vcfTemplateSelector dropdown.
+     *
+     * @param {String} modelId - UUID of the Content Fragment Model
+     */
+    function fetchVcfTemplates(modelId) {
+        if (!modelId || !vcfTemplateSelector) {
+            return;
+        }
+
+        $.when(vcfTemplatesApiDeferred, storedVcfTemplateDeferred).done(function(_, storedValue) {
+            if (!vcfTemplatesApiBase) {
+                return;
+            }
+            var currentValue = vcfTemplateSelector.value || storedValue;
+            storedVcfTemplateDeferred = $.Deferred().resolve("");
+            var url = vcfTemplatesApiBase + "/" + encodeURIComponent(modelId) + "/templates?limit=50";
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                dataType: "json"
+            }).then(function(response) {
+                vcfTemplateSelector.items.clear();
+
+                if (response && response.items) {
+                    response.items.forEach(function(template) {
+                        var item = new Coral.Select.Item();
+                        item.content.textContent = template.name;
+                        item.value = template.id;
+                        vcfTemplateSelector.items.add(item);
+                    });
+                }
+                // Set value after all items are added so Coral Select
+                // recognises the selection reliably
+                if (currentValue) {
+                    vcfTemplateSelector.value = currentValue;
+                }
+            }, function() {
+                vcfTemplateSelector.items.clear();
+            });
+        });
+    }
+
+    /**
+     * Loads HTML templates for the currently selected fragment.
+     * Resolves the model ID from the fragment path, then fetches templates.
+     */
+    function loadVcfTemplatesForCurrentFragment() {
+        var checkedRadio = editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED);
+        var displayMode = checkedRadio ? checkedRadio.value : null;
+        if (displayMode !== VCF_DISPLAY_MODE || !fragmentPath.value) {
+            return;
+        }
+        resolveModelId(fragmentPath.value, function(modelId) {
+            if (modelId) {
+                fetchVcfTemplates(modelId);
+            }
+        });
+    }
+
+    /**
+     * Refreshes the variation name dropdown for the currently selected fragment.
+     * Element-mode flows refresh variations as part of {@link ElementsController#testGetHTML};
+     * VCF mode skips that branch in {@link onFragmentPathChange}, so the variations DOM
+     * would otherwise keep entries from the previously selected fragment.
+     */
+    function refreshVariationsForCurrentFragment() {
+        var checkedRadio = editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED);
+        var displayMode = checkedRadio ? checkedRadio.value : null;
+        if (displayMode !== VCF_DISPLAY_MODE || !fragmentPath.value || !elementsController) {
+            return;
+        }
+        elementsController.fetchAndUpdateVariations(VCF_DISPLAY_MODE);
+    }
+
+    /**
+     * Reloads every VCF-mode dialog field whose contents depend on the selected fragment:
+     * the VCF template list (driven by the fragment's CF model) and the variation
+     * dropdown (driven by the fragment itself).
+     */
+    function reloadVcfFragmentDependentFields() {
+        loadVcfTemplatesForCurrentFragment();
+        refreshVariationsForCurrentFragment();
+    }
+
+    /**
+     * After the user confirms replacing the fragment in VCF mode, clears the VCF template
+     * selection and reloads all fragment-dependent fields for the new fragment.
+     */
+    function applyVcfFragmentReplaceConfirmed() {
+        clearVcfTemplates();
+        if (vcfTemplateSelector) {
+            vcfTemplateSelector.value = "";
+        }
+        reloadVcfFragmentDependentFields();
+    }
+
+    /**
+     * Shows the standard fragment-replace warning, then refreshes VCF fragment-dependent
+     * fields on confirm.
+     */
+    function promptVcfFragmentReplaceConfirmation() {
+        confirmFragmentChange(null, null, applyVcfFragmentReplaceConfirmed, null);
+    }
+
+    /**
+     * When display mode is VCF, changing the fragment may invalidate the VCF template
+     * and the variation list. If the new fragment uses a different CF model than the previous one
+     * (or model data cannot be read), show the same confirmation dialog as for element modes; if
+     * the model is unchanged, reload the fragment-dependent fields without prompting.
+     *
+     * @param {String} newFragmentPath - path from the fragment picker (already applied to the field)
+     */
+    function maybeConfirmVcfFragmentChange(newFragmentPath) {
+        if (!currentFragmentPath) {
+            currentFragmentPath = newFragmentPath;
+            reloadVcfFragmentDependentFields();
+            return;
+        }
+        if (newFragmentPath === currentFragmentPath) {
+            return;
+        }
+        var previousPath = currentFragmentPath;
+        $.when(
+            $.getJSON(previousPath + "/jcr:content/data.json"),
+            $.getJSON(newFragmentPath + "/jcr:content/data.json")
+        ).then(
+            function(oldRes, newRes) {
+                var oldModel = oldRes[0] && oldRes[0]["cq:model"];
+                var newModel = newRes[0] && newRes[0]["cq:model"];
+                if (oldModel && newModel && oldModel === newModel) {
+                    currentFragmentPath = newFragmentPath;
+                    reloadVcfFragmentDependentFields();
+                } else {
+                    promptVcfFragmentReplaceConfirmation();
+                }
+            },
+            function() {
+                promptVcfFragmentReplaceConfirmation();
+            }
+        );
+    }
 
     function initialize(dialog) {
         // get path of component being edited
@@ -418,6 +611,54 @@
         fragmentPath = dialog.querySelector(SELECTOR_FRAGMENT_PATH);
         paragraphControls = dialog.querySelector(SELECTOR_PARAGRAPH_CONTROLS);
         paragraphControlsTab = dialog.querySelector("coral-tabview").tabList.items.getAll()[1];
+
+        elementModeFields = dialog.querySelectorAll(SELECTOR_ELEMENT_MODE_FIELDS);
+        vcfModeFields = dialog.querySelectorAll(SELECTOR_VCF_MODE_FIELDS);
+        vcfTemplateSelector = dialog.querySelector(SELECTOR_VCF_TEMPLATE);
+
+        // read VCF templates API base from any content fragment element in the content frame
+        vcfTemplatesApiBase = null;
+        try {
+            var contentDoc = Granite.author.ContentFrame.contentWindow.document;
+            var vcfEl = contentDoc.querySelector("[data-cmp-contentfragment-vcf-templates-api]");
+            if (vcfEl) {
+                vcfTemplatesApiBase = vcfEl.getAttribute("data-cmp-contentfragment-vcf-templates-api");
+            }
+        } catch (e) {
+            // content frame not available
+        }
+
+        storedVcfTemplateDeferred = $.Deferred();
+        var componentPathEl = dialog.querySelector("[data-component-path]");
+        var componentPath = componentPathEl ? componentPathEl.dataset.componentPath : null;
+        if (componentPath) {
+            // resolve vcfTemplatesApiBase: use DOM value if available, otherwise fetch component HTML
+            if (vcfTemplatesApiBase) {
+                vcfTemplatesApiDeferred = $.Deferred().resolve();
+            } else {
+                vcfTemplatesApiDeferred = $.Deferred();
+                $.get(componentPath + ".html").done(function(html) {
+                    var match = html.match(/data-cmp-contentfragment-vcf-templates-api="([^"]*)"/);
+                    if (match) {
+                        vcfTemplatesApiBase = match[1];
+                    }
+                }).always(function() {
+                    vcfTemplatesApiDeferred.resolve();
+                });
+            }
+
+            $.getJSON(componentPath + ".json").then(
+                function(data) {
+                    storedVcfTemplateDeferred.resolve((data && data.vcfTemplate) || "");
+                },
+                function() {
+                    storedVcfTemplateDeferred.resolve("");
+                }
+            );
+        } else {
+            storedVcfTemplateDeferred.resolve("");
+            vcfTemplatesApiDeferred = $.Deferred().resolve();
+        }
 
         // initialize state variables
         currentFragmentPath = fragmentPath.value;
@@ -429,15 +670,25 @@
         }
         // enable / disable the paragraph controls
         setParagraphControlsState();
+        // set initial display mode field visibility
+        updateDisplayModeFieldVisibility();
         // hide/show paragraph control tab
         updateParagraphControlTabState();
+        // load VCF templates if the dialog opens in vcf mode with a fragment already set
+        loadVcfTemplatesForCurrentFragment();
 
         // register change listener
         $(fragmentPath).off("foundation-field-change").on("foundation-field-change", onFragmentPathChange);
         $(document).on("change", SELECTOR_PARAGRAPH_SCOPE, setParagraphControlsState);
         var $radioGroup = $(dialog).find(SELECTOR_DISPLAY_MODE_RADIO_GROUP);
         $radioGroup.on("change", function(e) {
-            elementsController.fetchAndUpdateElementsHTML(e.target.value);
+            updateDisplayModeFieldVisibility();
+            if (e.target.value === VCF_DISPLAY_MODE) {
+                elementsController.clearElementModeValidationIfNeeded();
+                loadVcfTemplatesForCurrentFragment();
+            } else {
+                elementsController.fetchAndUpdateElementsHTML(e.target.value);
+            }
             updateParagraphControlTabState();
         });
     }
@@ -449,6 +700,7 @@
     function onFragmentPathChange() {
         // if the fragment was reset (i.e. the fragment path was deleted)
         if (!fragmentPath.value) {
+            clearVcfTemplates();
             var canKeepConfig = elementsController.testStateForUpdate();
             if (canKeepConfig) {
                 // There was no current configuration. We just need to disable fields.
@@ -462,7 +714,14 @@
             return;
         }
 
-        elementsController.testGetHTML(editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED).value, function() {
+        var displayMode = editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED).value;
+
+        if (displayMode === VCF_DISPLAY_MODE) {
+            maybeConfirmVcfFragmentChange(fragmentPath.value);
+            return;
+        }
+
+        elementsController.testGetHTML(displayMode, function() {
             // check if we can keep the current configuration, in which case no confirmation dialog is necessary
             var canKeepConfig = elementsController.testStateForUpdate();
             if (canKeepConfig) {
@@ -479,6 +738,15 @@
                 elementsController.saveFetchedState, elementsController);
         });
 
+    }
+
+    /**
+     * Clears all items from the VCF template dropdown.
+     */
+    function clearVcfTemplates() {
+        if (vcfTemplateSelector) {
+            vcfTemplateSelector.items.clear();
+        }
     }
 
     /**
@@ -562,6 +830,21 @@
                 headings.setAttribute("disabled", "");
             }
         }
+    }
+
+    /**
+     * Shows or hides element-mode fields vs VCF-mode fields depending on the selected display mode.
+     */
+    function updateDisplayModeFieldVisibility() {
+        var displayMode = editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED).value;
+        var isVcf = displayMode === VCF_DISPLAY_MODE;
+
+        elementModeFields.forEach(function(field) {
+            field.hidden = isVcf;
+        });
+        vcfModeFields.forEach(function(field) {
+            field.hidden = !isVcf;
+        });
     }
 
     // Toggles the display of paragraph control tab depending on display mode
