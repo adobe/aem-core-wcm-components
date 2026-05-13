@@ -178,6 +178,12 @@ describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.author
             expect(out.indexOf("javascript")).toBe(-1);
         });
 
+        it("removes action with disallowed schemes", function() {
+            const html = "<div><div action=\"javascript:void(0)\">t</div></div>";
+            const out = markupUtils.sanitizeAuthoringEditorResponseMarkup(html);
+            expect(out.indexOf("javascript")).toBe(-1);
+        });
+
         it("drops style, link, meta, base, and form elements", function() {
             const html =
                 "<div><style>x</style><link rel=\"stylesheet\" href=\"/etc.clientlibs/a.css\">" +

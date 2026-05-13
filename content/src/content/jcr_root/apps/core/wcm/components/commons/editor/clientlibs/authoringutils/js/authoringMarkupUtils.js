@@ -155,7 +155,13 @@
                     continue;
                 }
                 if (
-                    (nl === "href" || nl === "src" || nl === "formaction" || nl === "xlink:href") &&
+                    (
+                        nl === "href" ||
+                        nl === "src" ||
+                        nl === "action" ||
+                        nl === "formaction" ||
+                        nl === "xlink:href"
+                    ) &&
                     linkValueHasExcludedRepositoryPrefix(val)
                 ) {
                     el.removeAttribute(name);
