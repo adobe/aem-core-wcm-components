@@ -96,15 +96,20 @@
 
     /**
      * Whether a link-like attribute value uses a non-http(s) scheme prefix that authoring dialogs do not treat as repository paths.
+     * Leading C0 control characters, DEL, and whitespace are stripped before the check so values cannot hide schemes from prefix matching.
      *
-     * @param {*} value - attribute value
+     * @param {*} value - attribute value (typically after DOM parsing, so entities are decoded)
      * @returns {Boolean}
      */
     function linkValueHasExcludedRepositoryPrefix(value) {
         if (value === undefined || value === null) {
             return false;
         }
-        var t = String(value).trim().toLowerCase();
+        // Strip C0 controls (incl. NUL, TAB, LF, CR) and all whitespace so
+        // browser URL-parser normalisations like "java\tscript:" can't bypass
+        // the prefix check. Values reach this helper post-DOM-parse, so HTML
+        // entities are already decoded by the parser.
+        var t = String(value).replace(/[\u0000-\u001F\u007F\s]+/g, "").toLowerCase();
         return (
             t.indexOf("javascript:") === 0 ||
             t.indexOf("data:") === 0 ||

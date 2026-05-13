@@ -41,6 +41,22 @@ describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.author
             expect(markupUtils.linkValueHasExcludedRepositoryPrefix("DATA:image/png;base64,xx")).toBe(true);
             expect(markupUtils.linkValueHasExcludedRepositoryPrefix("  javascript:x  ")).toBe(true);
         });
+
+        it("returns true when C0 controls or whitespace break up or precede the scheme", function() {
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix(" javascript:alert(1)")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("\n\tjavascript:alert(1)")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("java\tscript:alert(1)")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("java\nscript:alert(1)")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("jav\rascript:alert(1)")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("\u0000javascript:alert(1)")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("\u0001javascript:alert(1)")).toBe(true);
+        });
+
+        it("returns false for https URLs and nullish values", function() {
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("https://example.com/x")).toBe(false);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix(null)).toBe(false);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix(undefined)).toBe(false);
+        });
     });
 
     describe("buildPageImageThumbnailShellForEditor", function() {
