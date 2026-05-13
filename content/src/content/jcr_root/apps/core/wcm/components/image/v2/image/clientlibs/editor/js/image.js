@@ -43,16 +43,16 @@
     var smartCropRenditionFromJcr;
     var smartCropRenditionsDropDown;
 
-    var FT_SITES_41320 = "CT_SITES-41320";
+    var CT_SITES_41320 = "CT_SITES-41320";
     /*
-     * Granite feature toggle FT_SITES_41320 gates Coral label preparation and Dynamic Media request URL checks
+     * Granite feature toggle CT_SITES_41320 gates Coral label preparation and Dynamic Media request URL checks
      * in the Image v2 author dialog. When Granite or the toggle API is missing, helpers behave as enabled; set the
      * toggle to false only to restore the previous Image v2 dialog behaviour.
      */
 
     /**
      * Whether Coral smart-crop labels and Dynamic Media URL handling use commons authoring helpers.
-     * When Granite reports FT_SITES_41320 as disabled, the dialog matches earlier Image v2 behaviour.
+     * When Granite reports CT_SITES_41320 as disabled, the dialog matches earlier Image v2 behaviour.
      *
      * @returns {Boolean} true when helpers apply, false when the toggle explicitly disables them
      */
@@ -60,7 +60,7 @@
         if (!Granite || !Granite.Toggles || typeof Granite.Toggles.isEnabled !== "function") {
             return true;
         }
-        return Granite.Toggles.isEnabled(FT_SITES_41320) !== false;
+        return Granite.Toggles.isEnabled(CT_SITES_41320) !== false;
     }
 
     function getImageAuthoringUtils() {
@@ -68,10 +68,10 @@
     }
 
     /**
-     * Label HTML for smart crop dropdown items; with FT_SITES_41320, values are prepared for Coral innerHTML rendering.
+     * Label HTML for smart crop dropdown items; with CT_SITES_41320, values are prepared for Coral innerHTML rendering.
      *
      * @param {*} value smart crop label or related value
-     * @returns {String} label text or HTML-safe markup suitable for Coral rendering when FT_SITES_41320 applies
+     * @returns {String} label text or HTML-safe markup suitable for Coral rendering when CT_SITES_41320 applies
      */
     function formatSmartCropOptionLabel(value) {
         if (isImageV2AuthoringMarkupHelpersEnabled()) {
@@ -91,10 +91,10 @@
     }
 
     /**
-     * Whether dam:scene7File can drive image service requests; with FT_SITES_41320, repository path rules from commons apply.
+     * Whether dam:scene7File can drive image service requests; with CT_SITES_41320, repository path rules from commons apply.
      *
      * @param {*} path dam:scene7File or equivalent metadata path
-     * @returns {Boolean} whether the path is allowed for scene7-style requests when FT_SITES_41320 applies
+     * @returns {Boolean} whether the path is allowed for scene7-style requests when CT_SITES_41320 applies
      */
     function isDamScene7FileEligible(path) {
         if (isImageV2AuthoringMarkupHelpersEnabled()) {
