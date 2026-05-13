@@ -50,22 +50,20 @@
     }
 
     /**
-     * Sanitizes and encodes a page path for safe URL construction.
-     * Removes path traversal attempts, validates the path format, and encodes it.
+     * Normalises and encodes a repository page path segment for preview URL construction.
+     * Collapses repeated slashes, clears {@code ..} segments, rejects paths that do not start with {@code /}
+     * or that contain characters not permitted in repository paths, then applies URL segment encoding.
      *
-     * @param {String} pagePath - The page path to sanitize
-     * @returns {String|null} The sanitized and encoded path, or null if invalid
+     * @param {String} pagePath - repository path segment to normalise
+     * @returns {String|null} encoded path segment, or null when the path shape is not accepted
      */
     function sanitizeAndEncodePath(pagePath) {
-        // Remove any path traversal attempts and normalize the path
         pagePath = pagePath.replace(/\.\./g, "").replace(/\/+/g, "/");
 
-        // Validate that the path starts with / and doesn't contain dangerous patterns
         if (!/^\//.test(pagePath) || /[<>"|*?]/.test(pagePath)) {
             console.warn("Invalid page path detected: " + pagePath);
             return null;
         }
-        // Use encodeURIComponent to safely encode the path for URL construction
         return encodeURIComponent(pagePath).replace(/%2F/g, "/");
     }
 
@@ -82,7 +80,15 @@
                 try {
                     var urlObj = new URL(compPath, window.location.origin);
                     if (urlObj.origin !== window.location.origin) {
-                        console.log("Different origin detected: " + urlObj.origin + " from window origin " + window.location.origin + " generated from compPath: " + compPath);
+                        console.log(
+                            "HTML preview skipped: resolved form action origin " +
+                                urlObj.origin +
+                                " does not match the editor window origin " +
+                                window.location.origin +
+                                " (compPath: " +
+                                compPath +
+                                ")."
+                        );
                         return;
                     }
                 } catch (e) {
@@ -107,7 +113,7 @@
 
             var pathToResolve = pagePath;
 
-            // Use sanitization function if toggle is enabled
+            // Apply path normalisation when the path encoding toggle is on
             if (window.Granite && window.Granite.Toggles && window.Granite.Toggles.isEnabled(CT_SANITIZE_ENCODE_PATH)) {
                 var encodedPagePath = sanitizeAndEncodePath(pagePath);
                 if (!encodedPagePath) {

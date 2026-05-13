@@ -91,15 +91,15 @@ describe("HTML ID validator editor htmlIdValidation.js (Karma-loaded)", function
         });
 
         it("returns the syntactic prefix for protocol-relative actions before _jcr_content", function() {
-            expect(htmlId.extractAuthoringPagePathFromComponentFormAction("//evil.com/_jcr_content/x")).toBe(
-                "//evil.com"
-            );
+            expect(
+                htmlId.extractAuthoringPagePathFromComponentFormAction("//other-host.invalid/_jcr_content/x")
+            ).toBe("//other-host.invalid");
         });
     });
 
     describe("AuthoringEditorUtils.htmlId.authoringPageViewUrl", function() {
         it("returns null for protocol-relative paths that resolve to another origin", function() {
-            expect(htmlId.authoringPageViewUrl("//evil.com")).toBe(null);
+            expect(htmlId.authoringPageViewUrl("//other-host.invalid")).toBe(null);
         });
     });
 

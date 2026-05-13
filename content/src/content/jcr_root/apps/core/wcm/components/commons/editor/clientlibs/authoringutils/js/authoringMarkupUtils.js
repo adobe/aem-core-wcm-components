@@ -95,8 +95,8 @@
     }
 
     /**
-     * Drops ASCII C0 controls, DEL, and whitespace so scheme prefix checks cannot be bypassed with
-     * characters the URL layer may normalise away (e.g. TAB inside {@code javascript:}).
+     * Drops ASCII C0 controls, DEL, and whitespace so scheme prefix checks use a single normalised token
+     * (characters the URL layer may otherwise normalise away, e.g. TAB adjacent to a scheme name).
      *
      * @param {String} str - raw attribute value
      * @returns {String} characters kept for scheme prefix checks
@@ -122,7 +122,7 @@
 
     /**
      * Whether a link-like attribute value uses a non-http(s) scheme prefix that authoring dialogs do not treat as repository paths.
-     * Leading C0 control characters, DEL, and whitespace are stripped before the check so values cannot hide schemes from prefix matching.
+     * Leading C0 control characters, DEL, and whitespace are stripped before the check so prefix matching runs on one normalised string.
      *
      * @param {*} value - attribute value (typically after DOM parsing, so entities are decoded)
      * @returns {Boolean} true when the normalised value starts with javascript, data, or vbscript
@@ -140,8 +140,8 @@
     }
 
     /**
-     * Normalizes parsed authoring markup under a root element: drops disallowed subtrees (including
-     * active content, document-influencing, and styling hooks) and clears event-handler and disallowed URL schemes on link-like attributes.
+     * Normalizes parsed authoring markup under a root element: removes element types configured for
+     * datasource subtree cleanup and clears event-handler attributes and disallowed scheme prefixes on link-like attributes.
      *
      * @param {Element} rootElement - parsed subtree root (typically {@code document.body})
      */

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-describe("HTML ID Validator Path Sanitization", function() {
+describe("HTML ID validator path encoding and preview", function() {
     let originalAjax;
     let originalIsEnabled;
     let ajaxCalls = [];
@@ -43,7 +43,7 @@ describe("HTML ID Validator Path Sanitization", function() {
         this.toggle33116Enabled = true;
         this.toggle41942Enabled = true;
 
-        // CT_SITES-33116: path encoding / sanitization. CT_SITES-41942: page preview URL resolution and fetched markup handling.
+        // CT_SITES-33116: path encoding toggle. CT_SITES-41942: page preview URL resolution and fetched markup handling.
         this.setToggleEnabled = function(enabled33116) {
             this.toggle33116Enabled = enabled33116;
             globalThis.Granite.Toggles.isEnabled = function(feature) {
@@ -125,7 +125,7 @@ describe("HTML ID Validator Path Sanitization", function() {
             return v[0];
         };
 
-        // Helper function to reset state for CT_SITES-33116 disabled test (path sanitization legacy)
+        // Helper for CT_SITES-33116 off: legacy path resolution without normalising dot segments
         this.resetForDisabledToggle = function() {
             this.clearAjaxCalls();
             this.toggle33116Enabled = false;
@@ -141,14 +141,14 @@ describe("HTML ID Validator Path Sanitization", function() {
             }.bind(this);
         };
 
-        // Helper function to assert path was blocked (toggle enabled behavior)
-        this.expectPathBlocked = function() {
+        // When path encoding is on and the segment is invalid, the validator logs and skips the HTML preview request
+        this.expectInvalidPathSkipsPreview = function() {
             expect(console.warn).toHaveBeenCalledWith(jasmine.stringMatching(/Invalid page path detected/));
             expect(ajaxCalls.length).toBe(0);
         };
 
-        // Helper function to assert path was allowed (toggle disabled/legacy behavior)
-        this.expectPathAllowed = function() {
+        // When the path segment is accepted, no warning and a preview-related request is issued
+        this.expectPreviewRequestSent = function() {
             expect(console.warn).not.toHaveBeenCalled();
             expect(ajaxCalls.length).toBeGreaterThan(0);
         };
@@ -165,7 +165,7 @@ describe("HTML ID Validator Path Sanitization", function() {
             return url?.includes(".html") && url?.includes("wcmmode=disabled") ? url : null;
         };
 
-        // Helper function to test path is allowed in both toggle states
+        // Runs validation with path encoding on, then with CT_SITES-33116 off (legacy path handling)
         this.expectPathAllowedInBothStates = function(mockElement) {
             const validator = this.getValidator();
 
@@ -178,18 +178,18 @@ describe("HTML ID Validator Path Sanitization", function() {
             expect(ajaxCalls.length).toBeGreaterThan(0);
         };
 
-        // Helper function to test path is blocked when enabled, allowed when disabled
-        this.expectBlockedWhenEnabledAllowedWhenDisabled = function(mockElement) {
+        // Invalid segment with encoding on skips preview; same form action with encoding off may still resolve a preview URL
+        this.expectEncodingRejectsThenLegacyAcceptsPath = function(mockElement) {
             const validator = this.getValidator();
 
             this.setToggleEnabled(true);
             validator.validate(mockElement);
-            this.expectPathBlocked();
+            this.expectInvalidPathSkipsPreview();
 
             this.resetWarnSpy();
             this.resetForDisabledToggle();
             validator.validate(mockElement);
-            this.expectPathAllowed();
+            this.expectPreviewRequestSent();
         };
 
         this.setToggleEnabled(true);
@@ -206,12 +206,11 @@ describe("HTML ID Validator Path Sanitization", function() {
         fixture.cleanup();
     });
 
-    describe("Path sanitization behaviour", function() {
-        it("should handle path traversal sequences in URLs", function() {
+    describe("Path shape and encoding behaviour", function() {
+        it("should normalise parent-directory segments when path encoding toggle is on", function() {
             spyOn(console, 'warn');
             const mockElement = this.createMockElement('/content/../../../etc/passwd/_jcr_content/root/component', 'unique-id');
 
-            // Test with toggle ENABLED - should sanitize path traversal
             this.setToggleEnabled(true);
             let ajaxUrl = this.validateAndGetHtmlUrl(mockElement);
             if (ajaxUrl) {
@@ -219,7 +218,7 @@ describe("HTML ID Validator Path Sanitization", function() {
                 expect(ajaxUrl).not.toContain("..");
             }
 
-            // Test with toggle DISABLED - should encode but not sanitize
+            // With path encoding off, dot segments are not normalised the same way
             this.resetForDisabledToggle();
             ajaxUrl = this.validateAndGetHtmlUrl(mockElement);
             if (ajaxUrl) {
@@ -238,14 +237,14 @@ describe("HTML ID Validator Path Sanitization", function() {
                 this.clearAjaxCalls();
 
                 const mockElement = this.createMockElement('/content/test' + char + 'segment/_jcr_content/root/component', 'test-id');
-                this.expectBlockedWhenEnabledAllowedWhenDisabled(mockElement);
+                this.expectEncodingRejectsThenLegacyAcceptsPath(mockElement);
             }.bind(this));
         });
 
-        it("should reject paths containing angle brackets and script elements in the path string", function() {
+        it("should reject paths containing angle brackets or angle-bracketed segments in the path string", function() {
             spyOn(console, 'warn');
-            const mockElement = this.createMockElement('/content/test<script>alert(1)</script>/_jcr_content/root/component', 'test-id');
-            this.expectBlockedWhenEnabledAllowedWhenDisabled(mockElement);
+            const mockElement = this.createMockElement('/content/test<tag>text</tag>/_jcr_content/root/component', 'test-id');
+            this.expectEncodingRejectsThenLegacyAcceptsPath(mockElement);
         });
 
         it("should allow valid AEM paths", function() {
@@ -285,7 +284,7 @@ describe("HTML ID Validator Path Sanitization", function() {
         it("should reject paths that don't start with forward slash", function() {
             spyOn(console, 'warn');
             const mockElement = this.createMockElement('content/test/page/_jcr_content/root/component', 'test-id');
-            this.expectBlockedWhenEnabledAllowedWhenDisabled(mockElement);
+            this.expectEncodingRejectsThenLegacyAcceptsPath(mockElement);
         });
 
         it("should handle null or undefined compPath", function() {
@@ -339,7 +338,7 @@ describe("HTML ID Validator Path Sanitization", function() {
         it("should block paths ending with question mark", function() {
             spyOn(console, 'warn');
             const mockElement = this.createMockElement('/content/test/page?/_jcr_content/root/component', 'test-id');
-            this.expectBlockedWhenEnabledAllowedWhenDisabled(mockElement);
+            this.expectEncodingRejectsThenLegacyAcceptsPath(mockElement);
         });
 
         it("does not load page HTML when the form action omits the authored content path segment and preview helpers are on", function() {
