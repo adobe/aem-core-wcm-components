@@ -374,6 +374,7 @@
         innerHtmlFromFirstBodyChild: innerHtmlFromFirstBodyChild,
         adoptNodeForDocument: adoptNodeForDocument,
         linkValueHasExcludedRepositoryPrefix: linkValueHasExcludedRepositoryPrefix,
+        stripAsciiControlsAndWhitespaceForSchemeCheck: stripAsciiControlsAndWhitespaceForSchemeCheck,
         buildPageImageThumbnailShellForEditor: buildPageImageThumbnailShellForEditor,
         sanitizeAuthoringEditorResponseMarkup: sanitizeAuthoringEditorResponseMarkup,
         parseAndNormalizeAuthoringDatasourceMarkup: parseAndNormalizeAuthoringDatasourceMarkup

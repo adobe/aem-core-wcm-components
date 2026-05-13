@@ -43,11 +43,12 @@ describe("Content Fragment List v1 editor contentfragmentlist.js (Karma-loaded)"
     });
 
     describe("__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API", function() {
-        it("exposes resolve and toggle helpers", function() {
+        it("exposes resolve, toggle, and datasource path helpers", function() {
             expect(api).toBeDefined();
             expect(typeof api.resolveElementNamesContainerInnerHtmlForEditor).toBe("function");
             expect(typeof api.isContentFragmentListV1EditorMarkupHelpersEnabled).toBe("function");
             expect(typeof api.getAuthoringMarkupUtils).toBe("function");
+            expect(typeof api.isSameOriginDatasourcePath).toBe("function");
         });
     });
 
@@ -85,6 +86,39 @@ describe("Content Fragment List v1 editor contentfragmentlist.js (Karma-loaded)"
                 "<div><div data-granite-coral-multifield-name=\"./elementNames\"><img src=\"x\" onerror=\"alert(1)\"></div></div>";
             const inner = api.resolveElementNamesContainerInnerHtmlForEditor(doc);
             expect(inner.indexOf("onerror")).not.toBe(-1);
+        });
+    });
+
+    describe("isSameOriginDatasourcePath", function() {
+        it("returns false for nullish or empty values", function() {
+            expect(api.isSameOriginDatasourcePath(null)).toBe(false);
+            expect(api.isSameOriginDatasourcePath(undefined)).toBe(false);
+            expect(api.isSameOriginDatasourcePath("")).toBe(false);
+            expect(api.isSameOriginDatasourcePath("   ")).toBe(false);
+        });
+
+        it("returns true for repository-relative paths on the current origin", function() {
+            expect(api.isSameOriginDatasourcePath("/content/dam/models")).toBe(true);
+            expect(api.isSameOriginDatasourcePath("/conf/test/settings/dam/cfm/models/items")).toBe(true);
+        });
+
+        it("returns true for absolute URLs on the current page origin", function() {
+            const originPath = globalThis.location.origin + "/libs/datasource.html";
+            expect(api.isSameOriginDatasourcePath(originPath)).toBe(true);
+        });
+
+        it("returns false for disallowed schemes", function() {
+            expect(api.isSameOriginDatasourcePath("javascript:alert(1)")).toBe(false);
+            expect(api.isSameOriginDatasourcePath("data:text/html,x")).toBe(false);
+            expect(api.isSameOriginDatasourcePath("vbscript:msgbox")).toBe(false);
+        });
+
+        it("returns false when scheme is split with whitespace before prefix checks", function() {
+            expect(api.isSameOriginDatasourcePath("java\tscript:alert(1)")).toBe(false);
+        });
+
+        it("returns false for other origins", function() {
+            expect(api.isSameOriginDatasourcePath("https://example.com/libs/datasource.html")).toBe(false);
         });
     });
 });

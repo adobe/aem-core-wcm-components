@@ -73,8 +73,15 @@
             if (markupUtils.linkValueHasExcludedRepositoryPrefix(str)) {
                 return false;
             }
-        } else if (/^(javascript|data|vbscript):/i.test(str)) {
-            return false;
+        } else {
+            var normalizedStr = normalizeStringForExcludedSchemePrefix(str, markupUtils);
+            if (
+                normalizedStr.indexOf("javascript:") === 0 ||
+                normalizedStr.indexOf("data:") === 0 ||
+                normalizedStr.indexOf("vbscript:") === 0
+            ) {
+                return false;
+            }
         }
         var external = Granite.HTTP.externalize(str);
         var resolved;
@@ -84,6 +91,49 @@
             return false;
         }
         return resolved.origin === window.location.origin;
+    }
+
+    /**
+     * Strips ASCII C0 controls, DEL, and whitespace for scheme prefix checks when commons markup helpers are not loaded.
+     *
+     * @param {String} str - raw string
+     * @returns {String} compacted string
+     */
+    function stripAsciiControlsAndWhitespaceForSchemeCheckLocal(str) {
+        var s = String(str);
+        var out = "";
+        var i;
+        var ch;
+        var c;
+        for (i = 0; i < s.length; i++) {
+            ch = s.charAt(i);
+            c = s.charCodeAt(i);
+            if (c <= 31 || c === 127) {
+                continue;
+            }
+            if (/\s/.test(ch)) {
+                continue;
+            }
+            out += ch;
+        }
+        return out;
+    }
+
+    /**
+     * Lowercase string with the same C0 and whitespace stripping as linkValueHasExcludedRepositoryPrefix for fallback checks.
+     *
+     * @param {String} str - raw cmp-field-path value
+     * @param {Object|null} markupUtils - AuthoringEditorUtils.markup when available
+     * @returns {String} normalised lowercase string for scheme prefix comparison
+     */
+    function normalizeStringForExcludedSchemePrefix(str, markupUtils) {
+        var stripped;
+        if (markupUtils && typeof markupUtils.stripAsciiControlsAndWhitespaceForSchemeCheck === "function") {
+            stripped = markupUtils.stripAsciiControlsAndWhitespaceForSchemeCheck(str);
+        } else {
+            stripped = stripAsciiControlsAndWhitespaceForSchemeCheckLocal(str);
+        }
+        return String(stripped).toLowerCase();
     }
 
     /**
@@ -342,7 +392,7 @@
     /**
      * Updates inner html of element container.
      *
-     * @param {String} html - outerHTML value for elementNamesContainer
+     * @param {String} html - HTML document string from the element names datasource response (same shape as the $.get body).
      */
     ContentFragmentListController.prototype._updateElementsHTML = function(html) {
         this.elementNamesContainer.innerHTML = resolveElementNamesContainerInnerHtmlForEditor(html);
@@ -503,6 +553,7 @@
         cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API.resolveElementNamesContainerInnerHtmlForEditor =
             resolveElementNamesContainerInnerHtmlForEditor;
         cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API.getAuthoringMarkupUtils = getAuthoringMarkupUtils;
+        cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API.isSameOriginDatasourcePath = isSameOriginDatasourcePath;
     }
 
 })(window, jQuery, jQuery(document), Granite, Coral);
