@@ -553,6 +553,7 @@
         cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API.resolveElementNamesContainerInnerHtmlForEditor =
             resolveElementNamesContainerInnerHtmlForEditor;
         cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API.getAuthoringMarkupUtils = getAuthoringMarkupUtils;
+        cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API.isSameOriginDatasourcePath = isSameOriginDatasourcePath;
     }
 
 })(window, jQuery, jQuery(document), Granite, Coral);
