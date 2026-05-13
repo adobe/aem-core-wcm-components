@@ -39,6 +39,19 @@
         "data-thumbnail-config-path"
     ];
 
+    /** Element names removed entirely when normalizing parsed authoring datasource markup. */
+    var AUTHORING_MARKUP_STRIPPED_ELEMENT_TAGS = {
+        SCRIPT: true,
+        IFRAME: true,
+        OBJECT: true,
+        EMBED: true,
+        STYLE: true,
+        LINK: true,
+        META: true,
+        BASE: true,
+        FORM: true
+    };
+
     /**
      * Parses an HTML document string into a Document instance.
      *
@@ -100,8 +113,8 @@
     }
 
     /**
-     * Normalizes parsed authoring markup under a root element: drops disallowed subtrees and clears
-     * event-handler and disallowed URL schemes on link-like attributes.
+     * Normalizes parsed authoring markup under a root element: drops disallowed subtrees (including
+     * active content, document-influencing, and styling hooks) and clears event-handler and disallowed URL schemes on link-like attributes.
      *
      * @param {Element} rootElement - parsed subtree root (typically {@code document.body})
      */
@@ -123,7 +136,7 @@
                 continue;
             }
             var tag = el.tagName;
-            if (tag === "SCRIPT" || tag === "IFRAME" || tag === "OBJECT" || tag === "EMBED") {
+            if (AUTHORING_MARKUP_STRIPPED_ELEMENT_TAGS[tag]) {
                 removeEls.push(el);
                 continue;
             }

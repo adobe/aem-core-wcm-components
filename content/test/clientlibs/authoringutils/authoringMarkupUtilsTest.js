@@ -178,6 +178,21 @@ describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.author
             expect(out.indexOf("javascript")).toBe(-1);
         });
 
+        it("drops style, link, meta, base, and form elements", function() {
+            const html =
+                "<div><style>x</style><link rel=\"stylesheet\" href=\"/etc.clientlibs/a.css\">" +
+                "<meta http-equiv=\"refresh\" content=\"0\">" +
+                "<base href=\"http://example.com/\">" +
+                "<form action=\"/search\"></form><p>ok</p></div>";
+            const out = markupUtils.sanitizeAuthoringEditorResponseMarkup(html);
+            expect(out.indexOf("<style")).toBe(-1);
+            expect(out.indexOf("<link")).toBe(-1);
+            expect(out.indexOf("<meta")).toBe(-1);
+            expect(out.indexOf("<base")).toBe(-1);
+            expect(out.indexOf("<form")).toBe(-1);
+            expect(out.indexOf(">ok</p>")).not.toBe(-1);
+        });
+
         it("returns empty string when body has no element child", function() {
             expect(markupUtils.sanitizeAuthoringEditorResponseMarkup("")).toBe("");
         });
