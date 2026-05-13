@@ -66,7 +66,7 @@
     var remoteFileReference;
     var dataSeededValueAttr = "data-seeded-value";
 
-    var FT_SITES_41279 = "FT_SITES-41279";
+    var FT_SITES_41279 = "CT_SITES-41279";
     /*
      * Granite feature toggle FT_SITES-41279 gates Image v3 editor markup helpers (Coral crop labels, Dynamic Media path checks,
      * page-image thumbnail shell import). Helpers stay on unless the toggle is explicitly false—use false only as a short

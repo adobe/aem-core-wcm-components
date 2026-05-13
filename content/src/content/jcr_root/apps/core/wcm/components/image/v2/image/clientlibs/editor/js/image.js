@@ -43,7 +43,7 @@
     var smartCropRenditionFromJcr;
     var smartCropRenditionsDropDown;
 
-    var FT_SITES_41320 = "FT_SITES-41320";
+    var FT_SITES_41320 = "CT_SITES-41320";
     /*
      * Granite feature toggle FT_SITES_41320 gates Coral label preparation and Dynamic Media request URL checks
      * in the Image v2 author dialog. When Granite or the toggle API is missing, helpers behave as enabled; set the
