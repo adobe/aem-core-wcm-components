@@ -89,6 +89,18 @@ describe("HTML ID validator editor htmlIdValidation.js (Karma-loaded)", function
                 htmlId.extractAuthoringPagePathFromComponentFormAction("/content/site/en/page/jcr:content/root/c")
             ).toBe("/content/site/en/page");
         });
+
+        it("returns the syntactic prefix for protocol-relative actions before _jcr_content", function() {
+            expect(htmlId.extractAuthoringPagePathFromComponentFormAction("//evil.com/_jcr_content/x")).toBe(
+                "//evil.com"
+            );
+        });
+    });
+
+    describe("AuthoringEditorUtils.htmlId.authoringPageViewUrl", function() {
+        it("returns null for protocol-relative paths that resolve to another origin", function() {
+            expect(htmlId.authoringPageViewUrl("//evil.com")).toBe(null);
+        });
     });
 
     describe("AuthoringEditorUtils.htmlId.countElementsWithIdInAuthoringFetchedHtml", function() {
@@ -96,6 +108,23 @@ describe("HTML ID validator editor htmlIdValidation.js (Karma-loaded)", function
             const doc =
                 "<!DOCTYPE html><html><body><div id=\"keep\"></div><img src=\"x\" onerror=\"void(0)\"></body></html>";
             expect(htmlId.countElementsWithIdInAuthoringFetchedHtml(doc, "keep")).toBe(1);
+        });
+
+        it("matches countElementsWithIdInHtml for ids on form and other non-stripped elements", function() {
+            const doc = "<!DOCTYPE html><html><body><form id=\"f\"></form><div id=\"d\"></div></body></html>";
+            expect(htmlId.countElementsWithIdInHtml(doc, "f")).toBe(1);
+            expect(htmlId.countElementsWithIdInAuthoringFetchedHtml(doc, "f")).toBe(1);
+            expect(htmlId.countElementsWithIdInHtml(doc, "d")).toBe(1);
+            expect(htmlId.countElementsWithIdInAuthoringFetchedHtml(doc, "d")).toBe(1);
+        });
+
+        it("strips event-handler attributes via the fetched-html path while preserving id counts", function() {
+            const doc = "<!DOCTYPE html><html><body><div id=\"x\" onclick=\"void(0)\"></div></body></html>";
+            const markupUtils = globalThis.CQ.CoreComponents.AuthoringEditorUtils.markup;
+            const parsed = markupUtils.parseAuthoringMarkupStripEventHandlersOnly(doc);
+            expect(parsed.querySelector("[onclick]")).toBe(null);
+            expect(htmlId.countElementsWithIdInHtml(doc, "x")).toBe(1);
+            expect(htmlId.countElementsWithIdInAuthoringFetchedHtml(doc, "x")).toBe(1);
         });
 
         it("returns zero for empty markup or id", function() {

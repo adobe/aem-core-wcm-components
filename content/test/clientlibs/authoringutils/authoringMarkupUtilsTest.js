@@ -230,6 +230,24 @@ describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.author
             expect(doc.body.innerHTML.indexOf("<script")).toBe(-1);
         });
 
+        describe("parseAuthoringMarkupStripEventHandlersOnly", function() {
+            it("removes on* attributes but keeps elements and ids", function() {
+                const html = "<body><form id=\"f\" onclick=\"void(0)\"></form><div id=\"d\" onload=\"x\"></div></body>";
+                const doc = markupUtils.parseAuthoringMarkupStripEventHandlersOnly(html);
+                expect(doc.getElementById("f")).not.toBe(null);
+                expect(doc.getElementById("d")).not.toBe(null);
+                expect(doc.querySelector("[onclick]")).toBe(null);
+                expect(doc.querySelector("[onload]")).toBe(null);
+            });
+
+            it("does not remove script elements or javascript: href values", function() {
+                const html = "<body><script id=\"s\">1</script><a id=\"a\" href=\"javascript:void(0)\">x</a></body>";
+                const doc = markupUtils.parseAuthoringMarkupStripEventHandlersOnly(html);
+                expect(doc.getElementById("s")).not.toBe(null);
+                expect(doc.getElementById("a").getAttribute("href")).toContain("javascript");
+            });
+        });
+
         it("returns empty string when body has no element child", function() {
             expect(markupUtils.sanitizeAuthoringEditorResponseMarkup("")).toBe("");
         });

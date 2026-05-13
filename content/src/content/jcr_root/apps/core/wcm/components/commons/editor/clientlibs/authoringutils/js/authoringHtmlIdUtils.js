@@ -99,12 +99,13 @@
     }
 
     /**
-     * Counts elements whose {@code id} equals the given string in fetched authoring HTML, after the same
-     * subtree normalisation used for datasource markup parsing (event handlers and disallowed subtrees removed).
+     * Counts elements whose {@code id} equals the given string in fetched authoring HTML, after stripping
+     * event-handler attributes ({@code on*}) from the parsed body subtree. Element nodes are not removed,
+     * so semantics stay aligned with {@code countElementsWithIdInHtml} for ids on elements such as {@code form}.
      *
      * @param {String} markup - full HTML document string
      * @param {*} elementId - author-entered id value
-     * @returns {Number} number of matching elements after subtree normalisation
+     * @returns {Number} number of matching elements after handler attributes are cleared
      */
     function countElementsWithIdInAuthoringFetchedHtml(markup, elementId) {
         if (elementId === null || elementId === undefined) {
@@ -123,8 +124,8 @@
             window.CQ.CoreComponents &&
             window.CQ.CoreComponents.AuthoringEditorUtils &&
             window.CQ.CoreComponents.AuthoringEditorUtils.markup;
-        if (Markup && typeof Markup.parseAndNormalizeAuthoringDatasourceMarkup === "function") {
-            doc = Markup.parseAndNormalizeAuthoringDatasourceMarkup(markup);
+        if (Markup && typeof Markup.parseAuthoringMarkupStripEventHandlersOnly === "function") {
+            doc = Markup.parseAuthoringMarkupStripEventHandlersOnly(markup);
         } else {
             doc = new window.DOMParser().parseFromString(String(markup), "text/html");
         }

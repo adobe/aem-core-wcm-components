@@ -204,6 +204,59 @@
     }
 
     /**
+     * Clears event-handler attributes ({@code on*}) under a root element. Does not remove elements or
+     * non-handler attributes (unlike {@link sanitizeAuthoringMarkupSubtree}).
+     *
+     * @param {Element} rootElement - parsed subtree root (typically {@code document.body})
+     */
+    function sanitizeAuthoringMarkupEventHandlersOnly(rootElement) {
+        if (!rootElement || rootElement.nodeType !== 1) {
+            return;
+        }
+        var all = rootElement.querySelectorAll("*");
+        var list = [];
+        var i;
+        for (i = 0; i < all.length; i++) {
+            list.push(all[i]);
+        }
+        list.push(rootElement);
+        for (i = 0; i < list.length; i++) {
+            var el = list[i];
+            if (el.nodeType !== 1) {
+                continue;
+            }
+            var attrs = el.attributes;
+            var names = [];
+            var j;
+            for (j = 0; attrs && j < attrs.length; j++) {
+                names.push(attrs[j].name);
+            }
+            for (j = 0; j < names.length; j++) {
+                var name = names[j];
+                if (/^on/i.test(name)) {
+                    el.removeAttribute(name);
+                }
+            }
+        }
+    }
+
+    /**
+     * Parses HTML into a {@code Document} whose body has event-handler attributes stripped. Intended for
+     * duplicate {@code id} checks on fetched page markup where handler attributes are irrelevant to id
+     * matching and full datasource subtree stripping is unnecessary.
+     *
+     * @param {String} markup - HTML document string
+     * @returns {Document} parsed document with handler attributes removed from the body subtree
+     */
+    function parseAuthoringMarkupStripEventHandlersOnly(markup) {
+        var doc = parseMarkupDocument(String(markup == null ? "" : markup));
+        if (doc.body) {
+            sanitizeAuthoringMarkupEventHandlersOnly(doc.body);
+        }
+        return doc;
+    }
+
+    /**
      * Parses datasource HTML and returns the inner markup of the first body child, after subtree
      * normalization is applied to the parsed document body.
      *
@@ -377,7 +430,8 @@
         stripAsciiControlsAndWhitespaceForSchemeCheck: stripAsciiControlsAndWhitespaceForSchemeCheck,
         buildPageImageThumbnailShellForEditor: buildPageImageThumbnailShellForEditor,
         sanitizeAuthoringEditorResponseMarkup: sanitizeAuthoringEditorResponseMarkup,
-        parseAndNormalizeAuthoringDatasourceMarkup: parseAndNormalizeAuthoringDatasourceMarkup
+        parseAndNormalizeAuthoringDatasourceMarkup: parseAndNormalizeAuthoringDatasourceMarkup,
+        parseAuthoringMarkupStripEventHandlersOnly: parseAuthoringMarkupStripEventHandlersOnly
     };
 
 })(window);
