@@ -41,6 +41,22 @@ describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.author
             expect(markupUtils.linkValueHasExcludedRepositoryPrefix("DATA:image/png;base64,xx")).toBe(true);
             expect(markupUtils.linkValueHasExcludedRepositoryPrefix("  javascript:x  ")).toBe(true);
         });
+
+        it("returns true when C0 controls or whitespace break up or precede the scheme", function() {
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix(" javascript:alert(1)")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("\n\tjavascript:alert(1)")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("java\tscript:alert(1)")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("java\nscript:alert(1)")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("jav\rascript:alert(1)")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("\u0000javascript:alert(1)")).toBe(true);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("\u0001javascript:alert(1)")).toBe(true);
+        });
+
+        it("returns false for https URLs and nullish values", function() {
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix("https://example.com/x")).toBe(false);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix(null)).toBe(false);
+            expect(markupUtils.linkValueHasExcludedRepositoryPrefix(undefined)).toBe(false);
+        });
     });
 
     describe("buildPageImageThumbnailShellForEditor", function() {
@@ -152,6 +168,55 @@ describe("AuthoringEditorUtils.markup (core.wcm.components.commons.editor.author
             expect(img).not.toBe(null);
             expect(img.getAttribute("href")).toBe(null);
             expect(img.getAttribute("src")).toBe("/content/dam/x.png");
+        });
+    });
+
+    describe("sanitizeAuthoringEditorResponseMarkup", function() {
+        it("returns inner markup of the first body child with event attributes removed", function() {
+            const html =
+                "<html><body><div><span onmouseover=\"x\"><img src=\"x\" onerror=\"alert(1)\"></span></div></body></html>";
+            const out = markupUtils.sanitizeAuthoringEditorResponseMarkup(html);
+            expect(out.indexOf("onerror")).toBe(-1);
+            expect(out.indexOf("onmouseover")).toBe(-1);
+            expect(out.indexOf("<img")).not.toBe(-1);
+        });
+
+        it("drops script tags from nested markup", function() {
+            const html = "<div><script>z</script><p>ok</p></div>";
+            const out = markupUtils.sanitizeAuthoringEditorResponseMarkup(html);
+            expect(out.indexOf("<script>")).toBe(-1);
+            expect(out.indexOf(">ok</p>")).not.toBe(-1);
+        });
+
+        it("removes href with disallowed schemes", function() {
+            const html = "<div><a href=\"javascript:void(0)\">t</a></div>";
+            const out = markupUtils.sanitizeAuthoringEditorResponseMarkup(html);
+            expect(out.indexOf("javascript")).toBe(-1);
+        });
+
+        it("removes action with disallowed schemes", function() {
+            const html = "<div><div action=\"javascript:void(0)\">t</div></div>";
+            const out = markupUtils.sanitizeAuthoringEditorResponseMarkup(html);
+            expect(out.indexOf("javascript")).toBe(-1);
+        });
+
+        it("drops style, link, meta, base, and form elements", function() {
+            const html =
+                "<div><style>x</style><link rel=\"stylesheet\" href=\"/etc.clientlibs/a.css\">" +
+                "<meta http-equiv=\"refresh\" content=\"0\">" +
+                "<base href=\"http://example.com/\">" +
+                "<form action=\"/search\"></form><p>ok</p></div>";
+            const out = markupUtils.sanitizeAuthoringEditorResponseMarkup(html);
+            expect(out.indexOf("<style")).toBe(-1);
+            expect(out.indexOf("<link")).toBe(-1);
+            expect(out.indexOf("<meta")).toBe(-1);
+            expect(out.indexOf("<base")).toBe(-1);
+            expect(out.indexOf("<form")).toBe(-1);
+            expect(out.indexOf(">ok</p>")).not.toBe(-1);
+        });
+
+        it("returns empty string when body has no element child", function() {
+            expect(markupUtils.sanitizeAuthoringEditorResponseMarkup("")).toBe("");
         });
     });
 });
