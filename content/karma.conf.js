@@ -43,6 +43,7 @@ module.exports = function(config) {
             },
             'src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/htmlidvalidator/js/*.js',
             'src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/authoringutils/js/*.js',
+            'src/content/jcr_root/apps/core/wcm/components/image/v2/image/clientlibs/editor/js/image.js',
             'src/content/jcr_root/apps/core/wcm/components/image/v3/image/clientlibs/editor/js/image.js',
             'test/**/*Test.js',
             'test/**/*Test.html'

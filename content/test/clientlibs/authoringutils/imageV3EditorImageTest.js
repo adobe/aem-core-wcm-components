@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 /**
- * Covers Image v3 editor {@code image.js} markup-helper surface (FT_SITES-41279) wired through
+ * Covers Image v3 editor {@code image.js} markup-helper surface (CT_SITES-41279) wired through
  * {@code globalThis.__IMAGE_V3_EDITOR_TEST_API}. Depends on {@code authoringImageUtilsTest.js} loading first for
  * {@code AuthoringutilsThumbnailFixtures} (Karma name order).
  */
@@ -26,7 +26,7 @@ function imageV3EditorImageTestFtOn() {
 
 function imageV3EditorImageTestFtOff() {
     globalThis.Granite.Toggles.isEnabled = function(key) {
-        return key !== "FT_SITES-41279";
+        return key !== "CT_SITES-41279";
     };
 }
 
@@ -78,14 +78,14 @@ describe("Image v3 editor image.js (Karma-loaded)", function() {
             globalThis.Granite.Toggles = saved;
         });
 
-        it("returns false when FT_SITES-41279 is explicitly disabled", function() {
+        it("returns false when CT_SITES-41279 is explicitly disabled", function() {
             globalThis.Granite.Toggles.isEnabled = function(key) {
-                return key !== "FT_SITES-41279";
+                return key !== "CT_SITES-41279";
             };
             expect(api.isImageV3AuthoringMarkupHelpersEnabled()).toBe(false);
         });
 
-        it("returns true when FT_SITES-41279 is enabled", function() {
+        it("returns true when CT_SITES-41279 is enabled", function() {
             imageV3EditorImageTestFtOn();
             expect(api.isImageV3AuthoringMarkupHelpersEnabled()).toBe(true);
         });
