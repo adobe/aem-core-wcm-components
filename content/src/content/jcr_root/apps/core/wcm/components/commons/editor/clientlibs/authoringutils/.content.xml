@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Do not add cq.authoring.editor.core here: this clientlib can be pulled into Sites Admin
+  contexts (e.g. page properties via htmlidvalidator). Loading the Page Editor clientlib stack
+  there breaks nested authoring flows (MSM rollout) and changes dialog chrome. Declare
+  cq.authoring.editor.core on component editor clientlibs that require it instead.
+-->
 <jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
     jcr:primaryType="cq:ClientLibraryFolder"
     categories="[core.wcm.components.commons.editor.authoringutils]"
