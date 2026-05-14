@@ -77,6 +77,8 @@
                             com.day.cq.dam.api.handler;version="[2,3)",
                             com.adobe.cq.dam.cfm.content;version="[1.1,2)",
                             com.adobe.cq.dam.cfm.converter;version="[1,2)",
+                            org.apache.commons.lang3;version="[3.12,4)",
+                            org.apache.commons.lang3.tuple;version="[3.12,4)",
                             *
                         </Import-Package>
                     </instructions>
