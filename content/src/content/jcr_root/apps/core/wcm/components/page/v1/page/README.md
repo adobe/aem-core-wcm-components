@@ -28,6 +28,7 @@ Extensible page component written in HTL.
 * Blueprints and live copy
 * Closed user groups and permissions
 * Cloud services
+* Structured Data (JSON-LD) injection in the page head
 
 ## Loading of CSS/JS
 The page component automatically loads certain client libraries in the head section and at the end of the body section
