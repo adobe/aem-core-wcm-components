@@ -152,6 +152,7 @@
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                         checked="true"
                                                         fieldDescription="When checked, populate the image's alt attribute with the value of the dc:description metadata in DAM."
+                                                        forceIgnoreFreshness="true"
                                                         name="./cq:featuredimage/altValueFromDAM"
                                                         text="Inherit - Value taken from the DAM asset"
                                                         uncheckedValue="false"

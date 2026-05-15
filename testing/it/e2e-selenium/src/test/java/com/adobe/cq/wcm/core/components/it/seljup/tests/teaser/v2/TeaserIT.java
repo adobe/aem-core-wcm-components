@@ -16,9 +16,13 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.teaser.v2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,8 +30,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v2.Teaser;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.teaser.v2.TeaserEditDialog;
@@ -540,33 +542,23 @@ public class TeaserIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.t
     // ----------------------------------------------------------
 
     /**
-     * Sets the featured image for a page.
+     * Sets the featured image for a page, with alt text inherited from the DAM asset.
+     *
+     * <p>This is precondition setup for tests that verify how the Teaser renders an image inherited
+     * from the page's featured image. The page is reconfigured as a {@code page/v3/page} and the
+     * {@code cq:featuredimage} subnode is populated via a single Sling POST. The page-properties
+     * picker UI is intentionally not used here — it is covered by dedicated page tests, and its
+     * Granite-checkbox-driven {@code altValueFromDAM} state is unreliable across AEM versions.</p>
      */
-    private void setPageImage(String page, String asset) throws ClientException, InterruptedException {
-        // set page resource type to page v3
-        authorClient.setPageProperty(page, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
-        PropertiesPage pageProperties = new PropertiesPage(page);
-        pageProperties.open();
-        $("coral-tab[data-foundation-tracking-event*='images']").click();
-        $(".cq-FileUpload-picker").click();
-        $("*[data-foundation-collection-item-id='/content/dam/core-components']").click();
-
-        try {
-            $("*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-checkbox").click();
-        } catch (Throwable t) {
-            // Fallback for AEM 6.5
-            $("*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-columnview-item-thumbnail").click();
-        }
-
-        clickableClick($(".granite-pickerdialog-submit"));
-
-        // inherit alt text from DAM
-        String altValueFromDAMSelector = ".cq-siteadmin-admin-properties coral-checkbox[name='./cq:featuredimage/altValueFromDAM']";
-        CoralCheckbox altValueFromDAMCheckbox = new CoralCheckbox(altValueFromDAMSelector);
-        altValueFromDAMCheckbox.click();
-
-        pageProperties.saveAndClose();
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+    private void setPageImage(String page, String asset) throws ClientException {
+        List<NameValuePair> props = new ArrayList<>();
+        props.add(new BasicNameValuePair("./sling:resourceType", "core/wcm/components/page/v3/page"));
+        props.add(new BasicNameValuePair("./cq:featuredimage/jcr:primaryType", "nt:unstructured"));
+        props.add(new BasicNameValuePair("./cq:featuredimage/sling:resourceType", "core/wcm/components/image/v3/image"));
+        props.add(new BasicNameValuePair("./cq:featuredimage/fileReference", "/content/dam/core-components/" + asset));
+        props.add(new BasicNameValuePair("./cq:featuredimage/altValueFromDAM", "true"));
+        props.add(new BasicNameValuePair("./cq:featuredimage/altValueFromDAM@TypeHint", "Boolean"));
+        Commons.setPageProperties(authorClient, page, props, 200, 201);
         editorPage.open();
     }
 }
