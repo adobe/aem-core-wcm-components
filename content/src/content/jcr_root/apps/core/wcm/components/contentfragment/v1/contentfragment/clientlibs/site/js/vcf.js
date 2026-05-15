@@ -29,8 +29,9 @@
 
     /**
      * Builds placeholder markup for the VCF shadow root; uses DOM so translated strings are escaped.
+     * The {@code title} and {@code detail} arguments are expected to already be localized.
      */
-    function buildVcfPlaceholderOuterHtml(modifier, role, surfaceCss, accentCss, titleMessage, detailMessage) {
+    function buildVcfPlaceholderOuterHtml(modifier, role, surfaceCss, accentCss, title, detail) {
         var root = document.createElement("div");
         root.className = "cmp-contentfragment__vcf-placeholder cmp-contentfragment__vcf-placeholder--" + modifier;
         root.setAttribute("role", role);
@@ -53,10 +54,10 @@
             "text-transform:uppercase",
             "letter-spacing:.06em"
         ].join(";");
-        titleEl.textContent = i18n(titleMessage);
+        titleEl.textContent = title;
 
         var detailEl = document.createElement("span");
-        detailEl.textContent = i18n(detailMessage);
+        detailEl.textContent = detail;
 
         root.appendChild(titleEl);
         root.appendChild(detailEl);
@@ -69,8 +70,8 @@
             "alert",
             "border:2px dashed #d7373f;border-radius:8px;background:#fff4f4",
             "color:#c9252d",
-            "Visual Content Fragment could not be loaded",
-            "The Visual Content Fragment could not be displayed."
+            i18n("Visual Content Fragment could not be loaded"),
+            i18n("The Visual Content Fragment could not be displayed.")
         );
     }
 
