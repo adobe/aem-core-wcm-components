@@ -104,6 +104,7 @@ media
 21. `./cq:contextHubSegmentsPath` - defines the Context Path Segments Path.
 22. `./mainContentSelector` - defines the ID of the main content element of the page (used by the "skip to main content" accessibility feature).
 23. `./id` - defines the component HTML ID attribute.
+24. `./cq:structuredData` - defines a list of JSON-LD blocks rendered as `<script type="application/ld+json">` tags in the page `<head>`.
 
 ## Web Resources Client Library
 A web resources client library can be defined at the template level (see `./appResourcesClientlib` component policy configuration).
