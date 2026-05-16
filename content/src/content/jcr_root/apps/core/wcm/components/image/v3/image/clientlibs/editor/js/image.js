@@ -536,11 +536,7 @@
     }
 
     function isRemoteFileReference(fileReference) {
-        if (typeof fileReference !== "string" || fileReference === "") {
-            return false;
-        }
-        var normalizedPath = fileReference.charAt(0) === "/" ? fileReference.substring(1) : fileReference;
-        return normalizedPath.indexOf("urn:aaid:aem") === 0;
+        return typeof fileReference === "string" && fileReference.startsWith("/urn:aaid:aem");
     }
 
     function hideSmartCropRenditionField() {
@@ -558,29 +554,13 @@
         $dynamicMediaGroup.find(imageModifiersSelector).parent().show();
     }
 
-    /**
-     * Resolves the Polaris asset folder path used to query metadata for a remote reference.
-     *
-     * @param {String} fileRef remote file reference (must start with urn:aaid:aem, optional leading slash)
-     * @returns {String|undefined} asset folder path with leading slash, or {@code undefined} when not a valid remote reference
-     */
-    function getPolarisMetadataPath(fileRef) {
-        if (typeof fileRef !== "string" || !isRemoteFileReference(fileRef)) {
-            return undefined;
-        }
-        var normalizedRef = fileRef.charAt(0) === "/" ? fileRef : "/" + fileRef;
-        if (!normalizedRef.startsWith("/urn:aaid:aem") || normalizedRef.lastIndexOf("/") <= 0) {
-            return undefined;
-        }
-        return normalizedRef.substring(0, normalizedRef.lastIndexOf("/"));
-    }
-
     function retrieveDAMInfo(fileReference) {
-        if (typeof fileReference === "string" && isRemoteFileReference(fileReference)) {
+        if (isRemoteFileReference(fileReference)) {
             remoteFileReference = fileReference;
-            var polarisMetadataPath = getPolarisMetadataPath(fileReference);
+            // fileReference is /urn:aaid:aem:<assetID>/seoname.format; strip the SEO suffix to get the asset folder.
+            var polarisMetadataPath = fileReference.substring(0, fileReference.lastIndexOf("/"));
             return new Promise(function(resolve) {
-                if (polarisMetadataPath && isPolarisEnabled) {
+                if (isPolarisEnabled) {
                     var imageUrl = "https://" + polarisRepositoryId + "/adobe/assets" + polarisMetadataPath + "/metadata";
                     getPolarisSmartCropRenditions(imageUrl);
                 } else {
@@ -958,7 +938,6 @@
         imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.getImageAuthoringUtils = getImageAuthoringUtils;
         imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.getAuthoringPathUtils = getAuthoringPathUtils;
         imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.isRemoteFileReference = isRemoteFileReference;
-        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.getPolarisMetadataPath = getPolarisMetadataPath;
         imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.processPolarisSmartCropMetadataResponse = processPolarisSmartCropMetadataResponse;
         imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.installRemoteAssetDynamicMediaTestFixture = function(rootElement) {
             $dialogContent = $(rootElement);

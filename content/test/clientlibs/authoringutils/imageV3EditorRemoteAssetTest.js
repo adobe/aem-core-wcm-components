@@ -100,9 +100,8 @@ describe("Image v3 editor remote asset Dynamic Media", function() {
     });
 
     describe("isRemoteFileReference", function() {
-        it("returns true when fileReference starts with urn:aaid:aem", function() {
-            expect(api.isRemoteFileReference("urn:aaid:aem:123/asset")).toBe(true);
-            expect(api.isRemoteFileReference("/urn:aaid:aem:123/asset")).toBe(true);
+        it("returns true for the canonical /urn:aaid:aem:<assetID>/seoname.format reference", function() {
+            expect(api.isRemoteFileReference("/urn:aaid:aem:abc-123/landscape.jpg")).toBe(true);
         });
 
         it("returns false for DAM paths and empty values", function() {
@@ -112,20 +111,9 @@ describe("Image v3 editor remote asset Dynamic Media", function() {
             expect(api.isRemoteFileReference(undefined)).toBe(false);
         });
 
-        it("returns false when urn:aaid:aem is not a path prefix", function() {
+        it("returns false when urn:aaid:aem is not at the path root", function() {
+            expect(api.isRemoteFileReference("urn:aaid:aem:abc-123/landscape.jpg")).toBe(false);
             expect(api.isRemoteFileReference("/content/dam/urn:aaid:aem/asset")).toBe(false);
-        });
-    });
-
-    describe("getPolarisMetadataPath", function() {
-        it("returns asset folder path for remote references", function() {
-            expect(api.getPolarisMetadataPath("/urn:aaid:aem:org/asset-id/rendition")).toBe("/urn:aaid:aem:org/asset-id");
-            expect(api.getPolarisMetadataPath("urn:aaid:aem:org/asset-id/rendition")).toBe("/urn:aaid:aem:org/asset-id");
-        });
-
-        it("returns undefined for non-remote or malformed references", function() {
-            expect(api.getPolarisMetadataPath("/content/dam/x.jpg")).toBeUndefined();
-            expect(api.getPolarisMetadataPath("urn:aaid:aem:only-one-segment")).toBeUndefined();
         });
     });
 
