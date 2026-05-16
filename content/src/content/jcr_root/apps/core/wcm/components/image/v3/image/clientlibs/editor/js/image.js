@@ -555,18 +555,12 @@
     }
 
     function retrieveDAMInfo(fileReference) {
-        if (isRemoteFileReference(fileReference)) {
-            remoteFileReference = fileReference;
+        if (isRemoteFileReference(fileReference) && isPolarisEnabled) {
             // fileReference is /urn:aaid:aem:<assetID>/seoname.format; strip the SEO suffix to get the asset folder.
             var polarisMetadataPath = fileReference.substring(0, fileReference.lastIndexOf("/"));
             return new Promise(function(resolve) {
-                if (isPolarisEnabled) {
-                    var imageUrl = "https://" + polarisRepositoryId + "/adobe/assets" + polarisMetadataPath + "/metadata";
-                    getPolarisSmartCropRenditions(imageUrl);
-                } else {
-                    hideSmartCropRenditionField();
-                    showImageModifiersForRemoteAsset();
-                }
+                var imageUrl = "https://" + polarisRepositoryId + "/adobe/assets" + polarisMetadataPath + "/metadata";
+                getPolarisSmartCropRenditions(imageUrl);
                 resolve();
             });
         }
