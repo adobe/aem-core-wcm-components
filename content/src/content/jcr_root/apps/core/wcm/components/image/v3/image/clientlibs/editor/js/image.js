@@ -556,7 +556,7 @@
 
     function retrieveDAMInfo(fileReference) {
         if (isRemoteFileReference(fileReference) && isPolarisEnabled) {
-            // fileReference is /urn:aaid:aem:<assetID>/seoname.format; strip the SEO suffix to get the asset folder.
+            // fileReference is /urn:aaid:aem:<assetID>/seoname.format; strip the SEO suffix to get the asset UUID.
             var polarisMetadataPath = fileReference.substring(0, fileReference.lastIndexOf("/"));
             return new Promise(function(resolve) {
                 var imageUrl = "https://" + polarisRepositoryId + "/adobe/assets" + polarisMetadataPath + "/metadata";
@@ -670,11 +670,8 @@
                     selected: (smartCropRenditionFromJcr === cropName)
                 });
             }
+            prepareSmartCropPanel();
         } else {
-            $dynamicMediaGroup.hide();
-        }
-        prepareSmartCropPanel();
-        if (smartcrops === undefined) {
             hideSmartCropRenditionField();
         }
         showImageModifiersForRemoteAsset();
@@ -686,7 +683,6 @@
         }
         imagePropertiesRequest = new XMLHttpRequest();
         imagePropertiesRequest.open("GET", imageUrl, true);
-        imagePropertiesRequest.setRequestHeader("X-Adobe-Accept-Experimental", "1");
         imagePropertiesRequest.onload = function() {
             processPolarisSmartCropMetadataResponse(imagePropertiesRequest.status, imagePropertiesRequest.responseText);
         };
