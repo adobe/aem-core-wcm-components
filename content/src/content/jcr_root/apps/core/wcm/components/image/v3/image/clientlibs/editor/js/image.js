@@ -653,6 +653,7 @@
             smartcrops = JSON.parse(responseText).repositoryMetadata.smartcrops;
         }
         if (smartcrops !== undefined) {
+            $dynamicMediaGroup.find(presetTypeSelector).parent().show();
             var smartcropnames = Object.keys(smartcrops);
             if (smartCropRenditionsDropDown.items) {
                 smartCropRenditionsDropDown.items.clear();
@@ -673,6 +674,7 @@
             prepareSmartCropPanel();
         } else {
             $dynamicMediaGroup.find(presetTypeSelector).parent().hide();
+            $dynamicMediaGroup.find(imagePresetDropDownSelector).parent().hide();
             hideSmartCropRenditionField();
         }
         showImageModifiersForRemoteAsset();
