@@ -672,6 +672,7 @@
             }
             prepareSmartCropPanel();
         } else {
+            $dynamicMediaGroup.find(presetTypeSelector).parent().hide();
             hideSmartCropRenditionField();
         }
         showImageModifiersForRemoteAsset();

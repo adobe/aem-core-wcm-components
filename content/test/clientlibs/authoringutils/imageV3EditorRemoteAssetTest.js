@@ -136,7 +136,7 @@ describe("Image v3 editor remote asset Dynamic Media", function() {
             expect(isParentVisible(modifiers)).toBe(true);
         });
 
-        it("shows image modifiers but hides smart crop when smartcrops metadata is absent", function() {
+        it("shows image modifiers but hides smart crop and preset type when smartcrops metadata is absent", function() {
             const responseText = JSON.stringify({
                 repositoryMetadata: {}
             });
@@ -145,9 +145,11 @@ describe("Image v3 editor remote asset Dynamic Media", function() {
 
             const smartCrop = fixtureRoot.querySelector(".cmp-image__editor-dynamicmedia-smartcroprendition");
             const modifiers = fixtureRoot.querySelector("input[name='./imageModifiers']");
+            const presetType = fixtureRoot.querySelector(".cmp-image__editor-dynamicmedia-presettype");
             expect(isGroupVisible(fixtureRoot)).toBe(true);
             expect(isParentVisible(modifiers)).toBe(true);
             expect(isParentVisible(smartCrop)).toBe(false);
+            expect(isParentVisible(presetType)).toBe(false);
         });
 
         it("keeps original preset behaviour by hiding image preset radio parent", function() {
