@@ -935,7 +935,6 @@
         imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.installRemoteAssetDynamicMediaTestFixture = function(rootElement) {
             $dialogContent = $(rootElement);
             $dynamicMediaGroup = $dialogContent.find(".cmp-image__editor-dynamicmedia");
-            areDMFeaturesEnabled = ($dynamicMediaGroup.length === 1);
             smartCropRenditionsDropDown = rootElement.querySelector(".cmp-image__editor-dynamicmedia-smartcroprendition");
             if (smartCropRenditionsDropDown) {
                 if (!smartCropRenditionsDropDown.items) {

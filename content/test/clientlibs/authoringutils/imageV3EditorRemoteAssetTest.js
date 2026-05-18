@@ -17,70 +17,73 @@
  * Image v3 editor remote asset (urn:aaid:aem) Dynamic Media dialog behaviour.
  * Depends on {@code imageV3EditorImageTest.js} / {@code image.js} loading first.
  */
+function imageV3EditorRemoteAssetIsParentVisible(element) {
+    return element?.parentElement?.style.display !== "none";
+}
+
+function imageV3EditorRemoteAssetIsGroupVisible(root) {
+    const group = root.querySelector(".cmp-image__editor-dynamicmedia");
+    return group?.style.display !== "none";
+}
+
+function imageV3EditorRemoteAssetCreateDynamicMediaDialogFixture() {
+    const root = document.createElement("div");
+    root.className = "cmp-image__editor";
+
+    const pageImageCheckbox = document.createElement("coral-checkbox");
+    pageImageCheckbox.setAttribute("name", "./imageFromPageImage");
+    pageImageCheckbox.checked = false;
+    root.appendChild(pageImageCheckbox);
+
+    const group = document.createElement("div");
+    group.className = "cmp-image__editor-dynamicmedia";
+    group.style.display = "none";
+    root.appendChild(group);
+
+    const presetTypeWrapper = document.createElement("div");
+    const presetType = document.createElement("div");
+    presetType.className = "cmp-image__editor-dynamicmedia-presettype";
+    const imagePresetRadio = document.createElement("input");
+    imagePresetRadio.type = "radio";
+    imagePresetRadio.name = "./dmPresetType";
+    imagePresetRadio.value = "imagePreset";
+    imagePresetRadio.checked = false;
+    const smartCropRadio = document.createElement("input");
+    smartCropRadio.type = "radio";
+    smartCropRadio.name = "./dmPresetType";
+    smartCropRadio.value = "smartCrop";
+    presetType.appendChild(imagePresetRadio);
+    presetType.appendChild(smartCropRadio);
+    presetTypeWrapper.appendChild(presetType);
+    group.appendChild(presetTypeWrapper);
+
+    const imagePresetWrapper = document.createElement("div");
+    const imagePreset = document.createElement("select");
+    imagePreset.className = "cmp-image__editor-dynamicmedia-imagepreset";
+    imagePresetWrapper.appendChild(imagePreset);
+    group.appendChild(imagePresetWrapper);
+
+    const smartCropWrapper = document.createElement("div");
+    const smartCrop = document.createElement("coral-select");
+    smartCrop.className = "cmp-image__editor-dynamicmedia-smartcroprendition";
+    smartCropWrapper.appendChild(smartCrop);
+    group.appendChild(smartCropWrapper);
+
+    const modifiersWrapper = document.createElement("div");
+    const modifiers = document.createElement("input");
+    modifiers.setAttribute("name", "./imageModifiers");
+    modifiersWrapper.appendChild(modifiers);
+    group.appendChild(modifiersWrapper);
+
+    return root;
+}
+
 describe("Image v3 editor remote asset Dynamic Media", function() {
     let api;
     let fixtureRoot;
-
-    function isParentVisible(element) {
-        return element && element.parentElement && element.parentElement.style.display !== "none";
-    }
-
-    function isGroupVisible(root) {
-        const group = root.querySelector(".cmp-image__editor-dynamicmedia");
-        return group && group.style.display !== "none";
-    }
-
-    function createDynamicMediaDialogFixture() {
-        const root = document.createElement("div");
-        root.className = "cmp-image__editor";
-
-        const pageImageCheckbox = document.createElement("coral-checkbox");
-        pageImageCheckbox.setAttribute("name", "./imageFromPageImage");
-        pageImageCheckbox.checked = false;
-        root.appendChild(pageImageCheckbox);
-
-        const group = document.createElement("div");
-        group.className = "cmp-image__editor-dynamicmedia";
-        group.style.display = "none";
-        root.appendChild(group);
-
-        const presetTypeWrapper = document.createElement("div");
-        const presetType = document.createElement("div");
-        presetType.className = "cmp-image__editor-dynamicmedia-presettype";
-        const imagePresetRadio = document.createElement("input");
-        imagePresetRadio.type = "radio";
-        imagePresetRadio.name = "./dmPresetType";
-        imagePresetRadio.value = "imagePreset";
-        imagePresetRadio.checked = false;
-        const smartCropRadio = document.createElement("input");
-        smartCropRadio.type = "radio";
-        smartCropRadio.name = "./dmPresetType";
-        smartCropRadio.value = "smartCrop";
-        presetType.appendChild(imagePresetRadio);
-        presetType.appendChild(smartCropRadio);
-        presetTypeWrapper.appendChild(presetType);
-        group.appendChild(presetTypeWrapper);
-
-        const imagePresetWrapper = document.createElement("div");
-        const imagePreset = document.createElement("select");
-        imagePreset.className = "cmp-image__editor-dynamicmedia-imagepreset";
-        imagePresetWrapper.appendChild(imagePreset);
-        group.appendChild(imagePresetWrapper);
-
-        const smartCropWrapper = document.createElement("div");
-        const smartCrop = document.createElement("coral-select");
-        smartCrop.className = "cmp-image__editor-dynamicmedia-smartcroprendition";
-        smartCropWrapper.appendChild(smartCrop);
-        group.appendChild(smartCropWrapper);
-
-        const modifiersWrapper = document.createElement("div");
-        const modifiers = document.createElement("input");
-        modifiers.setAttribute("name", "./imageModifiers");
-        modifiersWrapper.appendChild(modifiers);
-        group.appendChild(modifiersWrapper);
-
-        return root;
-    }
+    const isParentVisible = imageV3EditorRemoteAssetIsParentVisible;
+    const isGroupVisible = imageV3EditorRemoteAssetIsGroupVisible;
+    const createDynamicMediaDialogFixture = imageV3EditorRemoteAssetCreateDynamicMediaDialogFixture;
 
     beforeAll(function() {
         api = globalThis.__IMAGE_V3_EDITOR_TEST_API;
@@ -93,9 +96,7 @@ describe("Image v3 editor remote asset Dynamic Media", function() {
     });
 
     afterEach(function() {
-        if (fixtureRoot && fixtureRoot.parentNode) {
-            fixtureRoot.parentNode.removeChild(fixtureRoot);
-        }
+        fixtureRoot?.remove();
         fixtureRoot = null;
     });
 

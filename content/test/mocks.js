@@ -64,10 +64,11 @@ class JQueryArray extends Array {
     }
 
     parent() {
-        if (!this[0] || !this[0].parentElement) {
+        const parentElement = this[0]?.parentElement;
+        if (!parentElement) {
             return new JQueryArray();
         }
-        return new JQueryArray(this[0].parentElement);
+        return new JQueryArray(parentElement);
     }
 
     prop(name, value) {
