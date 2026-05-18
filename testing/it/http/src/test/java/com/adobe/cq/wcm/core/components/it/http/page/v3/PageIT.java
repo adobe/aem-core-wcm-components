@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
@@ -81,6 +82,7 @@ public class PageIT {
     }
 
     @Test
+    @Ignore("Disabled until the feature is available in cq/foundation (SITES-42542).")
     @RunIfToggleEnabled("FT_SITES-42542")
     public void testStructuredData() throws ClientException {
         String message = "The page head should contain the JSON-LD script tag for the cq:structuredData block";
