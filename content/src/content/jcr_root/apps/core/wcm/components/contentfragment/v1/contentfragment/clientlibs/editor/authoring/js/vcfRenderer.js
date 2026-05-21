@@ -33,8 +33,9 @@
 
     /**
      * Builds placeholder markup for the author preview; uses DOM so translated strings are escaped.
+     * The {@code title} and {@code detail} arguments are expected to already be localized.
      */
-    function buildVcfPlaceholderOuterHtml(modifier, role, surfaceCss, accentCss, titleMessage, detailMessage) {
+    function buildVcfPlaceholderOuterHtml(modifier, role, surfaceCss, accentCss, title, detail) {
         var root = document.createElement("div");
         root.className = "cmp-contentfragment__vcf-placeholder cmp-contentfragment__vcf-placeholder--" + modifier;
         root.setAttribute("role", role);
@@ -57,10 +58,10 @@
             "text-transform:uppercase",
             "letter-spacing:.06em"
         ].join(";");
-        titleEl.textContent = i18n(titleMessage);
+        titleEl.textContent = title;
 
         var detailEl = document.createElement("span");
-        detailEl.textContent = i18n(detailMessage);
+        detailEl.textContent = detail;
 
         root.appendChild(titleEl);
         root.appendChild(detailEl);
@@ -73,8 +74,8 @@
             "alert",
             "border:2px dashed #d7373f;border-radius:8px;background:#fff4f4",
             "color:#c9252d",
-            "Visual Content Fragment could not be loaded",
-            "Check that preview services are available and the fragment configuration is valid."
+            i18n("Visual Content Fragment could not be loaded"),
+            i18n("The Visual Content Fragment could not be displayed.")
         );
     }
 
@@ -84,8 +85,8 @@
             "status",
             "border:2px dashed #b0b0b0;border-radius:8px;background:#f5f5f5",
             "color:#6e6e6e",
-            "Visual Content Fragment preview unavailable",
-            "A preview URL is not available for this content fragment in the editor."
+            i18n("Visual Content Fragment unavailable"),
+            i18n("A preview URL is not available for this content fragment.")
         );
     }
 
