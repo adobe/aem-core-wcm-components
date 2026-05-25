@@ -19,29 +19,55 @@
     var registry = $(window).adaptTo("foundation-registry");
     // feature toggle enabling opening the cf in the new editor
     var CT_SANITIZE_ENCODE_PATH = "CT_SITES-33116";
+    var CT_SITES_41942 = "CT_SITES-41942";
 
     /**
-     * Sanitizes and encodes a page path for safe URL construction.
-     * Removes path traversal attempts, validates the path format, and encodes it.
+     * Granite feature toggle CT_SITES-41942 controls how the page HTML preview URL is derived from the dialog
+     * form action and whether fetched markup is normalised before counting duplicate ids. When Granite reports
+     * the toggle as disabled, behaviour matches earlier validators.
      *
-     * @param {string} pagePath - The page path to sanitize
-     * @returns {string|null} The sanitized and encoded path, or null if invalid
+     * @returns {Boolean} true when preview URL resolution and fetched markup handling follow the updated rules
+     */
+    function isHtmlIdValidatorAuthoringPagePreviewHelpersEnabled() {
+        if (!window.Granite || !window.Granite.Toggles || typeof window.Granite.Toggles.isEnabled !== "function") {
+            return true;
+        }
+        return window.Granite.Toggles.isEnabled(CT_SITES_41942) !== false;
+    }
+
+    /**
+     * Returns the commons html id helper namespace object.
+     *
+     * @returns {Object|null} null when commons helpers are not available
+     */
+    function getAuthoringHtmlIdUtils() {
+        return window.CQ &&
+            window.CQ.CoreComponents &&
+            window.CQ.CoreComponents.AuthoringEditorUtils &&
+            window.CQ.CoreComponents.AuthoringEditorUtils.htmlId
+            ? window.CQ.CoreComponents.AuthoringEditorUtils.htmlId
+            : null;
+    }
+
+    /**
+     * Normalises and encodes a repository page path segment for preview URL construction.
+     * Collapses repeated slashes, clears {@code ..} segments, rejects paths that do not start with {@code /}
+     * or that contain characters not permitted in repository paths, then applies URL segment encoding.
+     *
+     * @param {String} pagePath - repository path segment to normalise
+     * @returns {String|null} encoded path segment, or null when the path shape is not accepted
      */
     function sanitizeAndEncodePath(pagePath) {
-        // Remove any path traversal attempts and normalize the path
         pagePath = pagePath.replace(/\.\./g, "").replace(/\/+/g, "/");
 
-        // Validate that the path starts with / and doesn't contain dangerous patterns
         if (!/^\//.test(pagePath) || /[<>"|*?]/.test(pagePath)) {
             console.warn("Invalid page path detected: " + pagePath);
             return null;
         }
-        // Use encodeURIComponent to safely encode the path for URL construction
         return encodeURIComponent(pagePath).replace(/%2F/g, "/");
     }
 
-    /* Validator for TextField - Validation for duplicate HTML ID authored through dialog */
-    registry.register("foundation.validation.validator", {
+    var htmlUniqueIdFieldValidator = {
         selector: "[data-validation=html-unique-id-validator]",
         validate: function(el) {
             var compPath = $(el.closest("form")).attr("action");
@@ -54,7 +80,15 @@
                 try {
                     var urlObj = new URL(compPath, window.location.origin);
                     if (urlObj.origin !== window.location.origin) {
-                        console.log("Different origin detected: " + urlObj.origin + " from window origin " + window.location.origin + " generated from compPath: " + compPath);
+                        console.log(
+                            "HTML preview skipped: resolved form action origin " +
+                                urlObj.origin +
+                                " does not match the editor window origin " +
+                                window.location.origin +
+                                " (compPath: " +
+                                compPath +
+                                ")."
+                        );
                         return;
                     }
                 } catch (e) {
@@ -62,15 +96,30 @@
                 }
             }
 
-            var pagePath = compPath.split("/_jcr_content")[0];
-            var encodedPagePath;
+            var htmlIdUtils = getAuthoringHtmlIdUtils();
+            var pagePath;
+            if (
+                isHtmlIdValidatorAuthoringPagePreviewHelpersEnabled() &&
+                htmlIdUtils &&
+                typeof htmlIdUtils.extractAuthoringPagePathFromComponentFormAction === "function"
+            ) {
+                pagePath = htmlIdUtils.extractAuthoringPagePathFromComponentFormAction(compPath);
+                if (!pagePath) {
+                    return;
+                }
+            } else {
+                pagePath = compPath.split("/_jcr_content")[0];
+            }
 
-            // Use sanitization function if toggle is enabled
+            var pathToResolve = pagePath;
+
+            // Apply path normalisation when the path encoding toggle is on
             if (window.Granite && window.Granite.Toggles && window.Granite.Toggles.isEnabled(CT_SANITIZE_ENCODE_PATH)) {
-                encodedPagePath = sanitizeAndEncodePath(pagePath);
+                var encodedPagePath = sanitizeAndEncodePath(pagePath);
                 if (!encodedPagePath) {
                     return;
                 }
+                pathToResolve = encodedPagePath;
             }
 
             var preConfiguredVal;
@@ -92,20 +141,29 @@
             if (!currentVal || currentVal === preConfiguredVal) {
                 return;
             }
-            var url = (encodedPagePath || pagePath) + ".html?wcmmode=disabled";
+            var viewUrl = null;
+            if (htmlIdUtils && typeof htmlIdUtils.authoringPageViewUrl === "function") {
+                viewUrl = htmlIdUtils.authoringPageViewUrl(pathToResolve);
+            }
+            if (!viewUrl) {
+                return;
+            }
             var idCount = 0;
             /* Check if same ID already exist on the page */
             $.ajax({
                 type: "GET",
-                url: url,
+                url: viewUrl,
                 dataType: "html",
                 async: false,
                 success: function(data) {
-                    var idList;
-                    if (data) {
-                        idList = $(data).find("[id='" + currentVal + "']");
-                        if (idList) {
-                            idCount = idList.length;
+                    if (data && htmlIdUtils) {
+                        if (
+                            isHtmlIdValidatorAuthoringPagePreviewHelpersEnabled() &&
+                            typeof htmlIdUtils.countElementsWithIdInAuthoringFetchedHtml === "function"
+                        ) {
+                            idCount = htmlIdUtils.countElementsWithIdInAuthoringFetchedHtml(data, currentVal);
+                        } else if (typeof htmlIdUtils.countElementsWithIdInHtml === "function") {
+                            idCount = htmlIdUtils.countElementsWithIdInHtml(data, currentVal);
                         }
                     }
                 }
@@ -114,5 +172,18 @@
                 return "This ID already exist on the page, please enter a unique ID.";
             }
         }
-    });
+    };
+
+    registry.register("foundation.validation.validator", htmlUniqueIdFieldValidator);
+
+    var htmlIdValidatorTestApiHost = typeof globalThis !== "undefined" ? globalThis : window;
+    /* Karma (mocks.js) sets __HTML_ID_VALIDATOR_EDITOR_TEST_API on the global object; AEM runtime leaves it undefined. */
+    if (htmlIdValidatorTestApiHost.__HTML_ID_VALIDATOR_EDITOR_TEST_API) {
+        htmlIdValidatorTestApiHost.__HTML_ID_VALIDATOR_EDITOR_TEST_API.isHtmlIdValidatorAuthoringPagePreviewHelpersEnabled =
+            isHtmlIdValidatorAuthoringPagePreviewHelpersEnabled;
+        htmlIdValidatorTestApiHost.__HTML_ID_VALIDATOR_EDITOR_TEST_API.getAuthoringHtmlIdUtils = getAuthoringHtmlIdUtils;
+        htmlIdValidatorTestApiHost.__HTML_ID_VALIDATOR_EDITOR_TEST_API.getHtmlUniqueIdFieldValidator = function() {
+            return htmlUniqueIdFieldValidator;
+        };
+    }
 })($, window, document);
