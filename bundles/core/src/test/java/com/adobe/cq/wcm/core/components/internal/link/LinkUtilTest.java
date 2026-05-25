@@ -16,7 +16,14 @@
 package com.adobe.cq.wcm.core.components.internal.link;
 
 import java.io.UnsupportedEncodingException;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
 import org.junit.jupiter.api.Test;
+import org.slf4j.LoggerFactory;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class LinkUtilTest {
@@ -71,16 +78,77 @@ class LinkUtilTest {
     }
 
     @Test
-    void escape_mailToLinkNotThrowException() throws UnsupportedEncodingException {
+    void escape_mailToLinkNotThrowException() {
         String path = "mailto:mail@example.com";
         String escapedMailTo = LinkUtil.escape(path, null, null);
         assertEquals(path, escapedMailTo);
     }
 
     @Test
-    void escape_telLinkNotThrowException() throws UnsupportedEncodingException {
+    void escape_telLinkNotThrowException() {
         String path = "tel:1800";
         String escapedTel = LinkUtil.escape(path, null, null);
         assertEquals(path, escapedTel);
+    }
+
+    @Test
+    void escape_quickviewLink_resultEqualToInputAndLogsDebug() {
+        String path = "quickview:fragment=Camping in Western Australia&size=400,300&reservedVal_productPath=/content/experience-fragments/wknd/ca/en/featured/camping-western-australia";
+
+        Logger appLogger = (Logger) LoggerFactory.getLogger(LinkUtil.class);
+        ListAppender<ILoggingEvent> appender = new ListAppender<>();
+        appender.start();
+        appLogger.addAppender(appender);
+        appLogger.setLevel(Level.DEBUG);
+
+        String escapedQuickview = LinkUtil.escape(path, null, null);
+        assertEquals(path, escapedQuickview);
+
+        assertEquals(1, appender.list.stream()
+            .filter(entry -> Level.DEBUG.equals(entry.getLevel()))
+            .count()
+        );
+
+        assertEquals(0, appender.list.stream()
+            .filter(entry -> Level.ERROR.equals(entry.getLevel()))
+            .count()
+        );
+    }
+
+    @Test
+    void escape_nullInputs_returnsEmptyStringAndLogsError() {
+
+        Logger appLogger = (Logger) LoggerFactory.getLogger(LinkUtil.class);
+        ListAppender<ILoggingEvent> appender = new ListAppender<>();
+        appender.start();
+        appLogger.addAppender(appender);
+        appLogger.setLevel(Level.DEBUG);
+
+        String escaped = LinkUtil.escape(null, null, null);
+        assertEquals("", escaped);
+
+        assertEquals(1, appender.list.stream()
+            .filter(entry -> Level.ERROR.equals(entry.getLevel()))
+            .count()
+        );
+    }
+
+    @Test
+    void escape_customLink_resultEqualToInputAndLogsError() {
+
+        Logger appLogger = (Logger) LoggerFactory.getLogger(LinkUtil.class);
+        ListAppender<ILoggingEvent> appender = new ListAppender<>();
+        appender.start();
+        appLogger.addAppender(appender);
+        appLogger.setLevel(Level.DEBUG);
+
+        String path = "custom:abc";
+        String escaped = LinkUtil.escape(path, null, null);
+        assertEquals(path, escaped);
+
+        assertEquals(1, appender.list.stream()
+            .filter(entry -> Level.ERROR.equals(entry.getLevel()))
+            .count()
+        );
     }
 }
