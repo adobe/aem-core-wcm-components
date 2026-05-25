@@ -21,6 +21,7 @@ import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.day.cq.i18n.I18n;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -173,6 +174,7 @@ public class SearchImpl extends AbstractComponentImpl implements Search {
         return request.getResource().getResourceType();
     }
 
+    @JsonIgnore
     public String getI18nMessages() {
         Locale pageLocale = currentPage.getLanguage(false);
         ResourceBundle resourceBundle = request.getResourceBundle(pageLocale);
