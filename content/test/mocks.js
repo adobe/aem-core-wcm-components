@@ -304,16 +304,30 @@ jQuery.when = function() {
 
 jQuery.ajax = function(options) {
     let _resolve, _reject;
+    const doneCallbacks = [];
     const deferred = {
         then: function(onResolve, onReject) { // NOSONAR - mimicking jQuery deferred API
             _resolve = onResolve;
             _reject = onReject;
             return deferred;
+        },
+        done: function(callback) {
+            doneCallbacks.push(callback);
+            return deferred;
         }
     };
+    function notifySuccess() {
+        const args = Array.prototype.slice.call(arguments);
+        doneCallbacks.forEach(function(cb) {
+            cb.apply(null, args);
+        });
+        if (_resolve) {
+            _resolve.apply(null, args);
+        }
+    }
     if (jQuery._ajaxHandler) {
         setTimeout(function() {
-            jQuery._ajaxHandler(options, _resolve, _reject);
+            jQuery._ajaxHandler(options, notifySuccess, _reject);
         }, 0);
     }
     return deferred;

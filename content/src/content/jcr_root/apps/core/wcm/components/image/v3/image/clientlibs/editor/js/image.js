@@ -555,7 +555,7 @@
     }
 
     function retrieveDAMInfo(fileReference) {
-        if (isRemoteFileReference(fileReference) && isPolarisEnabled) {
+        if (isRemoteFileReference(fileReference) && isPolarisEnabled && areDMFeaturesEnabled) {
             // fileReference is /urn:aaid:aem:<assetID>/seoname.format; strip the SEO suffix to get the asset UUID.
             var polarisMetadataPath = fileReference.substring(0, fileReference.lastIndexOf("/"));
             return new Promise(function(resolve) {
@@ -932,6 +932,18 @@
         imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.getAuthoringPathUtils = getAuthoringPathUtils;
         imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.isRemoteFileReference = isRemoteFileReference;
         imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.processPolarisSmartCropMetadataResponse = processPolarisSmartCropMetadataResponse;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.retrieveDAMInfo = retrieveDAMInfo;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.setRetrieveDAMTestState = function(state) {
+            if (state.isPolarisEnabled !== undefined) {
+                isPolarisEnabled = state.isPolarisEnabled;
+            }
+            if (state.areDMFeaturesEnabled !== undefined) {
+                areDMFeaturesEnabled = state.areDMFeaturesEnabled;
+            }
+            if (state.polarisRepositoryId !== undefined) {
+                polarisRepositoryId = state.polarisRepositoryId;
+            }
+        };
         imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.installRemoteAssetDynamicMediaTestFixture = function(rootElement) {
             $dialogContent = $(rootElement);
             $dynamicMediaGroup = $dialogContent.find(".cmp-image__editor-dynamicmedia");

@@ -78,12 +78,37 @@ function imageV3EditorRemoteAssetCreateDynamicMediaDialogFixture() {
     return root;
 }
 
+function imageV3EditorRemoteAssetCreatePolarisMetadataXhrSpy() {
+    const originalXhr = globalThis.XMLHttpRequest;
+    let polarisMetadataRequested = false;
+    globalThis.XMLHttpRequest = function() {
+        const xhr = new originalXhr();
+        const originalOpen = xhr.open;
+        xhr.open = function(method, url) {
+            if (typeof url === "string" && url.indexOf("/adobe/assets") !== -1 && url.indexOf("/metadata") !== -1) {
+                polarisMetadataRequested = true;
+            }
+            return originalOpen.apply(xhr, arguments);
+        };
+        return xhr;
+    };
+    return {
+        wasPolarisMetadataRequested: function() {
+            return polarisMetadataRequested;
+        },
+        restore: function() {
+            globalThis.XMLHttpRequest = originalXhr;
+        }
+    };
+}
+
 describe("Image v3 editor remote asset Dynamic Media", function() {
     let api;
     let fixtureRoot;
     const isParentVisible = imageV3EditorRemoteAssetIsParentVisible;
     const isGroupVisible = imageV3EditorRemoteAssetIsGroupVisible;
     const createDynamicMediaDialogFixture = imageV3EditorRemoteAssetCreateDynamicMediaDialogFixture;
+    const remoteFileReference = "/urn:aaid:aem:abc-123/landscape.jpg";
 
     beforeAll(function() {
         api = globalThis.__IMAGE_V3_EDITOR_TEST_API;
@@ -201,6 +226,54 @@ describe("Image v3 editor remote asset Dynamic Media", function() {
             api.processPolarisSmartCropMetadataResponse(500, "{}");
 
             expect(isGroupVisible(fixtureRoot)).toBe(false);
+        });
+    });
+
+    describe("retrieveDAMInfo", function() {
+        afterEach(function() {
+            api.setRetrieveDAMTestState({
+                isPolarisEnabled: false,
+                areDMFeaturesEnabled: false,
+                polarisRepositoryId: ""
+            });
+            delete globalThis.jQuery._ajaxHandler;
+        });
+
+        it("does not request Polaris metadata when DM features are disabled for a remote asset", function(done) {
+            const xhrSpy = imageV3EditorRemoteAssetCreatePolarisMetadataXhrSpy();
+            let ajaxUrl;
+            globalThis.jQuery._ajaxHandler = function(options, resolve) {
+                ajaxUrl = options.url;
+                resolve({});
+            };
+            api.setRetrieveDAMTestState({
+                isPolarisEnabled: true,
+                areDMFeaturesEnabled: false,
+                polarisRepositoryId: "repo.test"
+            });
+
+            api.retrieveDAMInfo(remoteFileReference);
+            setTimeout(function() {
+                expect(xhrSpy.wasPolarisMetadataRequested()).toBe(false);
+                expect(ajaxUrl).toBe(remoteFileReference + "/_jcr_content/metadata.json");
+                xhrSpy.restore();
+                done();
+            }, 10);
+        });
+
+        it("requests Polaris metadata when DM features are enabled for a remote asset", function(done) {
+            const xhrSpy = imageV3EditorRemoteAssetCreatePolarisMetadataXhrSpy();
+            api.setRetrieveDAMTestState({
+                isPolarisEnabled: true,
+                areDMFeaturesEnabled: true,
+                polarisRepositoryId: "repo.test"
+            });
+
+            api.retrieveDAMInfo(remoteFileReference).then(function() {
+                expect(xhrSpy.wasPolarisMetadataRequested()).toBe(true);
+                xhrSpy.restore();
+                done();
+            });
         });
     });
 });
