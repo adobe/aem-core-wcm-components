@@ -115,6 +115,49 @@
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured",
                         "elementNames"      : ["second", "non-existing", "main"]
+                    },
+                    "vcf-with-template"                    : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/text-only",
+                        "displayMode"       : "vcf",
+                        "vcfTemplate"       : "hero-banner"
+                    },
+                    "vcf-with-template-and-variation"      : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/text-only",
+                        "displayMode"       : "vcf",
+                        "vcfTemplate"       : "hero-banner",
+                        "variationName"     : "teaser"
+                    },
+                    "vcf-without-template"                 : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/text-only",
+                        "displayMode"       : "vcf"
+                    },
+                    "vcf-with-master-variation"            : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/text-only",
+                        "displayMode"       : "vcf",
+                        "vcfTemplate"       : "hero-banner",
+                        "variationName"     : "master"
+                    },
+                    "vcf-with-structured-fragment"         : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/structured",
+                        "displayMode"       : "vcf",
+                        "vcfTemplate"       : "hero-banner"
+                    },
+                    "vcf-no-fragment-id"                   : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/structured-nested-model",
+                        "displayMode"       : "vcf",
+                        "vcfTemplate"       : "hero-banner"
                     }
                 }
             }

@@ -1,0 +1,50 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2026 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<div class="cmp-contentfragment__editor">
+    <div data-component-path="/content/test-page/jcr:content/root/cf"></div>
+
+    <coral-tabview></coral-tabview>
+
+    <input name="./fragmentPath" value="/content/dam/test/my-fragment">
+
+    <div data-display-mode-radio-group="true">
+        <input type="radio" name="./displayMode" value="singleText">
+        <input type="radio" name="./displayMode" value="multi">
+        <input type="radio" name="./displayMode" value="vcf" checked>
+    </div>
+
+    <div data-element-mode-field="true">
+        <div data-element-names-container="true"
+             data-field-path="/apps/test/dialog/elementNames">
+            <div data-granite-coral-multifield-name="./elementNames"></div>
+            <select data-single-text-selector="true" name="./elementNames"></select>
+        </div>
+    </div>
+
+    <div data-vcf-mode-field="true">
+        <div data-vcf-template-selector="true"></div>
+    </div>
+
+    <select name="./variationName"
+            data-field-path="/apps/test/dialog/variationName"></select>
+
+    <fieldset class="cmp-contentfragment__editor-paragraph-controls">
+        <input type="radio" name="./paragraphScope" value="all" checked>
+        <input type="radio" name="./paragraphScope" value="range">
+        <input name="./paragraphRange">
+        <input name="./paragraphHeadings">
+    </fieldset>
+</div>
