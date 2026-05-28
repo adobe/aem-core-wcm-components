@@ -320,7 +320,8 @@
             // reposition the popover with overlay change,
             // as the editable toolbar can jump following navigation to a panel
             channel.off("cq-overlays-repositioned" + NS_PANELSELECTOR).on("cq-overlays-repositioned" + NS_PANELSELECTOR, function() {
-                if (that._elements.popover) {
+                var target = that._elements.popover && that._elements.popover.target;
+                if (that._elements.popover && target && target.nodeType && document.documentElement.contains(target)) {
                     that._elements.popover.reposition();
                 }
             });
@@ -368,7 +369,32 @@
             if (selectedItem) {
                 var index = Array.prototype.slice.call(selectedItem.parentElement.children).indexOf(selectedItem);
                 this._panelContainer.navigate(index);
+                this._refreshPanelEditableOverlays(index);
             }
+        },
+
+        /**
+         * Updates the panel item overlays after the Panel Container has navigated.
+         *
+         * @private
+         * @param {Number} index Index of the panel item navigated to
+         */
+        _refreshPanelEditableOverlays: function(index) {
+            var that = this;
+
+            window.setTimeout(function() {
+                var children = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerItems(that._config.editable);
+                var slides = that._panelContainer.getSlides() || 1;
+
+                children.forEach(function(child, childIndex) {
+                    if (child.overlay) {
+                        var disable = childIndex < index || childIndex >= index + slides;
+                        child.overlay.setDisabled(disable);
+                    }
+                });
+
+                ns.overlayManager.reposition();
+            }, 450);
         },
 
         /**
