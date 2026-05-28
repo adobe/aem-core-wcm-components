@@ -12,6 +12,7 @@
   - Modified: `content/src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/panelcontainer/v1/js/contentTree.js`
 - **Panel Selection UI:** Added thumbnail image previews in the panel selection dialog, improved visual feedback with drag-and-drop functionality
   - Modified: `content/src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/panelselect/js/panelselect.js`
+  - GD fix: Panel selector row selection now navigates the target panel and refreshes panel item overlay enabled/disabled state without force-selecting or activating the child editable. This preserves the authoring UX for multi-slide Golf Digest carousels, where the selected slide should become hover/editable after the selector closes without immediately moving the edit toolbar while the selector is open.
 
 ---
 
