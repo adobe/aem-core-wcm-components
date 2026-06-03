@@ -57,6 +57,11 @@ describe("Image v3 editor image.js (Karma-loaded)", function() {
             expect(typeof api.getImageAuthoringUtils).toBe("function");
             expect(typeof api.getAuthoringPathUtils).toBe("function");
             expect(typeof api.importPageImageThumbnailFromMarkup).toBe("function");
+            expect(typeof api.isRemoteFileReference).toBe("function");
+            expect(typeof api.processPolarisSmartCropMetadataResponse).toBe("function");
+            expect(typeof api.retrieveDAMInfo).toBe("function");
+            expect(typeof api.setRetrieveDAMTestState).toBe("function");
+            expect(typeof api.installRemoteAssetDynamicMediaTestFixture).toBe("function");
         });
 
         it("getAuthoringPathUtils returns path helpers from commons when present", function() {
