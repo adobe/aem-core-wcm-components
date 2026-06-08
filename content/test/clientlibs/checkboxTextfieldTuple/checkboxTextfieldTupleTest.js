@@ -13,8 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+function createFieldAdapter(element) {
+    return {
+        setDisabled: function(disabled) {
+            element.disabled = disabled;
+        }
+    };
+}
+
 describe("CheckboxTextfieldTuple readonly submit exclusion", function() {
-    var CheckboxTextfieldTuple;
+    let CheckboxTextfieldTuple;
 
     beforeAll(function() {
         fixture.setBase("test/fixtures/checkboxTextfieldTuple");
@@ -29,17 +37,9 @@ describe("CheckboxTextfieldTuple readonly submit exclusion", function() {
         fixture.cleanup();
     });
 
-    function createFieldAdapter(element) {
-        return {
-            setDisabled: function(disabled) {
-                element.disabled = disabled;
-            }
-        };
-    }
-
     function createTupleState(inherited) {
-        var textfield = fixture.el.querySelector('input[name="./jcr:title"]');
-        var tuple = Object.create(CheckboxTextfieldTuple.prototype);
+        const textfield = fixture.el.querySelector('input[name="./jcr:title"]');
+        const tuple = Object.create(CheckboxTextfieldTuple.prototype);
         tuple._useReadOnlyWhenDisabled = true;
         tuple._isRichText = false;
         tuple._checkboxFoundation = {
@@ -53,8 +53,8 @@ describe("CheckboxTextfieldTuple readonly submit exclusion", function() {
     }
 
     it("keeps inherited title readonly and focusable", function() {
-        var textfield = fixture.el.querySelector('input[name="./jcr:title"]');
-        var tuple = Object.create(CheckboxTextfieldTuple.prototype);
+        const textfield = fixture.el.querySelector('input[name="./jcr:title"]');
+        const tuple = Object.create(CheckboxTextfieldTuple.prototype);
         tuple._isRichText = false;
         tuple._useReadOnlyWhenDisabled = true;
         tuple._textfield = textfield;
@@ -68,7 +68,7 @@ describe("CheckboxTextfieldTuple readonly submit exclusion", function() {
     });
 
     it("excludes readonly inherited title from submit by temporarily disabling the field", function() {
-        var tuple = createTupleState(true);
+        const tuple = createTupleState(true);
         tuple._textfield.readOnly = true;
         spyOn(tuple._textfieldFoundation, "setDisabled").and.callThrough();
 
@@ -79,7 +79,7 @@ describe("CheckboxTextfieldTuple readonly submit exclusion", function() {
     });
 
     it("does not exclude editable title values from submit", function() {
-        var tuple = createTupleState(false);
+        const tuple = createTupleState(false);
         tuple._textfield.readOnly = false;
         spyOn(tuple._textfieldFoundation, "setDisabled");
 
