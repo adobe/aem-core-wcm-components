@@ -126,6 +126,31 @@ class JQueryArray extends Array {
         }
         return this;
     }
+
+    adaptTo(type) {
+        if (type === 'foundation-field') {
+            return this[0]?.__foundationField ?? null;
+        }
+        if (type === 'foundation-registry') {
+            return globalThis.foundationRegistry;
+        }
+        if (type === 'foundation-toggleable') {
+            var adapters = globalThis.foundationRegistry?._adapters;
+            if (!adapters || !this[0]) return null;
+            for (var i = 0; i < adapters.length; i++) {
+                var cfg = adapters[i];
+                if (cfg.type === 'foundation-toggleable') {
+                    try {
+                        if (this[0].matches && this[0].matches(cfg.selector)) {
+                            return cfg.adapter();
+                        }
+                    } catch (e) { /* ignore invalid selectors */ }
+                }
+            }
+            return null;
+        }
+        return null;
+    }
 }
 
 function jQuery(obj) {
@@ -439,9 +464,13 @@ Granite = {
 // Mock foundation registry
 globalThis.foundationRegistry = {
     validators: [],
+    _adapters: [],
     register: function(type, config) {
         if (type === 'foundation.validation.validator') {
             this.validators.push(config);
+        }
+        if (type === 'foundation.adapters') {
+            this._adapters.push(config);
         }
     }
 };
