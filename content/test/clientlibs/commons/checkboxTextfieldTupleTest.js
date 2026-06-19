@@ -63,7 +63,7 @@ describe("CheckboxTextfieldTuple suite", function() {
     });
 
     describe("checkbox foundation-toggleable adapter", function() {
-        it("hide() should not throw when textfield is absent (SITES-34101 regression)", function() {
+        it("hide() should not throw when textfield is absent (SITES-46718 regression)", function() {
             // Image v3 design dialog: titleValueFromDAM checkbox present, jcr:title input absent → _textfield = null
             const tuple = new CQ.CoreComponents.CheckboxTextfieldTuple.v1(
                 container,
