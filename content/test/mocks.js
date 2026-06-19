@@ -32,8 +32,40 @@ class JQueryArray extends Array {
         return this;
     }
 
-    val() {
+    val(value) {
+        if (value !== undefined) {
+            if (this[0]) {
+                this[0].value = value;
+            }
+            return this;
+        }
         return this[0] ? this[0].value : '';
+    }
+
+    show() {
+        for (let i = 0; i < this.length; i++) {
+            if (this[i]) {
+                this[i].style.display = '';
+            }
+        }
+        return this;
+    }
+
+    hide() {
+        for (let i = 0; i < this.length; i++) {
+            if (this[i]) {
+                this[i].style.display = 'none';
+            }
+        }
+        return this;
+    }
+
+    parent() {
+        const parentElement = this[0]?.parentElement;
+        if (!parentElement) {
+            return new JQueryArray();
+        }
+        return new JQueryArray(parentElement);
     }
 
     on(event, handler) {
