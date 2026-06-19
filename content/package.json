@@ -18,7 +18,8 @@
         "stylelint:fix": "stylelint \"**/*.css\" \"**/*.less\" --fix",
         "sync-pom-version": "sync-pom-version",
         "build": "clientlib --verbose",
-        "unit": "karma start karma.conf.js",
+        "guardrails": "node test/guardrails/clientlibDependencies.js",
+        "unit": "npm run guardrails && karma start karma.conf.js",
         "test": "npm run unit --"
     },
     "devDependencies": {
