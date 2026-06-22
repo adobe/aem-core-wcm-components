@@ -18,47 +18,56 @@
 <div id="htmlIdValidationTest">
     <!-- Test form with valid path -->
     <form action="/content/mysite/en/page/_jcr_content/root/component">
-        <input type="text" data-validation="html-unique-id-validator" value="test-id" />
+        <label for="htmlIdValidation-valid-path">Valid path ID</label>
+        <input id="htmlIdValidation-valid-path" type="text" data-validation="html-unique-id-validator" value="test-id" />
     </form>
     
     <!-- Test form with path traversal attempt -->
     <form action="/content/../../../etc/passwd/_jcr_content/root/component">
-        <input type="text" data-validation="html-unique-id-validator" value="traversal-id" />
+        <label for="htmlIdValidation-traversal-path">Traversal path ID</label>
+        <input id="htmlIdValidation-traversal-path" type="text" data-validation="html-unique-id-validator" value="traversal-id" />
     </form>
     
     <!-- Test form with disallowed characters in path -->
     <form action="/content/test<script>alert(1)</script>/_jcr_content/root/component">
-        <input type="text" data-validation="html-unique-id-validator" value="markup-path-id" />
+        <label for="htmlIdValidation-markup-path">Markup path ID</label>
+        <input id="htmlIdValidation-markup-path" type="text" data-validation="html-unique-id-validator" value="markup-path-id" />
     </form>
     
     <!-- Test form with spaces in path -->
     <form action="/content/my site/en/page with spaces/_jcr_content/root/component">
-        <input type="text" data-validation="html-unique-id-validator" value="space-id" />
+        <label for="htmlIdValidation-space-path">Space path ID</label>
+        <input id="htmlIdValidation-space-path" type="text" data-validation="html-unique-id-validator" value="space-id" />
     </form>
     
     <!-- Test form with multiple slashes -->
     <form action="/content//test///page/_jcr_content/root/component">
-        <input type="text" data-validation="html-unique-id-validator" value="slash-id" />
+        <label for="htmlIdValidation-slash-path">Slash path ID</label>
+        <input id="htmlIdValidation-slash-path" type="text" data-validation="html-unique-id-validator" value="slash-id" />
     </form>
     
     <!-- Test form with dots in path -->
     <form action="/content/mysite/en/page.with.dots/_jcr_content/root/component">
-        <input type="text" data-validation="html-unique-id-validator" value="dot-id" />
+        <label for="htmlIdValidation-dot-path">Dot path ID</label>
+        <input id="htmlIdValidation-dot-path" type="text" data-validation="html-unique-id-validator" value="dot-id" />
     </form>
     
     <!-- Test form with underscores and hyphens -->
     <form action="/content/my-site/en/page_with_underscores/_jcr_content/root/component">
-        <input type="text" data-validation="html-unique-id-validator" value="underscore-id" />
+        <label for="htmlIdValidation-underscore-path">Underscore path ID</label>
+        <input id="htmlIdValidation-underscore-path" type="text" data-validation="html-unique-id-validator" value="underscore-id" />
     </form>
     
     <!-- Test form with no action (should be handled gracefully) -->
     <form>
-        <input type="text" data-validation="html-unique-id-validator" value="no-action-id" />
+        <label for="htmlIdValidation-no-action">No action ID</label>
+        <input id="htmlIdValidation-no-action" type="text" data-validation="html-unique-id-validator" value="no-action-id" />
     </form>
     
     <!-- Test form with relative path (should be rejected) -->
     <form action="content/test/page/_jcr_content/root/component">
-        <input type="text" data-validation="html-unique-id-validator" value="relative-id" />
+        <label for="htmlIdValidation-relative-path">Relative path ID</label>
+        <input id="htmlIdValidation-relative-path" type="text" data-validation="html-unique-id-validator" value="relative-id" />
     </form>
     
     <!-- Mock HTML content for AJAX responses -->

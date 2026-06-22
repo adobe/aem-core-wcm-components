@@ -39,9 +39,11 @@
                 <coral-tooltip-content>You have to cancel the inheritance for the panel in order to change its title.</coral-tooltip-content>
             </coral-tooltip>
             <sly data-sly-call="${iconTemplate.icon @ item=item}"></sly>
+            <label class="u-coral-screenReaderOnly" for="cmp-childreneditor-item-title-${item.name}">${item.title @ i18n}</label>
             <input is="coral-textfield"
                    class="cmp-childreneditor__item-title"
                    data-cmp-hook-childreneditor="itemTitle"
+                   id="cmp-childreneditor-item-title-${item.name}"
                    name="./${item.name}/cq:panelTitle"
                    value="${item.value}"
                    data-sly-attribute.disabled="${item.isLiveCopy}"
@@ -55,9 +57,12 @@
         <div class="cmp-childreneditor__item">
             <span class="cmp-childreneditor__item-icon"
                   data-cmp-hook-childreneditor="itemIcon"></span>
+            <label class="u-coral-screenReaderOnly" for="cmp-childreneditor-item-title-template">${'Panel title' @ i18n}</label>
             <input is="coral-textfield"
                    class="cmp-childreneditor__item-title"
-                   data-cmp-hook-childreneditor="itemTitle" required>
+                   data-cmp-hook-childreneditor="itemTitle"
+                   id="cmp-childreneditor-item-title-template"
+                   required>
             <input type="hidden" data-cmp-hook-childreneditor="itemResourceType">
             <input type="hidden" data-cmp-hook-childreneditor="itemTemplatePath">
         </div>
