@@ -18,24 +18,19 @@
 
     <coral-tabview></coral-tabview>
 
-    <label for="editDialog-fragmentPath">Fragment path</label>
-    <input id="editDialog-fragmentPath" name="./fragmentPath" value="/content/dam/test/my-fragment">
+    <input id="editDialog-fragmentPath" aria-label="Fragment path" name="./fragmentPath" value="/content/dam/test/my-fragment">
 
     <div data-display-mode-radio-group="true">
-        <label for="editDialog-displayMode-singleText">Display mode single text</label>
-        <input id="editDialog-displayMode-singleText" type="radio" name="./displayMode" value="singleText">
-        <label for="editDialog-displayMode-multi">Display mode multi</label>
-        <input id="editDialog-displayMode-multi" type="radio" name="./displayMode" value="multi">
-        <label for="editDialog-displayMode-vcf">Display mode VCF</label>
-        <input id="editDialog-displayMode-vcf" type="radio" name="./displayMode" value="vcf" checked>
+        <input id="editDialog-displayMode-singleText" aria-label="Display mode single text" type="radio" name="./displayMode" value="singleText">
+        <input id="editDialog-displayMode-multi" aria-label="Display mode multi" type="radio" name="./displayMode" value="multi">
+        <input id="editDialog-displayMode-vcf" aria-label="Display mode VCF" type="radio" name="./displayMode" value="vcf" checked>
     </div>
 
     <div data-element-mode-field="true">
         <div data-element-names-container="true"
              data-field-path="/apps/test/dialog/elementNames">
             <div data-granite-coral-multifield-name="./elementNames"></div>
-            <label for="editDialog-elementNames">Element names</label>
-            <select id="editDialog-elementNames" data-single-text-selector="true" name="./elementNames"></select>
+            <select id="editDialog-elementNames" aria-label="Element names" data-single-text-selector="true" name="./elementNames"></select>
         </div>
     </div>
 
@@ -43,19 +38,15 @@
         <div data-vcf-template-selector="true"></div>
     </div>
 
-    <label for="editDialog-variationName">Variation name</label>
     <select id="editDialog-variationName"
+            aria-label="Variation name"
             name="./variationName"
             data-field-path="/apps/test/dialog/variationName"></select>
 
     <fieldset class="cmp-contentfragment__editor-paragraph-controls">
-        <label for="editDialog-paragraphScope-all">Paragraph scope all</label>
-        <input id="editDialog-paragraphScope-all" type="radio" name="./paragraphScope" value="all" checked>
-        <label for="editDialog-paragraphScope-range">Paragraph scope range</label>
-        <input id="editDialog-paragraphScope-range" type="radio" name="./paragraphScope" value="range">
-        <label for="editDialog-paragraphRange">Paragraph range</label>
-        <input id="editDialog-paragraphRange" name="./paragraphRange">
-        <label for="editDialog-paragraphHeadings">Paragraph headings</label>
-        <input id="editDialog-paragraphHeadings" name="./paragraphHeadings">
+        <input id="editDialog-paragraphScope-all" aria-label="Paragraph scope all" type="radio" name="./paragraphScope" value="all" checked>
+        <input id="editDialog-paragraphScope-range" aria-label="Paragraph scope range" type="radio" name="./paragraphScope" value="range">
+        <input id="editDialog-paragraphRange" aria-label="Paragraph range" name="./paragraphRange">
+        <input id="editDialog-paragraphHeadings" aria-label="Paragraph headings" name="./paragraphHeadings">
     </fieldset>
 </div>
