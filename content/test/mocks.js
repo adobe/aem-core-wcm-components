@@ -141,7 +141,7 @@ class JQueryArray extends Array {
                 var cfg = adapters[i];
                 if (cfg.type === 'foundation-toggleable') {
                     try {
-                        if (this[0].matches && this[0].matches(cfg.selector)) {
+                        if (this[0]?.matches?.(cfg.selector)) {
                             return cfg.adapter();
                         }
                     } catch (e) { /* ignore invalid selectors */ }
@@ -344,10 +344,10 @@ jQuery.ajax = function(options) {
     function notifySuccess() {
         const args = Array.prototype.slice.call(arguments);
         doneCallbacks.forEach(function(cb) {
-            cb.apply(null, args);
+            cb(...args);
         });
         if (_resolve) {
-            _resolve.apply(null, args);
+            _resolve(...args);
         }
     }
     if (jQuery._ajaxHandler) {
