@@ -21,14 +21,15 @@
          data-cmp-min-length="${search.searchTermMinimumLength}"
          data-cmp-results-size="${search.resultsSize}"
          data-i18n-messages='${search.i18nMessages}'>
-    <div class="cmp_search__info" aria-live="polite" role="status"></div>
+    <output class="cmp_search__info" aria-live="polite"></output>
     <form class="cmp-search__form" data-cmp-hook-search="form"
           method="get" action="${currentPage.path @ addSelectors=['searchresults'], extension='json', suffix = search.relativePath}"
           autocomplete="off">
         <div class="cmp-search__field">
+            <label class="cmp-search__input-label" for="${search.id}-input">${'Search' @ i18n}</label>
             <i class="cmp-search__icon" data-cmp-hook-search="icon"></i>
             <span class="cmp-search__loading-indicator" data-cmp-hook-search="loadingIndicator"></span>
-            <input class="cmp-search__input" data-cmp-hook-search="input" type="text" name="fulltext" placeholder="${'Search' @ i18n}"
+            <input id="${search.id}-input" class="cmp-search__input" data-cmp-hook-search="input" type="text" name="fulltext" placeholder="${'Search' @ i18n}"
                    role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-invalid="false" aria-expanded="false">
             <button class="cmp-search__clear" data-cmp-hook-search="clear" aria-label="${'Clear' @ i18n}">
                 <i class="cmp-search__clear-icon"></i>

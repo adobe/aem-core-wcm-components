@@ -1,5 +1,5 @@
 /*
- *  Copyright 2022 Adobe
+ *  Copyright 2026 Adobe
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,6 +28,19 @@
     padding-right: 2rem;
     height: 100%;
     width: 100%;
+}
+
+// visually hidden but still available to assistive technology
+.cmp-search__input-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 .cmp-search__icon {
@@ -106,6 +119,7 @@
 }
 
 .cmp_search__info {
+    display: block;
     height: 20px;
     font-size: .875rem;
     font-style: italic;
