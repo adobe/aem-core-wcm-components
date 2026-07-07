@@ -1159,18 +1159,21 @@ git commit -m "feat: add ContentAISupportedSearch Sling Model"
 
 ---
 
-### Task 5: `ContentAISearchResultsServlet`
+### Task 5: `AbstractContentAISearchServlet` + `ContentAISearchResultsServlet`
 
 **Files:**
+- Create: `bundles/core/src/main/java/com/adobe/cq/wcm/core/components/internal/servlets/contentaisearch/AbstractContentAISearchServlet.java`
 - Create: `bundles/core/src/main/java/com/adobe/cq/wcm/core/components/internal/servlets/contentaisearch/ContentAISearchResultsServlet.java`
 - Test: `bundles/core/src/test/java/com/adobe/cq/wcm/core/components/internal/servlets/contentaisearch/ContentAISearchResultsServletTest.java`
 - Test resource: `bundles/core/src/test/resources/contentaisearchservlet/test-content.json`
 
 **Interfaces:**
 - Consumes: `ContentAIClient.search(...)` (Task 2/3), `ContentAISupportedSearch` model (Task 4).
-- Produces: servlet registered on `sling.servlet.resourceTypes=core/wcm/components/contentaisearch/v1/contentaisearch`, `sling.servlet.selectors=search`, `sling.servlet.extensions=json`, `sling.servlet.methods=GET`. Query param `q`.
+- Produces:
+  - `AbstractContentAISearchServlet` — a package-private abstract `SlingSafeMethodsServlet` holding the shared request-handling logic. Declares `@Reference protected transient ContentAIClient contentAIClient;`, reads/validates the `q` param, adapts `ContentAISupportedSearch`, calls the abstract `Object executeQuery(ContentAISupportedSearch model, String query) throws ContentAIClientException`, and marshals the result to JSON. Task 6's servlet extends this too.
+  - `ContentAISearchResultsServlet extends AbstractContentAISearchServlet` — registered on `sling.servlet.resourceTypes=core/wcm/components/contentaisearch/v1/contentaisearch`, `sling.servlet.selectors=search`, `sling.servlet.extensions=json`, `sling.servlet.methods=GET`. Its `executeQuery` calls `contentAIClient.search(model.getContentSource(), query, model.getResultsSize())`.
 
-This follows `SearchResultServletTest`'s real pattern in this codebase: `AemContext` + `context.registerService(...)` + `context.registerInjectActivateService(...)` auto-injects the servlet's `@Reference ContentAIClient` — no fake test-seam methods needed on the servlet itself.
+Design note (adjustment from the original plan text): the two servlets are ~90% identical, so the shared `doGet`/validation/`writeJson` logic lives in an abstract base with one abstract `executeQuery` hook per concrete servlet — the same "abstract base + concrete subclasses" shape this codebase already uses for `AbstractComponentImpl`. `@Reference` fields declared on the abstract superclass are picked up by both the real OSGi DS runtime (bnd scans the full class hierarchy) and `osgi-mock`'s `registerInjectActivateService`, so the test approach is unchanged. This follows `SearchResultServletTest`'s real pattern: `AemContext` + `context.registerService(...)` + `context.registerInjectActivateService(...)` auto-injects the `@Reference ContentAIClient` — no fake test seams.
 
 - [ ] **Step 1: Create the test content fixture**
 
@@ -1279,7 +1282,7 @@ class ContentAISearchResultsServletTest {
 Run: `mvn test -pl bundles/core -am -Dtest=ContentAISearchResultsServletTest`
 Expected: `COMPILATION ERROR` — `ContentAISearchResultsServlet` doesn't exist yet.
 
-- [ ] **Step 4: Create `ContentAISearchResultsServlet`**
+- [ ] **Step 4: Create `AbstractContentAISearchServlet`**
 
 ```java
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1302,7 +1305,6 @@ package com.adobe.cq.wcm.core.components.internal.servlets.contentaisearch;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
@@ -1310,7 +1312,6 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.jetbrains.annotations.NotNull;
-import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1318,30 +1319,25 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClient;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
-import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Component(
-    service = Servlet.class,
-    property = {
-        "sling.servlet.methods=GET",
-        "sling.servlet.resourceTypes=" + ContentAISearchResultsServlet.RESOURCE_TYPE,
-        "sling.servlet.selectors=" + ContentAISearchResultsServlet.SELECTOR,
-        "sling.servlet.extensions=" + ContentAISearchResultsServlet.EXTENSION
-    }
-)
-public class ContentAISearchResultsServlet extends SlingSafeMethodsServlet {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ContentAISearchResultsServlet.class);
+/**
+ * Base servlet for the ContentAI Supported Search component's two query endpoints.
+ * Handles the shared request lifecycle — {@code q} parameter validation, model adaptation,
+ * Content AI error handling, and JSON marshaling — delegating the actual Content AI call to
+ * {@link #executeQuery(ContentAISupportedSearch, String)}.
+ */
+abstract class AbstractContentAISearchServlet extends SlingSafeMethodsServlet {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/contentaisearch/v1/contentaisearch";
-    protected static final String SELECTOR = "search";
     protected static final String EXTENSION = "json";
     private static final String PARAM_QUERY = "q";
     private static final long serialVersionUID = 1L;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractContentAISearchServlet.class);
+
     @Reference
-    private transient ContentAIClient contentAIClient;
+    protected transient ContentAIClient contentAIClient;
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws IOException {
@@ -1358,13 +1354,23 @@ public class ContentAISearchResultsServlet extends SlingSafeMethodsServlet {
         }
 
         try {
-            ContentSourceSearchResult result = contentAIClient.search(model.getContentSource(), queryText, model.getResultsSize());
+            Object result = executeQuery(model, queryText);
             writeJson(result, response);
         } catch (ContentAIClientException e) {
-            LOGGER.error("Content AI search failed for content source {}", model.getContentSource(), e);
-            response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Content AI search failed");
+            LOGGER.error("Content AI request failed for content source {}", model.getContentSource(), e);
+            response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Content AI request failed");
         }
     }
+
+    /**
+     * Executes the specific Content AI call for this servlet.
+     *
+     * @param model the resolved component model providing the content source and result size
+     * @param query the validated user query
+     * @return the result object to serialize as JSON
+     * @throws ContentAIClientException if the Content AI call fails
+     */
+    protected abstract Object executeQuery(@NotNull ContentAISupportedSearch model, @NotNull String query) throws ContentAIClientException;
 
     private void writeJson(Object result, SlingHttpServletResponse response) throws IOException {
         response.setContentType("application/json");
@@ -1374,18 +1380,71 @@ public class ContentAISearchResultsServlet extends SlingSafeMethodsServlet {
 }
 ```
 
-*(Note: `context.registerInjectActivateService(...)` in the test resolves the `@Reference ContentAIClient` against the OSGi-mock service registry, which is why registering the mock via `context.registerService(ContentAIClient.class, mockClient)` before activating the servlet is enough — no need for `ContentAISupportedSearch` to be separately mocked either, since `context.currentResource(COMPONENT_PATH)` combined with the real `ContentAISupportedSearchImpl` Sling Model from Task 4 makes `request.adaptTo(ContentAISupportedSearch.class)` resolve for real, end-to-end.)*
+- [ ] **Step 5: Create `ContentAISearchResultsServlet`**
 
-- [ ] **Step 5: Run the test to verify it passes**
+```java
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright 2026 Adobe
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~     http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+package com.adobe.cq.wcm.core.components.internal.servlets.contentaisearch;
+
+import javax.servlet.Servlet;
+
+import org.jetbrains.annotations.NotNull;
+import org.osgi.service.component.annotations.Component;
+
+import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
+import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
+
+/**
+ * Servlet exposing the ContentAI Supported Search component's results-list endpoint,
+ * backed by the Content AI AI Search API.
+ */
+@Component(
+    service = Servlet.class,
+    property = {
+        "sling.servlet.methods=GET",
+        "sling.servlet.resourceTypes=" + AbstractContentAISearchServlet.RESOURCE_TYPE,
+        "sling.servlet.selectors=" + ContentAISearchResultsServlet.SELECTOR,
+        "sling.servlet.extensions=" + AbstractContentAISearchServlet.EXTENSION
+    }
+)
+public class ContentAISearchResultsServlet extends AbstractContentAISearchServlet {
+
+    protected static final String SELECTOR = "search";
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    protected Object executeQuery(@NotNull ContentAISupportedSearch model, @NotNull String query) throws ContentAIClientException {
+        return contentAIClient.search(model.getContentSource(), query, model.getResultsSize());
+    }
+}
+```
+
+*(Note: `context.registerInjectActivateService(...)` resolves the inherited `@Reference ContentAIClient` against the OSGi-mock service registry, so registering the mock via `context.registerService(ContentAIClient.class, mockClient)` before activating is enough. `ContentAISupportedSearch` is not separately mocked — `context.currentResource(COMPONENT_PATH)` with the real `ContentAISupportedSearchImpl` model from Task 4 makes `request.adaptTo(ContentAISupportedSearch.class)` resolve end-to-end.)*
+
+- [ ] **Step 6: Run the test to verify it passes**
 
 Run: `mvn test -pl bundles/core -am -Dtest=ContentAISearchResultsServletTest`
 Expected: `Tests run: 2, Failures: 0, Errors: 0`
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
-git add bundles/core/src/main/java/com/adobe/cq/wcm/core/components/internal/servlets/contentaisearch/ContentAISearchResultsServlet.java bundles/core/src/test/java/com/adobe/cq/wcm/core/components/internal/servlets/contentaisearch/ContentAISearchResultsServletTest.java bundles/core/src/test/resources/contentaisearchservlet/
-git commit -m "feat: add ContentAISearchResultsServlet"
+git add bundles/core/src/main/java/com/adobe/cq/wcm/core/components/internal/servlets/contentaisearch/AbstractContentAISearchServlet.java bundles/core/src/main/java/com/adobe/cq/wcm/core/components/internal/servlets/contentaisearch/ContentAISearchResultsServlet.java bundles/core/src/test/java/com/adobe/cq/wcm/core/components/internal/servlets/contentaisearch/ContentAISearchResultsServletTest.java bundles/core/src/test/resources/contentaisearchservlet/
+git commit -m "feat: add AbstractContentAISearchServlet and ContentAISearchResultsServlet"
 ```
 
 ---
@@ -1397,8 +1456,8 @@ git commit -m "feat: add ContentAISearchResultsServlet"
 - Test: `bundles/core/src/test/java/com/adobe/cq/wcm/core/components/internal/servlets/contentaisearch/ContentAIGenSearchServletTest.java`
 
 **Interfaces:**
-- Consumes: `ContentAIClient.genSearch(...)` (Task 3), `ContentAISupportedSearch` model (Task 4). Reuses the test fixture from Task 5 (`bundles/core/src/test/resources/contentaisearchservlet/test-content.json`).
-- Produces: servlet on the same resource type, `sling.servlet.selectors=gensearch`.
+- Consumes: `AbstractContentAISearchServlet` (Task 5), `ContentAIClient.genSearch(...)` (Task 3), `ContentAISupportedSearch` model (Task 4). Reuses the test fixture from Task 5 (`bundles/core/src/test/resources/contentaisearchservlet/test-content.json`).
+- Produces: `ContentAIGenSearchServlet extends AbstractContentAISearchServlet`, registered on the same resource type with `sling.servlet.selectors=gensearch`. Its `executeQuery` calls `contentAIClient.genSearch(model.getContentSource(), query)`.
 
 - [ ] **Step 1: Write the failing test**
 
@@ -1507,77 +1566,35 @@ Expected: `COMPILATION ERROR` — `ContentAIGenSearchServlet` doesn't exist yet.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets.contentaisearch;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
 import javax.servlet.Servlet;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.SlingHttpServletResponse;
-import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
-import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClient;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
-import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceQueryResult;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Servlet exposing the ContentAI Supported Search component's generative-summary endpoint,
+ * backed by the Content AI Generative Search API.
+ */
 @Component(
     service = Servlet.class,
     property = {
         "sling.servlet.methods=GET",
-        "sling.servlet.resourceTypes=" + ContentAIGenSearchServlet.RESOURCE_TYPE,
+        "sling.servlet.resourceTypes=" + AbstractContentAISearchServlet.RESOURCE_TYPE,
         "sling.servlet.selectors=" + ContentAIGenSearchServlet.SELECTOR,
-        "sling.servlet.extensions=" + ContentAIGenSearchServlet.EXTENSION
+        "sling.servlet.extensions=" + AbstractContentAISearchServlet.EXTENSION
     }
 )
-public class ContentAIGenSearchServlet extends SlingSafeMethodsServlet {
+public class ContentAIGenSearchServlet extends AbstractContentAISearchServlet {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ContentAIGenSearchServlet.class);
-
-    protected static final String RESOURCE_TYPE = "core/wcm/components/contentaisearch/v1/contentaisearch";
     protected static final String SELECTOR = "gensearch";
-    protected static final String EXTENSION = "json";
-    private static final String PARAM_QUERY = "q";
     private static final long serialVersionUID = 1L;
 
-    @Reference
-    private transient ContentAIClient contentAIClient;
-
     @Override
-    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws IOException {
-        String queryText = request.getParameter(PARAM_QUERY);
-        if (StringUtils.isBlank(queryText)) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing required parameter: " + PARAM_QUERY);
-            return;
-        }
-
-        ContentAISupportedSearch model = request.adaptTo(ContentAISupportedSearch.class);
-        if (model == null) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-
-        try {
-            ContentSourceQueryResult result = contentAIClient.genSearch(model.getContentSource(), queryText);
-            writeJson(result, response);
-        } catch (ContentAIClientException e) {
-            LOGGER.error("Content AI gensearch failed for content source {}", model.getContentSource(), e);
-            response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Content AI generative search failed");
-        }
-    }
-
-    private void writeJson(Object result, SlingHttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        new ObjectMapper().writeValue(response.getWriter(), result);
+    protected Object executeQuery(@NotNull ContentAISupportedSearch model, @NotNull String query) throws ContentAIClientException {
+        return contentAIClient.genSearch(model.getContentSource(), query);
     }
 }
 ```
