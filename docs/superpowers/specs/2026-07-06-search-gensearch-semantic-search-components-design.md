@@ -1,7 +1,7 @@
 # Design: ContentAI Supported Search Core Component
 
 **Date:** 2026-07-06 (revised 2026-07-07)
-**Status:** Proposed — pending new Jira ticket + separate feature branch
+**Status:** Proposed — tracked in [GRANITE-70028](https://jira.corp.adobe.com/browse/GRANITE-70028) (relates to GRANITE-69682), branch `semantic-gensearch-components`
 **Related but out of scope:** `GRANITE-69682` ("Quick Search Core Component: Add AI Search toggle with ?{}? prefix support") — already in review, PR [#3055](https://github.com/adobe/aem-core-wcm-components/pull/3055). That ticket adds an opt-in Semantic Search toggle to the existing Quick Search component; it does not add any new drag-and-drop component. **Semantic Search does not get its own standalone component** — it remains a toggle inside Quick Search, scoped entirely to GRANITE-69682.
 
 ## Background
