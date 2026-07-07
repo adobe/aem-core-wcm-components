@@ -19,15 +19,22 @@ A reference implementation exists at `OneAdobe/cais-trial-reference-content` (a 
 | Component | Query path | Backend called |
 |---|---|---|
 | Quick Search (existing, incl. GRANITE-69682's Semantic Search toggle) | JCR/QueryBuilder via `SearchResultServlet`, optionally `?{}?`-prefixed | **Elasticsearch directly** (via Oak Search Elastic) |
-| **ContentAI Supported Search** (new, this ticket) | New servlet proxying to a **Content AI microservices API** | **Content AI API**, which itself calls Elasticsearch — the AEM component never talks to Elasticsearch directly |
+| **ContentAI Supported Search — results layer** (new component, reused mechanism) | Same `SearchResultServlet`, always plain (no `?{}?`) | **Elasticsearch directly**, same as Quick Search v2 |
+| **ContentAI Supported Search — GenSearch layer** (new, this ticket) | New servlet proxying to a **Content AI microservices API** | **Content AI API** (`content-sources/gensearch`), which itself calls Elasticsearch internally — the AEM component never talks to Elasticsearch for this layer |
 
-This is the core reason "ContentAI Supported Search" needs its own component rather than reusing Quick Search's path: Quick Search and its Semantic Search toggle are wired directly to Elasticsearch through Oak, with no Content AI service layer in between. ContentAI Supported Search must go through Content AI's microservices API — see "Confirmed API" below for the specific endpoint.
+ContentAI Supported Search issues **two independent requests per query** when its toggle is on: one to the existing `SearchResultServlet` for the results list (identical mechanism to Quick Search v2, no new backend needed for this part), and one to the new servlet proxying `content-sources/gensearch` for the AI answer. When the toggle is off, only the first request fires.
 
 ## Goals
 
 Build one new, independently drag-and-droppable core component:
 
-- **ContentAI Supported Search** — a self-contained search component whose queries go through Content AI's `content-sources/gensearch` API (not directly to Elasticsearch), modeled on the GenSearch half of the Inside Adobe search experience. Returns a generated answer with cited sources, not a raw results list.
+- **ContentAI Supported Search** — a self-contained search component with **two layers**:
+  1. **Baseline: Quick Search results** — plain lexical fulltext search, reusing the existing `SearchResultServlet` (same mechanism as Quick Search v2's plain mode). Always runs.
+  2. **GenSearch AI answer** — a generated answer with cited sources from Content AI's `content-sources/gensearch` API, layered on top of the baseline results.
+
+  A **toggle, default ON**, controls whether layer 2 runs:
+  - **Toggle ON (default):** shows Quick Search results **and** the GenSearch AI answer
+  - **Toggle OFF:** shows Quick Search results only (plain lexical, no `?{}?` prefix — this fallback is intentionally simpler than Quick Search v3's own semantic toggle, and independent of it)
 
 This ships in a **new ticket and new branch**, separate from `GRANITE-69682`.
 
@@ -77,37 +84,46 @@ This is real, in-use for an external customer (Leviton, not just Inside Adobe) �
 
 ## Component: ContentAI Supported Search
 
-**Location:** `core/wcm/components/contentaisearch/v1/contentaisearch` (naming may adjust once the ticket exists), `componentGroup=".core-wcm"`, self-contained (own input + own results/answer display).
+**Location:** `core/wcm/components/contentaisearch/v1/contentaisearch` (naming may adjust once the ticket exists), `componentGroup=".core-wcm"`, self-contained (own input, own results list, own AI-answer panel, own toggle).
 
-**Backend servlet:** `ContentAISupportedSearchServlet`, registered idiomatically via `sling.servlet.resourceTypes` bound to this component's resource type (following `SearchResultServlet`'s pattern), not a fixed `/bin/...` path like the reference repo's demo servlets. Because the servlet resolves against the specific dropped component instance's resource, it reads that instance's dialog config (content source name, config name) directly via `request.getResource()`.
+**Java Sling Model:** New `ContentAISupportedSearch` interface + impl, combining Quick Search's existing properties (`id`, `relativePath`, `searchTermMinimumLength`, `resultsSize`, `i18nMessages`) with GenSearch-specific ones (`contentSource`, `configName`, `genSearchEnabledByDefault` — backs the toggle's default state, `true` unless overridden).
 
-The servlet proxies server-side to `POST /contentAI/content-sources/gensearch` (blocking) — streaming via `/gensearch/stream` is a possible v2 enhancement, not required for v1 — using an IMS service token obtained via the OSGi config below. Request/response shape as documented in "Confirmed API" above.
+**Backend — two servlets, two calls per query when the toggle is on:**
+1. **Results layer:** reuses the existing `SearchResultServlet` as-is (same call Quick Search v2 makes — plain fulltext, no `?{}?` prefix). No new backend code for this layer.
+2. **GenSearch layer:** new `ContentAISupportedSearchServlet`, registered idiomatically via `sling.servlet.resourceTypes` bound to this component's resource type (following `SearchResultServlet`'s pattern), not a fixed `/bin/...` path like the reference repo's demo servlets. Because it resolves against the specific dropped component instance's resource, it reads that instance's dialog config (`contentSource`, `configName`) directly via `request.getResource()`. Proxies server-side to `POST /contentAI/content-sources/gensearch` (blocking; `/gensearch/stream` is a possible v2 enhancement) using an IMS service token from the OSGi config below.
+
+Client JS fires both requests in parallel on each query when the toggle is on, and only the results-layer request when it's off.
 
 **OSGi config:** New `ContentAIConfigService` (global, instance-wide) — Content AI domain/base URL, IMS service-token credentials (via AEM Crypto or Cloud Manager environment variables, consistent with how GRANITE-69682's discussion resolved credential handling), default `contentSource` name and `configName`.
 
-**Dialog:** placeholder text, optional per-instance `contentSource`/`configName` override (for multi-brand pages), optional disclaimer text override.
+**Dialog:** search root path, min length, results size (same as Quick Search v2) + `contentSource`/`configName` override (for multi-brand pages) + optional disclaimer text override + a property controlling the toggle's **default** state (`true`/enabled unless an author explicitly turns it off for a given instance).
 
 **HTL/JS:**
-- Loading state while awaiting the Content AI response
-- Rendered answer (`result`) + a **Sources** list from `retrievedLinks` (url + title)
+- A visible toggle (default **checked/on**) — same UI convention as Quick Search v3's AI-toggle checkbox, but semantically controls the GenSearch answer layer, not a search-mode switch
+- Results list (identical rendering to Quick Search's existing results template/logic — reused, not reimplemented)
+- When the toggle is on: loading state for the GenSearch call, then the rendered answer (`result`) + a **Sources** list from `retrievedLinks` (url + title), positioned above or alongside the results list
 - Optionally surface `questions` (API-suggested follow-ups) as clickable chips that re-trigger a search — nice-to-have, not required for v1
-- Error state with a retry action; generic user-facing error message, real failure detail (auth errors, timeouts, malformed responses) logged server-side only
-- Persistent disclaimer text below the answer (default i18n: *"AI-generated responses may be inaccurate. Verify important information."*)
+- Error state for the GenSearch call specifically, with a retry action; a failure in the GenSearch layer must **not** block or hide the results layer (they're independent requests) — generic user-facing error message, real failure detail (auth errors, timeouts, malformed responses) logged server-side only
+- Persistent disclaimer text below the answer when shown (default i18n: *"AI-generated responses may be inaccurate. Verify important information."*)
 - `qmaId` retained client-side (not rendered) for potential future feedback/thumbs-up-down wiring — out of scope for v1, but worth not discarding since the API already returns it
 
 **Testing:**
-- Client JS unit tests: loading / answer / error / retry states
-- Java servlet tests with a mocked HTTP client for the `gensearch` call: success, 401/403, timeout, malformed response
+- Client JS unit tests: toggle on/off behavior, both-requests-in-parallel timing, results-independent-of-answer-failure, loading/answer/error/retry states for the GenSearch layer
+- Java servlet tests for `ContentAISupportedSearchServlet` with a mocked HTTP client for the `gensearch` call: success, 401/403, timeout, malformed response
 - OSGi config service tests: missing/invalid credentials fail cleanly, no stack trace exposed to the user
+- Confirm the results layer continues to work identically to Quick Search v2's when reused here (no regressions from sharing the servlet)
 
 ## Rollout & feature-toggle plan
 
-New toggle required (e.g. `FT_GRANITE-<new-ticket>`), because this calls a Content AI microservices API that requires per-customer onboarding (a provisioned Content Source + config), not a blanket AEM-layer capability like `FT_GRANITE-56831`.
-- Default **off**, created via the standard release-toggles/LaunchDarkly workflow (same operating model as `FT_GRANITE-56831`)
-- Flip default to **on** once `content-sources/gensearch` is confirmed stable/GA (see residual open item above)
-- Toggle gates both servlet registration and component visibility in the component browser, so it can't be dropped where the backend isn't provisioned
+**Two different "toggle" concepts — do not conflate them:**
 
-**Staged rollout:** internal dogfood first → confirm with the Content AI team that `content-sources/gensearch` is the right/stable target (not still shifting) → opt-in for early customers via the toggle → GA once the API is stable.
+1. **The component's own AI-answer toggle** (end-user-facing UI switch, described above) — ships with the component, **default on**, purely a display/behavior control for whether the GenSearch layer runs for a given query. Not a release mechanism.
+2. **A release feature toggle** (e.g. `FT_GRANITE-<new-ticket>`) — gates whether the GenSearch layer/servlet is available on an AEM environment at all, because it calls a Content AI microservices API that requires per-customer onboarding (a provisioned Content Source + config), not a blanket AEM-layer capability like `FT_GRANITE-56831`.
+   - Default **off** at the environment level, created via the standard release-toggles/LaunchDarkly workflow (same operating model as `FT_GRANITE-56831`)
+   - Flip default to **on** once `content-sources/gensearch` is confirmed stable/GA (see residual open item above)
+   - When this environment-level toggle is off, the component's own UI toggle should not be shown at all (falls back to results-only, no dead-end AI switch that always errors)
+
+**Staged rollout:** internal dogfood first → confirm with the Content AI team that `content-sources/gensearch` is the right/stable target (not still shifting) → opt-in for early customers via the release toggle → GA once the API is stable.
 
 ## Open questions
 
