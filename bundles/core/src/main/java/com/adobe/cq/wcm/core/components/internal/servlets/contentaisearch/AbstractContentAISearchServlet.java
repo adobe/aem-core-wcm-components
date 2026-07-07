@@ -1,0 +1,93 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright 2026 Adobe
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~     http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+package com.adobe.cq.wcm.core.components.internal.servlets.contentaisearch;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.jetbrains.annotations.NotNull;
+import org.osgi.service.component.annotations.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
+import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClient;
+import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+/**
+ * Base servlet for the ContentAI Supported Search component's two query endpoints.
+ * Handles the shared request lifecycle — {@code q} parameter validation, model adaptation,
+ * Content AI error handling, and JSON marshaling — delegating the actual Content AI call to
+ * {@link #executeQuery(ContentAISupportedSearch, String)}.
+ */
+abstract class AbstractContentAISearchServlet extends SlingSafeMethodsServlet {
+
+    protected static final String RESOURCE_TYPE = "core/wcm/components/contentaisearch/v1/contentaisearch";
+    protected static final String EXTENSION = "json";
+    private static final String PARAM_QUERY = "q";
+    private static final long serialVersionUID = 1L;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractContentAISearchServlet.class);
+
+    @Reference
+    protected transient ContentAIClient contentAIClient;
+
+    @Override
+    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws IOException {
+        String queryText = request.getParameter(PARAM_QUERY);
+        if (StringUtils.isBlank(queryText)) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing required parameter: " + PARAM_QUERY);
+            return;
+        }
+
+        ContentAISupportedSearch model = request.adaptTo(ContentAISupportedSearch.class);
+        if (model == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        try {
+            Object result = executeQuery(model, queryText);
+            writeJson(result, response);
+        } catch (ContentAIClientException e) {
+            LOGGER.error("Content AI request failed for content source {}", model.getContentSource(), e);
+            response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Content AI request failed");
+        }
+    }
+
+    /**
+     * Executes the specific Content AI call for this servlet.
+     *
+     * @param model the resolved component model providing the content source and result size
+     * @param query the validated user query
+     * @return the result object to serialize as JSON
+     * @throws ContentAIClientException if the Content AI call fails
+     */
+    protected abstract Object executeQuery(@NotNull ContentAISupportedSearch model, @NotNull String query) throws ContentAIClientException;
+
+    private void writeJson(Object result, SlingHttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        new ObjectMapper().writeValue(response.getWriter(), result);
+    }
+}
