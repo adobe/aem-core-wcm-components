@@ -135,6 +135,28 @@ class ContentAIClientImplTest {
         assertEquals(401, exception.getStatusCode());
     }
 
+    @Test
+    void genSearchReturnsParsedResult() throws Exception {
+        respondWith(200, "{\"query\":\"electric cars\",\"result\":\"Electric cars are efficient.\",\"hits\":[{\"id\":\"doc_1\"},{\"id\":\"doc_2\"}]}");
+
+        com.adobe.cq.wcm.core.components.services.contentai.ContentSourceQueryResult result =
+            client.genSearch("my-content-source", "electric cars");
+
+        assertEquals("electric cars", result.getQuery());
+        assertEquals("Electric cars are efficient.", result.getResult());
+        assertEquals(2, result.getHits().size());
+        assertEquals("doc_1", result.getHits().get(0).getId());
+    }
+
+    @Test
+    void genSearchThrowsOnServerError() throws IOException {
+        respondWith(503, "{\"error\":\"Service Unavailable\"}");
+
+        ContentAIClientException exception = assertThrows(ContentAIClientException.class,
+            () -> client.genSearch("my-content-source", "electric cars"));
+        assertEquals(503, exception.getStatusCode());
+    }
+
     public static void setField(@NotNull final Class<?> clazz,
                                  @NotNull final String fieldName,
                                  @Nullable final Object target,

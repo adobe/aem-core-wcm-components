@@ -97,7 +97,16 @@ public class ContentAIClientImpl implements ContentAIClient {
 
     @Override
     public ContentSourceQueryResult genSearch(String contentSource, String query) throws ContentAIClientException {
-        throw new UnsupportedOperationException("Implemented in Task 3");
+        ObjectNode body = mapper.createObjectNode();
+        body.put("query", query);
+        body.putObject("contentSource").put("name", contentSource);
+
+        JsonNode response = executeRequest("/content-sources/gensearch", body);
+        try {
+            return mapper.treeToValue(response, ContentSourceQueryResult.class);
+        } catch (IOException e) {
+            throw new ContentAIClientException("Failed to parse Content AI gensearch response", e);
+        }
     }
 
     private JsonNode executeRequest(String path, ObjectNode body) throws ContentAIClientException {
