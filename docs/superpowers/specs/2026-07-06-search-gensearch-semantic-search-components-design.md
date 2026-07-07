@@ -109,21 +109,29 @@ This ships in a **new ticket and new branch** ([GRANITE-70028](https://jira.corp
 - Building or modifying the Content AI backend/API itself.
 - A linked-components pattern (separate input/output components wired by ID) — the component is self-contained.
 
+## Precedent in this codebase: the Embed component's oEmbed client
+
+Checked whether any existing core component already calls an external third-party API — the **Embed component** does (`OEmbedClient` / `OEmbedClientImpl`, used to fetch embed metadata from providers like YouTube/Pinterest). Its shape is the pattern to follow here, not the reference repo's raw-`HttpURLConnection` demo servlets:
+
+- **Outbound HTTP via `org.apache.http.osgi.services.HttpClientBuilderFactory`** (`@Reference`-injected), not raw `HttpURLConnection`. This factory is already provided by the AEM/uber-jar runtime — no new dependency to add. `OEmbedClientImpl` builds a `CloseableHttpClient` from it with configured connect/socket timeouts per call.
+- **Separation of concerns:** the servlet (`EmbedUrlProcessorServlet`) is a thin adapter — it only translates the Sling request into a call on an OSGi **service** interface (`UrlProcessor`/`OEmbedClient`) and marshals the result to JSON with Jackson. All the actual HTTP-calling logic lives in the service impl, not the servlet. Our design should follow this: a `ContentAIClient` service interface + impl doing the actual `content-sources/search` and `content-sources/gensearch` calls, with the servlets staying thin.
+- **OSGi config via `@ObjectClassDefinition`/`@Designate`** (metatype-based, editable in Felix Console / Cloud Manager OSGi config) — `OEmbedClientImplConfigurationFactory.Config` declares fields like `endpoint()`, `socketTimeout()`, `connectionTimeout()` with `default` values. Ours (`ContentAIConfigService`) should be a **single** `@Designate` config (not `factory = true` — we have one Content AI backend, not N providers like oEmbed does), with fields for base URL/bucket, bearer token, default content source, and timeouts.
+- **Testing:** plain JUnit 5 + Mockito, mocking `CloseableHttpClient`/`HttpEntity` directly (`OEmbedClientImplTest`) — no WireMock or embedded HTTP server needed. Matches what was already planned.
+
 ## Component: ContentAI Supported Search
 
 **Location:** `core/wcm/components/contentaisearch/v1/contentaisearch` (naming may adjust), `componentGroup=".core-wcm"`, self-contained (own input, own generative-summary panel, own results list, own toggle).
 
 **Java Sling Model:** New `ContentAISupportedSearch` interface + impl — `id`, `contentSource` (name), `contentSourceType` (optional, defaults `ACQUISITION`), `resultsSize`, `genSearchEnabledByDefault` (backs the toggle's default state, `true` unless overridden), `i18nMessages`.
 
-**Backend — two servlets, both proxying to Content AI, both registered via `sling.servlet.resourceTypes` bound to this component (not a fixed `/bin/...` path):**
-1. `ContentAISearchResultsServlet` → `POST /content-sources/search`. Builds a `composite` (vector + fulltext) query by default for good out-of-the-box relevance, using the component instance's configured `contentSource`.
-2. `ContentAISupportedSearchServlet` (gensearch) → `POST /content-sources/gensearch`. Only called when the toggle is on.
-
-Both use the same OSGi config for the bucket/domain and bearer token.
+**Backend, following the Embed/oEmbed precedent above:**
+- New service interface `ContentAIClient` (`com.adobe.cq.wcm.core.components.services.contentai`, public API package like `services.embed`) with two methods: `search(...)` → `POST /content-sources/search`, `genSearch(...)` → `POST /content-sources/gensearch`. Impl (`ContentAIClientImpl`) uses `HttpClientBuilderFactory` for the actual calls, same as `OEmbedClientImpl`.
+- Two thin servlets, both registered via `sling.servlet.resourceTypes` bound to this component (not a fixed `/bin/...` path): one for results (`selector=search`), one for the generative answer (`selector=gensearch`, only invoked when the toggle is on). Each just adapts the Sling request, calls `ContentAIClient`, and writes JSON — no HTTP logic of their own.
+- `ContentAIClient` builds a `composite` (vector + fulltext) query by default for the results call, using the component instance's configured `contentSource`.
 
 Client JS fires the results-list request on every query; fires the gensearch request in parallel **only when the toggle is on**. A gensearch failure must not hide/block the results list (independent requests, independent error handling).
 
-**OSGi config:** New `ContentAIConfigService` (global, instance-wide) — Content AI bucket/base URL, bearer token credentials (via AEM Crypto or Cloud Manager environment variables), default `contentSource` name.
+**OSGi config:** New `ContentAIConfigService.Config` (single `@Designate`, not a factory — one Content AI backend) — bucket/base URL, bearer token credentials (via AEM Crypto or Cloud Manager environment variables), default `contentSource` name, connect/socket timeouts (mirroring `OEmbedClientImplConfigurationFactory.Config`'s pattern).
 
 **Dialog:** search-box placeholder text, results size, `contentSource` name (+ optional `contentSourceType` override), optional disclaimer text override, a property for the toggle's default state.
 
@@ -136,8 +144,9 @@ Client JS fires the results-list request on every query; fires the gensearch req
 
 **Testing:**
 - Client JS unit tests: toggle on/off behavior, parallel-request timing when on, results-list independence from gensearch failure, loading/summary/error/retry states
-- Java servlet tests for both new servlets with a mocked HTTP client: success, 401/403, timeout, malformed response, empty `hits`/`results`
-- OSGi config service tests: missing/invalid credentials fail cleanly, no stack trace exposed to the user
+- `ContentAIClientImpl` unit tests, JUnit 5 + Mockito mocking `CloseableHttpClient`/`HttpEntity` directly (matching `OEmbedClientImplTest`'s style): success, 401/403, timeout, malformed response, empty `hits`/`results`
+- Servlet tests confirming they correctly adapt requests to `ContentAIClient` calls and marshal responses (thin, so thin tests)
+- OSGi config tests: missing/invalid credentials fail cleanly, no stack trace exposed to the user
 
 ## Rollout & feature-toggle plan
 
