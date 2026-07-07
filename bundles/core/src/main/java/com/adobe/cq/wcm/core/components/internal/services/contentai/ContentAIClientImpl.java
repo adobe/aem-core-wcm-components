@@ -111,17 +111,21 @@ public class ContentAIClientImpl implements ContentAIClient {
             post.setHeader("Authorization", "Bearer " + config.bearerToken());
             post.setEntity(new StringEntity(mapper.writeValueAsString(body), StandardCharsets.UTF_8));
 
-            try (CloseableHttpResponse response = httpClient.execute(post)) {
-                int statusCode = response.getStatusLine().getStatusCode();
-                String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
-                if (statusCode != HttpStatus.SC_OK) {
-                    LOGGER.error("Content AI request to {} failed with status {}: {}", path, statusCode, responseBody);
-                    throw new ContentAIClientException("Content AI request failed with status " + statusCode, statusCode);
-                }
-                return mapper.readTree(responseBody);
-            }
+            return executeAndParse(httpClient, post, path);
         } catch (IOException e) {
             throw new ContentAIClientException("Failed to call Content AI at " + path, e);
+        }
+    }
+
+    private JsonNode executeAndParse(CloseableHttpClient httpClient, HttpPost post, String path) throws IOException, ContentAIClientException {
+        try (CloseableHttpResponse response = httpClient.execute(post)) {
+            int statusCode = response.getStatusLine().getStatusCode();
+            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+            if (statusCode != HttpStatus.SC_OK) {
+                LOGGER.error("Content AI request to {} failed with status {}: {}", path, statusCode, responseBody);
+                throw new ContentAIClientException("Content AI request failed with status " + statusCode, statusCode);
+            }
+            return mapper.readTree(responseBody);
         }
     }
 
