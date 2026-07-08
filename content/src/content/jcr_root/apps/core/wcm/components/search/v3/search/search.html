@@ -35,7 +35,7 @@
                 <i class="cmp-search__clear-icon"></i>
             </button>
         </div>
-        <label class="cmp-search__ai-toggle">
+        <label data-sly-test="${!search.hideAiSearchToggle}" class="cmp-search__ai-toggle">
             <input type="checkbox" data-cmp-hook-search="aiToggle" aria-label="${'AI Search' @ i18n}">
             ${'AI Search' @ i18n}
         </label>
