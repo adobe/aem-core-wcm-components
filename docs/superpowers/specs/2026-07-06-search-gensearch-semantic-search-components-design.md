@@ -1,7 +1,7 @@
 # Design: ContentAI Supported Search Core Component
 
-**Date:** 2026-07-06 (revised 2026-07-07, revised again 2026-07-07)
-**Status:** Proposed — tracked in [GRANITE-70028](https://jira.corp.adobe.com/browse/GRANITE-70028) (relates to GRANITE-69682), branch `semantic-gensearch-components`
+**Date:** 2026-07-06 (revised 2026-07-07 ×2; 2026-07-08 auth/ACL/bucket revision)
+**Status:** Proposed — tracked in [GRANITE-70028](https://jira.corp.adobe.com/browse/GRANITE-70028) (relates to GRANITE-69682), branch `semantic-gensearch-components`, PR [#3056](https://github.com/adobe/aem-core-wcm-components/pull/3056). **Code in PR #3056 predates the 2026-07-08 auth/ACL/bucket revision and needs updating to match (see Decisions locked).**
 **Related but out of scope:** `GRANITE-69682` ("Quick Search Core Component: Add AI Search toggle with ?{}? prefix support") — already in review, PR [#3055](https://github.com/adobe/aem-core-wcm-components/pull/3055). That ticket adds an opt-in Semantic Search toggle to the existing Quick Search component; it does not add any new drag-and-drop component. **Semantic Search does not get its own standalone component** — it remains a toggle inside Quick Search, scoped entirely to GRANITE-69682.
 
 ## Background
@@ -16,15 +16,23 @@ Adobe's internal "Launch Site Search for AEM Cloud Service" initiative (Site Sea
 
 Source: the actual OpenAPI spec behind Adobe's public docs page (`developer.adobe.com/.../api/experimental/contentai/`), fetched directly (`api.redocly.com/registry/bundle/adobe-developers/AEM-contentAI/aemcontentai/openapi.yaml?branch=prod`). This is the authoritative, versioned contract — it **supersedes** the earlier informal wiki-draft schema this doc previously cited (that wiki page, "20260605 - GenSearch on Content Sources", described a richer response shape — `retrievedLinks`, `questions`, `qmaId` — that is **not** present in the currently published spec; see "Discrepancy" note below).
 
-**Base URL** (per-AEM-instance, not a global gateway):
+**Base URL — environment-derived, NOT hand-configured** (per-AEM-instance, not a global gateway):
 ```
 https://{bucket}.adobeaemcloud.com/adobe/experimental/aemcontentai-expires-20261231/contentAI
 ```
-where `{bucket}` is the AEM CS environment identifier (e.g. `author-p12345-e123456`) — this matches the reference repo's per-domain servlet pattern, not the internal Nexus gateway model.
+where `{bucket}` is the running AEM CS environment's own identifier. **This is derived at runtime from the instance's own AEM CS environment variables — not a free-text config string** (a static string risks drift, wrong-tenant, or wrong-tier targeting). AEM CS exposes these to Java via `System.getenv(...)`:
+- `AEM_DOMAIN_PUBLISH` = `publish-p{PID}-e{EID}.adobeaemcloud.com` (and an author equivalent) — the instance's own external host; the cleanest single source for the base URL host.
+- `AEM_PROGRAM_ID` (e.g. `125754`), `AEM_ENV_ID` (e.g. `1283020`), `AEM_SERVICE` = `cm-p{PID}-e{EID}` — for assembling the bucket if the host env var isn't preferred.
 
-**Auth:** `BearerAuth` (JWT bearer token, full access — returns public + private content sources) or `ApiKeyAuth` (`X-Api-Key` header, read-only, public sources only). For a server-side AEM servlet proxy, `BearerAuth` is the right choice.
+The client builds the base URL from these, so it always targets the environment actually serving the user. (An OSGi override is allowed only for local dev / non-CS testing where these env vars are absent.)
 
-**Access note (important, from the spec's own description):** *"The use of these APIs is subject to co-innovation arrangements with Adobe or licensing once available for public use. Please contact your Adobe representative for more details."* This is a real dependency beyond a feature toggle — see Rollout section.
+**Auth — `X-Api-Key` (anonymous, public index), NOT BearerAuth.** Confirmed with the Content AI team (wiki/Slack) + spec `securitySchemes`:
+- `ApiKeyAuth` (`X-Api-Key` header): required for anonymous/public access; reaches **public content sources only**. The key is effectively an **Adobe Developer Console client ID** — it identifies the source for abuse handling, it is *not* a user authenticator and is not treated as a high-value secret (PetPlace/BambooHR shipped it in browser JS). This is the correct and only appropriate auth for a public, anonymous end-user site.
+- `BearerAuth` (IMS JWT): only for *authenticated* callers reaching *entitled/private* content, and it must carry the right scope (`contentai.api`) + a profile entitled to the bucket **and tier**. It is **explicitly dropped from this component** because: (a) a public site has no logged-in user, so no per-user token exists; (b) a single service/technical-account bearer token used for all anonymous visitors serves them under one privileged identity — over-exposure the Content AI team warns against; (c) Content AI bearer tokens expire ~1h, so a static OSGi token is non-viable anyway. Bearer belongs to a *future authenticated variant*, not this public-site component.
+
+**Key storage:** the `X-Api-Key` (client ID) lives in the OSGi config on AEM CS, fed by a Cloud Manager environment variable / secret. Because our servlet proxies server-side, the key is not exposed in the browser at all — strictly better than the EDS/PetPlace precedent of embedding it in client JS.
+
+**Access note (from the spec's own description):** *"The use of these APIs is subject to co-innovation arrangements with Adobe or licensing once available for public use."* A real dependency beyond a feature toggle — see Rollout section.
 
 ### 1. Results list — `POST /content-sources/search` (tag: AI Search API)
 
@@ -88,6 +96,19 @@ Streaming variant (`/gensearch/stream`, SSE, `Accept: text/event-stream`) sends 
 
 Both new-component layers go through Content AI exclusively. There is no Elasticsearch-direct call anywhere in this component, and no reuse of `SearchResultServlet`.
 
+## Access control & ACL — deliberately none at runtime; safety is at ingest/config time
+
+Confirmed with the Content AI team (wiki/Slack): **Content AI indexes have no embedded ACL/authorization** — *"there is nothing similar to ACLs in the content ai index,"* and it cannot evaluate AEM/Oak repository ACLs. Querying permissioned content directly through Content AI would *"basically show them all the content."*
+
+For a **public site this is acceptable and no runtime ACL evaluation is required or meaningful** — there is no authenticated user to evaluate against, and the team's guidance is explicit: *"For fully public sites, only published content should be returned, and ACL evaluation should not be part of the result filtering."*
+
+The safety guarantee is therefore a **content-scope invariant established at ingest/config time, not a query-time filter:**
+- The component MUST be pointed only at a **public** Content AI index (`IndexAccess.public = true`), whose acquisition crawled with an **anonymous JCR session** so that only published/public content ever entered the index.
+- We do **not** implement AEM-side ACL evaluation in this component (and note that AEM ACLs are JCR `rep:policy` permissions evaluated per authenticated session by Oak — they are not, and cannot be, "stored in OSGi config").
+- Reusing this pattern for **authored/managed/permissioned** content (logged-in users) is a *different, out-of-scope* use case that would require routing through the AEM Search API (which post-filters by ACL) or forwarding the user's own IMS token to an entitled index. Not this component.
+
+**Guardrail:** the design treats "public index only" as a hard constraint — documented in the dialog help text, and reinforced by the `X-Api-Key` auth (which by construction can only reach public content sources). If a private index is configured, `X-Api-Key` simply returns nothing/forbidden rather than leaking entitled content.
+
 ## Goals
 
 Build one new, independently drag-and-droppable core component:
@@ -131,9 +152,9 @@ Checked whether any existing core component already calls an external third-part
 
 Client JS fires the results-list request on every query; fires the gensearch request in parallel **only when the toggle is on**. A gensearch failure must not hide/block the results list (independent requests, independent error handling).
 
-**OSGi config:** New `ContentAIConfigService.Config` (single `@Designate`, not a factory — one Content AI backend) — bucket/base URL, bearer token credentials (via AEM Crypto or Cloud Manager environment variables), default `contentSource` name, connect/socket timeouts (mirroring `OEmbedClientImplConfigurationFactory.Config`'s pattern).
+**OSGi config:** New `ContentAIConfigService.Config` (single `@Designate`, not a factory — one Content AI backend) — **`apiKey` (the `X-Api-Key` client ID, fed by a Cloud Manager env var/secret)**, default `contentSource` name, connect/socket timeouts (mirroring `OEmbedClientImplConfigurationFactory.Config`). **No bearer-token field.** The base URL/bucket is **not** a config field — it is derived at runtime from the AEM CS environment (`AEM_DOMAIN_PUBLISH` / `AEM_PROGRAM_ID` + `AEM_ENV_ID` via `System.getenv`), with an optional override used only for local/non-CS dev where those env vars are absent. `ContentAIClientImpl` sends the `X-Api-Key` header (not `Authorization: Bearer`).
 
-**Dialog:** search-box placeholder text, results size, `contentSource` name (+ optional `contentSourceType` override), optional disclaimer text override, a property for the toggle's default state.
+**Dialog:** search-box placeholder text, results size, `contentSource` name (+ optional `contentSourceType` override), optional disclaimer text override, a property for the toggle's default state, and **help text stating the content source must be a public Content AI index of published content** (see Access control & ACL).
 
 **HTL/JS layout, top to bottom:**
 1. Search input
@@ -144,9 +165,10 @@ Client JS fires the results-list request on every query; fires the gensearch req
 
 **Testing:**
 - Client JS unit tests: toggle on/off behavior, parallel-request timing when on, results-list independence from gensearch failure, loading/summary/error/retry states
-- `ContentAIClientImpl` unit tests, JUnit 5 + Mockito mocking `CloseableHttpClient`/`HttpEntity` directly (matching `OEmbedClientImplTest`'s style): success, 401/403, timeout, malformed response, empty `hits`/`results`
+- `ContentAIClientImpl` unit tests, JUnit 5 + Mockito mocking `CloseableHttpClient`/`HttpEntity` directly (matching `OEmbedClientImplTest`'s style): success, 401/403, timeout, malformed response, empty `hits`/`results`, **and that the request carries the `X-Api-Key` header (not `Authorization: Bearer`)**
+- **Bucket-derivation unit test:** given `AEM_DOMAIN_PUBLISH` / `AEM_PROGRAM_ID`+`AEM_ENV_ID` present, the base URL is assembled correctly; given the dev-override set, it is honored; given neither, it fails cleanly
 - Servlet tests confirming they correctly adapt requests to `ContentAIClient` calls and marshal responses (thin, so thin tests)
-- OSGi config tests: missing/invalid credentials fail cleanly, no stack trace exposed to the user
+- OSGi config tests: missing `apiKey` fails cleanly, no stack trace exposed to the user
 
 ## Rollout & feature-toggle plan
 
@@ -159,13 +181,19 @@ Client JS fires the results-list request on every query; fires the gensearch req
 
 **Staged rollout:** confirm access/licensing model with the Content AI team → internal dogfood (bucket/domain with confirmed access) → opt-in for co-innovation customers via the release toggle → broader availability once/if the API's access model opens up (the spec itself is explicitly still `-experimental` and time-boxed, `expires-20261231` in its own server URL).
 
+## Decisions locked (2026-07-08)
+
+- **Auth = `X-Api-Key`** (client ID), anonymous, public index only. BearerAuth dropped from this component (deferred to a future authenticated variant).
+- **Bucket/base URL = environment-derived** from AEM CS env vars (`AEM_DOMAIN_PUBLISH` / `AEM_PROGRAM_ID`+`AEM_ENV_ID`), not a config string; OSGi override only for local dev.
+- **ACL = no runtime evaluation**; safety comes from the "public index of published content" invariant, enforced by ingest config + `X-Api-Key`'s public-only reach, and documented in the dialog.
+
 ## Open questions
 
-1. **Sources rendering without guaranteed URLs:** `gensearch`'s `hits[]` only has `id` (+ optional `metadata`). How should "Sources" be rendered if a given content source's ingestion didn't store a URL in `metadata`? Options: require ingestion to populate a specific `metadata.url` field as a convention we document, or fall back to not rendering a link (just cite the id/title if present). Needs a decision before HTL implementation.
-2. **Access/licensing model:** is this specific experimental endpoint (`aemcontentai-expires-20261231`) something we can build a shipping core component against, given the co-innovation/licensing note and its own expiry-dated URL? Needs Content AI team confirmation.
-3. Exact toggle key/name for the release feature toggle — to be created via the standard release-toggles workflow.
-4. Component and resource-type naming ("ContentAI Supported Search" vs a shorter internal name).
-5. Default query composition for the results list (`composite` vector+fulltext, as drafted above, vs. plain `fulltext`) — worth validating relevance/latency tradeoffs before locking in.
+1. **Publish vs author host/tier:** the spec's server example shows an `author-` host, while the routing model treats `tier` separately. Confirm with the Content AI team whether a **publish** instance calling for **published/public** content should target its own `AEM_DOMAIN_PUBLISH` host, and that an `AEM_PUBLISH`-type public content source is reachable that way. (Derivation mechanism is settled; the exact host/tier to use is the open detail.)
+2. **Sources rendering without guaranteed URLs:** `gensearch`'s `hits[]` only has `id` (+ optional `metadata`). Current decision: render `metadata.url`/`metadata.title` as a (scheme-safe) link if present, else the id as unlinked text — no ingestion convention required. Revisit if a `metadata.url` convention is later standardized.
+3. **Access/licensing model:** is this experimental endpoint (`aemcontentai-expires-20261231`) buildable-against for a shipping core component, given the co-innovation/licensing note and expiry-dated URL? Needs Content AI team confirmation.
+4. Exact toggle key/name for the release feature toggle — via the standard release-toggles workflow.
+5. Default query composition for the results list (`composite` vector+fulltext vs. plain `fulltext`) — validate relevance/latency before locking in.
 
 ## Relationship to GRANITE-69682
 
