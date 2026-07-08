@@ -60,11 +60,13 @@ public class ContentAIClientImpl implements ContentAIClient {
     private static final String CONTENT_AI_PATH = "/adobe/experimental/aemcontentai-expires-20261231/contentAI";
 
     /**
-     * AEM as a Cloud Service environment variables used to derive the instance's own Content AI base URL.
+     * AEM as a Cloud Service environment variables (sourced from pod annotations aemProgramId/aemEnvId/aemService)
+     * used to derive the instance's own Content AI bucket. NOTE: {@code AEM_DOMAIN_PUBLISH} is deliberately NOT used —
+     * on AEM CS it holds the CDN/customer FQDN, not the {@code {bucket}.adobeaemcloud.com} host Content AI is served on.
      */
-    private static final String ENV_DOMAIN_PUBLISH = "AEM_DOMAIN_PUBLISH";
     private static final String ENV_PROGRAM_ID = "AEM_PROGRAM_ID";
     private static final String ENV_ENV_ID = "AEM_ENV_ID";
+    private static final String ENV_SERVICE = "AEM_SERVICE";
 
     @Reference
     private HttpClientBuilderFactory httpClientBuilderFactory;
@@ -164,28 +166,35 @@ public class ContentAIClientImpl implements ContentAIClient {
         if (StringUtils.isNotBlank(override)) {
             return StringUtils.removeEnd(override.trim(), "/");
         }
-        // Tier matters: AEM Cloud Service hosts are `author-p{PID}-e{EID}` and `publish-p{PID}-e{EID}`. A
-        // public-site component runs on publish at request time, but may also render on author (e.g. preview),
-        // so resolve the tier from the instance's run modes rather than assuming publish.
-        boolean author = isAuthorTier();
-        String host = null;
-        if (!author) {
-            // On publish, AEM_DOMAIN_PUBLISH is the authoritative host for this environment.
-            host = getEnv(ENV_DOMAIN_PUBLISH);
+        // The Content AI host is {tier}-p{PID}-e{EID}.adobeaemcloud.com (e.g. author-p12345-e67890...). Derive the
+        // bucket (p{PID}-e{EID}) from the environment, and the tier from the instance's run modes — a public-site
+        // component runs on publish at request time but may also render on author (e.g. preview).
+        String bucket = deriveBucket();
+        if (StringUtils.isBlank(bucket)) {
+            throw new ContentAIClientException("Content AI base URL could not be derived: no baseUrlOverride is set "
+                + "and the AEM_PROGRAM_ID+AEM_ENV_ID (or AEM_SERVICE) environment variables are absent", 0);
         }
-        if (StringUtils.isBlank(host)) {
-            String programId = getEnv(ENV_PROGRAM_ID);
-            String envId = getEnv(ENV_ENV_ID);
-            if (StringUtils.isNotBlank(programId) && StringUtils.isNotBlank(envId)) {
-                String prefix = author ? "author-" : "publish-";
-                host = prefix + "p" + programId + "-e" + envId + ".adobeaemcloud.com";
-            }
+        String tier = isAuthorTier() ? "author" : "publish";
+        return "https://" + tier + "-" + bucket + ".adobeaemcloud.com" + CONTENT_AI_PATH;
+    }
+
+    /**
+     * Derives the environment bucket ({@code p{PID}-e{EID}}) from AEM CS environment variables: preferring
+     * {@code AEM_PROGRAM_ID}+{@code AEM_ENV_ID}, falling back to parsing {@code AEM_SERVICE} ({@code cm-p{PID}-e{EID}}).
+     *
+     * @return the bucket without a tier prefix, or {@code null} if it cannot be derived
+     */
+    private String deriveBucket() {
+        String programId = getEnv(ENV_PROGRAM_ID);
+        String envId = getEnv(ENV_ENV_ID);
+        if (StringUtils.isNotBlank(programId) && StringUtils.isNotBlank(envId)) {
+            return "p" + programId + "-e" + envId;
         }
-        if (StringUtils.isBlank(host)) {
-            throw new ContentAIClientException("Content AI base URL could not be derived: no baseUrlOverride is set and "
-                + "the AEM_DOMAIN_PUBLISH / AEM_PROGRAM_ID+AEM_ENV_ID environment variables are absent", 0);
+        String service = getEnv(ENV_SERVICE);
+        if (StringUtils.isNotBlank(service) && service.startsWith("cm-")) {
+            return StringUtils.removeStart(service, "cm-");
         }
-        return "https://" + host + CONTENT_AI_PATH;
+        return null;
     }
 
     /**
