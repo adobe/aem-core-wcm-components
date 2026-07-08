@@ -45,6 +45,7 @@ abstract class AbstractContentAISearchServlet extends SlingSafeMethodsServlet {
     protected static final String RESOURCE_TYPE = "core/wcm/components/contentaisearch/v1/contentaisearch";
     protected static final String EXTENSION = "json";
     private static final String PARAM_QUERY = "q";
+    private static final int MAX_QUERY_LENGTH = 512;
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractContentAISearchServlet.class);
@@ -57,6 +58,10 @@ abstract class AbstractContentAISearchServlet extends SlingSafeMethodsServlet {
         String queryText = request.getParameter(PARAM_QUERY);
         if (StringUtils.isBlank(queryText)) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing required parameter: " + PARAM_QUERY);
+            return;
+        }
+        if (queryText.length() > MAX_QUERY_LENGTH) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parameter " + PARAM_QUERY + " exceeds maximum length of " + MAX_QUERY_LENGTH);
             return;
         }
 

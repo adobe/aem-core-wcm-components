@@ -188,17 +188,47 @@
         return this._escapeHtml(text).replace(/"/g, "&quot;");
     };
 
+    /**
+     * Strips ASCII C0 controls, DEL, and whitespace so the scheme-prefix checks below run against a single
+     * normalised token (characters the URL/DOM layer may otherwise strip away, e.g. a TAB spliced into a
+     * scheme name), rather than just trimming the ends as String.trim() does.
+     *
+     * @param {String} str - raw URL value
+     * @returns {String} characters kept for scheme prefix checks
+     */
+    function stripAsciiControlsAndWhitespaceForSchemeCheck(str) {
+        var out = "";
+        var i;
+        var ch;
+        var c;
+        for (i = 0; i < str.length; i++) {
+            ch = str.charAt(i);
+            c = str.charCodeAt(i);
+            if (c <= 31 || c === 127) {
+                continue;
+            }
+            if (/\s/.test(ch)) {
+                continue;
+            }
+            out += ch;
+        }
+        return out;
+    }
+
     ContentAISearch.prototype._isSafeUrl = function(url) {
         if (!url) {
             return false;
         }
-        var trimmed = String(url).trim();
+        // Strip interior/leading/trailing ASCII controls, DEL, and whitespace before scheme-testing: the URL
+        // layer normalises these away (e.g. "java\tscript:alert(1)" becomes "javascript:alert(1)" once
+        // assigned to href), so leaving them in place would let a crafted value slip past the checks below.
+        var sanitized = stripAsciiControlsAndWhitespaceForSchemeCheck(String(url));
         // Allow http(s) absolute URLs and root-relative/relative paths; reject javascript:, data:, vbscript:, etc.
-        if (/^https?:\/\//i.test(trimmed)) {
+        if (/^https?:\/\//i.test(sanitized)) {
             return true;
         }
         // Relative or root-relative path (no scheme). Reject anything containing a colon before the first slash (a scheme).
-        return !/^[a-z][a-z0-9+.-]*:/i.test(trimmed);
+        return !/^[a-z][a-z0-9+.-]*:/i.test(sanitized);
     };
 
     function onDocumentReady() {

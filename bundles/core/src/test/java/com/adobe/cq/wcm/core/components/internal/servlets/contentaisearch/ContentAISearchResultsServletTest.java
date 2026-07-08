@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets.contentaisearch;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,8 +29,11 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
@@ -74,5 +78,17 @@ class ContentAISearchResultsServletTest {
         underTest.doGet(context.request(), context.response());
 
         assertEquals(400, context.response().getStatus());
+    }
+
+    @Test
+    void doGetReturns400WhenQueryExceedsMaxLength() throws Exception {
+        context.currentResource(COMPONENT_PATH);
+        String longQuery = StringUtils.repeat("a", 513);
+        context.request().setQueryString("q=" + longQuery);
+
+        underTest.doGet(context.request(), context.response());
+
+        assertEquals(400, context.response().getStatus());
+        verify(mockClient, never()).search(anyString(), anyString(), anyInt());
     }
 }
