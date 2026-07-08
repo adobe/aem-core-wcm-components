@@ -34,16 +34,6 @@
         }
     }
 
-    // eslint-disable-next-line no-unused-vars
-    function localizeMessage(root, message) {
-        try {
-            var i18nMessages = JSON.parse(root.getAttribute("data-i18n-messages"));
-            return i18nMessages[message] || message;
-        } catch (e) {
-            return message;
-        }
-    }
-
     function ContentAISearch(element) {
         this._element = element;
         this._cacheElements();
@@ -178,7 +168,7 @@
             var hit = hits[i];
             var url = hit.metadata && hit.metadata.url;
             var label = (hit.metadata && hit.metadata.title) || hit.id;
-            if (url) {
+            if (url && this._isSafeUrl(url)) {
                 sourcesHtml += "<li><a href=\"" + this._escapeAttribute(url) + "\">" + this._escapeHtml(label) + "</a></li>";
             } else {
                 sourcesHtml += "<li>" + this._escapeHtml(label) + "</li>";
@@ -196,6 +186,19 @@
 
     ContentAISearch.prototype._escapeAttribute = function(text) {
         return this._escapeHtml(text).replace(/"/g, "&quot;");
+    };
+
+    ContentAISearch.prototype._isSafeUrl = function(url) {
+        if (!url) {
+            return false;
+        }
+        var trimmed = String(url).trim();
+        // Allow http(s) absolute URLs and root-relative/relative paths; reject javascript:, data:, vbscript:, etc.
+        if (/^https?:\/\//i.test(trimmed)) {
+            return true;
+        }
+        // Relative or root-relative path (no scheme). Reject anything containing a colon before the first slash (a scheme).
+        return !/^[a-z][a-z0-9+.-]*:/i.test(trimmed);
     };
 
     function onDocumentReady() {
