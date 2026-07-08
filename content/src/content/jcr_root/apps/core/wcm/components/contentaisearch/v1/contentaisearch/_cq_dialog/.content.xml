@@ -48,7 +48,7 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                         fieldLabel="Content Source"
-                                        fieldDescription="Name of the Content AI content source to search. Requires Content AI to be provisioned for this content source on this environment."
+                                        fieldDescription="Name of the Content AI content source to search. Must be a PUBLIC Content AI index containing only published/public content (accessed anonymously via X-Api-Key). Do not point this at private or permissioned content: Content AI does not evaluate AEM ACLs, so restricted content would be exposed to anonymous visitors."
                                         name="./contentSource"
                                         required="{Boolean}true"/>
                                     <resultsSize

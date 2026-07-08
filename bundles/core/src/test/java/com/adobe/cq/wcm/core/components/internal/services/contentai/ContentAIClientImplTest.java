@@ -20,13 +20,19 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.StatusLine;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -36,17 +42,24 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ContentAIClientImplTest {
+
+    private static final String TEST_BASE_URL = "http://test.contentai.example.com";
+    private static final String TEST_API_KEY = "test-key";
 
     private ContentAIClientImpl client;
     private CloseableHttpClient mockHttpClient;
@@ -54,14 +67,15 @@ class ContentAIClientImplTest {
 
     @BeforeEach
     void setUp() {
+        // Default client: uses the dev baseUrlOverride so the core request tests need no environment.
         client = new ContentAIClientImpl();
-        client.activate(testConfig());
+        client.activate(config(TEST_API_KEY, TEST_BASE_URL));
         mockHttpClient = mock(CloseableHttpClient.class);
         mockResponse = mock(CloseableHttpResponse.class);
-        mockTransport();
+        attachTransport(client);
     }
 
-    private ContentAIConfig testConfig() {
+    private ContentAIConfig config(String apiKey, String baseUrlOverride) {
         return new ContentAIConfig() {
             @Override
             public Class<? extends Annotation> annotationType() {
@@ -69,13 +83,13 @@ class ContentAIClientImplTest {
             }
 
             @Override
-            public String baseUrl() {
-                return "http://test.contentai.example.com";
+            public String apiKey() {
+                return apiKey;
             }
 
             @Override
-            public String bearerToken() {
-                return "test-token";
+            public String baseUrlOverride() {
+                return baseUrlOverride;
             }
 
             @Override
@@ -95,9 +109,9 @@ class ContentAIClientImplTest {
         };
     }
 
-    private void mockTransport() {
+    private void attachTransport(ContentAIClientImpl target) {
         HttpClientBuilderFactory mockBuilderFactory = mock(HttpClientBuilderFactory.class);
-        setField(ContentAIClientImpl.class, "httpClientBuilderFactory", client, mockBuilderFactory);
+        setField(ContentAIClientImpl.class, "httpClientBuilderFactory", target, mockBuilderFactory);
 
         HttpClientBuilder mockBuilder = mock(HttpClientBuilder.class);
         when(mockBuilderFactory.newBuilder()).thenReturn(mockBuilder);
@@ -112,6 +126,38 @@ class ContentAIClientImplTest {
         when(mockEntity.getContent()).thenReturn(new ByteArrayInputStream(jsonBody.getBytes(StandardCharsets.UTF_8)));
         when(mockResponse.getEntity()).thenReturn(mockEntity);
         when(mockHttpClient.execute(any(HttpUriRequest.class))).thenReturn(mockResponse);
+    }
+
+    private HttpUriRequest captureExecutedRequest() throws IOException {
+        ArgumentCaptor<HttpUriRequest> captor = ArgumentCaptor.forClass(HttpUriRequest.class);
+        verify(mockHttpClient).execute(captor.capture());
+        return captor.getValue();
+    }
+
+    /**
+     * A client whose environment lookups come from a supplied map, so bucket derivation can be tested without a
+     * real AEM Cloud Service environment.
+     */
+    private ContentAIClientImpl envClient(ContentAIConfig cfg, Map<String, String> env) {
+        // Default: no run modes → treated as publish tier (the component's primary tier).
+        return envClient(cfg, env, Collections.emptySet());
+    }
+
+    private ContentAIClientImpl envClient(ContentAIConfig cfg, Map<String, String> env, Set<String> runModes) {
+        ContentAIClientImpl envClient = new ContentAIClientImpl() {
+            @Override
+            protected String getEnv(String name) {
+                return env.get(name);
+            }
+
+            @Override
+            protected Set<String> getRunModes() {
+                return runModes;
+            }
+        };
+        envClient.activate(cfg);
+        attachTransport(envClient);
+        return envClient;
     }
 
     @Test
@@ -155,6 +201,88 @@ class ContentAIClientImplTest {
         ContentAIClientException exception = assertThrows(ContentAIClientException.class,
             () -> client.genSearch("my-content-source", "electric cars"));
         assertEquals(503, exception.getStatusCode());
+    }
+
+    @Test
+    void requestCarriesApiKeyHeaderAndNoBearer() throws Exception {
+        respondWith(200, "{\"totalResults\":0,\"results\":[]}");
+
+        client.search("my-content-source", "electric cars", 10);
+
+        HttpUriRequest sent = captureExecutedRequest();
+        Header apiKey = sent.getFirstHeader("X-Api-Key");
+        assertEquals(TEST_API_KEY, apiKey == null ? null : apiKey.getValue());
+        // Anonymous public access must NOT send an Authorization bearer header.
+        assertNull(sent.getFirstHeader("Authorization"));
+    }
+
+    @Test
+    void missingApiKeyFailsCleanly() {
+        ContentAIClientImpl noKey = new ContentAIClientImpl();
+        noKey.activate(config("", TEST_BASE_URL));
+        attachTransport(noKey);
+
+        ContentAIClientException exception = assertThrows(ContentAIClientException.class,
+            () -> noKey.search("my-content-source", "electric cars", 10));
+        assertEquals(0, exception.getStatusCode());
+    }
+
+    @Test
+    void baseUrlDerivedFromPublishDomainEnv() throws Exception {
+        Map<String, String> env = new HashMap<>();
+        env.put("AEM_DOMAIN_PUBLISH", "publish-p12345-e67890.adobeaemcloud.com");
+        ContentAIClientImpl envClient = envClient(config(TEST_API_KEY, ""), env);
+        respondWith(200, "{\"totalResults\":0,\"results\":[]}");
+
+        envClient.search("my-content-source", "electric cars", 10);
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        assertEquals("https://publish-p12345-e67890.adobeaemcloud.com"
+            + "/adobe/experimental/aemcontentai-expires-20261231/contentAI/content-sources/search",
+            sent.getURI().toString());
+    }
+
+    @Test
+    void baseUrlDerivedFromProgramAndEnvIds() throws Exception {
+        Map<String, String> env = new HashMap<>();
+        env.put("AEM_PROGRAM_ID", "12345");
+        env.put("AEM_ENV_ID", "67890");
+        ContentAIClientImpl envClient = envClient(config(TEST_API_KEY, ""), env);
+        respondWith(200, "{\"totalResults\":0,\"results\":[]}");
+
+        envClient.search("my-content-source", "electric cars", 10);
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        assertTrue(sent.getURI().toString().startsWith(
+            "https://publish-p12345-e67890.adobeaemcloud.com/adobe/experimental/aemcontentai-expires-20261231/contentAI"),
+            "Expected derived host from AEM_PROGRAM_ID/AEM_ENV_ID, got " + sent.getURI());
+    }
+
+    @Test
+    void baseUrlUsesAuthorPrefixOnAuthorTier() throws Exception {
+        Map<String, String> env = new HashMap<>();
+        env.put("AEM_PROGRAM_ID", "12345");
+        env.put("AEM_ENV_ID", "67890");
+        // Author tier: even though AEM_DOMAIN_PUBLISH could exist, the host must use the author- prefix.
+        env.put("AEM_DOMAIN_PUBLISH", "publish-p12345-e67890.adobeaemcloud.com");
+        ContentAIClientImpl envClient = envClient(config(TEST_API_KEY, ""), env, Collections.singleton("author"));
+        respondWith(200, "{\"totalResults\":0,\"results\":[]}");
+
+        envClient.search("my-content-source", "electric cars", 10);
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        assertTrue(sent.getURI().toString().startsWith(
+            "https://author-p12345-e67890.adobeaemcloud.com/adobe/experimental/aemcontentai-expires-20261231/contentAI"),
+            "Expected author- host on author tier, got " + sent.getURI());
+    }
+
+    @Test
+    void baseUrlDerivationFailsCleanlyWhenNoEnvAndNoOverride() {
+        ContentAIClientImpl envClient = envClient(config(TEST_API_KEY, ""), new HashMap<>());
+
+        ContentAIClientException exception = assertThrows(ContentAIClientException.class,
+            () -> envClient.search("my-content-source", "electric cars", 10));
+        assertEquals(0, exception.getStatusCode());
     }
 
     public static void setField(@NotNull final Class<?> clazz,

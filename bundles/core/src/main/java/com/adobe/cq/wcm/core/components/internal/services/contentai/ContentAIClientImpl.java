@@ -17,7 +17,10 @@ package com.adobe.cq.wcm.core.components.internal.services.contentai;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -27,6 +30,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.apache.http.util.EntityUtils;
+import org.apache.sling.settings.SlingSettingsService;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
@@ -50,8 +54,23 @@ public class ContentAIClientImpl implements ContentAIClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentAIClientImpl.class);
 
+    /**
+     * The experimental, expiry-dated Content AI API path appended to the environment's own host.
+     */
+    private static final String CONTENT_AI_PATH = "/adobe/experimental/aemcontentai-expires-20261231/contentAI";
+
+    /**
+     * AEM as a Cloud Service environment variables used to derive the instance's own Content AI base URL.
+     */
+    private static final String ENV_DOMAIN_PUBLISH = "AEM_DOMAIN_PUBLISH";
+    private static final String ENV_PROGRAM_ID = "AEM_PROGRAM_ID";
+    private static final String ENV_ENV_ID = "AEM_ENV_ID";
+
     @Reference
     private HttpClientBuilderFactory httpClientBuilderFactory;
+
+    @Reference
+    private SlingSettingsService slingSettings;
 
     private ContentAIConfig config;
 
@@ -110,20 +129,90 @@ public class ContentAIClientImpl implements ContentAIClient {
     }
 
     private JsonNode executeRequest(String path, ObjectNode body) throws ContentAIClientException {
+        String apiKey = config.apiKey();
+        if (StringUtils.isBlank(apiKey)) {
+            throw new ContentAIClientException("Content AI API key (X-Api-Key) is not configured", 0);
+        }
+        String url = resolveBaseUrl() + path;
         RequestConfig requestConfig = RequestConfig.custom()
             .setConnectTimeout(config.connectionTimeout())
             .setSocketTimeout(config.socketTimeout())
             .build();
         try (CloseableHttpClient httpClient = getHttpClient(requestConfig)) {
-            HttpPost post = new HttpPost(config.baseUrl() + path);
+            HttpPost post = new HttpPost(url);
             post.setHeader("Content-Type", "application/json");
-            post.setHeader("Authorization", "Bearer " + config.bearerToken());
+            // Anonymous, public-index access uses X-Api-Key (a Developer Console client ID), never a bearer token.
+            post.setHeader("X-Api-Key", apiKey);
             post.setEntity(new StringEntity(mapper.writeValueAsString(body), StandardCharsets.UTF_8));
 
             return executeAndParse(httpClient, post, path);
         } catch (IOException e) {
             throw new ContentAIClientException("Failed to call Content AI at " + path, e);
         }
+    }
+
+    /**
+     * Resolves the Content AI base URL from the running AEM as a Cloud Service environment, so the component always
+     * targets its own environment's bucket rather than a hand-configured value. Falls back to the dev-only
+     * {@code baseUrlOverride} config when the CS environment variables are absent (local/non-CS development).
+     *
+     * @return the base URL (without a trailing slash), up to and including the Content AI path
+     * @throws ContentAIClientException if no override is set and the environment variables are not present
+     */
+    protected String resolveBaseUrl() throws ContentAIClientException {
+        String override = config.baseUrlOverride();
+        if (StringUtils.isNotBlank(override)) {
+            return StringUtils.removeEnd(override.trim(), "/");
+        }
+        // Tier matters: AEM Cloud Service hosts are `author-p{PID}-e{EID}` and `publish-p{PID}-e{EID}`. A
+        // public-site component runs on publish at request time, but may also render on author (e.g. preview),
+        // so resolve the tier from the instance's run modes rather than assuming publish.
+        boolean author = isAuthorTier();
+        String host = null;
+        if (!author) {
+            // On publish, AEM_DOMAIN_PUBLISH is the authoritative host for this environment.
+            host = getEnv(ENV_DOMAIN_PUBLISH);
+        }
+        if (StringUtils.isBlank(host)) {
+            String programId = getEnv(ENV_PROGRAM_ID);
+            String envId = getEnv(ENV_ENV_ID);
+            if (StringUtils.isNotBlank(programId) && StringUtils.isNotBlank(envId)) {
+                String prefix = author ? "author-" : "publish-";
+                host = prefix + "p" + programId + "-e" + envId + ".adobeaemcloud.com";
+            }
+        }
+        if (StringUtils.isBlank(host)) {
+            throw new ContentAIClientException("Content AI base URL could not be derived: no baseUrlOverride is set and "
+                + "the AEM_DOMAIN_PUBLISH / AEM_PROGRAM_ID+AEM_ENV_ID environment variables are absent", 0);
+        }
+        return "https://" + host + CONTENT_AI_PATH;
+    }
+
+    /**
+     * @return {@code true} if this instance runs on the author tier (author run mode present and publish absent);
+     *         {@code false} otherwise — ambiguous/unknown defaults to publish, the primary tier for this
+     *         public-site component.
+     */
+    private boolean isAuthorTier() {
+        Set<String> runModes = getRunModes();
+        return runModes.contains("author") && !runModes.contains("publish");
+    }
+
+    /**
+     * Reads an environment variable. Package-visible seam so tests can supply values without a real CS environment.
+     *
+     * @param name the environment variable name
+     * @return the value, or {@code null} if unset
+     */
+    protected String getEnv(String name) {
+        return System.getenv(name);
+    }
+
+    /**
+     * @return the instance's Sling run modes. Seam so tests can control the tier without an OSGi container.
+     */
+    protected Set<String> getRunModes() {
+        return slingSettings != null ? slingSettings.getRunModes() : Collections.emptySet();
     }
 
     private JsonNode executeAndParse(CloseableHttpClient httpClient, HttpPost post, String path) throws IOException, ContentAIClientException {
