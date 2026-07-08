@@ -1,0 +1,51 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2026 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<section data-sly-use.search="com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch"
+         id="${search.id}"
+         class="cmp-contentaisearch"
+         role="search"
+         data-cmp-is="contentaisearch"
+         data-cmp-content-source="${search.contentSource}"
+         data-cmp-gensearch-enabled-default="${search.genSearchEnabledByDefault}"
+         data-cmp-resource-path="${resource.path}"
+         data-i18n-messages='${search.i18nMessages}'>
+    <form class="cmp-contentaisearch__form" data-cmp-hook-contentaisearch="form" autocomplete="off">
+        <div class="cmp-contentaisearch__field">
+            <label class="cmp-contentaisearch__input-label" for="${search.id}-input">${'Search' @ i18n}</label>
+            <input id="${search.id}-input" class="cmp-contentaisearch__input" data-cmp-hook-contentaisearch="input"
+                   type="text" name="q" placeholder="${search.placeholder || 'Search' @ i18n}" autocomplete="off">
+            <span class="cmp-contentaisearch__loading-indicator" data-cmp-hook-contentaisearch="loadingIndicator" hidden="hidden"></span>
+        </div>
+        <label class="cmp-contentaisearch__toggle">
+            <input type="checkbox" data-cmp-hook-contentaisearch="toggle"
+                   checked="${search.genSearchEnabledByDefault ? true : false}"
+                   aria-label="${'Show AI-generated summary' @ i18n}">
+            ${'Show AI-generated summary' @ i18n}
+        </label>
+    </form>
+    <div class="cmp-contentaisearch__summary" data-cmp-hook-contentaisearch="summary" hidden="hidden">
+        <p class="cmp-contentaisearch__summary-text" data-cmp-hook-contentaisearch="summaryText"></p>
+        <ul class="cmp-contentaisearch__sources" data-cmp-hook-contentaisearch="sources"></ul>
+        <p class="cmp-contentaisearch__disclaimer" data-cmp-hook-contentaisearch="disclaimer">
+            ${search.disclaimerText || 'AI-generated responses may be inaccurate. Verify important information.' @ i18n}
+        </p>
+    </div>
+    <div class="cmp-contentaisearch__error" data-cmp-hook-contentaisearch="error" hidden="hidden">
+        <p>${'Something went wrong generating the summary.' @ i18n}</p>
+        <button type="button" data-cmp-hook-contentaisearch="retry">${'Try again' @ i18n}</button>
+    </div>
+    <ul class="cmp-contentaisearch__results" data-cmp-hook-contentaisearch="results" aria-label="${'Search results' @ i18n}"></ul>
+</section>
