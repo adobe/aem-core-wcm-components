@@ -30,7 +30,7 @@
             <i class="cmp-search__icon" data-cmp-hook-search="icon"></i>
             <span class="cmp-search__loading-indicator" data-cmp-hook-search="loadingIndicator"></span>
             <input id="${search.id}-input" class="cmp-search__input" data-cmp-hook-search="input" type="text" name="fulltext" placeholder="${'Search' @ i18n}"
-                   role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-invalid="false" aria-expanded="false">
+                   role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-controls="${search.id}-results" aria-invalid="false" aria-expanded="false">
             <button class="cmp-search__clear" data-cmp-hook-search="clear" aria-label="${'Clear' @ i18n}">
                 <i class="cmp-search__clear-icon"></i>
             </button>
@@ -40,6 +40,6 @@
             ${'AI Search' @ i18n}
         </label>
     </form>
-    <div class="cmp-search__results" aria-label="${'Search results' @ i18n}" data-cmp-hook-search="results" role="listbox" aria-multiselectable="false"></div>
+    <div id="${search.id}-results" class="cmp-search__results" aria-label="${'Search results' @ i18n}" data-cmp-hook-search="results" role="listbox" aria-multiselectable="false"></div>
     <sly data-sly-include="itemTemplate.html"/>
 </section>

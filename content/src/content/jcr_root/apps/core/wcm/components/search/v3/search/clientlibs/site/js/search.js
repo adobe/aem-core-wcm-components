@@ -304,10 +304,14 @@
     };
 
     Search.prototype._makeAccessible = function() {
-        var id = NS + "-search-results-" + idCount;
+        var id = this._elements.results.id;
+        if (!id) {
+            id = NS + "-search-results-" + idCount;
+            this._elements.results.id = id;
+            idCount++;
+        }
         this._elements.input.setAttribute("aria-owns", id);
-        this._elements.results.id = id;
-        idCount++;
+        this._elements.input.setAttribute("aria-controls", id);
     };
 
     Search.prototype._generateItems = function(data, results) {

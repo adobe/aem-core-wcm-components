@@ -49,7 +49,7 @@ public interface Search extends Component {
     /**
      * Name of the configuration policy property that hides the AI Search toggle from site visitors.
      *
-     * @since com.adobe.cq.wcm.core.components.models 12.28.0
+     * @since com.adobe.cq.wcm.core.components.models 12.31.0
      */
     String PN_HIDE_AI_SEARCH_TOGGLE = "hideAiSearchToggle";
 
@@ -99,7 +99,7 @@ public interface Search extends Component {
      * Whether the AI Search toggle should be hidden from site visitors.
      *
      * @return {@code true} if the toggle should be hidden, {@code false} otherwise (default)
-     * @since com.adobe.cq.wcm.core.components.models 12.28.0
+     * @since com.adobe.cq.wcm.core.components.models 12.31.0
      */
     default boolean hideAiSearchToggle() {
         return false;
