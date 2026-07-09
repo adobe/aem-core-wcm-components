@@ -66,4 +66,12 @@ public class SearchImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         Search search = context.request().adaptTo(Search.class);
         assertTrue(search.hideAiSearchToggle());
     }
+
+    @Test
+    void testHideAiSearchToggle_policyExplicitlyDisabled() {
+        context.currentResource(SEARCH_PAGE + "/jcr:content/search");
+        context.contentPolicyMapping(resourceType, Search.PN_HIDE_AI_SEARCH_TOGGLE, false);
+        Search search = context.request().adaptTo(Search.class);
+        assertFalse(search.hideAiSearchToggle());
+    }
 }

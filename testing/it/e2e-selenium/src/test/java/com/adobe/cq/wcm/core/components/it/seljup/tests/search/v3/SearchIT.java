@@ -35,8 +35,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Tag("group3")
 public class SearchIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.search.v2.SearchIT {
 
-    protected Search search;
-
     @Override
     protected void setupResources() {
         super.setupResources();
@@ -45,10 +43,15 @@ public class SearchIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.s
         search = new Search();
     }
 
+    @Override
     @BeforeEach
     public void setupBeforeEach() throws ClientException {
         setupResources();
         setup();
+    }
+
+    private Search v3Search() {
+        return (Search) search;
     }
 
     @Test
@@ -56,7 +59,7 @@ public class SearchIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.s
     public void testAiSearchToggleVisible() {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertTrue(search.isAiToggleVisible(), "AI Search toggle should be visible by default");
+        assertTrue(v3Search().isAiToggleVisible(), "AI Search toggle should be visible by default");
     }
 
     @Test
@@ -64,11 +67,11 @@ public class SearchIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.s
     public void testAiSearchTogglePrefix() throws InterruptedException {
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        search.setAiToggle(true);
+        v3Search().setAiToggle(true);
         search.setInput("Page");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
-        String requestUrl = search.getLastSearchResultsRequestUrl();
+        String requestUrl = v3Search().getLastSearchResultsRequestUrl();
         assertNotNull(requestUrl, "Search results request should be fired");
         assertTrue(requestUrl.contains("fulltext=%3F%7B%7D%3FPage") || requestUrl.contains("fulltext=?%7B%7D%3FPage"),
             "AI Search enabled request should include the ?{}? prefix in fulltext");
@@ -83,12 +86,12 @@ public class SearchIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.s
 
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
-        assertFalse(search.isAiToggleVisible(), "AI Search toggle should be hidden when policy is enabled");
+        assertFalse(v3Search().isAiToggleVisible(), "AI Search toggle should be hidden when policy is enabled");
 
         search.setInput("Page");
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
-        String requestUrl = search.getLastSearchResultsRequestUrl();
+        String requestUrl = v3Search().getLastSearchResultsRequestUrl();
         assertNotNull(requestUrl, "Search results request should be fired");
         assertFalse(requestUrl.contains("%3F%7B%7D%3F"), "Lexical search should not include the semantic prefix");
     }
