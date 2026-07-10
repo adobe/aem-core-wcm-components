@@ -62,7 +62,16 @@
                                             <vcf
                                                 jcr:primaryType="nt:unstructured"
                                                 text="Visual Content Fragment"
-                                                value="vcf"/>
+                                                value="vcf">
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/renderconditions/not">
+                                                    <rendercondition
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/renderconditions/feature"
+                                                        feature="core.wcm.components.contentfragment.vcf"/>
+                                                </granite:rendercondition>
+                                            </vcf>
                                         </items>
                                     </displayMode>
                                     <elementNames
