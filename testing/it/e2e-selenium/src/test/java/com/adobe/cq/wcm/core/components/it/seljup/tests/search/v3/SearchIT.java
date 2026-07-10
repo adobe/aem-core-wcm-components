@@ -48,6 +48,9 @@ public class SearchIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.s
     public void setupBeforeEach() throws ClientException {
         setupResources();
         setup();
+        createComponentPolicy(proxyPath.substring(proxyPath.lastIndexOf("/")), new HashMap<String, String>() {{
+            put("hideAiSearchToggle", "false");
+        }});
     }
 
     private Search v3Search() {
