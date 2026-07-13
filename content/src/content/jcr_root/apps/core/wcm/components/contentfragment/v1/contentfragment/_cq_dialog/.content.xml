@@ -62,7 +62,12 @@
                                             <vcf
                                                 jcr:primaryType="nt:unstructured"
                                                 text="Visual Content Fragment"
-                                                value="vcf"/>
+                                                value="vcf">
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/renderconditions/featuretoggle"
+                                                    toggleName="FT_SITES-47738"/>
+                                            </vcf>
                                         </items>
                                     </displayMode>
                                     <elementNames
