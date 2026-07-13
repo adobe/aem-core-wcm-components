@@ -18,13 +18,16 @@ package com.adobe.cq.wcm.core.components.internal.services.contentai;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import com.adobe.cq.wcm.core.components.services.contentai.ContentAISearchResponse;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ContentSourceSearchMergerTest {
 
@@ -87,6 +90,34 @@ class ContentSourceSearchMergerTest {
         ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(Collections.singletonList(partial), 0);
 
         assertEquals(3, merged.getResults().size());
+    }
+
+    @Test
+    void mergeToResponse_includesPaginationMetadata() {
+        ContentSourceSearchResult partial = result(item("doc_1", 0.9));
+        partial.setTotalResults(42);
+        partial.setCursor("next-page");
+        Map<String, String> cursors = new HashMap<>();
+        cursors.put("my-source", "next-page");
+
+        ContentAISearchResponse response = ContentSourceSearchMerger.mergeToResponse(
+            Collections.singletonList(partial), cursors, 0);
+
+        assertEquals(1, response.getResults().size());
+        assertEquals(42, response.getTotalResults());
+        assertTrue(response.isHasMore());
+        assertEquals("next-page", response.getSourceCursors().get("my-source"));
+    }
+
+    @Test
+    void mergeToResponse_hasMoreFalseWhenNoCursors() {
+        ContentSourceSearchResult partial = result(item("doc_1", 0.9));
+
+        ContentAISearchResponse response = ContentSourceSearchMerger.mergeToResponse(
+            Collections.singletonList(partial), Collections.emptyMap(), 0);
+
+        assertEquals(false, response.isHasMore());
+        assertTrue(response.getSourceCursors().isEmpty());
     }
 
     private static ContentSourceSearchResult result(ContentSourceSearchResult.Item... items) {

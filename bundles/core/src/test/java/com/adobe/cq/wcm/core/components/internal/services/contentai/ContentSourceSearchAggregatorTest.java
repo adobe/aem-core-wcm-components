@@ -15,9 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.contentai;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClient;
@@ -25,83 +22,46 @@ import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientExcept
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ContentSourceSearchAggregatorTest {
 
     @Test
-    void fetchAll_followsCursorUntilAllResultsLoaded() throws Exception {
-        ContentAIClient client = mock(ContentAIClient.class);
-        ContentSourceSearchResult firstPage = page(67, item("doc_1"), item("doc_2"));
-        firstPage.setCursor("page-2");
-        ContentSourceSearchResult secondPage = page(67, item("doc_3"));
-
-        when(client.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(50), isNull())).thenReturn(firstPage);
-        when(client.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(50), eq("page-2"))).thenReturn(secondPage);
-
-        ContentSourceSearchResult result = ContentSourceSearchAggregator.fetchAll(client, "my-source", "ACQUISITION", "block");
-
-        assertEquals(67, result.getTotalResults());
-        assertEquals(3, result.getResults().size());
-        verify(client).search("my-source", "ACQUISITION", "block", 50, "page-2");
-    }
-
-    @Test
-    void fetchAll_returnsSinglePageWhenNoCursor() throws Exception {
-        ContentAIClient client = mock(ContentAIClient.class);
-        ContentSourceSearchResult page = page(10, item("doc_1"));
-        when(client.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(50), isNull())).thenReturn(page);
-
-        ContentSourceSearchResult result = ContentSourceSearchAggregator.fetchAll(client, "my-source", "ACQUISITION", "block");
-
-        assertEquals(10, result.getTotalResults());
-        assertEquals(1, result.getResults().size());
-    }
-
-    @Test
-    void fetchAll_handlesNullResultsList() throws Exception {
+    void fetchPage_delegatesToClientWithCappedLimit() throws Exception {
         ContentAIClient client = mock(ContentAIClient.class);
         ContentSourceSearchResult page = new ContentSourceSearchResult();
-        page.setTotalResults(0);
-        when(client.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(50), isNull())).thenReturn(page);
+        when(client.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(10), isNull())).thenReturn(page);
 
-        ContentSourceSearchResult result = ContentSourceSearchAggregator.fetchAll(client, "my-source", "ACQUISITION", "block");
+        ContentSourceSearchResult result = ContentSourceSearchAggregator.fetchPage(
+            client, "my-source", "ACQUISITION", "block", 10, null);
 
-        assertEquals(0, result.getResults().size());
+        assertEquals(page, result);
+        verify(client).search("my-source", "ACQUISITION", "block", 10, null);
     }
 
     @Test
-    void fetchAll_stopsAfterMaxPages() throws Exception {
+    void fetchPage_capsLimitAtApiPageSize() throws Exception {
         ContentAIClient client = mock(ContentAIClient.class);
-        ContentSourceSearchResult page = page(1000, item("doc_1"));
-        page.setCursor("next");
-        when(client.search(anyString(), anyString(), anyString(), anyInt(), any())).thenReturn(page);
+        ContentSourceSearchResult page = new ContentSourceSearchResult();
+        when(client.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(50), isNull())).thenReturn(page);
 
-        ContentSourceSearchAggregator.fetchAll(client, "my-source", "ACQUISITION", "block");
+        ContentSourceSearchAggregator.fetchPage(client, "my-source", "ACQUISITION", "block", 200, null);
 
-        verify(client, times(ContentSourceSearchAggregator.MAX_PAGES))
-            .search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(50), any());
+        verify(client).search("my-source", "ACQUISITION", "block", 50, null);
     }
 
-    private static ContentSourceSearchResult page(long totalResults, ContentSourceSearchResult.Item... items) {
-        ContentSourceSearchResult result = new ContentSourceSearchResult();
-        result.setTotalResults(totalResults);
-        result.setResults(Arrays.asList(items));
-        return result;
-    }
+    @Test
+    void fetchPage_passesCursorToClient() throws Exception {
+        ContentAIClient client = mock(ContentAIClient.class);
+        ContentSourceSearchResult page = new ContentSourceSearchResult();
+        when(client.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(10), eq("page-2"))).thenReturn(page);
 
-    private static ContentSourceSearchResult.Item item(String id) {
-        ContentSourceSearchResult.Item item = new ContentSourceSearchResult.Item();
-        item.setId(id);
-        item.setScore(1.0);
-        return item;
+        ContentSourceSearchAggregator.fetchPage(client, "my-source", "ACQUISITION", "block", 10, "page-2");
+
+        verify(client).search("my-source", "ACQUISITION", "block", 10, "page-2");
     }
 }

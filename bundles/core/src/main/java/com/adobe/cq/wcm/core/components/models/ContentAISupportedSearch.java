@@ -88,10 +88,10 @@ public interface ContentAISupportedSearch extends Component {
     }
 
     /**
-     * @return the maximum number of results to fetch from the results list.
+     * @return the number of results fetched per Content AI search request (cursor page size).
      */
     default int getResultsSize() {
-        return 0;
+        return 12;
     }
 
     /**

@@ -24,6 +24,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import com.adobe.cq.wcm.core.components.services.contentai.ContentAISearchResponse;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
 
 /**
@@ -77,5 +78,29 @@ public final class ContentSourceSearchMerger {
         result.setTotalResults(totalResults);
         result.setCursor(null);
         return result;
+    }
+
+    /**
+     * @param partials        per-source search responses from the current request
+     * @param sourceCursors   cursors for the next page per source (sources with more results)
+     * @param limit           maximum number of merged results to return
+     * @return merged response including pagination metadata for the client
+     */
+    @NotNull
+    public static ContentAISearchResponse mergeToResponse(@NotNull List<ContentSourceSearchResult> partials,
+        @NotNull Map<String, String> sourceCursors, int limit) {
+        ContentSourceSearchResult merged = merge(partials, limit);
+        ContentAISearchResponse response = new ContentAISearchResponse();
+        response.setResults(merged.getResults());
+        response.setTotalResults(merged.getTotalResults());
+        Map<String, String> nextCursors = new LinkedHashMap<>();
+        for (Map.Entry<String, String> entry : sourceCursors.entrySet()) {
+            if (StringUtils.isNotBlank(entry.getValue())) {
+                nextCursors.put(entry.getKey(), entry.getValue());
+            }
+        }
+        response.setHasMore(!nextCursors.isEmpty());
+        response.setSourceCursors(nextCursors);
+        return response;
     }
 }

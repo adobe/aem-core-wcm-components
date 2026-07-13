@@ -22,7 +22,6 @@
          data-cmp-gensearch-enabled-default="${search.genSearchEnabledByDefault}"
          data-cmp-gensearch-toggle-visible="${search.genSearchToggleVisible}"
          data-cmp-gensearch-error-fallback="${search.genSearchErrorFallback}"
-         data-cmp-results-size="${search.resultsSize}"
          data-cmp-results-layout="${search.resultsLayout}"
          data-cmp-resource-path="${resource.path}"
          data-i18n-messages='${search.i18nMessages}'>
@@ -77,30 +76,13 @@
     </div>
     <div class="cmp-contentaisearch__results-section" data-cmp-hook-contentaisearch="resultsSection" hidden="hidden">
         <div class="cmp-contentaisearch__results-toolbar">
-            <p class="cmp-contentaisearch__results-status" data-cmp-hook-contentaisearch="resultsStatus"></p>
-            <div class="cmp-contentaisearch__results-controls">
-                <div class="cmp-contentaisearch__layout-toggle" role="group" aria-label="${'Results layout' @ i18n}">
-                    <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutCard" aria-pressed="true">${'Cards' @ i18n}</button>
-                    <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutList" aria-pressed="false">${'List' @ i18n}</button>
-                </div>
-                <label class="cmp-contentaisearch__results-limit">
-                    <span class="cmp-contentaisearch__results-limit-label">${'Results per page' @ i18n}</span>
-                    <select data-cmp-hook-contentaisearch="resultsLimit" aria-label="${'Results per page' @ i18n}">
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                        <option value="50">50</option>
-                    </select>
-                </label>
+            <div class="cmp-contentaisearch__layout-toggle" role="group" aria-label="${'Results layout' @ i18n}">
+                <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutCard" aria-pressed="true">${'Cards' @ i18n}</button>
+                <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutList" aria-pressed="false">${'List' @ i18n}</button>
             </div>
         </div>
         <ul class="cmp-contentaisearch__results" data-cmp-hook-contentaisearch="results" aria-label="${'Search results' @ i18n}"></ul>
-        <div class="cmp-contentaisearch__pagination" data-cmp-hook-contentaisearch="pagination" hidden="hidden">
-            <button type="button" class="cmp-contentaisearch__pagination-btn" data-cmp-hook-contentaisearch="prevPage" disabled="disabled">${'Previous' @ i18n}</button>
-            <span class="cmp-contentaisearch__pagination-status" data-cmp-hook-contentaisearch="paginationStatus"></span>
-            <button type="button" class="cmp-contentaisearch__pagination-btn" data-cmp-hook-contentaisearch="nextPage">${'Next' @ i18n}</button>
-        </div>
+        <button type="button" class="cmp-contentaisearch__load-more" data-cmp-hook-contentaisearch="loadMore" hidden="hidden">${'Load more results' @ i18n}</button>
     </div>
     <sly data-sly-include="itemTemplateCard.html"/>
     <sly data-sly-include="itemTemplateList.html"/>

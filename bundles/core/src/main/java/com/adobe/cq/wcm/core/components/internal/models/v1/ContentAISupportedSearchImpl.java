@@ -57,7 +57,7 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/contentaisearch/v1/contentaisearch";
 
-    public static final int PROP_RESULTS_SIZE_DEFAULT = 10;
+    public static final int PROP_RESULTS_SIZE_DEFAULT = 12;
     public static final String PROP_RESULTS_LAYOUT_DEFAULT = ContentAISupportedSearch.RESULTS_LAYOUT_CARD;
     public static final boolean PROP_GENSEARCH_ENABLED_BY_DEFAULT_DEFAULT = true;
 
@@ -212,15 +212,11 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
         i18nMessagesMap.put("Generating answer...", i18n.get("Generating answer..."));
         i18nMessagesMap.put("Powered by Content AI", i18n.get("Powered by Content AI"));
         i18nMessagesMap.put("Sources", i18n.get("Sources"));
-        i18nMessagesMap.put("Results per page", i18n.get("Results per page"));
         i18nMessagesMap.put("Search results", i18n.get("Search results"));
         i18nMessagesMap.put("Cards", i18n.get("Cards"));
         i18nMessagesMap.put("List", i18n.get("List"));
         i18nMessagesMap.put("Results layout", i18n.get("Results layout"));
-        i18nMessagesMap.put("Previous", i18n.get("Previous"));
-        i18nMessagesMap.put("Next", i18n.get("Next"));
-        i18nMessagesMap.put("Page {0} of {1}", i18n.get("Page {0} of {1}"));
-        i18nMessagesMap.put("Showing {0}-{1} of {2}", i18n.get("Showing {0}-{1} of {2}"));
+        i18nMessagesMap.put("Load more results", i18n.get("Load more results"));
         try {
             return new ObjectMapper().writeValueAsString(i18nMessagesMap);
         } catch (Exception e) {

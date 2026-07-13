@@ -38,6 +38,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -69,7 +70,7 @@ class ContentAISearchResultsServletTest {
         item.setId("doc_1");
         item.setScore(0.75);
         expected.setResults(Collections.singletonList(item));
-        when(mockClient.search(eq("my-source"), eq("ACQUISITION"), eq("electric cars"), eq(50), isNull())).thenReturn(expected);
+        when(mockClient.search(eq("my-source"), eq("ACQUISITION"), eq("electric cars"), eq(10), isNull())).thenReturn(expected);
 
         context.currentResource(COMPONENT_PATH);
         context.request().setQueryString("q=electric+cars");
@@ -77,7 +78,9 @@ class ContentAISearchResultsServletTest {
         underTest.doGet(context.request(), context.response());
 
         assertEquals(200, context.response().getStatus());
-        assertTrue(context.response().getOutputAsString().contains("\"id\":\"doc_1\""));
+        String output = context.response().getOutputAsString();
+        assertTrue(output.contains("\"id\":\"doc_1\""));
+        assertTrue(output.contains("\"hasMore\":false"));
     }
 
     @Test
@@ -102,7 +105,7 @@ class ContentAISearchResultsServletTest {
     }
 
     @Test
-    void doGetFetchesAllPagesFromContentAi() throws Exception {
+    void doGetFetchesSinglePageAndReturnsPaginationMetadata() throws Exception {
         ContentSourceSearchResult firstPage = new ContentSourceSearchResult();
         firstPage.setTotalResults(67);
         firstPage.setCursor("page-2");
@@ -111,17 +114,8 @@ class ContentAISearchResultsServletTest {
         item.setScore(0.75);
         firstPage.setResults(Collections.singletonList(item));
 
-        ContentSourceSearchResult secondPage = new ContentSourceSearchResult();
-        secondPage.setTotalResults(67);
-        ContentSourceSearchResult.Item item2 = new ContentSourceSearchResult.Item();
-        item2.setId("doc_2");
-        item2.setScore(0.5);
-        secondPage.setResults(Collections.singletonList(item2));
-
-        when(mockClient.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(50), isNull()))
+        when(mockClient.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(10), isNull()))
             .thenReturn(firstPage);
-        when(mockClient.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(50), eq("page-2")))
-            .thenReturn(secondPage);
 
         context.currentResource(COMPONENT_PATH);
         context.request().setQueryString("q=block");
@@ -131,8 +125,32 @@ class ContentAISearchResultsServletTest {
         assertEquals(200, context.response().getStatus());
         String output = context.response().getOutputAsString();
         assertTrue(output.contains("\"id\":\"doc_1\""));
-        assertTrue(output.contains("\"id\":\"doc_2\""));
         assertTrue(output.contains("\"totalResults\":67"));
+        assertTrue(output.contains("\"hasMore\":true"));
+        assertTrue(output.contains("\"sourceCursors\":{\"my-source\":\"page-2\"}"));
+        verify(mockClient, times(1)).search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(10), isNull());
+    }
+
+    @Test
+    void doGetLoadMoreUsesProvidedCursors() throws Exception {
+        ContentSourceSearchResult secondPage = new ContentSourceSearchResult();
+        secondPage.setTotalResults(67);
+        ContentSourceSearchResult.Item item = new ContentSourceSearchResult.Item();
+        item.setId("doc_2");
+        item.setScore(0.5);
+        secondPage.setResults(Collections.singletonList(item));
+
+        when(mockClient.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(10), eq("page-2")))
+            .thenReturn(secondPage);
+
+        context.currentResource(COMPONENT_PATH);
+        context.request().setQueryString("q=block&cursors=%7B%22my-source%22%3A%22page-2%22%7D");
+
+        underTest.doGet(context.request(), context.response());
+
+        assertEquals(200, context.response().getStatus());
+        assertTrue(context.response().getOutputAsString().contains("\"id\":\"doc_2\""));
+        verify(mockClient).search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(10), eq("page-2"));
     }
 
     @Test
@@ -160,5 +178,16 @@ class ContentAISearchResultsServletTest {
         assertEquals(200, context.response().getStatus());
         assertTrue(context.response().getOutputAsString().contains("\"results\":[]"));
         verify(mockClient, never()).search(anyString(), anyString(), anyString(), anyInt(), isNull());
+    }
+
+    @Test
+    void parseSourceCursors_returnsEmptyMapForBlankInput() {
+        assertTrue(ContentAISearchResultsServlet.parseSourceCursors(null).isEmpty());
+        assertTrue(ContentAISearchResultsServlet.parseSourceCursors("").isEmpty());
+    }
+
+    @Test
+    void parseSourceCursors_parsesJsonMap() {
+        assertEquals("page-2", ContentAISearchResultsServlet.parseSourceCursors("{\"my-source\":\"page-2\"}").get("my-source"));
     }
 }

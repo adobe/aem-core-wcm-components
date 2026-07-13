@@ -20,7 +20,6 @@
     var IS = "contentaisearch";
     var DELAY = 300;
     var LOADING_DISPLAY_DELAY = 300;
-    var LIMIT_OPTIONS = [5, 10, 20, 30, 50];
 
     var selectors = {
         self: "[data-" + NS + '-is="' + IS + '"]',
@@ -56,13 +55,12 @@
         this._genSearchErrorFallback = this._element.getAttribute("data-cmp-gensearch-error-fallback") || "RESULTS_ONLY";
         this._genSearchEnabled = this._resolveInitialGenSearchEnabled();
         this._resultsLayout = this._element.getAttribute("data-cmp-results-layout") === "list" ? "list" : "card";
-        this._resultsLimit = this._resolveInitialResultsLimit();
         this._i18n = this._parseI18n();
         this._timeout = null;
         this._currentQuery = "";
         this._allResults = [];
-        this._totalResults = 0;
-        this._currentPage = 0;
+        this._hasMore = false;
+        this._sourceCursors = {};
 
         this._applyLayoutClass();
         this._syncLayoutButtons();
@@ -79,21 +77,14 @@
         if (this._elements.retry) {
             this._elements.retry.addEventListener("click", this._onRetry.bind(this));
         }
-        if (this._elements.resultsLimit) {
-            this._elements.resultsLimit.value = String(this._resultsLimit);
-            this._elements.resultsLimit.addEventListener("change", this._onResultsLimitChange.bind(this));
-        }
         if (this._elements.layoutCard) {
             this._elements.layoutCard.addEventListener("click", this._onLayoutCard.bind(this));
         }
         if (this._elements.layoutList) {
             this._elements.layoutList.addEventListener("click", this._onLayoutList.bind(this));
         }
-        if (this._elements.prevPage) {
-            this._elements.prevPage.addEventListener("click", this._onPrevPage.bind(this));
-        }
-        if (this._elements.nextPage) {
-            this._elements.nextPage.addEventListener("click", this._onNextPage.bind(this));
+        if (this._elements.loadMore) {
+            this._elements.loadMore.addEventListener("click", this._onLoadMore.bind(this));
         }
         if (this._elements.form) {
             this._elements.form.addEventListener("submit", function(event) {
@@ -118,11 +109,6 @@
         return this._i18n[key] || fallback || key;
     };
 
-    ContentAISearch.prototype._formatStatus = function(start, end, total) {
-        var template = this._msg("Showing {0}-{1} of {2}", "Showing {0}-{1} of {2}");
-        return template.replace("{0}", String(start)).replace("{1}", String(end)).replace("{2}", String(total));
-    };
-
     ContentAISearch.prototype._cacheElements = function() {
         this._elements = {};
         var hooks = this._element.querySelectorAll("[data-" + NS + "-hook-" + IS + "]");
@@ -135,14 +121,6 @@
 
     ContentAISearch.prototype._resolveResourcePath = function() {
         return this._element.getAttribute("data-cmp-resource-path");
-    };
-
-    ContentAISearch.prototype._resolveInitialResultsLimit = function() {
-        var configured = parseInt(this._element.getAttribute("data-cmp-results-size"), 10);
-        if (!configured || LIMIT_OPTIONS.indexOf(configured) === -1) {
-            return 10;
-        }
-        return configured;
     };
 
     ContentAISearch.prototype._resolveInitialGenSearchEnabled = function() {
@@ -180,7 +158,7 @@
         this._resultsLayout = "card";
         this._applyLayoutClass();
         this._syncLayoutButtons();
-        this._renderResultsPage();
+        this._renderResults();
     };
 
     ContentAISearch.prototype._onLayoutList = function() {
@@ -190,7 +168,7 @@
         this._resultsLayout = "list";
         this._applyLayoutClass();
         this._syncLayoutButtons();
-        this._renderResultsPage();
+        this._renderResults();
     };
 
     ContentAISearch.prototype._onInput = function() {
@@ -227,37 +205,8 @@
         this._runQuery();
     };
 
-    ContentAISearch.prototype._onResultsLimitChange = function() {
-        var selected = parseInt(this._elements.resultsLimit.value, 10);
-        if (!selected || LIMIT_OPTIONS.indexOf(selected) === -1) {
-            return;
-        }
-        this._resultsLimit = selected;
-        this._currentPage = 0;
-        this._renderResultsPage();
-    };
-
-    ContentAISearch.prototype._onPrevPage = function() {
-        if (this._currentPage > 0) {
-            this._currentPage--;
-            this._renderResultsPage();
-        }
-    };
-
-    ContentAISearch.prototype._onNextPage = function() {
-        var totalPages = this._getTotalPages();
-        if (this._currentPage < totalPages - 1) {
-            this._currentPage++;
-            this._renderResultsPage();
-        }
-    };
-
-    ContentAISearch.prototype._getTotalPages = function() {
-        var resultCount = this._allResults.length;
-        if (!resultCount) {
-            return 0;
-        }
-        return Math.ceil(resultCount / this._resultsLimit);
+    ContentAISearch.prototype._onLoadMore = function() {
+        this._runLoadMore();
     };
 
     ContentAISearch.prototype._onRetry = function() {
@@ -267,7 +216,6 @@
     ContentAISearch.prototype._runQuery = function() {
         var query = this._elements.input.value;
         this._currentQuery = query;
-        this._currentPage = 0;
         if (!query) {
             this._clearResults();
             return;
@@ -284,13 +232,13 @@
     ContentAISearch.prototype._clearResults = function() {
         this._currentQuery = "";
         this._allResults = [];
-        this._totalResults = 0;
-        this._currentPage = 0;
+        this._hasMore = false;
+        this._sourceCursors = {};
         if (this._elements.results) {
             this._elements.results.innerHTML = "";
         }
         toggleShow(this._elements.resultsSection, false);
-        toggleShow(this._elements.pagination, false);
+        toggleShow(this._elements.loadMore, false);
         toggleShow(this._elements.summary, false);
         toggleShow(this._elements.summaryLoading, false);
         toggleShow(this._elements.error, false);
@@ -334,16 +282,17 @@
         this._fetchJson(url)
             .then(function(data) {
                 self._storeResults(data);
-                self._renderResultsPage();
+                self._renderResults();
             })
             .catch(function() {
                 self._allResults = [];
-                self._totalResults = 0;
+                self._hasMore = false;
+                self._sourceCursors = {};
                 if (self._elements.results) {
                     self._elements.results.innerHTML = "";
                 }
                 toggleShow(self._elements.resultsSection, false);
-                toggleShow(self._elements.pagination, false);
+                toggleShow(self._elements.loadMore, false);
             })
             .then(function() {
                 var elapsed = Date.now() - searchStart;
@@ -354,12 +303,52 @@
             });
     };
 
-    ContentAISearch.prototype._storeResults = function(data) {
-        this._allResults = (data && data.results) || [];
-        this._totalResults = this._allResults.length;
-        if (data && data.totalResults > this._totalResults) {
-            this._totalResults = data.totalResults;
+    ContentAISearch.prototype._storeResults = function(data, append) {
+        var results = (data && data.results) || [];
+        if (!append) {
+            this._allResults = results;
+        } else {
+            var existingIds = {};
+            var self = this;
+            this._allResults.forEach(function(result) {
+                if (result && result.id) {
+                    existingIds[result.id] = true;
+                }
+            });
+            results.forEach(function(result) {
+                if (result && result.id && !existingIds[result.id]) {
+                    self._allResults.push(result);
+                    existingIds[result.id] = true;
+                }
+            });
+            this._allResults.sort(function(a, b) {
+                return (b.score || 0) - (a.score || 0);
+            });
         }
+        this._hasMore = !!(data && data.hasMore);
+        this._sourceCursors = (data && data.sourceCursors) || {};
+    };
+
+    ContentAISearch.prototype._runLoadMore = function() {
+        if (!this._hasMore || !this._currentQuery) {
+            return;
+        }
+        var self = this;
+        if (this._elements.loadMore) {
+            this._elements.loadMore.disabled = true;
+        }
+        var url = this._resourcePath + ".search.json?q=" + encodeURIComponent(this._currentQuery) +
+            "&cursors=" + encodeURIComponent(JSON.stringify(this._sourceCursors));
+        this._fetchJson(url)
+            .then(function(data) {
+                self._storeResults(data, true);
+                self._renderResults();
+            })
+            .then(function() {
+                if (self._elements.loadMore) {
+                    self._elements.loadMore.disabled = false;
+                }
+            });
     };
 
     ContentAISearch.prototype._runGenSearch = function(query) {
@@ -592,43 +581,18 @@
         return html;
     };
 
-    ContentAISearch.prototype._renderResultsPage = function() {
-        var totalPages = this._getTotalPages();
+    ContentAISearch.prototype._renderResults = function() {
         if (!this._allResults.length) {
             this._elements.results.innerHTML = "";
             toggleShow(this._elements.resultsSection, false);
-            toggleShow(this._elements.pagination, false);
+            toggleShow(this._elements.loadMore, false);
             return;
         }
-        if (this._currentPage >= totalPages) {
-            this._currentPage = Math.max(0, totalPages - 1);
-        }
-        var startIndex = this._currentPage * this._resultsLimit;
-        var endIndex = Math.min(startIndex + this._resultsLimit, this._allResults.length);
-        var pageResults = this._allResults.slice(startIndex, endIndex);
 
-        this._elements.results.innerHTML = this._generateResultItems(pageResults);
-
-        var displayStart = startIndex + 1;
-        var displayEnd = endIndex;
-        var displayTotal = this._allResults.length;
-        if (this._elements.resultsStatus) {
-            this._elements.resultsStatus.textContent = this._formatStatus(displayStart, displayEnd, displayTotal);
-        }
-        if (this._elements.paginationStatus) {
-            this._elements.paginationStatus.textContent = this._msg("Page {0} of {1}", "Page {0} of {1}")
-                .replace("{0}", String(this._currentPage + 1))
-                .replace("{1}", String(totalPages));
-        }
-        if (this._elements.prevPage) {
-            this._elements.prevPage.disabled = this._currentPage <= 0;
-        }
-        if (this._elements.nextPage) {
-            this._elements.nextPage.disabled = this._currentPage >= totalPages - 1;
-        }
+        this._elements.results.innerHTML = this._generateResultItems(this._allResults);
 
         toggleShow(this._elements.resultsSection, true);
-        toggleShow(this._elements.pagination, totalPages > 1);
+        toggleShow(this._elements.loadMore, this._hasMore);
     };
 
     ContentAISearch.prototype._renderSummary = function(data) {

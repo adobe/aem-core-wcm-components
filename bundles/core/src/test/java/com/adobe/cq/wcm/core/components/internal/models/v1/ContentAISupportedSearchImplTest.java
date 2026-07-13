@@ -101,7 +101,18 @@ class ContentAISupportedSearchImplTest {
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         JsonNode node = new ObjectMapper().readTree(search.getI18nMessages());
         assertNotNull(node.get("Search"));
-        assertNotNull(node.get("Results per page"));
+        assertNotNull(node.get("Load more results"));
+    }
+
+    @Test
+    void resultsSize_defaultsToTwelve() {
+        mockProductInfoProvider.setVersion(new Version("6.6.0"));
+        context.create().resource(CONTENT_ROOT + "/default-results-size",
+            "sling:resourceType", ContentAISupportedSearchImpl.RESOURCE_TYPE,
+            "contentSources", new String[] {"my-content-source"});
+        context.currentResource(CONTENT_ROOT + "/default-results-size");
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertEquals(12, search.getResultsSize());
     }
 
     @Test

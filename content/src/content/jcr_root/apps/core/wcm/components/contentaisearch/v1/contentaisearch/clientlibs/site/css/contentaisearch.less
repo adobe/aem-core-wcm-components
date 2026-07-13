@@ -305,15 +305,9 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
         gap: .75em;
         margin-bottom: 1em;
-    }
-
-    &__results-status {
-        margin: 0;
-        font-size: .875rem;
-        color: @text-muted;
     }
 
     &__results-controls {
@@ -345,15 +339,9 @@
         }
     }
 
-    &__pagination {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1em;
-        margin-top: 1em;
-    }
-
-    &__pagination-btn {
+    &__load-more {
+        display: block;
+        margin: 1em auto 0;
         padding: .4em .9em;
         border: 1px solid @card-border;
         border-radius: 6px;
@@ -365,22 +353,6 @@
             opacity: .45;
             cursor: not-allowed;
         }
-    }
-
-    &__pagination-status {
-        font-size: .875rem;
-        color: @text-muted;
-    }
-
-    &__results-limit {
-        display: flex;
-        align-items: center;
-        gap: .5em;
-        font-size: .875rem;
-    }
-
-    &__results-limit-label {
-        color: @text-muted;
     }
 
     &__results {
