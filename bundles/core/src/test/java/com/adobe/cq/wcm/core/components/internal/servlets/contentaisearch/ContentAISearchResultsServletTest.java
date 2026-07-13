@@ -25,6 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClient;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
+import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -56,6 +57,7 @@ class ContentAISearchResultsServletTest {
         context.load().json(TEST_BASE + "/test-content.json", CONTENT_ROOT);
         mockClient = mock(ContentAIClient.class);
         context.registerService(ContentAIClient.class, mockClient);
+        context.registerInjectActivateService(new MockProductInfoProvider());
         underTest = context.registerInjectActivateService(new ContentAISearchResultsServlet());
     }
 

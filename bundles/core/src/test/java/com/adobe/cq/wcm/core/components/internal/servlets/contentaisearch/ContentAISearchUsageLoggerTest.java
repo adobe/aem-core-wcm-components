@@ -29,6 +29,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -49,6 +50,7 @@ class ContentAISearchUsageLoggerTest {
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + "/test-content.json", CONTENT_ROOT);
+        context.registerInjectActivateService(new MockProductInfoProvider());
         appender = new ListAppender<>();
         appender.start();
         Logger logger = (Logger) LoggerFactory.getLogger(ContentAISearchUsageLogger.class);

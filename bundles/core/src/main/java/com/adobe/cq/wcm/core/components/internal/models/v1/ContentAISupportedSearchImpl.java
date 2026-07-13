@@ -61,7 +61,7 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     public static final String PROP_RESULTS_LAYOUT_DEFAULT = ContentAISupportedSearch.RESULTS_LAYOUT_CARD;
     public static final boolean PROP_GENSEARCH_ENABLED_BY_DEFAULT_DEFAULT = true;
 
-    @OSGiService
+    @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
     private ProductInfoProvider productInfoProvider;
 
     @ValueMapValue
