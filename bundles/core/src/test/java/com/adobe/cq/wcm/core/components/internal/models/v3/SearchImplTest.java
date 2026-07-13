@@ -83,6 +83,14 @@ public class SearchImplTest extends com.adobe.cq.wcm.core.components.internal.mo
     }
 
     @Test
+    void testHideAiSearchToggle_defaultVisibleOnFutureCloudAuthorReleaseTrain() {
+        mockProductInfoProvider.setVersion(new Version("2030.1.0"));
+        context.currentResource(SEARCH_PAGE + "/jcr:content/search");
+        Search search = context.request().adaptTo(Search.class);
+        assertFalse(search.hideAiSearchToggle());
+    }
+
+    @Test
     void testHideAiSearchToggle_policyEnabled() {
         context.currentResource(SEARCH_PAGE + "/jcr:content/search");
         context.contentPolicyMapping(resourceType, Search.PN_HIDE_AI_SEARCH_TOGGLE, true);
