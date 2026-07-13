@@ -41,9 +41,14 @@ public final class ContentSourceSearchMerger {
      */
     @NotNull
     public static ContentSourceSearchResult merge(@NotNull List<ContentSourceSearchResult> partials, int limit) {
+        long reportedTotal = 0;
         Map<String, ContentSourceSearchResult.Item> byId = new LinkedHashMap<>();
         for (ContentSourceSearchResult partial : partials) {
-            if (partial == null || partial.getResults() == null) {
+            if (partial == null) {
+                continue;
+            }
+            reportedTotal = Math.max(reportedTotal, partial.getTotalResults());
+            if (partial.getResults() == null) {
                 continue;
             }
             for (ContentSourceSearchResult.Item item : partial.getResults()) {
@@ -65,9 +70,11 @@ public final class ContentSourceSearchMerger {
             merged = merged.subList(0, effectiveLimit);
         }
 
+        long totalResults = Math.max(reportedTotal, merged.size());
+
         ContentSourceSearchResult result = new ContentSourceSearchResult();
         result.setResults(merged);
-        result.setTotalResults(merged.size());
+        result.setTotalResults(totalResults);
         result.setCursor(null);
         return result;
     }

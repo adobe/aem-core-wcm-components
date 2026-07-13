@@ -49,6 +49,21 @@ public interface ContentAIClient {
         throws ContentAIClientException;
 
     /**
+     * Executes a hybrid search with optional cursor-based pagination.
+     *
+     * @param contentSource the name of the Content AI content source to search
+     * @param contentSourceType the Content AI content source type
+     * @param query the user's search text
+     * @param limit the maximum number of results to return per page
+     * @param cursor optional pagination cursor from a previous response
+     * @return the search result
+     * @throws ContentAIClientException if the call to Content AI fails
+     * @since com.adobe.cq.wcm.core.components.services.contentai 1.0.0
+     */
+    ContentSourceSearchResult search(String contentSource, String contentSourceType, String query, int limit,
+        String cursor) throws ContentAIClientException;
+
+    /**
      * Executes a hybrid search using {@link #DEFAULT_CONTENT_SOURCE_TYPE}.
      *
      * @param contentSource the name of the Content AI content source to search
@@ -60,6 +75,22 @@ public interface ContentAIClient {
      */
     default ContentSourceSearchResult search(String contentSource, String query, int limit) throws ContentAIClientException {
         return search(contentSource, DEFAULT_CONTENT_SOURCE_TYPE, query, limit);
+    }
+
+    /**
+     * Executes a hybrid search using {@link #DEFAULT_CONTENT_SOURCE_TYPE}.
+     *
+     * @param contentSource the name of the Content AI content source to search
+     * @param query the user's search text
+     * @param limit the maximum number of results to return per page
+     * @param cursor optional pagination cursor from a previous response
+     * @return the search result
+     * @throws ContentAIClientException if the call to Content AI fails
+     * @since com.adobe.cq.wcm.core.components.services.contentai 1.0.0
+     */
+    default ContentSourceSearchResult search(String contentSource, String query, int limit, String cursor)
+        throws ContentAIClientException {
+        return search(contentSource, DEFAULT_CONTENT_SOURCE_TYPE, query, limit, cursor);
     }
 
     /**

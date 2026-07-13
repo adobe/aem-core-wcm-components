@@ -184,6 +184,17 @@ class ContentAIClientImplTest {
     }
 
     @Test
+    void searchIncludesCursorWhenProvided() throws Exception {
+        respondWith(200, "{\"totalResults\":0,\"results\":[]}");
+
+        client.search("my-content-source", "ACQUISITION", "electric cars", 10, "cursor-1");
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        String body = new String(sent.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
+        assertTrue(body.contains("\"cursor\":\"cursor-1\""));
+    }
+
+    @Test
     void searchReturnsParsedResult() throws Exception {
         respondWith(200, "{\"totalResults\":1,\"results\":[{\"id\":\"doc_1\",\"score\":0.75,\"data\":{\"title\":\"Electric Cars\"}}],\"cursor\":\"abc\"}");
 

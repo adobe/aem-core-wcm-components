@@ -26,7 +26,7 @@ public final class ContentSourceLabelFormatter {
 
     public static final int DESCRIPTION_LABEL_MAX_LENGTH = 80;
 
-    private static final String DESCRIPTION_SEPARATOR = " — ";
+    private static final String DESCRIPTION_SEPARATOR = " - ";
 
     private ContentSourceLabelFormatter() {
     }

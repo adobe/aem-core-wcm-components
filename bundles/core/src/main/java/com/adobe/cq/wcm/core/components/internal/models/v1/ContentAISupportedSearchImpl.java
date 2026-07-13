@@ -33,14 +33,17 @@ import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.AemCloudPlatformDetector;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClient;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
+import com.adobe.granite.license.ProductInfoProvider;
 import com.day.cq.i18n.I18n;
 import com.day.cq.wcm.api.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -55,8 +58,11 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     protected static final String RESOURCE_TYPE = "core/wcm/components/contentaisearch/v1/contentaisearch";
 
     public static final int PROP_RESULTS_SIZE_DEFAULT = 10;
+    public static final String PROP_RESULTS_LAYOUT_DEFAULT = ContentAISupportedSearch.RESULTS_LAYOUT_CARD;
     public static final boolean PROP_GENSEARCH_ENABLED_BY_DEFAULT_DEFAULT = true;
-    public static final boolean PROP_GENSEARCH_TOGGLE_VISIBLE_DEFAULT = true;
+
+    @OSGiService
+    private ProductInfoProvider productInfoProvider;
 
     @ValueMapValue
     @Default(values = "")
@@ -77,13 +83,16 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     @Default(intValues = PROP_RESULTS_SIZE_DEFAULT)
     private int resultsSize;
 
+    @ValueMapValue(name = PN_RESULTS_LAYOUT)
+    @Default(values = PROP_RESULTS_LAYOUT_DEFAULT)
+    private String resultsLayout;
+
     @ValueMapValue
     @Default(booleanValues = PROP_GENSEARCH_ENABLED_BY_DEFAULT_DEFAULT)
     private boolean genSearchEnabledByDefault;
 
-    @ValueMapValue
-    @Default(booleanValues = PROP_GENSEARCH_TOGGLE_VISIBLE_DEFAULT)
-    private boolean genSearchToggleVisible;
+    @ValueMapValue(name = PN_GENSEARCH_TOGGLE_VISIBLE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    private Boolean genSearchToggleVisibleProperty;
 
     @ValueMapValue
     @Default(values = GENSEARCH_ERROR_FALLBACK_RESULTS_ONLY)
@@ -99,6 +108,7 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
 
     private List<String> resolvedContentSources = Collections.emptyList();
     private String resolvedPrimaryContentSource = "";
+    private boolean genSearchToggleVisible;
 
     private final Map<String, String> i18nMessagesMap = new HashMap<>();
 
@@ -106,6 +116,14 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     private void initModel() {
         resolvedContentSources = resolveContentSources();
         resolvedPrimaryContentSource = resolvePrimaryContentSource(resolvedContentSources);
+        genSearchToggleVisible = resolveGenSearchToggleVisible();
+    }
+
+    private boolean resolveGenSearchToggleVisible() {
+        if (!AemCloudPlatformDetector.isCloudPlatform(productInfoProvider)) {
+            return false;
+        }
+        return genSearchToggleVisibleProperty == null || genSearchToggleVisibleProperty.booleanValue();
     }
 
     @NotNull
@@ -135,6 +153,15 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     @Override
     public int getResultsSize() {
         return resultsSize;
+    }
+
+    @NotNull
+    @Override
+    public String getResultsLayout() {
+        if (ContentAISupportedSearch.RESULTS_LAYOUT_LIST.equals(resultsLayout)) {
+            return ContentAISupportedSearch.RESULTS_LAYOUT_LIST;
+        }
+        return ContentAISupportedSearch.RESULTS_LAYOUT_CARD;
     }
 
     @Override
@@ -181,6 +208,19 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
         i18nMessagesMap.put("Clear", i18n.get("Clear"));
         i18nMessagesMap.put("AI-generated responses may be inaccurate. Verify important information.",
             i18n.get("AI-generated responses may be inaccurate. Verify important information."));
+        i18nMessagesMap.put("Generative answer", i18n.get("Generative answer"));
+        i18nMessagesMap.put("Generating answer...", i18n.get("Generating answer..."));
+        i18nMessagesMap.put("Powered by Content AI", i18n.get("Powered by Content AI"));
+        i18nMessagesMap.put("Sources", i18n.get("Sources"));
+        i18nMessagesMap.put("Results per page", i18n.get("Results per page"));
+        i18nMessagesMap.put("Search results", i18n.get("Search results"));
+        i18nMessagesMap.put("Cards", i18n.get("Cards"));
+        i18nMessagesMap.put("List", i18n.get("List"));
+        i18nMessagesMap.put("Results layout", i18n.get("Results layout"));
+        i18nMessagesMap.put("Previous", i18n.get("Previous"));
+        i18nMessagesMap.put("Next", i18n.get("Next"));
+        i18nMessagesMap.put("Page {0} of {1}", i18n.get("Page {0} of {1}"));
+        i18nMessagesMap.put("Showing {0}-{1} of {2}", i18n.get("Showing {0}-{1} of {2}"));
         try {
             return new ObjectMapper().writeValueAsString(i18nMessagesMap);
         } catch (Exception e) {

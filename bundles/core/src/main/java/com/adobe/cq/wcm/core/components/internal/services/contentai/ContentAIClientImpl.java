@@ -100,6 +100,12 @@ public class ContentAIClientImpl implements ContentAIClient {
     @Override
     public ContentSourceSearchResult search(String contentSource, String contentSourceType, String query, int limit)
         throws ContentAIClientException {
+        return search(contentSource, contentSourceType, query, limit, null);
+    }
+
+    @Override
+    public ContentSourceSearchResult search(String contentSource, String contentSourceType, String query, int limit,
+        String cursor) throws ContentAIClientException {
         ObjectNode body = mapper.createObjectNode();
         ObjectNode contentSourceNode = body.putObject("contentSource");
         contentSourceNode.put("name", contentSource);
@@ -124,7 +130,11 @@ public class ContentAIClientImpl implements ContentAIClient {
         fulltextQuery.put("text", query);
         fulltextQuery.putObject("options").put("boost", 1.5);
 
-        body.putObject("queryOptions").putObject("pagination").put("limit", limit);
+        ObjectNode pagination = body.putObject("queryOptions").putObject("pagination");
+        pagination.put("limit", limit);
+        if (StringUtils.isNotBlank(cursor)) {
+            pagination.put("cursor", cursor);
+        }
 
         JsonNode response = executeRequest("/content-sources/search", body);
         try {

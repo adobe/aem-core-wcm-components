@@ -36,6 +36,7 @@ public interface ContentAISupportedSearch extends Component {
     String PN_CONTENT_SOURCES = "contentSources";
     String PN_PRIMARY_CONTENT_SOURCE = "primaryContentSource";
     String PN_RESULTS_SIZE = "resultsSize";
+    String PN_RESULTS_LAYOUT = "resultsLayout";
     String PN_GENSEARCH_ENABLED_BY_DEFAULT = "genSearchEnabledByDefault";
     String PN_GENSEARCH_TOGGLE_VISIBLE = "genSearchToggleVisible";
     String PN_GENSEARCH_ERROR_FALLBACK = "genSearchErrorFallback";
@@ -45,6 +46,9 @@ public interface ContentAISupportedSearch extends Component {
     String GENSEARCH_ERROR_FALLBACK_RESULTS_ONLY = "RESULTS_ONLY";
     String GENSEARCH_ERROR_FALLBACK_SHOW_ERROR = "SHOW_ERROR";
     String GENSEARCH_ERROR_FALLBACK_SHOW_ERROR_MESSAGE = "SHOW_ERROR_MESSAGE";
+
+    String RESULTS_LAYOUT_CARD = "card";
+    String RESULTS_LAYOUT_LIST = "list";
 
     /**
      * @return the primary Content AI content source name (first configured source).
@@ -91,6 +95,15 @@ public interface ContentAISupportedSearch extends Component {
     }
 
     /**
+     * @return the results layout style ({@link #RESULTS_LAYOUT_CARD} or {@link #RESULTS_LAYOUT_LIST}).
+     * @since com.adobe.cq.wcm.core.components.models 12.32.0
+     */
+    @NotNull
+    default String getResultsLayout() {
+        return RESULTS_LAYOUT_CARD;
+    }
+
+    /**
      * @return whether the generative-summary toggle should default to on.
      */
     default boolean isGenSearchEnabledByDefault() {
@@ -99,6 +112,8 @@ public interface ContentAISupportedSearch extends Component {
 
     /**
      * @return whether the visitor-facing generative search toggle is rendered.
+     *         Only available on AEM as a Cloud Service; always hidden on classic AEM regardless of
+     *         author configuration.
      * @since com.adobe.cq.wcm.core.components.models 12.32.0
      */
     default boolean isGenSearchToggleVisible() {

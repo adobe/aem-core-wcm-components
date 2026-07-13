@@ -34,7 +34,7 @@ class ContentSourceLabelFormatterTest {
 
     @Test
     void shortDescription_appendsFull() {
-        assertEquals("hotels-demo — Demo index",
+        assertEquals("hotels-demo - Demo index",
             ContentSourceLabelFormatter.formatLabel("hotels-demo", "Demo index"));
     }
 
@@ -43,7 +43,7 @@ class ContentSourceLabelFormatterTest {
         String desc = "A".repeat(90);
         String label = ContentSourceLabelFormatter.formatLabel("x", desc);
         assertTrue(label.endsWith("..."));
-        assertEquals("x — " + "A".repeat(80) + "...", label);
+        assertEquals("x - " + "A".repeat(80) + "...", label);
     }
 
     @Test

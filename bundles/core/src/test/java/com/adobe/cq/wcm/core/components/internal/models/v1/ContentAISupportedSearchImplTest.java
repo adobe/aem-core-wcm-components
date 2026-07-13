@@ -18,13 +18,16 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.osgi.framework.Version;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
+import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
@@ -33,16 +36,21 @@ class ContentAISupportedSearchImplTest {
     private static final String TEST_BASE = "/contentaisupportedsearch";
     private static final String CONTENT_ROOT = "/content";
     private static final String COMPONENT_PATH = CONTENT_ROOT + "/contentaisearch";
+    private static final String COMPONENT_DEFAULTS_PATH = CONTENT_ROOT + "/contentaisearch-defaults";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
+    private static final MockProductInfoProvider mockProductInfoProvider = new MockProductInfoProvider();
 
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + "/test-content-dam.json", CONTENT_ROOT);
+        mockProductInfoProvider.setVersion(new Version("6.5.25"));
+        context.registerInjectActivateService(mockProductInfoProvider);
     }
 
     @Test
     void testProperties() {
+        mockProductInfoProvider.setVersion(new Version("6.6.0"));
         context.currentResource(COMPONENT_PATH);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         assertEquals("my-content-source", search.getContentSource());
@@ -53,5 +61,48 @@ class ContentAISupportedSearchImplTest {
         assertTrue(search.isGenSearchEnabledByDefault());
         assertTrue(search.isGenSearchToggleVisible());
         assertEquals("RESULTS_ONLY", search.getGenSearchErrorFallback());
+    }
+
+    @Test
+    void genSearchToggleVisible_defaultHiddenOnAem65() {
+        mockProductInfoProvider.setVersion(new Version("6.5.25"));
+        context.currentResource(COMPONENT_DEFAULTS_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertFalse(search.isGenSearchToggleVisible());
+    }
+
+    @Test
+    void genSearchToggleVisible_defaultVisibleOnCloudPublish() {
+        mockProductInfoProvider.setVersion(new Version("6.6.0"));
+        context.currentResource(COMPONENT_DEFAULTS_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertTrue(search.isGenSearchToggleVisible());
+    }
+
+    @Test
+    void genSearchToggleVisible_defaultVisibleOnCloudAuthorReleaseTrain() {
+        mockProductInfoProvider.setVersion(new Version("2026.2.24288"));
+        context.currentResource(COMPONENT_DEFAULTS_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertTrue(search.isGenSearchToggleVisible());
+    }
+
+    @Test
+    void genSearchToggleVisible_alwaysHiddenOnAem65EvenWhenAuthorEnables() {
+        mockProductInfoProvider.setVersion(new Version("6.5.25"));
+        context.currentResource(COMPONENT_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertFalse(search.isGenSearchToggleVisible());
+    }
+
+    @Test
+    void genSearchToggleVisible_authorCanDisableOnCloud() {
+        mockProductInfoProvider.setVersion(new Version("6.6.0"));
+        context.currentResource(COMPONENT_DEFAULTS_PATH);
+        context.create().resource(COMPONENT_DEFAULTS_PATH,
+            "sling:resourceType", ContentAISupportedSearchImpl.RESOURCE_TYPE,
+            "genSearchToggleVisible", false);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertFalse(search.isGenSearchToggleVisible());
     }
 }

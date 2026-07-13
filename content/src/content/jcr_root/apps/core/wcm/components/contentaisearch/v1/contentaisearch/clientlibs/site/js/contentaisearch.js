@@ -19,9 +19,22 @@
     var NS = "cmp";
     var IS = "contentaisearch";
     var DELAY = 300;
+    var LOADING_DISPLAY_DELAY = 300;
+    var LIMIT_OPTIONS = [5, 10, 20, 30, 50];
 
     var selectors = {
-        self: "[data-" + NS + '-is="' + IS + '"]'
+        self: "[data-" + NS + '-is="' + IS + '"]',
+        item: {
+            self: "[data-" + NS + "-hook-" + IS + '="item"]',
+            title: "[data-" + NS + "-hook-" + IS + '="itemTitle"]',
+            description: "[data-" + NS + "-hook-" + IS + '="itemDescription"]',
+            image: "[data-" + NS + "-hook-" + IS + '="itemImage"]',
+            imagePlaceholder: "[data-" + NS + "-hook-" + IS + '="itemImagePlaceholder"]'
+        },
+        source: {
+            link: "[data-" + NS + "-hook-" + IS + '="sourceLink"]',
+            text: "[data-" + NS + "-hook-" + IS + '="sourceText"]'
+        }
     };
 
     function toggleShow(element, show) {
@@ -40,7 +53,17 @@
         this._resourcePath = this._resolveResourcePath();
         this._genSearchErrorFallback = this._element.getAttribute("data-cmp-gensearch-error-fallback") || "RESULTS_ONLY";
         this._genSearchEnabled = this._resolveInitialGenSearchEnabled();
+        this._resultsLayout = this._element.getAttribute("data-cmp-results-layout") === "list" ? "list" : "card";
+        this._resultsLimit = this._resolveInitialResultsLimit();
+        this._i18n = this._parseI18n();
         this._timeout = null;
+        this._currentQuery = "";
+        this._allResults = [];
+        this._totalResults = 0;
+        this._currentPage = 0;
+
+        this._applyLayoutClass();
+        this._syncLayoutButtons();
 
         if (this._elements.input) {
             this._elements.input.addEventListener("input", this._onInput.bind(this));
@@ -51,12 +74,49 @@
         if (this._elements.retry) {
             this._elements.retry.addEventListener("click", this._onRetry.bind(this));
         }
+        if (this._elements.resultsLimit) {
+            this._elements.resultsLimit.value = String(this._resultsLimit);
+            this._elements.resultsLimit.addEventListener("change", this._onResultsLimitChange.bind(this));
+        }
+        if (this._elements.layoutCard) {
+            this._elements.layoutCard.addEventListener("click", this._onLayoutCard.bind(this));
+        }
+        if (this._elements.layoutList) {
+            this._elements.layoutList.addEventListener("click", this._onLayoutList.bind(this));
+        }
+        if (this._elements.prevPage) {
+            this._elements.prevPage.addEventListener("click", this._onPrevPage.bind(this));
+        }
+        if (this._elements.nextPage) {
+            this._elements.nextPage.addEventListener("click", this._onNextPage.bind(this));
+        }
         if (this._elements.form) {
             this._elements.form.addEventListener("submit", function(event) {
                 event.preventDefault();
             });
         }
     }
+
+    ContentAISearch.prototype._parseI18n = function() {
+        var raw = this._element.getAttribute("data-i18n-messages");
+        if (!raw) {
+            return {};
+        }
+        try {
+            return JSON.parse(raw);
+        } catch (e) {
+            return {};
+        }
+    };
+
+    ContentAISearch.prototype._msg = function(key, fallback) {
+        return this._i18n[key] || fallback || key;
+    };
+
+    ContentAISearch.prototype._formatStatus = function(start, end, total) {
+        var template = this._msg("Showing {0}-{1} of {2}", "Showing {0}-{1} of {2}");
+        return template.replace("{0}", String(start)).replace("{1}", String(end)).replace("{2}", String(total));
+    };
 
     ContentAISearch.prototype._cacheElements = function() {
         this._elements = {};
@@ -69,11 +129,15 @@
     };
 
     ContentAISearch.prototype._resolveResourcePath = function() {
-        // The component's own JCR resource path, rendered by the HTL as data-cmp-resource-path.
-        // Used to build the .search.json / .gensearch.json selector URLs against the servlets
-        // bound to this component's resource type — correct even with multiple instances of
-        // this component on the same page, since each instance's root element carries its own path.
         return this._element.getAttribute("data-cmp-resource-path");
+    };
+
+    ContentAISearch.prototype._resolveInitialResultsLimit = function() {
+        var configured = parseInt(this._element.getAttribute("data-cmp-results-size"), 10);
+        if (!configured || LIMIT_OPTIONS.indexOf(configured) === -1) {
+            return 10;
+        }
+        return configured;
     };
 
     ContentAISearch.prototype._resolveInitialGenSearchEnabled = function() {
@@ -83,6 +147,45 @@
             return enabledDefault === "true";
         }
         return this._elements.toggle ? this._elements.toggle.checked : false;
+    };
+
+    ContentAISearch.prototype._applyLayoutClass = function() {
+        this._element.classList.remove("cmp-contentaisearch--card", "cmp-contentaisearch--list");
+        this._element.classList.add(this._resultsLayout === "list" ? "cmp-contentaisearch--list" : "cmp-contentaisearch--card");
+    };
+
+    ContentAISearch.prototype._syncLayoutButtons = function() {
+        var isList = this._resultsLayout === "list";
+        if (this._elements.layoutCard) {
+            this._elements.layoutCard.setAttribute("aria-pressed", isList ? "false" : "true");
+        }
+        if (this._elements.layoutList) {
+            this._elements.layoutList.setAttribute("aria-pressed", isList ? "true" : "false");
+        }
+    };
+
+    ContentAISearch.prototype._getActiveItemTemplate = function() {
+        return this._resultsLayout === "list" ? this._elements.itemTemplateList : this._elements.itemTemplateCard;
+    };
+
+    ContentAISearch.prototype._onLayoutCard = function() {
+        if (this._resultsLayout === "card") {
+            return;
+        }
+        this._resultsLayout = "card";
+        this._applyLayoutClass();
+        this._syncLayoutButtons();
+        this._renderResultsPage();
+    };
+
+    ContentAISearch.prototype._onLayoutList = function() {
+        if (this._resultsLayout === "list") {
+            return;
+        }
+        this._resultsLayout = "list";
+        this._applyLayoutClass();
+        this._syncLayoutButtons();
+        this._renderResultsPage();
     };
 
     ContentAISearch.prototype._onInput = function() {
@@ -98,8 +201,42 @@
         if (!this._genSearchEnabled) {
             toggleShow(this._elements.summary, false);
             toggleShow(this._elements.error, false);
+            this._setSummaryLoading(false);
         }
         this._runQuery();
+    };
+
+    ContentAISearch.prototype._onResultsLimitChange = function() {
+        var selected = parseInt(this._elements.resultsLimit.value, 10);
+        if (!selected || LIMIT_OPTIONS.indexOf(selected) === -1) {
+            return;
+        }
+        this._resultsLimit = selected;
+        this._currentPage = 0;
+        this._renderResultsPage();
+    };
+
+    ContentAISearch.prototype._onPrevPage = function() {
+        if (this._currentPage > 0) {
+            this._currentPage--;
+            this._renderResultsPage();
+        }
+    };
+
+    ContentAISearch.prototype._onNextPage = function() {
+        var totalPages = this._getTotalPages();
+        if (this._currentPage < totalPages - 1) {
+            this._currentPage++;
+            this._renderResultsPage();
+        }
+    };
+
+    ContentAISearch.prototype._getTotalPages = function() {
+        var resultCount = this._allResults.length;
+        if (!resultCount) {
+            return 0;
+        }
+        return Math.ceil(resultCount / this._resultsLimit);
     };
 
     ContentAISearch.prototype._onRetry = function() {
@@ -108,6 +245,8 @@
 
     ContentAISearch.prototype._runQuery = function() {
         var query = this._elements.input.value;
+        this._currentQuery = query;
+        this._currentPage = 0;
         if (!query) {
             this._clearResults();
             return;
@@ -115,43 +254,100 @@
         this._runResultsSearch(query);
         if (this._genSearchEnabled) {
             this._runGenSearch(query);
+        } else {
+            toggleShow(this._elements.summary, false);
+            this._setSummaryLoading(false);
         }
     };
 
     ContentAISearch.prototype._clearResults = function() {
-        this._elements.results.innerHTML = "";
+        this._currentQuery = "";
+        this._allResults = [];
+        this._totalResults = 0;
+        this._currentPage = 0;
+        if (this._elements.results) {
+            this._elements.results.innerHTML = "";
+        }
+        toggleShow(this._elements.resultsSection, false);
+        toggleShow(this._elements.pagination, false);
         toggleShow(this._elements.summary, false);
+        toggleShow(this._elements.summaryLoading, false);
         toggleShow(this._elements.error, false);
+    };
+
+    ContentAISearch.prototype._setSummaryLoading = function(show) {
+        toggleShow(this._elements.summaryLoading, show);
+        if (this._elements.summaryLoading) {
+            if (show) {
+                this._elements.summaryLoading.setAttribute("aria-busy", "true");
+            } else {
+                this._elements.summaryLoading.removeAttribute("aria-busy");
+            }
+        }
+    };
+
+    ContentAISearch.prototype._hideSummaryLoading = function(startTime, callback) {
+        var elapsed = Date.now() - startTime;
+        var delay = Math.max(0, LOADING_DISPLAY_DELAY - elapsed);
+        var self = this;
+        setTimeout(function() {
+            self._setSummaryLoading(false);
+            if (callback) {
+                callback();
+            }
+        }, delay);
     };
 
     ContentAISearch.prototype._runResultsSearch = function(query) {
         var self = this;
         toggleShow(this._elements.loadingIndicator, true);
-        this._fetchJson(this._resourcePath + ".search.json?q=" + encodeURIComponent(query))
+        var url = this._resourcePath + ".search.json?q=" + encodeURIComponent(query);
+        this._fetchJson(url)
             .then(function(data) {
-                self._renderResults(data);
+                self._storeResults(data);
+                self._renderResultsPage();
             })
             .catch(function() {
-                self._elements.results.innerHTML = "";
+                self._allResults = [];
+                self._totalResults = 0;
+                if (self._elements.results) {
+                    self._elements.results.innerHTML = "";
+                }
+                toggleShow(self._elements.resultsSection, false);
+                toggleShow(self._elements.pagination, false);
             })
             .then(function() {
                 toggleShow(self._elements.loadingIndicator, false);
             });
     };
 
+    ContentAISearch.prototype._storeResults = function(data) {
+        this._allResults = (data && data.results) || [];
+        this._totalResults = this._allResults.length;
+        if (data && data.totalResults > this._totalResults) {
+            this._totalResults = data.totalResults;
+        }
+    };
+
     ContentAISearch.prototype._runGenSearch = function(query) {
         var self = this;
+        var genSearchStart = Date.now();
         toggleShow(this._elements.error, false);
         toggleShow(this._elements.summary, false);
+        this._setSummaryLoading(true);
         if (this._elements.retry) {
             toggleShow(this._elements.retry, true);
         }
         this._fetchJson(this._resourcePath + ".gensearch.json?q=" + encodeURIComponent(query))
             .then(function(data) {
-                self._renderSummary(data);
+                self._hideSummaryLoading(genSearchStart, function() {
+                    self._renderSummary(data);
+                });
             })
             .catch(function() {
-                self._handleGenSearchError();
+                self._hideSummaryLoading(genSearchStart, function() {
+                    self._handleGenSearchError();
+                });
             });
     };
 
@@ -182,53 +378,233 @@
         });
     };
 
-    ContentAISearch.prototype._renderResults = function(data) {
-        var results = (data && data.results) || [];
-        var html = "";
-        for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var title = (item.data && (item.data.title || item.data.name)) || item.id;
-            html += "<li class=\"cmp-contentaisearch__item\">" + this._escapeHtml(title) + "</li>";
+    ContentAISearch.prototype._getItemMetadata = function(item) {
+        return (item && item.data && item.data.metadata) || {};
+    };
+
+    ContentAISearch.prototype._resolveItemLabel = function(item) {
+        if (!item) {
+            return "";
         }
-        this._elements.results.innerHTML = html;
+        var data = item.data || {};
+        var metadata = data.metadata || {};
+        if (metadata.title) {
+            return metadata.title;
+        }
+        if (data.title) {
+            return data.title;
+        }
+        if (data.name) {
+            return data.name;
+        }
+        if (metadata.description) {
+            return metadata.description;
+        }
+        if (data.text) {
+            var headingMatch = String(data.text).match(/^#\s+(.+)$/m);
+            if (headingMatch) {
+                return headingMatch[1].trim();
+            }
+        }
+        if (metadata.url) {
+            return this._labelFromUrl(metadata.url);
+        }
+        return item.id || "";
+    };
+
+    ContentAISearch.prototype._resolveItemDescription = function(item) {
+        var metadata = this._getItemMetadata(item);
+        if (metadata.description) {
+            return metadata.description;
+        }
+        var data = (item && item.data) || {};
+        if (data.text) {
+            var text = String(data.text).replace(/^#\s+.+\n+/m, "").trim();
+            text = text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+            text = text.replace(/[*_`#]/g, "");
+            return text;
+        }
+        return "";
+    };
+
+    ContentAISearch.prototype._resolveItemImage = function(item) {
+        var metadata = this._getItemMetadata(item);
+        var image = metadata.image;
+        if (image && this._isSafeUrl(image)) {
+            return image;
+        }
+        return "";
+    };
+
+    ContentAISearch.prototype._resolveHitLabel = function(hit) {
+        if (!hit) {
+            return "";
+        }
+        var metadata = hit.metadata || {};
+        if (metadata.title) {
+            return metadata.title;
+        }
+        if (metadata.url) {
+            return this._labelFromUrl(metadata.url);
+        }
+        return hit.id || "";
+    };
+
+    ContentAISearch.prototype._labelFromUrl = function(url) {
+        try {
+            var parsed = new URL(url, window.location.origin);
+            var segments = parsed.pathname.split("/").filter(Boolean);
+            if (segments.length) {
+                return decodeURIComponent(segments[segments.length - 1]).replace(/[-_]/g, " ");
+            }
+        } catch (e) {
+            // fall through
+        }
+        return url;
+    };
+
+    ContentAISearch.prototype._populateItemNode = function(root, item) {
+        var metadata = this._getItemMetadata(item);
+        var url = metadata.url;
+        var title = this._resolveItemLabel(item);
+        var description = this._resolveItemDescription(item);
+        var image = this._resolveItemImage(item);
+        var itemRoot = root.querySelector(selectors.item.self);
+        var titleNode = root.querySelector(selectors.item.title);
+        var descriptionNode = root.querySelector(selectors.item.description);
+        var imageNode = root.querySelector(selectors.item.image);
+        var placeholderNode = root.querySelector(selectors.item.imagePlaceholder);
+
+        if (titleNode) {
+            titleNode.textContent = title;
+        }
+        if (descriptionNode) {
+            if (description) {
+                descriptionNode.textContent = description;
+                toggleShow(descriptionNode, true);
+            } else {
+                descriptionNode.textContent = "";
+                toggleShow(descriptionNode, false);
+            }
+        }
+        if (imageNode && placeholderNode) {
+            if (image) {
+                imageNode.setAttribute("src", image);
+                toggleShow(imageNode, true);
+                toggleShow(placeholderNode, false);
+            } else {
+                imageNode.removeAttribute("src");
+                toggleShow(imageNode, false);
+                toggleShow(placeholderNode, true);
+            }
+        }
+        if (itemRoot) {
+            if (url && this._isSafeUrl(url)) {
+                itemRoot.setAttribute("href", url);
+            } else {
+                itemRoot.removeAttribute("href");
+                if (itemRoot.tagName === "A") {
+                    var article = document.createElement(itemRoot.classList.contains("cmp-contentaisearch__row") ? "div" : "article");
+                    article.className = itemRoot.className;
+                    while (itemRoot.firstChild) {
+                        article.appendChild(itemRoot.firstChild);
+                    }
+                    itemRoot.parentNode.replaceChild(article, itemRoot);
+                }
+            }
+        }
+    };
+
+    ContentAISearch.prototype._generateResultItems = function(results) {
+        var self = this;
+        var html = "";
+        var template = this._getActiveItemTemplate();
+        if (!template) {
+            return html;
+        }
+        results.forEach(function(item) {
+            var el = document.createElement("div");
+            el.innerHTML = template.innerHTML;
+            self._populateItemNode(el, item);
+            html += el.innerHTML;
+        });
+        return html;
+    };
+
+    ContentAISearch.prototype._generateSourceItems = function(hits) {
+        var self = this;
+        var html = "";
+        if (!this._elements.sourceTemplate) {
+            return html;
+        }
+        hits.forEach(function(hit) {
+            var url = hit.metadata && hit.metadata.url;
+            var label = self._resolveHitLabel(hit);
+            var el = document.createElement("div");
+            el.innerHTML = self._elements.sourceTemplate.innerHTML;
+            var linkNode = el.querySelector(selectors.source.link);
+            var textNode = el.querySelector(selectors.source.text);
+            if (url && self._isSafeUrl(url) && linkNode) {
+                linkNode.setAttribute("href", url);
+                linkNode.textContent = label;
+                toggleShow(linkNode, true);
+                toggleShow(textNode, false);
+            } else if (textNode) {
+                textNode.textContent = label;
+                toggleShow(textNode, true);
+                toggleShow(linkNode, false);
+            }
+            html += el.innerHTML;
+        });
+        return html;
+    };
+
+    ContentAISearch.prototype._renderResultsPage = function() {
+        var totalPages = this._getTotalPages();
+        if (!this._allResults.length) {
+            this._elements.results.innerHTML = "";
+            toggleShow(this._elements.resultsSection, false);
+            toggleShow(this._elements.pagination, false);
+            return;
+        }
+        if (this._currentPage >= totalPages) {
+            this._currentPage = Math.max(0, totalPages - 1);
+        }
+        var startIndex = this._currentPage * this._resultsLimit;
+        var endIndex = Math.min(startIndex + this._resultsLimit, this._allResults.length);
+        var pageResults = this._allResults.slice(startIndex, endIndex);
+
+        this._elements.results.innerHTML = this._generateResultItems(pageResults);
+
+        var displayStart = startIndex + 1;
+        var displayEnd = endIndex;
+        var displayTotal = this._allResults.length;
+        if (this._elements.resultsStatus) {
+            this._elements.resultsStatus.textContent = this._formatStatus(displayStart, displayEnd, displayTotal);
+        }
+        if (this._elements.paginationStatus) {
+            this._elements.paginationStatus.textContent = this._msg("Page {0} of {1}", "Page {0} of {1}")
+                .replace("{0}", String(this._currentPage + 1))
+                .replace("{1}", String(totalPages));
+        }
+        if (this._elements.prevPage) {
+            this._elements.prevPage.disabled = this._currentPage <= 0;
+        }
+        if (this._elements.nextPage) {
+            this._elements.nextPage.disabled = this._currentPage >= totalPages - 1;
+        }
+
+        toggleShow(this._elements.resultsSection, true);
+        toggleShow(this._elements.pagination, totalPages > 1);
     };
 
     ContentAISearch.prototype._renderSummary = function(data) {
         this._elements.summaryText.textContent = data.result || "";
         var hits = data.hits || [];
-        var sourcesHtml = "";
-        for (var i = 0; i < hits.length; i++) {
-            var hit = hits[i];
-            var url = hit.metadata && hit.metadata.url;
-            var label = (hit.metadata && hit.metadata.title) || hit.id;
-            if (url && this._isSafeUrl(url)) {
-                sourcesHtml += "<li><a href=\"" + this._escapeAttribute(url) + "\">" + this._escapeHtml(label) + "</a></li>";
-            } else {
-                sourcesHtml += "<li>" + this._escapeHtml(label) + "</li>";
-            }
-        }
-        this._elements.sources.innerHTML = sourcesHtml;
+        this._elements.sources.innerHTML = this._generateSourceItems(hits);
         toggleShow(this._elements.summary, true);
     };
 
-    ContentAISearch.prototype._escapeHtml = function(text) {
-        var div = document.createElement("div");
-        div.textContent = String(text == null ? "" : text);
-        return div.innerHTML;
-    };
-
-    ContentAISearch.prototype._escapeAttribute = function(text) {
-        return this._escapeHtml(text).replace(/"/g, "&quot;");
-    };
-
-    /**
-     * Strips ASCII C0 controls, DEL, and whitespace so the scheme-prefix checks below run against a single
-     * normalised token (characters the URL/DOM layer may otherwise strip away, e.g. a TAB spliced into a
-     * scheme name), rather than just trimming the ends as String.trim() does.
-     *
-     * @param {String} str - raw URL value
-     * @returns {String} characters kept for scheme prefix checks
-     */
     function stripAsciiControlsAndWhitespaceForSchemeCheck(str) {
         var out = "";
         var i;
@@ -252,15 +628,10 @@
         if (!url) {
             return false;
         }
-        // Strip interior/leading/trailing ASCII controls, DEL, and whitespace before scheme-testing: the URL
-        // layer normalises these away (e.g. "java\tscript:alert(1)" becomes "javascript:alert(1)" once
-        // assigned to href), so leaving them in place would let a crafted value slip past the checks below.
         var sanitized = stripAsciiControlsAndWhitespaceForSchemeCheck(String(url));
-        // Allow http(s) absolute URLs and root-relative/relative paths; reject javascript:, data:, vbscript:, etc.
         if (/^https?:\/\//i.test(sanitized)) {
             return true;
         }
-        // Relative or root-relative path (no scheme). Reject anything containing a colon before the first slash (a scheme).
         return !/^[a-z][a-z0-9+.-]*:/i.test(sanitized);
     };
 

@@ -59,10 +59,11 @@
 
             contentSourcesField.items.clear();
             items.forEach(function(item) {
+                var label = (item.innerText || item.textContent || "").trim();
                 contentSourcesField.items.add({
                     value: item.value,
                     content: {
-                        textContent: item.textContent
+                        textContent: label || item.value
                     },
                     selected: selectedValues.indexOf(item.value) !== -1
                 });

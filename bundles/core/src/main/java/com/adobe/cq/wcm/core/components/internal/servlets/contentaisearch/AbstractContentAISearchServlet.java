@@ -40,7 +40,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Base servlet for the ContentAI Supported Search component's two query endpoints.
  * Handles the shared request lifecycle — {@code q} parameter validation, model adaptation,
  * Content AI error handling, and JSON marshaling — delegating the actual Content AI call to
- * {@link #executeQuery(ContentAISupportedSearch, String)}.
+ * {@link #executeQuery(SlingHttpServletRequest, ContentAISupportedSearch, String)}.
  */
 abstract class AbstractContentAISearchServlet extends SlingSafeMethodsServlet {
 
@@ -79,7 +79,7 @@ abstract class AbstractContentAISearchServlet extends SlingSafeMethodsServlet {
         ContentAISearchUsageLogger.logUsage(getOperationName(), request, model);
 
         try {
-            Object result = executeQuery(model, queryText);
+            Object result = executeQuery(request, model, queryText);
             writeJson(result, response);
         } catch (ContentAIClientException e) {
             LOGGER.error("Content AI request failed for content source {}", model.getContentSource(), e);
@@ -95,7 +95,8 @@ abstract class AbstractContentAISearchServlet extends SlingSafeMethodsServlet {
      * @return the result object to serialize as JSON
      * @throws ContentAIClientException if the Content AI call fails
      */
-    protected abstract Object executeQuery(@NotNull ContentAISupportedSearch model, @NotNull String query) throws ContentAIClientException;
+    protected abstract Object executeQuery(@NotNull SlingHttpServletRequest request, @NotNull ContentAISupportedSearch model,
+        @NotNull String query) throws ContentAIClientException;
 
     /**
      * @return a short operation label included in usage logs ({@code search} or {@code gensearch})

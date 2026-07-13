@@ -33,6 +33,8 @@ import com.adobe.granite.ui.components.ds.DataSource;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static com.adobe.cq.wcm.core.components.internal.servlets.TextValueDataResourceSource.PN_TEXT;
+import static com.adobe.cq.wcm.core.components.internal.servlets.TextValueDataResourceSource.PN_VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
@@ -57,6 +59,7 @@ class ContentSourcesDataSourceServletTest {
     void doGetReturnsFilteredPublicAcquisitionSources() throws Exception {
         ContentSourceListItem acquisition = new ContentSourceListItem();
         acquisition.setName("aem-live");
+        acquisition.setDescription("Live site index");
         acquisition.setType("ACQUISITION");
         ContentSourceListItem.ContentSourceConfig config = new ContentSourceListItem.ContentSourceConfig();
         ContentSourceListItem.ContentSourceAccess access = new ContentSourceListItem.ContentSourceAccess();
@@ -90,10 +93,43 @@ class ContentSourcesDataSourceServletTest {
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
         List<String> values = new ArrayList<>();
+        List<String> texts = new ArrayList<>();
         Iterator<Resource> iterator = dataSource.iterator();
         while (iterator.hasNext()) {
-            values.add(iterator.next().getValueMap().get("value", String.class));
+            Resource option = iterator.next();
+            values.add(option.getValueMap().get(PN_VALUE, String.class));
+            texts.add(option.getValueMap().get(PN_TEXT, String.class));
         }
         assertEquals(List.of("aem-live"), values);
+        assertEquals(List.of("aem-live - Live site index"), texts);
+    }
+
+    @Test
+    void doGetUsesConfigDescriptionWhenTopLevelMissing() throws Exception {
+        ContentSourceListItem acquisition = new ContentSourceListItem();
+        acquisition.setName("hotels-demo");
+        acquisition.setType("ACQUISITION");
+        ContentSourceListItem.ContentSourceConfig config = new ContentSourceListItem.ContentSourceConfig();
+        config.setDescription("Demo hotel content index");
+        ContentSourceListItem.ContentSourceAccess access = new ContentSourceListItem.ContentSourceAccess();
+        access.setPublic(true);
+        config.setAccess(access);
+        acquisition.setConfig(config);
+
+        ContentSourceListResult listResult = new ContentSourceListResult();
+        listResult.setItems(List.of(acquisition));
+        when(mockClient.listContentSources()).thenReturn(listResult);
+
+        context.create().resource("/apps/datasource-config-desc",
+            "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
+        context.currentResource("/apps/datasource-config-desc");
+        context.request().setParameterMap(java.util.Map.of("contentSourceType", "ACQUISITION"));
+        underTest.doGet(context.request(), context.response());
+
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        assertNotNull(dataSource);
+        Resource option = dataSource.iterator().next();
+        assertEquals("hotels-demo", option.getValueMap().get(PN_VALUE, String.class));
+        assertEquals("hotels-demo - Demo hotel content index", option.getValueMap().get(PN_TEXT, String.class));
     }
 }

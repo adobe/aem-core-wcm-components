@@ -20,9 +20,11 @@ import java.util.List;
 
 import javax.servlet.Servlet;
 
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 
+import com.adobe.cq.wcm.core.components.internal.services.contentai.ContentSourceSearchAggregator;
 import com.adobe.cq.wcm.core.components.internal.services.contentai.ContentSourceSearchMerger;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
@@ -47,7 +49,8 @@ public class ContentAISearchResultsServlet extends AbstractContentAISearchServle
     private static final long serialVersionUID = 1L;
 
     @Override
-    protected Object executeQuery(@NotNull ContentAISupportedSearch model, @NotNull String query) throws ContentAIClientException {
+    protected Object executeQuery(@NotNull SlingHttpServletRequest request, @NotNull ContentAISupportedSearch model,
+        @NotNull String query) throws ContentAIClientException {
         List<String> sources = model.getContentSources();
         if (sources.isEmpty()) {
             return new ContentSourceSearchResult();
@@ -55,9 +58,9 @@ public class ContentAISearchResultsServlet extends AbstractContentAISearchServle
         List<ContentSourceSearchResult> partials = new ArrayList<>();
         String contentSourceType = model.getContentSourceType();
         for (String source : sources) {
-            partials.add(contentAIClient.search(source, contentSourceType, query, model.getResultsSize()));
+            partials.add(ContentSourceSearchAggregator.fetchAll(contentAIClient, source, contentSourceType, query));
         }
-        return ContentSourceSearchMerger.merge(partials, model.getResultsSize());
+        return ContentSourceSearchMerger.merge(partials, 0);
     }
 
     @Override

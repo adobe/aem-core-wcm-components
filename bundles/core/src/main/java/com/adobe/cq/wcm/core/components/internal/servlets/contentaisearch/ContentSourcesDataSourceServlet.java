@@ -91,7 +91,7 @@ public class ContentSourcesDataSourceServlet extends SlingSafeMethodsServlet {
                     if (StringUtils.isBlank(indexName)) {
                         continue;
                     }
-                    String label = ContentSourceLabelFormatter.formatLabel(indexName, item.getDescription());
+                    String label = ContentSourceLabelFormatter.formatLabel(indexName, item.getResolvableDescription());
                     options.add(new ContentSourceOptionResource(resolver, label, indexName));
                 }
             }

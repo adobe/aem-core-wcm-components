@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -65,7 +66,7 @@ class ContentAISearchResultsServletTest {
         item.setId("doc_1");
         item.setScore(0.75);
         expected.setResults(Collections.singletonList(item));
-        when(mockClient.search(eq("my-source"), eq("ACQUISITION"), eq("electric cars"), anyInt())).thenReturn(expected);
+        when(mockClient.search(eq("my-source"), eq("ACQUISITION"), eq("electric cars"), eq(50), isNull())).thenReturn(expected);
 
         context.currentResource(COMPONENT_PATH);
         context.request().setQueryString("q=electric+cars");
@@ -95,5 +96,39 @@ class ContentAISearchResultsServletTest {
 
         assertEquals(400, context.response().getStatus());
         verify(mockClient, never()).search(anyString(), anyString(), anyString(), anyInt());
+    }
+
+    @Test
+    void doGetFetchesAllPagesFromContentAi() throws Exception {
+        ContentSourceSearchResult firstPage = new ContentSourceSearchResult();
+        firstPage.setTotalResults(67);
+        firstPage.setCursor("page-2");
+        ContentSourceSearchResult.Item item = new ContentSourceSearchResult.Item();
+        item.setId("doc_1");
+        item.setScore(0.75);
+        firstPage.setResults(Collections.singletonList(item));
+
+        ContentSourceSearchResult secondPage = new ContentSourceSearchResult();
+        secondPage.setTotalResults(67);
+        ContentSourceSearchResult.Item item2 = new ContentSourceSearchResult.Item();
+        item2.setId("doc_2");
+        item2.setScore(0.5);
+        secondPage.setResults(Collections.singletonList(item2));
+
+        when(mockClient.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(50), isNull()))
+            .thenReturn(firstPage);
+        when(mockClient.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(50), eq("page-2")))
+            .thenReturn(secondPage);
+
+        context.currentResource(COMPONENT_PATH);
+        context.request().setQueryString("q=block");
+
+        underTest.doGet(context.request(), context.response());
+
+        assertEquals(200, context.response().getStatus());
+        String output = context.response().getOutputAsString();
+        assertTrue(output.contains("\"id\":\"doc_1\""));
+        assertTrue(output.contains("\"id\":\"doc_2\""));
+        assertTrue(output.contains("\"totalResults\":67"));
     }
 }

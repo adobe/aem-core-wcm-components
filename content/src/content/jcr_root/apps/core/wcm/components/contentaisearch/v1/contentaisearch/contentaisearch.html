@@ -15,13 +15,15 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <section data-sly-use.search="com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch"
          id="${search.id}"
-         class="cmp-contentaisearch"
+         class="cmp-contentaisearch cmp-contentaisearch--${search.resultsLayout}"
          role="search"
          data-cmp-is="contentaisearch"
          data-cmp-content-source="${search.primaryContentSource}"
          data-cmp-gensearch-enabled-default="${search.genSearchEnabledByDefault}"
          data-cmp-gensearch-toggle-visible="${search.genSearchToggleVisible}"
          data-cmp-gensearch-error-fallback="${search.genSearchErrorFallback}"
+         data-cmp-results-size="${search.resultsSize}"
+         data-cmp-results-layout="${search.resultsLayout}"
          data-cmp-resource-path="${resource.path}"
          data-i18n-messages='${search.i18nMessages}'>
     <form class="cmp-contentaisearch__form" data-cmp-hook-contentaisearch="form" autocomplete="off">
@@ -38,16 +40,65 @@
             ${'Show AI-generated summary' @ i18n}
         </label>
     </form>
+    <div class="cmp-contentaisearch__summary-loading" data-cmp-hook-contentaisearch="summaryLoading" hidden="hidden" aria-live="polite">
+        <div class="cmp-contentaisearch__summary-card">
+            <div class="cmp-contentaisearch__summary-loading-content">
+                <span class="cmp-contentaisearch__summary-loading-indicator" aria-hidden="true"></span>
+                <p class="cmp-contentaisearch__summary-loading-text">${'Generating answer...' @ i18n}</p>
+            </div>
+        </div>
+    </div>
     <div class="cmp-contentaisearch__summary" data-cmp-hook-contentaisearch="summary" hidden="hidden">
-        <p class="cmp-contentaisearch__summary-text" data-cmp-hook-contentaisearch="summaryText"></p>
-        <ul class="cmp-contentaisearch__sources" data-cmp-hook-contentaisearch="sources"></ul>
-        <p class="cmp-contentaisearch__disclaimer" data-cmp-hook-contentaisearch="disclaimer">
-            ${search.disclaimerText || 'AI-generated responses may be inaccurate. Verify important information.' @ i18n}
-        </p>
+        <div class="cmp-contentaisearch__summary-card">
+            <div class="cmp-contentaisearch__summary-header">
+                <span class="cmp-contentaisearch__summary-icon" aria-hidden="true"></span>
+                <div class="cmp-contentaisearch__summary-heading">
+                    <p class="cmp-contentaisearch__summary-title">${'Generative answer' @ i18n}</p>
+                    <p class="cmp-contentaisearch__summary-attribution">${'Powered by Content AI' @ i18n}</p>
+                </div>
+            </div>
+            <p class="cmp-contentaisearch__summary-text" data-cmp-hook-contentaisearch="summaryText"></p>
+            <div class="cmp-contentaisearch__sources-section">
+                <p class="cmp-contentaisearch__sources-label">${'Sources' @ i18n}</p>
+                <ul class="cmp-contentaisearch__sources" data-cmp-hook-contentaisearch="sources"></ul>
+            </div>
+            <p class="cmp-contentaisearch__disclaimer" data-cmp-hook-contentaisearch="disclaimer">
+                ${search.disclaimerText || 'AI-generated responses may be inaccurate. Verify important information.' @ i18n}
+            </p>
+        </div>
     </div>
     <div class="cmp-contentaisearch__error" data-cmp-hook-contentaisearch="error" hidden="hidden">
         <p data-cmp-hook-contentaisearch="errorMessage">${'Something went wrong generating the summary.' @ i18n}</p>
         <button type="button" data-cmp-hook-contentaisearch="retry">${'Try again' @ i18n}</button>
     </div>
-    <ul class="cmp-contentaisearch__results" data-cmp-hook-contentaisearch="results" aria-label="${'Search results' @ i18n}"></ul>
+    <div class="cmp-contentaisearch__results-section" data-cmp-hook-contentaisearch="resultsSection" hidden="hidden">
+        <div class="cmp-contentaisearch__results-toolbar">
+            <p class="cmp-contentaisearch__results-status" data-cmp-hook-contentaisearch="resultsStatus"></p>
+            <div class="cmp-contentaisearch__results-controls">
+                <div class="cmp-contentaisearch__layout-toggle" role="group" aria-label="${'Results layout' @ i18n}">
+                    <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutCard" aria-pressed="true">${'Cards' @ i18n}</button>
+                    <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutList" aria-pressed="false">${'List' @ i18n}</button>
+                </div>
+                <label class="cmp-contentaisearch__results-limit">
+                    <span class="cmp-contentaisearch__results-limit-label">${'Results per page' @ i18n}</span>
+                    <select data-cmp-hook-contentaisearch="resultsLimit" aria-label="${'Results per page' @ i18n}">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+        <ul class="cmp-contentaisearch__results" data-cmp-hook-contentaisearch="results" aria-label="${'Search results' @ i18n}"></ul>
+        <div class="cmp-contentaisearch__pagination" data-cmp-hook-contentaisearch="pagination" hidden="hidden">
+            <button type="button" class="cmp-contentaisearch__pagination-btn" data-cmp-hook-contentaisearch="prevPage" disabled="disabled">${'Previous' @ i18n}</button>
+            <span class="cmp-contentaisearch__pagination-status" data-cmp-hook-contentaisearch="paginationStatus"></span>
+            <button type="button" class="cmp-contentaisearch__pagination-btn" data-cmp-hook-contentaisearch="nextPage">${'Next' @ i18n}</button>
+        </div>
+    </div>
+    <sly data-sly-include="itemTemplateCard.html"/>
+    <sly data-sly-include="itemTemplateList.html"/>
+    <sly data-sly-include="sourceTemplate.html"/>
 </section>

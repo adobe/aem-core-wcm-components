@@ -52,7 +52,7 @@ class ContentSourceSearchMergerTest {
         ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(Collections.singletonList(partial), 2);
 
         assertEquals(2, merged.getResults().size());
-        assertEquals(2, merged.getTotalResults());
+        assertEquals(3, merged.getTotalResults());
         assertEquals("a", merged.getResults().get(0).getId());
         assertEquals("b", merged.getResults().get(1).getId());
     }

@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.services.contentai;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -79,10 +81,32 @@ public class ContentSourceListItem {
         return config != null && config.getAccess() != null && config.getAccess().isPublic();
     }
 
+    /**
+     * @return the author-visible description from the list API, if present
+     */
+    public String getResolvableDescription() {
+        if (StringUtils.isNotBlank(description)) {
+            return description;
+        }
+        if (config != null && StringUtils.isNotBlank(config.getDescription())) {
+            return config.getDescription();
+        }
+        return null;
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ContentSourceConfig {
 
+        private String description;
         private ContentSourceAccess access;
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
 
         public ContentSourceAccess getAccess() {
             return access;
