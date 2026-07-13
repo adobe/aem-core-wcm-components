@@ -22,6 +22,8 @@ import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class AemCloudPlatformDetectorTest {
 
@@ -48,5 +50,17 @@ class AemCloudPlatformDetectorTest {
     @Test
     void isCloudPlatform_falseWhenProviderMissing() {
         assertFalse(AemCloudPlatformDetector.isCloudPlatform(null));
+    }
+
+    @Test
+    void isCloudPlatform_falseWhenProductInfoMissing() {
+        assertFalse(AemCloudPlatformDetector.isCloudPlatform(() -> null));
+    }
+
+    @Test
+    void isCloudPlatform_falseWhenVersionMissing() {
+        com.adobe.granite.license.ProductInfo productInfo = mock(com.adobe.granite.license.ProductInfo.class);
+        when(productInfo.getVersion()).thenReturn(null);
+        assertFalse(AemCloudPlatformDetector.isCloudPlatform(() -> productInfo));
     }
 }

@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.services.contentai;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -55,6 +54,39 @@ class ContentSourceSearchMergerTest {
         assertEquals(3, merged.getTotalResults());
         assertEquals("a", merged.getResults().get(0).getId());
         assertEquals("b", merged.getResults().get(1).getId());
+    }
+
+    @Test
+    void merge_skipsNullPartialsItemsAndBlankIds() {
+        ContentSourceSearchResult valid = result(item("doc_1", 0.5));
+        ContentSourceSearchResult nullResults = new ContentSourceSearchResult();
+        nullResults.setTotalResults(1);
+        ContentSourceSearchResult.Item blankId = item(" ", 0.9);
+
+        ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(
+            Arrays.asList(null, valid, nullResults, result(blankId)), 0);
+
+        assertEquals(1, merged.getResults().size());
+        assertEquals("doc_1", merged.getResults().get(0).getId());
+    }
+
+    @Test
+    void merge_keepsExistingItemWhenIncomingScoreLower() {
+        ContentSourceSearchResult first = result(item("doc_1", 0.9));
+        ContentSourceSearchResult second = result(item("doc_1", 0.2));
+
+        ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(Arrays.asList(first, second), 10);
+
+        assertEquals(0.9, merged.getResults().get(0).getScore(), 0.001);
+    }
+
+    @Test
+    void merge_returnsAllItemsWhenLimitZero() {
+        ContentSourceSearchResult partial = result(item("a", 0.9), item("b", 0.8), item("c", 0.7));
+
+        ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(Collections.singletonList(partial), 0);
+
+        assertEquals(3, merged.getResults().size());
     }
 
     private static ContentSourceSearchResult result(ContentSourceSearchResult.Item... items) {

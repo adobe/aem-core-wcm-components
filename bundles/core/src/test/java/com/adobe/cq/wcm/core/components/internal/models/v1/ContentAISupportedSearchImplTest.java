@@ -105,6 +105,32 @@ class ContentAISupportedSearchImplTest {
     }
 
     @Test
+    void resolvesContentSourceFromLegacyProperty() {
+        mockProductInfoProvider.setVersion(new Version("6.6.0"));
+        context.create().resource(CONTENT_ROOT + "/legacy-source",
+            "sling:resourceType", ContentAISupportedSearchImpl.RESOURCE_TYPE,
+            "contentSource", "legacy-source");
+        context.currentResource(CONTENT_ROOT + "/legacy-source");
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertEquals("legacy-source", search.getContentSource());
+        assertEquals(1, search.getContentSources().size());
+    }
+
+    @Test
+    void genSearchErrorFallback_defaultsToResultsOnlyWhenBlank() {
+        mockProductInfoProvider.setVersion(new Version("6.6.0"));
+        String path = CONTENT_ROOT + "/blank-fallback";
+        context.create().resource(path,
+            "sling:resourceType", ContentAISupportedSearchImpl.RESOURCE_TYPE,
+            "contentSource", "my-content-source",
+            "contentSources", new String[] {"my-content-source"},
+            "genSearchErrorFallback", " ");
+        context.currentResource(path);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertEquals("RESULTS_ONLY", search.getGenSearchErrorFallback());
+    }
+
+    @Test
     void genSearchToggleVisible_defaultHiddenOnAem65() {
         mockProductInfoProvider.setVersion(new Version("6.5.25"));
         context.currentResource(COMPONENT_DEFAULTS_PATH);

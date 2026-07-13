@@ -257,4 +257,45 @@ class ContentSourcesDataSourceServletTest {
         assertNotNull(dataSource);
         assertEquals("content-path-source", dataSource.iterator().next().getValueMap().get(PN_VALUE, String.class));
     }
+
+    @Test
+    void doGetUsesDefaultAcquisitionTypeWhenNoParam() throws Exception {
+        ContentSourceListItem acquisition = new ContentSourceListItem();
+        acquisition.setName("default-type-source");
+        acquisition.setType("ACQUISITION");
+
+        ContentSourceListResult listResult = new ContentSourceListResult();
+        listResult.setItems(List.of(acquisition));
+        when(mockClient.listContentSources()).thenReturn(listResult);
+
+        context.create().resource("/apps/datasource-default-type",
+            "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
+        context.currentResource("/apps/datasource-default-type");
+        underTest.doGet(context.request(), context.response());
+
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        assertNotNull(dataSource);
+        assertEquals("default-type-source", dataSource.iterator().next().getValueMap().get(PN_VALUE, String.class));
+    }
+
+    @Test
+    void doGetIgnoresUnresolvedPlaceholderType() throws Exception {
+        ContentSourceListItem acquisition = new ContentSourceListItem();
+        acquisition.setName("placeholder-type-source");
+        acquisition.setType("ACQUISITION");
+
+        ContentSourceListResult listResult = new ContentSourceListResult();
+        listResult.setItems(List.of(acquisition));
+        when(mockClient.listContentSources()).thenReturn(listResult);
+
+        context.create().resource("/apps/datasource-placeholder-type",
+            "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
+        context.currentResource("/apps/datasource-placeholder-type");
+        context.request().setParameterMap(java.util.Map.of("contentSourceType", "${param.contentSourceType}"));
+        underTest.doGet(context.request(), context.response());
+
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        assertNotNull(dataSource);
+        assertEquals("placeholder-type-source", dataSource.iterator().next().getValueMap().get(PN_VALUE, String.class));
+    }
 }

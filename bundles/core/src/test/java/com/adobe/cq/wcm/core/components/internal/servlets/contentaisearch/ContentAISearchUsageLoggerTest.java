@@ -104,6 +104,26 @@ class ContentAISearchUsageLoggerTest {
         assertEquals("p99999-e11111", usageContext.resolveCustomerBucket("99999", "11111"));
     }
 
+    @Test
+    void resolvesUnknownIdentifiersWhenEnvMissing() {
+        ContentAISearchUsageLogger.UsageContext usageContext = envContext(new HashMap<>());
+
+        assertEquals("unknown", usageContext.resolveProgramId());
+        assertEquals("unknown", usageContext.resolveEnvironmentId());
+        assertEquals("unknown", usageContext.resolveCustomerBucket("unknown", "unknown"));
+    }
+
+    @Test
+    void trimsProgramAndEnvironmentIds() {
+        Map<String, String> env = new HashMap<>();
+        env.put("AEM_PROGRAM_ID", " 12345 ");
+        env.put("AEM_ENV_ID", " 67890 ");
+        ContentAISearchUsageLogger.UsageContext usageContext = envContext(env);
+
+        assertEquals("12345", usageContext.resolveProgramId());
+        assertEquals("67890", usageContext.resolveEnvironmentId());
+    }
+
     private static ContentAISearchUsageLogger.UsageContext envContext(Map<String, String> env) {
         return new ContentAISearchUsageLogger.UsageContext() {
             @Override

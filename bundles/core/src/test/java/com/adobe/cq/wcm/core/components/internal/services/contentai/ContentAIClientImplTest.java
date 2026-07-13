@@ -32,6 +32,7 @@ import org.apache.http.ProtocolVersion;
 import org.apache.http.StatusLine;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -48,6 +49,7 @@ import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientExcept
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -315,6 +317,70 @@ class ContentAIClientImplTest {
 
         ContentAIClientException exception = assertThrows(ContentAIClientException.class,
             () -> envClient.search("my-content-source", "electric cars", 10));
+        assertEquals(0, exception.getStatusCode());
+    }
+
+    @Test
+    void listContentSourcesUsesGetRequest() throws Exception {
+        respondWith(200, "{\"items\":[]}");
+
+        client.listContentSources();
+
+        assertTrue(captureExecutedRequest() instanceof HttpGet);
+    }
+
+    @Test
+    void listContentSourcesThrowsOnMalformedResponse() throws IOException {
+        respondWith(200, "{\"items\":\"not-an-array\"}");
+
+        assertThrows(ContentAIClientException.class, () -> client.listContentSources());
+    }
+
+    @Test
+    void searchThrowsOnTransportError() throws IOException {
+        when(mockHttpClient.execute(any(HttpUriRequest.class))).thenThrow(new IOException("network down"));
+
+        ContentAIClientException exception = assertThrows(ContentAIClientException.class,
+            () -> client.search("my-content-source", "electric cars", 10));
+        assertEquals(0, exception.getStatusCode());
+    }
+
+    @Test
+    void genSearchThrowsOnMalformedResponse() throws IOException {
+        respondWith(200, "\"unexpected\"");
+
+        assertThrows(ContentAIClientException.class,
+            () -> client.genSearch("my-content-source", "ACQUISITION", "electric cars"));
+    }
+
+    @Test
+    void searchOmitsContentSourceTypeWhenBlank() throws Exception {
+        respondWith(200, "{\"totalResults\":0,\"results\":[]}");
+
+        client.search("my-content-source", " ", "electric cars", 10);
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        String body = new String(sent.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
+        assertTrue(body.contains("\"contentSource\":{\"name\":\"my-content-source\"}"));
+    }
+
+    @Test
+    void usesDefaultHttpClientWhenBuilderFactoryMissing() {
+        ContentAIClientImpl noFactory = new ContentAIClientImpl();
+        noFactory.activate(config(TEST_API_KEY, TEST_BASE_URL));
+        setField(ContentAIClientImpl.class, "httpClientBuilderFactory", noFactory, null);
+
+        assertNotNull(noFactory.getHttpClient(RequestConfig.custom().build()));
+    }
+
+    @Test
+    void deriveBucketIgnoresMalformedServiceValue() throws Exception {
+        Map<String, String> env = new HashMap<>();
+        env.put("AEM_SERVICE", "not-a-bucket");
+        ContentAIClientImpl envClient = envClient(config(TEST_API_KEY, ""), env);
+
+        ContentAIClientException exception = assertThrows(ContentAIClientException.class,
+            () -> envClient.listContentSources());
         assertEquals(0, exception.getStatusCode());
     }
 

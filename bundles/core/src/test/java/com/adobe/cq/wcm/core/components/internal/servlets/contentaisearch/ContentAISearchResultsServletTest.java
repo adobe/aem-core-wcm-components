@@ -24,6 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClient;
+import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -132,5 +133,32 @@ class ContentAISearchResultsServletTest {
         assertTrue(output.contains("\"id\":\"doc_1\""));
         assertTrue(output.contains("\"id\":\"doc_2\""));
         assertTrue(output.contains("\"totalResults\":67"));
+    }
+
+    @Test
+    void doGetReturns502WhenContentAiFails() throws Exception {
+        when(mockClient.search(anyString(), anyString(), anyString(), anyInt(), isNull()))
+            .thenThrow(new ContentAIClientException("failed", 502));
+
+        context.currentResource(COMPONENT_PATH);
+        context.request().setQueryString("q=electric+cars");
+
+        underTest.doGet(context.request(), context.response());
+
+        assertEquals(502, context.response().getStatus());
+    }
+
+    @Test
+    void doGetReturnsEmptyResultWhenNoContentSourcesConfigured() throws Exception {
+        context.create().resource(CONTENT_ROOT + "/jcr:content/par/empty-search",
+            "sling:resourceType", "core/wcm/components/contentaisearch/v1/contentaisearch");
+        context.currentResource(CONTENT_ROOT + "/jcr:content/par/empty-search");
+        context.request().setQueryString("q=electric+cars");
+
+        underTest.doGet(context.request(), context.response());
+
+        assertEquals(200, context.response().getStatus());
+        assertTrue(context.response().getOutputAsString().contains("\"results\":[]"));
+        verify(mockClient, never()).search(anyString(), anyString(), anyString(), anyInt(), isNull());
     }
 }

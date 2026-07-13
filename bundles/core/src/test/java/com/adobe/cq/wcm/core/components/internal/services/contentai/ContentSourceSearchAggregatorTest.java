@@ -25,9 +25,13 @@ import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientExcept
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -60,6 +64,31 @@ class ContentSourceSearchAggregatorTest {
 
         assertEquals(10, result.getTotalResults());
         assertEquals(1, result.getResults().size());
+    }
+
+    @Test
+    void fetchAll_handlesNullResultsList() throws Exception {
+        ContentAIClient client = mock(ContentAIClient.class);
+        ContentSourceSearchResult page = new ContentSourceSearchResult();
+        page.setTotalResults(0);
+        when(client.search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(50), isNull())).thenReturn(page);
+
+        ContentSourceSearchResult result = ContentSourceSearchAggregator.fetchAll(client, "my-source", "ACQUISITION", "block");
+
+        assertEquals(0, result.getResults().size());
+    }
+
+    @Test
+    void fetchAll_stopsAfterMaxPages() throws Exception {
+        ContentAIClient client = mock(ContentAIClient.class);
+        ContentSourceSearchResult page = page(1000, item("doc_1"));
+        page.setCursor("next");
+        when(client.search(anyString(), anyString(), anyString(), anyInt(), any())).thenReturn(page);
+
+        ContentSourceSearchAggregator.fetchAll(client, "my-source", "ACQUISITION", "block");
+
+        verify(client, times(ContentSourceSearchAggregator.MAX_PAGES))
+            .search(eq("my-source"), eq("ACQUISITION"), eq("block"), eq(50), any());
     }
 
     private static ContentSourceSearchResult page(long totalResults, ContentSourceSearchResult.Item... items) {
