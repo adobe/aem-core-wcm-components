@@ -15,24 +15,31 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
+import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClient;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.day.cq.i18n.I18n;
 import com.day.cq.wcm.api.Page;
@@ -49,13 +56,22 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
 
     public static final int PROP_RESULTS_SIZE_DEFAULT = 10;
     public static final boolean PROP_GENSEARCH_ENABLED_BY_DEFAULT_DEFAULT = true;
-
-    @ScriptVariable
-    private Page currentPage;
+    public static final boolean PROP_GENSEARCH_TOGGLE_VISIBLE_DEFAULT = true;
 
     @ValueMapValue
     @Default(values = "")
     private String contentSource;
+
+    @ValueMapValue(name = PN_CONTENT_SOURCE_TYPE)
+    @Default(values = ContentAIClient.DEFAULT_CONTENT_SOURCE_TYPE)
+    private String contentSourceType;
+
+    @ValueMapValue(name = PN_CONTENT_SOURCES, injectionStrategy = InjectionStrategy.OPTIONAL)
+    private String[] contentSources;
+
+    @ValueMapValue(name = PN_PRIMARY_CONTENT_SOURCE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(values = "")
+    private String primaryContentSource;
 
     @ValueMapValue
     @Default(intValues = PROP_RESULTS_SIZE_DEFAULT)
@@ -66,6 +82,14 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     private boolean genSearchEnabledByDefault;
 
     @ValueMapValue
+    @Default(booleanValues = PROP_GENSEARCH_TOGGLE_VISIBLE_DEFAULT)
+    private boolean genSearchToggleVisible;
+
+    @ValueMapValue
+    @Default(values = GENSEARCH_ERROR_FALLBACK_RESULTS_ONLY)
+    private String genSearchErrorFallback;
+
+    @ValueMapValue
     @Default(values = "")
     private String placeholder;
 
@@ -73,17 +97,39 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     @Default(values = "")
     private String disclaimerText;
 
+    private List<String> resolvedContentSources = Collections.emptyList();
+    private String resolvedPrimaryContentSource = "";
+
     private final Map<String, String> i18nMessagesMap = new HashMap<>();
 
     @PostConstruct
     private void initModel() {
-        // no-op for now; kept for parity with SearchImpl's initModel pattern and future extension
+        resolvedContentSources = resolveContentSources();
+        resolvedPrimaryContentSource = resolvePrimaryContentSource(resolvedContentSources);
     }
 
     @NotNull
     @Override
     public String getContentSource() {
-        return contentSource;
+        return resolvedPrimaryContentSource;
+    }
+
+    @NotNull
+    @Override
+    public String getContentSourceType() {
+        return StringUtils.defaultIfBlank(contentSourceType, ContentAIClient.DEFAULT_CONTENT_SOURCE_TYPE);
+    }
+
+    @NotNull
+    @Override
+    public List<String> getContentSources() {
+        return resolvedContentSources;
+    }
+
+    @NotNull
+    @Override
+    public String getPrimaryContentSource() {
+        return resolvedPrimaryContentSource;
     }
 
     @Override
@@ -97,13 +143,24 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     }
 
     @Override
+    public boolean isGenSearchToggleVisible() {
+        return genSearchToggleVisible;
+    }
+
+    @NotNull
+    @Override
+    public String getGenSearchErrorFallback() {
+        return StringUtils.defaultIfBlank(genSearchErrorFallback, GENSEARCH_ERROR_FALLBACK_RESULTS_ONLY);
+    }
+
+    @Override
     public String getPlaceholder() {
-        return placeholder;
+        return StringUtils.isBlank(placeholder) ? null : placeholder;
     }
 
     @Override
     public String getDisclaimerText() {
-        return disclaimerText;
+        return StringUtils.isBlank(disclaimerText) ? null : disclaimerText;
     }
 
     @NotNull
@@ -116,7 +173,8 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     @NotNull
     @Override
     public String getI18nMessages() {
-        Locale pageLocale = currentPage.getLanguage(false);
+        Page page = getCurrentPage();
+        Locale pageLocale = page != null ? page.getLanguage(false) : request.getLocale();
         ResourceBundle resourceBundle = request.getResourceBundle(pageLocale);
         I18n i18n = new I18n(resourceBundle);
         i18nMessagesMap.put("Search", i18n.get("Search"));
@@ -128,5 +186,31 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
         } catch (Exception e) {
             return "{}";
         }
+    }
+
+    @NotNull
+    private List<String> resolveContentSources() {
+        List<String> sources = new ArrayList<>();
+        if (contentSources != null) {
+            sources.addAll(Arrays.stream(contentSources)
+                .filter(StringUtils::isNotBlank)
+                .map(String::trim)
+                .collect(Collectors.toList()));
+        }
+        if (sources.isEmpty() && StringUtils.isNotBlank(contentSource)) {
+            sources.add(contentSource.trim());
+        }
+        return Collections.unmodifiableList(sources);
+    }
+
+    @NotNull
+    private String resolvePrimaryContentSource(@NotNull List<String> sources) {
+        if (StringUtils.isNotBlank(primaryContentSource)) {
+            return primaryContentSource.trim();
+        }
+        if (!sources.isEmpty()) {
+            return sources.get(0);
+        }
+        return "";
     }
 }

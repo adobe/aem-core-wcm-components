@@ -43,6 +43,12 @@ public class ContentAIGenSearchServlet extends AbstractContentAISearchServlet {
 
     @Override
     protected Object executeQuery(@NotNull ContentAISupportedSearch model, @NotNull String query) throws ContentAIClientException {
-        return contentAIClient.genSearch(model.getContentSource(), query);
+        return contentAIClient.genSearch(model.getPrimaryContentSource(), model.getContentSourceType(), query);
+    }
+
+    @Override
+    @NotNull
+    protected String getOperationName() {
+        return SELECTOR;
     }
 }

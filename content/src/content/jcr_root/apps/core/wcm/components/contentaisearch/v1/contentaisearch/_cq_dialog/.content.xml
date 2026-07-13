@@ -18,8 +18,10 @@
     xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="nt:unstructured"
     jcr:title="ContentAI Supported Search"
-    sling:resourceType="cq/gui/components/authoring/dialog">
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.contentaisearch.v1.editor]">
     <content
+        granite:class="cmp-contentaisearch__editor"
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">
         <items jcr:primaryType="nt:unstructured">
@@ -28,9 +30,9 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
-                    <properties
+                    <contentScope
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Properties"
+                        jcr:title="Content Scope"
                         sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
@@ -44,18 +46,67 @@
                                         fieldLabel="ID"
                                         fieldDescription="Optional HTML ID for this component."
                                         name="./id"/>
-                                    <contentSource
+                                    <contentSourceType
                                         jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                        fieldLabel="Content Source"
-                                        fieldDescription="Name of the Content AI content source to search. Must be a PUBLIC Content AI index containing only published/public content (accessed anonymously via X-Api-Key). Do not point this at private or permissioned content: Content AI does not evaluate AEM ACLs, so restricted content would be exposed to anonymous visitors."
-                                        name="./contentSource"
-                                        required="{Boolean}true"/>
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        fieldLabel="Content Source Type"
+                                        fieldDescription="Filters the list of available Content AI content sources. For public anonymous sites, use ACQUISITION."
+                                        name="./contentSourceType"
+                                        value="ACQUISITION">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <acquisition
+                                                jcr:primaryType="nt:unstructured"
+                                                text="ACQUISITION"
+                                                value="ACQUISITION"/>
+                                            <aemAuthor
+                                                jcr:primaryType="nt:unstructured"
+                                                text="AEM_AUTHOR"
+                                                value="AEM_AUTHOR"/>
+                                            <aemPublish
+                                                jcr:primaryType="nt:unstructured"
+                                                text="AEM_PUBLISH"
+                                                value="AEM_PUBLISH"/>
+                                            <custom
+                                                jcr:primaryType="nt:unstructured"
+                                                text="CUSTOM"
+                                                value="CUSTOM"/>
+                                        </items>
+                                    </contentSourceType>
+                                    <contentSources
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        fieldLabel="Content Sources"
+                                        fieldDescription="Public Content AI content sources to search. Must contain only published/public content — Content AI does not evaluate AEM ACLs."
+                                        name="./contentSources"
+                                        multiple="{Boolean}true"
+                                        required="{Boolean}true">
+                                        <datasource
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="core/wcm/components/contentaisearch/v1/datasources/contentsources"
+                                            contentSourceType="${param.contentSourceType}"/>
+                                        <granite:data
+                                            jcr:primaryType="nt:unstructured"
+                                            cmp-field-path="${requestPathInfo.resourcePath}"/>
+                                    </contentSources>
+                                </items>
+                            </column>
+                        </items>
+                    </contentScope>
+                    <searchBehavior
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Search Behavior"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
                                     <resultsSize
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
                                         fieldLabel="Number of Results"
-                                        fieldDescription="Maximum number of results to fetch."
+                                        fieldDescription="Maximum number of merged results to return."
                                         name="./resultsSize"
                                         value="10"
                                         min="1"/>
@@ -65,6 +116,29 @@
                                         fieldLabel="Placeholder Text"
                                         fieldDescription="Placeholder text for the search input."
                                         name="./placeholder"/>
+                                </items>
+                            </column>
+                        </items>
+                    </searchBehavior>
+                    <generativeSearch
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Generative Search"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <genSearchToggleVisible
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        text="Show generative summary toggle to visitors"
+                                        fieldDescription="When unchecked, visitors cannot change whether the AI summary is shown."
+                                        name="./genSearchToggleVisible"
+                                        checked="{Boolean}true"
+                                        value="{Boolean}true"
+                                        uncheckedValue="{Boolean}false"/>
                                     <genSearchEnabledByDefault
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
@@ -74,6 +148,28 @@
                                         checked="{Boolean}true"
                                         value="{Boolean}true"
                                         uncheckedValue="{Boolean}false"/>
+                                    <genSearchErrorFallback
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        fieldLabel="GenSearch Error Fallback"
+                                        fieldDescription="Visitor behavior when generative search fails."
+                                        name="./genSearchErrorFallback"
+                                        value="RESULTS_ONLY">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <resultsOnly
+                                                jcr:primaryType="nt:unstructured"
+                                                text="Results only (hide error)"
+                                                value="RESULTS_ONLY"/>
+                                            <showError
+                                                jcr:primaryType="nt:unstructured"
+                                                text="Show error with retry"
+                                                value="SHOW_ERROR"/>
+                                            <showErrorMessage
+                                                jcr:primaryType="nt:unstructured"
+                                                text="Show error message only"
+                                                value="SHOW_ERROR_MESSAGE"/>
+                                        </items>
+                                    </genSearchErrorFallback>
                                     <disclaimerText
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
@@ -83,7 +179,7 @@
                                 </items>
                             </column>
                         </items>
-                    </properties>
+                    </generativeSearch>
                 </items>
             </tabs>
         </items>

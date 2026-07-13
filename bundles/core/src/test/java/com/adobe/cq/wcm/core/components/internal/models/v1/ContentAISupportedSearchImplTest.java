@@ -46,7 +46,12 @@ class ContentAISupportedSearchImplTest {
         context.currentResource(COMPONENT_PATH);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         assertEquals("my-content-source", search.getContentSource());
+        assertEquals("ACQUISITION", search.getContentSourceType());
+        assertEquals(1, search.getContentSources().size());
+        assertEquals("my-content-source", search.getPrimaryContentSource());
         assertEquals(5, search.getResultsSize());
         assertTrue(search.isGenSearchEnabledByDefault());
+        assertTrue(search.isGenSearchToggleVisible());
+        assertEquals("RESULTS_ONLY", search.getGenSearchErrorFallback());
     }
 }

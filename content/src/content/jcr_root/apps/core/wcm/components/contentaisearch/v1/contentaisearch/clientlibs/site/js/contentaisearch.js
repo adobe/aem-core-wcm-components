@@ -38,10 +38,13 @@
         this._element = element;
         this._cacheElements();
         this._resourcePath = this._resolveResourcePath();
-        this._genSearchEnabled = this._elements.toggle ? this._elements.toggle.checked : false;
+        this._genSearchErrorFallback = this._element.getAttribute("data-cmp-gensearch-error-fallback") || "RESULTS_ONLY";
+        this._genSearchEnabled = this._resolveInitialGenSearchEnabled();
         this._timeout = null;
 
-        this._elements.input.addEventListener("input", this._onInput.bind(this));
+        if (this._elements.input) {
+            this._elements.input.addEventListener("input", this._onInput.bind(this));
+        }
         if (this._elements.toggle) {
             this._elements.toggle.addEventListener("change", this._onToggleChange.bind(this));
         }
@@ -71,6 +74,15 @@
         // bound to this component's resource type — correct even with multiple instances of
         // this component on the same page, since each instance's root element carries its own path.
         return this._element.getAttribute("data-cmp-resource-path");
+    };
+
+    ContentAISearch.prototype._resolveInitialGenSearchEnabled = function() {
+        var toggleVisible = this._element.getAttribute("data-cmp-gensearch-toggle-visible");
+        var enabledDefault = this._element.getAttribute("data-cmp-gensearch-enabled-default");
+        if (toggleVisible === "false") {
+            return enabledDefault === "true";
+        }
+        return this._elements.toggle ? this._elements.toggle.checked : false;
     };
 
     ContentAISearch.prototype._onInput = function() {
@@ -131,13 +143,34 @@
         var self = this;
         toggleShow(this._elements.error, false);
         toggleShow(this._elements.summary, false);
+        if (this._elements.retry) {
+            toggleShow(this._elements.retry, true);
+        }
         this._fetchJson(this._resourcePath + ".gensearch.json?q=" + encodeURIComponent(query))
             .then(function(data) {
                 self._renderSummary(data);
             })
             .catch(function() {
-                toggleShow(self._elements.error, true);
+                self._handleGenSearchError();
             });
+    };
+
+    ContentAISearch.prototype._handleGenSearchError = function() {
+        if (this._genSearchErrorFallback === "SHOW_ERROR") {
+            if (this._elements.retry) {
+                toggleShow(this._elements.retry, true);
+            }
+            toggleShow(this._elements.error, true);
+            return;
+        }
+        if (this._genSearchErrorFallback === "SHOW_ERROR_MESSAGE") {
+            if (this._elements.retry) {
+                toggleShow(this._elements.retry, false);
+            }
+            toggleShow(this._elements.error, true);
+            return;
+        }
+        toggleShow(this._elements.error, false);
     };
 
     ContentAISearch.prototype._fetchJson = function(url) {

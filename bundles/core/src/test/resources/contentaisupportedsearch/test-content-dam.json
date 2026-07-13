@@ -9,7 +9,12 @@
     "sling:resourceType": "core/wcm/components/contentaisearch/v1/contentaisearch",
     "id": "contentaisearch-1",
     "contentSource": "my-content-source",
+    "contentSources": ["my-content-source"],
+    "contentSourceType": "ACQUISITION",
+    "primaryContentSource": "my-content-source",
     "resultsSize": 5,
-    "genSearchEnabledByDefault": true
+    "genSearchEnabledByDefault": true,
+    "genSearchToggleVisible": true,
+    "genSearchErrorFallback": "RESULTS_ONLY"
   }
 }

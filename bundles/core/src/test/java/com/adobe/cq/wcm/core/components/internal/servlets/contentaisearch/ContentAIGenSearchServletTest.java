@@ -36,7 +36,7 @@ class ContentAIGenSearchServletTest {
 
     private static final String TEST_BASE = "/contentaisearchservlet";
     private static final String CONTENT_ROOT = "/content";
-    private static final String COMPONENT_PATH = CONTENT_ROOT + "/jcr:content/contentaisearch";
+    private static final String COMPONENT_PATH = CONTENT_ROOT + "/jcr:content/par/contentaisearch";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -55,7 +55,7 @@ class ContentAIGenSearchServletTest {
     void doGetWritesGenSearchResultAsJson() throws Exception {
         ContentSourceQueryResult expected = new ContentSourceQueryResult();
         expected.setResult("Electric cars are efficient.");
-        when(mockClient.genSearch(eq("my-source"), eq("electric cars"))).thenReturn(expected);
+        when(mockClient.genSearch(eq("my-source"), eq("ACQUISITION"), eq("electric cars"))).thenReturn(expected);
 
         context.currentResource(COMPONENT_PATH);
         context.request().setQueryString("q=electric+cars");

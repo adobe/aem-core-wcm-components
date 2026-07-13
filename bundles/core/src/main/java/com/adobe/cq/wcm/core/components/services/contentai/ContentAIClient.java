@@ -23,26 +23,68 @@ package com.adobe.cq.wcm.core.components.services.contentai;
  */
 public interface ContentAIClient {
 
+    String DEFAULT_CONTENT_SOURCE_TYPE = "ACQUISITION";
+
+    /**
+     * Lists available Content AI content sources for the configured environment.
+     *
+     * @return parsed list response from {@code GET /content-sources}
+     * @throws ContentAIClientException if the call to Content AI fails
+     * @since com.adobe.cq.wcm.core.components.services.contentai 1.0.0
+     */
+    ContentSourceListResult listContentSources() throws ContentAIClientException;
+
     /**
      * Executes a hybrid (vector + fulltext) search against the given content source.
      *
-     * @param contentSource The name of the Content AI content source to search.
-     * @param query The user's search text.
-     * @param limit The maximum number of results to return.
-     * @return The search result.
-     * @throws ContentAIClientException if the call to Content AI fails.
+     * @param contentSource the name of the Content AI content source to search
+     * @param contentSourceType the Content AI content source type
+     * @param query the user's search text
+     * @param limit the maximum number of results to return
+     * @return the search result
+     * @throws ContentAIClientException if the call to Content AI fails
      * @since com.adobe.cq.wcm.core.components.services.contentai 1.0.0
      */
-    ContentSourceSearchResult search(String contentSource, String query, int limit) throws ContentAIClientException;
+    ContentSourceSearchResult search(String contentSource, String contentSourceType, String query, int limit)
+        throws ContentAIClientException;
+
+    /**
+     * Executes a hybrid search using {@link #DEFAULT_CONTENT_SOURCE_TYPE}.
+     *
+     * @param contentSource the name of the Content AI content source to search
+     * @param query the user's search text
+     * @param limit the maximum number of results to return
+     * @return the search result
+     * @throws ContentAIClientException if the call to Content AI fails
+     * @since com.adobe.cq.wcm.core.components.services.contentai 1.0.0
+     */
+    default ContentSourceSearchResult search(String contentSource, String query, int limit) throws ContentAIClientException {
+        return search(contentSource, DEFAULT_CONTENT_SOURCE_TYPE, query, limit);
+    }
 
     /**
      * Executes a blocking generative (RAG) search against the given content source.
      *
-     * @param contentSource The name of the Content AI content source to search.
-     * @param query The user's natural-language query.
-     * @return The generative search result, including the generated answer and cited hits.
-     * @throws ContentAIClientException if the call to Content AI fails.
+     * @param contentSource the name of the Content AI content source to search
+     * @param contentSourceType the Content AI content source type
+     * @param query the user's natural-language query
+     * @return the generative search result, including the generated answer and cited hits
+     * @throws ContentAIClientException if the call to Content AI fails
      * @since com.adobe.cq.wcm.core.components.services.contentai 1.0.0
      */
-    ContentSourceQueryResult genSearch(String contentSource, String query) throws ContentAIClientException;
+    ContentSourceQueryResult genSearch(String contentSource, String contentSourceType, String query)
+        throws ContentAIClientException;
+
+    /**
+     * Executes generative search using {@link #DEFAULT_CONTENT_SOURCE_TYPE}.
+     *
+     * @param contentSource the name of the Content AI content source to search
+     * @param query the user's natural-language query
+     * @return the generative search result
+     * @throws ContentAIClientException if the call to Content AI fails
+     * @since com.adobe.cq.wcm.core.components.services.contentai 1.0.0
+     */
+    default ContentSourceQueryResult genSearch(String contentSource, String query) throws ContentAIClientException {
+        return genSearch(contentSource, DEFAULT_CONTENT_SOURCE_TYPE, query);
+    }
 }

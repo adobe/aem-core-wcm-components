@@ -3,12 +3,16 @@
   "jcr:content": {
     "jcr:primaryType": "cq:PageContent",
     "sling:resourceType": "core/wcm/components/page/v3/page",
-    "contentaisearch": {
+    "par": {
       "jcr:primaryType": "nt:unstructured",
-      "sling:resourceType": "core/wcm/components/contentaisearch/v1/contentaisearch",
-      "id": "contentaisearch-1",
-      "contentSource": "my-source",
-      "resultsSize": 10
+      "sling:resourceType": "wcm/foundation/components/parsys",
+      "contentaisearch": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "core/wcm/components/contentaisearch/v1/contentaisearch",
+        "id": "contentaisearch-1",
+        "contentSource": "my-source",
+        "resultsSize": 10
+      }
     }
   }
 }

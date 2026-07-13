@@ -15,13 +15,18 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets.contentaisearch;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.Servlet;
 
 import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 
+import com.adobe.cq.wcm.core.components.internal.services.contentai.ContentSourceSearchMerger;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
+import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
 
 /**
  * Servlet exposing the ContentAI Supported Search component's results-list endpoint,
@@ -43,6 +48,21 @@ public class ContentAISearchResultsServlet extends AbstractContentAISearchServle
 
     @Override
     protected Object executeQuery(@NotNull ContentAISupportedSearch model, @NotNull String query) throws ContentAIClientException {
-        return contentAIClient.search(model.getContentSource(), query, model.getResultsSize());
+        List<String> sources = model.getContentSources();
+        if (sources.isEmpty()) {
+            return new ContentSourceSearchResult();
+        }
+        List<ContentSourceSearchResult> partials = new ArrayList<>();
+        String contentSourceType = model.getContentSourceType();
+        for (String source : sources) {
+            partials.add(contentAIClient.search(source, contentSourceType, query, model.getResultsSize()));
+        }
+        return ContentSourceSearchMerger.merge(partials, model.getResultsSize());
+    }
+
+    @Override
+    @NotNull
+    protected String getOperationName() {
+        return SELECTOR;
     }
 }

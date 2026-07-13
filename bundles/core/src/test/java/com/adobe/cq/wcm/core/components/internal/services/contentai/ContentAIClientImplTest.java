@@ -161,6 +161,29 @@ class ContentAIClientImplTest {
     }
 
     @Test
+    void listContentSourcesReturnsParsedItems() throws Exception {
+        respondWith(200, "{\"items\":[{\"name\":\"aem-live\",\"type\":\"ACQUISITION\",\"config\":{\"access\":{\"public\":true}}}]}");
+
+        com.adobe.cq.wcm.core.components.services.contentai.ContentSourceListResult result =
+            client.listContentSources();
+
+        assertEquals(1, result.getItems().size());
+        assertEquals("aem-live", result.getItems().get(0).getName());
+        assertTrue(result.getItems().get(0).isPublicAccess());
+    }
+
+    @Test
+    void searchIncludesContentSourceType() throws Exception {
+        respondWith(200, "{\"totalResults\":0,\"results\":[]}");
+
+        client.search("my-content-source", "ACQUISITION", "electric cars", 10);
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        String body = new String(sent.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
+        assertTrue(body.contains("\"type\":\"ACQUISITION\""));
+    }
+
+    @Test
     void searchReturnsParsedResult() throws Exception {
         respondWith(200, "{\"totalResults\":1,\"results\":[{\"id\":\"doc_1\",\"score\":0.75,\"data\":{\"title\":\"Electric Cars\"}}],\"cursor\":\"abc\"}");
 

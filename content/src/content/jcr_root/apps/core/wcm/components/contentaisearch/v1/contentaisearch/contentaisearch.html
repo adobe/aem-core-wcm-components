@@ -18,8 +18,10 @@
          class="cmp-contentaisearch"
          role="search"
          data-cmp-is="contentaisearch"
-         data-cmp-content-source="${search.contentSource}"
+         data-cmp-content-source="${search.primaryContentSource}"
          data-cmp-gensearch-enabled-default="${search.genSearchEnabledByDefault}"
+         data-cmp-gensearch-toggle-visible="${search.genSearchToggleVisible}"
+         data-cmp-gensearch-error-fallback="${search.genSearchErrorFallback}"
          data-cmp-resource-path="${resource.path}"
          data-i18n-messages='${search.i18nMessages}'>
     <form class="cmp-contentaisearch__form" data-cmp-hook-contentaisearch="form" autocomplete="off">
@@ -29,7 +31,7 @@
                    type="text" name="q" placeholder="${search.placeholder || 'Search' @ i18n}" autocomplete="off">
             <span class="cmp-contentaisearch__loading-indicator" data-cmp-hook-contentaisearch="loadingIndicator" hidden="hidden"></span>
         </div>
-        <label class="cmp-contentaisearch__toggle">
+        <label class="cmp-contentaisearch__toggle" data-sly-test="${search.genSearchToggleVisible}">
             <input type="checkbox" data-cmp-hook-contentaisearch="toggle"
                    checked="${search.genSearchEnabledByDefault ? true : false}"
                    aria-label="${'Show AI-generated summary' @ i18n}">
@@ -44,7 +46,7 @@
         </p>
     </div>
     <div class="cmp-contentaisearch__error" data-cmp-hook-contentaisearch="error" hidden="hidden">
-        <p>${'Something went wrong generating the summary.' @ i18n}</p>
+        <p data-cmp-hook-contentaisearch="errorMessage">${'Something went wrong generating the summary.' @ i18n}</p>
         <button type="button" data-cmp-hook-contentaisearch="retry">${'Try again' @ i18n}</button>
     </div>
     <ul class="cmp-contentaisearch__results" data-cmp-hook-contentaisearch="results" aria-label="${'Search results' @ i18n}"></ul>

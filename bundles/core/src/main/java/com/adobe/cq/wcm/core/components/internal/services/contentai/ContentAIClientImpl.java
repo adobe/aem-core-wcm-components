@@ -24,7 +24,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -41,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClient;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
+import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceListResult;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceQueryResult;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -85,9 +88,24 @@ public class ContentAIClientImpl implements ContentAIClient {
     }
 
     @Override
-    public ContentSourceSearchResult search(String contentSource, String query, int limit) throws ContentAIClientException {
+    public ContentSourceListResult listContentSources() throws ContentAIClientException {
+        JsonNode response = executeGet("/content-sources");
+        try {
+            return mapper.treeToValue(response, ContentSourceListResult.class);
+        } catch (IOException e) {
+            throw new ContentAIClientException("Failed to parse Content AI content-sources response", e);
+        }
+    }
+
+    @Override
+    public ContentSourceSearchResult search(String contentSource, String contentSourceType, String query, int limit)
+        throws ContentAIClientException {
         ObjectNode body = mapper.createObjectNode();
-        body.putObject("contentSource").put("name", contentSource);
+        ObjectNode contentSourceNode = body.putObject("contentSource");
+        contentSourceNode.put("name", contentSource);
+        if (StringUtils.isNotBlank(contentSourceType)) {
+            contentSourceNode.put("type", contentSourceType);
+        }
 
         ObjectNode queryNode = body.putObject("query");
         queryNode.put("type", "composite");
@@ -117,16 +135,41 @@ public class ContentAIClientImpl implements ContentAIClient {
     }
 
     @Override
-    public ContentSourceQueryResult genSearch(String contentSource, String query) throws ContentAIClientException {
+    public ContentSourceQueryResult genSearch(String contentSource, String contentSourceType, String query)
+        throws ContentAIClientException {
         ObjectNode body = mapper.createObjectNode();
         body.put("query", query);
-        body.putObject("contentSource").put("name", contentSource);
+        ObjectNode contentSourceNode = body.putObject("contentSource");
+        contentSourceNode.put("name", contentSource);
+        if (StringUtils.isNotBlank(contentSourceType)) {
+            contentSourceNode.put("type", contentSourceType);
+        }
 
         JsonNode response = executeRequest("/content-sources/gensearch", body);
         try {
             return mapper.treeToValue(response, ContentSourceQueryResult.class);
         } catch (IOException e) {
             throw new ContentAIClientException("Failed to parse Content AI gensearch response", e);
+        }
+    }
+
+    private JsonNode executeGet(String path) throws ContentAIClientException {
+        String apiKey = config.apiKey();
+        if (StringUtils.isBlank(apiKey)) {
+            throw new ContentAIClientException("Content AI API key (X-Api-Key) is not configured", 0);
+        }
+        String url = resolveBaseUrl() + path;
+        RequestConfig requestConfig = RequestConfig.custom()
+            .setConnectTimeout(config.connectionTimeout())
+            .setSocketTimeout(config.socketTimeout())
+            .build();
+        try (CloseableHttpClient httpClient = getHttpClient(requestConfig)) {
+            HttpGet get = new HttpGet(url);
+            get.setHeader("Accept", "application/json");
+            get.setHeader("X-Api-Key", apiKey);
+            return executeAndParse(httpClient, get, path);
+        } catch (IOException e) {
+            throw new ContentAIClientException("Failed to call Content AI at " + path, e);
         }
     }
 
@@ -224,8 +267,12 @@ public class ContentAIClientImpl implements ContentAIClient {
         return slingSettings != null ? slingSettings.getRunModes() : Collections.emptySet();
     }
 
-    private JsonNode executeAndParse(CloseableHttpClient httpClient, HttpPost post, String path) throws IOException, ContentAIClientException {
-        try (CloseableHttpResponse response = httpClient.execute(post)) {
+    /**
+     * Package-visible for unit tests.
+     */
+    JsonNode executeAndParse(CloseableHttpClient httpClient, HttpUriRequest request, String path)
+        throws IOException, ContentAIClientException {
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
             int statusCode = response.getStatusLine().getStatusCode();
             String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
             if (statusCode != HttpStatus.SC_OK) {

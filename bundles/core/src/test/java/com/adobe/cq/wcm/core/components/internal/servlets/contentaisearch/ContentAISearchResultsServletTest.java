@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets.contentaisearch;
 
+import java.util.Collections;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +43,7 @@ class ContentAISearchResultsServletTest {
 
     private static final String TEST_BASE = "/contentaisearchservlet";
     private static final String CONTENT_ROOT = "/content";
-    private static final String COMPONENT_PATH = CONTENT_ROOT + "/jcr:content/contentaisearch";
+    private static final String COMPONENT_PATH = CONTENT_ROOT + "/jcr:content/par/contentaisearch";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -59,8 +61,11 @@ class ContentAISearchResultsServletTest {
     @Test
     void doGetWritesSearchResultsAsJson() throws Exception {
         ContentSourceSearchResult expected = new ContentSourceSearchResult();
-        expected.setTotalResults(1);
-        when(mockClient.search(eq("my-source"), eq("electric cars"), anyInt())).thenReturn(expected);
+        ContentSourceSearchResult.Item item = new ContentSourceSearchResult.Item();
+        item.setId("doc_1");
+        item.setScore(0.75);
+        expected.setResults(Collections.singletonList(item));
+        when(mockClient.search(eq("my-source"), eq("ACQUISITION"), eq("electric cars"), anyInt())).thenReturn(expected);
 
         context.currentResource(COMPONENT_PATH);
         context.request().setQueryString("q=electric+cars");
@@ -68,7 +73,7 @@ class ContentAISearchResultsServletTest {
         underTest.doGet(context.request(), context.response());
 
         assertEquals(200, context.response().getStatus());
-        assertTrue(context.response().getOutputAsString().contains("\"totalResults\":1"));
+        assertTrue(context.response().getOutputAsString().contains("\"id\":\"doc_1\""));
     }
 
     @Test
@@ -89,6 +94,6 @@ class ContentAISearchResultsServletTest {
         underTest.doGet(context.request(), context.response());
 
         assertEquals(400, context.response().getStatus());
-        verify(mockClient, never()).search(anyString(), anyString(), anyInt());
+        verify(mockClient, never()).search(anyString(), anyString(), anyString(), anyInt());
     }
 }

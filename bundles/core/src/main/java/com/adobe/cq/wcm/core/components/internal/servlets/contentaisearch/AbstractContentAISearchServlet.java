@@ -23,7 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
@@ -53,6 +55,9 @@ abstract class AbstractContentAISearchServlet extends SlingSafeMethodsServlet {
     @Reference
     protected transient ContentAIClient contentAIClient;
 
+    @Reference
+    private transient ModelFactory modelFactory;
+
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws IOException {
         String queryText = request.getParameter(PARAM_QUERY);
@@ -65,11 +70,13 @@ abstract class AbstractContentAISearchServlet extends SlingSafeMethodsServlet {
             return;
         }
 
-        ContentAISupportedSearch model = request.adaptTo(ContentAISupportedSearch.class);
+        ContentAISupportedSearch model = getModel(request);
         if (model == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
+
+        ContentAISearchUsageLogger.logUsage(getOperationName(), request, model);
 
         try {
             Object result = executeQuery(model, queryText);
@@ -89,6 +96,28 @@ abstract class AbstractContentAISearchServlet extends SlingSafeMethodsServlet {
      * @throws ContentAIClientException if the Content AI call fails
      */
     protected abstract Object executeQuery(@NotNull ContentAISupportedSearch model, @NotNull String query) throws ContentAIClientException;
+
+    /**
+     * @return a short operation label included in usage logs ({@code search} or {@code gensearch})
+     */
+    @NotNull
+    protected abstract String getOperationName();
+
+    /**
+     * Adapts the request to {@link ContentAISupportedSearch} via {@link ModelFactory}, so proxy components
+     * ({@code sling:resourceSuperType} pointing at the core resource type) resolve correctly.
+     */
+    private ContentAISupportedSearch getModel(@NotNull SlingHttpServletRequest request) {
+        Resource resource = request.getResource();
+        ContentAISupportedSearch model = null;
+        if (resource != null && modelFactory != null) {
+            model = modelFactory.getModelFromWrappedRequest(request, resource, ContentAISupportedSearch.class);
+        }
+        if (model == null) {
+            model = request.adaptTo(ContentAISupportedSearch.class);
+        }
+        return model;
+    }
 
     private void writeJson(Object result, SlingHttpServletResponse response) throws IOException {
         response.setContentType("application/json");

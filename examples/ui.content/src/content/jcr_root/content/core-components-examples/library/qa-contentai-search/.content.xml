@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
+        jcr:description="ContentAI Supported Search manual QA page"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="QA ContentAI Search"
+        sling:resourceType="core-components-examples/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid">
+            <responsivegrid
+                cq:styleIds="[1545309110033]"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <text
+                    cq:styleIds="[1644862132301]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;h1>ContentAI Supported Search&lt;/h1>"
+                    textIsRich="true"/>
+                <text_instructions
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Manual QA page for GRANITE-70028. Content source: &lt;strong>aem-live&lt;/strong> (ACQUISITION, bucket &lt;code>p158407-e1696476&lt;/code>). Try queries like &lt;em>block&lt;/em>, &lt;em>sitemap&lt;/em>, or &lt;em>What is a block&lt;/em>. Use DevTools Network to inspect &lt;code>.search.json&lt;/code> and &lt;code>.gensearch.json&lt;/code>.&lt;/p>"
+                    textIsRich="true"/>
+                <contentaisearch
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/contentaisearch/v1/contentaisearch"
+                    contentSources="[aem-live]"
+                    contentSourceType="ACQUISITION"
+                    genSearchEnabledByDefault="{Boolean}true"
+                    genSearchToggleVisible="{Boolean}true"
+                    genSearchErrorFallback="RESULTS_ONLY"
+                    resultsSize="{Long}10"/>
+            </responsivegrid>
+        </root>
+    </jcr:content>
+</jcr:root>
