@@ -27,8 +27,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClient;
+import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceListItem;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceListResult;
+import com.adobe.granite.ui.components.Config;
+import com.adobe.granite.ui.components.Value;
 import com.adobe.granite.ui.components.ds.DataSource;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -36,6 +39,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import static com.adobe.cq.wcm.core.components.internal.servlets.TextValueDataResourceSource.PN_TEXT;
 import static com.adobe.cq.wcm.core.components.internal.servlets.TextValueDataResourceSource.PN_VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -131,5 +135,126 @@ class ContentSourcesDataSourceServletTest {
         Resource option = dataSource.iterator().next();
         assertEquals("hotels-demo", option.getValueMap().get(PN_VALUE, String.class));
         assertEquals("hotels-demo - Demo hotel content index", option.getValueMap().get(PN_TEXT, String.class));
+    }
+
+    @Test
+    void doGetReturnsEmptyOnClientError() throws Exception {
+        when(mockClient.listContentSources()).thenThrow(new ContentAIClientException("failed", 503));
+
+        context.create().resource("/apps/datasource-error",
+            "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
+        context.currentResource("/apps/datasource-error");
+        underTest.doGet(context.request(), context.response());
+
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        assertNotNull(dataSource);
+        assertFalse(dataSource.iterator().hasNext());
+    }
+
+    @Test
+    void doGetIncludesPublicSourceWithNullConfig() throws Exception {
+        ContentSourceListItem acquisition = new ContentSourceListItem();
+        acquisition.setName("public-default");
+        acquisition.setType("ACQUISITION");
+
+        ContentSourceListResult listResult = new ContentSourceListResult();
+        listResult.setItems(List.of(acquisition));
+        when(mockClient.listContentSources()).thenReturn(listResult);
+
+        context.create().resource("/apps/datasource-null-config",
+            "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
+        context.currentResource("/apps/datasource-null-config");
+        context.request().setParameterMap(java.util.Map.of("contentSourceType", "ACQUISITION"));
+        underTest.doGet(context.request(), context.response());
+
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        assertNotNull(dataSource);
+        assertEquals("public-default", dataSource.iterator().next().getValueMap().get(PN_VALUE, String.class));
+    }
+
+    @Test
+    void doGetSkipsBlankIndexName() throws Exception {
+        ContentSourceListItem blankName = new ContentSourceListItem();
+        blankName.setType("ACQUISITION");
+
+        ContentSourceListResult listResult = new ContentSourceListResult();
+        listResult.setItems(List.of(blankName));
+        when(mockClient.listContentSources()).thenReturn(listResult);
+
+        context.create().resource("/apps/datasource-blank",
+            "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
+        context.currentResource("/apps/datasource-blank");
+        context.request().setParameterMap(java.util.Map.of("contentSourceType", "ACQUISITION"));
+        underTest.doGet(context.request(), context.response());
+
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        assertNotNull(dataSource);
+        assertFalse(dataSource.iterator().hasNext());
+    }
+
+    @Test
+    void doGetResolvesTypeFromResourceProperty() throws Exception {
+        ContentSourceListItem acquisition = new ContentSourceListItem();
+        acquisition.setName("resource-type-source");
+        acquisition.setType("CUSTOM");
+
+        ContentSourceListResult listResult = new ContentSourceListResult();
+        listResult.setItems(List.of(acquisition));
+        when(mockClient.listContentSources()).thenReturn(listResult);
+
+        context.create().resource("/apps/datasource-resource-type",
+            "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE,
+            "contentSourceType", "CUSTOM");
+        context.currentResource("/apps/datasource-resource-type");
+        underTest.doGet(context.request(), context.response());
+
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        assertNotNull(dataSource);
+        assertEquals("resource-type-source", dataSource.iterator().next().getValueMap().get(PN_VALUE, String.class));
+    }
+
+    @Test
+    void doGetResolvesTypeFromDatasourceChild() throws Exception {
+        ContentSourceListItem acquisition = new ContentSourceListItem();
+        acquisition.setName("child-type-source");
+        acquisition.setType("CHILD");
+
+        ContentSourceListResult listResult = new ContentSourceListResult();
+        listResult.setItems(List.of(acquisition));
+        when(mockClient.listContentSources()).thenReturn(listResult);
+
+        context.create().resource("/apps/datasource-child-type",
+            "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
+        context.create().resource("/apps/datasource-child-type/" + Config.DATASOURCE,
+            "contentSourceType", "CHILD");
+        context.currentResource("/apps/datasource-child-type");
+        underTest.doGet(context.request(), context.response());
+
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        assertNotNull(dataSource);
+        assertEquals("child-type-source", dataSource.iterator().next().getValueMap().get(PN_VALUE, String.class));
+    }
+
+    @Test
+    void doGetResolvesTypeFromContentPathAttribute() throws Exception {
+        ContentSourceListItem acquisition = new ContentSourceListItem();
+        acquisition.setName("content-path-source");
+        acquisition.setType("PATH");
+
+        ContentSourceListResult listResult = new ContentSourceListResult();
+        listResult.setItems(List.of(acquisition));
+        when(mockClient.listContentSources()).thenReturn(listResult);
+
+        context.create().resource("/content/component",
+            "contentSourceType", "PATH");
+        context.create().resource("/apps/datasource-content-path",
+            "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
+        context.currentResource("/apps/datasource-content-path");
+        context.request().setAttribute(Value.CONTENTPATH_ATTRIBUTE, "/content/component");
+        underTest.doGet(context.request(), context.response());
+
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        assertNotNull(dataSource);
+        assertEquals("content-path-source", dataSource.iterator().next().getValueMap().get(PN_VALUE, String.class));
     }
 }

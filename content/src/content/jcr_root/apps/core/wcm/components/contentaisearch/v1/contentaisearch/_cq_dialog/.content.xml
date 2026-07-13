@@ -103,14 +103,6 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/container">
                                 <items jcr:primaryType="nt:unstructured">
-                                    <resultsSize
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                        fieldLabel="Number of Results"
-                                        fieldDescription="Default number of results to show. Visitors can increase this via the results-per-page control."
-                                        name="./resultsSize"
-                                        value="10"
-                                        min="1"/>
                                     <resultsLayout
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/select"

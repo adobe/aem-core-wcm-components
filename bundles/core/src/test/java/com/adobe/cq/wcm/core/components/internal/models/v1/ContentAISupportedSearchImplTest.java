@@ -15,19 +15,26 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import org.apache.sling.i18n.ResourceBundleProvider;
+import org.apache.sling.i18n.impl.RootResourceBundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.osgi.framework.Version;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
@@ -37,6 +44,7 @@ class ContentAISupportedSearchImplTest {
     private static final String CONTENT_ROOT = "/content";
     private static final String COMPONENT_PATH = CONTENT_ROOT + "/contentaisearch";
     private static final String COMPONENT_DEFAULTS_PATH = CONTENT_ROOT + "/contentaisearch-defaults";
+    private static final String COMPONENT_LIST_PATH = CONTENT_ROOT + "/contentaisearch-list";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
     private static final MockProductInfoProvider mockProductInfoProvider = new MockProductInfoProvider();
@@ -46,6 +54,10 @@ class ContentAISupportedSearchImplTest {
         context.load().json(TEST_BASE + "/test-content-dam.json", CONTENT_ROOT);
         mockProductInfoProvider.setVersion(new Version("6.5.25"));
         context.registerInjectActivateService(mockProductInfoProvider);
+        ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class);
+        Mockito.when(resourceBundleProvider.getResourceBundle(Mockito.any())).thenReturn(new RootResourceBundle());
+        Mockito.when(resourceBundleProvider.getResourceBundle(Mockito.any(), Mockito.any())).thenReturn(new RootResourceBundle());
+        context.registerService(ResourceBundleProvider.class, resourceBundleProvider);
     }
 
     @Test
@@ -61,6 +73,35 @@ class ContentAISupportedSearchImplTest {
         assertTrue(search.isGenSearchEnabledByDefault());
         assertTrue(search.isGenSearchToggleVisible());
         assertEquals("RESULTS_ONLY", search.getGenSearchErrorFallback());
+        assertEquals(ContentAISupportedSearchImpl.RESOURCE_TYPE, search.getExportedType());
+        assertEquals("card", search.getResultsLayout());
+        assertNull(search.getPlaceholder());
+        assertNull(search.getDisclaimerText());
+    }
+
+    @Test
+    void testListLayoutAndTextProperties() {
+        mockProductInfoProvider.setVersion(new Version("6.6.0"));
+        context.currentResource(COMPONENT_LIST_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertEquals("list", search.getResultsLayout());
+        assertEquals("Search content", search.getPlaceholder());
+        assertEquals("AI-generated summary", search.getDisclaimerText());
+        assertEquals("SHOW_ERROR", search.getGenSearchErrorFallback());
+        assertEquals(2, search.getContentSources().size());
+        assertEquals("primary-source", search.getPrimaryContentSource());
+        assertFalse(search.isGenSearchEnabledByDefault());
+        assertFalse(search.isGenSearchToggleVisible());
+    }
+
+    @Test
+    void getI18nMessagesReturnsJson() throws Exception {
+        mockProductInfoProvider.setVersion(new Version("6.6.0"));
+        context.currentResource(COMPONENT_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        JsonNode node = new ObjectMapper().readTree(search.getI18nMessages());
+        assertNotNull(node.get("Search"));
+        assertNotNull(node.get("Results per page"));
     }
 
     @Test

@@ -39,9 +39,11 @@
 
     function toggleShow(element, show) {
         if (element) {
-            if (show) {
+            if (show !== false) {
+                element.style.display = "block";
                 element.removeAttribute("hidden");
             } else {
+                element.style.display = "none";
                 element.setAttribute("hidden", "hidden");
             }
         }
@@ -67,6 +69,9 @@
 
         if (this._elements.input) {
             this._elements.input.addEventListener("input", this._onInput.bind(this));
+        }
+        if (this._elements.clear) {
+            this._elements.clear.addEventListener("click", this._onClearClick.bind(this));
         }
         if (this._elements.toggle) {
             this._elements.toggle.addEventListener("change", this._onToggleChange.bind(this));
@@ -190,10 +195,26 @@
 
     ContentAISearch.prototype._onInput = function() {
         var self = this;
+        this._syncClearButton();
         clearTimeout(this._timeout);
         this._timeout = setTimeout(function() {
             self._runQuery();
         }, DELAY);
+    };
+
+    ContentAISearch.prototype._syncClearButton = function() {
+        var hasValue = this._elements.input && this._elements.input.value.length > 0;
+        toggleShow(this._elements.clear, hasValue);
+    };
+
+    ContentAISearch.prototype._onClearClick = function() {
+        if (this._elements.input) {
+            this._elements.input.value = "";
+        }
+        toggleShow(this._elements.clear, false);
+        toggleShow(this._elements.loadingIndicator, false);
+        toggleShow(this._elements.icon, true);
+        this._clearResults();
     };
 
     ContentAISearch.prototype._onToggleChange = function() {
@@ -273,6 +294,13 @@
         toggleShow(this._elements.summary, false);
         toggleShow(this._elements.summaryLoading, false);
         toggleShow(this._elements.error, false);
+        toggleShow(this._elements.loadingIndicator, false);
+        toggleShow(this._elements.icon, true);
+    };
+
+    ContentAISearch.prototype._setFieldLoading = function(loading) {
+        toggleShow(this._elements.loadingIndicator, loading);
+        toggleShow(this._elements.icon, !loading);
     };
 
     ContentAISearch.prototype._setSummaryLoading = function(show) {
@@ -300,7 +328,8 @@
 
     ContentAISearch.prototype._runResultsSearch = function(query) {
         var self = this;
-        toggleShow(this._elements.loadingIndicator, true);
+        var searchStart = Date.now();
+        this._setFieldLoading(true);
         var url = this._resourcePath + ".search.json?q=" + encodeURIComponent(query);
         this._fetchJson(url)
             .then(function(data) {
@@ -317,7 +346,11 @@
                 toggleShow(self._elements.pagination, false);
             })
             .then(function() {
-                toggleShow(self._elements.loadingIndicator, false);
+                var elapsed = Date.now() - searchStart;
+                var delay = Math.max(0, LOADING_DISPLAY_DELAY - elapsed);
+                setTimeout(function() {
+                    self._setFieldLoading(false);
+                }, delay);
             });
     };
 

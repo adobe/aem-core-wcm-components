@@ -29,10 +29,13 @@
     <form class="cmp-contentaisearch__form" data-cmp-hook-contentaisearch="form" autocomplete="off">
         <div class="cmp-contentaisearch__field">
             <label class="cmp-contentaisearch__input-label" for="${search.id}-input">${'Search' @ i18n}</label>
-            <i class="cmp-contentaisearch__icon" aria-hidden="true"></i>
-            <span class="cmp-contentaisearch__loading-indicator" data-cmp-hook-contentaisearch="loadingIndicator" hidden="hidden"></span>
+            <i class="cmp-contentaisearch__icon" data-cmp-hook-contentaisearch="icon" aria-hidden="true"></i>
+            <span class="cmp-contentaisearch__loading-indicator" data-cmp-hook-contentaisearch="loadingIndicator"></span>
             <input id="${search.id}-input" class="cmp-contentaisearch__input" data-cmp-hook-contentaisearch="input"
                    type="text" name="q" placeholder="${search.placeholder || 'Search' @ i18n}" autocomplete="off">
+            <button type="button" class="cmp-contentaisearch__clear" data-cmp-hook-contentaisearch="clear" aria-label="${'Clear' @ i18n}" hidden="hidden">
+                <i class="cmp-contentaisearch__clear-icon" aria-hidden="true"></i>
+            </button>
         </div>
         <label class="cmp-contentaisearch__ai-toggle" data-sly-test="${search.genSearchToggleVisible}">
             <input type="checkbox" class="cmp-contentaisearch__ai-toggle-input" data-cmp-hook-contentaisearch="toggle"
