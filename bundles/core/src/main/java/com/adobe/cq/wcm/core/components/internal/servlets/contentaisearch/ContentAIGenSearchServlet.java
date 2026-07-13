@@ -17,7 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.servlets.contentaisearch;
 
 import javax.servlet.Servlet;
 
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 
@@ -43,8 +42,8 @@ public class ContentAIGenSearchServlet extends AbstractContentAISearchServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
-    protected Object executeQuery(@NotNull SlingHttpServletRequest request, @NotNull ContentAISupportedSearch model,
-        @NotNull String query) throws ContentAIClientException {
+    protected Object executeQuery(@NotNull ContentAISupportedSearch model, @NotNull String query)
+        throws ContentAIClientException {
         return contentAIClient.genSearch(model.getPrimaryContentSource(), model.getContentSourceType(), query);
     }
 

@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets.contentaisearch;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -142,11 +143,11 @@ public class ContentSourcesDataSourceServlet extends SlingSafeMethodsServlet {
     }
 
     private boolean isResolvableContentSourceType(@Nullable String value) {
-        return StringUtils.isNotBlank(value) && !StringUtils.contains(value, "${");
+        return StringUtils.isNotBlank(value) && !value.contains("${");
     }
 
     private boolean matchesType(@NotNull ContentSourceListItem item, @NotNull String contentSourceType) {
-        return StringUtils.equals(item.getType(), contentSourceType);
+        return Objects.equals(item.getType(), contentSourceType);
     }
 
     private boolean isPublicSource(@NotNull ContentSourceListItem item) {

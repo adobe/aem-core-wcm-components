@@ -217,7 +217,7 @@ public class ContentAIClientImpl implements ContentAIClient {
     protected String resolveBaseUrl() throws ContentAIClientException {
         String override = config.baseUrlOverride();
         if (StringUtils.isNotBlank(override)) {
-            return StringUtils.removeEnd(override.trim(), "/");
+            return stripTrailingSlash(override.trim());
         }
         // The Content AI host is {tier}-p{PID}-e{EID}.adobeaemcloud.com (e.g. author-p12345-e67890...). Derive the
         // bucket (p{PID}-e{EID}) from the environment, and the tier from the instance's run modes — a public-site
@@ -245,9 +245,16 @@ public class ContentAIClientImpl implements ContentAIClient {
         }
         String service = getEnv(ENV_SERVICE);
         if (StringUtils.isNotBlank(service) && service.startsWith("cm-")) {
-            return StringUtils.removeStart(service, "cm-");
+            return service.substring("cm-".length());
         }
         return null;
+    }
+
+    private static String stripTrailingSlash(String value) {
+        if (value.endsWith("/")) {
+            return value.substring(0, value.length() - 1);
+        }
+        return value;
     }
 
     /**

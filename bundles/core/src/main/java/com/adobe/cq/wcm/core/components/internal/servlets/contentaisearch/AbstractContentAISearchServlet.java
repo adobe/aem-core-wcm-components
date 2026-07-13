@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets.contentaisearch;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -90,13 +91,30 @@ abstract class AbstractContentAISearchServlet extends SlingSafeMethodsServlet {
     /**
      * Executes the specific Content AI call for this servlet.
      *
-     * @param model the resolved component model providing the content source and result size
+     * @param request the Sling request; required for subclasses that read request parameters (e.g. cursor pagination)
+     * @param model   the resolved component model providing the content source and result size
+     * @param query   the validated user query
+     * @return the result object to serialize as JSON
+     * @throws ContentAIClientException if the Content AI call fails
+     */
+    protected Object executeQuery(@NotNull SlingHttpServletRequest request, @NotNull ContentAISupportedSearch model,
+        @NotNull String query) throws ContentAIClientException {
+        Objects.requireNonNull(request);
+        return executeQuery(model, query);
+    }
+
+    /**
+     * Executes the Content AI call when no request-scoped input is required.
+     *
+     * @param model the resolved component model
      * @param query the validated user query
      * @return the result object to serialize as JSON
      * @throws ContentAIClientException if the Content AI call fails
      */
-    protected abstract Object executeQuery(@NotNull SlingHttpServletRequest request, @NotNull ContentAISupportedSearch model,
-        @NotNull String query) throws ContentAIClientException;
+    protected Object executeQuery(@NotNull ContentAISupportedSearch model, @NotNull String query)
+        throws ContentAIClientException {
+        throw new UnsupportedOperationException("executeQuery(request, model, query) must be overridden");
+    }
 
     /**
      * @return a short operation label included in usage logs ({@code search} or {@code gensearch})
