@@ -1,0 +1,137 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright 2026 Adobe
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~     http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+package com.adobe.cq.wcm.core.components.internal.services.contentai;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.jupiter.api.Test;
+
+import com.adobe.cq.wcm.core.components.services.contentai.ContentAISearchResponse;
+import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class ContentSourceSearchMergerTest {
+
+    @Test
+    void merge_dedupesByIdKeepsHighestScore() {
+        ContentSourceSearchResult first = result(item("doc_1", 0.5), item("doc_2", 0.9));
+        ContentSourceSearchResult second = result(item("doc_1", 0.8), item("doc_3", 0.7));
+
+        ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(Arrays.asList(first, second), 10);
+
+        assertEquals(3, merged.getTotalResults());
+        assertEquals(3, merged.getResults().size());
+        assertEquals("doc_2", merged.getResults().get(0).getId());
+        assertEquals("doc_1", merged.getResults().get(1).getId());
+        assertEquals(0.8, merged.getResults().get(1).getScore(), 0.001);
+        assertNull(merged.getCursor());
+    }
+
+    @Test
+    void merge_respectsLimit() {
+        ContentSourceSearchResult partial = result(
+            item("a", 0.9), item("b", 0.8), item("c", 0.7));
+
+        ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(Collections.singletonList(partial), 2);
+
+        assertEquals(2, merged.getResults().size());
+        assertEquals(3, merged.getTotalResults());
+        assertEquals("a", merged.getResults().get(0).getId());
+        assertEquals("b", merged.getResults().get(1).getId());
+    }
+
+    @Test
+    void merge_skipsNullPartialsItemsAndBlankIds() {
+        ContentSourceSearchResult valid = result(item("doc_1", 0.5));
+        ContentSourceSearchResult nullResults = new ContentSourceSearchResult();
+        nullResults.setTotalResults(1);
+        ContentSourceSearchResult.Item blankId = item(" ", 0.9);
+
+        ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(
+            Arrays.asList(null, valid, nullResults, result(blankId)), 0);
+
+        assertEquals(1, merged.getResults().size());
+        assertEquals("doc_1", merged.getResults().get(0).getId());
+    }
+
+    @Test
+    void merge_keepsExistingItemWhenIncomingScoreLower() {
+        ContentSourceSearchResult first = result(item("doc_1", 0.9));
+        ContentSourceSearchResult second = result(item("doc_1", 0.2));
+
+        ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(Arrays.asList(first, second), 10);
+
+        assertEquals(0.9, merged.getResults().get(0).getScore(), 0.001);
+    }
+
+    @Test
+    void merge_returnsAllItemsWhenLimitZero() {
+        ContentSourceSearchResult partial = result(item("a", 0.9), item("b", 0.8), item("c", 0.7));
+
+        ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(Collections.singletonList(partial), 0);
+
+        assertEquals(3, merged.getResults().size());
+    }
+
+    @Test
+    void mergeToResponse_includesPaginationMetadata() {
+        ContentSourceSearchResult partial = result(item("doc_1", 0.9));
+        partial.setTotalResults(42);
+        partial.setCursor("next-page");
+        Map<String, String> cursors = new HashMap<>();
+        cursors.put("my-source", "next-page");
+
+        ContentAISearchResponse response = ContentSourceSearchMerger.mergeToResponse(
+            Collections.singletonList(partial), cursors, 0);
+
+        assertEquals(1, response.getResults().size());
+        assertEquals(42, response.getTotalResults());
+        assertTrue(response.isHasMore());
+        assertEquals("next-page", response.getSourceCursors().get("my-source"));
+    }
+
+    @Test
+    void mergeToResponse_hasMoreFalseWhenNoCursors() {
+        ContentSourceSearchResult partial = result(item("doc_1", 0.9));
+
+        ContentAISearchResponse response = ContentSourceSearchMerger.mergeToResponse(
+            Collections.singletonList(partial), Collections.emptyMap(), 0);
+
+        assertEquals(false, response.isHasMore());
+        assertTrue(response.getSourceCursors().isEmpty());
+    }
+
+    private static ContentSourceSearchResult result(ContentSourceSearchResult.Item... items) {
+        ContentSourceSearchResult result = new ContentSourceSearchResult();
+        result.setResults(Arrays.asList(items));
+        result.setTotalResults(items.length);
+        return result;
+    }
+
+    private static ContentSourceSearchResult.Item item(String id, double score) {
+        ContentSourceSearchResult.Item item = new ContentSourceSearchResult.Item();
+        item.setId(id);
+        item.setScore(score);
+        item.setData(new HashMap<String, Object>());
+        return item;
+    }
+}

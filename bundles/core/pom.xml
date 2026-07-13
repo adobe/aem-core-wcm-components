@@ -66,6 +66,8 @@
                         </_plugin>
                         <!-- Enable processing of OSGI DS component annotations -->
                         <_dsannotations>*</_dsannotations>
+                        <!-- Include @Reference/@Activate fields declared on super classes (e.g. AbstractContentAISearchServlet) -->
+                        <_dsannotations-options>inherit</_dsannotations-options>
                         <!-- Enable processing of OSGI metatype annotations -->
                         <_metatypeannotations>*</_metatypeannotations>
                         <Import-Package>
