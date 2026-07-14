@@ -70,9 +70,11 @@
                         hide: function() {
                             self._checkboxFoundation.setDisabled(true);
                             $(self._checkbox).parent().hide();
-                            var previousValue = self._textfield.getAttribute(self.ATTR_PREVIOUS_VALUE);
-                            if (previousValue !== undefined && previousValue !== null) {
-                                self._setTextfieldValue(previousValue);
+                            if (self._textfield) {
+                                var previousValue = self._textfield.getAttribute(self.ATTR_PREVIOUS_VALUE);
+                                if (previousValue !== undefined && previousValue !== null) {
+                                    self._setTextfieldValue(previousValue);
+                                }
                             }
                         }
                     };
