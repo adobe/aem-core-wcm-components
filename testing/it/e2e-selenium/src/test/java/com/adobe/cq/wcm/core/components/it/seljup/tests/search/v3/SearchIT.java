@@ -87,6 +87,8 @@ public class SearchIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.s
             put("hideAiSearchToggle", "true");
         }});
 
+        editorPage.refresh();
+
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         assertFalse(v3Search().isAiToggleVisible(), "AI Search toggle should be hidden when policy is enabled");
