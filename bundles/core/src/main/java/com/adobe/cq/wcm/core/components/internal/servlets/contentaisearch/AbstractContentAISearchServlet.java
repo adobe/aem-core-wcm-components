@@ -57,7 +57,7 @@ abstract class AbstractContentAISearchServlet extends SlingSafeMethodsServlet {
     protected transient ContentAIClient contentAIClient;
 
     @Reference
-    private transient ModelFactory modelFactory;
+    protected transient ModelFactory modelFactory;
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws IOException {
