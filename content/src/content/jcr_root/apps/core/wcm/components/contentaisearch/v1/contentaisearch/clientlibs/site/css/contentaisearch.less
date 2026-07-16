@@ -244,7 +244,36 @@
     &__summary-text {
         margin: 0 0 1em;
         line-height: 1.6;
-        white-space: pre-wrap;
+
+        p {
+            margin: 0 0 .75em;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        ul {
+            margin: 0 0 .75em;
+            padding-left: 1.25em;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        li {
+            margin: 0 0 .35em;
+        }
+
+        strong {
+            font-weight: 700;
+        }
+
+        a {
+            color: @summary-accent;
+            text-decoration: underline;
+        }
     }
 
     &__sources-section {

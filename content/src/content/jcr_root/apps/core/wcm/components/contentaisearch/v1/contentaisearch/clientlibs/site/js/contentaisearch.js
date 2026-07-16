@@ -596,10 +596,63 @@
     };
 
     ContentAISearch.prototype._renderSummary = function(data) {
-        this._elements.summaryText.textContent = data.result || "";
+        this._elements.summaryText.innerHTML = this._renderMarkdownSummary(data.result || "");
         var hits = data.hits || [];
         this._elements.sources.innerHTML = this._generateSourceItems(hits);
         toggleShow(this._elements.summary, true);
+    };
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    // Content AI returns the generative answer as Markdown (bold, links, bullet lists).
+    // Renders a minimal, safe subset of it: text is HTML-escaped first, then only
+    // **bold**, [text](url) links (http/https only, re-validated via _isSafeUrl),
+    // and "- " bullet lists are turned into markup; anything else stays plain text.
+    ContentAISearch.prototype._renderMarkdownInline = function(text) {
+        var self = this;
+        var html = escapeHtml(text);
+        html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+        html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, function(match, label, url) {
+            return self._isSafeUrl(url) ? '<a href="' + url + '">' + label + "</a>" : label;
+        });
+        return html;
+    };
+
+    ContentAISearch.prototype._renderMarkdownSummary = function(text) {
+        var lines = String(text || "").split(/\r?\n/);
+        var html = "";
+        var listOpen = false;
+        var i;
+        var trimmed;
+        for (i = 0; i < lines.length; i++) {
+            trimmed = lines[i].replace(/^\s+/, "");
+            if (/^[-*]\s+/.test(trimmed)) {
+                if (!listOpen) {
+                    html += "<ul>";
+                    listOpen = true;
+                }
+                html += "<li>" + this._renderMarkdownInline(trimmed.replace(/^[-*]\s+/, "")) + "</li>";
+            } else {
+                if (listOpen) {
+                    html += "</ul>";
+                    listOpen = false;
+                }
+                if (trimmed.length > 0) {
+                    html += "<p>" + this._renderMarkdownInline(trimmed) + "</p>";
+                }
+            }
+        }
+        if (listOpen) {
+            html += "</ul>";
+        }
+        return html;
     };
 
     function stripAsciiControlsAndWhitespaceForSchemeCheck(str) {
