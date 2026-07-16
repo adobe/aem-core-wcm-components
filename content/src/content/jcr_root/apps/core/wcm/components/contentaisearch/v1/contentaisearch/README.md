@@ -40,6 +40,31 @@ The following properties are written to JCR for the ContentAI Supported Search c
 10. `./disclaimerText` - optional disclaimer below the generative summary
 11. `./id` - defines the component HTML ID attribute
 
+## Configuration - Content AI API Access
+The component calls the Content AI `content-sources/search` and `content-sources/gensearch` APIs through the `ContentAIClient` OSGi service, which is configured via the `Core Components Content AI Client` OSGi configuration (PID `com.adobe.cq.wcm.core.components.internal.services.contentai.ContentAIClientImpl`):
+
+| Property | Required | Description |
+|---|---|---|
+| `apiKey` | Yes | Adobe Developer Console client ID (X-Api-Key) used for anonymous, public-index Content AI access. |
+| `defaultContentSource` | No | Default public content source name used when a component instance does not specify one. |
+| `connectionTimeout` | No | Connection timeout (ms) to Content AI. Defaults to `2000`. |
+| `socketTimeout` | No | Socket read timeout (ms). Defaults to `10000`. |
+| `baseUrlOverride` | No | Full Content AI base URL override, for local/non-Cloud-Service development only. |
+
+Without a valid `apiKey`, the component renders its results section but search/gensearch requests fail gracefully (see `ContentAIClientException`); no key is bundled with, or defaulted by, this component.
+
+### Setting `apiKey` on AEM as a Cloud Service
+1. Obtain an X-Api-Key by requesting Content AI API access for your AEM CS Program/Environment (via the Content AI onboarding process) and creating a Server-to-Server credential in Adobe Developer Console. Copy its "API Key (Client ID)".
+2. In your own Cloud Manager Git repository, add an OSGi configuration targeting the PID above, for example at:
+   `ui.config/src/main/content/jcr_root/apps/<your-app>/osgiconfig/config.author/com.adobe.cq.wcm.core.components.internal.services.contentai.ContentAIClientImpl.cfg.json`
+   ```json
+   {
+     "apiKey": "$[secret:CONTENT_AI_API_KEY]"
+   }
+   ```
+3. Set `CONTENT_AI_API_KEY` as a secret environment variable for your environment in Cloud Manager, using the key copied in step 1.
+4. On the next deploy (or OSGi config reload), Cloud Manager's environment variable interpolation resolves the placeholder and the component starts sending `X-Api-Key` automatically. No AEM code changes are required.
+
 ## Client Libraries
 The component provides a `core.wcm.components.contentaisearch.v1` client library category that contains recommended base CSS styling and JavaScript. It should be added to a relevant site client library using the `embed` property.
 
