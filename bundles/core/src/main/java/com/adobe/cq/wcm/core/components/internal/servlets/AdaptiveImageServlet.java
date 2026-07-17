@@ -32,6 +32,7 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharEncoding;
@@ -105,8 +106,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String DEFAULT_MIME = "image/jpeg";
     private static final String SELECTOR_QUALITY_KEY = "quality";
     private static final String SELECTOR_WIDTH_KEY = "width";
+    private static final List<String> NON_TRANSFORMABLE_IMAGE_TYPES = List.of("gif", "svg");
     private int defaultResizeWidth;
     private int maxInputWidth;
+    private List<String> nonTransformableImageTypes;
+    private List<String> forcedTransformationImageTypes;
 
     private AdaptiveImageServletMetrics metrics;
 
@@ -115,12 +119,15 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private transient AssetStore assetStore;
 
     public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, AdaptiveImageServletMetrics metrics,
-            int defaultResizeWidth, int maxInputWidth) {
+            int defaultResizeWidth, int maxInputWidth, List<String> nonTransformableImageTypes,
+            List<String> forcedTransformationImageTypes) {
         this.mimeTypeService = mimeTypeService;
         this.assetStore = assetStore;
         this.metrics = metrics;
         this.defaultResizeWidth = defaultResizeWidth > 0 ? defaultResizeWidth : DEFAULT_RESIZE_WIDTH;
         this.maxInputWidth = maxInputWidth > 0 ? maxInputWidth : DEFAULT_MAX_SIZE;
+        this.nonTransformableImageTypes = ListUtils.union(nonTransformableImageTypes, NON_TRANSFORMABLE_IMAGE_TYPES);
+        this.forcedTransformationImageTypes = forcedTransformationImageTypes;
     }
 
     @Override
@@ -132,7 +139,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             List<String> selectorList = selectorToList(requestPathInfo.getSelectorString());
             String suffix = requestPathInfo.getSuffix();
             String imageName = StringUtils.isNotEmpty(suffix) ? FilenameUtils.getName(suffix) : "";
-
             if (StringUtils.isNotEmpty(suffix)) {
                 String suffixExtension = FilenameUtils.getExtension(suffix);
                 if (StringUtils.isNotEmpty(suffixExtension)) {
@@ -221,6 +227,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     return;
                 }
             }
+
             if (!handleIfModifiedSinceHeader(request, response, lastModifiedEpoch)) {
 
                 Map<String, Integer> transformationMap = getTransformationMap(selectorList, component, request);
@@ -251,8 +258,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     protected void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, double quality,
                                          Asset asset, String imageType, String imageName) throws IOException {
         String extension = mimeTypeService.getExtension(imageType);
-        if ("gif".equalsIgnoreCase(extension) || "svg".equalsIgnoreCase(extension)) {
-            LOGGER.debug("GIF or SVG asset detected; will render the original rendition.");
+        if (nonTransformableImageTypes.contains(extension)) {
+            LOGGER.debug("{} asset detected; will render the original rendition.", extension);
             metrics.markOriginalRenditionUsed();
             try (InputStream is = asset.getOriginal().getStream()) {
                 if (is != null) {
@@ -265,7 +272,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         Rectangle rectangle = getCropRect(componentProperties);
         boolean flipHorizontally = componentProperties.get(Image.PN_FLIP_HORIZONTAL, Boolean.FALSE);
         boolean flipVertically = componentProperties.get(Image.PN_FLIP_VERTICAL, Boolean.FALSE);
-        if (rotationAngle != 0 || rectangle != null || resizeWidth > 0 || flipHorizontally || flipVertically) {
+        if (rotationAngle != 0 || rectangle != null || resizeWidth > 0 || flipHorizontally || flipVertically ||
+            forcedTransformationImageTypes.contains(extension)) {
+            LOGGER.debug("Applying transformation; rotation: {}, cropping: {}, resize: {} flip hor: {}, flip vert: {}, extension: {}",
+                rotationAngle, rectangle, resizeWidth, flipHorizontally, flipVertically, extension);
             int originalWidth = getDimension(asset.getMetadataValue(DamConstants.TIFF_IMAGEWIDTH));
             int originalHeight = getDimension(asset.getMetadataValue(DamConstants.TIFF_IMAGELENGTH));
             Layer layer = null;
@@ -383,10 +393,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private void transformAndStreamFile(SlingHttpServletResponse response, ValueMap componentProperties, int
             resizeWidth, double quality, Resource imageFile, String imageType, String imageName) throws
             IOException {
+        final String extension = mimeTypeService.getExtension(imageType);
         try (InputStream is = imageFile.adaptTo(InputStream.class)) {
-            if ("gif".equalsIgnoreCase(mimeTypeService.getExtension(imageType))
-                    || "svg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
-                LOGGER.debug("GIF or SVG file detected; will render the original file.");
+            if (nonTransformableImageTypes.contains(extension)) {
+                LOGGER.debug("{} file detected; will render the original file.", extension);
                 if (is != null) {
                     stream(response, is, imageType, imageName);
                 }
@@ -397,7 +407,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             boolean flipHorizontally = componentProperties.get(Image.PN_FLIP_HORIZONTAL, Boolean.FALSE);
             boolean flipVertically = componentProperties.get(Image.PN_FLIP_VERTICAL, Boolean.FALSE);
             if (is != null) {
-                if (rotationAngle != 0 || rectangle != null || resizeWidth > 0 || flipHorizontally || flipVertically) {
+                if (rotationAngle != 0 || rectangle != null || resizeWidth > 0 || flipHorizontally || flipVertically ||
+                    forcedTransformationImageTypes.contains(extension)) {
                     Layer layer = new Layer(is);
                     if (rectangle != null) {
                         layer.crop(rectangle);
@@ -610,7 +621,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private void streamOrConvert(@NotNull SlingHttpServletResponse response, @NotNull EnhancedRendition rendition, @NotNull String imageType,
                                  String imageName, int resizeWidth, double quality) throws IOException {
         Dimension dimension = rendition.getDimension();
-        if (rendition.getMimeType().equals(imageType)) {
+        final String extension = mimeTypeService.getExtension(imageType);
+        if (rendition.getMimeType().equals(imageType) && !forcedTransformationImageTypes.contains(extension)) {
             LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px",
                     rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth);
             try (InputStream is = rendition.getStream()) {
@@ -631,7 +643,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 }
             } else {
                 LOGGER.debug("Found rendition {}/{} has a width of {}px and does not require a resize for requested width of {}px " +
-                                "but the rendition is not of the requested type {}, need to convert",
+                                "but the rendition is not of the requested type {} or forces conversion, need to convert",
                         rendition.getAsset().getPath(), rendition.getName(), dimension != null ? dimension.getWidth() : null, resizeWidth, imageType);
                 resizeAndStreamLayer(response, layer, imageType, 0, quality);
             }
@@ -992,8 +1004,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         }
         return  allowedResizeWidth;
     }
-
-
 
     private enum Source {
         ASSET,
