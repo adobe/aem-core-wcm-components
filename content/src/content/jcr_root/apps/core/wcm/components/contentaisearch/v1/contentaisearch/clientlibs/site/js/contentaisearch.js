@@ -281,10 +281,16 @@
         var url = this._resourcePath + ".search.json?q=" + encodeURIComponent(query);
         this._fetchJson(url)
             .then(function(data) {
+                if (query !== self._currentQuery) {
+                    return;
+                }
                 self._storeResults(data);
                 self._renderResults();
             })
             .catch(function() {
+                if (query !== self._currentQuery) {
+                    return;
+                }
                 self._allResults = [];
                 self._hasMore = false;
                 self._sourceCursors = {};
@@ -295,6 +301,9 @@
                 toggleShow(self._elements.loadMore, false);
             })
             .then(function() {
+                if (query !== self._currentQuery) {
+                    return;
+                }
                 var elapsed = Date.now() - searchStart;
                 var delay = Math.max(0, LOADING_DISPLAY_DELAY - elapsed);
                 setTimeout(function() {
@@ -334,17 +343,24 @@
             return;
         }
         var self = this;
+        var query = this._currentQuery;
         if (this._elements.loadMore) {
             this._elements.loadMore.disabled = true;
         }
-        var url = this._resourcePath + ".search.json?q=" + encodeURIComponent(this._currentQuery) +
+        var url = this._resourcePath + ".search.json?q=" + encodeURIComponent(query) +
             "&cursors=" + encodeURIComponent(JSON.stringify(this._sourceCursors));
         this._fetchJson(url)
             .then(function(data) {
+                if (query !== self._currentQuery) {
+                    return;
+                }
                 self._storeResults(data, true);
                 self._renderResults();
             })
             .then(function() {
+                if (query !== self._currentQuery) {
+                    return;
+                }
                 if (self._elements.loadMore) {
                     self._elements.loadMore.disabled = false;
                 }
@@ -362,11 +378,17 @@
         }
         this._fetchJson(this._resourcePath + ".gensearch.json?q=" + encodeURIComponent(query))
             .then(function(data) {
+                if (query !== self._currentQuery) {
+                    return;
+                }
                 self._hideSummaryLoading(genSearchStart, function() {
                     self._renderSummary(data);
                 });
             })
             .catch(function() {
+                if (query !== self._currentQuery) {
+                    return;
+                }
                 self._hideSummaryLoading(genSearchStart, function() {
                     self._handleGenSearchError();
                 });
@@ -404,6 +426,16 @@
         return (item && item.data && item.data.metadata) || {};
     };
 
+    // Content AI's own acquisition indexing convention stores the crawled page's
+    // address as "source" (metadata.source, duplicated at data.source) - "url" is
+    // only ever present for content sources that map a differently-named field.
+    // Every resolver below checks metadata.url first for that case, then falls
+    // back to the acquisition convention.
+    function resolveMetadataUrl(metadata, fallbackUrl) {
+        var m = metadata || {};
+        return m.url || m.source || fallbackUrl || "";
+    }
+
     ContentAISearch.prototype._resolveItemLabel = function(item) {
         if (!item) {
             return "";
@@ -428,8 +460,9 @@
                 return headingMatch[1].trim();
             }
         }
-        if (metadata.url) {
-            return this._labelFromUrl(metadata.url);
+        var url = resolveMetadataUrl(metadata, data.source);
+        if (url) {
+            return this._labelFromUrl(url);
         }
         return item.id || "";
     };
@@ -466,8 +499,9 @@
         if (metadata.title) {
             return metadata.title;
         }
-        if (metadata.url) {
-            return this._labelFromUrl(metadata.url);
+        var url = resolveMetadataUrl(metadata, hit.source);
+        if (url) {
+            return this._labelFromUrl(url);
         }
         return hit.id || "";
     };
@@ -487,7 +521,7 @@
 
     ContentAISearch.prototype._populateItemNode = function(root, item) {
         var metadata = this._getItemMetadata(item);
-        var url = metadata.url;
+        var url = resolveMetadataUrl(metadata, item && item.data && item.data.source);
         var title = this._resolveItemLabel(item);
         var description = this._resolveItemDescription(item);
         var image = this._resolveItemImage(item);
@@ -560,7 +594,7 @@
             return html;
         }
         hits.forEach(function(hit) {
-            var url = hit.metadata && hit.metadata.url;
+            var url = resolveMetadataUrl(hit.metadata, hit.source);
             var label = self._resolveHitLabel(hit);
             var el = document.createElement("div");
             el.innerHTML = self._elements.sourceTemplate.innerHTML;
