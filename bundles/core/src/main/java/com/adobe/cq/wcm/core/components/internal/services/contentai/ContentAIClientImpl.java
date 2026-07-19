@@ -35,6 +35,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.sling.settings.SlingSettingsService;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.Designate;
@@ -77,14 +78,42 @@ public class ContentAIClientImpl implements ContentAIClient {
     @Reference
     private SlingSettingsService slingSettings;
 
-    private ContentAIConfig config;
+    // volatile: @Modified can run concurrently with in-flight requests on
+    // other threads: swapping both fields together under a single volatile
+    // write (config last) means a request either sees the old config with
+    // the old client, or the new config with the new client, never a mix.
+    private volatile ContentAIConfig config;
+    private volatile CloseableHttpClient httpClient;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Activate
     @Modified
     protected void activate(ContentAIConfig config) {
+        CloseableHttpClient previousClient = this.httpClient;
+        this.httpClient = buildHttpClient(config);
+        // config is written last (see the volatile note above)
         this.config = config;
+        if (previousClient != null) {
+            closeQuietly(previousClient);
+        }
+    }
+
+    @Deactivate
+    protected void deactivate() {
+        closeQuietly(this.httpClient);
+        this.httpClient = null;
+    }
+
+    private void closeQuietly(CloseableHttpClient client) {
+        if (client == null) {
+            return;
+        }
+        try {
+            client.close();
+        } catch (IOException e) {
+            LOGGER.warn("Failed to close Content AI HTTP client", e);
+        }
     }
 
     @Override
@@ -169,15 +198,11 @@ public class ContentAIClientImpl implements ContentAIClient {
             throw new ContentAIClientException("Content AI API key (X-Api-Key) is not configured", 0);
         }
         String url = resolveBaseUrl() + path;
-        RequestConfig requestConfig = RequestConfig.custom()
-            .setConnectTimeout(config.connectionTimeout())
-            .setSocketTimeout(config.socketTimeout())
-            .build();
-        try (CloseableHttpClient httpClient = getHttpClient(requestConfig)) {
+        try {
             HttpGet get = new HttpGet(url);
             get.setHeader("Accept", "application/json");
             get.setHeader("X-Api-Key", apiKey);
-            return executeAndParse(httpClient, get, path);
+            return executeAndParse(this.httpClient, get, path);
         } catch (IOException e) {
             throw new ContentAIClientException("Failed to call Content AI at " + path, e);
         }
@@ -189,18 +214,14 @@ public class ContentAIClientImpl implements ContentAIClient {
             throw new ContentAIClientException("Content AI API key (X-Api-Key) is not configured", 0);
         }
         String url = resolveBaseUrl() + path;
-        RequestConfig requestConfig = RequestConfig.custom()
-            .setConnectTimeout(config.connectionTimeout())
-            .setSocketTimeout(config.socketTimeout())
-            .build();
-        try (CloseableHttpClient httpClient = getHttpClient(requestConfig)) {
+        try {
             HttpPost post = new HttpPost(url);
             post.setHeader("Content-Type", "application/json");
             // Anonymous, public-index access uses X-Api-Key (a Developer Console client ID), never a bearer token.
             post.setHeader("X-Api-Key", apiKey);
             post.setEntity(new StringEntity(mapper.writeValueAsString(body), StandardCharsets.UTF_8));
 
-            return executeAndParse(httpClient, post, path);
+            return executeAndParse(this.httpClient, post, path);
         } catch (IOException e) {
             throw new ContentAIClientException("Failed to call Content AI at " + path, e);
         }
@@ -300,7 +321,18 @@ public class ContentAIClientImpl implements ContentAIClient {
         }
     }
 
-    protected CloseableHttpClient getHttpClient(RequestConfig requestConfig) {
+    /**
+     * Builds the long-lived, shared HTTP client used for every Content AI call - built once per activation
+     * (config change) rather than per request, so requests reuse pooled connections instead of paying a fresh
+     * TCP/TLS handshake every time.
+     *
+     * @param config the configuration this client's connect/socket timeouts are derived from
+     */
+    protected CloseableHttpClient buildHttpClient(ContentAIConfig config) {
+        RequestConfig requestConfig = RequestConfig.custom()
+            .setConnectTimeout(config.connectionTimeout())
+            .setSocketTimeout(config.socketTimeout())
+            .build();
         if (httpClientBuilderFactory != null) {
             return httpClientBuilderFactory.newBuilder().setDefaultRequestConfig(requestConfig).build();
         }

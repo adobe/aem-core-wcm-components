@@ -61,6 +61,16 @@
         this._allResults = [];
         this._hasMore = false;
         this._sourceCursors = {};
+        // Monotonic per-endpoint request counters, plus which query (if any)
+        // is currently in flight for that endpoint. Replaces comparing
+        // against _currentQuery alone: two requests for the identical query
+        // text (e.g. pressing Enter twice) are otherwise indistinguishable
+        // from each other by a string comparison, so neither looks "stale"
+        // to the other no matter which one resolves last.
+        this._resultsRequestId = 0;
+        this._genSearchRequestId = 0;
+        this._pendingResultsQuery = null;
+        this._pendingGenSearchQuery = null;
 
         this._applyLayoutClass();
         this._syncLayoutButtons();
@@ -202,9 +212,19 @@
         this._clearResults();
     };
 
+    // Only ever touches the gensearch/summary state - toggling the
+    // AI-answer switch has nothing to do with the plain results list, so
+    // unlike the old behavior (which always re-ran _runQuery, re-firing a
+    // full .search.json call along with it) this no longer re-fetches
+    // results that haven't changed.
     ContentAISearch.prototype._onToggleChange = function() {
         this._genSearchEnabled = this._elements.toggle.checked;
         if (!this._genSearchEnabled) {
+            // Invalidate any gensearch request still in flight so a
+            // late-arriving answer can't reopen the summary the user just
+            // explicitly turned off.
+            this._genSearchRequestId++;
+            this._pendingGenSearchQuery = null;
             if (this._revealTimer) {
                 clearTimeout(this._revealTimer);
                 this._revealTimer = null;
@@ -212,8 +232,19 @@
             toggleShow(this._elements.summary, false);
             toggleShow(this._elements.error, false);
             this._setSummaryLoading(false);
+            return;
         }
-        this._runQuery();
+        var query = this._elements.input.value;
+        if (!query || query !== this._currentQuery) {
+            // Nothing has been submitted yet, or the field has unsubmitted
+            // edits - wait for an explicit submit rather than searching just
+            // because the toggle moved.
+            return;
+        }
+        if (this._pendingGenSearchQuery === query) {
+            return;
+        }
+        this._runGenSearch(query);
     };
 
     ContentAISearch.prototype._onLoadMore = function() {
@@ -221,16 +252,32 @@
     };
 
     ContentAISearch.prototype._onRetry = function() {
-        this._runGenSearch(this._elements.input.value);
+        var query = this._elements.input.value;
+        if (this._pendingGenSearchQuery === query) {
+            // Already retrying this exact query - ignore a repeated click
+            // instead of firing a second, redundant request.
+            return;
+        }
+        this._runGenSearch(query);
     };
 
     ContentAISearch.prototype._runQuery = function() {
         var query = this._elements.input.value;
-        this._currentQuery = query;
         if (!query) {
+            this._currentQuery = query;
             this._clearResults();
             return;
         }
+        if (query === this._currentQuery &&
+            (this._pendingResultsQuery === query || this._pendingGenSearchQuery === query)) {
+            // The identical query is already in flight (e.g. Enter pressed
+            // twice, or mashed while waiting) - ignore the duplicate submit
+            // rather than firing a second round-trip. The in-flight request
+            // still resolves normally; submitting again once it's done
+            // fires a fresh one as usual.
+            return;
+        }
+        this._currentQuery = query;
         this._runResultsSearch(query);
         if (this._genSearchEnabled) {
             this._runGenSearch(query);
@@ -245,6 +292,12 @@
         this._allResults = [];
         this._hasMore = false;
         this._sourceCursors = {};
+        // Invalidate anything still in flight - its response, if any,
+        // resolves against a request ID nothing compares equal to anymore.
+        this._resultsRequestId++;
+        this._genSearchRequestId++;
+        this._pendingResultsQuery = null;
+        this._pendingGenSearchQuery = null;
         if (this._revealTimer) {
             clearTimeout(this._revealTimer);
             this._revealTimer = null;
@@ -295,18 +348,24 @@
     ContentAISearch.prototype._runResultsSearch = function(query) {
         var self = this;
         var searchStart = Date.now();
+        // Shared with _runLoadMore - a fresh search and a load-more append
+        // both write to _allResults/_hasMore/_sourceCursors, so whichever of
+        // the two is issued more recently needs to invalidate the other one's
+        // still-in-flight response, not just responses to a different query.
+        var requestId = ++this._resultsRequestId;
+        this._pendingResultsQuery = query;
         this._setFieldLoading(true);
         var url = this._resourcePath + ".search.json?q=" + encodeURIComponent(query);
         this._fetchJson(url)
             .then(function(data) {
-                if (query !== self._currentQuery) {
+                if (requestId !== self._resultsRequestId) {
                     return;
                 }
                 self._storeResults(data);
                 self._renderResults();
             })
             .catch(function() {
-                if (query !== self._currentQuery) {
+                if (requestId !== self._resultsRequestId) {
                     return;
                 }
                 self._allResults = [];
@@ -319,9 +378,10 @@
                 toggleShow(self._elements.loadMore, false);
             })
             .then(function() {
-                if (query !== self._currentQuery) {
+                if (requestId !== self._resultsRequestId) {
                     return;
                 }
+                self._pendingResultsQuery = null;
                 var elapsed = Date.now() - searchStart;
                 var delay = Math.max(0, LOADING_DISPLAY_DELAY - elapsed);
                 setTimeout(function() {
@@ -362,6 +422,11 @@
         }
         var self = this;
         var query = this._currentQuery;
+        // Shares _resultsRequestId with _runResultsSearch - if a fresh
+        // search is issued while this append is still in flight (or vice
+        // versa), whichever fired later wins and the other's response is
+        // ignored, instead of racing to write _allResults/_sourceCursors.
+        var requestId = ++this._resultsRequestId;
         if (this._elements.loadMore) {
             this._elements.loadMore.disabled = true;
         }
@@ -369,14 +434,19 @@
             "&cursors=" + encodeURIComponent(JSON.stringify(this._sourceCursors));
         this._fetchJson(url)
             .then(function(data) {
-                if (query !== self._currentQuery) {
+                if (requestId !== self._resultsRequestId) {
                     return;
                 }
                 self._storeResults(data, true);
                 self._renderResults();
             })
+            .catch(function() {
+                // A failed page fetch shouldn't leave "Load More" stuck
+                // disabled forever - keep the results that are already
+                // shown and let the user try again.
+            })
             .then(function() {
-                if (query !== self._currentQuery) {
+                if (requestId !== self._resultsRequestId) {
                     return;
                 }
                 if (self._elements.loadMore) {
@@ -388,6 +458,8 @@
     ContentAISearch.prototype._runGenSearch = function(query) {
         var self = this;
         var genSearchStart = Date.now();
+        var requestId = ++this._genSearchRequestId;
+        this._pendingGenSearchQuery = query;
         toggleShow(this._elements.error, false);
         toggleShow(this._elements.summary, false);
         this._setSummaryLoading(true);
@@ -396,18 +468,26 @@
         }
         this._fetchJson(this._resourcePath + ".gensearch.json?q=" + encodeURIComponent(query))
             .then(function(data) {
-                if (query !== self._currentQuery) {
+                if (requestId !== self._genSearchRequestId) {
                     return;
                 }
                 self._hideSummaryLoading(genSearchStart, function() {
-                    self._renderSummary(data, query);
+                    if (requestId !== self._genSearchRequestId) {
+                        return;
+                    }
+                    self._pendingGenSearchQuery = null;
+                    self._renderSummary(data, requestId);
                 });
             })
             .catch(function() {
-                if (query !== self._currentQuery) {
+                if (requestId !== self._genSearchRequestId) {
                     return;
                 }
                 self._hideSummaryLoading(genSearchStart, function() {
+                    if (requestId !== self._genSearchRequestId) {
+                        return;
+                    }
+                    self._pendingGenSearchQuery = null;
                     self._handleGenSearchError();
                 });
             });
@@ -684,10 +764,12 @@
     // an older query can otherwise run to completion - and sit there fully
     // rendered - before a slower-arriving newer response replaces it, the
     // same stale-response race _runResultsSearch/_runGenSearch already guard
-    // against at the network level. Each tick re-checks query against
-    // _currentQuery so a reveal for a query the user has since moved on from
-    // stops silently instead of finishing.
-    ContentAISearch.prototype._renderSummary = function(data, query) {
+    // against at the network level. Each tick re-checks requestId against
+    // _genSearchRequestId (not query text - two requests for the identical
+    // query, e.g. a double Enter, are otherwise indistinguishable) so a
+    // reveal superseded by a newer request stops silently instead of
+    // finishing or restarting.
+    ContentAISearch.prototype._renderSummary = function(data, requestId) {
         var self = this;
         var fullText = data.result || "";
         var hits = data.hits || [];
@@ -710,7 +792,7 @@
         toggleShow(this._elements.summary, true);
 
         function tick() {
-            if (query !== self._currentQuery) {
+            if (requestId !== self._genSearchRequestId) {
                 self._revealTimer = null;
                 return;
             }
