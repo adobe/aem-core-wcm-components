@@ -400,7 +400,7 @@
                     return;
                 }
                 self._hideSummaryLoading(genSearchStart, function() {
-                    self._renderSummary(data);
+                    self._renderSummary(data, query);
                 });
             })
             .catch(function() {
@@ -678,7 +678,16 @@
     // through _renderMarkdownSummary (never a raw, unstyled Text node), so
     // paragraph/list spacing is already in place from the first word instead
     // of appearing all at once on the last one.
-    ContentAISearch.prototype._renderSummary = function(data) {
+    //
+    // A newer query starting its own _renderSummary call cancels this one's
+    // timer (below), but that alone isn't enough: a still-ticking reveal for
+    // an older query can otherwise run to completion - and sit there fully
+    // rendered - before a slower-arriving newer response replaces it, the
+    // same stale-response race _runResultsSearch/_runGenSearch already guard
+    // against at the network level. Each tick re-checks query against
+    // _currentQuery so a reveal for a query the user has since moved on from
+    // stops silently instead of finishing.
+    ContentAISearch.prototype._renderSummary = function(data, query) {
         var self = this;
         var fullText = data.result || "";
         var hits = data.hits || [];
@@ -701,6 +710,10 @@
         toggleShow(this._elements.summary, true);
 
         function tick() {
+            if (query !== self._currentQuery) {
+                self._revealTimer = null;
+                return;
+            }
             idx++;
             self._elements.summaryText.innerHTML = self._renderMarkdownSummary(tokens.slice(0, idx).join(""));
             if (idx < tokens.length) {
