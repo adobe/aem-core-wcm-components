@@ -18,8 +18,8 @@
 
     var NS = "cmp";
     var IS = "contentaisearch";
-    var DELAY = 300;
     var LOADING_DISPLAY_DELAY = 300;
+    var REVEAL_WORD_INTERVAL_MS = 12;
 
     var selectors = {
         self: "[data-" + NS + '-is="' + IS + '"]',
@@ -56,7 +56,7 @@
         this._genSearchEnabled = this._resolveInitialGenSearchEnabled();
         this._resultsLayout = this._element.getAttribute("data-cmp-results-layout") === "list" ? "list" : "card";
         this._i18n = this._parseI18n();
-        this._timeout = null;
+        this._revealTimer = null;
         this._currentQuery = "";
         this._allResults = [];
         this._hasMore = false;
@@ -87,9 +87,7 @@
             this._elements.loadMore.addEventListener("click", this._onLoadMore.bind(this));
         }
         if (this._elements.form) {
-            this._elements.form.addEventListener("submit", function(event) {
-                event.preventDefault();
-            });
+            this._elements.form.addEventListener("submit", this._onFormSubmit.bind(this));
         }
     }
 
@@ -171,13 +169,22 @@
         this._renderResults();
     };
 
+    // Search runs only on an explicit trigger - form submit (Enter, or a
+    // mobile keyboard's "Go"/"Search" action, both of which fire the form's
+    // submit event same as a real submit button would) or the AI-answer
+    // toggle changing - never on typing itself. A debounced search-as-you-
+    // type fires a fresh, often-incomplete query on every brief pause,
+    // which both re-renders the results/summary repeatedly while the user
+    // is still typing (a visible flicker) and shows the loading indicators
+    // for every one of those in-between queries, giving the impression a
+    // search is running when the user hasn't asked for one yet.
     ContentAISearch.prototype._onInput = function() {
-        var self = this;
         this._syncClearButton();
-        clearTimeout(this._timeout);
-        this._timeout = setTimeout(function() {
-            self._runQuery();
-        }, DELAY);
+    };
+
+    ContentAISearch.prototype._onFormSubmit = function(event) {
+        event.preventDefault();
+        this._runQuery();
     };
 
     ContentAISearch.prototype._syncClearButton = function() {
@@ -198,6 +205,10 @@
     ContentAISearch.prototype._onToggleChange = function() {
         this._genSearchEnabled = this._elements.toggle.checked;
         if (!this._genSearchEnabled) {
+            if (this._revealTimer) {
+                clearTimeout(this._revealTimer);
+                this._revealTimer = null;
+            }
             toggleShow(this._elements.summary, false);
             toggleShow(this._elements.error, false);
             this._setSummaryLoading(false);
@@ -234,6 +245,13 @@
         this._allResults = [];
         this._hasMore = false;
         this._sourceCursors = {};
+        if (this._revealTimer) {
+            clearTimeout(this._revealTimer);
+            this._revealTimer = null;
+        }
+        if (this._elements.sources) {
+            this._elements.sources.style.visibility = "";
+        }
         if (this._elements.results) {
             this._elements.results.innerHTML = "";
         }
@@ -506,12 +524,26 @@
         return hit.id || "";
     };
 
+    // Only ever used as a last-resort fallback, once metadata.title/data.title/
+    // data.name have all already come up empty - so there's no risk of this
+    // clobbering an authored title, just turning a bare URL into something
+    // readable: strip a trailing page extension, turn dashes/underscores into
+    // spaces, and title-case the result (e.g. "ski-touring-mont-blanc.html"
+    // becomes "Ski Touring Mont Blanc" instead of "ski touring mont blanc.html").
     ContentAISearch.prototype._labelFromUrl = function(url) {
         try {
             var parsed = new URL(url, window.location.origin);
             var segments = parsed.pathname.split("/").filter(Boolean);
             if (segments.length) {
-                return decodeURIComponent(segments[segments.length - 1]).replace(/[-_]/g, " ");
+                var slug = decodeURIComponent(segments[segments.length - 1])
+                    .replace(/\.(html?|php|aspx?)$/i, "")
+                    .replace(/[-_]+/g, " ")
+                    .trim();
+                if (slug) {
+                    return slug.replace(/\S+/g, function(word) {
+                        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+                    });
+                }
             }
         } catch (e) {
             // fall through
@@ -624,16 +656,64 @@
         }
 
         this._elements.results.innerHTML = this._generateResultItems(this._allResults);
+        // The whole list is replaced in one synchronous write, so there's no
+        // display:none/block toggle for a CSS *animation* to key off of the
+        // way the summary card's show/hide has - remove-then-re-add the
+        // class instead (with a forced reflow in between) so the animation
+        // restarts on every render, including a Load More append.
+        this._elements.results.classList.remove("cmp-contentaisearch__results--refresh");
+        void this._elements.results.offsetWidth;
+        this._elements.results.classList.add("cmp-contentaisearch__results--refresh");
 
         toggleShow(this._elements.resultsSection, true);
         toggleShow(this._elements.loadMore, this._hasMore);
     };
 
+    // Reveals the answer word by word rather than painting it in one go. The
+    // full answer is already in hand (this runs once the blocking gensearch
+    // response has arrived) - a genuine reduction in time-to-first-word
+    // would need the API's SSE streaming endpoint relayed through a servlet
+    // fan-out across every configured content source, a larger change; this
+    // is the interim, purely cosmetic improvement. Every tick re-renders
+    // through _renderMarkdownSummary (never a raw, unstyled Text node), so
+    // paragraph/list spacing is already in place from the first word instead
+    // of appearing all at once on the last one.
     ContentAISearch.prototype._renderSummary = function(data) {
-        this._elements.summaryText.innerHTML = this._renderMarkdownSummary(data.result || "");
+        var self = this;
+        var fullText = data.result || "";
         var hits = data.hits || [];
-        this._elements.sources.innerHTML = this._generateSourceItems(hits);
+        var tokens = fullText.split(/(\s+)/);
+        var idx = 0;
+
+        if (this._revealTimer) {
+            clearTimeout(this._revealTimer);
+            this._revealTimer = null;
+        }
+
+        if (this._elements.sources) {
+            // Sources are generated up front (same as the summary text
+            // itself) but held back until the reveal finishes, rather than
+            // showing them - momentarily out of sync - before the answer
+            // they support has even finished appearing.
+            this._elements.sources.innerHTML = this._generateSourceItems(hits);
+            this._elements.sources.style.visibility = "hidden";
+        }
         toggleShow(this._elements.summary, true);
+
+        function tick() {
+            idx++;
+            self._elements.summaryText.innerHTML = self._renderMarkdownSummary(tokens.slice(0, idx).join(""));
+            if (idx < tokens.length) {
+                self._revealTimer = setTimeout(tick, REVEAL_WORD_INTERVAL_MS);
+            } else {
+                self._revealTimer = null;
+                if (self._elements.sources) {
+                    self._elements.sources.style.visibility = "";
+                }
+            }
+        }
+
+        tick();
     };
 
     function escapeHtml(str) {
