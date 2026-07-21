@@ -92,7 +92,6 @@ Two independent auth concerns, both ultimately traced back to the same source of
 
 ## 9. Open questions / dependencies
 
-- **Hosting model**: one shared AEM environment hosting many org pages (matches the CAIS Onboarding pattern, cheaper) vs. a separate AEM environment per org (heavier, more isolated). Still unresolved - see the dedicated discussion below (§10). Now a purely ops/isolation-cost decision, not a code-cost one - the Bearer-token change (§8 item 4) is needed identically either way.
 - **Two Slack threads referenced during research** (`cq-dev.slack.com/archives/C09F4B1FMMF/...` and `.../C09N5KS9JR0/...`) were never retrieved — that workspace isn't indexed by our internal search tooling and direct fetch hit Slack's login wall. If they contain material context, they still need to be pulled manually and folded in.
 - **Bearer-forwarding auth path** (§5.2 step 6, §6, §7) is new design surface not yet implementation-planned in detail - needs its own review pass, since the forwarding mechanism's exact shape (raw IMS token vs. a narrower exchange token) is still an open implementation choice.
 
@@ -100,10 +99,11 @@ Two independent auth concerns, both ultimately traced back to the same source of
 
 - ~~CAIS Onboarding team dependency~~ — resolved: not extending it, using it only as an architectural reference (§4).
 - ~~Public content source requirement~~ — resolved differently than first drafted: rather than branching per-source, every content source (public or private) uses the same forwarded-Bearer path, since it needs no separate credential provisioning (§5.2 step 6). `x-api-key` is no longer part of this feature's design at all.
+- ~~Hosting model~~ — resolved: **one shared AEM environment**, hosting all onboarded orgs' demo pages via domain+path routing (§10.1). Rejected the separate-environment-per-org alternative (§10.2) mainly on cost grounds - it would require a production-tier CM program per org, not one total.
 
-## 10. Hosting model — implementation research for both options (decision deferred)
+## 10. Hosting model — shared AEM environment (decided)
 
-Not resolved yet, deliberately - this section documents how each option would actually be *built*, in enough detail to decide from later, without committing to one now.
+**Decision: Option A, one shared AEM environment**, hosting every onboarded org's demo page. This section documents how it's built and, since a shared environment means one signing secret and one set of runtime config serving every org, how orgs stay isolated from each other within it (§10.1 item 5). §10.2 documents the per-org-environment alternative that was considered and rejected, kept for reference.
 
 **Shared constraint underlying both options**: `ContentAIClientImpl` (the core component's Content AI client) is a **singleton OSGi component** (`@Component(service = ContentAIClient.class)`, `@Designate(ocd = ContentAIConfig.class)`, no factory configuration) — its `apiKey`/`baseUrlOverride`/`defaultContentSource` are configured **once per AEM environment**, not per page or per resource. This is a real constraint, not just a cost/ops framing device.
 
@@ -118,8 +118,13 @@ Not resolved yet, deliberately - this section documents how each option would ac
    - **Real limitation found**: custom domains require a **production (non-sandbox) Cloud Manager program** with the **SITES solution enabled** - a demo-hosting environment for this feature would need to live in a production-tier program to get org subdomains at all, not a cheaper sandbox/dev program. This applies whether the environment is shared (Option A) or dedicated (Option B) - see §10.2.
    - **Routing within the shared environment**: standard, long-documented AEM mechanism - a `sling:Mapping` node under `/etc/map.publish` (AEM CS requires Sling Mappings be deployed via code, since the repo is immutable - not authored live) with `sling:match: <domain>/(.*)` and `sling:internalRedirect: /content/gensearch-demo/<org>/$1`, and the Apache Sling Resource Resolver Factory's `resource.resolver.map.location` OSGi config pointed at `/etc/map.publish`. This is the exact documented pattern (Experience League's own example maps `wknd.com` this way), not a workaround - one mapping node added per org onboarded.
 4. **Isolation cost, named explicitly**: every onboarded org shares one AEM environment - an incident, upgrade, or misconfiguration on that environment is shared risk across all of them simultaneously. Adobe's own closest precedent (CAIS Onboarding) accepted this exact trade-off for the same kind of demo/trial use case.
+5. **Org/brand isolation mechanisms**, needed precisely *because* one environment, one signing secret, and one runtime now serve every org - each closes a specific cross-org leak this sharing would otherwise allow:
+   - **Token-to-org binding**: the handoff token (§5.2 step 3) proves "a valid CM user was authenticated," but on its own doesn't prove *for which org*. The minting endpoint stamps the org/content-source identifier into the token's signed claims, and the destination servlet (§5.2 step 5) checks that claim against the subdomain it's actually redeeming on, rejecting on mismatch - otherwise a token minted while viewing org A's row could be replayed against org B's subdomain, since both are served by the same environment and secret.
+   - **Defense in depth via Content AI's own authorization**: even if the check above were somehow bypassed, Content AI's own authorization is a second, independent gate - the forwarded Bearer token's entitlement (§5.2 step 6) is tied to the real CM user and the actual environment/bucket their FI codes grant access to, not to whatever content source name the page happens to query. A mismatched org still couldn't retrieve another org's real data.
+   - **Host-only session cookies**: the destination servlet's application-level session cookie (§5.2 step 5) must be set with **no explicit `Domain=` attribute**, scoping it to `<org>.gensearch-demo.adobe.com` specifically. A wildcard `Domain=.gensearch-demo.adobe.com` cookie would leak sessions across every org sharing the base domain - an easy mistake worth calling out explicitly given how many orgs will share it.
+   - **Cache isolation**: CDN/Dispatcher cache keys already include the full hostname, so there's no cross-org cache-poisoning risk at that layer by default. The cache-deny rule for the redemption path (§5.2 step 5, §7) should be written once, as a single pattern matching the shared path across all org subdomains, rather than needing a new rule authored per org onboarded - keeps the per-org onboarding step (§8 item 5) from growing over time.
 
-### 10.2 Option B — Separate AEM environment per org
+### 10.2 Option B — Separate AEM environment per org (considered, rejected — kept for reference)
 
 **What has to be true, and how each piece gets built:**
 
@@ -128,9 +133,9 @@ Not resolved yet, deliberately - this section documents how each option would ac
 3. **Same custom-domain requirement and mechanism as §10.1** - a production (non-sandbox), SITES-enabled program, one domain per org, wildcard cert reusable across them. The difference from Option A: each org's domain maps to its *own* environment's default page root, so no Sling Mapping fan-out is needed within a single environment - simpler per-environment routing, at the cost of needing that production-tier program (and its licensing cost) multiplied by every org onboarded, rather than once total.
 4. **Isolation benefit, named explicitly**: an incident on one org's environment can't affect any other org's demo - full blast-radius containment, at real recurring infrastructure cost per org.
 
-### 10.3 Cost asymmetry worth weighing directly
+### 10.3 Why Option A won
 
-Because custom domains require a *production* program either way, Option B's "isolation" doesn't just cost more environments - it costs a **production-tier program per org**, where Option A needs only **one** production-tier program total (hosting many orgs via domain+path routing). With `x-api-key` dropped from the design, the code-cost side of this comparison has effectively disappeared: the one required code change (the Bearer-token overload, §8 item 4) is identical either way, so this is now a **pure ops/isolation-cost decision**, not a code-cost one. That's a materially different scaling curve if this feature is meant to onboard many orgs over time, not a handful.
+Because custom domains require a *production* program either way, Option B's "isolation" doesn't just cost more environments - it costs a **production-tier program per org**, where Option A needs only **one** production-tier program total (hosting many orgs via domain+path routing). With `x-api-key` dropped from the design, the code-cost side of this comparison had already disappeared: the one required code change (the Bearer-token overload, §8 item 4) is identical either way. That left this as a pure ops/isolation-cost decision - and a materially better scaling curve for onboarding many orgs over time, not a handful, is what settled it in Option A's favor. The isolation Option B would have bought is instead approximated within the shared environment via the mechanisms in §10.1 item 5 (token-to-org binding, Content AI's own authorization as a second gate, host-only cookies, shared cache-deny rule).
 
 ## 11. References
 
