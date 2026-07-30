@@ -367,6 +367,38 @@ class ContentAIClientImplTest {
     }
 
     @Test
+    void deactivateClosesHttpClientAndClearsField() throws Exception {
+        client.deactivate();
+
+        verify(mockHttpClient).close();
+        assertNull(FieldUtils.getField(ContentAIClientImpl.class, "httpClient", true).get(client));
+    }
+
+    @Test
+    void deactivateSwallowsCloseException() throws Exception {
+        org.mockito.Mockito.doThrow(new IOException("close failed")).when(mockHttpClient).close();
+
+        client.deactivate();
+    }
+
+    @Test
+    void reactivateClosesThePreviousHttpClient() throws Exception {
+        // client's httpClient field currently holds mockHttpClient (via attachTransport in setUp).
+        client.activate(config(TEST_API_KEY, TEST_BASE_URL));
+
+        verify(mockHttpClient).close();
+    }
+
+    @Test
+    void reactivateSwallowsPreviousClientCloseException() throws Exception {
+        org.mockito.Mockito.doThrow(new IOException("close failed")).when(mockHttpClient).close();
+
+        client.activate(config(TEST_API_KEY, TEST_BASE_URL));
+
+        verify(mockHttpClient).close();
+    }
+
+    @Test
     void deriveBucketIgnoresMalformedServiceValue() throws Exception {
         Map<String, String> env = new HashMap<>();
         env.put("AEM_SERVICE", "not-a-bucket");

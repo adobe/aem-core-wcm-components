@@ -414,9 +414,8 @@
                 // Keep existing results shown; don't leave Load More disabled forever.
             })
             .then(function() {
-                if (requestId !== self._resultsRequestId) {
-                    return;
-                }
+                // Always re-enable, even if a newer request superseded this one - otherwise
+                // a fresh search that re-shows Load More would leave it stuck disabled.
                 if (self._elements.loadMore) {
                     self._elements.loadMore.disabled = false;
                 }

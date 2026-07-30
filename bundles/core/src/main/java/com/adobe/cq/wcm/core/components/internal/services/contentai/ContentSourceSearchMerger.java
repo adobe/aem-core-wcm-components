@@ -82,6 +82,10 @@ public final class ContentSourceSearchMerger {
     }
 
     /**
+     * Note: each source's own cursor advances independent of how many of its items actually survive the
+     * merge+cap - a source whose items are outranked and dropped this page has no way to resurface them via
+     * Load More, since that source's cursor already points past them.
+     *
      * @param partials        per-source search responses from the current request
      * @param sourceCursors   cursors for the next page per source (sources with more results)
      * @param limit           maximum number of merged results to return

@@ -74,6 +74,21 @@ class ContentSourceSearchMergerTest {
     }
 
     @Test
+    void merge_capsResultsAcrossMultipleSourcesExceedingResultsSize() {
+        // Two sources each independently contributing more than the configured limit -
+        // the regression this exists to catch is returning up to N x limit instead of limit.
+        ContentSourceSearchResult first = result(item("a1", 0.95), item("a2", 0.85), item("a3", 0.75));
+        ContentSourceSearchResult second = result(item("b1", 0.9), item("b2", 0.8), item("b3", 0.7));
+
+        ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(Arrays.asList(first, second), 3);
+
+        assertEquals(3, merged.getResults().size());
+        assertEquals("a1", merged.getResults().get(0).getId());
+        assertEquals("b1", merged.getResults().get(1).getId());
+        assertEquals("a2", merged.getResults().get(2).getId());
+    }
+
+    @Test
     void merge_skipsNullPartialsItemsAndBlankIds() {
         ContentSourceSearchResult valid = result(item("doc_1", 0.5));
         ContentSourceSearchResult nullResults = new ContentSourceSearchResult();

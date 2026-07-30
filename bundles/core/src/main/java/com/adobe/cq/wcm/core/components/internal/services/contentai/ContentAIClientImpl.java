@@ -78,8 +78,10 @@ public class ContentAIClientImpl implements ContentAIClient {
     @Reference
     private SlingSettingsService slingSettings;
 
-    // volatile: @Modified can run concurrently with in-flight requests; config
-    // is written last so a request never sees a mix of old/new config+client.
+    // volatile: @Modified can run concurrently with in-flight requests. config is snapshotted once per request
+    // (see executeGet/executeRequest), so a request's apiKey/baseUrl reads can't straddle a reconfiguration.
+    // httpClient is read unsnapshotted, so a request may still pair an old config with a just-swapped httpClient -
+    // harmless, since httpClient only affects transport/pooling, not the URL/headers already built from that config.
     private volatile ContentAIConfig config;
     private volatile CloseableHttpClient httpClient;
 
@@ -199,11 +201,12 @@ public class ContentAIClientImpl implements ContentAIClient {
             throw new ContentAIClientException("Content AI API key (X-Api-Key) is not configured", 0);
         }
         String url = resolveBaseUrl(config) + path;
+        CloseableHttpClient httpClient = requireHttpClient();
         try {
             HttpGet get = new HttpGet(url);
             get.setHeader("Accept", "application/json");
             get.setHeader("X-Api-Key", apiKey);
-            return executeAndParse(this.httpClient, get, path);
+            return executeAndParse(httpClient, get, path);
         } catch (IOException e) {
             throw new ContentAIClientException("Failed to call Content AI at " + path, e);
         }
@@ -217,6 +220,7 @@ public class ContentAIClientImpl implements ContentAIClient {
             throw new ContentAIClientException("Content AI API key (X-Api-Key) is not configured", 0);
         }
         String url = resolveBaseUrl(config) + path;
+        CloseableHttpClient httpClient = requireHttpClient();
         try {
             HttpPost post = new HttpPost(url);
             post.setHeader("Content-Type", "application/json");
@@ -224,10 +228,20 @@ public class ContentAIClientImpl implements ContentAIClient {
             post.setHeader("X-Api-Key", apiKey);
             post.setEntity(new StringEntity(mapper.writeValueAsString(body), StandardCharsets.UTF_8));
 
-            return executeAndParse(this.httpClient, post, path);
+            return executeAndParse(httpClient, post, path);
         } catch (IOException e) {
             throw new ContentAIClientException("Failed to call Content AI at " + path, e);
         }
+    }
+
+    // Snapshotted once, same reasoning as config - also turns the narrow post-@Deactivate window (httpClient set to
+    // null) into a clean ContentAIClientException instead of an unchecked NullPointerException.
+    private CloseableHttpClient requireHttpClient() throws ContentAIClientException {
+        CloseableHttpClient current = this.httpClient;
+        if (current == null) {
+            throw new ContentAIClientException("Content AI HTTP client is not available (component deactivated)", 0);
+        }
+        return current;
     }
 
     /**
