@@ -21,8 +21,6 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClient;
-
 /**
  * Defines the {@code ContentAISupportedSearch} Sling Model used for the
  * {@code /apps/core/wcm/components/contentaisearch} component.
@@ -50,6 +48,9 @@ public interface ContentAISupportedSearch extends Component {
     String RESULTS_LAYOUT_CARD = "card";
     String RESULTS_LAYOUT_LIST = "list";
 
+    /** Default Content AI content source type used when none is configured. */
+    String DEFAULT_CONTENT_SOURCE_TYPE = "ACQUISITION";
+
     /**
      * @return the primary Content AI content source name (first configured source).
      * @since com.adobe.cq.wcm.core.components.models 12.32.0
@@ -65,7 +66,7 @@ public interface ContentAISupportedSearch extends Component {
      */
     @NotNull
     default String getContentSourceType() {
-        return ContentAIClient.DEFAULT_CONTENT_SOURCE_TYPE;
+        return DEFAULT_CONTENT_SOURCE_TYPE;
     }
 
     /**
