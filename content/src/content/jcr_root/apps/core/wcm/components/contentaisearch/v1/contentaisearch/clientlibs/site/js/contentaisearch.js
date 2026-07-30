@@ -18,8 +18,8 @@
 
     var NS = "cmp";
     var IS = "contentaisearch";
-    var DELAY = 300;
     var LOADING_DISPLAY_DELAY = 300;
+    var REVEAL_WORD_INTERVAL_MS = 12;
 
     var selectors = {
         self: "[data-" + NS + '-is="' + IS + '"]',
@@ -56,11 +56,21 @@
         this._genSearchEnabled = this._resolveInitialGenSearchEnabled();
         this._resultsLayout = this._element.getAttribute("data-cmp-results-layout") === "list" ? "list" : "card";
         this._i18n = this._parseI18n();
-        this._timeout = null;
+        this._revealTimer = null;
         this._currentQuery = "";
         this._allResults = [];
         this._hasMore = false;
         this._sourceCursors = {};
+        // Monotonic per-endpoint request counters, plus which query (if any)
+        // is currently in flight for that endpoint. Replaces comparing
+        // against _currentQuery alone: two requests for the identical query
+        // text (e.g. pressing Enter twice) are otherwise indistinguishable
+        // from each other by a string comparison, so neither looks "stale"
+        // to the other no matter which one resolves last.
+        this._resultsRequestId = 0;
+        this._genSearchRequestId = 0;
+        this._pendingResultsQuery = null;
+        this._pendingGenSearchQuery = null;
 
         this._applyLayoutClass();
         this._syncLayoutButtons();
@@ -87,9 +97,7 @@
             this._elements.loadMore.addEventListener("click", this._onLoadMore.bind(this));
         }
         if (this._elements.form) {
-            this._elements.form.addEventListener("submit", function(event) {
-                event.preventDefault();
-            });
+            this._elements.form.addEventListener("submit", this._onFormSubmit.bind(this));
         }
     }
 
@@ -171,13 +179,22 @@
         this._renderResults();
     };
 
+    // Search runs only on an explicit trigger - form submit (Enter, or a
+    // mobile keyboard's "Go"/"Search" action, both of which fire the form's
+    // submit event same as a real submit button would) or the AI-answer
+    // toggle changing - never on typing itself. A debounced search-as-you-
+    // type fires a fresh, often-incomplete query on every brief pause,
+    // which both re-renders the results/summary repeatedly while the user
+    // is still typing (a visible flicker) and shows the loading indicators
+    // for every one of those in-between queries, giving the impression a
+    // search is running when the user hasn't asked for one yet.
     ContentAISearch.prototype._onInput = function() {
-        var self = this;
         this._syncClearButton();
-        clearTimeout(this._timeout);
-        this._timeout = setTimeout(function() {
-            self._runQuery();
-        }, DELAY);
+    };
+
+    ContentAISearch.prototype._onFormSubmit = function(event) {
+        event.preventDefault();
+        this._runQuery();
     };
 
     ContentAISearch.prototype._syncClearButton = function() {
@@ -195,14 +212,39 @@
         this._clearResults();
     };
 
+    // Only ever touches the gensearch/summary state - toggling the
+    // AI-answer switch has nothing to do with the plain results list, so
+    // unlike the old behavior (which always re-ran _runQuery, re-firing a
+    // full .search.json call along with it) this no longer re-fetches
+    // results that haven't changed.
     ContentAISearch.prototype._onToggleChange = function() {
         this._genSearchEnabled = this._elements.toggle.checked;
         if (!this._genSearchEnabled) {
+            // Invalidate any gensearch request still in flight so a
+            // late-arriving answer can't reopen the summary the user just
+            // explicitly turned off.
+            this._genSearchRequestId++;
+            this._pendingGenSearchQuery = null;
+            if (this._revealTimer) {
+                clearTimeout(this._revealTimer);
+                this._revealTimer = null;
+            }
             toggleShow(this._elements.summary, false);
             toggleShow(this._elements.error, false);
             this._setSummaryLoading(false);
+            return;
         }
-        this._runQuery();
+        var query = this._elements.input.value;
+        if (!query || query !== this._currentQuery) {
+            // Nothing has been submitted yet, or the field has unsubmitted
+            // edits - wait for an explicit submit rather than searching just
+            // because the toggle moved.
+            return;
+        }
+        if (this._pendingGenSearchQuery === query) {
+            return;
+        }
+        this._runGenSearch(query);
     };
 
     ContentAISearch.prototype._onLoadMore = function() {
@@ -210,16 +252,32 @@
     };
 
     ContentAISearch.prototype._onRetry = function() {
-        this._runGenSearch(this._elements.input.value);
+        var query = this._elements.input.value;
+        if (this._pendingGenSearchQuery === query) {
+            // Already retrying this exact query - ignore a repeated click
+            // instead of firing a second, redundant request.
+            return;
+        }
+        this._runGenSearch(query);
     };
 
     ContentAISearch.prototype._runQuery = function() {
         var query = this._elements.input.value;
-        this._currentQuery = query;
         if (!query) {
+            this._currentQuery = query;
             this._clearResults();
             return;
         }
+        if (query === this._currentQuery &&
+            (this._pendingResultsQuery === query || this._pendingGenSearchQuery === query)) {
+            // The identical query is already in flight (e.g. Enter pressed
+            // twice, or mashed while waiting) - ignore the duplicate submit
+            // rather than firing a second round-trip. The in-flight request
+            // still resolves normally; submitting again once it's done
+            // fires a fresh one as usual.
+            return;
+        }
+        this._currentQuery = query;
         this._runResultsSearch(query);
         if (this._genSearchEnabled) {
             this._runGenSearch(query);
@@ -234,6 +292,19 @@
         this._allResults = [];
         this._hasMore = false;
         this._sourceCursors = {};
+        // Invalidate anything still in flight - its response, if any,
+        // resolves against a request ID nothing compares equal to anymore.
+        this._resultsRequestId++;
+        this._genSearchRequestId++;
+        this._pendingResultsQuery = null;
+        this._pendingGenSearchQuery = null;
+        if (this._revealTimer) {
+            clearTimeout(this._revealTimer);
+            this._revealTimer = null;
+        }
+        if (this._elements.sources) {
+            this._elements.sources.style.visibility = "";
+        }
         if (this._elements.results) {
             this._elements.results.innerHTML = "";
         }
@@ -277,14 +348,26 @@
     ContentAISearch.prototype._runResultsSearch = function(query) {
         var self = this;
         var searchStart = Date.now();
+        // Shared with _runLoadMore - a fresh search and a load-more append
+        // both write to _allResults/_hasMore/_sourceCursors, so whichever of
+        // the two is issued more recently needs to invalidate the other one's
+        // still-in-flight response, not just responses to a different query.
+        var requestId = ++this._resultsRequestId;
+        this._pendingResultsQuery = query;
         this._setFieldLoading(true);
         var url = this._resourcePath + ".search.json?q=" + encodeURIComponent(query);
         this._fetchJson(url)
             .then(function(data) {
+                if (requestId !== self._resultsRequestId) {
+                    return;
+                }
                 self._storeResults(data);
                 self._renderResults();
             })
             .catch(function() {
+                if (requestId !== self._resultsRequestId) {
+                    return;
+                }
                 self._allResults = [];
                 self._hasMore = false;
                 self._sourceCursors = {};
@@ -295,6 +378,10 @@
                 toggleShow(self._elements.loadMore, false);
             })
             .then(function() {
+                if (requestId !== self._resultsRequestId) {
+                    return;
+                }
+                self._pendingResultsQuery = null;
                 var elapsed = Date.now() - searchStart;
                 var delay = Math.max(0, LOADING_DISPLAY_DELAY - elapsed);
                 setTimeout(function() {
@@ -334,17 +421,34 @@
             return;
         }
         var self = this;
+        var query = this._currentQuery;
+        // Shares _resultsRequestId with _runResultsSearch - if a fresh
+        // search is issued while this append is still in flight (or vice
+        // versa), whichever fired later wins and the other's response is
+        // ignored, instead of racing to write _allResults/_sourceCursors.
+        var requestId = ++this._resultsRequestId;
         if (this._elements.loadMore) {
             this._elements.loadMore.disabled = true;
         }
-        var url = this._resourcePath + ".search.json?q=" + encodeURIComponent(this._currentQuery) +
+        var url = this._resourcePath + ".search.json?q=" + encodeURIComponent(query) +
             "&cursors=" + encodeURIComponent(JSON.stringify(this._sourceCursors));
         this._fetchJson(url)
             .then(function(data) {
+                if (requestId !== self._resultsRequestId) {
+                    return;
+                }
                 self._storeResults(data, true);
                 self._renderResults();
             })
+            .catch(function() {
+                // A failed page fetch shouldn't leave "Load More" stuck
+                // disabled forever - keep the results that are already
+                // shown and let the user try again.
+            })
             .then(function() {
+                if (requestId !== self._resultsRequestId) {
+                    return;
+                }
                 if (self._elements.loadMore) {
                     self._elements.loadMore.disabled = false;
                 }
@@ -354,6 +458,8 @@
     ContentAISearch.prototype._runGenSearch = function(query) {
         var self = this;
         var genSearchStart = Date.now();
+        var requestId = ++this._genSearchRequestId;
+        this._pendingGenSearchQuery = query;
         toggleShow(this._elements.error, false);
         toggleShow(this._elements.summary, false);
         this._setSummaryLoading(true);
@@ -362,12 +468,26 @@
         }
         this._fetchJson(this._resourcePath + ".gensearch.json?q=" + encodeURIComponent(query))
             .then(function(data) {
+                if (requestId !== self._genSearchRequestId) {
+                    return;
+                }
                 self._hideSummaryLoading(genSearchStart, function() {
-                    self._renderSummary(data);
+                    if (requestId !== self._genSearchRequestId) {
+                        return;
+                    }
+                    self._pendingGenSearchQuery = null;
+                    self._renderSummary(data, requestId);
                 });
             })
             .catch(function() {
+                if (requestId !== self._genSearchRequestId) {
+                    return;
+                }
                 self._hideSummaryLoading(genSearchStart, function() {
+                    if (requestId !== self._genSearchRequestId) {
+                        return;
+                    }
+                    self._pendingGenSearchQuery = null;
                     self._handleGenSearchError();
                 });
             });
@@ -404,6 +524,16 @@
         return (item && item.data && item.data.metadata) || {};
     };
 
+    // Content AI's own acquisition indexing convention stores the crawled page's
+    // address as "source" (metadata.source, duplicated at data.source) - "url" is
+    // only ever present for content sources that map a differently-named field.
+    // Every resolver below checks metadata.url first for that case, then falls
+    // back to the acquisition convention.
+    function resolveMetadataUrl(metadata, fallbackUrl) {
+        var m = metadata || {};
+        return m.url || m.source || fallbackUrl || "";
+    }
+
     ContentAISearch.prototype._resolveItemLabel = function(item) {
         if (!item) {
             return "";
@@ -428,8 +558,9 @@
                 return headingMatch[1].trim();
             }
         }
-        if (metadata.url) {
-            return this._labelFromUrl(metadata.url);
+        var url = resolveMetadataUrl(metadata, data.source);
+        if (url) {
+            return this._labelFromUrl(url);
         }
         return item.id || "";
     };
@@ -466,18 +597,33 @@
         if (metadata.title) {
             return metadata.title;
         }
-        if (metadata.url) {
-            return this._labelFromUrl(metadata.url);
+        var url = resolveMetadataUrl(metadata, hit.source);
+        if (url) {
+            return this._labelFromUrl(url);
         }
         return hit.id || "";
     };
 
+    // Only ever used as a last-resort fallback, once metadata.title/data.title/
+    // data.name have all already come up empty - so there's no risk of this
+    // clobbering an authored title, just turning a bare URL into something
+    // readable: strip a trailing page extension, turn dashes/underscores into
+    // spaces, and title-case the result (e.g. "ski-touring-mont-blanc.html"
+    // becomes "Ski Touring Mont Blanc" instead of "ski touring mont blanc.html").
     ContentAISearch.prototype._labelFromUrl = function(url) {
         try {
             var parsed = new URL(url, window.location.origin);
             var segments = parsed.pathname.split("/").filter(Boolean);
             if (segments.length) {
-                return decodeURIComponent(segments[segments.length - 1]).replace(/[-_]/g, " ");
+                var slug = decodeURIComponent(segments[segments.length - 1])
+                    .replace(/\.(html?|php|aspx?)$/i, "")
+                    .replace(/[-_]+/g, " ")
+                    .trim();
+                if (slug) {
+                    return slug.replace(/\S+/g, function(word) {
+                        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+                    });
+                }
             }
         } catch (e) {
             // fall through
@@ -487,7 +633,7 @@
 
     ContentAISearch.prototype._populateItemNode = function(root, item) {
         var metadata = this._getItemMetadata(item);
-        var url = metadata.url;
+        var url = resolveMetadataUrl(metadata, item && item.data && item.data.source);
         var title = this._resolveItemLabel(item);
         var description = this._resolveItemDescription(item);
         var image = this._resolveItemImage(item);
@@ -560,7 +706,7 @@
             return html;
         }
         hits.forEach(function(hit) {
-            var url = hit.metadata && hit.metadata.url;
+            var url = resolveMetadataUrl(hit.metadata, hit.source);
             var label = self._resolveHitLabel(hit);
             var el = document.createElement("div");
             el.innerHTML = self._elements.sourceTemplate.innerHTML;
@@ -590,16 +736,132 @@
         }
 
         this._elements.results.innerHTML = this._generateResultItems(this._allResults);
+        // The whole list is replaced in one synchronous write, so there's no
+        // display:none/block toggle for a CSS *animation* to key off of the
+        // way the summary card's show/hide has - remove-then-re-add the
+        // class instead (with a forced reflow in between) so the animation
+        // restarts on every render, including a Load More append.
+        this._elements.results.classList.remove("cmp-contentaisearch__results--refresh");
+        void this._elements.results.offsetWidth;
+        this._elements.results.classList.add("cmp-contentaisearch__results--refresh");
 
         toggleShow(this._elements.resultsSection, true);
         toggleShow(this._elements.loadMore, this._hasMore);
     };
 
-    ContentAISearch.prototype._renderSummary = function(data) {
-        this._elements.summaryText.textContent = data.result || "";
+    // Reveals the answer word by word rather than painting it in one go. The
+    // full answer is already in hand (this runs once the blocking gensearch
+    // response has arrived) - a genuine reduction in time-to-first-word
+    // would need the API's SSE streaming endpoint relayed through a servlet
+    // fan-out across every configured content source, a larger change; this
+    // is the interim, purely cosmetic improvement. Every tick re-renders
+    // through _renderMarkdownSummary (never a raw, unstyled Text node), so
+    // paragraph/list spacing is already in place from the first word instead
+    // of appearing all at once on the last one.
+    //
+    // A newer query starting its own _renderSummary call cancels this one's
+    // timer (below), but that alone isn't enough: a still-ticking reveal for
+    // an older query can otherwise run to completion - and sit there fully
+    // rendered - before a slower-arriving newer response replaces it, the
+    // same stale-response race _runResultsSearch/_runGenSearch already guard
+    // against at the network level. Each tick re-checks requestId against
+    // _genSearchRequestId (not query text - two requests for the identical
+    // query, e.g. a double Enter, are otherwise indistinguishable) so a
+    // reveal superseded by a newer request stops silently instead of
+    // finishing or restarting.
+    ContentAISearch.prototype._renderSummary = function(data, requestId) {
+        var self = this;
+        var fullText = data.result || "";
         var hits = data.hits || [];
-        this._elements.sources.innerHTML = this._generateSourceItems(hits);
+        var tokens = fullText.split(/(\s+)/);
+        var idx = 0;
+
+        if (this._revealTimer) {
+            clearTimeout(this._revealTimer);
+            this._revealTimer = null;
+        }
+
+        if (this._elements.sources) {
+            // Sources are generated up front (same as the summary text
+            // itself) but held back until the reveal finishes, rather than
+            // showing them - momentarily out of sync - before the answer
+            // they support has even finished appearing.
+            this._elements.sources.innerHTML = this._generateSourceItems(hits);
+            this._elements.sources.style.visibility = "hidden";
+        }
         toggleShow(this._elements.summary, true);
+
+        function tick() {
+            if (requestId !== self._genSearchRequestId) {
+                self._revealTimer = null;
+                return;
+            }
+            idx++;
+            self._elements.summaryText.innerHTML = self._renderMarkdownSummary(tokens.slice(0, idx).join(""));
+            if (idx < tokens.length) {
+                self._revealTimer = setTimeout(tick, REVEAL_WORD_INTERVAL_MS);
+            } else {
+                self._revealTimer = null;
+                if (self._elements.sources) {
+                    self._elements.sources.style.visibility = "";
+                }
+            }
+        }
+
+        tick();
+    };
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    // Content AI returns the generative answer as Markdown (bold, links, bullet lists).
+    // Renders a minimal, safe subset of it: text is HTML-escaped first, then only
+    // **bold**, [text](url) links (http/https only, re-validated via _isSafeUrl),
+    // and "- " bullet lists are turned into markup; anything else stays plain text.
+    ContentAISearch.prototype._renderMarkdownInline = function(text) {
+        var self = this;
+        var html = escapeHtml(text);
+        html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+        html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, function(match, label, url) {
+            return self._isSafeUrl(url) ? '<a href="' + url + '">' + label + "</a>" : label;
+        });
+        return html;
+    };
+
+    ContentAISearch.prototype._renderMarkdownSummary = function(text) {
+        var lines = String(text || "").split(/\r?\n/);
+        var html = "";
+        var listOpen = false;
+        var i;
+        var trimmed;
+        for (i = 0; i < lines.length; i++) {
+            trimmed = lines[i].replace(/^\s+/, "");
+            if (/^[-*]\s+/.test(trimmed)) {
+                if (!listOpen) {
+                    html += "<ul>";
+                    listOpen = true;
+                }
+                html += "<li>" + this._renderMarkdownInline(trimmed.replace(/^[-*]\s+/, "")) + "</li>";
+            } else {
+                if (listOpen) {
+                    html += "</ul>";
+                    listOpen = false;
+                }
+                if (trimmed.length > 0) {
+                    html += "<p>" + this._renderMarkdownInline(trimmed) + "</p>";
+                }
+            }
+        }
+        if (listOpen) {
+            html += "</ul>";
+        }
+        return html;
     };
 
     function stripAsciiControlsAndWhitespaceForSchemeCheck(str) {

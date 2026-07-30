@@ -35,6 +35,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.sling.settings.SlingSettingsService;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.Designate;
@@ -77,14 +78,47 @@ public class ContentAIClientImpl implements ContentAIClient {
     @Reference
     private SlingSettingsService slingSettings;
 
-    private ContentAIConfig config;
+    // volatile: @Modified can run concurrently with in-flight requests on
+    // other threads: swapping both fields together under a single volatile
+    // write (config last) means a request either sees the old config with
+    // the old client, or the new config with the new client, never a mix.
+    private volatile ContentAIConfig config;
+    private volatile CloseableHttpClient httpClient;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Activate
     @Modified
     protected void activate(ContentAIConfig config) {
+        CloseableHttpClient previousClient = this.httpClient;
+        this.httpClient = buildHttpClient(config);
+        // config is written last (see the volatile note above)
         this.config = config;
+        // Accepted tradeoff: if @Modified fires while another thread is mid-execute() on previousClient (read via
+        // this.httpClient at the top of executeGet/executeRequest before this swap), closing it here can abort that
+        // in-flight call - it surfaces as one failed request (IOException -> ContentAIClientException), not data
+        // corruption, and OSGi reconfiguration is rare enough in practice that this is preferable to the added
+        // complexity of reference-counting or a drain delay before closing.
+        if (previousClient != null) {
+            closeQuietly(previousClient);
+        }
+    }
+
+    @Deactivate
+    protected void deactivate() {
+        closeQuietly(this.httpClient);
+        this.httpClient = null;
+    }
+
+    private void closeQuietly(CloseableHttpClient client) {
+        if (client == null) {
+            return;
+        }
+        try {
+            client.close();
+        } catch (IOException e) {
+            LOGGER.warn("Failed to close Content AI HTTP client", e);
+        }
     }
 
     @Override
@@ -164,43 +198,41 @@ public class ContentAIClientImpl implements ContentAIClient {
     }
 
     private JsonNode executeGet(String path) throws ContentAIClientException {
+        // Snapshot once: config is volatile and @Modified can swap it concurrently with this request. Reading
+        // config.apiKey() and (inside resolveBaseUrl) config.baseUrlOverride() as two separate field reads could
+        // otherwise combine an old API key with a new base URL, or vice versa, if a reconfiguration lands in between.
+        ContentAIConfig config = this.config;
         String apiKey = config.apiKey();
         if (StringUtils.isBlank(apiKey)) {
             throw new ContentAIClientException("Content AI API key (X-Api-Key) is not configured", 0);
         }
-        String url = resolveBaseUrl() + path;
-        RequestConfig requestConfig = RequestConfig.custom()
-            .setConnectTimeout(config.connectionTimeout())
-            .setSocketTimeout(config.socketTimeout())
-            .build();
-        try (CloseableHttpClient httpClient = getHttpClient(requestConfig)) {
+        String url = resolveBaseUrl(config) + path;
+        try {
             HttpGet get = new HttpGet(url);
             get.setHeader("Accept", "application/json");
             get.setHeader("X-Api-Key", apiKey);
-            return executeAndParse(httpClient, get, path);
+            return executeAndParse(this.httpClient, get, path);
         } catch (IOException e) {
             throw new ContentAIClientException("Failed to call Content AI at " + path, e);
         }
     }
 
     private JsonNode executeRequest(String path, ObjectNode body) throws ContentAIClientException {
+        // See executeGet's comment on why config is snapshotted once per request.
+        ContentAIConfig config = this.config;
         String apiKey = config.apiKey();
         if (StringUtils.isBlank(apiKey)) {
             throw new ContentAIClientException("Content AI API key (X-Api-Key) is not configured", 0);
         }
-        String url = resolveBaseUrl() + path;
-        RequestConfig requestConfig = RequestConfig.custom()
-            .setConnectTimeout(config.connectionTimeout())
-            .setSocketTimeout(config.socketTimeout())
-            .build();
-        try (CloseableHttpClient httpClient = getHttpClient(requestConfig)) {
+        String url = resolveBaseUrl(config) + path;
+        try {
             HttpPost post = new HttpPost(url);
             post.setHeader("Content-Type", "application/json");
             // Anonymous, public-index access uses X-Api-Key (a Developer Console client ID), never a bearer token.
             post.setHeader("X-Api-Key", apiKey);
             post.setEntity(new StringEntity(mapper.writeValueAsString(body), StandardCharsets.UTF_8));
 
-            return executeAndParse(httpClient, post, path);
+            return executeAndParse(this.httpClient, post, path);
         } catch (IOException e) {
             throw new ContentAIClientException("Failed to call Content AI at " + path, e);
         }
@@ -211,10 +243,12 @@ public class ContentAIClientImpl implements ContentAIClient {
      * targets its own environment's bucket rather than a hand-configured value. Falls back to the dev-only
      * {@code baseUrlOverride} config when the CS environment variables are absent (local/non-CS development).
      *
+     * @param config the config snapshot to resolve against (see callers' notes on why this isn't read from the
+     *               instance field directly)
      * @return the base URL (without a trailing slash), up to and including the Content AI path
      * @throws ContentAIClientException if no override is set and the environment variables are not present
      */
-    protected String resolveBaseUrl() throws ContentAIClientException {
+    protected String resolveBaseUrl(ContentAIConfig config) throws ContentAIClientException {
         String override = config.baseUrlOverride();
         if (StringUtils.isNotBlank(override)) {
             return stripTrailingSlash(override.trim());
@@ -300,7 +334,18 @@ public class ContentAIClientImpl implements ContentAIClient {
         }
     }
 
-    protected CloseableHttpClient getHttpClient(RequestConfig requestConfig) {
+    /**
+     * Builds the long-lived, shared HTTP client used for every Content AI call - built once per activation
+     * (config change) rather than per request, so requests reuse pooled connections instead of paying a fresh
+     * TCP/TLS handshake every time.
+     *
+     * @param config the configuration this client's connect/socket timeouts are derived from
+     */
+    protected CloseableHttpClient buildHttpClient(ContentAIConfig config) {
+        RequestConfig requestConfig = RequestConfig.custom()
+            .setConnectTimeout(config.connectionTimeout())
+            .setSocketTimeout(config.socketTimeout())
+            .build();
         if (httpClientBuilderFactory != null) {
             return httpClientBuilderFactory.newBuilder().setDefaultRequestConfig(requestConfig).build();
         }

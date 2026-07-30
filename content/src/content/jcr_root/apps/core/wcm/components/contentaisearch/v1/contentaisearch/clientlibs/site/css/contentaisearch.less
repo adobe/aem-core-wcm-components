@@ -157,6 +157,12 @@
         }
     }
 
+    // toggleShow() sets display:none/block directly via JS, so there's no
+    // intermediate state for a CSS *transition* to interpolate between - a
+    // *transition* would just cut instantly. A CSS *animation* sidesteps
+    // this: browsers automatically restart it whenever an element re-enters
+    // the render tree (display goes from none back to block), with no JS
+    // changes needed.
     &__summary-loading {
         margin: 1.25em 0;
 
@@ -190,6 +196,10 @@
 
     &__summary {
         margin: 1.25em 0;
+    }
+
+    &__summary:not([hidden]), &__summary-loading:not([hidden]) {
+        animation: cmp-contentaisearch__fade-in 400ms ease-out;
     }
 
     &__summary-card {
@@ -244,7 +254,41 @@
     &__summary-text {
         margin: 0 0 1em;
         line-height: 1.6;
-        white-space: pre-wrap;
+
+        // Deliberately no :last-child margin-bottom:0 override. The summary
+        // is revealed word by word (see _renderSummary), so whichever
+        // paragraph/list is currently being typed out IS the last child at
+        // that moment - giving it a different margin than "finished" ones
+        // would mean every block's bottom margin jumps from 0 to .75em the
+        // instant a new one starts after it, a spacing shift that grows
+        // throughout the reveal and is most noticeable right as it settles.
+        // Every block now carries the same margin throughout, mid-reveal or
+        // finished, at the cost of one harmless trailing margin at the end.
+        // The AI summary's Markdown is rendered into plain p/ul/li/strong/a
+        // tags (see _renderMarkdownSummary/_renderMarkdownInline) with no
+        // classes of their own, since the content is dynamically generated
+        // from arbitrary response text rather than authored markup.
+        p { /* stylelint-disable-line selector-max-type */
+            margin: 0 0 .75em;
+        }
+
+        ul { /* stylelint-disable-line selector-max-type */
+            margin: 0 0 .75em;
+            padding-left: 1.25em;
+        }
+
+        li { /* stylelint-disable-line selector-max-type */
+            margin: 0 0 .35em;
+        }
+
+        strong { /* stylelint-disable-line selector-max-type */
+            font-weight: 700;
+        }
+
+        a { /* stylelint-disable-line selector-max-type */
+            color: @summary-accent;
+            text-decoration: underline;
+        }
     }
 
     &__sources-section {
@@ -359,6 +403,16 @@
         list-style: none;
         margin: 0;
         padding: 0;
+    }
+
+    // The results list replaces all of its content in one synchronous write
+    // (_renderResults), so there's no display:none/block toggle to key an
+    // animation off of the way the summary card's show/hide has - the class
+    // is instead removed and re-added by JS on every render (with a forced
+    // reflow in between) to restart this animation each time, including a
+    // Load More append.
+    &__results--refresh {
+        animation: cmp-contentaisearch__fade-in 320ms ease-out;
     }
 
     &--card &__results {
@@ -488,4 +542,16 @@
 @keyframes cmp-contentaisearch__loading-indicator-spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+@keyframes cmp-contentaisearch__fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

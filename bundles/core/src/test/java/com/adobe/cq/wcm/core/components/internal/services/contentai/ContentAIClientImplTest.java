@@ -30,15 +30,12 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.StatusLine;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicStatusLine;
-import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
@@ -112,13 +109,10 @@ class ContentAIClientImplTest {
     }
 
     private void attachTransport(ContentAIClientImpl target) {
-        HttpClientBuilderFactory mockBuilderFactory = mock(HttpClientBuilderFactory.class);
-        setField(ContentAIClientImpl.class, "httpClientBuilderFactory", target, mockBuilderFactory);
-
-        HttpClientBuilder mockBuilder = mock(HttpClientBuilder.class);
-        when(mockBuilderFactory.newBuilder()).thenReturn(mockBuilder);
-        when(mockBuilder.setDefaultRequestConfig(any(RequestConfig.class))).thenReturn(mockBuilder);
-        when(mockBuilder.build()).thenReturn(mockHttpClient);
+        // The client is now built once in activate() rather than per request, so injecting a mock
+        // HttpClientBuilderFactory after activate() has already run would be too late - set the already-built
+        // (real) client field directly instead.
+        setField(ContentAIClientImpl.class, "httpClient", target, mockHttpClient);
     }
 
     private void respondWith(int statusCode, String jsonBody) throws IOException {
@@ -367,10 +361,9 @@ class ContentAIClientImplTest {
     @Test
     void usesDefaultHttpClientWhenBuilderFactoryMissing() {
         ContentAIClientImpl noFactory = new ContentAIClientImpl();
-        noFactory.activate(config(TEST_API_KEY, TEST_BASE_URL));
         setField(ContentAIClientImpl.class, "httpClientBuilderFactory", noFactory, null);
 
-        assertNotNull(noFactory.getHttpClient(RequestConfig.custom().build()));
+        assertNotNull(noFactory.buildHttpClient(config(TEST_API_KEY, TEST_BASE_URL)));
     }
 
     @Test

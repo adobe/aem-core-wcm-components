@@ -30,8 +30,11 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
@@ -100,5 +103,19 @@ class ContentAIGenSearchServletTest {
         underTest.doGet(context.request(), context.response());
 
         assertEquals(400, context.response().getStatus());
+    }
+
+    @Test
+    void doGetReturnsEmptyResultWhenNoContentSourceConfigured() throws Exception {
+        context.create().resource(CONTENT_ROOT + "/jcr:content/par/empty-gensearch",
+            "sling:resourceType", "core/wcm/components/contentaisearch/v1/contentaisearch");
+        context.currentResource(CONTENT_ROOT + "/jcr:content/par/empty-gensearch");
+        context.request().setQueryString("q=electric+cars");
+
+        underTest.doGet(context.request(), context.response());
+
+        assertEquals(200, context.response().getStatus());
+        assertTrue(context.response().getOutputAsString().contains("\"hits\":[]"));
+        verify(mockClient, never()).genSearch(anyString(), anyString(), anyString());
     }
 }
