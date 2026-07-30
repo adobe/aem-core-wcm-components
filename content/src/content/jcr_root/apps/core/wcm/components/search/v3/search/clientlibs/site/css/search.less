@@ -75,11 +75,8 @@
     100% { transform: rotate(360deg); }
 }
 
-// The button itself carries the position/hit-area now (not just the inner
-// icon) - a fixed `top: .5rem` on the icon alone only centers correctly for
-// the field's default 2rem height; `top: 50%` + translateY keeps it centered
-// regardless. A real circular hit area with hover/focus feedback replaces
-// the previous bare icon-with-no-affordance look.
+// Position/hit-area now live on the button itself, not the icon - top: 50%
+// keeps it centered regardless of field height (vs. the old fixed offset).
 .cmp-search__clear {
     display: none;
     position: absolute;
