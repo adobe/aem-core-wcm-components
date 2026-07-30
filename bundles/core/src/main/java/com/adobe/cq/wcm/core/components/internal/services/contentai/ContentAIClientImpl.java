@@ -78,10 +78,8 @@ public class ContentAIClientImpl implements ContentAIClient {
     @Reference
     private SlingSettingsService slingSettings;
 
-    // volatile: @Modified can run concurrently with in-flight requests on
-    // other threads: swapping both fields together under a single volatile
-    // write (config last) means a request either sees the old config with
-    // the old client, or the new config with the new client, never a mix.
+    // volatile: @Modified can run concurrently with in-flight requests; config
+    // is written last so a request never sees a mix of old/new config+client.
     private volatile ContentAIConfig config;
     private volatile CloseableHttpClient httpClient;
 
@@ -92,13 +90,9 @@ public class ContentAIClientImpl implements ContentAIClient {
     protected void activate(ContentAIConfig config) {
         CloseableHttpClient previousClient = this.httpClient;
         this.httpClient = buildHttpClient(config);
-        // config is written last (see the volatile note above)
-        this.config = config;
-        // Accepted tradeoff: if @Modified fires while another thread is mid-execute() on previousClient (read via
-        // this.httpClient at the top of executeGet/executeRequest before this swap), closing it here can abort that
-        // in-flight call - it surfaces as one failed request (IOException -> ContentAIClientException), not data
-        // corruption, and OSGi reconfiguration is rare enough in practice that this is preferable to the added
-        // complexity of reference-counting or a drain delay before closing.
+        this.config = config; // written last, see the volatile note above
+        // Accepted tradeoff: closing previousClient here can abort a request still mid-flight on it (surfaces as
+        // one failed request, not corruption) - reconfiguration is rare enough that this beats reference-counting.
         if (previousClient != null) {
             closeQuietly(previousClient);
         }
@@ -198,9 +192,7 @@ public class ContentAIClientImpl implements ContentAIClient {
     }
 
     private JsonNode executeGet(String path) throws ContentAIClientException {
-        // Snapshot once: config is volatile and @Modified can swap it concurrently with this request. Reading
-        // config.apiKey() and (inside resolveBaseUrl) config.baseUrlOverride() as two separate field reads could
-        // otherwise combine an old API key with a new base URL, or vice versa, if a reconfiguration lands in between.
+        // Snapshot once - config is volatile, so two separate field reads could combine an old API key with a new base URL.
         ContentAIConfig config = this.config;
         String apiKey = config.apiKey();
         if (StringUtils.isBlank(apiKey)) {
@@ -335,9 +327,8 @@ public class ContentAIClientImpl implements ContentAIClient {
     }
 
     /**
-     * Builds the long-lived, shared HTTP client used for every Content AI call - built once per activation
-     * (config change) rather than per request, so requests reuse pooled connections instead of paying a fresh
-     * TCP/TLS handshake every time.
+     * Builds the shared HTTP client, once per activation rather than per request, so requests reuse pooled
+     * connections instead of paying a fresh TCP/TLS handshake every time.
      *
      * @param config the configuration this client's connect/socket timeouts are derived from
      */

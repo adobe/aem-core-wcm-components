@@ -42,9 +42,7 @@ public final class ContentSourceSearchMerger {
      */
     @NotNull
     public static ContentSourceSearchResult merge(@NotNull List<ContentSourceSearchResult> partials, int limit) {
-        // Summed across sources, not the max of any one - each partial's totalResults is that source's own
-        // independent match count, so the combined universe of matches is their sum (minus whatever de-duplication
-        // happens below), not bounded by whichever single source happened to report the most.
+        // Summed, not maxed - each partial's totalResults is that source's own independent match count.
         long reportedTotal = 0;
         Map<String, ContentSourceSearchResult.Item> byId = new LinkedHashMap<>();
         for (ContentSourceSearchResult partial : partials) {

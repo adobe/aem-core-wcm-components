@@ -61,12 +61,8 @@
         this._allResults = [];
         this._hasMore = false;
         this._sourceCursors = {};
-        // Monotonic per-endpoint request counters, plus which query (if any)
-        // is currently in flight for that endpoint. Replaces comparing
-        // against _currentQuery alone: two requests for the identical query
-        // text (e.g. pressing Enter twice) are otherwise indistinguishable
-        // from each other by a string comparison, so neither looks "stale"
-        // to the other no matter which one resolves last.
+        // Monotonic request IDs, since comparing query text alone can't tell
+        // apart two requests for the identical query (e.g. double Enter).
         this._resultsRequestId = 0;
         this._genSearchRequestId = 0;
         this._pendingResultsQuery = null;
@@ -179,15 +175,9 @@
         this._renderResults();
     };
 
-    // Search runs only on an explicit trigger - form submit (Enter, or a
-    // mobile keyboard's "Go"/"Search" action, both of which fire the form's
-    // submit event same as a real submit button would) or the AI-answer
-    // toggle changing - never on typing itself. A debounced search-as-you-
-    // type fires a fresh, often-incomplete query on every brief pause,
-    // which both re-renders the results/summary repeatedly while the user
-    // is still typing (a visible flicker) and shows the loading indicators
-    // for every one of those in-between queries, giving the impression a
-    // search is running when the user hasn't asked for one yet.
+    // Search runs only on explicit submit (Enter/toggle change), never on
+    // typing itself - avoids the flicker/loading-spinner noise of firing a
+    // fresh, incomplete query on every debounced keystroke pause.
     ContentAISearch.prototype._onInput = function() {
         this._syncClearButton();
     };
@@ -212,17 +202,13 @@
         this._clearResults();
     };
 
-    // Only ever touches the gensearch/summary state - toggling the
-    // AI-answer switch has nothing to do with the plain results list, so
-    // unlike the old behavior (which always re-ran _runQuery, re-firing a
-    // full .search.json call along with it) this no longer re-fetches
-    // results that haven't changed.
+    // Only touches gensearch/summary state - the results list doesn't
+    // depend on this toggle and shouldn't re-fetch when it changes.
     ContentAISearch.prototype._onToggleChange = function() {
         this._genSearchEnabled = this._elements.toggle.checked;
         if (!this._genSearchEnabled) {
-            // Invalidate any gensearch request still in flight so a
-            // late-arriving answer can't reopen the summary the user just
-            // explicitly turned off.
+            // Invalidate any in-flight gensearch request so a late answer
+            // can't reopen the summary the user just turned off.
             this._genSearchRequestId++;
             this._pendingGenSearchQuery = null;
             if (this._revealTimer) {
@@ -236,9 +222,7 @@
         }
         var query = this._elements.input.value;
         if (!query || query !== this._currentQuery) {
-            // Nothing has been submitted yet, or the field has unsubmitted
-            // edits - wait for an explicit submit rather than searching just
-            // because the toggle moved.
+            // No submitted query, or unsubmitted edits - wait for a real submit.
             return;
         }
         if (this._pendingGenSearchQuery === query) {
@@ -254,9 +238,7 @@
     ContentAISearch.prototype._onRetry = function() {
         var query = this._elements.input.value;
         if (this._pendingGenSearchQuery === query) {
-            // Already retrying this exact query - ignore a repeated click
-            // instead of firing a second, redundant request.
-            return;
+            return; // already retrying this exact query
         }
         this._runGenSearch(query);
     };
@@ -270,12 +252,7 @@
         }
         if (query === this._currentQuery &&
             (this._pendingResultsQuery === query || this._pendingGenSearchQuery === query)) {
-            // The identical query is already in flight (e.g. Enter pressed
-            // twice, or mashed while waiting) - ignore the duplicate submit
-            // rather than firing a second round-trip. The in-flight request
-            // still resolves normally; submitting again once it's done
-            // fires a fresh one as usual.
-            return;
+            return; // identical query already in flight (e.g. double Enter)
         }
         this._currentQuery = query;
         this._runResultsSearch(query);
@@ -292,8 +269,7 @@
         this._allResults = [];
         this._hasMore = false;
         this._sourceCursors = {};
-        // Invalidate anything still in flight - its response, if any,
-        // resolves against a request ID nothing compares equal to anymore.
+        // Bump request IDs so anything still in flight resolves as stale.
         this._resultsRequestId++;
         this._genSearchRequestId++;
         this._pendingResultsQuery = null;
@@ -348,10 +324,8 @@
     ContentAISearch.prototype._runResultsSearch = function(query) {
         var self = this;
         var searchStart = Date.now();
-        // Shared with _runLoadMore - a fresh search and a load-more append
-        // both write to _allResults/_hasMore/_sourceCursors, so whichever of
-        // the two is issued more recently needs to invalidate the other one's
-        // still-in-flight response, not just responses to a different query.
+        // Shared counter with _runLoadMore - both write _allResults, so
+        // whichever fires later must invalidate the other's response.
         var requestId = ++this._resultsRequestId;
         this._pendingResultsQuery = query;
         this._setFieldLoading(true);
@@ -422,10 +396,6 @@
         }
         var self = this;
         var query = this._currentQuery;
-        // Shares _resultsRequestId with _runResultsSearch - if a fresh
-        // search is issued while this append is still in flight (or vice
-        // versa), whichever fired later wins and the other's response is
-        // ignored, instead of racing to write _allResults/_sourceCursors.
         var requestId = ++this._resultsRequestId;
         if (this._elements.loadMore) {
             this._elements.loadMore.disabled = true;
@@ -441,9 +411,7 @@
                 self._renderResults();
             })
             .catch(function() {
-                // A failed page fetch shouldn't leave "Load More" stuck
-                // disabled forever - keep the results that are already
-                // shown and let the user try again.
+                // Keep existing results shown; don't leave Load More disabled forever.
             })
             .then(function() {
                 if (requestId !== self._resultsRequestId) {
@@ -524,11 +492,8 @@
         return (item && item.data && item.data.metadata) || {};
     };
 
-    // Content AI's own acquisition indexing convention stores the crawled page's
-    // address as "source" (metadata.source, duplicated at data.source) - "url" is
-    // only ever present for content sources that map a differently-named field.
-    // Every resolver below checks metadata.url first for that case, then falls
-    // back to the acquisition convention.
+    // Content AI's acquisition indexing stores the crawled page address as
+    // "source" (metadata.source/data.source), not "url" - fall back to it.
     function resolveMetadataUrl(metadata, fallbackUrl) {
         var m = metadata || {};
         return m.url || m.source || fallbackUrl || "";
@@ -604,12 +569,8 @@
         return hit.id || "";
     };
 
-    // Only ever used as a last-resort fallback, once metadata.title/data.title/
-    // data.name have all already come up empty - so there's no risk of this
-    // clobbering an authored title, just turning a bare URL into something
-    // readable: strip a trailing page extension, turn dashes/underscores into
-    // spaces, and title-case the result (e.g. "ski-touring-mont-blanc.html"
-    // becomes "Ski Touring Mont Blanc" instead of "ski touring mont blanc.html").
+    // Last-resort fallback once title/name are empty: turns a bare URL into
+    // something readable (e.g. "ski-touring-mont-blanc.html" -> "Ski Touring Mont Blanc").
     ContentAISearch.prototype._labelFromUrl = function(url) {
         try {
             var parsed = new URL(url, window.location.origin);
@@ -736,11 +697,8 @@
         }
 
         this._elements.results.innerHTML = this._generateResultItems(this._allResults);
-        // The whole list is replaced in one synchronous write, so there's no
-        // display:none/block toggle for a CSS *animation* to key off of the
-        // way the summary card's show/hide has - remove-then-re-add the
-        // class instead (with a forced reflow in between) so the animation
-        // restarts on every render, including a Load More append.
+        // Force a reflow so re-adding the class restarts the fade-in animation
+        // on every render (the list has no display toggle to key an animation off of).
         this._elements.results.classList.remove("cmp-contentaisearch__results--refresh");
         void this._elements.results.offsetWidth;
         this._elements.results.classList.add("cmp-contentaisearch__results--refresh");
@@ -749,26 +707,10 @@
         toggleShow(this._elements.loadMore, this._hasMore);
     };
 
-    // Reveals the answer word by word rather than painting it in one go. The
-    // full answer is already in hand (this runs once the blocking gensearch
-    // response has arrived) - a genuine reduction in time-to-first-word
-    // would need the API's SSE streaming endpoint relayed through a servlet
-    // fan-out across every configured content source, a larger change; this
-    // is the interim, purely cosmetic improvement. Every tick re-renders
-    // through _renderMarkdownSummary (never a raw, unstyled Text node), so
-    // paragraph/list spacing is already in place from the first word instead
-    // of appearing all at once on the last one.
-    //
-    // A newer query starting its own _renderSummary call cancels this one's
-    // timer (below), but that alone isn't enough: a still-ticking reveal for
-    // an older query can otherwise run to completion - and sit there fully
-    // rendered - before a slower-arriving newer response replaces it, the
-    // same stale-response race _runResultsSearch/_runGenSearch already guard
-    // against at the network level. Each tick re-checks requestId against
-    // _genSearchRequestId (not query text - two requests for the identical
-    // query, e.g. a double Enter, are otherwise indistinguishable) so a
-    // reveal superseded by a newer request stops silently instead of
-    // finishing or restarting.
+    // Reveals the already-fetched answer word by word (cosmetic only - a real
+    // streaming reduction in time-to-first-word would need the API's SSE
+    // endpoint). Each tick re-checks requestId against _genSearchRequestId so
+    // a reveal superseded by a newer query stops instead of finishing/restarting.
     ContentAISearch.prototype._renderSummary = function(data, requestId) {
         var self = this;
         var fullText = data.result || "";
@@ -782,10 +724,7 @@
         }
 
         if (this._elements.sources) {
-            // Sources are generated up front (same as the summary text
-            // itself) but held back until the reveal finishes, rather than
-            // showing them - momentarily out of sync - before the answer
-            // they support has even finished appearing.
+            // Held back until the reveal finishes, so sources don't show before the answer they support.
             this._elements.sources.innerHTML = this._generateSourceItems(hits);
             this._elements.sources.style.visibility = "hidden";
         }
@@ -820,10 +759,9 @@
             .replace(/'/g, "&#39;");
     }
 
-    // Content AI returns the generative answer as Markdown (bold, links, bullet lists).
-    // Renders a minimal, safe subset of it: text is HTML-escaped first, then only
-    // **bold**, [text](url) links (http/https only, re-validated via _isSafeUrl),
-    // and "- " bullet lists are turned into markup; anything else stays plain text.
+    // Renders a minimal, safe subset of the generative answer's Markdown: text
+    // is HTML-escaped first, then only **bold** and http(s) [text](url) links
+    // (validated via _isSafeUrl) are turned into markup.
     ContentAISearch.prototype._renderMarkdownInline = function(text) {
         var self = this;
         var html = escapeHtml(text);
