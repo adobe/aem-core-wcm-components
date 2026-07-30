@@ -165,6 +165,7 @@
     }
 
     // useful for Accessibility, helping users with low vision and users with cognitive disabilities to identify the change in results
+    // Guarded: this v3-only element may be absent if this shared JS ends up initializing against older v1 markup on the same page.
     function updateSearchResultsStatusMessageElement(searchElementId, totalResults) {
         var searchResultsStatusMessage = document.querySelector("#" + searchElementId + "> .cmp_search__info");
         if (!searchResultsStatusMessage) {

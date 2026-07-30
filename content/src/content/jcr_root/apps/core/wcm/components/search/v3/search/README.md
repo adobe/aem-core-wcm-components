@@ -15,7 +15,7 @@ limitations under the License.
 -->
 Quick Search (v3)
 ====
-Search component written in HTL. Extends v2 with an optional AI Search toggle for semantic search.
+Search component written in HTL. Extends v2 with an optional Semantic Search toggle for semantic search.
 
 ## Features
 
@@ -26,7 +26,7 @@ The Search component uses the `com.adobe.cq.wcm.core.components.models.Search` S
 When the user is scrolling down the results, if the hidden results below are less than the visible results, more results
 are fetched.
 
-When the AI Search toggle is enabled by the visitor, the search query is prefixed with `?{}?` to route to ContentAI-powered
+When the Semantic Search toggle is enabled by the visitor, the search query is prefixed with `?{}?` to route to ContentAI-powered
 semantic search. When the toggle is hidden via policy configuration, the component behaves like v2 (fulltext-only search).
 
 ### Component Policy Configuration Properties
@@ -35,7 +35,7 @@ The following configuration properties are used:
 1. `./searchRoot` - the root page from which to search. It can be a blueprint master, language master or regular page.
 2. `./resultsSize` - the maximal number of results fetched by a search request
 3. `./searchTermMinimumLength` - the minimum required length of the search term before results are fetched
-4. `./hideAiSearchToggle` - when `true`, the AI Search toggle is not rendered and the component behaves like v2
+4. `./hideAiSearchToggle` - when `true`, the Semantic Search toggle is not rendered and the component behaves like v2
 
 ### Edit Dialog Properties
 The following properties are written to JCR for the Search component and are expected to be available as `Resource` properties:
