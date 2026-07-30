@@ -167,6 +167,9 @@
     // useful for Accessibility, helping users with low vision and users with cognitive disabilities to identify the change in results
     function updateSearchResultsStatusMessageElement(searchElementId, totalResults) {
         var searchResultsStatusMessage = document.querySelector("#" + searchElementId + "> .cmp_search__info");
+        if (!searchResultsStatusMessage) {
+            return;
+        }
         searchResultsStatusMessage.style.visibility = "visible";
         var searchResultsFoundMessage = localizeMessage(searchElementId, totalResults === 1 ? "{0} result" : "{0} results", [totalResults]);
         var searchResultsNotFoundMessage = localizeMessage(searchElementId, "No results");
@@ -453,7 +456,9 @@
 
     Search.prototype._hideSearchResultsStatusMessage = function() {
         var searchResultsStatusMessage = document.querySelector("#" + this._elements.self.id + "> .cmp_search__info");
-        searchResultsStatusMessage.style.visibility = "hidden";
+        if (searchResultsStatusMessage) {
+            searchResultsStatusMessage.style.visibility = "hidden";
+        }
     };
 
     Search.prototype._cacheElements = function(wrapper) {
