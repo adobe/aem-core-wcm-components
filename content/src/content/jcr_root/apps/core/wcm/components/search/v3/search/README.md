@@ -29,6 +29,9 @@ are fetched.
 When the Semantic Search toggle is enabled by the visitor, the search query is prefixed with `?{}?` to route to ContentAI-powered
 semantic search. When the toggle is hidden via policy configuration, the component behaves like v2 (fulltext-only search).
 
+An individual component instance can also force the toggle hidden regardless of the template policy - see `./hideAiSearchToggle`
+under Edit Dialog Properties below.
+
 ### Component Policy Configuration Properties
 The following configuration properties are used:
 
@@ -42,6 +45,10 @@ The following properties are written to JCR for the Search component and are exp
 
 1. `./searchRoot` - the root page from which to search. It can be a blueprint master, language master or regular page.
 2. `./id` - defines the component HTML ID attribute.
+3. `./hideAiSearchToggle` - *(optional)* when checked, hides the Semantic Search toggle on this instance even if the
+   template policy shows it. When absent (unchecked and never saved as `false`), the instance falls back to the template
+   policy's `./hideAiSearchToggle` value. This edit dialog property takes precedence over the policy whenever it is present
+   on the resource.
 
 ## Client Libraries
 The component provides a `core.wcm.components.search.v3` client library category that contains a recommended base
