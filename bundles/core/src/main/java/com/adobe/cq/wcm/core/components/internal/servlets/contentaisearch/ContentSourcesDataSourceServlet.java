@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.services.contentai.ContentSourceLabelFormatter;
 import com.adobe.cq.wcm.core.components.internal.servlets.TextValueDataResourceSource;
+import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClient;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceListItem;
@@ -139,7 +140,7 @@ public class ContentSourcesDataSourceServlet extends SlingSafeMethodsServlet {
             }
         }
 
-        return ContentAIClient.DEFAULT_CONTENT_SOURCE_TYPE;
+        return ContentAISupportedSearch.DEFAULT_CONTENT_SOURCE_TYPE;
     }
 
     private boolean isResolvableContentSourceType(@Nullable String value) {

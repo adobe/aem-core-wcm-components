@@ -86,7 +86,7 @@ public class ContentAISearchResultsServlet extends AbstractContentAISearchServle
             }
         }
 
-        return ContentSourceSearchMerger.mergeToResponse(partials, nextCursors, 0);
+        return ContentSourceSearchMerger.mergeToResponse(partials, nextCursors, model.getResultsSize());
     }
 
     @NotNull

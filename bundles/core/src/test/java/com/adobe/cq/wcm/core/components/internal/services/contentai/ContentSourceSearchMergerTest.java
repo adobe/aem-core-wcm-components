@@ -38,12 +38,26 @@ class ContentSourceSearchMergerTest {
 
         ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(Arrays.asList(first, second), 10);
 
-        assertEquals(3, merged.getTotalResults());
+        // Each partial independently reports totalResults=2 (from the result() helper below) - summed, not maxed,
+        // across the two sources: 2 + 2 = 4, even though de-duplication leaves only 3 unique items.
+        assertEquals(4, merged.getTotalResults());
         assertEquals(3, merged.getResults().size());
         assertEquals("doc_2", merged.getResults().get(0).getId());
         assertEquals("doc_1", merged.getResults().get(1).getId());
         assertEquals(0.8, merged.getResults().get(1).getScore(), 0.001);
         assertNull(merged.getCursor());
+    }
+
+    @Test
+    void merge_totalResultsSumsAcrossSourcesNotMax() {
+        ContentSourceSearchResult first = result(item("doc_1", 0.5));
+        first.setTotalResults(50);
+        ContentSourceSearchResult second = result(item("doc_2", 0.5));
+        second.setTotalResults(30);
+
+        ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(Arrays.asList(first, second), 10);
+
+        assertEquals(80, merged.getTotalResults());
     }
 
     @Test
@@ -57,6 +71,21 @@ class ContentSourceSearchMergerTest {
         assertEquals(3, merged.getTotalResults());
         assertEquals("a", merged.getResults().get(0).getId());
         assertEquals("b", merged.getResults().get(1).getId());
+    }
+
+    @Test
+    void merge_capsResultsAcrossMultipleSourcesExceedingResultsSize() {
+        // Two sources each independently contributing more than the configured limit -
+        // the regression this exists to catch is returning up to N x limit instead of limit.
+        ContentSourceSearchResult first = result(item("a1", 0.95), item("a2", 0.85), item("a3", 0.75));
+        ContentSourceSearchResult second = result(item("b1", 0.9), item("b2", 0.8), item("b3", 0.7));
+
+        ContentSourceSearchResult merged = ContentSourceSearchMerger.merge(Arrays.asList(first, second), 3);
+
+        assertEquals(3, merged.getResults().size());
+        assertEquals("a1", merged.getResults().get(0).getId());
+        assertEquals("b1", merged.getResults().get(1).getId());
+        assertEquals("a2", merged.getResults().get(2).getId());
     }
 
     @Test

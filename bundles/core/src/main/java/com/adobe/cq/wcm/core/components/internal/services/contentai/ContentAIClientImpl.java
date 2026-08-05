@@ -35,6 +35,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.sling.settings.SlingSettingsService;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.Designate;
@@ -77,14 +78,43 @@ public class ContentAIClientImpl implements ContentAIClient {
     @Reference
     private SlingSettingsService slingSettings;
 
-    private ContentAIConfig config;
+    // volatile: @Modified can run concurrently with in-flight requests. config is snapshotted once per request
+    // (see executeGet/executeRequest), so a request's apiKey/baseUrl reads can't straddle a reconfiguration.
+    // httpClient is read unsnapshotted, so a request may still pair an old config with a just-swapped httpClient -
+    // harmless, since httpClient only affects transport/pooling, not the URL/headers already built from that config.
+    private volatile ContentAIConfig config;
+    private volatile CloseableHttpClient httpClient;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Activate
     @Modified
     protected void activate(ContentAIConfig config) {
-        this.config = config;
+        CloseableHttpClient previousClient = this.httpClient;
+        this.httpClient = buildHttpClient(config);
+        this.config = config; // written last, see the volatile note above
+        // Accepted tradeoff: closing previousClient here can abort a request still mid-flight on it (surfaces as
+        // one failed request, not corruption) - reconfiguration is rare enough that this beats reference-counting.
+        if (previousClient != null) {
+            closeQuietly(previousClient);
+        }
+    }
+
+    @Deactivate
+    protected void deactivate() {
+        closeQuietly(this.httpClient);
+        this.httpClient = null;
+    }
+
+    private void closeQuietly(CloseableHttpClient client) {
+        if (client == null) {
+            return;
+        }
+        try {
+            client.close();
+        } catch (IOException e) {
+            LOGGER.warn("Failed to close Content AI HTTP client", e);
+        }
     }
 
     @Override
@@ -164,16 +194,15 @@ public class ContentAIClientImpl implements ContentAIClient {
     }
 
     private JsonNode executeGet(String path) throws ContentAIClientException {
+        // Snapshot once - config is volatile, so two separate field reads could combine an old API key with a new base URL.
+        ContentAIConfig config = this.config;
         String apiKey = config.apiKey();
         if (StringUtils.isBlank(apiKey)) {
             throw new ContentAIClientException("Content AI API key (X-Api-Key) is not configured", 0);
         }
-        String url = resolveBaseUrl() + path;
-        RequestConfig requestConfig = RequestConfig.custom()
-            .setConnectTimeout(config.connectionTimeout())
-            .setSocketTimeout(config.socketTimeout())
-            .build();
-        try (CloseableHttpClient httpClient = getHttpClient(requestConfig)) {
+        String url = resolveBaseUrl(config) + path;
+        CloseableHttpClient httpClient = requireHttpClient();
+        try {
             HttpGet get = new HttpGet(url);
             get.setHeader("Accept", "application/json");
             get.setHeader("X-Api-Key", apiKey);
@@ -184,16 +213,15 @@ public class ContentAIClientImpl implements ContentAIClient {
     }
 
     private JsonNode executeRequest(String path, ObjectNode body) throws ContentAIClientException {
+        // See executeGet's comment on why config is snapshotted once per request.
+        ContentAIConfig config = this.config;
         String apiKey = config.apiKey();
         if (StringUtils.isBlank(apiKey)) {
             throw new ContentAIClientException("Content AI API key (X-Api-Key) is not configured", 0);
         }
-        String url = resolveBaseUrl() + path;
-        RequestConfig requestConfig = RequestConfig.custom()
-            .setConnectTimeout(config.connectionTimeout())
-            .setSocketTimeout(config.socketTimeout())
-            .build();
-        try (CloseableHttpClient httpClient = getHttpClient(requestConfig)) {
+        String url = resolveBaseUrl(config) + path;
+        CloseableHttpClient httpClient = requireHttpClient();
+        try {
             HttpPost post = new HttpPost(url);
             post.setHeader("Content-Type", "application/json");
             // Anonymous, public-index access uses X-Api-Key (a Developer Console client ID), never a bearer token.
@@ -206,15 +234,27 @@ public class ContentAIClientImpl implements ContentAIClient {
         }
     }
 
+    // Snapshotted once, same reasoning as config - also turns the narrow post-@Deactivate window (httpClient set to
+    // null) into a clean ContentAIClientException instead of an unchecked NullPointerException.
+    private CloseableHttpClient requireHttpClient() throws ContentAIClientException {
+        CloseableHttpClient current = this.httpClient;
+        if (current == null) {
+            throw new ContentAIClientException("Content AI HTTP client is not available (component deactivated)", 0);
+        }
+        return current;
+    }
+
     /**
      * Resolves the Content AI base URL from the running AEM as a Cloud Service environment, so the component always
      * targets its own environment's bucket rather than a hand-configured value. Falls back to the dev-only
      * {@code baseUrlOverride} config when the CS environment variables are absent (local/non-CS development).
      *
+     * @param config the config snapshot to resolve against (see callers' notes on why this isn't read from the
+     *               instance field directly)
      * @return the base URL (without a trailing slash), up to and including the Content AI path
      * @throws ContentAIClientException if no override is set and the environment variables are not present
      */
-    protected String resolveBaseUrl() throws ContentAIClientException {
+    protected String resolveBaseUrl(ContentAIConfig config) throws ContentAIClientException {
         String override = config.baseUrlOverride();
         if (StringUtils.isNotBlank(override)) {
             return stripTrailingSlash(override.trim());
@@ -300,7 +340,17 @@ public class ContentAIClientImpl implements ContentAIClient {
         }
     }
 
-    protected CloseableHttpClient getHttpClient(RequestConfig requestConfig) {
+    /**
+     * Builds the shared HTTP client, once per activation rather than per request, so requests reuse pooled
+     * connections instead of paying a fresh TCP/TLS handshake every time.
+     *
+     * @param config the configuration this client's connect/socket timeouts are derived from
+     */
+    protected CloseableHttpClient buildHttpClient(ContentAIConfig config) {
+        RequestConfig requestConfig = RequestConfig.custom()
+            .setConnectTimeout(config.connectionTimeout())
+            .setSocketTimeout(config.socketTimeout())
+            .build();
         if (httpClientBuilderFactory != null) {
             return httpClientBuilderFactory.newBuilder().setDefaultRequestConfig(requestConfig).build();
         }

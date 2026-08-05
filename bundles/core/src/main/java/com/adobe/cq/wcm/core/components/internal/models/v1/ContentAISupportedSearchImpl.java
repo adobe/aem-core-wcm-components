@@ -41,7 +41,6 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.AemCloudPlatformDetector;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
-import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClient;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.adobe.granite.license.ProductInfoProvider;
 import com.day.cq.i18n.I18n;
@@ -69,7 +68,7 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     private String contentSource;
 
     @ValueMapValue(name = PN_CONTENT_SOURCE_TYPE)
-    @Default(values = ContentAIClient.DEFAULT_CONTENT_SOURCE_TYPE)
+    @Default(values = ContentAISupportedSearch.DEFAULT_CONTENT_SOURCE_TYPE)
     private String contentSourceType;
 
     @ValueMapValue(name = PN_CONTENT_SOURCES, injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -135,7 +134,7 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     @NotNull
     @Override
     public String getContentSourceType() {
-        return StringUtils.defaultIfBlank(contentSourceType, ContentAIClient.DEFAULT_CONTENT_SOURCE_TYPE);
+        return StringUtils.defaultIfBlank(contentSourceType, ContentAISupportedSearch.DEFAULT_CONTENT_SOURCE_TYPE);
     }
 
     @NotNull
