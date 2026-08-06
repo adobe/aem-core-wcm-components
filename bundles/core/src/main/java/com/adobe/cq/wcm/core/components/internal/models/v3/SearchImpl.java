@@ -20,8 +20,10 @@ import javax.annotation.PostConstruct;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -52,12 +54,18 @@ public class SearchImpl extends com.adobe.cq.wcm.core.components.internal.models
     @ScriptVariable
     private Style currentStyle;
 
+    @ValueMapValue(name = PN_HIDE_AI_SEARCH_TOGGLE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    private Boolean hideAiSearchToggleOverride;
+
     private boolean hideAiSearchToggle;
 
     @PostConstruct
     private void initV3Model() {
         boolean hideByDefault = !AemCloudPlatformDetector.isCloudPlatform(productInfoProvider);
-        if (currentStyle != null) {
+        if (hideAiSearchToggleOverride != null) {
+            // explicit per-instance override from the edit dialog wins over the template policy
+            hideAiSearchToggle = hideAiSearchToggleOverride;
+        } else if (currentStyle != null) {
             hideAiSearchToggle = currentStyle.get(PN_HIDE_AI_SEARCH_TOGGLE, hideByDefault);
         } else {
             hideAiSearchToggle = hideByDefault;

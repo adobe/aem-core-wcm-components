@@ -16,6 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import org.apache.sling.api.resource.ModifiableValueMap;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.i18n.ResourceBundleProvider;
 import org.apache.sling.i18n.impl.RootResourceBundle;
 import org.junit.jupiter.api.BeforeEach;
@@ -105,5 +107,40 @@ public class SearchImplTest extends com.adobe.cq.wcm.core.components.internal.mo
         context.contentPolicyMapping(resourceType, Search.PN_HIDE_AI_SEARCH_TOGGLE, false);
         Search search = context.request().adaptTo(Search.class);
         assertFalse(search.hideAiSearchToggle());
+    }
+
+    @Test
+    void testHideAiSearchToggle_instanceOverrideHidesEvenWhenPolicyShows() {
+        mockProductInfoProvider.setVersion(new Version("6.6.0"));
+        context.contentPolicyMapping(resourceType, Search.PN_HIDE_AI_SEARCH_TOGGLE, false);
+        setInstanceHideAiSearchToggle(true);
+        context.currentResource(SEARCH_PAGE + "/jcr:content/search");
+        Search search = context.request().adaptTo(Search.class);
+        assertTrue(search.hideAiSearchToggle());
+    }
+
+    @Test
+    void testHideAiSearchToggle_instanceOverrideShowsEvenWhenPolicyHides() {
+        mockProductInfoProvider.setVersion(new Version("6.5.25"));
+        context.contentPolicyMapping(resourceType, Search.PN_HIDE_AI_SEARCH_TOGGLE, true);
+        setInstanceHideAiSearchToggle(false);
+        context.currentResource(SEARCH_PAGE + "/jcr:content/search");
+        Search search = context.request().adaptTo(Search.class);
+        assertFalse(search.hideAiSearchToggle());
+    }
+
+    @Test
+    void testHideAiSearchToggle_noInstanceOverrideFallsBackToPolicy() {
+        mockProductInfoProvider.setVersion(new Version("6.5.25"));
+        context.contentPolicyMapping(resourceType, Search.PN_HIDE_AI_SEARCH_TOGGLE, false);
+        context.currentResource(SEARCH_PAGE + "/jcr:content/search");
+        Search search = context.request().adaptTo(Search.class);
+        assertFalse(search.hideAiSearchToggle());
+    }
+
+    private void setInstanceHideAiSearchToggle(boolean value) {
+        Resource resource = context.resourceResolver().getResource(SEARCH_PAGE + "/jcr:content/search");
+        ModifiableValueMap properties = resource.adaptTo(ModifiableValueMap.class);
+        properties.put(Search.PN_HIDE_AI_SEARCH_TOGGLE, value);
     }
 }
