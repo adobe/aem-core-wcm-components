@@ -158,6 +158,32 @@ describe("Test editDialog VCF template retention for", function() {
         }, done);
     });
 
+    it("model ID sent to templates API has base64 padding stripped", function(done) {
+        let requestedUrl = null;
+
+        jQuery._getJSONHandler = function(url, resolve) {
+            if (url.includes("jcr:content/data")) {
+                resolve({ "cq:model": MODEL_PATH });
+            } else if (url.includes(COMPONENT_PATH)) {
+                resolve({ fragmentPath: FRAGMENT_PATH, displayMode: "vcf" });
+            }
+        };
+
+        jQuery._ajaxHandler = function(ajaxOptions, resolve) {
+            requestedUrl = ajaxOptions.url;
+            resolve(TEMPLATES_RESPONSE);
+        };
+
+        channel.trigger({ type: "foundation-contentloaded", target: fixture.el });
+
+        setTimeout(function() {
+            // MODEL_PATH's standard base64 encoding ends in "=" padding; the API expects it stripped.
+            expect(requestedUrl).toContain("L2NvbmYvdGVzdC9zZXR0aW5ncy9kYW0vY2ZtL21vZGVscy9wZXJzb24/");
+            expect(requestedUrl).not.toContain("%3D");
+            done();
+        }, 100);
+    });
+
     it("templates are not loaded when no fragment is selected", function(done) {
         fixture.el.querySelector("[name='./fragmentPath']").value = "";
         let ajaxCalled = false;
