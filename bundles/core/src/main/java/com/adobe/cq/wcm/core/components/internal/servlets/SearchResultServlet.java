@@ -157,10 +157,12 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
             Search searchComponent = getSearchComponent(request, currentPage);
             try {
                 List<ListItem> results = getResults(request, searchComponent, currentPage.getPageManager());
+                SearchUsageLogger.logUsage(request, searchComponent, results.size());
                 response.setContentType("application/json");
                 response.setCharacterEncoding(StandardCharsets.UTF_8.name());
                 new ObjectMapper().writeValue(response.getWriter(), results);
             } catch (NumberFormatException e) {
+                SearchUsageLogger.logError(request, "invalid_results_offset", e);
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             }
         } else {
