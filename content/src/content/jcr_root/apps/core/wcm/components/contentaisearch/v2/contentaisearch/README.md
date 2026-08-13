@@ -25,14 +25,14 @@ The component uses the `com.adobe.cq.wcm.core.components.models.ContentAISupport
 ### Behavior
 On submit, the component always fetches `.search.json`. When AI Search Mode is enabled (see below), it also fetches `.gensearch.json` in parallel — regardless of which tab is currently active, so switching tabs is instant rather than triggering a new fetch. When AI Search Mode is disabled, `.gensearch.json` is never called at all.
 
-The active tab persists across page loads via a single, site-wide cookie (`cmp-contentaisearch-tab`, values `search-results`/`ai-mode`), applied by a small synchronous script inline in the component's own markup — not a server-side cookie read — so pages using this component remain fully cacheable.
+The active tab persists across page loads via a single, site-wide cookie (`cmp-contentaisearch-tab`, values `search-results`/`ai-mode`, set with `path=/; max-age=<1 year>; SameSite=Lax; Secure`), applied by a small synchronous script inline in the component's own markup — not a server-side cookie read — so pages using this component remain fully cacheable.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for the component:
 
 1. `./contentSourceType` - the Content AI content source type (default `ACQUISITION`)
 2. `./contentSources` - the selected Content AI content source names
-3. `./primaryContentSource` - optional override for generative search source
+3. `./primaryContentSource` - optional override for generative search source (resource property; not exposed as a dialog field — set via the underlying resource, not authored through the dialog UI)
 4. `./resultsSize` - default number of results to fetch
 5. `./resultsLayout` - `card` or `list`
 6. `./placeholder` - placeholder text for the search input
@@ -107,7 +107,7 @@ Apply a `data-cmp-is="contentaisearch"` attribute to the wrapper block to enable
 
 1. `data-cmp-content-source` - populated with `primaryContentSource`, specifies the Content AI source for generative search
 2. `data-cmp-ai-search-mode-enabled` - populated with `aiSearchModeEnabled`
-3. `data-cmp-gensearch-error-retry-visible` - populated with `genSearchErrorRetryVisible`
+3. `data-cmp-gensearch-error-retry-visible` - populated with `genSearchErrorRetryVisible`, present on the root element for reference/parity only — the client JS never reads it; retry-button visibility is enforced server-side by the HTL (`data-sly-test="${search.genSearchErrorRetryVisible}"` on the retry button itself), which simply omits the button from the DOM when false
 4. `data-cmp-results-layout` - populated with `resultsLayout` (`card` or `list`)
 5. `data-cmp-resource-path` - the component resource path used to build `.search.json` and `.gensearch.json` URLs
 6. `data-i18n-messages` - localized strings for client-side rendering

@@ -60,7 +60,7 @@
     function setCookie(name, value) {
         var oneYearSeconds = 365 * 24 * 60 * 60;
         document.cookie = name + "=" + encodeURIComponent(value) +
-            "; path=/; max-age=" + oneYearSeconds + "; SameSite=Lax";
+            "; path=/; max-age=" + oneYearSeconds + "; SameSite=Lax; Secure";
     }
 
     function ContentAISearch(element) {

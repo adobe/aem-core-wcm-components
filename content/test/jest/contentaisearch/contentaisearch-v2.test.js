@@ -137,6 +137,48 @@ describe("contentaisearch.js v2 - tab switching", () => {
         expect(calledUrls.some((url) => url.indexOf(".search.json") !== -1)).toBe(true);
     });
 
+    test("picks up the pre-paint script's already-applied DOM state as its initial active tab", () => {
+        // Simulate what the HTL's synchronous pre-paint script does before the JS
+        // component initializes: it already flips aria-selected on the tabs and
+        // hidden on the panels based on the cookie. The JS must read that state
+        // (via _syncActiveTabFromDom) into its own _activeTab, rather than assuming
+        // the default (Search Results) - otherwise a subsequent tab interaction
+        // would be computed from the wrong starting point.
+        const html = renderComponentHtml({}).replace(
+            'data-cmp-hook-contentaisearch="tabAiMode" aria-selected="false" tabindex="-1"',
+            'data-cmp-hook-contentaisearch="tabAiMode" aria-selected="true"'
+        ).replace(
+            'data-cmp-hook-contentaisearch="tabSearchResults" aria-selected="true"',
+            'data-cmp-hook-contentaisearch="tabSearchResults" aria-selected="false" tabindex="-1"'
+        ).replace(
+            'data-cmp-hook-contentaisearch="panelAiMode" hidden',
+            'data-cmp-hook-contentaisearch="panelAiMode"'
+        ).replace(
+            'data-cmp-hook-contentaisearch="panelSearchResults">',
+            'data-cmp-hook-contentaisearch="panelSearchResults" hidden>'
+        );
+        document.body.innerHTML = html;
+        loadFreshScript();
+
+        const panelAi = document.querySelector('[data-cmp-hook-contentaisearch="panelAiMode"]');
+        const panelResults = document.querySelector('[data-cmp-hook-contentaisearch="panelSearchResults"]');
+
+        // Sanity check: the pre-paint state as rendered is still what we expect
+        // before any JS-driven interaction.
+        expect(panelAi.hasAttribute("hidden")).toBe(false);
+        expect(panelResults.hasAttribute("hidden")).toBe(true);
+
+        // The real assertion: if the JS's internal _activeTab wasn't synced from the
+        // DOM (i.e. it still thinks Search Results is active, the default), clicking
+        // the Search Results tab would be a no-op (tab === this._activeTab short-
+        // circuits _activateTab) and the AI panel would incorrectly stay visible.
+        document.querySelector('[data-cmp-hook-contentaisearch="tabSearchResults"]').click();
+
+        expect(panelResults.hasAttribute("hidden")).toBe(false);
+        expect(panelAi.hasAttribute("hidden")).toBe(true);
+        expect(document.cookie).toContain("cmp-contentaisearch-tab=search-results");
+    });
+
     test("submitting a query with AI Search Mode enabled calls both endpoints in parallel", () => {
         document.body.innerHTML = renderComponentHtml({});
         loadFreshScript();
