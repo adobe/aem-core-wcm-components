@@ -18,11 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -44,10 +40,6 @@ import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearchV2;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.adobe.granite.license.ProductInfoProvider;
-import com.day.cq.i18n.I18n;
-import com.day.cq.wcm.api.Page;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Model(adaptables = SlingHttpServletRequest.class,
     adapters = {ContentAISupportedSearchV2.class, ContentAISupportedSearch.class, ComponentExporter.class},
@@ -104,8 +96,6 @@ public class ContentAISupportedSearchV2Impl extends AbstractComponentImpl implem
     private List<String> resolvedContentSources = Collections.emptyList();
     private String resolvedPrimaryContentSource = "";
     private boolean aiSearchModeEnabled;
-
-    private final Map<String, String> i18nMessagesMap = new HashMap<>();
 
     @PostConstruct
     private void initModel() {
@@ -183,34 +173,6 @@ public class ContentAISupportedSearchV2Impl extends AbstractComponentImpl implem
     @Override
     public String getExportedType() {
         return RESOURCE_TYPE;
-    }
-
-    @JsonIgnore
-    @NotNull
-    @Override
-    public String getI18nMessages() {
-        Page page = getCurrentPage();
-        Locale pageLocale = page != null ? page.getLanguage(false) : request.getLocale();
-        ResourceBundle resourceBundle = request.getResourceBundle(pageLocale);
-        I18n i18n = new I18n(resourceBundle);
-        i18nMessagesMap.put("Search", i18n.get("Search"));
-        i18nMessagesMap.put("Clear", i18n.get("Clear"));
-        i18nMessagesMap.put("AI-generated responses may be inaccurate. Verify important information.",
-            i18n.get("AI-generated responses may be inaccurate. Verify important information."));
-        i18nMessagesMap.put("Generative answer", i18n.get("Generative answer"));
-        i18nMessagesMap.put("Generating answer...", i18n.get("Generating answer..."));
-        i18nMessagesMap.put("Powered by Content AI", i18n.get("Powered by Content AI"));
-        i18nMessagesMap.put("Sources", i18n.get("Sources"));
-        i18nMessagesMap.put("Search results", i18n.get("Search results"));
-        i18nMessagesMap.put("Cards", i18n.get("Cards"));
-        i18nMessagesMap.put("List", i18n.get("List"));
-        i18nMessagesMap.put("Results layout", i18n.get("Results layout"));
-        i18nMessagesMap.put("Load more results", i18n.get("Load more results"));
-        try {
-            return new ObjectMapper().writeValueAsString(i18nMessagesMap);
-        } catch (Exception e) {
-            return "{}";
-        }
     }
 
     @NotNull

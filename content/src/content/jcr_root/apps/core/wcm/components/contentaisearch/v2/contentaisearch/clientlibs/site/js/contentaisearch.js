@@ -69,7 +69,6 @@
         this._resourcePath = this._resolveResourcePath();
         this._aiSearchModeEnabled = this._element.getAttribute("data-cmp-ai-search-mode-enabled") === "true";
         this._resultsLayout = this._element.getAttribute("data-cmp-results-layout") === "list" ? "list" : "card";
-        this._i18n = this._parseI18n();
         this._revealTimer = null;
         this._currentQuery = "";
         this._allResults = [];
@@ -117,18 +116,6 @@
             this._elements.tabAiMode.addEventListener("keydown", this._onTabKeydown.bind(this));
         }
     }
-
-    ContentAISearch.prototype._parseI18n = function() {
-        var raw = this._element.getAttribute("data-i18n-messages");
-        if (!raw) {
-            return {};
-        }
-        try {
-            return JSON.parse(raw);
-        } catch (e) {
-            return {};
-        }
-    };
 
     ContentAISearch.prototype._cacheElements = function() {
         this._elements = {};

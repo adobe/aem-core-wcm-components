@@ -22,8 +22,7 @@
          data-cmp-ai-search-mode-enabled="${search.aiSearchModeEnabled}"
          data-cmp-gensearch-error-retry-visible="${search.genSearchErrorRetryVisible}"
          data-cmp-results-layout="${search.resultsLayout}"
-         data-cmp-resource-path="${resource.path}"
-         data-i18n-messages='${search.i18nMessages}'>
+         data-cmp-resource-path="${resource.path}">
     <form class="cmp-contentaisearch__form" data-cmp-hook-contentaisearch="form" autocomplete="off">
         <div class="cmp-contentaisearch__field">
             <label class="cmp-contentaisearch__input-label" for="${search.id}-input">${'Search' @ i18n}</label>
@@ -38,7 +37,7 @@
     </form>
 
     <sly data-sly-test="${search.aiSearchModeEnabled}">
-        <div class="cmp-contentaisearch__tabs" role="tablist" data-cmp-hook-contentaisearch="tabs">
+        <div class="cmp-contentaisearch__tabs" role="tablist" aria-label="${'Search mode' @ i18n}" data-cmp-hook-contentaisearch="tabs">
             <button type="button" role="tab" id="${search.id}-tab-results" class="cmp-contentaisearch__tab"
                     aria-controls="${search.id}-panel-results" aria-selected="true"
                     data-cmp-hook-contentaisearch="tabSearchResults">${'Search Results' @ i18n}</button>
