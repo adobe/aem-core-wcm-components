@@ -129,4 +129,62 @@ class ContentAISupportedSearchV2ImplTest {
 
         assertFalse(model.isGenSearchErrorRetryVisible());
     }
+
+    @Test
+    void resultsLayoutDefaultsToCard() {
+        createResource(new HashMap<>());
+        context.currentResource(COMPONENT_PATH);
+
+        ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);
+
+        assertEquals(ContentAISupportedSearchV2.RESULTS_LAYOUT_CARD, model.getResultsLayout());
+    }
+
+    @Test
+    void resultsLayoutListWhenAuthored() {
+        Map<String, Object> props = new HashMap<>();
+        props.put("resultsLayout", "list");
+        createResource(props);
+        context.currentResource(COMPONENT_PATH);
+
+        ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);
+
+        assertEquals(ContentAISupportedSearchV2.RESULTS_LAYOUT_LIST, model.getResultsLayout());
+    }
+
+    @Test
+    void exportedTypeIsV2ResourceType() {
+        createResource(new HashMap<>());
+        context.currentResource(COMPONENT_PATH);
+
+        ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);
+
+        assertEquals(ContentAISupportedSearchV2Impl.RESOURCE_TYPE, model.getExportedType());
+    }
+
+    @Test
+    void resolvesLegacySingleContentSourceProperty() {
+        Map<String, Object> props = new HashMap<>();
+        props.put("contentSource", "wknd");
+        createResource(props);
+        context.currentResource(COMPONENT_PATH);
+
+        ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);
+
+        assertEquals(Arrays.asList("wknd"), model.getContentSources());
+        assertEquals("wknd", model.getPrimaryContentSource());
+    }
+
+    @Test
+    void primaryContentSourceOverridesFirstOfContentSources() {
+        Map<String, Object> props = new HashMap<>();
+        props.put("contentSources", new String[] {"wknd", "wknd-blog"});
+        props.put("primaryContentSource", "wknd-blog");
+        createResource(props);
+        context.currentResource(COMPONENT_PATH);
+
+        ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);
+
+        assertEquals("wknd-blog", model.getPrimaryContentSource());
+    }
 }
