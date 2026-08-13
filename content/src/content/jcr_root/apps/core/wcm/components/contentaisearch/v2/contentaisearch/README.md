@@ -35,10 +35,11 @@ The following properties are written to JCR for the component:
 3. `./primaryContentSource` - optional override for generative search source
 4. `./resultsSize` - default number of results to fetch
 5. `./resultsLayout` - `card` or `list`
-6. `./aiSearchModeEnabled` - whether the AI Mode tab is shown to visitors at all (unchecked = plain Search Results view, no tab bar, generative search never called)
-7. `./genSearchErrorRetryVisible` - whether a retry button is shown when the AI Mode tab's answer fails to generate
-8. `./disclaimerText` - optional disclaimer below the generative summary
-9. `./id` - defines the component HTML ID attribute
+6. `./placeholder` - placeholder text for the search input
+7. `./aiSearchModeEnabled` - whether the AI Mode tab is shown to visitors at all (unchecked = plain Search Results view, no tab bar, generative search never called)
+8. `./genSearchErrorRetryVisible` - whether a retry button is shown when the AI Mode tab's answer fails to generate
+9. `./disclaimerText` - optional disclaimer below the generative summary
+10. `./id` - defines the component HTML ID attribute
 
 Compared to v1: `genSearchEnabledByDefault` is removed (the default tab is always Search Results); `genSearchToggleVisible` is renamed to `aiSearchModeEnabled`; `genSearchErrorFallback`'s three states are replaced by the two-state `genSearchErrorRetryVisible`.
 
@@ -56,7 +57,11 @@ BLOCK cmp-contentaisearch
     ELEMENT cmp-contentaisearch__form
     ELEMENT cmp-contentaisearch__field
     ELEMENT cmp-contentaisearch__input
+    ELEMENT cmp-contentaisearch__input-label
+    ELEMENT cmp-contentaisearch__icon
     ELEMENT cmp-contentaisearch__loading-indicator
+    ELEMENT cmp-contentaisearch__clear
+    ELEMENT cmp-contentaisearch__clear-icon
     ELEMENT cmp-contentaisearch__tabs
     ELEMENT cmp-contentaisearch__tab
     ELEMENT cmp-contentaisearch__panel
@@ -64,9 +69,14 @@ BLOCK cmp-contentaisearch
     ELEMENT cmp-contentaisearch__summary-card
     ELEMENT cmp-contentaisearch__summary-header
     ELEMENT cmp-contentaisearch__summary-icon
+    ELEMENT cmp-contentaisearch__summary-heading
     ELEMENT cmp-contentaisearch__summary-title
     ELEMENT cmp-contentaisearch__summary-attribution
     ELEMENT cmp-contentaisearch__summary-text
+    ELEMENT cmp-contentaisearch__summary-loading
+    ELEMENT cmp-contentaisearch__summary-loading-content
+    ELEMENT cmp-contentaisearch__summary-loading-indicator
+    ELEMENT cmp-contentaisearch__summary-loading-text
     ELEMENT cmp-contentaisearch__sources-section
     ELEMENT cmp-contentaisearch__sources-label
     ELEMENT cmp-contentaisearch__sources
@@ -75,7 +85,10 @@ BLOCK cmp-contentaisearch
     ELEMENT cmp-contentaisearch__error
     ELEMENT cmp-contentaisearch__results-section
     ELEMENT cmp-contentaisearch__results-toolbar
+    ELEMENT cmp-contentaisearch__layout-toggle
+    ELEMENT cmp-contentaisearch__layout-btn
     ELEMENT cmp-contentaisearch__results
+    ELEMENT cmp-contentaisearch__load-more
     ELEMENT cmp-contentaisearch__item
     ELEMENT cmp-contentaisearch__card
     ELEMENT cmp-contentaisearch__card-image
@@ -92,21 +105,25 @@ BLOCK cmp-contentaisearch
 ## JavaScript Data Attribute Bindings
 Apply a `data-cmp-is="contentaisearch"` attribute to the wrapper block to enable initialization of the JavaScript component.
 
-1. `data-cmp-ai-search-mode-enabled` - populated with `aiSearchModeEnabled`
-2. `data-cmp-gensearch-error-retry-visible` - populated with `genSearchErrorRetryVisible`
-3. `data-cmp-results-layout` - populated with `resultsLayout` (`card` or `list`)
-4. `data-cmp-resource-path` - the component resource path used to build `.search.json` and `.gensearch.json` URLs
-5. `data-i18n-messages` - localized strings for client-side rendering
+1. `data-cmp-content-source` - populated with `primaryContentSource`, specifies the Content AI source for generative search
+2. `data-cmp-ai-search-mode-enabled` - populated with `aiSearchModeEnabled`
+3. `data-cmp-gensearch-error-retry-visible` - populated with `genSearchErrorRetryVisible`
+4. `data-cmp-results-layout` - populated with `resultsLayout` (`card` or `list`)
+5. `data-cmp-resource-path` - the component resource path used to build `.search.json` and `.gensearch.json` URLs
+6. `data-i18n-messages` - localized strings for client-side rendering
 
 ```
 data-cmp-hook-contentaisearch="form"
 data-cmp-hook-contentaisearch="input"
+data-cmp-hook-contentaisearch="icon"
 data-cmp-hook-contentaisearch="loadingIndicator"
 data-cmp-hook-contentaisearch="clear"
+data-cmp-hook-contentaisearch="tabs"
 data-cmp-hook-contentaisearch="tabSearchResults"
 data-cmp-hook-contentaisearch="tabAiMode"
 data-cmp-hook-contentaisearch="panelSearchResults"
 data-cmp-hook-contentaisearch="panelAiMode"
+data-cmp-hook-contentaisearch="summaryLoading"
 data-cmp-hook-contentaisearch="summary"
 data-cmp-hook-contentaisearch="summaryText"
 data-cmp-hook-contentaisearch="sources"
@@ -116,7 +133,11 @@ data-cmp-hook-contentaisearch="errorMessage"
 data-cmp-hook-contentaisearch="retry"
 data-cmp-hook-contentaisearch="resultsSection"
 data-cmp-hook-contentaisearch="results"
-data-cmp-hook-contentaisearch="itemTemplate"
+data-cmp-hook-contentaisearch="loadMore"
+data-cmp-hook-contentaisearch="layoutCard"
+data-cmp-hook-contentaisearch="layoutList"
+data-cmp-hook-contentaisearch="itemTemplateCard"
+data-cmp-hook-contentaisearch="itemTemplateList"
 data-cmp-hook-contentaisearch="item"
 data-cmp-hook-contentaisearch="itemTitle"
 data-cmp-hook-contentaisearch="itemDescription"
@@ -125,6 +146,7 @@ data-cmp-hook-contentaisearch="itemImagePlaceholder"
 data-cmp-hook-contentaisearch="sourceTemplate"
 data-cmp-hook-contentaisearch="sourceLink"
 data-cmp-hook-contentaisearch="sourceText"
+data-cmp-hook-contentaisearch="prepaint"
 ```
 
 ## Information
