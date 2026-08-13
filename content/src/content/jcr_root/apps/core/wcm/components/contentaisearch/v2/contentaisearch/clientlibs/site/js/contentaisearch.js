@@ -51,6 +51,7 @@
         }
     }
 
+    // eslint-disable-next-line no-unused-vars
     function getCookie(name) {
         var match = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
         return match ? decodeURIComponent(match[1]) : null;
