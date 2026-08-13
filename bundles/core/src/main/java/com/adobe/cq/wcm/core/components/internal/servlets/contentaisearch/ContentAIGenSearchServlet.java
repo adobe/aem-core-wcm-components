@@ -34,6 +34,7 @@ import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceQueryRes
     property = {
         "sling.servlet.methods=GET",
         "sling.servlet.resourceTypes=" + AbstractContentAISearchServlet.RESOURCE_TYPE,
+        "sling.servlet.resourceTypes=" + AbstractContentAISearchServlet.RESOURCE_TYPE_V2,
         "sling.servlet.selectors=" + ContentAIGenSearchServlet.SELECTOR,
         "sling.servlet.extensions=" + AbstractContentAISearchServlet.EXTENSION
     }

@@ -46,6 +46,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 abstract class AbstractContentAISearchServlet extends SlingSafeMethodsServlet {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/contentaisearch/v1/contentaisearch";
+    protected static final String RESOURCE_TYPE_V2 = "core/wcm/components/contentaisearch/v2/contentaisearch";
     protected static final String EXTENSION = "json";
     private static final String PARAM_QUERY = "q";
     private static final int MAX_QUERY_LENGTH = 512;
