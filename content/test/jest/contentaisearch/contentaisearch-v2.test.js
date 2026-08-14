@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright 2026 Adobe
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+
 /*
  * Jest harness for v2's contentaisearch.js, covering the tab-switching and
  * cookie-persistence behavior that's new in v2 (request-ID/in-flight-guard
@@ -45,12 +61,15 @@ function renderComponentHtml(options) {
     return (
         '<section data-cmp-is="contentaisearch"' +
         ' data-cmp-resource-path="' + RESOURCE_PATH + '"' +
-        ' data-cmp-ai-search-mode-enabled="' + String(opts.aiSearchModeEnabled) + '"' +
+        // aiSearchModeEnabled is a Sightly boolean-typed attribute: real HTL output is a
+        // bare attribute (present) when true and omits it entirely when false - never the
+        // literal string "false". Mirroring that here is what makes this fixture actually
+        // catch a regression to the old (buggy) getAttribute() === "true" read.
+        (opts.aiSearchModeEnabled ? " data-cmp-ai-search-mode-enabled" : "") +
         ' data-cmp-gensearch-error-retry-visible="true"' +
         ' data-cmp-results-layout="card">' +
         '<form data-cmp-hook-contentaisearch="form">' +
         '<i data-cmp-hook-contentaisearch="icon"></i>' +
-        '<span data-cmp-hook-contentaisearch="loadingIndicator" hidden></span>' +
         '<input data-cmp-hook-contentaisearch="input" type="text">' +
         '<button type="button" data-cmp-hook-contentaisearch="clear" hidden></button>' +
         "</form>" +

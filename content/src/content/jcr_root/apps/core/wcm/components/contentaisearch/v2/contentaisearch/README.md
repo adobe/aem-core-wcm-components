@@ -59,7 +59,6 @@ BLOCK cmp-contentaisearch
     ELEMENT cmp-contentaisearch__input
     ELEMENT cmp-contentaisearch__input-label
     ELEMENT cmp-contentaisearch__icon
-    ELEMENT cmp-contentaisearch__loading-indicator
     ELEMENT cmp-contentaisearch__clear
     ELEMENT cmp-contentaisearch__clear-icon
     ELEMENT cmp-contentaisearch__tabs
@@ -106,17 +105,15 @@ BLOCK cmp-contentaisearch
 Apply a `data-cmp-is="contentaisearch"` attribute to the wrapper block to enable initialization of the JavaScript component.
 
 1. `data-cmp-content-source` - populated with `primaryContentSource`, specifies the Content AI source for generative search
-2. `data-cmp-ai-search-mode-enabled` - populated with `aiSearchModeEnabled`
+2. `data-cmp-ai-search-mode-enabled` - populated with `aiSearchModeEnabled`; a Sightly boolean-typed attribute, so it's rendered bare (present) when true and omitted entirely when false - the client JS reads it with `hasAttribute`, not a string comparison
 3. `data-cmp-gensearch-error-retry-visible` - populated with `genSearchErrorRetryVisible`, present on the root element for reference/parity only — the client JS never reads it; retry-button visibility is enforced server-side by the HTL (`data-sly-test="${search.genSearchErrorRetryVisible}"` on the retry button itself), which simply omits the button from the DOM when false
 4. `data-cmp-results-layout` - populated with `resultsLayout` (`card` or `list`)
 5. `data-cmp-resource-path` - the component resource path used to build `.search.json` and `.gensearch.json` URLs
-6. `data-i18n-messages` - localized strings for client-side rendering
 
 ```
 data-cmp-hook-contentaisearch="form"
 data-cmp-hook-contentaisearch="input"
 data-cmp-hook-contentaisearch="icon"
-data-cmp-hook-contentaisearch="loadingIndicator"
 data-cmp-hook-contentaisearch="clear"
 data-cmp-hook-contentaisearch="tabs"
 data-cmp-hook-contentaisearch="tabSearchResults"

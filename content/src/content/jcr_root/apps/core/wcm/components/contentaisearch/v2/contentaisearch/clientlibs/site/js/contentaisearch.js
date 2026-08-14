@@ -67,7 +67,12 @@
         this._element = element;
         this._cacheElements();
         this._resourcePath = this._resolveResourcePath();
-        this._aiSearchModeEnabled = this._element.getAttribute("data-cmp-ai-search-mode-enabled") === "true";
+        // Sightly renders boolean-typed attributes as bare (present when true, omitted
+        // when false) rather than as the literal string "true" - hasAttribute is the
+        // correct read here, matching the convention used elsewhere in this codebase
+        // (e.g. data-cmp-data-layer-enabled), not a getAttribute() === "true" string
+        // comparison, which would always evaluate to false against real HTL output.
+        this._aiSearchModeEnabled = this._element.hasAttribute("data-cmp-ai-search-mode-enabled");
         this._resultsLayout = this._element.getAttribute("data-cmp-results-layout") === "list" ? "list" : "card";
         this._revealTimer = null;
         this._currentQuery = "";
@@ -243,8 +248,6 @@
             this._elements.input.value = "";
         }
         toggleShow(this._elements.clear, false);
-        toggleShow(this._elements.loadingIndicator, false);
-        toggleShow(this._elements.icon, true);
         this._clearResults();
     };
 
@@ -302,13 +305,6 @@
         toggleShow(this._elements.summary, false);
         toggleShow(this._elements.summaryLoading, false);
         toggleShow(this._elements.error, false);
-        toggleShow(this._elements.loadingIndicator, false);
-        toggleShow(this._elements.icon, true);
-    };
-
-    ContentAISearch.prototype._setFieldLoading = function(loading) {
-        toggleShow(this._elements.loadingIndicator, loading);
-        toggleShow(this._elements.icon, !loading);
     };
 
     ContentAISearch.prototype._setSummaryLoading = function(show) {
@@ -336,10 +332,8 @@
 
     ContentAISearch.prototype._runResultsSearch = function(query) {
         var self = this;
-        var searchStart = Date.now();
         var requestId = ++this._resultsRequestId;
         this._pendingResultsQuery = query;
-        this._setFieldLoading(true);
         var url = this._resourcePath + ".search.json?q=" + encodeURIComponent(query);
         this._fetchJson(url)
             .then(function(data) {
@@ -367,11 +361,6 @@
                     return;
                 }
                 self._pendingResultsQuery = null;
-                var elapsed = Date.now() - searchStart;
-                var delay = Math.max(0, LOADING_DISPLAY_DELAY - elapsed);
-                setTimeout(function() {
-                    self._setFieldLoading(false);
-                }, delay);
             });
     };
 
