@@ -418,12 +418,13 @@
         line-height: 1.45;
         color: @text-muted;
         overflow: hidden;
+        text-overflow: ellipsis;
 
         /* stylelint-disable-next-line value-no-vendor-prefix */
         display: -webkit-box;
         -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
-        line-clamp: 3;
+        -webkit-line-clamp: 4;
+        line-clamp: 4;
     }
 
     &--list &__item {
