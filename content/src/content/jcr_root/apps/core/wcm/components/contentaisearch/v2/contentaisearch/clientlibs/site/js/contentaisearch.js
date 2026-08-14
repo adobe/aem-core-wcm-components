@@ -576,10 +576,15 @@
         if (descriptionNode) {
             if (description) {
                 descriptionNode.textContent = description;
-                toggleShow(descriptionNode, true);
+                // Not toggleShow(): it sets an inline style="display: block", which
+                // (being more specific than a stylesheet class rule) would permanently
+                // clobber the __card-description/__row-description CSS's
+                // "display: -webkit-box", silently breaking the line-clamp truncation.
+                // Just clearing "hidden" lets that stylesheet display value apply.
+                descriptionNode.removeAttribute("hidden");
             } else {
                 descriptionNode.textContent = "";
-                toggleShow(descriptionNode, false);
+                descriptionNode.setAttribute("hidden", "hidden");
             }
         }
         if (imageNode && placeholderNode) {

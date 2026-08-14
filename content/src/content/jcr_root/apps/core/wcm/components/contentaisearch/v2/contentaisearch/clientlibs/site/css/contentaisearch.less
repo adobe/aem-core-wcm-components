@@ -425,6 +425,15 @@
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 4;
         line-clamp: 4;
+
+        // A plain [hidden] attribute wouldn't hide this on its own: our own
+        // "display: -webkit-box" above is an author-origin rule, which always beats
+        // the user-agent stylesheet's "[hidden] { display: none }" default regardless
+        // of selector specificity. Overriding it explicitly here (this compound
+        // selector outranks the base rule above via specificity) is required.
+        &[hidden] {
+            display: none;
+        }
     }
 
     &--list &__item {
@@ -477,6 +486,12 @@
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         line-clamp: 2;
+
+        // See the matching &[hidden] rule on __card-description above for why this
+        // is needed - a bare [hidden] attribute alone won't hide this element.
+        &[hidden] {
+            display: none;
+        }
     }
 }
 
