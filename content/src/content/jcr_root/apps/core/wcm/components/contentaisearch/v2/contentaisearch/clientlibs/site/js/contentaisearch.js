@@ -229,6 +229,12 @@
 
     ContentAISearch.prototype._onInput = function() {
         this._syncClearButton();
+        // Backspacing a query down to empty (without submitting or hitting the
+        // explicit clear button) should also clear stale results/summary - otherwise
+        // an emptied field is left showing results for whatever was last submitted.
+        if (!this._elements.input.value) {
+            this._clearResults();
+        }
     };
 
     ContentAISearch.prototype._onFormSubmit = function(event) {

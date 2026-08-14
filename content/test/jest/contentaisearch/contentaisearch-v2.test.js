@@ -211,4 +211,38 @@ describe("contentaisearch.js v2 - tab switching", () => {
         expect(calledUrls.some((url) => url.indexOf(".search.json") !== -1)).toBe(true);
         expect(calledUrls.some((url) => url.indexOf(".gensearch.json") !== -1)).toBe(true);
     });
+
+    test("backspacing the query down to empty clears already-rendered results and summary", async () => {
+        document.body.innerHTML = renderComponentHtml({});
+        global.fetch = jest.fn((url) => {
+            const data = url.indexOf(".gensearch.json") !== -1
+                ? { result: "Adventures include hiking and skiing.", hits: [] }
+                : { results: [{ id: "1", data: { title: "Adventure" } }], hasMore: false, sourceCursors: {} };
+            return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(data) });
+        });
+        loadFreshScript();
+        const form = document.querySelector('[data-cmp-hook-contentaisearch="form"]');
+        const input = document.querySelector('[data-cmp-hook-contentaisearch="input"]');
+        const resultsSection = document.querySelector('[data-cmp-hook-contentaisearch="resultsSection"]');
+        const summary = document.querySelector('[data-cmp-hook-contentaisearch="summary"]');
+
+        input.value = "adventure";
+        form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+        // Let the fetch .then() chains settle, including _hideSummaryLoading's
+        // minimum-visible-time setTimeout.
+        jest.useFakeTimers();
+        await jest.runAllTimersAsync();
+        jest.useRealTimers();
+
+        expect(resultsSection.hasAttribute("hidden")).toBe(false);
+        expect(summary.hasAttribute("hidden")).toBe(false);
+
+        // Simulate the user backspacing the field to empty - no submit, no clear button.
+        input.value = "";
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+
+        expect(resultsSection.hasAttribute("hidden")).toBe(true);
+        expect(summary.hasAttribute("hidden")).toBe(true);
+        expect(document.querySelector('[data-cmp-hook-contentaisearch="results"]').innerHTML).toBe("");
+    });
 });
