@@ -19,7 +19,6 @@
     var NS = "cmp";
     var IS = "contentaisearch";
     var LOADING_DISPLAY_DELAY = 300;
-    var REVEAL_WORD_INTERVAL_MS = 12;
     var TAB_COOKIE_NAME = "cmp-contentaisearch-tab";
     var TAB_RESULTS = "search-results";
     var TAB_AI = "ai-mode";
@@ -74,7 +73,6 @@
         // comparison, which would always evaluate to false against real HTL output.
         this._aiSearchModeEnabled = this._element.hasAttribute("data-cmp-ai-search-mode-enabled");
         this._resultsLayout = this._element.getAttribute("data-cmp-results-layout") === "list" ? "list" : "card";
-        this._revealTimer = null;
         this._currentQuery = "";
         this._allResults = [];
         this._hasMore = false;
@@ -290,13 +288,6 @@
         this._genSearchRequestId++;
         this._pendingResultsQuery = null;
         this._pendingGenSearchQuery = null;
-        if (this._revealTimer) {
-            clearTimeout(this._revealTimer);
-            this._revealTimer = null;
-        }
-        if (this._elements.sources) {
-            this._elements.sources.style.visibility = "";
-        }
         if (this._elements.results) {
             this._elements.results.innerHTML = "";
         }
@@ -681,41 +672,18 @@
     };
 
     ContentAISearch.prototype._renderSummary = function(data, requestId) {
-        var self = this;
         var fullText = data.result || "";
         var hits = data.hits || [];
-        var tokens = fullText.split(/(\s+)/);
-        var idx = 0;
 
-        if (this._revealTimer) {
-            clearTimeout(this._revealTimer);
-            this._revealTimer = null;
+        if (requestId !== this._genSearchRequestId) {
+            return;
         }
 
         if (this._elements.sources) {
             this._elements.sources.innerHTML = this._generateSourceItems(hits);
-            this._elements.sources.style.visibility = "hidden";
         }
+        this._elements.summaryText.innerHTML = this._renderMarkdownSummary(fullText);
         toggleShow(this._elements.summary, true);
-
-        function tick() {
-            if (requestId !== self._genSearchRequestId) {
-                self._revealTimer = null;
-                return;
-            }
-            idx++;
-            self._elements.summaryText.innerHTML = self._renderMarkdownSummary(tokens.slice(0, idx).join(""));
-            if (idx < tokens.length) {
-                self._revealTimer = setTimeout(tick, REVEAL_WORD_INTERVAL_MS);
-            } else {
-                self._revealTimer = null;
-                if (self._elements.sources) {
-                    self._elements.sources.style.visibility = "";
-                }
-            }
-        }
-
-        tick();
     };
 
     function escapeHtml(str) {
