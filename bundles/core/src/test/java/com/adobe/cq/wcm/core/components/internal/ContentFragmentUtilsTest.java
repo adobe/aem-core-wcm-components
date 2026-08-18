@@ -26,7 +26,7 @@ import javax.json.Json;
 import javax.json.JsonReader;
 
 import com.adobe.cq.dam.cfm.ElementTemplate;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
