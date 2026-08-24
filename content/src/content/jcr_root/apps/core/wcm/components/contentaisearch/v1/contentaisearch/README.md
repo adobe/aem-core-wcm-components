@@ -155,4 +155,6 @@ data-cmp-hook-contentaisearch="sourceText"
 * **Vendor**: Adobe
 * **Version**: v1
 * **Compatibility**: AEM as a Cloud Service
-* **Status**: work-in-progress
+* **Status**: production-ready
+* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_ai\_search\_v1](https://www.adobe.com/go/aem_cmp_ai_search_v1)
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_ai\_search](https://www.adobe.com/go/aem_cmp_library_ai_search)
