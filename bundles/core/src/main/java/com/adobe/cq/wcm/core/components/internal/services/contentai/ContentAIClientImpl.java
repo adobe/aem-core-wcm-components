@@ -246,8 +246,9 @@ public class ContentAIClientImpl implements ContentAIClient {
 
     /**
      * Resolves the Content AI base URL from the running AEM as a Cloud Service environment, so the component always
-     * targets its own environment's bucket rather than a hand-configured value. Falls back to the dev-only
-     * {@code baseUrlOverride} config when the CS environment variables are absent (local/non-CS development).
+     * targets its own environment's bucket rather than a hand-configured value. Falls back to the
+     * {@code baseUrlOverride} config when the CS environment variables are absent - required on AEM 6.5 LTS /
+     * Adobe Managed Services and for local development, neither of which expose those environment variables.
      *
      * @param config the config snapshot to resolve against (see callers' notes on why this isn't read from the
      *               instance field directly)

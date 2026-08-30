@@ -38,10 +38,11 @@ public @interface ContentAIConfig {
     String apiKey();
 
     @AttributeDefinition(
-        name = "Base URL Override (dev only)",
-        description = "Optional full Content AI base URL, used ONLY for local/non-Cloud-Service development where the " +
-            "AEM_DOMAIN_PUBLISH / AEM_PROGRAM_ID+AEM_ENV_ID environment variables are absent. Leave empty on AEM as a " +
-            "Cloud Service: the base URL is derived from the running environment. Example: " +
+        name = "Base URL Override",
+        description = "Optional full Content AI base URL. Required on AEM 6.5 LTS / Adobe Managed Services and for " +
+            "local development, where the AEM_PROGRAM_ID+AEM_ENV_ID (or AEM_SERVICE) environment variables are " +
+            "absent. Leave empty on AEM as a Cloud Service: the base URL is derived from the running environment. " +
+            "Example: " +
             "https://publish-p12345-e123456.adobeaemcloud.com/adobe/experimental/aemcontentai-expires-20261231/contentAI"
     )
     String baseUrlOverride() default "";
