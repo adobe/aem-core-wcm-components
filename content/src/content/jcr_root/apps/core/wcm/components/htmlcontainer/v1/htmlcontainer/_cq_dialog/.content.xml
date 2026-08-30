@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="HTML Container"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.commons.editor.dialog.childreneditor.v1,core.wcm.components.tabs.v1.editor]"
+    helpPath="https://www.adobe.com/go/aem_cmp_htmlcontainer_v1"
+    trackingFeature="core-components:htmlcontainer:v1">
+    <content
+        granite:class="cmp-tabs__editor"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+                    <general
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="General"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        granite:class="cq-RichText-FixedColumn-column"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </general>
+                    <cssIncludes
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="CSS Includes"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <cssItems
+                                                granite:class="foundation-toggleable cmp-teaser__editor-multifield_actions"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                                composite="{Boolean}true"
+                                                fieldDescription="Add all your CSS files">
+                                                <field
+                                                    granite:class="cmp-teaser__editor-action"
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/container"
+                                                    name="./cssFiles">
+                                                    <items jcr:primaryType="nt:unstructured">
+                                                        <includeMethod
+                                                            granite:class="cq-dialog-dropdown-showhide"
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                            fieldDescription="Select a method for including each file.  Inline puts the CSS file's contents directly into the page, and Reference references the file."
+                                                            fieldLabel="Include method"
+                                                            name="./includeType">
+                                                            <granite:data
+                                                                jcr:primaryType="nt:unstructured"
+                                                                cq-dialog-dropdown-showhide-target=".list-option-listfrom-showhide-target"/>
+                                                            <items jcr:primaryType="nt:unstructured">
+                                                                <inline
+                                                                    granite:hide="${cqDesign.disableChildren}"
+                                                                    jcr:primaryType="nt:unstructured"
+                                                                    text="Inline"
+                                                                    value="inline"/>
+                                                                <reference
+                                                                    granite:hide="${cqDesign.disableStatic}"
+                                                                    jcr:primaryType="nt:unstructured"
+                                                                    text="Reference"
+                                                                    value="reference"/>
+                                                            </items>
+                                                        </includeMethod>
+                                                        <link
+                                                            granite:class="cmp-teaser__editor-actionField"
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                                            emptyText="CSS File"
+                                                            name="fileName"
+                                                            required="{Boolean}true"
+                                                            rootPath="${not empty cqDesign.defaultPath ? cqDesign.defaultPath : '/content/dam'}">
+                                                            <granite:data
+                                                                jcr:primaryType="nt:unstructured"
+                                                                cmp-teaser-v1-dialog-edit-hook="actionLink"
+                                                                css-should-contain=".css"/>
+                                                        </link>
+                                                    </items>
+                                                </field>
+                                            </cssItems>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </cssIncludes>
+                    <htmlIncludes
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="HTML Include"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <link
+                                                granite:class="cmp-teaser__editor-actionField"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                                emptyText="HTML File"
+                                                fieldDescription="Add one HTML file"
+                                                name="./htmlFile"
+                                                required="{Boolean}true"
+                                                rootPath="${not empty cqDesign.defaultPath ? cqDesign.defaultPath : '/content/dam'}">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-teaser-v1-dialog-edit-hook="actionLink"
+                                                    html-should-contain=".html"/>
+                                            </link>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </htmlIncludes>
+                    <jsIncludes
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="JS Includes"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <jsItems
+                                                granite:class="foundation-toggleable cmp-teaser__editor-multifield_actions"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                                composite="{Boolean}true"
+                                                fieldDescription="Add all your JS files.  ">
+                                                <field
+                                                    granite:class="cmp-teaser__editor-action"
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/container"
+                                                    name="./jsFiles">
+                                                    <items jcr:primaryType="nt:unstructured">
+                                                        <includeMethod
+                                                            granite:class="cq-dialog-dropdown-showhide"
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                            fieldDescription="Select a method for including each file.  Async uses the 'async' modifier, Defer uses the 'defer' modifier, Inline puts the JS file's contents directly into the page, and Reference just references the file (without the async or defer modifiers)."
+                                                            fieldLabel="Include method"
+                                                            name="./includeType">
+                                                            <granite:data
+                                                                jcr:primaryType="nt:unstructured"
+                                                                cq-dialog-dropdown-showhide-target=".list-option-listfrom-showhide-target"/>
+                                                            <items jcr:primaryType="nt:unstructured">
+                                                                <async
+                                                                    granite:hide="${cqDesign.disableChildren}"
+                                                                    jcr:primaryType="nt:unstructured"
+                                                                    text="Async"
+                                                                    value="async"/>
+                                                                <defer
+                                                                    granite:hide="${cqDesign.disableChildren}"
+                                                                    jcr:primaryType="nt:unstructured"
+                                                                    text="Defer"
+                                                                    value="defer"/>
+                                                                <inline
+                                                                    granite:hide="${cqDesign.disableChildren}"
+                                                                    jcr:primaryType="nt:unstructured"
+                                                                    text="Inline"
+                                                                    value="inline"/>
+                                                                <reference
+                                                                    granite:hide="${cqDesign.disableStatic}"
+                                                                    jcr:primaryType="nt:unstructured"
+                                                                    text="Reference"
+                                                                    value="reference"/>
+                                                            </items>
+                                                        </includeMethod>
+                                                        <link
+                                                            granite:class="cmp-teaser__editor-actionField"
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                                            emptyText="JS File"
+                                                            name="fileName"
+                                                            required="{Boolean}true"
+                                                            rootPath="${not empty cqDesign.defaultPath ? cqDesign.defaultPath : '/content/dam'}">
+                                                            <granite:data
+                                                                jcr:primaryType="nt:unstructured"
+                                                                cmp-teaser-v1-dialog-edit-hook="actionLink"
+                                                                js-should-contain=".js"/>
+                                                        </link>
+                                                    </items>
+                                                </field>
+                                            </jsItems>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </jsIncludes>
+                </items>
+            </tabs>
+            <include-clientlibs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/includeclientlibs"
+                js="core.wcm.components.htmlcontainer.v1.dialog"/>
+        </items>
+    </content>
+</jcr:root>

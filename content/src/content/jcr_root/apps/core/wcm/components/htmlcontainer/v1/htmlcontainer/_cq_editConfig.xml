@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:EditConfig">
+    <cq:inplaceEditing
+        jcr:primaryType="cq:InplaceEditingConfig"
+        active="{Boolean}true"
+        editorType="contentfragment"/>
+    <cq:dropTargets jcr:primaryType="nt:unstructured">
+        <contentfragment
+            jcr:primaryType="cq:DropTargetConfig"
+            accept="[application/vnd.adobe.contentfragment]"
+            groups="[media]"
+            propertyName="./fragmentPath">
+            <parameters
+                jcr:primaryType="nt:unstructured"
+                displayMode="multi"
+                elementNames=""
+                paragraphHeadings=""
+                paragraphRange=""
+                paragraphScope=""
+                variationName=""/>
+        </contentfragment>
+    </cq:dropTargets>
+    <cq:listeners
+        jcr:primaryType="cq:EditListenersConfig"
+        afterdelete="function (properties) { $(document).trigger('cq-contentfragment-delete'); }"
+        afteredit="function (properties) { $(document).trigger('cq-contentfragment-edit'); }"
+        afterinsert="function (properties) { $(document).trigger('cq-contentfragment-insert'); }"/>
+</jcr:root>
