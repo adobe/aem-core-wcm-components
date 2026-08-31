@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Version;
 
@@ -74,7 +74,7 @@ public final class AemVersionDetector {
         if (version == null || version.getMajor() != 6 || version.getMinor() != 5) {
             return false;
         }
-        return !StringUtils.equalsIgnoreCase(version.getQualifier(), CLASSIC_65_LTS_QUALIFIER);
+        return !Strings.CI.equals(version.getQualifier(), CLASSIC_65_LTS_QUALIFIER);
     }
 
     @Nullable
