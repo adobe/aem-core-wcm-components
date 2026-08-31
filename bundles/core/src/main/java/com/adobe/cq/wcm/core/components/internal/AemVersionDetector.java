@@ -39,6 +39,13 @@ public final class AemVersionDetector {
      */
     static final Version MIN_CLOUD_CLASSIC_VERSION = new Version("6.6.0");
 
+    /**
+     * Version qualifier reported by properly provisioned/branded classic AEM 6.5 LTS instances (e.g.
+     * {@code 6.5.2.LTS}). A classic 6.5.x version without this qualifier (e.g. a bare {@code 6.5.0}) is treated
+     * as an unsupported/unbranded environment.
+     */
+    static final String CLASSIC_65_LTS_QUALIFIER = "LTS";
+
     private AemVersionDetector() {
     }
 
@@ -58,25 +65,18 @@ public final class AemVersionDetector {
     }
 
     /**
-     * Version qualifier reported by properly provisioned/branded classic AEM 6.5 LTS instances (e.g.
-     * {@code 6.5.2.LTS}). A classic 6.5.x version without this qualifier (e.g. a bare {@code 6.5.0}) is treated
-     * as an unsupported/unbranded environment.
-     */
-    static final String CLASSIC_65_LTS_QUALIFIER = "LTS";
-
-    /**
      * @param productInfoProvider Granite product info service
-     * @return {@code true} when the runtime is classic AEM 6.5 without the {@code LTS} version qualifier -
-     *         Content AI Search is unsupported there. Properly branded AEM 6.5 LTS (qualifier present) is
-     *         unaffected. Note: major/minor 6.5 can never also satisfy {@link #isCloudPlatform}, so no separate
-     *         cloud check is needed here.
+     * @return {@code true} when the runtime is classic AEM 6.5 without the {@code LTS} version qualifier, at any
+     *         release (GA, service pack, or otherwise) - Content AI Search is unsupported there. Properly branded
+     *         AEM 6.5 LTS (qualifier present) is unaffected. Note: major/minor 6.5 can never also satisfy
+     *         {@link #isCloudPlatform}, so no separate cloud check is needed here.
      */
-    public static boolean isUnsupportedClassic65ServicePack(@Nullable ProductInfoProvider productInfoProvider) {
+    public static boolean isUnbrandedClassic65(@Nullable ProductInfoProvider productInfoProvider) {
         Version version = getVersion(productInfoProvider);
         if (version == null || version.getMajor() != 6 || version.getMinor() != 5) {
             return false;
         }
-        return !StringUtils.containsIgnoreCase(version.getQualifier(), CLASSIC_65_LTS_QUALIFIER);
+        return !StringUtils.equalsIgnoreCase(version.getQualifier(), CLASSIC_65_LTS_QUALIFIER);
     }
 
     @Nullable

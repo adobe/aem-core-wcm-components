@@ -65,49 +65,57 @@ class AemVersionDetectorTest {
     }
 
     @Test
-    void isUnsupportedClassic65ServicePack_trueOnGa() {
+    void isUnbrandedClassic65_trueOnGa() {
         mockProductInfoProvider.setVersion(new Version("6.5.0"));
-        assertTrue(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertTrue(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
     }
 
     @Test
-    void isUnsupportedClassic65ServicePack_trueOnLatestKnownServicePack() {
+    void isUnbrandedClassic65_trueOnLatestKnownServicePack() {
         mockProductInfoProvider.setVersion(new Version("6.5.25"));
-        assertTrue(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertTrue(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
     }
 
     @Test
-    void isUnsupportedClassic65ServicePack_trueOnFutureServicePack() {
+    void isUnbrandedClassic65_trueOnFutureServicePack() {
         mockProductInfoProvider.setVersion(new Version("6.5.27"));
-        assertTrue(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertTrue(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
     }
 
     @Test
-    void isUnsupportedClassic65ServicePack_falseOnCloudPublishEvenWithHighMicro() {
+    void isUnbrandedClassic65_falseOnCloudPublishEvenWithHighMicro() {
         mockProductInfoProvider.setVersion(new Version("6.6.25"));
-        assertFalse(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
     }
 
     @Test
-    void isUnsupportedClassic65ServicePack_falseOnCloudAuthorReleaseTrain() {
+    void isUnbrandedClassic65_falseOnCloudAuthorReleaseTrain() {
         mockProductInfoProvider.setVersion(new Version("2026.2.24288"));
-        assertFalse(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
     }
 
     @Test
-    void isUnsupportedClassic65ServicePack_falseWhenProviderMissing() {
-        assertFalse(AemVersionDetector.isUnsupportedClassic65ServicePack(null));
+    void isUnbrandedClassic65_falseWhenProviderMissing() {
+        assertFalse(AemVersionDetector.isUnbrandedClassic65(null));
     }
 
     @Test
-    void isUnsupportedClassic65ServicePack_falseOnBrandedLtsQualifier() {
+    void isUnbrandedClassic65_falseOnBrandedLtsQualifier() {
         mockProductInfoProvider.setVersion(new Version("6.5.2.LTS"));
-        assertFalse(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
     }
 
     @Test
-    void isUnsupportedClassic65ServicePack_falseOnBrandedLtsQualifierLowercase() {
+    void isUnbrandedClassic65_falseOnBrandedLtsQualifierLowercase() {
         mockProductInfoProvider.setVersion(new Version("6.5.21.lts"));
-        assertFalse(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
+    }
+
+    @Test
+    void isUnbrandedClassic65_trueOnQualifierThatMerelyContainsLts() {
+        // Exact match only - a qualifier that merely contains "LTS" as a substring (e.g. a hypothetical internal
+        // build tag) must not be mistaken for the real LTS branding.
+        mockProductInfoProvider.setVersion(new Version("6.5.5.NOTLTSBUILD"));
+        assertTrue(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
     }
 }
