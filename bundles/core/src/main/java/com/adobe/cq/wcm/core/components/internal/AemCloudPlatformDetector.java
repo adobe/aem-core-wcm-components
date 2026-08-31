@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Version;
 
@@ -56,10 +57,17 @@ public final class AemCloudPlatformDetector {
     }
 
     /**
+     * Version qualifier reported by properly provisioned/branded classic AEM 6.5 LTS instances (e.g.
+     * {@code 6.5.2.LTS}). A classic 6.5.x version without this qualifier (e.g. a bare {@code 6.5.0}) is treated
+     * as an unsupported/unbranded environment.
+     */
+    static final String CLASSIC_65_LTS_QUALIFIER = "LTS";
+
+    /**
      * @param productInfoProvider Granite product info service
-     * @return {@code true} when the runtime is classic AEM 6.5, at any service pack (SP0 through the latest and
-     *         any future SP) - Content AI Search is unsupported on non-Cloud AEM 6.5 entirely. AEM as a Cloud
-     *         Service is unaffected.
+     * @return {@code true} when the runtime is classic AEM 6.5 without the {@code LTS} version qualifier -
+     *         Content AI Search is unsupported there. Properly branded AEM 6.5 LTS (qualifier present) and AEM as
+     *         a Cloud Service are unaffected.
      */
     public static boolean isUnsupportedClassic65ServicePack(@Nullable ProductInfoProvider productInfoProvider) {
         if (isCloudPlatform(productInfoProvider)) {
@@ -69,7 +77,10 @@ public final class AemCloudPlatformDetector {
         if (version == null) {
             return false;
         }
-        return version.getMajor() == 6 && version.getMinor() == 5;
+        if (version.getMajor() != 6 || version.getMinor() != 5) {
+            return false;
+        }
+        return !StringUtils.containsIgnoreCase(version.getQualifier(), CLASSIC_65_LTS_QUALIFIER);
     }
 
     @Nullable

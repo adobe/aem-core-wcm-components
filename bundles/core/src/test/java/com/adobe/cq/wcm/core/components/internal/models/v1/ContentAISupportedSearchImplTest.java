@@ -178,6 +178,14 @@ class ContentAISupportedSearchImplTest {
     }
 
     @Test
+    void genSearchToggleVisible_visibleOnBrandedClassic65LtsQualifier() {
+        mockProductInfoProvider.setVersion(new Version("6.5.2.LTS"));
+        context.currentResource(COMPONENT_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertTrue(search.isGenSearchToggleVisible());
+    }
+
+    @Test
     void genSearchToggleVisible_visibleOnCloudEvenWithHighVersionNumber() {
         mockProductInfoProvider.setVersion(new Version("6.6.25"));
         context.currentResource(COMPONENT_PATH);

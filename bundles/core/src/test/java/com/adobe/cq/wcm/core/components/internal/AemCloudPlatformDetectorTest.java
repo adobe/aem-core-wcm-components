@@ -98,4 +98,16 @@ class AemCloudPlatformDetectorTest {
     void isUnsupportedClassic65ServicePack_falseWhenProviderMissing() {
         assertFalse(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(null));
     }
+
+    @Test
+    void isUnsupportedClassic65ServicePack_falseOnBrandedLtsQualifier() {
+        mockProductInfoProvider.setVersion(new Version("6.5.2.LTS"));
+        assertFalse(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+    }
+
+    @Test
+    void isUnsupportedClassic65ServicePack_falseOnBrandedLtsQualifierLowercase() {
+        mockProductInfoProvider.setVersion(new Version("6.5.21.lts"));
+        assertFalse(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+    }
 }
