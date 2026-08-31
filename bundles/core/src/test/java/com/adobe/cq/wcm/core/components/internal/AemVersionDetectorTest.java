@@ -16,6 +16,8 @@
 package com.adobe.cq.wcm.core.components.internal;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.osgi.framework.Version;
 
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
@@ -64,21 +66,10 @@ class AemVersionDetectorTest {
         assertFalse(AemVersionDetector.isCloudPlatform(() -> productInfo));
     }
 
-    @Test
-    void isUnbrandedClassic65_trueOnGa() {
-        mockProductInfoProvider.setVersion(new Version("6.5.0"));
-        assertTrue(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
-    }
-
-    @Test
-    void isUnbrandedClassic65_trueOnLatestKnownServicePack() {
-        mockProductInfoProvider.setVersion(new Version("6.5.25"));
-        assertTrue(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
-    }
-
-    @Test
-    void isUnbrandedClassic65_trueOnFutureServicePack() {
-        mockProductInfoProvider.setVersion(new Version("6.5.27"));
+    @ParameterizedTest
+    @ValueSource(strings = {"6.5.0", "6.5.25", "6.5.27"}) // GA, latest known SP, and a future SP alike
+    void isUnbrandedClassic65_trueOnAnyClassic65MicroVersion(String version) {
+        mockProductInfoProvider.setVersion(new Version(version));
         assertTrue(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
     }
 

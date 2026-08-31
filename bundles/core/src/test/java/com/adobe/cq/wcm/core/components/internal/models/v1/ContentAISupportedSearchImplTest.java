@@ -20,6 +20,8 @@ import org.apache.sling.i18n.impl.RootResourceBundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.osgi.framework.Version;
 
@@ -153,25 +155,10 @@ class ContentAISupportedSearchImplTest {
         assertFalse(search.isGenSearchToggleVisible());
     }
 
-    @Test
-    void genSearchToggleVisible_alwaysHiddenOnClassic65GaEvenWhenAuthorEnables() {
-        mockProductInfoProvider.setVersion(new Version("6.5.0"));
-        context.currentResource(COMPONENT_PATH);
-        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
-        assertFalse(search.isGenSearchToggleVisible());
-    }
-
-    @Test
-    void genSearchToggleVisible_alwaysHiddenOnClassic65LatestServicePack() {
-        mockProductInfoProvider.setVersion(new Version("6.5.25"));
-        context.currentResource(COMPONENT_PATH);
-        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
-        assertFalse(search.isGenSearchToggleVisible());
-    }
-
-    @Test
-    void genSearchToggleVisible_alwaysHiddenOnClassic65FutureServicePack() {
-        mockProductInfoProvider.setVersion(new Version("6.5.27"));
+    @ParameterizedTest
+    @ValueSource(strings = {"6.5.0", "6.5.25", "6.5.27"}) // GA, latest known SP, and a future SP alike
+    void genSearchToggleVisible_alwaysHiddenOnClassic65EvenWhenAuthorEnables(String version) {
+        mockProductInfoProvider.setVersion(new Version(version));
         context.currentResource(COMPONENT_PATH);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         assertFalse(search.isGenSearchToggleVisible());

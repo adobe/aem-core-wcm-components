@@ -66,10 +66,8 @@ public final class AemVersionDetector {
 
     /**
      * @param productInfoProvider Granite product info service
-     * @return {@code true} when the runtime is classic AEM 6.5 without the {@code LTS} version qualifier, at any
-     *         release (GA, service pack, or otherwise) - Content AI Search is unsupported there. Properly branded
-     *         AEM 6.5 LTS (qualifier present) is unaffected. Note: major/minor 6.5 can never also satisfy
-     *         {@link #isCloudPlatform}, so no separate cloud check is needed here.
+     * @return {@code true} when the runtime is classic AEM 6.5 without the {@code LTS} version qualifier
+     *         (unsupported for Content AI Search); {@code false} for properly branded AEM 6.5 LTS or Cloud Service
      */
     public static boolean isUnbrandedClassic65(@Nullable ProductInfoProvider productInfoProvider) {
         Version version = getVersion(productInfoProvider);

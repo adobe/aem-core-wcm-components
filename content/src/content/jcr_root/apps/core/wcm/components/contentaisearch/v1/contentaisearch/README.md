@@ -159,7 +159,8 @@ data-cmp-hook-contentaisearch="sourceText"
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
-* **Compatibility**: AEM as a Cloud Service, AEM 6.5 LTS (including Adobe Managed Services) for search results. The visitor-facing generative-summary toggle is unsupported and hidden on a bare/unbranded classic AEM 6.5 (no `LTS` version qualifier, e.g. `6.5.0`) - it renders on AEM as a Cloud Service and on properly branded AEM 6.5 LTS (version qualifier `LTS`, e.g. `6.5.2.LTS`).
+* **Compatibility**: AEM as a Cloud Service, AEM 6.5 LTS (including Adobe Managed Services) for search results.
+* **Generative-summary toggle**: renders on AEM as a Cloud Service and on properly branded AEM 6.5 LTS (version qualifier `LTS`, e.g. `6.5.2.LTS`). It's hidden on a bare/unbranded classic AEM 6.5 (no `LTS` version qualifier, e.g. `6.5.0`).
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_ai\_search\_v1](https://www.adobe.com/go/aem_cmp_ai_search_v1)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_ai\_search](https://www.adobe.com/go/aem_cmp_library_ai_search)
