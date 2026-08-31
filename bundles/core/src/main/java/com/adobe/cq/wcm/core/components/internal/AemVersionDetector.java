@@ -23,9 +23,10 @@ import com.adobe.granite.license.ProductInfo;
 import com.adobe.granite.license.ProductInfoProvider;
 
 /**
- * Detects whether the runtime is AEM as a Cloud Service using {@link ProductInfo}.
+ * Detects properties of the running AEM version/platform (Cloud Service vs. classic, and classic AEM 6.5 LTS
+ * branding) using {@link ProductInfo}.
  */
-public final class AemCloudPlatformDetector {
+public final class AemVersionDetector {
 
     /**
      * Minimum major version for AEM as a Cloud Service release train versioning.
@@ -38,7 +39,7 @@ public final class AemCloudPlatformDetector {
      */
     static final Version MIN_CLOUD_CLASSIC_VERSION = new Version("6.6.0");
 
-    private AemCloudPlatformDetector() {
+    private AemVersionDetector() {
     }
 
     /**

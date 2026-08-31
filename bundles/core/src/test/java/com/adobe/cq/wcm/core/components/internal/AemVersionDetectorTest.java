@@ -25,89 +25,89 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class AemCloudPlatformDetectorTest {
+class AemVersionDetectorTest {
 
     private final MockProductInfoProvider mockProductInfoProvider = new MockProductInfoProvider();
 
     @Test
     void isCloudPlatform_falseOnAem65() {
         mockProductInfoProvider.setVersion(new Version("6.5.25"));
-        assertFalse(AemCloudPlatformDetector.isCloudPlatform(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isCloudPlatform(mockProductInfoProvider));
     }
 
     @Test
     void isCloudPlatform_trueOnCloudPublish() {
         mockProductInfoProvider.setVersion(new Version("6.6.0"));
-        assertTrue(AemCloudPlatformDetector.isCloudPlatform(mockProductInfoProvider));
+        assertTrue(AemVersionDetector.isCloudPlatform(mockProductInfoProvider));
     }
 
     @Test
     void isCloudPlatform_trueOnCloudAuthorReleaseTrain() {
         mockProductInfoProvider.setVersion(new Version("2026.2.24288"));
-        assertTrue(AemCloudPlatformDetector.isCloudPlatform(mockProductInfoProvider));
+        assertTrue(AemVersionDetector.isCloudPlatform(mockProductInfoProvider));
     }
 
     @Test
     void isCloudPlatform_falseWhenProviderMissing() {
-        assertFalse(AemCloudPlatformDetector.isCloudPlatform(null));
+        assertFalse(AemVersionDetector.isCloudPlatform(null));
     }
 
     @Test
     void isCloudPlatform_falseWhenProductInfoMissing() {
-        assertFalse(AemCloudPlatformDetector.isCloudPlatform(() -> null));
+        assertFalse(AemVersionDetector.isCloudPlatform(() -> null));
     }
 
     @Test
     void isCloudPlatform_falseWhenVersionMissing() {
         com.adobe.granite.license.ProductInfo productInfo = mock(com.adobe.granite.license.ProductInfo.class);
         when(productInfo.getVersion()).thenReturn(null);
-        assertFalse(AemCloudPlatformDetector.isCloudPlatform(() -> productInfo));
+        assertFalse(AemVersionDetector.isCloudPlatform(() -> productInfo));
     }
 
     @Test
     void isUnsupportedClassic65ServicePack_trueOnGa() {
         mockProductInfoProvider.setVersion(new Version("6.5.0"));
-        assertTrue(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertTrue(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
     }
 
     @Test
     void isUnsupportedClassic65ServicePack_trueOnLatestKnownServicePack() {
         mockProductInfoProvider.setVersion(new Version("6.5.25"));
-        assertTrue(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertTrue(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
     }
 
     @Test
     void isUnsupportedClassic65ServicePack_trueOnFutureServicePack() {
         mockProductInfoProvider.setVersion(new Version("6.5.27"));
-        assertTrue(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertTrue(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
     }
 
     @Test
     void isUnsupportedClassic65ServicePack_falseOnCloudPublishEvenWithHighMicro() {
         mockProductInfoProvider.setVersion(new Version("6.6.25"));
-        assertFalse(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
     }
 
     @Test
     void isUnsupportedClassic65ServicePack_falseOnCloudAuthorReleaseTrain() {
         mockProductInfoProvider.setVersion(new Version("2026.2.24288"));
-        assertFalse(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
     }
 
     @Test
     void isUnsupportedClassic65ServicePack_falseWhenProviderMissing() {
-        assertFalse(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(null));
+        assertFalse(AemVersionDetector.isUnsupportedClassic65ServicePack(null));
     }
 
     @Test
     void isUnsupportedClassic65ServicePack_falseOnBrandedLtsQualifier() {
         mockProductInfoProvider.setVersion(new Version("6.5.2.LTS"));
-        assertFalse(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
     }
 
     @Test
     void isUnsupportedClassic65ServicePack_falseOnBrandedLtsQualifierLowercase() {
         mockProductInfoProvider.setVersion(new Version("6.5.21.lts"));
-        assertFalse(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
     }
 }

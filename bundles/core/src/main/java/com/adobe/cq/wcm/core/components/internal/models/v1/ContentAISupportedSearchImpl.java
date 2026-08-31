@@ -39,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.AemCloudPlatformDetector;
+import com.adobe.cq.wcm.core.components.internal.AemVersionDetector;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.adobe.granite.license.ProductInfoProvider;
@@ -119,7 +119,7 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     }
 
     private boolean resolveGenSearchToggleVisible() {
-        if (AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(productInfoProvider)) {
+        if (AemVersionDetector.isUnsupportedClassic65ServicePack(productInfoProvider)) {
             return false;
         }
         return genSearchToggleVisibleProperty == null || genSearchToggleVisibleProperty.booleanValue();
