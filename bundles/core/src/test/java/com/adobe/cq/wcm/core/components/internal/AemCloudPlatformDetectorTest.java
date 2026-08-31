@@ -65,20 +65,20 @@ class AemCloudPlatformDetectorTest {
     }
 
     @Test
-    void isUnsupportedClassic65ServicePack_falseBelowSp10() {
-        mockProductInfoProvider.setVersion(new Version("6.5.9"));
-        assertFalse(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
-    }
-
-    @Test
-    void isUnsupportedClassic65ServicePack_trueAtSp10() {
-        mockProductInfoProvider.setVersion(new Version("6.5.10"));
+    void isUnsupportedClassic65ServicePack_trueOnGa() {
+        mockProductInfoProvider.setVersion(new Version("6.5.0"));
         assertTrue(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
     }
 
     @Test
-    void isUnsupportedClassic65ServicePack_trueAboveSp10() {
+    void isUnsupportedClassic65ServicePack_trueOnLatestKnownServicePack() {
         mockProductInfoProvider.setVersion(new Version("6.5.25"));
+        assertTrue(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
+    }
+
+    @Test
+    void isUnsupportedClassic65ServicePack_trueOnFutureServicePack() {
+        mockProductInfoProvider.setVersion(new Version("6.5.27"));
         assertTrue(AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(mockProductInfoProvider));
     }
 

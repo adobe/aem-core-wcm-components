@@ -52,8 +52,8 @@ class ContentAISupportedSearchImplTest {
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + "/test-content-dam.json", CONTENT_ROOT);
-        // Below the classic 6.5 SP10 cutoff by default, so tests unrelated to version gating aren't affected.
-        mockProductInfoProvider.setVersion(new Version("6.5.9"));
+        // Cloud Service by default, so tests unrelated to version gating aren't affected by the classic-6.5 block.
+        mockProductInfoProvider.setVersion(new Version("6.6.0"));
         context.registerInjectActivateService(mockProductInfoProvider);
         ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class);
         Mockito.when(resourceBundleProvider.getResourceBundle(Mockito.any())).thenReturn(new RootResourceBundle());
@@ -154,16 +154,24 @@ class ContentAISupportedSearchImplTest {
     }
 
     @Test
-    void genSearchToggleVisible_alwaysHiddenOnClassic65Sp10EvenWhenAuthorEnables() {
-        mockProductInfoProvider.setVersion(new Version("6.5.10"));
+    void genSearchToggleVisible_alwaysHiddenOnClassic65GaEvenWhenAuthorEnables() {
+        mockProductInfoProvider.setVersion(new Version("6.5.0"));
         context.currentResource(COMPONENT_PATH);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         assertFalse(search.isGenSearchToggleVisible());
     }
 
     @Test
-    void genSearchToggleVisible_alwaysHiddenOnClassic65AboveSp10() {
+    void genSearchToggleVisible_alwaysHiddenOnClassic65LatestServicePack() {
         mockProductInfoProvider.setVersion(new Version("6.5.25"));
+        context.currentResource(COMPONENT_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertFalse(search.isGenSearchToggleVisible());
+    }
+
+    @Test
+    void genSearchToggleVisible_alwaysHiddenOnClassic65FutureServicePack() {
+        mockProductInfoProvider.setVersion(new Version("6.5.27"));
         context.currentResource(COMPONENT_PATH);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         assertFalse(search.isGenSearchToggleVisible());
