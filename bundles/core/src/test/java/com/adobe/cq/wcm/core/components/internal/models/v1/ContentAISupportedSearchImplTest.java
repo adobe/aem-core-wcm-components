@@ -52,8 +52,8 @@ class ContentAISupportedSearchImplTest {
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + "/test-content-dam.json", CONTENT_ROOT);
-        // Below the classic 6.5 SP20 cutoff by default, so tests unrelated to version gating aren't affected.
-        mockProductInfoProvider.setVersion(new Version("6.5.19"));
+        // Below the classic 6.5 SP10 cutoff by default, so tests unrelated to version gating aren't affected.
+        mockProductInfoProvider.setVersion(new Version("6.5.9"));
         context.registerInjectActivateService(mockProductInfoProvider);
         ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class);
         Mockito.when(resourceBundleProvider.getResourceBundle(Mockito.any())).thenReturn(new RootResourceBundle());
@@ -154,15 +154,15 @@ class ContentAISupportedSearchImplTest {
     }
 
     @Test
-    void genSearchToggleVisible_alwaysHiddenOnClassic65Sp20EvenWhenAuthorEnables() {
-        mockProductInfoProvider.setVersion(new Version("6.5.20"));
+    void genSearchToggleVisible_alwaysHiddenOnClassic65Sp10EvenWhenAuthorEnables() {
+        mockProductInfoProvider.setVersion(new Version("6.5.10"));
         context.currentResource(COMPONENT_PATH);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         assertFalse(search.isGenSearchToggleVisible());
     }
 
     @Test
-    void genSearchToggleVisible_alwaysHiddenOnClassic65AboveSp20() {
+    void genSearchToggleVisible_alwaysHiddenOnClassic65AboveSp10() {
         mockProductInfoProvider.setVersion(new Version("6.5.25"));
         context.currentResource(COMPONENT_PATH);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);

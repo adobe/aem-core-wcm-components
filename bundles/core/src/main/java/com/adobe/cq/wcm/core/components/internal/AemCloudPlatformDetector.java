@@ -38,10 +38,10 @@ public final class AemCloudPlatformDetector {
     static final Version MIN_CLOUD_CLASSIC_VERSION = new Version("6.6.0");
 
     /**
-     * First classic AEM 6.5 service pack (SP20) at which Content AI Search is unsupported on non-Cloud AEM
-     * (on-premise / Adobe Managed Services). SP0-SP19 remain supported.
+     * First classic AEM 6.5 service pack (SP10) at which Content AI Search is unsupported on non-Cloud AEM
+     * (on-premise / Adobe Managed Services). SP0-SP9 remain supported.
      */
-    static final Version MIN_UNSUPPORTED_CLASSIC_65_VERSION = new Version("6.5.20");
+    static final Version MIN_UNSUPPORTED_CLASSIC_65_VERSION = new Version("6.5.10");
 
     private AemCloudPlatformDetector() {
     }
@@ -63,7 +63,7 @@ public final class AemCloudPlatformDetector {
 
     /**
      * @param productInfoProvider Granite product info service
-     * @return {@code true} when the runtime is classic AEM 6.5 at service pack 20 or later (SP20+ is unsupported
+     * @return {@code true} when the runtime is classic AEM 6.5 at service pack 10 or later (SP10+ is unsupported
      *         for Content AI Search on non-Cloud AEM; earlier 6.5 service packs and AEM as a Cloud Service are
      *         unaffected)
      */
