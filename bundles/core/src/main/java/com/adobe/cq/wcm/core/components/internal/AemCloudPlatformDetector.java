@@ -37,6 +37,12 @@ public final class AemCloudPlatformDetector {
      */
     static final Version MIN_CLOUD_CLASSIC_VERSION = new Version("6.6.0");
 
+    /**
+     * First classic AEM 6.5 service pack (SP20) at which Content AI Search is unsupported on non-Cloud AEM
+     * (on-premise / Adobe Managed Services). SP0-SP19 remain supported.
+     */
+    static final Version MIN_UNSUPPORTED_CLASSIC_65_VERSION = new Version("6.5.20");
+
     private AemCloudPlatformDetector() {
     }
 
@@ -45,14 +51,7 @@ public final class AemCloudPlatformDetector {
      * @return {@code true} when the runtime is AEM as a Cloud Service
      */
     public static boolean isCloudPlatform(@Nullable ProductInfoProvider productInfoProvider) {
-        if (productInfoProvider == null) {
-            return false;
-        }
-        ProductInfo productInfo = productInfoProvider.getProductInfo();
-        if (productInfo == null) {
-            return false;
-        }
-        Version version = productInfo.getVersion();
+        Version version = getVersion(productInfoProvider);
         if (version == null) {
             return false;
         }
@@ -60,5 +59,35 @@ public final class AemCloudPlatformDetector {
             return true;
         }
         return version.compareTo(MIN_CLOUD_CLASSIC_VERSION) >= 0;
+    }
+
+    /**
+     * @param productInfoProvider Granite product info service
+     * @return {@code true} when the runtime is classic AEM 6.5 at service pack 20 or later (SP20+ is unsupported
+     *         for Content AI Search on non-Cloud AEM; earlier 6.5 service packs and AEM as a Cloud Service are
+     *         unaffected)
+     */
+    public static boolean isUnsupportedClassic65ServicePack(@Nullable ProductInfoProvider productInfoProvider) {
+        if (isCloudPlatform(productInfoProvider)) {
+            return false;
+        }
+        Version version = getVersion(productInfoProvider);
+        if (version == null) {
+            return false;
+        }
+        return version.getMajor() == 6 && version.getMinor() == 5
+            && version.compareTo(MIN_UNSUPPORTED_CLASSIC_65_VERSION) >= 0;
+    }
+
+    @Nullable
+    private static Version getVersion(@Nullable ProductInfoProvider productInfoProvider) {
+        if (productInfoProvider == null) {
+            return null;
+        }
+        ProductInfo productInfo = productInfoProvider.getProductInfo();
+        if (productInfo == null) {
+            return null;
+        }
+        return productInfo.getVersion();
     }
 }

@@ -39,8 +39,10 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.AemCloudPlatformDetector;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
+import com.adobe.granite.license.ProductInfoProvider;
 import com.day.cq.i18n.I18n;
 import com.day.cq.wcm.api.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -57,6 +59,9 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     public static final int PROP_RESULTS_SIZE_DEFAULT = 12;
     public static final String PROP_RESULTS_LAYOUT_DEFAULT = ContentAISupportedSearch.RESULTS_LAYOUT_CARD;
     public static final boolean PROP_GENSEARCH_ENABLED_BY_DEFAULT_DEFAULT = true;
+
+    @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private ProductInfoProvider productInfoProvider;
 
     @ValueMapValue
     @Default(values = "")
@@ -114,6 +119,9 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     }
 
     private boolean resolveGenSearchToggleVisible() {
+        if (AemCloudPlatformDetector.isUnsupportedClassic65ServicePack(productInfoProvider)) {
+            return false;
+        }
         return genSearchToggleVisibleProperty == null || genSearchToggleVisibleProperty.booleanValue();
     }
 

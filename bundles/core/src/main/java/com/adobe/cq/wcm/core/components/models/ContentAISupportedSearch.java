@@ -112,7 +112,8 @@ public interface ContentAISupportedSearch extends Component {
     }
 
     /**
-     * @return whether the visitor-facing generative search toggle is rendered.
+     * @return whether the visitor-facing generative search toggle is rendered. Always {@code false} on classic
+     *         AEM 6.5 service pack 20 and later (unsupported); follows author configuration everywhere else.
      * @since com.adobe.cq.wcm.core.components.models 12.32.0
      */
     default boolean isGenSearchToggleVisible() {

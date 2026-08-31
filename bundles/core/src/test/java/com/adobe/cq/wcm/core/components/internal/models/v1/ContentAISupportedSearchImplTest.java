@@ -21,9 +21,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.osgi.framework.Version;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
+import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -45,10 +47,14 @@ class ContentAISupportedSearchImplTest {
     private static final String COMPONENT_LIST_PATH = CONTENT_ROOT + "/contentaisearch-list";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
+    private static final MockProductInfoProvider mockProductInfoProvider = new MockProductInfoProvider();
 
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + "/test-content-dam.json", CONTENT_ROOT);
+        // Below the classic 6.5 SP20 cutoff by default, so tests unrelated to version gating aren't affected.
+        mockProductInfoProvider.setVersion(new Version("6.5.19"));
+        context.registerInjectActivateService(mockProductInfoProvider);
         ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class);
         Mockito.when(resourceBundleProvider.getResourceBundle(Mockito.any())).thenReturn(new RootResourceBundle());
         Mockito.when(resourceBundleProvider.getResourceBundle(Mockito.any(), Mockito.any())).thenReturn(new RootResourceBundle());
@@ -145,5 +151,29 @@ class ContentAISupportedSearchImplTest {
             "genSearchToggleVisible", false);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         assertFalse(search.isGenSearchToggleVisible());
+    }
+
+    @Test
+    void genSearchToggleVisible_alwaysHiddenOnClassic65Sp20EvenWhenAuthorEnables() {
+        mockProductInfoProvider.setVersion(new Version("6.5.20"));
+        context.currentResource(COMPONENT_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertFalse(search.isGenSearchToggleVisible());
+    }
+
+    @Test
+    void genSearchToggleVisible_alwaysHiddenOnClassic65AboveSp20() {
+        mockProductInfoProvider.setVersion(new Version("6.5.25"));
+        context.currentResource(COMPONENT_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertFalse(search.isGenSearchToggleVisible());
+    }
+
+    @Test
+    void genSearchToggleVisible_visibleOnCloudEvenWithHighVersionNumber() {
+        mockProductInfoProvider.setVersion(new Version("6.6.25"));
+        context.currentResource(COMPONENT_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertTrue(search.isGenSearchToggleVisible());
     }
 }
