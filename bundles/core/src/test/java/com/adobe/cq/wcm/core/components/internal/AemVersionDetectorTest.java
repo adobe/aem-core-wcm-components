@@ -68,45 +68,45 @@ class AemVersionDetectorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"6.5.0", "6.5.25", "6.5.27"}) // GA, latest known SP, and a future SP alike
-    void isUnbrandedClassic65_trueOnAnyClassic65MicroVersion(String version) {
+    void isNonLtsClassic65_trueOnAnyClassic65MicroVersion(String version) {
         mockProductInfoProvider.setVersion(new Version(version));
-        assertTrue(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
+        assertTrue(AemVersionDetector.isNonLtsClassic65(mockProductInfoProvider));
     }
 
     @Test
-    void isUnbrandedClassic65_falseOnCloudPublishEvenWithHighMicro() {
+    void isNonLtsClassic65_falseOnCloudPublishEvenWithHighMicro() {
         mockProductInfoProvider.setVersion(new Version("6.6.25"));
-        assertFalse(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isNonLtsClassic65(mockProductInfoProvider));
     }
 
     @Test
-    void isUnbrandedClassic65_falseOnCloudAuthorReleaseTrain() {
+    void isNonLtsClassic65_falseOnCloudAuthorReleaseTrain() {
         mockProductInfoProvider.setVersion(new Version("2026.2.24288"));
-        assertFalse(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isNonLtsClassic65(mockProductInfoProvider));
     }
 
     @Test
-    void isUnbrandedClassic65_falseWhenProviderMissing() {
-        assertFalse(AemVersionDetector.isUnbrandedClassic65(null));
+    void isNonLtsClassic65_falseWhenProviderMissing() {
+        assertFalse(AemVersionDetector.isNonLtsClassic65(null));
     }
 
     @Test
-    void isUnbrandedClassic65_falseOnBrandedLtsQualifier() {
+    void isNonLtsClassic65_falseOnBrandedLtsQualifier() {
         mockProductInfoProvider.setVersion(new Version("6.5.2.LTS"));
-        assertFalse(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isNonLtsClassic65(mockProductInfoProvider));
     }
 
     @Test
-    void isUnbrandedClassic65_falseOnBrandedLtsQualifierLowercase() {
+    void isNonLtsClassic65_falseOnBrandedLtsQualifierLowercase() {
         mockProductInfoProvider.setVersion(new Version("6.5.21.lts"));
-        assertFalse(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isNonLtsClassic65(mockProductInfoProvider));
     }
 
     @Test
-    void isUnbrandedClassic65_trueOnQualifierThatMerelyContainsLts() {
+    void isNonLtsClassic65_trueOnQualifierThatMerelyContainsLts() {
         // Exact match only - a qualifier that merely contains "LTS" as a substring (e.g. a hypothetical internal
         // build tag) must not be mistaken for the real LTS branding.
         mockProductInfoProvider.setVersion(new Version("6.5.5.NOTLTSBUILD"));
-        assertTrue(AemVersionDetector.isUnbrandedClassic65(mockProductInfoProvider));
+        assertTrue(AemVersionDetector.isNonLtsClassic65(mockProductInfoProvider));
     }
 }

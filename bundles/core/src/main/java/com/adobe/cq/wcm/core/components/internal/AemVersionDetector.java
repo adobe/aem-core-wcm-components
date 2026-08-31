@@ -42,7 +42,7 @@ public final class AemVersionDetector {
     /**
      * Version qualifier reported by properly provisioned/branded classic AEM 6.5 LTS instances (e.g.
      * {@code 6.5.2.LTS}). A classic 6.5.x version without this qualifier (e.g. a bare {@code 6.5.0}) is treated
-     * as an unsupported/unbranded environment.
+     * as an unsupported/non-LTS environment.
      */
     static final String CLASSIC_65_LTS_QUALIFIER = "LTS";
 
@@ -69,7 +69,7 @@ public final class AemVersionDetector {
      * @return {@code true} when the runtime is classic AEM 6.5 without the {@code LTS} version qualifier
      *         (unsupported for Content AI Search); {@code false} for properly branded AEM 6.5 LTS or Cloud Service
      */
-    public static boolean isUnbrandedClassic65(@Nullable ProductInfoProvider productInfoProvider) {
+    public static boolean isNonLtsClassic65(@Nullable ProductInfoProvider productInfoProvider) {
         Version version = getVersion(productInfoProvider);
         if (version == null || version.getMajor() != 6 || version.getMinor() != 5) {
             return false;
