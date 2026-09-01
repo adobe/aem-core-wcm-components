@@ -177,13 +177,14 @@ public class ContentAIClientImpl implements ContentAIClient {
     @Override
     public ContentSourceQueryResult genSearch(String contentSource, String contentSourceType, String query)
         throws ContentAIClientException {
+        // Unlike /content-sources/search, the gensearch endpoint's request schema rejects a contentSource.type
+        // field outright with 400 "Request validation failed" - confirmed by direct API testing. contentSourceType
+        // is accepted here only to keep this method's signature symmetric with search()/the ContentAIClient
+        // interface; it's deliberately not added to the request body.
         ObjectNode body = mapper.createObjectNode();
         body.put("query", query);
         ObjectNode contentSourceNode = body.putObject("contentSource");
         contentSourceNode.put("name", contentSource);
-        if (StringUtils.isNotBlank(contentSourceType)) {
-            contentSourceNode.put("type", contentSourceType);
-        }
 
         JsonNode response = executeRequest("/content-sources/gensearch", body);
         try {

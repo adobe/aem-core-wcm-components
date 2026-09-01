@@ -234,6 +234,21 @@ class ContentAIClientImplTest {
     }
 
     @Test
+    void genSearchOmitsContentSourceType() throws Exception {
+        // Unlike /content-sources/search, the gensearch endpoint's request schema rejects a contentSource.type
+        // field outright with 400 "Request validation failed" (confirmed against the real API) - genSearch()
+        // must never send it, even though the parameter is accepted for signature symmetry with search().
+        respondWith(200, "{\"query\":\"electric cars\",\"result\":\"Electric cars are efficient.\",\"hits\":[]}");
+
+        client.genSearch("my-content-source", "ACQUISITION", "electric cars");
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        String body = new String(sent.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
+        assertEquals("{\"query\":\"electric cars\",\"contentSource\":{\"name\":\"my-content-source\"}}", body,
+            "gensearch request body must never include contentSource.type");
+    }
+
+    @Test
     void requestCarriesApiKeyHeaderAndNoBearer() throws Exception {
         respondWith(200, "{\"totalResults\":0,\"results\":[]}");
 
