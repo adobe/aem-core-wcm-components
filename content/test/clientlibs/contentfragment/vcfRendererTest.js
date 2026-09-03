@@ -125,6 +125,76 @@ describe("Test VCF renderer for", function() {
         }, 50);
     });
 
+    it("normalizes the VCF preview response markup before injecting", function(done) {
+        window.__vcfHandlerFired = false;
+        // CT_SITES-49050 gates markup normalization; force it enabled (mock default is off).
+        const savedIsEnabled = globalThis.Granite.Toggles.isEnabled;
+        globalThis.Granite.Toggles.isEnabled = function() {
+            return true;
+        };
+
+        const contentFrameDoc = document.createElement("div");
+        const vcfElement = document.createElement("div");
+        vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
+        vcfElement.dataset.cmpContentfragmentVcfUrl = "/cf/preview?" + FRAGMENT_UUID;
+        contentFrameDoc.appendChild(vcfElement);
+
+        Granite.author.ContentFrame.contentWindow = {
+            document: contentFrameDoc
+        };
+
+        const responseMarkup =
+            "<div class=\"cmp-contentfragment-vcf__preview\">visible preview" +
+                "<img src=\"x\" onerror=\"window.__vcfHandlerFired = true\">" +
+                "<script>window.__vcfHandlerFired = true;<\/script>" +
+            "</div>";
+
+        jQuery._ajaxHandler = function(options, resolve) {
+            resolve(responseMarkup);
+
+            setTimeout(function() {
+                globalThis.Granite.Toggles.isEnabled = savedIsEnabled;
+                expect(vcfElement.innerHTML).not.toContain("onerror");
+                expect(vcfElement.innerHTML.toLowerCase()).not.toContain("<script");
+                expect(vcfElement.innerHTML).toContain("visible preview");
+                expect(window.__vcfHandlerFired).toBe(false);
+                delete window.__vcfHandlerFired;
+                done();
+            }, 50);
+        };
+
+        channel.trigger("cq-editor-loaded");
+    });
+
+    it("returns the raw preview markup when markup helpers are disabled", function(done) {
+        const savedIsEnabled = globalThis.Granite.Toggles.isEnabled;
+        globalThis.Granite.Toggles.isEnabled = function(key) {
+            return key !== "CT_SITES-49050";
+        };
+
+        const contentFrameDoc = document.createElement("div");
+        const vcfElement = document.createElement("div");
+        vcfElement.className = "cmp-contentfragment cmp-contentfragment--vcf";
+        vcfElement.dataset.cmpContentfragmentVcfUrl = "/cf/preview?" + FRAGMENT_UUID;
+        contentFrameDoc.appendChild(vcfElement);
+
+        Granite.author.ContentFrame.contentWindow = {
+            document: contentFrameDoc
+        };
+
+        jQuery._ajaxHandler = function(options, resolve) {
+            resolve("<div>Legacy Preview</div>");
+
+            setTimeout(function() {
+                globalThis.Granite.Toggles.isEnabled = savedIsEnabled;
+                expect(vcfElement.innerHTML).toBe("<div>Legacy Preview</div>");
+                done();
+            }, 0);
+        };
+
+        channel.trigger("cq-editor-loaded");
+    });
+
     it("does not load element already being loaded", function(done) {
         const contentFrameDoc = document.createElement("div");
         const vcfElement = document.createElement("div");
