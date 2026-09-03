@@ -119,7 +119,7 @@ public class ContentAISupportedSearchImpl extends AbstractComponentImpl implemen
     }
 
     private boolean resolveGenSearchToggleVisible() {
-        if (AemVersionDetector.isNonLtsClassic65(productInfoProvider)) {
+        if (!AemVersionDetector.isGenSearchSupportedPlatform(productInfoProvider)) {
             return false;
         }
         return genSearchToggleVisibleProperty == null || genSearchToggleVisibleProperty.booleanValue();

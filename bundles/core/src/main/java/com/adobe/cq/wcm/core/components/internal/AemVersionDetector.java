@@ -65,16 +65,22 @@ public final class AemVersionDetector {
     }
 
     /**
+     * Allow-list check for the platforms Content AI Search's generative-search toggle supports: AEM as a Cloud
+     * Service, or classic AEM 6.5 with the {@code LTS} version qualifier (e.g. {@code 6.5.2.LTS}). Fails closed
+     * (returns {@code false}, i.e. hidden) for any other classic version - including AMS/6.5 without the LTS
+     * qualifier - and for an indeterminate platform (missing {@link ProductInfoProvider}/{@link ProductInfo}/
+     * version), so an unknown platform is never treated as supported.
+     *
      * @param productInfoProvider Granite product info service
-     * @return {@code true} when the runtime is classic AEM 6.5 without the {@code LTS} version qualifier
-     *         (unsupported for Content AI Search); {@code false} for properly branded AEM 6.5 LTS or Cloud Service
+     * @return {@code true} when the runtime is a platform the generative-search toggle supports
      */
-    public static boolean isNonLtsClassic65(@Nullable ProductInfoProvider productInfoProvider) {
-        Version version = getVersion(productInfoProvider);
-        if (version == null || version.getMajor() != 6 || version.getMinor() != 5) {
-            return false;
+    public static boolean isGenSearchSupportedPlatform(@Nullable ProductInfoProvider productInfoProvider) {
+        if (isCloudPlatform(productInfoProvider)) {
+            return true;
         }
-        return !Strings.CI.equals(version.getQualifier(), CLASSIC_65_LTS_QUALIFIER);
+        Version version = getVersion(productInfoProvider);
+        return version != null && version.getMajor() == 6 && version.getMinor() == 5
+            && Strings.CI.equals(version.getQualifier(), CLASSIC_65_LTS_QUALIFIER);
     }
 
     @Nullable

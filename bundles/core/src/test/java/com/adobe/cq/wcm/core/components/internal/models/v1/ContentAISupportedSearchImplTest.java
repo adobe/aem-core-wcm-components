@@ -23,11 +23,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
+import com.adobe.granite.license.ProductInfoProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -178,5 +180,15 @@ class ContentAISupportedSearchImplTest {
         context.currentResource(COMPONENT_PATH);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         assertTrue(search.isGenSearchToggleVisible());
+    }
+
+    @Test
+    void genSearchToggleVisible_hiddenWhenPlatformIndeterminateEvenWhenAuthorEnables() {
+        // Fails closed rather than open: when ProductInfo can't be resolved at all, the toggle must stay hidden
+        // even though the author-configured property (genSearchToggleVisibleProperty) would otherwise allow it.
+        context.registerService(ProductInfoProvider.class, () -> null, Constants.SERVICE_RANKING, 100);
+        context.currentResource(COMPONENT_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertFalse(search.isGenSearchToggleVisible());
     }
 }

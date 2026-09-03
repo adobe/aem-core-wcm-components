@@ -66,47 +66,66 @@ class AemVersionDetectorTest {
         assertFalse(AemVersionDetector.isCloudPlatform(() -> productInfo));
     }
 
+    @Test
+    void isGenSearchSupportedPlatform_trueOnCloudPublish() {
+        mockProductInfoProvider.setVersion(new Version("6.6.0"));
+        assertTrue(AemVersionDetector.isGenSearchSupportedPlatform(mockProductInfoProvider));
+    }
+
+    @Test
+    void isGenSearchSupportedPlatform_trueOnCloudAuthorReleaseTrain() {
+        mockProductInfoProvider.setVersion(new Version("2026.2.24288"));
+        assertTrue(AemVersionDetector.isGenSearchSupportedPlatform(mockProductInfoProvider));
+    }
+
+    @Test
+    void isGenSearchSupportedPlatform_trueOnBrandedLtsQualifier() {
+        mockProductInfoProvider.setVersion(new Version("6.5.2.LTS"));
+        assertTrue(AemVersionDetector.isGenSearchSupportedPlatform(mockProductInfoProvider));
+    }
+
+    @Test
+    void isGenSearchSupportedPlatform_trueOnBrandedLtsQualifierLowercase() {
+        mockProductInfoProvider.setVersion(new Version("6.5.21.lts"));
+        assertTrue(AemVersionDetector.isGenSearchSupportedPlatform(mockProductInfoProvider));
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {"6.5.0", "6.5.25", "6.5.27"}) // GA, latest known SP, and a future SP alike
-    void isNonLtsClassic65_trueOnAnyClassic65MicroVersion(String version) {
+    void isGenSearchSupportedPlatform_falseOnAnyNonLtsClassic65MicroVersion(String version) {
         mockProductInfoProvider.setVersion(new Version(version));
-        assertTrue(AemVersionDetector.isNonLtsClassic65(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isGenSearchSupportedPlatform(mockProductInfoProvider));
     }
 
     @Test
-    void isNonLtsClassic65_falseOnCloudPublishEvenWithHighMicro() {
-        mockProductInfoProvider.setVersion(new Version("6.6.25"));
-        assertFalse(AemVersionDetector.isNonLtsClassic65(mockProductInfoProvider));
-    }
-
-    @Test
-    void isNonLtsClassic65_falseOnCloudAuthorReleaseTrain() {
-        mockProductInfoProvider.setVersion(new Version("2026.2.24288"));
-        assertFalse(AemVersionDetector.isNonLtsClassic65(mockProductInfoProvider));
-    }
-
-    @Test
-    void isNonLtsClassic65_falseWhenProviderMissing() {
-        assertFalse(AemVersionDetector.isNonLtsClassic65(null));
-    }
-
-    @Test
-    void isNonLtsClassic65_falseOnBrandedLtsQualifier() {
-        mockProductInfoProvider.setVersion(new Version("6.5.2.LTS"));
-        assertFalse(AemVersionDetector.isNonLtsClassic65(mockProductInfoProvider));
-    }
-
-    @Test
-    void isNonLtsClassic65_falseOnBrandedLtsQualifierLowercase() {
-        mockProductInfoProvider.setVersion(new Version("6.5.21.lts"));
-        assertFalse(AemVersionDetector.isNonLtsClassic65(mockProductInfoProvider));
-    }
-
-    @Test
-    void isNonLtsClassic65_trueOnQualifierThatMerelyContainsLts() {
+    void isGenSearchSupportedPlatform_falseOnQualifierThatMerelyContainsLts() {
         // Exact match only - a qualifier that merely contains "LTS" as a substring (e.g. a hypothetical internal
         // build tag) must not be mistaken for the real LTS branding.
         mockProductInfoProvider.setVersion(new Version("6.5.5.NOTLTSBUILD"));
-        assertTrue(AemVersionDetector.isNonLtsClassic65(mockProductInfoProvider));
+        assertFalse(AemVersionDetector.isGenSearchSupportedPlatform(mockProductInfoProvider));
+    }
+
+    @Test
+    void isGenSearchSupportedPlatform_falseOnOtherClassicVersion() {
+        mockProductInfoProvider.setVersion(new Version("6.4.8"));
+        assertFalse(AemVersionDetector.isGenSearchSupportedPlatform(mockProductInfoProvider));
+    }
+
+    @Test
+    void isGenSearchSupportedPlatform_failsClosedWhenProviderMissing() {
+        // Fail-closed (hidden) rather than fail-open, when the platform can't be determined at all.
+        assertFalse(AemVersionDetector.isGenSearchSupportedPlatform(null));
+    }
+
+    @Test
+    void isGenSearchSupportedPlatform_failsClosedWhenProductInfoMissing() {
+        assertFalse(AemVersionDetector.isGenSearchSupportedPlatform(() -> null));
+    }
+
+    @Test
+    void isGenSearchSupportedPlatform_failsClosedWhenVersionMissing() {
+        com.adobe.granite.license.ProductInfo productInfo = mock(com.adobe.granite.license.ProductInfo.class);
+        when(productInfo.getVersion()).thenReturn(null);
+        assertFalse(AemVersionDetector.isGenSearchSupportedPlatform(() -> productInfo));
     }
 }
