@@ -61,6 +61,7 @@ otherwise a caption will be rendered
 1. `./imageFromPageImage` - if `true`, the image is inherited from the featured image of either the linked page if `./linkURL` is set or the current page.
 1. `./altValueFromPageImage` - if `true` and if `./imageFromPageImage` is `true`, the HTML `alt` attribute is inherited from the featured image of either the linked page if `./linkURL` is set or the current page.
 1. `./disableLazyLoading` - if `true` the lazy loading of the image is disabled regardless of the lazy loading setting in the design policy.
+1. `./autoPreservePngTransparency` - If `true`, automatically preserves PNG transparency in Dynamic Media URLs by adding `fmt=png-alpha` modifier for transparent PNGs (32-bit). This feature only applies to PNG images that actually have transparency and is disabled by default to maintain optimal performance.
 
 ## Extending from This Component
 1. In case you overwrite the image's HTL script, make sure the necessary attributes for the JavaScript loading script are contained in the markup at the right position (see section below).

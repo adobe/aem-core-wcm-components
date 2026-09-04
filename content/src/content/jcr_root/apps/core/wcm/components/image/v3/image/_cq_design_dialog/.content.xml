@@ -63,6 +63,14 @@
                                                 sling:resourceType="core/wcm/components/rendercondition/isNGDMEnabled"/>
                                         </granite:rendercondition>
                                     </enableDmFeatures>
+                                    <autoPreservePngTransparency
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="When checked, automatically preserve PNG transparency in Dynamic Media URLs by adding fmt=png-alpha modifier for transparent PNGs."
+                                        name="./autoPreservePngTransparency"
+                                        text="Auto-preserve PNG transparency"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true"/>
                                     <enableAssetDelivery
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"

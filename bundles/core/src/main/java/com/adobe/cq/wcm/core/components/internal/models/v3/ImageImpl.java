@@ -77,6 +77,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private static final String EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
     static final int DEFAULT_NGDM_ASSET_WIDTH = 640;
 
+
     @OSGiService
     @Optional
     private NextGenDynamicMediaConfig nextGenDynamicMediaConfig;
@@ -344,6 +345,20 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             if(StringUtils.isNotEmpty(smartCrop) && !StringUtils.equals(smartCrop, SMART_CROP_AUTO)) {
                 builder.withSmartCrop(smartCrop);
             }
+
+            // Auto-preserve PNG transparency if enabled
+            Resource assetResource = resource.getResourceResolver().getResource(fileReference);
+            if (assetResource != null) {
+                Asset asset = assetResource.adaptTo(Asset.class);
+                if (shouldApplyPngAlphaModifier(asset)) {
+                    if (StringUtils.isNotEmpty(modifiers)) {
+                        modifiers += "&" + Image.PNG_ALPHA_FORMAT_MODIFIER;
+                    } else {
+                        modifiers = Image.PNG_ALPHA_FORMAT_MODIFIER;
+                    }
+                }
+            }
+
             if (StringUtils.isNotEmpty(modifiers)) {
                 builder.withImageModifiers(modifiers);
             }
@@ -377,4 +392,5 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public static boolean isNgdmImageReference(String fileReference) {
         return StringUtils.isNotBlank(fileReference) && fileReference.startsWith("/urn:");
     }
+
 }
