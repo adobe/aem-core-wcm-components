@@ -25,6 +25,37 @@
         indexMarker: ".cmp-panelselector__indexMarker"
     };
 
+    var CT_SITES_49051 = "CT_SITES-49051";
+
+    /**
+     * Granite feature toggle CT_SITES-49051 gates sanitization of the authored panel title before it is
+     * inserted into the selector markup. When Granite or {@code Toggles} is unavailable, sanitization is
+     * treated as enabled. When the toggle is explicitly disabled, behaviour matches earlier revisions.
+     *
+     * @returns {Boolean}
+     */
+    function isPanelTitleSanitizationEnabled() {
+        if (typeof Granite === "undefined" || !Granite.Toggles || typeof Granite.Toggles.isEnabled !== "function") {
+            return true;
+        }
+        return Granite.Toggles.isEnabled(CT_SITES_49051) !== false;
+    }
+
+    /**
+     * Encodes a string for safe insertion into an HTML context.
+     *
+     * @param {String} value - raw input value
+     * @returns {String} the HTML-encoded value
+     */
+    function encodeHtml(value) {
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#x27;");
+    }
+
     /**
      * @typedef {Object} PanelSelectorConfig Represents a Panel Selector configuration object
      * @property {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} against which to create the panel selector
@@ -406,7 +437,8 @@
             }
 
             if (subTitle) {
-                title = title + ": <span class='foundation-layout-util-subtletext'>" + subTitle + "</span>";
+                var safeSubTitle = isPanelTitleSanitizationEnabled() ? encodeHtml(subTitle) : subTitle;
+                title = title + ": <span class='foundation-layout-util-subtletext'>" + safeSubTitle + "</span>";
             }
 
             return title;
