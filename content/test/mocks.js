@@ -546,3 +546,5 @@ globalThis.__CONTENTFRAGMENT_V1_DIALOG_TEST_API = {};
 globalThis.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API = {};
 /** Filled by commons htmlIdValidation.js when present (Karma loads that script after mocks). */
 globalThis.__HTML_ID_VALIDATOR_EDITOR_TEST_API = {};
+/** Filled by commons checkboxTextfieldTuple.js when present (Karma loads that script after mocks). */
+globalThis.__CHECKBOX_TEXTFIELD_TUPLE_TEST_API = {};
