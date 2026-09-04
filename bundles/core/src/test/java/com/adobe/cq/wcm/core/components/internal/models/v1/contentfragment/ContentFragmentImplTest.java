@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,6 +37,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -230,6 +232,40 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_SINGLE_ELEMENT_MAIN);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, STRUCTURED_NAME, ASSOCIATED_CONTENT, MAIN);
         Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_STRUCTURED_SINGLE_ELEMENT_MAIN));
+    }
+
+    @Test
+    void structuredComposite() {
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_COMPOSITE);
+
+        // the export omits the composite element entirely: unsupported field type => absent, both
+        // from the exported elements map and from the element order
+        Map<String, DAMContentFragment.DAMContentElement> exportedElements = fragment.getExportedElements();
+        assertNotNull(exportedElements);
+        assertFalse(exportedElements.containsKey("composite"), "Composite element should be omitted from the exported elements map");
+        assertFalse(Arrays.asList(fragment.getExportedElementsOrder()).contains("composite"),
+            "Composite element should be omitted from the exported elements order");
+
+        // getElements() (not an export getter) still carries the composite element, since HTL and the
+        // data layer need it to render the "unsupported field type" hint in edit/preview
+        List<DAMContentFragment.DAMContentElement> elements = fragment.getElements();
+        assertNotNull(elements);
+        DAMContentFragment.DAMContentElement compositeElement = elements.stream()
+            .filter(element -> "composite".equals(element.getDataType()))
+            .findFirst()
+            .orElse(null);
+        assertNotNull(compositeElement, "Element with dataType \"composite\" should still be present in getElements()");
+        assertNull(compositeElement.getValue(), "Composite element's scalar value should be null");
+
+        // the FragmentData wrapper (ContentElement#getValue(), i.e. DAMContentElementImpl.getData())
+        // must stay non-null for a composite element; only its scalar value is null
+        com.adobe.cq.dam.cfm.ContentFragment rawFragment = context.resourceResolver()
+            .getResource("/content/dam/contentfragments/structured-composite")
+            .adaptTo(com.adobe.cq.dam.cfm.ContentFragment.class);
+        com.adobe.cq.dam.cfm.ContentElement rawCompositeElement = rawFragment.getElement("composite");
+        assertNotNull(rawCompositeElement.getValue(), "ContentElement#getValue() (the FragmentData wrapper) must stay non-null");
+
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_STRUCTURED_COMPOSITE));
     }
 
     @Test
