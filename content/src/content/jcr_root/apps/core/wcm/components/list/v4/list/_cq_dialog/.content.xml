@@ -282,6 +282,15 @@
                                                     </well>
                                                 </items>
                                             </setTags>
+                                            <excludeCurrentPage
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="{Boolean}false"
+                                                fieldDescription="When checked, the current page is excluded from results."
+                                                name="./excludeCurrentPage"
+                                                text="Exclude current page"
+                                                uncheckedValue="{Boolean}false"
+                                                value="{Boolean}true"/>
                                             <orderBy
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"

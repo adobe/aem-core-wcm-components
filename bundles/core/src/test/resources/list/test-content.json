@@ -25,6 +25,20 @@
                         "/content/list/pages/page_2"
                     ]
                 },
+                "staticListTypeExcludeCurrentPage": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/list",
+                    "listFrom": "static",
+                    "showThumbnail": "true",
+                    "linkItems": "true",
+                    "showDescription": "true",
+                    "showModificationDate": "true",
+                    "excludeCurrentPage": "true",
+                    "pages": [
+                        "/content/list/pages/page_1",
+                        "/content/list/pages/page_2"
+                    ]
+                },
                 "staticMaxItemsListType": {
                     "jcr:primaryType": "nt:unstructured",
                     "sling:resourceType": "core/wcm/components/list",
