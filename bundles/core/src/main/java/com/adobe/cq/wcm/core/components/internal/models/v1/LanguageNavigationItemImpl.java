@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,21 +29,61 @@ import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilde
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 
+/**
+ * V1 Language Navigation Item implementation.
+ */
 public class LanguageNavigationItemImpl extends NavigationItemImpl implements LanguageNavigationItem {
 
-    protected String title;
-    protected Locale locale;
-    protected String country;
-    protected String language;
+    /**
+     * Navigation item title.
+     */
+    private final String title;
 
-    public LanguageNavigationItemImpl(Page page, boolean active, boolean current, @NotNull LinkManager linkManager, int level,
-                                      List<NavigationItem> children, String title, String parentId, Component component) {
-        super(page, active, current, linkManager, level, children, parentId, component);
+    /**
+     * Locale for this language navigation item.
+     */
+    private Locale locale;
+
+    /**
+     * Country for this language navigation item.
+     */
+    private String country;
+
+    /**
+     * Language for this language navigation item.
+     */
+    private String language;
+
+    /**
+     * Construct a Language Navigation Item.
+     *
+     * @param page             The page for which to create a navigation item.
+     * @param active           Flag indicating if the navigation item is active.
+     * @param current          Flag indicating if the navigation item is current page.
+     * @param linkManager      Link manager service.
+     * @param level            Depth level of the navigation item.
+     * @param childrenSupplier The child navigation items supplier.
+     * @param title            The item title.
+     * @param parentId         ID of the parent navigation component.
+     * @param component        The parent navigation {@link Component}.
+     */
+    public LanguageNavigationItemImpl(@NotNull final Page page,
+                                      final boolean active,
+                                      final boolean current,
+                                      @NotNull final LinkManager linkManager,
+                                      final int level,
+                                      @NotNull final Supplier<List<NavigationItem>> childrenSupplier,
+                                      final String title,
+                                      final String parentId,
+                                      final Component component) {
+        super(page, active, current, linkManager, level, childrenSupplier, parentId, component);
         this.title = title;
     }
 
     @Override
-    public String getTitle() { return title; }
+    public String getTitle() {
+        return title;
+    }
 
     @Override
     public Locale getLocale() {

@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -56,11 +57,11 @@ import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 @Model(adaptables = SlingHttpServletRequest.class,
     adapters = {Navigation.class, ComponentExporter.class},
     resourceType = {NavigationImpl.RESOURCE_TYPE})
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class NavigationImpl extends AbstractComponentImpl implements Navigation {
 
     /**
-     * The resource navigation component resource type.
+     * V1 Navigation component resource type.
      */
     public static final String RESOURCE_TYPE = "core/wcm/components/navigation/v1/navigation";
 
@@ -138,10 +139,11 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     @PostConstruct
     private void initModel() {
         ValueMap properties = this.resource.getValueMap();
-        structureDepth = properties.get(PN_STRUCTURE_DEPTH, currentStyle.get(PN_STRUCTURE_DEPTH, -1));
         boolean collectAllPages = properties.get(PN_COLLECT_ALL_PAGES, currentStyle.get(PN_COLLECT_ALL_PAGES, true));
         if (collectAllPages) {
             structureDepth = -1;
+        } else {
+            structureDepth = properties.get(PN_STRUCTURE_DEPTH, currentStyle.get(PN_STRUCTURE_DEPTH, -1));
         }
         if (currentStyle.containsKey(PN_STRUCTURE_START) || properties.containsKey(PN_STRUCTURE_START)) {
             //workaround to maintain the content of Navigation component of users in case they update to the current i.e. the `structureStart` version.
@@ -181,14 +183,33 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
             this.items = Optional.ofNullable(this.getNavigationRoot())
                 .map(navigationRoot -> getRootItems(navigationRoot, structureStart))
                 .orElseGet(Stream::empty)
-                .map(item -> this.createNavigationItem(item, getItems(item)))
+                .map(item -> this.createNavigationItem(item, () -> getItems(item)))
                 .collect(Collectors.toList());
         }
         return Collections.unmodifiableList(items);
     }
 
-    protected NavigationItem newNavigationItem(Page page, boolean active, boolean current, @NotNull LinkManager linkManager, int level,
-                                               List<NavigationItem> children, String parentId, Component component) {
+    /**
+     * Create a new navigation item.
+     *
+     * @param page        The page for which to create a navigation item.
+     * @param active      Flag indicating if the navigation item is active.
+     * @param current     Flag indicating if the navigation item is current page.
+     * @param linkManager Link manager service.
+     * @param level       Depth level of the navigation item.
+     * @param children    The child navigation items supplier.
+     * @param parentId    ID of the parent navigation component.
+     * @param component   The parent navigation {@link Component}.
+     * @return The navigation item.
+     */
+    protected NavigationItem newNavigationItem(@NotNull final Page page,
+                                               final boolean active,
+                                               final boolean current,
+                                               @NotNull final LinkManager linkManager,
+                                               final int level,
+                                               @NotNull final Supplier<@NotNull List<NavigationItem>> children,
+                                               final String parentId,
+                                               final Component component) {
         return new NavigationItemImpl(page, active, current, linkManager, level, children, parentId, component);
     }
 
@@ -201,12 +222,6 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
         return this.accessibilityLabel;
     }
 
-    @NotNull
-    @Override
-    public String getExportedType() {
-        return this.resource.getResourceType();
-    }
-
     /**
      * Builds the navigation tree for a {@code navigationRoot} page.
      *
@@ -217,7 +232,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
         if (this.structureDepth < 0 || subtreeRoot.getDepth() - this.getNavigationRoot().getDepth() < this.structureDepth) {
             Iterator<Page> childIterator = subtreeRoot.listChildren(new PageFilter());
             return StreamSupport.stream(((Iterable<Page>) () -> childIterator).spliterator(), false)
-                .map(item -> this.createNavigationItem(item, getItems(item)))
+                .map(item -> this.createNavigationItem(item, () -> getItems(item)))
                 .collect(Collectors.toList());
         }
         return Collections.emptyList();
@@ -242,11 +257,11 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     /**
      * Create a navigation item for the given page/children.
      *
-     * @param page The page for which to create a navigation item.
-     * @param children The child navigation items.
+     * @param page     The page for which to create a navigation item.
+     * @param children The child navigation items supplier.
      * @return The newly created navigation item.
      */
-    private NavigationItem createNavigationItem(@NotNull final Page page, @NotNull final List<NavigationItem> children) {
+    private NavigationItem createNavigationItem(@NotNull final Page page, @NotNull final Supplier<@NotNull List<NavigationItem>> children) {
         int level = page.getDepth() - (this.getNavigationRoot().getDepth() + structureStart);
         boolean current = checkCurrent(page);
         boolean selected = checkSelected(page, current);
@@ -263,16 +278,26 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      * </ul>
      *
      * @param page The page to check.
+     * @param current Flag indicating if the page is the current page.
      * @return True if the page is selected, false if not.
      */
     private boolean checkSelected(@NotNull final Page page, boolean current) {
-        return current
-            || this.currentPage.getPath().startsWith(page.getPath() + "/");
+        return current || this.currentPage.getPath().startsWith(page.getPath() + "/");
     }
 
+    /**
+     * Checks if the specified page is the current page.
+     * A page is current if it is either:
+     * <ul>
+     *     <li>equal to currentPage</li>
+     *     <li>redirects to currentPage</li>
+     * </ul>
+     *
+     * @param page The page to check.
+     * @return True if the page is current, false if not.
+     */
     private boolean checkCurrent(@NotNull final Page page) {
-        return this.currentPage.equals(page)
-                || currentPageIsRedirectTarget(page);
+        return this.currentPage.equals(page) || currentPageIsRedirectTarget(page);
     }
 
     /**
