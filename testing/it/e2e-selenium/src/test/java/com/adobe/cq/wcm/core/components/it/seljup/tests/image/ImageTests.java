@@ -16,29 +16,36 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.tests.image;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 import com.codeborne.selenide.WebDriverRunner;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 
 import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.selenium.pageobject.PageEditorPage;
 import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.BaseImage;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.image.ImageEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.codeborne.selenide.SelenideElement;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
 import static com.adobe.cq.wcm.core.components.it.seljup.AuthorBaseUITest.adminClient;
+import static com.codeborne.selenide.Condition.checked;
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -484,6 +491,37 @@ public class ImageTests {
         assertTrue(Commons.getCurrentUrl().endsWith(redirectPage+".html"),"Current page should be link URL set after redirection");
     }
 
+    public void testSetPageFeaturedImageInPageProperties(boolean aem65) throws InterruptedException, ClientException {
+        String assetSelector;
+        if (aem65) {
+            assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + climbingAsset + "'] coral-columnview-item-thumbnail";
+        } else {
+            assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + climbingAsset + "'] coral-checkbox";
+        }
+
+        String assetPath = "/content/dam/core-components/" + climbingAsset;
+        adminClient.setPageProperty(testPage, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
+        propertiesPage.open();
+        $("coral-tab[data-foundation-tracking-event*='images']").click();
+        $(".cq-FileUpload-picker").click();
+        $("*[data-foundation-collection-item-id='/content/dam/core-components']").click();
+        $(assetSelector).click();
+        clickableClick($(".granite-pickerdialog-submit"));
+
+        $("[name='./cq:featuredimage/fileReference']").shouldHave(value(assetPath));
+        $("[name='./cq:featuredimage/alt']").shouldHave(value(climbingAssetAltText));
+        SelenideElement altValueFromDAM = $(".cq-siteadmin-admin-properties coral-checkbox[name='./cq:featuredimage/altValueFromDAM']").should(exist);
+        altValueFromDAM.$("input[type='checkbox']").shouldBe(checked);
+
+        propertiesPage.saveAndClose();
+        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+
+        JsonNode featuredImage = adminClient.doGetJson(testPage + "/_jcr_content/cq:featuredimage", 1, HttpStatus.SC_OK);
+        assertEquals("core/wcm/components/image/v3/image", featuredImage.get("sling:resourceType").asText());
+        assertEquals(assetPath, featuredImage.get("fileReference").asText());
+        assertTrue(featuredImage.get("altValueFromDAM").asBoolean(), "Alt text inheritance from DAM should be persisted.");
+    }
+
     public void testSetLinkWithTarget() throws TimeoutException, InterruptedException {
         Commons.openSidePanel();
         dragImage();
@@ -622,31 +660,26 @@ public class ImageTests {
 
     /**
      * Sets the featured image for a page.
+     *
+     * <p>This is precondition setup for tests that verify how the Image component renders a page's
+     * featured image. The page is reconfigured as a {@code page/v3/page} and the
+     * {@code cq:featuredimage} subnode is populated via a single Sling POST. The page-properties
+     * picker UI is intentionally not used here; it is covered by
+     * {@link #testSetPageFeaturedImageInPageProperties(boolean)}, so these rendering tests can stay
+     * focused on Image component behaviour.</p>
+     *
+     * @param aem65 retained for backwards-compatible signature; no longer affects behaviour because
+     *              the UI picker is not used.
      */
-    private void setPageImage(boolean aem65, String page, String asset, boolean altFromDam) throws ClientException, InterruptedException {
-        String assetSelector;
-        if (aem65) {
-            assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-columnview-item-thumbnail";
-        } else {
-            assetSelector = "*[data-foundation-collection-item-id='/content/dam/core-components/" + asset + "'] coral-checkbox";
-        }
-        // set page resource type to page v3
-        adminClient.setPageProperty(page, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
-        PropertiesPage pageProperties = new PropertiesPage(page);
-        pageProperties.open();
-        $("coral-tab[data-foundation-tracking-event*='images']").click();
-        $(".cq-FileUpload-picker").click();
-        $("*[data-foundation-collection-item-id='/content/dam/core-components']").click();
-        $(assetSelector).click();
-        clickableClick($(".granite-pickerdialog-submit"));
-        if (altFromDam) {
-            // inherit alt text from DAM
-            String altValueFromDAMSelector = ".cq-siteadmin-admin-properties coral-checkbox[name='./cq:featuredimage/altValueFromDAM']";
-            CoralCheckbox altValueFromDAMCheckbox = new CoralCheckbox(altValueFromDAMSelector);
-            altValueFromDAMCheckbox.click();
-        }
-        pageProperties.saveAndClose();
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+    private void setPageImage(boolean aem65, String page, String asset, boolean altFromDam) throws ClientException {
+        List<NameValuePair> props = new ArrayList<>();
+        props.add(new BasicNameValuePair("./sling:resourceType", "core/wcm/components/page/v3/page"));
+        props.add(new BasicNameValuePair("./cq:featuredimage/jcr:primaryType", "nt:unstructured"));
+        props.add(new BasicNameValuePair("./cq:featuredimage/sling:resourceType", "core/wcm/components/image/v3/image"));
+        props.add(new BasicNameValuePair("./cq:featuredimage/fileReference", "/content/dam/core-components/" + asset));
+        props.add(new BasicNameValuePair("./cq:featuredimage/altValueFromDAM", Boolean.toString(altFromDam)));
+        props.add(new BasicNameValuePair("./cq:featuredimage/altValueFromDAM@TypeHint", "Boolean"));
+        Commons.setPageProperties(adminClient, page, props, 200, 201);
     }
 
     /**

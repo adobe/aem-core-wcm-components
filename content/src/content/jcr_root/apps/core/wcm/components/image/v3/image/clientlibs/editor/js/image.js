@@ -196,6 +196,8 @@
                             }
                             captionTuple.hideCheckbox(false);
                             altTuple.reinitCheckbox();
+                            applyPageAltFromDAMDefault();
+                            altTuple.update();
                             captionTuple.reinitCheckbox();
                             toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
                             if (areDMFeaturesEnabled && !isPolarisEnabled) {
@@ -574,6 +576,7 @@
                         altTextFromDAM = data["dc:title"];
                     }
                     altTuple.seedTextValue(altTextFromDAM);
+                    applyPageAltFromDAMDefault();
                     altTuple.update();
                     var altEl = document.querySelector(altInputSelector);
                     if (altEl && altTextFromDAM) {
@@ -605,6 +608,36 @@
                 }
             }
         });
+    }
+
+    function applyPageAltFromDAMDefault() {
+        var pageAltCheckbox = document.querySelector(pageAltCheckboxSelector);
+        if (!pageAltCheckbox) {
+            return;
+        }
+        var previousValue = pageAltCheckbox.getAttribute("data-previous-value");
+        if (previousValue !== null && previousValue !== "null") {
+            return;
+        }
+        var checkboxField = $(pageAltCheckbox).adaptTo("foundation-field");
+        if (checkboxField) {
+            checkboxField.setDisabled(false);
+            checkboxField.setValue("true");
+        }
+        pageAltCheckbox.checked = true;
+        pageAltCheckbox.disabled = false;
+        pageAltCheckbox.setAttribute("checked", "true");
+        pageAltCheckbox.removeAttribute("disabled");
+        pageAltCheckbox.removeAttribute("aria-disabled");
+        pageAltCheckbox.classList.remove("is-disabled");
+
+        var input = pageAltCheckbox.querySelector("input[type='checkbox']");
+        if (input) {
+            input.checked = true;
+            input.disabled = false;
+            input.setAttribute("checked", "checked");
+            input.removeAttribute("disabled");
+        }
     }
 
     /**
