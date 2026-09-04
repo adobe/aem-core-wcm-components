@@ -40,6 +40,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
@@ -231,6 +233,34 @@ class ContentAIClientImplTest {
         ContentAIClientException exception = assertThrows(ContentAIClientException.class,
             () -> client.genSearch("my-content-source", "electric cars"));
         assertEquals(503, exception.getStatusCode());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"ACQUISITION", "AEM_PUBLISH", "AEM_AUTHOR", "CUSTOM"})
+    void genSearchForwardsContentSourceType(String contentSourceType) throws Exception {
+        // Forward whatever the component instance is configured with, same as search() - the request body must
+        // reflect the author's actual dialog selection rather than a hardcoded/omitted value.
+        respondWith(200, "{\"query\":\"electric cars\",\"result\":\"Electric cars are efficient.\",\"hits\":[]}");
+
+        client.genSearch("my-content-source", contentSourceType, "electric cars");
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        String body = new String(sent.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
+        assertEquals("{\"query\":\"electric cars\",\"contentSource\":{\"name\":\"my-content-source\",\"type\":\""
+            + contentSourceType + "\"}}", body,
+            "gensearch request body must forward the configured contentSource.type");
+    }
+
+    @Test
+    void genSearchOmitsContentSourceTypeWhenBlank() throws Exception {
+        respondWith(200, "{\"query\":\"electric cars\",\"result\":\"Electric cars are efficient.\",\"hits\":[]}");
+
+        client.genSearch("my-content-source", " ", "electric cars");
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        String body = new String(sent.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
+        assertEquals("{\"query\":\"electric cars\",\"contentSource\":{\"name\":\"my-content-source\"}}", body,
+            "gensearch request body must omit contentSource.type when blank");
     }
 
     @Test
