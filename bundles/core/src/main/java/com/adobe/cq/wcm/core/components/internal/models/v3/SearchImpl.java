@@ -25,7 +25,7 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.AemCloudPlatformDetector;
+import com.adobe.cq.wcm.core.components.internal.AemVersionDetector;
 import com.adobe.cq.wcm.core.components.models.Search;
 import com.adobe.granite.license.ProductInfoProvider;
 import com.day.cq.wcm.api.designer.Style;
@@ -56,7 +56,7 @@ public class SearchImpl extends com.adobe.cq.wcm.core.components.internal.models
 
     @PostConstruct
     private void initV3Model() {
-        boolean hideByDefault = !AemCloudPlatformDetector.isCloudPlatform(productInfoProvider);
+        boolean hideByDefault = !AemVersionDetector.isCloudPlatform(productInfoProvider);
         if (currentStyle != null) {
             hideAiSearchToggle = currentStyle.get(PN_HIDE_AI_SEARCH_TOGGLE, hideByDefault);
         } else {
