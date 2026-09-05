@@ -203,6 +203,52 @@
         return getInnerHtmlFromDatasourceResponse(html);
     }
 
+    /**
+     * Resolves the sanitized element names container node for the editor from a datasource response string, for
+     * callers that import DOM nodes directly into the live document rather than re-parsing a serialized string.
+     *
+     * @param {String} html - response body
+     * @returns {Element|null} Sanitized element to import into the live document, or null when the toggle is
+     * disabled or the markup helper is unavailable.
+     */
+    function resolveElementNamesContainerNodeForEditor(html) {
+        if (!isContentFragmentListV1EditorMarkupHelpersEnabled()) {
+            return null;
+        }
+        var markupUtils = getAuthoringMarkupUtils();
+        if (markupUtils && typeof markupUtils.sanitizeAuthoringEditorResponseMarkupNode === "function") {
+            return markupUtils.sanitizeAuthoringEditorResponseMarkupNode(html);
+        }
+        return null;
+    }
+
+    /**
+     * Renders the element names datasource response markup into the given live container element, the way
+     * {@link ContentFragmentListController#_updateElementsHTML} does. Extracted so tests can exercise the exact
+     * production rendering path against a plain container, without a full dialog/controller instance.
+     *
+     * Imports the sanitized markup's child nodes directly into the live document rather than serializing to a
+     * string and reassigning via innerHTML, to avoid a second HTML parse under a different scripting context
+     * (see {@link resolveElementNamesContainerNodeForEditor}). Falls back to the legacy string-based path when
+     * the toggle is disabled or the node-returning helper is unavailable.
+     *
+     * @param {String} html - element names datasource response body
+     * @param {Element} container - live document element that the resolved markup will be rendered into
+     */
+    function renderElementNamesContainerForEditor(html, container) {
+        var sanitizedNode = resolveElementNamesContainerNodeForEditor(html);
+        if (sanitizedNode) {
+            container.innerHTML = "";
+            var childNode = sanitizedNode.firstChild;
+            while (childNode) {
+                container.appendChild(container.ownerDocument.importNode(childNode, true));
+                childNode = childNode.nextSibling;
+            }
+            return;
+        }
+        container.innerHTML = resolveElementNamesContainerInnerHtmlForEditor(html);
+    }
+
     // ui helper
     var ui = $(window).adaptTo("foundation-ui");
 
@@ -395,7 +441,7 @@
      * @param {String} html - HTML document string from the element names datasource response (same shape as the $.get body).
      */
     ContentFragmentListController.prototype._updateElementsHTML = function(html) {
-        this.elementNamesContainer.innerHTML = resolveElementNamesContainerInnerHtmlForEditor(html);
+        renderElementNamesContainerForEditor(html, this.elementNamesContainer);
         this._updateElementNamesField();
     };
 
@@ -552,6 +598,8 @@
             isContentFragmentListV1EditorMarkupHelpersEnabled;
         cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API.resolveElementNamesContainerInnerHtmlForEditor =
             resolveElementNamesContainerInnerHtmlForEditor;
+        cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API.renderElementNamesContainerForEditor =
+            renderElementNamesContainerForEditor;
         cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API.getAuthoringMarkupUtils = getAuthoringMarkupUtils;
         cflEditorTestApiHost.__CONTENTFRAGMENTLIST_V1_EDITOR_TEST_API.isSameOriginDatasourcePath = isSameOriginDatasourcePath;
     }
