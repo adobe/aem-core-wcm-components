@@ -46,6 +46,7 @@ describe("Content Fragment List v1 editor contentfragmentlist.js (Karma-loaded)"
         it("exposes resolve, toggle, and datasource path helpers", function() {
             expect(api).toBeDefined();
             expect(typeof api.resolveElementNamesContainerInnerHtmlForEditor).toBe("function");
+            expect(typeof api.renderElementNamesContainerForEditor).toBe("function");
             expect(typeof api.isContentFragmentListV1EditorMarkupHelpersEnabled).toBe("function");
             expect(typeof api.getAuthoringMarkupUtils).toBe("function");
             expect(typeof api.isSameOriginDatasourcePath).toBe("function");
@@ -86,6 +87,23 @@ describe("Content Fragment List v1 editor contentfragmentlist.js (Karma-loaded)"
                 "<div><div data-granite-coral-multifield-name=\"./elementNames\"><img src=\"x\" onerror=\"alert(1)\"></div></div>";
             const inner = api.resolveElementNamesContainerInnerHtmlForEditor(doc);
             expect(inner.indexOf("onerror")).not.toBe(-1);
+        });
+    });
+
+    describe("renderElementNamesContainerForEditor", function() {
+        const mxssNoscriptPayload =
+            "<div class=\"cmp-cfl-js\"><noscript><!--</noscript><img src=x onerror=alert(1)>--></noscript></div>";
+
+        it("does not resurrect an onerror payload hidden behind a noscript scripting-context mismatch", function() {
+            contentfragmentlistEditorTestToggleOn();
+            const container = document.createElement("div");
+            document.body.appendChild(container);
+            try {
+                api.renderElementNamesContainerForEditor(mxssNoscriptPayload, container);
+                expect(container.querySelector("img[onerror]")).toBeNull();
+            } finally {
+                document.body.removeChild(container);
+            }
         });
     });
 
