@@ -174,6 +174,20 @@ install_package() {
         "${AEM_BASE_URL}/crx/packmgr/service.jsp" >/dev/null
 }
 
+# Install + start an OSGi bundle jar via the Felix web console.
+install_bundle() {
+    local jar="$1"
+    if [[ ! -f "${jar}" ]]; then
+        echo "Bundle not found: ${jar} (did you build the project first? see README)" >&2
+        return 1
+    fi
+    log "Installing bundle $(basename "${jar}")"
+    curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
+        -F action=install -F bundlestartlevel=20 -F bundlestart=start -F refreshPackages=true \
+        -F bundlefile=@"${jar}" \
+        "${AEM_BASE_URL}/system/console/bundles" >/dev/null
+}
+
 # Resolve the newest matching built package zip for a module target dir. Any glob
 # in $2 is expanded; $3 (optional) is an extended-regex of basenames to EXCLUDE.
 find_zip() {
@@ -199,6 +213,12 @@ provision() {
     install_package "$(find_zip "${REPO_ROOT}/testing/it/it.ui.apps/target" 'core.wcm.components.it.ui.apps-*.zip')"
     install_package "$(find_zip "${REPO_ROOT}/testing/it/it.ui.config/target" 'core.wcm.components.it.ui.config-*.zip')"
     install_package "$(find_zip "${REPO_ROOT}/testing/it/it.ui.content/target" 'core.wcm.components.it.ui.content-*.zip')"
+
+    # Server-side IT support bundle (TestTransformerFactory etc.). It is a plain OSGi
+    # bundle deployed via sling:install in the normal pipeline - not embedded in any
+    # content package - so install it explicitly, or ITs like TableOfContentsFilterIT
+    # (which references the 'core-components-test-transformer' rewriter) 500.
+    install_bundle "$(find_zip "${REPO_ROOT}/testing/it/it.core/target" 'core.wcm.components.it.core-*.jar' '\-(sources|javadoc)\.jar$')"
 }
 
 run_tests() {

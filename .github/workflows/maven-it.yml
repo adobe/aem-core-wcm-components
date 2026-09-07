@@ -92,9 +92,11 @@ jobs:
         id: imgkey
         run: echo "key=aem-image-${CACHE_VERSION}-$(echo "$AEM_IMAGE" | tr '/:' '__')" >> "$GITHUB_OUTPUT"
 
-      - name: Cache AEM Docker image
+      # Split restore/save (not combined actions/cache) so the tarball is saved even
+      # when the ITs fail - the combined action skips its post-save on job failure.
+      - name: Restore AEM Docker image cache
         id: aem-image-cache
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
@@ -143,3 +145,12 @@ jobs:
         with:
           path: ~/.m2/repository
           key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
+
+      # Save the pulled image tarball even on failure (only when it wasn't a cache hit),
+      # so subsequent runs skip the multi-GB pull via docker load.
+      - name: Save AEM Docker image cache
+        if: always() && steps.aem-image-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: /tmp/aem-image.tar
+          key: ${{ steps.imgkey.outputs.key }}
