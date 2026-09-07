@@ -1,0 +1,99 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Copyright 2026 Adobe Systems Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Runs the testing/it/http integration tests against a Dockerized AEM author
+# instance (PHASE 1: author-only, single AEM flavor). All the container +
+# provisioning + failsafe orchestration lives in testing/it/docker/run-it.sh so
+# this workflow and the local developer flow share one code path.
+#
+# Requires two repository secrets for the private Adobe AEM image registry:
+#   ARTIFACTORY_CLOUD_USER, ARTIFACTORY_CLOUD_PASS
+# Because those secrets are not exposed to fork PRs, this job only runs on the
+# canonical repository (push to main) or on manual dispatch - never on forks.
+
+name: Integration Tests (AEM)
+
+on:
+  workflow_dispatch:
+    inputs:
+      keep_aem:
+        description: 'Leave the AEM container running at the end of the job (for debugging via a follow-up tmate step)'
+        type: boolean
+        default: false
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: it-aem-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  integration-test:
+    name: http ITs (author, cloud-ready)
+    # Skip on forks: the private-image secrets are unavailable there.
+    if: ${{ github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      REGISTRY: docker-adobe-cif-release.dr-uw2.adobeitc.com
+      # PHASE 1 image (cloud-ready author). The image is a QuickProvider server;
+      # run-it.sh starts the author inside it. See testing/it/docker/README.md.
+      AEM_IMAGE: docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:26125-openjdk21
+      KEEP_AEM: ${{ inputs.keep_aem || false }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+          cache: maven
+
+      # Build the deployable packages (all + it.ui.* zips) the IT script installs
+      # into AEM. Unit tests are already covered by maven-test.yml, so skip them
+      # here to keep this job focused on packaging.
+      - name: Build packages
+        run: mvn -B -U clean install -Pcloud,adobe-public -DskipTests -s ./.github/workflows/settings.xml
+
+      - name: Log in to Adobe image registry
+        run: echo "${{ secrets.ARTIFACTORY_CLOUD_PASS }}" | docker login "${REGISTRY}" -u "${{ secrets.ARTIFACTORY_CLOUD_USER }}" --password-stdin
+
+      - name: Run http integration tests against Dockerized AEM
+        run: bash testing/it/docker/run-it.sh
+
+      - name: Publish integration test results
+        if: always()
+        uses: mikepenz/action-junit-report@v5
+        with:
+          check_name: Integration Tests (http, author, cloud-ready)
+          report_paths: testing/it/http/target/failsafe-reports/TEST-*.xml
+          detailed_summary: true
+          include_passed: true
+          group_suite: true
+          fail_on_failure: false
+
+      - name: Upload test results and AEM logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: it-http-author-reports
+          if-no-files-found: ignore
+          retention-days: 14
+          path: |
+            testing/it/http/target/failsafe-reports
