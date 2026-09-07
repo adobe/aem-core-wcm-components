@@ -33,10 +33,6 @@ on:
         description: 'Leave the AEM container running at the end of the job (for debugging via a follow-up tmate step)'
         type: boolean
         default: false
-      selenium_it_test:
-        description: 'Selenium: failsafe -Dit.test selection (empty = full e2e-selenium suite)'
-        type: string
-        default: ''
   push:
     branches:
       - main
@@ -168,16 +164,40 @@ jobs:
   # slower than the http ITs. Uses a host-local headless Chrome (preinstalled on the
   # runner) under Xvfb, driven by run-it.sh's WITH_SELENIUM mode against the author.
   selenium:
-    name: Selenium ITs (author, cloud-ready)
+    name: Selenium ITs (${{ matrix.group }}, cloud-ready)
     if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    strategy:
+      # Shard the e2e-selenium suite by its JUnit @Tag groups so the legs run in
+      # parallel (each leg = its own AEM instance + one group). fail-fast off so one
+      # failing group doesn't cancel the others. The 'ungrouped' leg covers the few
+      # classes that carry no group tag, so the whole suite is exercised.
+      fail-fast: false
+      matrix:
+        include:
+          - group: group1
+            sel_groups: group1
+            sel_it_test: ''
+          - group: group2
+            sel_groups: group2
+            sel_it_test: ''
+          - group: group3
+            sel_groups: group3
+            sel_it_test: ''
+          - group: group4
+            sel_groups: group4
+            sel_it_test: ''
+          - group: ungrouped
+            sel_groups: ''
+            sel_it_test: 'com.adobe.cq.wcm.core.components.it.seljup.tests.pdfviewer.v1.PdfViewerIT,com.adobe.cq.wcm.core.components.it.seljup.tests.separator.v1.SeparatorIT,com.adobe.cq.wcm.core.components.it.seljup.tests.download.v1.DownloadIT,com.adobe.cq.wcm.core.components.it.seljup.tests.download.v2.DownloadIT'
     env:
       REGISTRY: docker-adobe-cif-release.dr-uw2.adobeitc.com
       AEM_IMAGE: docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:27830-v2-openjdk21
       WITH_SELENIUM: 'true'
       SEL_BROWSER: chrome
-      SEL_IT_TEST: ${{ inputs.selenium_it_test }}
+      SEL_GROUPS: ${{ matrix.sel_groups }}
+      SEL_IT_TEST: ${{ matrix.sel_it_test }}
       QP_VM_OPTIONS: '-Xmx4g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
       CACHE_VERSION: '1'
 
@@ -244,7 +264,7 @@ jobs:
         if: always()
         uses: mikepenz/action-junit-report@v5
         with:
-          check_name: Selenium ITs (e2e-selenium, cloud-ready)
+          check_name: Selenium ITs (${{ matrix.group }}, cloud-ready)
           report_paths: testing/it/e2e-selenium/target/failsafe-reports/TEST-*.xml
           detailed_summary: true
           include_passed: true
@@ -257,7 +277,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: it-selenium-reports
+          name: it-selenium-reports-${{ matrix.group }}
           if-no-files-found: ignore
           retention-days: 14
           path: |

@@ -103,8 +103,14 @@ IT_EXCLUDED_GROUPS="${IT_EXCLUDED_GROUPS:-com.adobe.cq.wcm.core.components.it.ht
 WITH_SELENIUM="${WITH_SELENIUM:-false}"
 SEL_BROWSER="${SEL_BROWSER:-chrome}"
 # Comma-separated failsafe selection (FQN recommended). Defaults to one small
-# class for a first smoke; set to a broader value / empty for more.
+# class for a first smoke; set empty (with SEL_GROUPS) to run a whole group.
 SEL_IT_TEST="${SEL_IT_TEST:-com.adobe.cq.wcm.core.components.it.seljup.tests.list.v2.ListIT}"
+# JUnit5 tag include (e.g. group1) so CI can shard the suite across parallel jobs.
+SEL_GROUPS="${SEL_GROUPS:-}"
+# JUnit5 tag excludes. Keep the pom's failing,nested and add IgnoreOnSDK for the
+# cloud(-ready) target (mirrors the pipeline; the module tags cloud-unsupported
+# UI tests with @Tag("IgnoreOnSDK")).
+SEL_EXCLUDED_GROUPS="${SEL_EXCLUDED_GROUPS:-failing,nested,IgnoreOnSDK}"
 
 # Max seconds to wait for an instance to answer HTTP before giving up.
 AEM_STARTUP_TIMEOUT="${AEM_STARTUP_TIMEOUT:-600}"
@@ -324,6 +330,12 @@ run_selenium() {
     )
     if [[ -n "${SEL_IT_TEST}" ]]; then
         args+=(-Dit.test="${SEL_IT_TEST}")
+    fi
+    if [[ -n "${SEL_GROUPS}" ]]; then
+        args+=(-Dgroups="${SEL_GROUPS}")
+    fi
+    if [[ -n "${SEL_EXCLUDED_GROUPS}" ]]; then
+        args+=(-DexcludedGroups="${SEL_EXCLUDED_GROUPS}")
     fi
     # Headless display for CI: on a Linux runner with no DISPLAY, run under Xvfb so
     # the host-local Chrome has a virtual screen. On macOS (no xvfb-run, Chrome runs
