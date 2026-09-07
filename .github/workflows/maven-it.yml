@@ -100,3 +100,4 @@ jobs:
           retention-days: 14
           path: |
             testing/it/http/target/failsafe-reports
+            testing/it/http/target/aem-logs

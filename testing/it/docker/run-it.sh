@@ -89,6 +89,22 @@ cleanup() {
     echo "::group::AEM container logs (${AEM_CONTAINER})"
     docker logs "${AEM_CONTAINER}" 2>&1 || true
     echo "::endgroup::"
+
+    # Best-effort: copy AEM's own logs out of the (still-running) container so
+    # the 500s etc. are diagnosable from the uploaded artifacts. The instance
+    # dir varies (qp provisions per --id), so locate error.log dynamically.
+    local logs_dir="${REPO_ROOT}/testing/it/http/target/aem-logs"
+    local err_path
+    err_path=$(docker exec "${AEM_CONTAINER}" bash -lc \
+        'find /home/circleci -maxdepth 6 -path "*crx-quickstart/logs/error.log" 2>/dev/null | head -1' \
+        2>/dev/null | tr -d '\r')
+    if [[ -n "${err_path}" ]]; then
+        mkdir -p "${logs_dir}"
+        docker cp "${AEM_CONTAINER}:${err_path}" "${logs_dir}/error.log" 2>/dev/null || true
+        docker cp "${AEM_CONTAINER}:$(dirname "${err_path}")/stdout.log" "${logs_dir}/stdout.log" 2>/dev/null || true
+        echo "Copied AEM logs to ${logs_dir}"
+    fi
+
     if [[ "${KEEP_AEM}" == "true" ]]; then
         log "KEEP_AEM=true - leaving ${AEM_CONTAINER} running (docker rm -f it manually when done)."
     else
