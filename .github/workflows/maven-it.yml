@@ -46,16 +46,21 @@ concurrency:
 
 jobs:
   integration-test:
-    name: http ITs (author, cloud-ready)
+    name: http ITs (author + publish, cloud-ready)
     # Skip on forks: the private-image secrets are unavailable there.
     if: ${{ github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     env:
       REGISTRY: docker-adobe-cif-release.dr-uw2.adobeitc.com
-      # PHASE 1 image (cloud-ready author). The image is a QuickProvider server;
-      # run-it.sh starts the author inside it. See testing/it/docker/README.md.
+      # Cloud-ready image. The image is a QuickProvider server; run-it.sh starts the
+      # author and publish instances inside it. See testing/it/docker/README.md.
       AEM_IMAGE: docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:27830-v2-openjdk21
+      # Run the full suite against author + publish. Heaps sized for the 16 GB
+      # public-repo runner (two instances): ~3g heap + 1g metaspace each.
+      WITH_PUBLISH: 'true'
+      QP_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
+      PUBLISH_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
       KEEP_AEM: ${{ inputs.keep_aem || false }}
       # Bump to force a fresh cache lineage (Maven + Docker image) without a code change.
       CACHE_VERSION: '1'
@@ -120,7 +125,7 @@ jobs:
         if: always()
         uses: mikepenz/action-junit-report@v5
         with:
-          check_name: Integration Tests (http, author, cloud-ready)
+          check_name: Integration Tests (http, author + publish, cloud-ready)
           report_paths: testing/it/http/target/failsafe-reports/TEST-*.xml
           detailed_summary: true
           include_passed: true

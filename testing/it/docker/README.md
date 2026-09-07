@@ -6,14 +6,23 @@ locally the same way CI does. The orchestration lives in [`run-it.sh`](run-it.sh
 and is shared by the [`Integration Tests (AEM)`](../../../.github/workflows/maven-it.yml)
 GitHub Actions workflow.
 
-## Phase 1 scope
+## Scope
 
-- **Author only, cloud-ready AEM image.** Runs against the `circleci-aem-cloudready`
-  image with the cloud (`-cloud`) core-components package. Only the IT classes
-  that do not use a publish instance are run by default:
-  `AdaptiveImageServletIT`, `ComponentsIT`, `ExperienceFragmentIT`,
-  `TableOfContentsFilterIT`. The remaining classes replicate to and read from a
-  publish instance and are enabled in a later phase (see "Roadmap").
+Runs against the `circleci-aem-cloudready` image with the cloud (`-cloud`)
+core-components package. Two modes:
+
+- **Author only (default).** Runs just the IT classes that do not use a publish
+  instance: `AdaptiveImageServletIT`, `ComponentsIT`, `ExperienceFragmentIT`.
+- **Author + publish (`WITH_PUBLISH=true`).** Also starts and provisions a
+  publish instance (port 4503) and runs the full `*IT.java` suite. The
+  publish-touching tests just `GET` pre-deployed content from publish, so the
+  same content packages are installed there (no replication configured).
+
+Because the target is a cloud(-ready) image, classes annotated
+`@Category(IgnoreOnCloud)` are excluded (via `excludedGroups`), mirroring the
+core-components pipeline's cloud run — currently `SeoIT`,
+`TableOfContentsFilterIT`, and `ClientlibsIncludeIT`. Override with
+`IT_EXCLUDED_GROUPS=""` to force them.
 
 ## Prerequisites
 
@@ -34,7 +43,14 @@ mvn -B clean install -Pcloud,adobe-public -DskipTests
 
 # 2. Start AEM in Docker, provision it, and run the author-only http ITs
 bash testing/it/docker/run-it.sh
+
+# ...or run the full suite against author + publish
+WITH_PUBLISH=true bash testing/it/docker/run-it.sh
 ```
+
+> **Memory:** two AEM instances need headroom. On Docker Desktop, raise
+> Settings > Resources > Memory to ~16 GB before running with `WITH_PUBLISH=true`
+> (the default 7-8 GB is enough for author-only but not for author + publish).
 
 The script starts the AEM container, waits for it to answer HTTP, installs the
 cloud (`-cloud`) `all` package + `it.ui.apps` + `it.ui.config` + `it.ui.content`
@@ -50,9 +66,13 @@ All knobs are environment variables (see the top of `run-it.sh`). The common one
 |---|---|---|
 | `AEM_IMAGE` | `…/circleci-aem-cloudready:27830-v2-openjdk21` | AEM Docker image to run |
 | `AEM_AUTHOR_PORT` | `4502` | Host port the author is published on |
-| `IT_TEST` | the four author-only classes | Comma-separated failsafe test selection |
-| `AEM_STARTUP_TIMEOUT` | `600` | Seconds to wait for AEM to answer HTTP |
-| `QP_VM_OPTIONS` | `-Xmx4g -XX:MaxMetaspaceSize=1g …` | JVM options for the AEM quickstart (qp's 256m metaspace default OOMs cloud AEM) |
+| `WITH_PUBLISH` | `false` | Also start/provision publish and run the full suite |
+| `AEM_PUBLISH_PORT` | `4503` | Host port the publish is published on |
+| `IT_TEST` | author-only classes (empty=all when publish on) | Comma-separated failsafe test selection |
+| `IT_EXCLUDED_GROUPS` | `…it.http.IgnoreOnCloud` | JUnit categories excluded (cloud target); set empty to force them |
+| `AEM_STARTUP_TIMEOUT` | `600` | Seconds to wait for each instance to answer HTTP |
+| `QP_VM_OPTIONS` | `-Xmx4g -XX:MaxMetaspaceSize=1g …` | JVM options for the author quickstart (qp's 256m metaspace default OOMs cloud AEM) |
+| `PUBLISH_VM_OPTIONS` | same as `QP_VM_OPTIONS` | JVM options for the publish quickstart |
 | `KEEP_AEM` | `false` | Leave the container running after the run (for debugging) |
 
 Example — run a single test class and keep AEM up afterwards:
@@ -87,7 +107,7 @@ best-effort. On an amd64 Linux host it runs natively.
 
 ## Roadmap
 
-1. **(this phase)** Author-only http ITs, cloud-ready image.
-2. Add a publish instance (`:4503`) and run the full `-Ptest-all` http suite.
-3. Matrix across AEM flavors (LTS, cloud-ready), mirroring the CIF `test-aem` job.
-4. Add the Selenium/e2e suite (`testing/it/e2e-selenium`).
+1. ✅ Author-only http ITs, cloud-ready image.
+2. ✅ Publish instance (`:4503`) + full `*IT.java` http suite (`WITH_PUBLISH=true`).
+3. Add the Selenium/e2e suite (`testing/it/e2e-selenium`).
+4. Matrix across AEM flavors (classic 6.5, LTS), mirroring the CIF `test-aem` job.
