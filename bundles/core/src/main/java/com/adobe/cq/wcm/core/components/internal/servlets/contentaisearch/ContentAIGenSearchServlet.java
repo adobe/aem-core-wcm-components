@@ -17,11 +17,13 @@ package com.adobe.cq.wcm.core.components.internal.servlets.contentaisearch;
 
 import javax.servlet.Servlet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
+import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceQueryResult;
 
 /**
  * Servlet exposing the ContentAI Supported Search component's generative-summary endpoint,
@@ -44,6 +46,12 @@ public class ContentAIGenSearchServlet extends AbstractContentAISearchServlet {
     @Override
     protected Object executeQuery(@NotNull ContentAISupportedSearch model, @NotNull String query)
         throws ContentAIClientException {
+        if (StringUtils.isBlank(model.getPrimaryContentSource())) {
+            // Mirrors ContentAISearchResultsServlet's own empty-sources check
+            // instead of calling out to Content AI with a blank content
+            // source name, which only fails once it gets there.
+            return new ContentSourceQueryResult();
+        }
         return contentAIClient.genSearch(model.getPrimaryContentSource(), model.getContentSourceType(), query);
     }
 

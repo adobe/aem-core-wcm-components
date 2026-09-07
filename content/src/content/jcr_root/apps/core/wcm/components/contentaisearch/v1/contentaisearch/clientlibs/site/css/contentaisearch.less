@@ -192,6 +192,12 @@
         margin: 1.25em 0;
     }
 
+    // An animation (not a transition) so it auto-restarts when display goes
+    // from none back to block, since toggleShow() has no intermediate state.
+    &__summary:not([hidden]), &__summary-loading:not([hidden]) {
+        animation: cmp-contentaisearch__fade-in 400ms ease-out;
+    }
+
     &__summary-card {
         padding: 1.25em 1.5em;
         border-radius: 12px;
@@ -244,7 +250,31 @@
     &__summary-text {
         margin: 0 0 1em;
         line-height: 1.6;
-        white-space: pre-wrap;
+
+        // No :last-child override - the word-by-word reveal makes the last
+        // child change mid-render, which would otherwise shift spacing.
+        // Bare tags (not classes) since this is rendered from response text.
+        p { /* stylelint-disable-line selector-max-type */
+            margin: 0 0 .75em;
+        }
+
+        ul { /* stylelint-disable-line selector-max-type */
+            margin: 0 0 .75em;
+            padding-left: 1.25em;
+        }
+
+        li { /* stylelint-disable-line selector-max-type */
+            margin: 0 0 .35em;
+        }
+
+        strong { /* stylelint-disable-line selector-max-type */
+            font-weight: 700;
+        }
+
+        a { /* stylelint-disable-line selector-max-type */
+            color: @summary-accent;
+            text-decoration: underline;
+        }
     }
 
     &__sources-section {
@@ -359,6 +389,12 @@
         list-style: none;
         margin: 0;
         padding: 0;
+    }
+
+    // Class is removed/re-added by JS on every render (see _renderResults)
+    // to restart this animation, since the list has no display toggle to key off of.
+    &__results--refresh {
+        animation: cmp-contentaisearch__fade-in 320ms ease-out;
     }
 
     &--card &__results {
@@ -488,4 +524,16 @@
 @keyframes cmp-contentaisearch__loading-indicator-spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+@keyframes cmp-contentaisearch__fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

@@ -73,6 +73,8 @@
                         <Import-Package>
                             com.adobe.cq.commerce.*;resolution:=optional,
                             com.adobe.aem.wcm.seo.*;resolution:=optional,
+                            com.google.re2j.*;resolution:=optional,
+                            org.jspecify.annotations.*;resolution:=optional,
                             javax.annotation;version=0.0.0,
                             javax.annotation.meta;resolution:=optional,
                             com.day.cq.dam.api;version="[1.24,2.0)",
@@ -406,7 +408,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.15.3</version>
+            <version>1.23.2</version>
         </dependency>
 
         <dependency>

@@ -65,10 +65,10 @@
                             <hideAiSearchToggle
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                fieldDescription="When checked, the AI Search toggle will not be shown to site visitors."
+                                fieldDescription="When checked, the Semantic Search toggle will not be shown to site visitors."
                                 name="./hideAiSearchToggle"
                                 checked="{Boolean}false"
-                                text="Hide AI Search toggle"
+                                text="Hide Semantic Search toggle"
                                 uncheckedValue="{Boolean}false"
                                 value="{Boolean}true"/>
                         </items>

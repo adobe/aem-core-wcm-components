@@ -154,6 +154,41 @@ class ContentAISearchResultsServletTest {
     }
 
     @Test
+    void doGetCapsResultsAcrossMultipleConfiguredSources() throws Exception {
+        String multiSourceRoot = "/content-multisource";
+        context.load().json(TEST_BASE + "/test-content-multisource.json", multiSourceRoot);
+
+        ContentSourceSearchResult sourceAResult = new ContentSourceSearchResult();
+        sourceAResult.setResults(java.util.Arrays.asList(
+            itemWithScore("a1", 0.95), itemWithScore("a2", 0.85), itemWithScore("a3", 0.75)));
+        ContentSourceSearchResult sourceBResult = new ContentSourceSearchResult();
+        sourceBResult.setResults(java.util.Arrays.asList(
+            itemWithScore("b1", 0.9), itemWithScore("b2", 0.8), itemWithScore("b3", 0.7)));
+
+        when(mockClient.search(eq("source-a"), eq("ACQUISITION"), eq("adventure"), eq(3), isNull()))
+            .thenReturn(sourceAResult);
+        when(mockClient.search(eq("source-b"), eq("ACQUISITION"), eq("adventure"), eq(3), isNull()))
+            .thenReturn(sourceBResult);
+
+        context.currentResource(multiSourceRoot + "/jcr:content/par/contentaisearch");
+        context.request().setQueryString("q=adventure");
+
+        underTest.doGet(context.request(), context.response());
+
+        assertEquals(200, context.response().getStatus());
+        String output = context.response().getOutputAsString();
+        int resultCount = StringUtils.countMatches(output, "\"id\":");
+        assertEquals(3, resultCount, "Merged results across 2 sources of 3 each must be capped to resultsSize (3), not returned as up to 6");
+    }
+
+    private static ContentSourceSearchResult.Item itemWithScore(String id, double score) {
+        ContentSourceSearchResult.Item item = new ContentSourceSearchResult.Item();
+        item.setId(id);
+        item.setScore(score);
+        return item;
+    }
+
+    @Test
     void doGetReturns502WhenContentAiFails() throws Exception {
         when(mockClient.search(anyString(), anyString(), anyString(), anyInt(), isNull()))
             .thenThrow(new ContentAIClientException("failed", 502));

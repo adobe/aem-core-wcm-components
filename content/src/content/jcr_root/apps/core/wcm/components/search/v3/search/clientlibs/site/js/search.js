@@ -165,8 +165,12 @@
     }
 
     // useful for Accessibility, helping users with low vision and users with cognitive disabilities to identify the change in results
+    // Guarded: this v3-only element may be absent if this shared JS ends up initializing against older v1 markup on the same page.
     function updateSearchResultsStatusMessageElement(searchElementId, totalResults) {
         var searchResultsStatusMessage = document.querySelector("#" + searchElementId + "> .cmp_search__info");
+        if (!searchResultsStatusMessage) {
+            return;
+        }
         searchResultsStatusMessage.style.visibility = "visible";
         var searchResultsFoundMessage = localizeMessage(searchElementId, totalResults === 1 ? "{0} result" : "{0} results", [totalResults]);
         var searchResultsNotFoundMessage = localizeMessage(searchElementId, "No results");
@@ -431,7 +435,8 @@
                         self._hasMoreResults = false;
                     }
                 } else {
-                    // error status
+                    // eslint-disable-next-line no-console
+                    console.error("Quick Search request failed with status " + request.status);
                 }
             };
             // when the results are loading: display the loading indicator and hide the search icon
@@ -453,7 +458,9 @@
 
     Search.prototype._hideSearchResultsStatusMessage = function() {
         var searchResultsStatusMessage = document.querySelector("#" + this._elements.self.id + "> .cmp_search__info");
-        searchResultsStatusMessage.style.visibility = "hidden";
+        if (searchResultsStatusMessage) {
+            searchResultsStatusMessage.style.visibility = "hidden";
+        }
     };
 
     Search.prototype._cacheElements = function(wrapper) {

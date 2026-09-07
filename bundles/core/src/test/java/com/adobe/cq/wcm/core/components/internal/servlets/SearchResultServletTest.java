@@ -41,6 +41,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
@@ -58,8 +59,13 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -88,6 +94,8 @@ public class SearchResultServletTest {
     private static final String TEST_XF_TEMPLATE_EN = "/content/en/search/xf-page-template";
     protected static final String CONTEXT_PATH = "/test-cp";
 
+    private ListAppender<ILoggingEvent> appender;
+
     @BeforeEach
     public void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
@@ -97,6 +105,21 @@ public class SearchResultServletTest {
         context.registerService(LiveRelationshipManager.class, mockLiveRelationshipManager);
         context.request().setContextPath(CONTEXT_PATH);
         underTest = context.registerInjectActivateService(new SearchResultServlet());
+    }
+
+    @BeforeEach
+    public void setUpLogging() {
+        appender = new ListAppender<>();
+        appender.start();
+        Logger logger = (Logger) LoggerFactory.getLogger(SearchUsageLogger.class);
+        logger.setLevel(Level.ALL);
+        logger.addAppender(appender);
+    }
+
+    @org.junit.jupiter.api.AfterEach
+    public void tearDownLogging() {
+        Logger logger = (Logger) LoggerFactory.getLogger(SearchUsageLogger.class);
+        logger.detachAppender(appender);
     }
 
     /**
@@ -173,6 +196,42 @@ public class SearchResultServletTest {
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
         assertEquals(HttpServletResponse.SC_BAD_REQUEST, context.response().getStatus());
+    }
+
+    @Test
+    public void testSimpleSearch_logsUsageWithResultCount() throws Exception {
+        setUpQueryBuilder();
+        context.currentResource(TEST_ROOT_EN);
+        MockSlingHttpServletRequest request = context.request();
+        request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod");
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("jcr:content/search");
+        underTest.doGet(request, context.response());
+
+        java.util.List<ILoggingEvent> infoEvents = appender.list.stream()
+            .filter(e -> e.getLevel() == Level.INFO)
+            .collect(java.util.stream.Collectors.toList());
+        assertEquals(1, infoEvents.size());
+        String message = infoEvents.get(0).getFormattedMessage();
+        assertTrue(message.contains("resultCount=6"));
+        assertTrue(!message.contains("yod"), "visitor query must not be logged");
+    }
+
+    @Test
+    public void testSimpleSearch_badOffset_logsError() throws Exception {
+        context.currentResource(TEST_ROOT_EN);
+        MockSlingHttpServletRequest request = context.request();
+        request.setQueryString(SearchResultServlet.PARAM_FULLTEXT + "=yod&"
+            + SearchResultServlet.PARAM_RESULTS_OFFSET + "=3x");
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("jcr:content/search");
+        underTest.doGet(request, context.response());
+
+        java.util.List<ILoggingEvent> errorEvents = appender.list.stream()
+            .filter(e -> e.getLevel() == Level.ERROR)
+            .collect(java.util.stream.Collectors.toList());
+        assertEquals(1, errorEvents.size());
+        assertTrue(errorEvents.get(0).getFormattedMessage().contains("reason=invalid_results_offset"));
     }
 
     @Test
