@@ -147,6 +147,9 @@ public class ContentAIClientImpl implements ContentAIClient {
     @Override
     public ContentSourceQueryResult genSearch(String contentSource, String contentSourceType, String query)
         throws ContentAIClientException {
+        // Forward whatever contentSourceType the component instance is configured with, same as search() - the
+        // author's dialog selection (ACQUISITION/AEM_PUBLISH) is passed straight through so gensearch routes to
+        // the same backend/index the plain search-results list already queries.
         ObjectNode body = mapper.createObjectNode();
         body.put("query", query);
         ObjectNode contentSourceNode = body.putObject("contentSource");
@@ -208,8 +211,9 @@ public class ContentAIClientImpl implements ContentAIClient {
 
     /**
      * Resolves the Content AI base URL from the running AEM as a Cloud Service environment, so the component always
-     * targets its own environment's bucket rather than a hand-configured value. Falls back to the dev-only
-     * {@code baseUrlOverride} config when the CS environment variables are absent (local/non-CS development).
+     * targets its own environment's bucket rather than a hand-configured value. Falls back to the
+     * {@code baseUrlOverride} config when the CS environment variables are absent - required on AEM 6.5 LTS /
+     * Adobe Managed Services and for local development, neither of which expose those environment variables.
      *
      * @return the base URL (without a trailing slash), up to and including the Content AI path
      * @throws ContentAIClientException if no override is set and the environment variables are not present
