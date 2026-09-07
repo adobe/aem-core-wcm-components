@@ -34,7 +34,7 @@
 # them (image coordinates, KEEP_AEM, etc.). Nothing here is specific to a CI
 # runner, so the same invocation works on a developer laptop.
 #
-# How the image works (verified against circleci-aem-cloudready:26125-openjdk21,
+# How the image works (verified against circleci-aem-cloudready:27830-v2-openjdk21,
 # same shape as the classic circleci-aem image): it is a
 # QuickProvider (qp) *server* image - its entrypoint runs
 # `qp.sh start_local_server` (RMI on :55555) and then stays alive, but does NOT
@@ -52,7 +52,7 @@ set -euo pipefail
 # Configuration (override via environment)
 # ---------------------------------------------------------------------------
 REGISTRY="${REGISTRY:-docker-adobe-cif-release.dr-uw2.adobeitc.com}"
-AEM_IMAGE="${AEM_IMAGE:-${REGISTRY}/circleci-aem-cloudready:26125-openjdk21}"
+AEM_IMAGE="${AEM_IMAGE:-${REGISTRY}/circleci-aem-cloudready:27830-v2-openjdk21}"
 AEM_AUTHOR_PORT="${AEM_AUTHOR_PORT:-4502}"
 AEM_ADMIN_USER="${AEM_ADMIN_USER:-admin}"
 AEM_ADMIN_PASSWORD="${AEM_ADMIN_PASSWORD:-admin}"

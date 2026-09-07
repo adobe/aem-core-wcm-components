@@ -48,7 +48,7 @@ All knobs are environment variables (see the top of `run-it.sh`). The common one
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `AEM_IMAGE` | `…/circleci-aem-cloudready:26125-openjdk21` | AEM Docker image to run |
+| `AEM_IMAGE` | `…/circleci-aem-cloudready:27830-v2-openjdk21` | AEM Docker image to run |
 | `AEM_AUTHOR_PORT` | `4502` | Host port the author is published on |
 | `IT_TEST` | the four author-only classes | Comma-separated failsafe test selection |
 | `AEM_STARTUP_TIMEOUT` | `600` | Seconds to wait for AEM to answer HTTP |
@@ -62,7 +62,7 @@ IT_TEST=ComponentsIT KEEP_AEM=true bash testing/it/docker/run-it.sh
 
 ## How the image works (verified)
 
-`circleci-aem-cloudready:26125-openjdk21` is a QuickProvider (qp) *server* image
+`circleci-aem-cloudready:27830-v2-openjdk21` is a QuickProvider (qp) *server* image
 (same shape as the classic `circleci-aem` image): its entrypoint starts the qp
 RMI server (`:55555`) and stays alive, but does **not** boot an AEM author by
 itself. `run-it.sh` starts the author with a qp *client*

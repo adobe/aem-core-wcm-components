@@ -55,8 +55,10 @@ jobs:
       REGISTRY: docker-adobe-cif-release.dr-uw2.adobeitc.com
       # PHASE 1 image (cloud-ready author). The image is a QuickProvider server;
       # run-it.sh starts the author inside it. See testing/it/docker/README.md.
-      AEM_IMAGE: docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:26125-openjdk21
+      AEM_IMAGE: docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:27830-v2-openjdk21
       KEEP_AEM: ${{ inputs.keep_aem || false }}
+      # Bump to force a fresh cache lineage (Maven + Docker image) without a code change.
+      CACHE_VERSION: '1'
 
     steps:
       - uses: actions/checkout@v4
@@ -66,7 +68,16 @@ jobs:
         with:
           distribution: temurin
           java-version: '11'
-          cache: maven
+
+      # Explicit restore/save (not setup-java's cache: maven) so a failing run - which
+      # this job can be while ITs are stabilising - still persists what it downloaded.
+      - name: Restore Maven repository cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.m2/repository
+          key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            it-aem-m2-${{ env.CACHE_VERSION }}-
 
       # Build the deployable packages (all + it.ui.* zips) the IT script installs
       # into AEM. Unit tests are already covered by maven-test.yml, so skip them
@@ -74,8 +85,31 @@ jobs:
       - name: Build packages
         run: mvn -B -U clean install -Pcloud,adobe-public -DskipTests -s ./.github/workflows/settings.xml
 
-      - name: Log in to Adobe image registry
-        run: echo "${{ secrets.ARTIFACTORY_CLOUD_PASS }}" | docker login "${REGISTRY}" -u "${{ secrets.ARTIFACTORY_CLOUD_USER }}" --password-stdin
+      # Cache the (multi-GB) AEM image across runs: on a hit we `docker load` the
+      # saved tarball instead of pulling. Keyed on the image ref, so bumping
+      # AEM_IMAGE (or CACHE_VERSION) naturally invalidates it.
+      - name: Compute AEM image cache key
+        id: imgkey
+        run: echo "key=aem-image-${CACHE_VERSION}-$(echo "$AEM_IMAGE" | tr '/:' '__')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache AEM Docker image
+        id: aem-image-cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/aem-image.tar
+          key: ${{ steps.imgkey.outputs.key }}
+
+      - name: Load or pull AEM image
+        run: |
+          if [ -f /tmp/aem-image.tar ]; then
+            echo "Cache hit - loading AEM image from tarball"
+            docker load -i /tmp/aem-image.tar
+          else
+            echo "Cache miss - logging in and pulling AEM image"
+            echo "${{ secrets.ARTIFACTORY_CLOUD_PASS }}" | docker login "${REGISTRY}" -u "${{ secrets.ARTIFACTORY_CLOUD_USER }}" --password-stdin
+            docker pull "$AEM_IMAGE"
+            docker save -o /tmp/aem-image.tar "$AEM_IMAGE"
+          fi
 
       - name: Run http integration tests against Dockerized AEM
         run: bash testing/it/docker/run-it.sh
@@ -101,3 +135,11 @@ jobs:
           path: |
             testing/it/http/target/failsafe-reports
             testing/it/http/target/aem-logs
+
+      # Save whatever was downloaded even if the ITs failed, so the next run starts warm.
+      - name: Save Maven repository cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.m2/repository
+          key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
