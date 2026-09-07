@@ -441,6 +441,22 @@ Granite = {
                     }
                 }
             }
+        },
+        ui: {
+            ToolbarAction: function (config) {
+                Object.assign(this, config);
+            }
+        },
+        editableHelper: {
+            getEditableDisplayableName: function (editable) {
+                return (editable && editable.displayName) || "Panel";
+            }
+        },
+        EditorFrame: {
+            editableToolbar: {
+                registerAction: function () {
+                }
+            }
         }
     },
     Toggles: {
@@ -457,6 +473,9 @@ Granite = {
     I18n: {
         get: function(message) {
             return message;
+        },
+        getVar: function(value) {
+            return value;
         }
     }
 };
