@@ -105,9 +105,34 @@ best-effort. On an amd64 Linux host it runs natively.
 - **CI secrets.** `ARTIFACTORY_CLOUD_USER` / `ARTIFACTORY_CLOUD_PASS` must be
   added as repository secrets for the workflow to pull the image.
 
+## Selenium UI suite (`WITH_SELENIUM=true`)
+
+Runs the `testing/it/e2e-selenium` suite with a **local** browser on the host
+(`-Dsel.jup.default.browser=chrome`), which reaches AEM at the published
+`localhost:4502` — no browser-container networking. The module's default
+Chrome-in-Docker (Selenoid) mode is not used because the e2e-selenium pom pins
+the author URL to `localhost:4502`, which a browser in a separate container
+cannot reach.
+
+```bash
+# Full suite (author instance)
+WITH_SELENIUM=true bash testing/it/docker/run-it.sh
+
+# A single class / method
+WITH_SELENIUM=true SEL_IT_TEST='com.adobe.cq.wcm.core.components.it.seljup.tests.list.v2.ListIT' \
+  bash testing/it/docker/run-it.sh
+```
+
+- **Local:** needs Chrome installed (native, not emulated — so fast). Runs
+  headed unless a virtual display is used.
+- **CI:** the workflow's `selenium` job (manual `workflow_dispatch`) runs Chrome
+  headless under **Xvfb** on the runner. It is slower than the http ITs, so it
+  is not on every push.
+- Knobs: `SEL_BROWSER` (default `chrome`), `SEL_IT_TEST` (failsafe selection).
+
 ## Roadmap
 
 1. ✅ Author-only http ITs, cloud-ready image.
 2. ✅ Publish instance (`:4503`) + full `*IT.java` http suite (`WITH_PUBLISH=true`).
-3. Add the Selenium/e2e suite (`testing/it/e2e-selenium`).
+3. ✅ Selenium/e2e suite (`testing/it/e2e-selenium`, `WITH_SELENIUM=true`).
 4. Matrix across AEM flavors (classic 6.5, LTS), mirroring the CIF `test-aem` job.

@@ -95,6 +95,17 @@ fi
 # on AEM as a Cloud Service. Override with IT_EXCLUDED_GROUPS="" to force them.
 IT_EXCLUDED_GROUPS="${IT_EXCLUDED_GROUPS:-com.adobe.cq.wcm.core.components.it.http.IgnoreOnCloud}"
 
+# --- Selenium (e2e-selenium) mode ---
+# When true, run the Selenium UI suite (testing/it/e2e-selenium) instead of the
+# http ITs, driving a LOCAL browser on the host. The browser runs where Maven
+# runs, so it reaches AEM at the published localhost port (the e2e-selenium pom
+# hard-codes the author URL to localhost:4502) - no browser-container networking.
+WITH_SELENIUM="${WITH_SELENIUM:-false}"
+SEL_BROWSER="${SEL_BROWSER:-chrome}"
+# Comma-separated failsafe selection (FQN recommended). Defaults to one small
+# class for a first smoke; set to a broader value / empty for more.
+SEL_IT_TEST="${SEL_IT_TEST:-com.adobe.cq.wcm.core.components.it.seljup.tests.list.v2.ListIT}"
+
 # Max seconds to wait for an instance to answer HTTP before giving up.
 AEM_STARTUP_TIMEOUT="${AEM_STARTUP_TIMEOUT:-600}"
 
@@ -302,6 +313,28 @@ run_tests() {
     mvn "${args[@]}"
 }
 
+run_selenium() {
+    log "Running Selenium ITs (local ${SEL_BROWSER}): ${SEL_IT_TEST:-<all>}"
+    # -Dsel.jup.default.browser selects a LOCAL browser (vs the module's default
+    # Chrome-in-Docker). The pom's test-all profile pins the author URL to
+    # localhost:4502, which the host-local browser can reach directly.
+    local -a args=(
+        -B -f "${REPO_ROOT}/testing/it/e2e-selenium/pom.xml" verify -Ptest-all
+        -Dsel.jup.default.browser="${SEL_BROWSER}"
+    )
+    if [[ -n "${SEL_IT_TEST}" ]]; then
+        args+=(-Dit.test="${SEL_IT_TEST}")
+    fi
+    # Headless display for CI: on a Linux runner with no DISPLAY, run under Xvfb so
+    # the host-local Chrome has a virtual screen. On macOS (no xvfb-run, Chrome runs
+    # natively) this branch is skipped, matching the validated local flow.
+    if [[ -z "${DISPLAY:-}" ]] && command -v xvfb-run >/dev/null 2>&1; then
+        xvfb-run -a mvn "${args[@]}"
+    else
+        mvn "${args[@]}"
+    fi
+}
+
 main() {
     command -v docker >/dev/null || { echo "docker is required" >&2; exit 1; }
     start_aem
@@ -310,7 +343,11 @@ main() {
         wait_for_aem "${AEM_PUBLISH_URL}" publish
     fi
     provision
-    run_tests
+    if [[ "${WITH_SELENIUM}" == "true" ]]; then
+        run_selenium
+    else
+        run_tests
+    fi
 }
 
 main "$@"

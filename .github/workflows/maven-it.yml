@@ -33,6 +33,10 @@ on:
         description: 'Leave the AEM container running at the end of the job (for debugging via a follow-up tmate step)'
         type: boolean
         default: false
+      selenium_it_test:
+        description: 'Selenium: failsafe -Dit.test selection (empty = full e2e-selenium suite)'
+        type: string
+        default: ''
   push:
     branches:
       - main
@@ -153,6 +157,110 @@ jobs:
 
       # Save the pulled image tarball even on failure (only when it wasn't a cache hit),
       # so subsequent runs skip the multi-GB pull via docker load.
+      - name: Save AEM Docker image cache
+        if: always() && steps.aem-image-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: /tmp/aem-image.tar
+          key: ${{ steps.imgkey.outputs.key }}
+
+  # Selenium (e2e-selenium) UI suite. Manual (workflow_dispatch) only - it is much
+  # slower than the http ITs. Uses a host-local headless Chrome (preinstalled on the
+  # runner) under Xvfb, driven by run-it.sh's WITH_SELENIUM mode against the author.
+  selenium:
+    name: Selenium ITs (author, cloud-ready)
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      REGISTRY: docker-adobe-cif-release.dr-uw2.adobeitc.com
+      AEM_IMAGE: docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:27830-v2-openjdk21
+      WITH_SELENIUM: 'true'
+      SEL_BROWSER: chrome
+      SEL_IT_TEST: ${{ inputs.selenium_it_test }}
+      QP_VM_OPTIONS: '-Xmx4g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
+      CACHE_VERSION: '1'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+
+      # Xvfb gives the host-local Chrome a virtual display (headless CI). Chrome
+      # itself is preinstalled on ubuntu-latest.
+      - name: Install Xvfb
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
+      - name: Restore Maven repository cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.m2/repository
+          key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            it-aem-m2-${{ env.CACHE_VERSION }}-
+
+      - name: Build packages
+        run: mvn -B -U clean install -Pcloud,adobe-public -DskipTests -s ./.github/workflows/settings.xml
+
+      - name: Compute AEM image cache key
+        id: imgkey
+        run: echo "key=aem-image-${CACHE_VERSION}-$(echo "$AEM_IMAGE" | tr '/:' '__')" >> "$GITHUB_OUTPUT"
+
+      - name: Restore AEM Docker image cache
+        id: aem-image-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: /tmp/aem-image.tar
+          key: ${{ steps.imgkey.outputs.key }}
+
+      - name: Load or pull AEM image
+        run: |
+          if [ -f /tmp/aem-image.tar ]; then
+            echo "Cache hit - loading AEM image from tarball"
+            docker load -i /tmp/aem-image.tar
+          else
+            echo "Cache miss - logging in and pulling AEM image"
+            echo "${{ secrets.ARTIFACTORY_CLOUD_PASS }}" | docker login "${REGISTRY}" -u "${{ secrets.ARTIFACTORY_CLOUD_USER }}" --password-stdin
+            docker pull "$AEM_IMAGE"
+            docker save -o /tmp/aem-image.tar "$AEM_IMAGE"
+          fi
+
+      - name: Run Selenium ITs against Dockerized AEM
+        run: bash testing/it/docker/run-it.sh
+
+      - name: Publish Selenium test results
+        if: always()
+        uses: mikepenz/action-junit-report@v5
+        with:
+          check_name: Selenium ITs (e2e-selenium, cloud-ready)
+          report_paths: testing/it/e2e-selenium/target/failsafe-reports/TEST-*.xml
+          detailed_summary: true
+          include_passed: true
+          group_suite: true
+          fail_on_failure: false
+
+      - name: Upload Selenium results and AEM logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: it-selenium-reports
+          if-no-files-found: ignore
+          retention-days: 14
+          path: |
+            testing/it/e2e-selenium/target/failsafe-reports
+            testing/it/http/target/aem-logs
+
+      - name: Save Maven repository cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.m2/repository
+          key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
+
       - name: Save AEM Docker image cache
         if: always() && steps.aem-image-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
