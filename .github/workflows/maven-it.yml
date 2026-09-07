@@ -190,10 +190,18 @@ jobs:
           distribution: temurin
           java-version: '11'
 
-      # Xvfb gives the host-local Chrome a virtual display (headless CI). Chrome
-      # itself is preinstalled on ubuntu-latest.
-      - name: Install Xvfb
-        run: sudo apt-get update && sudo apt-get install -y xvfb
+      # The host-local Chrome needs a virtual display AND a window manager: the
+      # selenium base lib calls window.maximize() in its per-test setup, which
+      # fails under bare Xvfb (no WM). Xvfb (24-bit screen) + fluxbox + DISPLAY
+      # gives Chrome a real windowed environment. Chrome is preinstalled on ubuntu-latest.
+      - name: Set up virtual display (Xvfb + fluxbox)
+        run: |
+          sudo apt-get update && sudo apt-get install -y xvfb fluxbox
+          Xvfb :99 -screen 0 1920x1080x24 >/tmp/xvfb.log 2>&1 &
+          sleep 3
+          DISPLAY=:99 fluxbox >/tmp/fluxbox.log 2>&1 &
+          sleep 2
+          echo "DISPLAY=:99" >> "$GITHUB_ENV"
 
       - name: Restore Maven repository cache
         uses: actions/cache/restore@v4
@@ -241,7 +249,9 @@ jobs:
           detailed_summary: true
           include_passed: true
           group_suite: true
-          fail_on_failure: false
+          # e2e-selenium's test-all binds only failsafe:integration-test (not verify),
+          # so `mvn verify` won't fail on test errors - gate the job on the report instead.
+          fail_on_failure: true
 
       - name: Upload Selenium results and AEM logs
         if: always()
