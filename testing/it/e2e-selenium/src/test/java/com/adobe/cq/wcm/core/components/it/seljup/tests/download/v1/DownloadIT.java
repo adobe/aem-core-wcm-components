@@ -41,7 +41,6 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants
 import com.google.common.net.HttpHeaders;
 
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_DOWNLOAD_V1;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DownloadIT extends AuthorBaseUITest {
@@ -101,6 +100,10 @@ public class DownloadIT extends AuthorBaseUITest {
         SlingHttpResponse response = slingClient.doGet(url, Collections.EMPTY_LIST, Collections.EMPTY_LIST, HttpStatus.SC_OK);
         Header headers[] = response.getHeaders(HttpHeaders.CONTENT_DISPOSITION);
         assertTrue(headers.length > 0);
-        assertEquals("attachment; filename=\"" + testAssetName + "\"", headers[0].getValue());
+        // Newer AEM also appends the RFC 5987 filename* parameter
+        // (attachment; filename="x"; filename*=UTF-8''x); accept both by matching
+        // the leading filename directive rather than the exact header.
+        assertTrue(headers[0].getValue().startsWith("attachment; filename=\"" + testAssetName + "\""),
+            "Unexpected Content-Disposition: " + headers[0].getValue());
     }
 }

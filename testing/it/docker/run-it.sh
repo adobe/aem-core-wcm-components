@@ -102,15 +102,22 @@ IT_EXCLUDED_GROUPS="${IT_EXCLUDED_GROUPS:-com.adobe.cq.wcm.core.components.it.ht
 # hard-codes the author URL to localhost:4502) - no browser-container networking.
 WITH_SELENIUM="${WITH_SELENIUM:-false}"
 SEL_BROWSER="${SEL_BROWSER:-chrome}"
-# Comma-separated failsafe selection (FQN recommended). Defaults to one small
-# class for a first smoke; set empty (with SEL_GROUPS) to run a whole group.
-SEL_IT_TEST="${SEL_IT_TEST:-com.adobe.cq.wcm.core.components.it.seljup.tests.list.v2.ListIT}"
 # JUnit5 tag include (e.g. group1) so CI can shard the suite across parallel jobs.
 SEL_GROUPS="${SEL_GROUPS:-}"
 # JUnit5 tag excludes. Keep the pom's failing,nested and add IgnoreOnSDK for the
 # cloud(-ready) target (mirrors the pipeline; the module tags cloud-unsupported
 # UI tests with @Tag("IgnoreOnSDK")).
 SEL_EXCLUDED_GROUPS="${SEL_EXCLUDED_GROUPS:-failing,nested,IgnoreOnSDK}"
+# Failsafe class selection (comma-separated FQNs). Fall back to a single smoke
+# class ONLY when neither an explicit selection nor a tag group is given. Do NOT
+# use ${SEL_IT_TEST:-<class>} here: an empty SEL_IT_TEST alongside SEL_GROUPS
+# (the CI group-shard case) must stay empty so the WHOLE group runs - a :- default
+# would wrongly intersect the group with the single smoke class (running 0 tests
+# for any group that doesn't contain it).
+if [[ -z "${SEL_IT_TEST:-}" && -z "${SEL_GROUPS}" ]]; then
+    SEL_IT_TEST="com.adobe.cq.wcm.core.components.it.seljup.tests.list.v2.ListIT"
+fi
+SEL_IT_TEST="${SEL_IT_TEST:-}"
 
 # Max seconds to wait for an instance to answer HTTP before giving up.
 AEM_STARTUP_TIMEOUT="${AEM_STARTUP_TIMEOUT:-600}"

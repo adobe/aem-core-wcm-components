@@ -34,7 +34,6 @@ import java.util.Collections;
 import java.util.concurrent.TimeoutException;
 
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_DOWNLOAD_V2;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DownloadIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.download.v1.DownloadIT {
@@ -63,21 +62,24 @@ public class DownloadIT extends com.adobe.cq.wcm.core.components.it.seljup.tests
     public void downloadWordFile() throws TimeoutException, InterruptedException, ClientException, URISyntaxException {
         Header[] headers = getDownloadedFileHeaders(testAssetWordPath);
         assertTrue(headers.length > 0);
-        assertEquals("attachment; filename=\"" + testAssetWordName + "\"", headers[0].getValue());
+        assertTrue(headers[0].getValue().startsWith("attachment; filename=\"" + testAssetWordName + "\""),
+            "Unexpected Content-Disposition: " + headers[0].getValue());
     }
 
     @Test
     public void downloadXlsxFile() throws TimeoutException, InterruptedException, ClientException, URISyntaxException {
         Header[] headers = getDownloadedFileHeaders(testAssetXlsxPath);
         assertTrue(headers.length > 0);
-        assertEquals("attachment; filename=\"" + testAssetXlsxName + "\"", headers[0].getValue());
+        assertTrue(headers[0].getValue().startsWith("attachment; filename=\"" + testAssetXlsxName + "\""),
+            "Unexpected Content-Disposition: " + headers[0].getValue());
     }
 
     @Test
     public void downloadPptxFile() throws TimeoutException, InterruptedException, ClientException, URISyntaxException {
         Header[] headers = getDownloadedFileHeaders(testAssetPptxPath);
         assertTrue(headers.length > 0);
-        assertEquals("attachment; filename=\"" + testAssetPptxName + "\"", headers[0].getValue());
+        assertTrue(headers[0].getValue().startsWith("attachment; filename=\"" + testAssetPptxName + "\""),
+            "Unexpected Content-Disposition: " + headers[0].getValue());
     }
 
     private Header[] getDownloadedFileHeaders (String testAssetPath) throws InterruptedException, TimeoutException, URISyntaxException, ClientException {
