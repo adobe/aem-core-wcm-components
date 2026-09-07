@@ -36,6 +36,9 @@ on:
   push:
     branches:
       - main
+      # TEMPORARY: allows a first validation run directly on the feature branch.
+      # Remove before merging to main.
+      - it-docker-aem
 
 concurrency:
   group: it-aem-${{ github.workflow }}-${{ github.ref }}
