@@ -138,8 +138,12 @@ start_aem() {
     log "Starting AEM author (qp start --id author --port 4502)"
     # Same invocation shape the CIF repo uses. qp `start` provisions from the
     # local quickstart jar then starts it, returning once the instance is up.
+    # qp.sh runs the quickstart via `eval "java ... $*"`, which word-splits its args.
+    # The multi-token --vm-options value must therefore reach that eval still wrapped
+    # in literal single quotes, so it survives as ONE java argument. The \"'...'\"
+    # wrapping keeps the single quotes literal through the container's `bash -lc`.
     docker exec "${AEM_CONTAINER}" bash -lc \
-        "cd ${QP_DIR} && ./qp.sh -v start --id author --runmode author --port 4502 --qs-jar ${QS_JAR} --timeout ${QP_START_TIMEOUT} --vm-options '${QP_VM_OPTIONS}'"
+        "cd ${QP_DIR} && ./qp.sh -v start --id author --runmode author --port 4502 --qs-jar ${QS_JAR} --timeout ${QP_START_TIMEOUT} --vm-options \"'${QP_VM_OPTIONS}'\""
 }
 
 wait_for_aem() {
