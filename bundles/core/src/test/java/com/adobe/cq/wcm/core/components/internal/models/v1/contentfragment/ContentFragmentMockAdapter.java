@@ -72,6 +72,7 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
     private final String PN_VALUE_TYPE = "valueType";
     private final String MAIN_ELEMENT = "main";
     private final String COMPOSITE_TYPE_STRING = "composite";
+    private final String ARRAY_SUFFIX = "[]";
 
     @Nullable
     @Override
@@ -340,8 +341,17 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
                 // set the element title
                 element.title = properties.get(PN_ELEMENT_TITLE, String.class);
                 // determine if the element is multi-valued (if the value type is e.g. "string[]")
-                element.isMultiValued = properties.get(PN_VALUE_TYPE, "").endsWith("[]");
-                element.typeString = properties.get(PN_VALUE_TYPE, String.class);
+                String rawValueType = properties.get(PN_VALUE_TYPE, "");
+                element.isMultiValued = rawValueType.endsWith(ARRAY_SUFFIX);
+                // mirrors FieldImpl#calculateDataType in the CFM platform: the array suffix is
+                // folded into isMultiValue and never appears in the resulting type string - the
+                // deprecated getTypeString() strips it exactly like getValueType() does, for every
+                // value type. "string[]" (multi) normalizes to "string", same
+                // as "string" (single); "composite[]" normalizes to "composite", same as
+                // "composite". A field's cardinality lives in isMultiValue(), never in the string.
+                element.typeString = element.isMultiValued
+                        ? rawValueType.substring(0, rawValueType.length() - ARRAY_SUFFIX.length())
+                        : rawValueType;
                 found = true;
                 break;
             }

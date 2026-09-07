@@ -260,7 +260,8 @@
                     "main"            : "<p>Main content</p>",
                     "main@ContentType": "text/html",
                     "second"          : ["one", "two", "three"],
-                    "composite"       : "<composite placeholder; replace for proper composite support>"
+                    "composite"       : "<composite placeholder; replace for proper composite support>",
+                    "compositeMulti"  : "<composite placeholder; replace for proper composite support>"
                 }
             }
         }

@@ -239,23 +239,43 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_COMPOSITE);
 
         // the export omits the composite element entirely: unsupported field type => absent, both
-        // from the exported elements map and from the element order
+        // from the exported elements map and from the element order. "compositeMulti" is the
+        // multi-value (composite[]) counterpart of "composite" - both must be excluded the same way,
+        // since composite exclusion is keyed off DataType#getValueType(), which drops the array
+        // suffix for both cardinalities (see FieldImpl#calculateDataType in the CFM platform).
         Map<String, DAMContentFragment.DAMContentElement> exportedElements = fragment.getExportedElements();
         assertNotNull(exportedElements);
         assertFalse(exportedElements.containsKey("composite"), "Composite element should be omitted from the exported elements map");
+        assertFalse(exportedElements.containsKey("compositeMulti"),
+            "Multi-value composite element should be omitted from the exported elements map");
         assertFalse(Arrays.asList(fragment.getExportedElementsOrder()).contains("composite"),
             "Composite element should be omitted from the exported elements order");
+        assertFalse(Arrays.asList(fragment.getExportedElementsOrder()).contains("compositeMulti"),
+            "Multi-value composite element should be omitted from the exported elements order");
 
-        // getElements() (not an export getter) still carries the composite element, since HTL and the
-        // data layer need it to render the "unsupported field type" hint in edit/preview
+        // getElements() (not an export getter) still carries the composite elements, since HTL and the
+        // data layer need them to render the "unsupported field type" hint in edit/preview
         List<DAMContentFragment.DAMContentElement> elements = fragment.getElements();
         assertNotNull(elements);
         DAMContentFragment.DAMContentElement compositeElement = elements.stream()
-            .filter(element -> "composite".equals(element.getDataType()))
+            .filter(element -> "composite".equals(element.getName()))
             .findFirst()
             .orElse(null);
-        assertNotNull(compositeElement, "Element with dataType \"composite\" should still be present in getElements()");
+        assertNotNull(compositeElement, "Element \"composite\" should still be present in getElements()");
+        assertEquals("composite", compositeElement.getDataType());
         assertNull(compositeElement.getValue(), "Composite element's scalar value should be null");
+
+        // the multi-value composite's dataType must also be exactly "composite", never "composite[]" -
+        // that string only ever appears as the raw JCR valueType on the model's dialog field
+        // definition, not on DataType#getTypeString()/getValueType() of an actual element
+        DAMContentFragment.DAMContentElement compositeMultiElement = elements.stream()
+            .filter(element -> "compositeMulti".equals(element.getName()))
+            .findFirst()
+            .orElse(null);
+        assertNotNull(compositeMultiElement, "Element \"compositeMulti\" should still be present in getElements()");
+        assertEquals("composite", compositeMultiElement.getDataType(),
+            "Multi-value composite element's dataType must normalize to \"composite\", not \"composite[]\"");
+        assertNull(compositeMultiElement.getValue(), "Multi-value composite element's scalar value should be null");
 
         // the FragmentData wrapper (ContentElement#getValue(), i.e. DAMContentElementImpl.getData())
         // must stay non-null for a composite element; only its scalar value is null
