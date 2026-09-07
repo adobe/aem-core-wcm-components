@@ -108,6 +108,10 @@ SEL_GROUPS="${SEL_GROUPS:-}"
 # cloud(-ready) target (mirrors the pipeline; the module tags cloud-unsupported
 # UI tests with @Tag("IgnoreOnSDK")).
 SEL_EXCLUDED_GROUPS="${SEL_EXCLUDED_GROUPS:-failing,nested,IgnoreOnSDK}"
+# Re-run failing Selenium tests up to N times before marking them failed. UI tests
+# are prone to transient timing flakiness (and search tests can miss the async Oak
+# index on the first attempt); a couple of reruns absorb that. 0 disables.
+SEL_RERUN="${SEL_RERUN:-2}"
 # Failsafe class selection (comma-separated FQNs). Fall back to a single smoke
 # class ONLY when neither an explicit selection nor a tag group is given. Do NOT
 # use ${SEL_IT_TEST:-<class>} here: an empty SEL_IT_TEST alongside SEL_GROUPS
@@ -343,6 +347,9 @@ run_selenium() {
     fi
     if [[ -n "${SEL_EXCLUDED_GROUPS}" ]]; then
         args+=(-DexcludedGroups="${SEL_EXCLUDED_GROUPS}")
+    fi
+    if [[ "${SEL_RERUN}" != "0" ]]; then
+        args+=(-Dfailsafe.rerunFailingTestsCount="${SEL_RERUN}")
     fi
     # Headless display for CI: on a Linux runner with no DISPLAY, run under Xvfb so
     # the host-local Chrome has a virtual screen. On macOS (no xvfb-run, Chrome runs
