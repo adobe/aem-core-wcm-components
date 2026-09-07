@@ -52,6 +52,7 @@ All knobs are environment variables (see the top of `run-it.sh`). The common one
 | `AEM_AUTHOR_PORT` | `4502` | Host port the author is published on |
 | `IT_TEST` | the four author-only classes | Comma-separated failsafe test selection |
 | `AEM_STARTUP_TIMEOUT` | `600` | Seconds to wait for AEM to answer HTTP |
+| `QP_VM_OPTIONS` | `-Xmx4g -XX:MaxMetaspaceSize=1g …` | JVM options for the AEM quickstart (qp's 256m metaspace default OOMs cloud AEM) |
 | `KEEP_AEM` | `false` | Leave the container running after the run (for debugging) |
 
 Example — run a single test class and keep AEM up afterwards:

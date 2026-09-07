@@ -64,6 +64,11 @@ QS_JAR="${QS_JAR:-/home/circleci/cq/author/cq-quickstart.jar}"
 # Seconds qp waits for the quickstart to finish starting.
 QP_START_TIMEOUT="${QP_START_TIMEOUT:-1800}"
 
+# JVM options for the AEM quickstart. qp's default (-Xmx1536m -XX:MaxMetaspaceSize=256m)
+# is far too small for a cloud-ready instance on Java 21 - metaspace fills mid-run and
+# every subsequent request then fails with OutOfMemoryError: Metaspace. Give it room.
+QP_VM_OPTIONS="${QP_VM_OPTIONS:--Xmx4g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true}"
+
 # Author-only IT classes (the ones that never touch a publish instance). Keep in
 # sync with the classification in testing/it/docker/README.md.
 IT_TEST="${IT_TEST:-AdaptiveImageServletIT,ComponentsIT,ExperienceFragmentIT,TableOfContentsFilterIT}"
@@ -134,7 +139,7 @@ start_aem() {
     # Same invocation shape the CIF repo uses. qp `start` provisions from the
     # local quickstart jar then starts it, returning once the instance is up.
     docker exec "${AEM_CONTAINER}" bash -lc \
-        "cd ${QP_DIR} && ./qp.sh -v start --id author --runmode author --port 4502 --qs-jar ${QS_JAR} --timeout ${QP_START_TIMEOUT}"
+        "cd ${QP_DIR} && ./qp.sh -v start --id author --runmode author --port 4502 --qs-jar ${QS_JAR} --timeout ${QP_START_TIMEOUT} --vm-options '${QP_VM_OPTIONS}'"
 }
 
 wait_for_aem() {
