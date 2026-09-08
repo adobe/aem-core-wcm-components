@@ -45,7 +45,10 @@ on:
       - it-docker-aem
 
 concurrency:
-  group: it-aem-${{ github.workflow }}-${{ github.ref }}
+  # Include the event name so a push run and a manual workflow_dispatch run on the
+  # same ref don't cancel each other (they are different intents); a newer run of
+  # the SAME event still supersedes the older one.
+  group: it-aem-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 env:
