@@ -15,19 +15,24 @@
 # limitations under the License.
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Emits the GitHub Actions matrix (JSON: {"include":[...]}) for the sharded
-# Selenium suite. Each of the four @Tag groups (group1..group4) is split into
-# SHARDS_PER_GROUP round-robin buckets of test classes, plus one "ungrouped" leg
-# for classes that carry no group tag - so every e2e-selenium test runs, spread
-# across many parallel legs to cut wall-clock time.
+# Emits the GitHub Actions matrix (JSON: {"include":[...]}) for the Selenium
+# suite, sharded by the tests' JUnit @Tag groups: one leg per group1..group4
+# (selected via -Dgroups, i.e. the tag itself), plus one "ungrouped" leg
+# (explicit class list) for the handful of classes that carry no group tag - so
+# every e2e-selenium test still runs. Five legs total.
 #
-# Each matrix entry: { name, sel_it_test } where sel_it_test is a comma-separated
-# list of failsafe -Dit.test class FQNs. Consumed by maven-it.yml via fromJSON().
-# Run standalone to inspect:  bash testing/it/docker/gen-selenium-matrix.sh | jq .
+# Each matrix entry has:
+#   name        - leg id (group1..group4, ungrouped)
+#   sel_groups  - JUnit tag to pass as -Dgroups (empty for the ungrouped leg)
+#   sel_it_test - comma-separated failsafe -Dit.test class FQNs (only set for
+#                 the ungrouped leg; empty for tag-based legs so the whole
+#                 group runs)
+#
+# Consumed by .github/workflows/maven-it.yml via fromJSON(). Run standalone to
+# inspect the split:  bash testing/it/docker/gen-selenium-matrix.sh | jq .
 
 set -uo pipefail
 
-SHARDS_PER_GROUP="${SHARDS_PER_GROUP:-4}"
 TAG_GROUPS=("group1" "group2" "group3" "group4")
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
@@ -47,33 +52,7 @@ group_of() {
 entries=()
 
 for grp in "${TAG_GROUPS[@]}"; do
-    classes=()
-    while IFS= read -r f; do
-        [ -z "$f" ] && continue
-        if [ "$(group_of "$f")" = "$grp" ]; then
-            classes+=("$(fqn_of "$f")")
-        fi
-    done < <(grep -rlE "@Tag\(\"${grp}\"\)" "${SRC}/${PKG_ROOT}" 2>/dev/null | sort)
-
-    buckets=()
-    idx=0
-    for c in "${classes[@]}"; do
-        b=$(( idx % SHARDS_PER_GROUP ))
-        if [ -n "${buckets[$b]:-}" ]; then
-            buckets[$b]="${buckets[$b]},${c}"
-        else
-            buckets[$b]="${c}"
-        fi
-        idx=$(( idx + 1 ))
-    done
-
-    b=0
-    while [ "$b" -lt "$SHARDS_PER_GROUP" ]; do
-        if [ -n "${buckets[$b]:-}" ]; then
-            entries+=("{\"name\":\"${grp}-$(( b + 1 ))\",\"sel_it_test\":\"${buckets[$b]}\"}")
-        fi
-        b=$(( b + 1 ))
-    done
+    entries+=("{\"name\":\"${grp}\",\"sel_groups\":\"${grp}\",\"sel_it_test\":\"\"}")
 done
 
 ungrouped=()
@@ -86,7 +65,7 @@ done < <(find "${SRC}/${PKG_ROOT}" -name "*IT.java" 2>/dev/null | sort)
 
 if [ "${#ungrouped[@]}" -gt 0 ]; then
     joined=$(IFS=,; echo "${ungrouped[*]}")
-    entries+=("{\"name\":\"ungrouped\",\"sel_it_test\":\"${joined}\"}")
+    entries+=("{\"name\":\"ungrouped\",\"sel_groups\":\"\",\"sel_it_test\":\"${joined}\"}")
 fi
 
 printf '{"include":[%s]}\n' "$(IFS=,; echo "${entries[*]}")"
