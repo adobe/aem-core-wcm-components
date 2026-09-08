@@ -82,6 +82,20 @@ jobs:
           distribution: temurin
           java-version: '11'
 
+      # Self-hosted runners aren't guaranteed to have Maven pre-installed (unlike
+      # GitHub-hosted ubuntu-latest). Install it via Homebrew if missing, so this
+      # job doesn't depend on manual provisioning of the runner machine.
+      - name: Setup Maven (if missing)
+        run: |
+          if command -v mvn >/dev/null 2>&1; then
+            echo "Maven already available: $(mvn -v | head -1)"
+          elif command -v brew >/dev/null 2>&1; then
+            brew install maven
+          else
+            echo "::error::mvn not found on PATH and Homebrew is unavailable to install it. Install Maven on this self-hosted runner." >&2
+            exit 1
+          fi
+
       - name: Restore Maven repository cache
         uses: actions/cache/restore@v5
         with:
@@ -170,6 +184,20 @@ jobs:
         with:
           distribution: temurin
           java-version: '11'
+
+      # Self-hosted runners aren't guaranteed to have Maven pre-installed (unlike
+      # GitHub-hosted ubuntu-latest). Install it via Homebrew if missing, so this
+      # job doesn't depend on manual provisioning of the runner machine.
+      - name: Setup Maven (if missing)
+        run: |
+          if command -v mvn >/dev/null 2>&1; then
+            echo "Maven already available: $(mvn -v | head -1)"
+          elif command -v brew >/dev/null 2>&1; then
+            brew install maven
+          else
+            echo "::error::mvn not found on PATH and Homebrew is unavailable to install it. Install Maven on this self-hosted runner." >&2
+            exit 1
+          fi
       - name: Restore Maven repository cache
         uses: actions/cache/restore@v5
         with:
@@ -241,6 +269,20 @@ jobs:
         with:
           distribution: temurin
           java-version: '11'
+
+      # Self-hosted runners aren't guaranteed to have Maven pre-installed (unlike
+      # GitHub-hosted ubuntu-latest). Install it via Homebrew if missing, so this
+      # job doesn't depend on manual provisioning of the runner machine.
+      - name: Setup Maven (if missing)
+        run: |
+          if command -v mvn >/dev/null 2>&1; then
+            echo "Maven already available: $(mvn -v | head -1)"
+          elif command -v brew >/dev/null 2>&1; then
+            brew install maven
+          else
+            echo "::error::mvn not found on PATH and Homebrew is unavailable to install it. Install Maven on this self-hosted runner." >&2
+            exit 1
+          fi
       - name: Restore Maven repository cache
         uses: actions/cache/restore@v5
         with:
