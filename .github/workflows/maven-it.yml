@@ -66,16 +66,16 @@ jobs:
     outputs:
       selenium_matrix: ${{ steps.genmatrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup JDK 11
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '11'
 
       - name: Restore Maven repository cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ~/.m2/repository
           key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
@@ -90,13 +90,13 @@ jobs:
 
       - name: Save Maven repository cache
         if: always()
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ~/.m2/repository
           key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
 
       - name: Upload deployable packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: it-packages
           if-no-files-found: error
@@ -115,7 +115,7 @@ jobs:
 
       - name: Restore AEM Docker image cache
         id: aem-image-cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
@@ -129,7 +129,7 @@ jobs:
 
       - name: Save AEM Docker image cache
         if: ${{ always() && steps.aem-image-cache.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
@@ -153,28 +153,28 @@ jobs:
       PUBLISH_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
       KEEP_AEM: ${{ inputs.keep_aem || false }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup JDK 11
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '11'
       - name: Restore Maven repository cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ~/.m2/repository
           key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             it-aem-m2-${{ env.CACHE_VERSION }}-
       - name: Download deployable packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: it-packages
       - name: Compute AEM image cache key
         id: imgkey
         run: echo "key=aem-image-${CACHE_VERSION}-$(echo "$AEM_IMAGE" | tr '/:' '__')" >> "$GITHUB_OUTPUT"
       - name: Restore AEM Docker image cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
@@ -194,7 +194,7 @@ jobs:
           fail_on_failure: false
       - name: Upload test results and AEM logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: it-http-author-reports
           if-no-files-found: ignore
@@ -221,9 +221,9 @@ jobs:
       SEL_IT_TEST: ${{ matrix.sel_it_test }}
       QP_VM_OPTIONS: '-Xmx4g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup JDK 11
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '11'
@@ -236,21 +236,21 @@ jobs:
           sleep 2
           echo "DISPLAY=:99" >> "$GITHUB_ENV"
       - name: Restore Maven repository cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ~/.m2/repository
           key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             it-aem-m2-${{ env.CACHE_VERSION }}-
       - name: Download deployable packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: it-packages
       - name: Compute AEM image cache key
         id: imgkey
         run: echo "key=aem-image-${CACHE_VERSION}-$(echo "$AEM_IMAGE" | tr '/:' '__')" >> "$GITHUB_OUTPUT"
       - name: Restore AEM Docker image cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
@@ -270,7 +270,7 @@ jobs:
           fail_on_failure: true
       - name: Upload Selenium results and AEM logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: it-selenium-reports-${{ matrix.name }}
           if-no-files-found: ignore
@@ -278,3 +278,23 @@ jobs:
           path: |
             testing/it/e2e-selenium/target/failsafe-reports
             testing/it/http/target/aem-logs
+
+  # --------------------------------------------------------------------------
+  # Aggregate every leg's failsafe reports into one Step Summary (totals + the
+  # list of failing tests). Runs regardless of test outcomes.
+  # --------------------------------------------------------------------------
+  summary:
+    name: Test results summary
+    needs: [integration-test, selenium]
+    if: ${{ always() && (github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - name: Download all test report artifacts
+        uses: actions/download-artifact@v5
+        with:
+          path: all-reports
+          pattern: 'it-*reports*'
+      - name: Write results summary
+        run: node testing/it/docker/summarize-it.js all-reports >> "$GITHUB_STEP_SUMMARY"
