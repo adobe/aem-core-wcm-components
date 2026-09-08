@@ -351,9 +351,10 @@ run_selenium() {
     if [[ "${SEL_RERUN}" != "0" ]]; then
         args+=(-Dfailsafe.rerunFailingTestsCount="${SEL_RERUN}")
     fi
-    # Headless display for CI: on a Linux runner with no DISPLAY, run under Xvfb so
-    # the host-local Chrome has a virtual screen. On macOS (no xvfb-run, Chrome runs
-    # natively) this branch is skipped, matching the validated local flow.
+    # Headless display: on a Linux runner with no DISPLAY, run under Xvfb so the
+    # host-local Chrome has a virtual screen. On macOS (no xvfb-run) this branch is
+    # skipped - Chrome runs natively against the runner's real GUI session (the CI
+    # self-hosted runner and a local Mac both work this way).
     if [[ -z "${DISPLAY:-}" ]] && command -v xvfb-run >/dev/null 2>&1; then
         xvfb-run -a mvn "${args[@]}"
     else

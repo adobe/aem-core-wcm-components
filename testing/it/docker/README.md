@@ -95,10 +95,13 @@ we only publish `:4502` for the host-side Maven/curl.
 
 ## Platform note (Apple Silicon)
 
-The image is `linux/amd64`. On an arm64 (Apple Silicon) laptop it runs under
-emulation, so the local AEM boot is **slow and can be flaky**. The authoritative
-run is the CI job on native amd64 runners; treat the local flow on arm64 as
-best-effort. On an amd64 Linux host it runs natively.
+The image is `linux/amd64`. On an arm64 (Apple Silicon) Mac it runs under Docker
+emulation, so AEM boot is **slower than on native amd64** (author/publish took
+~3.5 min each to come up in testing, vs. seconds/low-minutes natively) and can be
+flaky. This applies both locally **and in CI**, since the self-hosted CI runner
+is also Apple Silicon — there is currently no native-amd64 run of this workflow.
+Job timeouts in `maven-it.yml` are sized generously to account for this. On an
+amd64 host (Linux or Mac) it runs natively.
 
 ## Open items
 

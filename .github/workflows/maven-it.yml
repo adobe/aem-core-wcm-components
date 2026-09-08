@@ -29,6 +29,10 @@
 # Requires repo secrets ARTIFACTORY_CLOUD_USER / ARTIFACTORY_CLOUD_PASS for the
 # private Adobe AEM image registry (not exposed to forks - hence the canonical-repo
 # guard).
+#
+# Runs on a self-hosted macOS runner (a logged-in GUI session, Docker installed).
+# The Selenium job relies on that real GUI session/WindowServer for Chrome - see
+# run-it.sh's headless-display comment for how this differs from a Linux runner.
 
 name: Integration Tests (AEM)
 
@@ -150,7 +154,10 @@ jobs:
     needs: prep
     if: ${{ github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components' }}
     runs-on: self-hosted
-    timeout-minutes: 90
+    # Generous: the self-hosted runner is Apple Silicon, so the linux/amd64 AEM
+    # image runs under Docker emulation here too (author+publish boot alone took
+    # ~3.5 min each locally under emulation, vs. seconds/low-minutes natively).
+    timeout-minutes: 120
     env:
       WITH_PUBLISH: 'true'
       QP_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
@@ -208,14 +215,16 @@ jobs:
             testing/it/http/target/aem-logs
 
   # --------------------------------------------------------------------------
-  # Selenium ITs, sharded (each @Tag group in 4 + ungrouped). Manual only.
+  # Selenium ITs, one leg per @Tag group + ungrouped. Manual only.
   # --------------------------------------------------------------------------
   selenium:
     name: Selenium ITs (${{ matrix.name }}, cloud-ready)
     needs: prep
     if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: self-hosted
-    timeout-minutes: 60
+    # Generous: Apple Silicon runner emulates the linux/amd64 AEM image, and
+    # browser-driven UI tests were noticeably slower under emulation locally.
+    timeout-minutes: 180
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.prep.outputs.selenium_matrix) }}
@@ -232,14 +241,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '11'
-      - name: Set up virtual display (Xvfb + fluxbox)
-        run: |
-          sudo apt-get update && sudo apt-get install -y xvfb fluxbox
-          Xvfb :99 -screen 0 1920x1080x24 >/tmp/xvfb.log 2>&1 &
-          sleep 3
-          DISPLAY=:99 fluxbox >/tmp/fluxbox.log 2>&1 &
-          sleep 2
-          echo "DISPLAY=:99" >> "$GITHUB_ENV"
       - name: Restore Maven repository cache
         uses: actions/cache/restore@v5
         with:
