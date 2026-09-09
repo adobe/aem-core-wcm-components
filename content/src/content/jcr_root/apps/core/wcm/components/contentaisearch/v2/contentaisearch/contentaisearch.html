@@ -1,0 +1,140 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2026 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<section data-sly-use.search="com.adobe.cq.wcm.core.components.models.ContentAISupportedSearchV2"
+         id="${search.id}"
+         class="cmp-contentaisearch cmp-contentaisearch--${search.resultsLayout}"
+         role="search"
+         data-cmp-is="contentaisearch"
+         data-cmp-content-source="${search.primaryContentSource}"
+         data-cmp-ai-search-mode-enabled="${search.aiSearchModeEnabled}"
+         data-cmp-gensearch-error-retry-visible="${search.genSearchErrorRetryVisible}"
+         data-cmp-results-layout="${search.resultsLayout}"
+         data-cmp-resource-path="${resource.path}">
+    <form class="cmp-contentaisearch__form" data-cmp-hook-contentaisearch="form" autocomplete="off">
+        <div class="cmp-contentaisearch__field">
+            <label class="cmp-contentaisearch__input-label" for="${search.id}-input">${'Search' @ i18n}</label>
+            <i class="cmp-contentaisearch__icon" data-cmp-hook-contentaisearch="icon" aria-hidden="true"></i>
+            <input id="${search.id}-input" class="cmp-contentaisearch__input" data-cmp-hook-contentaisearch="input"
+                   type="text" name="q" placeholder="${search.placeholder || 'Search' @ i18n}" autocomplete="off">
+            <button type="button" class="cmp-contentaisearch__clear" data-cmp-hook-contentaisearch="clear" aria-label="${'Clear' @ i18n}" hidden="hidden">
+                <i class="cmp-contentaisearch__clear-icon" aria-hidden="true"></i>
+            </button>
+        </div>
+    </form>
+
+    <sly data-sly-test="${search.aiSearchModeEnabled}">
+        <div class="cmp-contentaisearch__tabs" role="tablist" aria-label="${'Search mode' @ i18n}" data-cmp-hook-contentaisearch="tabs">
+            <button type="button" role="tab" id="${search.id}-tab-results" class="cmp-contentaisearch__tab"
+                    aria-controls="${search.id}-panel-results" aria-selected="true"
+                    data-cmp-hook-contentaisearch="tabSearchResults">${'Search Results' @ i18n}</button>
+            <button type="button" role="tab" id="${search.id}-tab-ai" class="cmp-contentaisearch__tab"
+                    aria-controls="${search.id}-panel-ai" aria-selected="false" tabindex="-1"
+                    data-cmp-hook-contentaisearch="tabAiMode">${'AI Mode' @ i18n}</button>
+        </div>
+
+        <div class="cmp-contentaisearch__panel" role="tabpanel" id="${search.id}-panel-ai"
+             aria-labelledby="${search.id}-tab-ai" data-cmp-hook-contentaisearch="panelAiMode" hidden="hidden">
+            <div class="cmp-contentaisearch__summary-loading" data-cmp-hook-contentaisearch="summaryLoading" hidden="hidden" aria-live="polite">
+                <div class="cmp-contentaisearch__summary-card">
+                    <div class="cmp-contentaisearch__summary-loading-content">
+                        <span class="cmp-contentaisearch__summary-loading-indicator" aria-hidden="true"></span>
+                        <p class="cmp-contentaisearch__summary-loading-text">${'Generating answer...' @ i18n}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cmp-contentaisearch__summary" data-cmp-hook-contentaisearch="summary" hidden="hidden">
+                <div class="cmp-contentaisearch__summary-card">
+                    <div class="cmp-contentaisearch__summary-header">
+                        <span class="cmp-contentaisearch__summary-icon" aria-hidden="true"></span>
+                        <div class="cmp-contentaisearch__summary-heading">
+                            <p class="cmp-contentaisearch__summary-title">${'Generative answer' @ i18n}</p>
+                            <p class="cmp-contentaisearch__summary-attribution">${'Powered by Content AI' @ i18n}</p>
+                        </div>
+                    </div>
+                    <p class="cmp-contentaisearch__summary-text" data-cmp-hook-contentaisearch="summaryText"></p>
+                    <div class="cmp-contentaisearch__sources-section">
+                        <p class="cmp-contentaisearch__sources-label">${'Sources' @ i18n}</p>
+                        <ul class="cmp-contentaisearch__sources" data-cmp-hook-contentaisearch="sources"></ul>
+                    </div>
+                    <p class="cmp-contentaisearch__disclaimer" data-cmp-hook-contentaisearch="disclaimer">
+                        ${search.disclaimerText || 'AI-generated responses may be inaccurate. Verify important information.' @ i18n}
+                    </p>
+                </div>
+            </div>
+            <div class="cmp-contentaisearch__error" data-cmp-hook-contentaisearch="error" hidden="hidden">
+                <p data-cmp-hook-contentaisearch="errorMessage">${'Something went wrong generating the summary.' @ i18n}</p>
+                <button type="button" data-cmp-hook-contentaisearch="retry" data-sly-test="${search.genSearchErrorRetryVisible}">${'Try again' @ i18n}</button>
+            </div>
+        </div>
+
+        <div class="cmp-contentaisearch__panel" role="tabpanel" id="${search.id}-panel-results"
+             aria-labelledby="${search.id}-tab-results" data-cmp-hook-contentaisearch="panelSearchResults">
+            <div class="cmp-contentaisearch__results-section" data-cmp-hook-contentaisearch="resultsSection" hidden="hidden">
+                <div class="cmp-contentaisearch__results-toolbar">
+                    <div class="cmp-contentaisearch__layout-toggle" role="group" aria-label="${'Results layout' @ i18n}">
+                        <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutCard" aria-pressed="true">${'Cards' @ i18n}</button>
+                        <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutList" aria-pressed="false">${'List' @ i18n}</button>
+                    </div>
+                </div>
+                <ul class="cmp-contentaisearch__results" data-cmp-hook-contentaisearch="results" aria-label="${'Search results' @ i18n}"></ul>
+                <button type="button" class="cmp-contentaisearch__load-more" data-cmp-hook-contentaisearch="loadMore" hidden="hidden">${'Load more results' @ i18n}</button>
+            </div>
+        </div>
+
+        <script data-cmp-hook-contentaisearch="prepaint">
+            (function() {
+                try {
+                    var root = document.currentScript.closest(".cmp-contentaisearch");
+                    if (!root) { return; }
+                    var match = document.cookie.match(/(?:^|; )cmp-contentaisearch-tab=([^;]*)/);
+                    var wantAi = match && decodeURIComponent(match[1]) === "ai-mode";
+                    if (!wantAi) { return; }
+                    var tabResults = root.querySelector('[data-cmp-hook-contentaisearch="tabSearchResults"]');
+                    var tabAi = root.querySelector('[data-cmp-hook-contentaisearch="tabAiMode"]');
+                    var panelResults = root.querySelector('[data-cmp-hook-contentaisearch="panelSearchResults"]');
+                    var panelAi = root.querySelector('[data-cmp-hook-contentaisearch="panelAiMode"]');
+                    if (tabResults && tabAi && panelResults && panelAi) {
+                        tabResults.setAttribute("aria-selected", "false");
+                        tabResults.setAttribute("tabindex", "-1");
+                        tabAi.setAttribute("aria-selected", "true");
+                        tabAi.removeAttribute("tabindex");
+                        panelResults.setAttribute("hidden", "hidden");
+                        panelAi.removeAttribute("hidden");
+                    }
+                } catch (e) {
+                    // Fails open to the default (Search Results) tab already rendered above.
+                }
+            })();
+        </script>
+    </sly>
+
+    <sly data-sly-test="${!search.aiSearchModeEnabled}">
+        <div class="cmp-contentaisearch__results-section" data-cmp-hook-contentaisearch="resultsSection" hidden="hidden">
+            <div class="cmp-contentaisearch__results-toolbar">
+                <div class="cmp-contentaisearch__layout-toggle" role="group" aria-label="${'Results layout' @ i18n}">
+                    <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutCard" aria-pressed="true">${'Cards' @ i18n}</button>
+                    <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutList" aria-pressed="false">${'List' @ i18n}</button>
+                </div>
+            </div>
+            <ul class="cmp-contentaisearch__results" data-cmp-hook-contentaisearch="results" aria-label="${'Search results' @ i18n}"></ul>
+            <button type="button" class="cmp-contentaisearch__load-more" data-cmp-hook-contentaisearch="loadMore" hidden="hidden">${'Load more results' @ i18n}</button>
+        </div>
+    </sly>
+
+    <sly data-sly-include="itemTemplateCard.html"/>
+    <sly data-sly-include="itemTemplateList.html"/>
+    <sly data-sly-include="sourceTemplate.html"/>
+</section>
