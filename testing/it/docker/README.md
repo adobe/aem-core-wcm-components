@@ -93,24 +93,19 @@ client in the same container keeps RMI's `localhost` callback consistent, so —
 unlike the CIF repo's two-container split — **no `--network host` is needed**;
 we only publish `:4502` for the host-side Maven/curl.
 
-## Platform note (architecture)
+## Platform note (Apple Silicon)
 
-The image is `linux/amd64`. On an arm64 host (e.g. Apple Silicon) it runs under
-Docker emulation, so AEM boot is **slower than on native amd64** (author/publish
-took ~3.5 min each to come up in testing, vs. seconds/low-minutes natively) and
-can be flaky. Whether this applies in CI depends on the self-hosted runner's own
-architecture — confirm it there. Job timeouts in `maven-it.yml` are sized
-generously (see the comments on `integration-test`/`selenium`) pending that
-confirmation. On a native amd64 host (Linux or Mac) it runs natively.
+The image is `linux/amd64`. On an arm64 (Apple Silicon) Mac it runs under Docker
+emulation, so AEM boot is **slower than on native amd64** (author/publish took
+~3.5 min each to come up in testing, vs. seconds/low-minutes natively) and can be
+flaky — this only affects local dev on Apple Silicon. CI runs on GitHub-hosted
+`ubuntu-latest`, which is native amd64, so it doesn't hit this. On a native amd64
+host (Linux or Mac) it runs natively.
 
 ## Open items
 
 - **CI secrets.** `ARTIFACTORY_CLOUD_USER` / `ARTIFACTORY_CLOUD_PASS` must be
   added as repository secrets for the workflow to pull the image.
-- **Runner Docker access.** The self-hosted CI runner is an Ubuntu Docker
-  image/container; it needs its own access to a Docker daemon (host socket
-  bind-mounted in, or Docker-in-Docker) for this workflow's `docker` commands to
-  work at all.
 
 ## Selenium UI suite (`WITH_SELENIUM=true`)
 

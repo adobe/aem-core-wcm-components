@@ -30,13 +30,9 @@
 # private Adobe AEM image registry (not exposed to forks - hence the canonical-repo
 # guard).
 #
-# Runs on a self-hosted runner backed by an Ubuntu Docker image/container. That
-# container needs its own access to a Docker daemon (e.g. the host's
-# /var/run/docker.sock bind-mounted in, or Docker-in-Docker) so this workflow's
-# own `docker run`/`docker exec`/`docker pull`/`docker load` calls work - if the
-# runner container has no Docker access at all, every job past checkout fails.
-# There is no GUI session inside the container, so the Selenium job starts its
-# own virtual display (Xvfb + fluxbox) for Chrome - see run-it.sh's
+# Runs on GitHub-hosted ubuntu-latest runners (native amd64, Docker and Maven
+# preinstalled). The Selenium job has no GUI session, so it starts its own
+# virtual display (Xvfb + fluxbox) for Chrome - see run-it.sh's
 # headless-display comment for how this differs from a local macOS dev run.
 
 name: Integration Tests (AEM)
@@ -74,7 +70,7 @@ jobs:
   prep:
     name: prep (build + prime caches)
     if: ${{ github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components' }}
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
       selenium_matrix: ${{ steps.genmatrix.outputs.matrix }}
@@ -86,24 +82,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '11'
-
-      # Self-hosted runners aren't guaranteed to have Maven pre-installed (unlike
-      # GitHub-hosted ubuntu-latest). Install it via apt if missing, so this job
-      # doesn't depend on manual provisioning of the runner container. Tries
-      # plain apt-get first (the container may already run as root), falling
-      # back to sudo for a non-root runner user.
-      - name: Setup Maven (if missing)
-        run: |
-          if command -v mvn >/dev/null 2>&1; then
-            echo "Maven already available: $(mvn -v | head -1)"
-          elif apt-get update && apt-get install -y maven; then
-            :
-          elif command -v sudo >/dev/null 2>&1 && sudo apt-get update && sudo apt-get install -y maven; then
-            :
-          else
-            echo "::error::mvn not found on PATH and apt-get install failed (as root and via sudo). Install Maven on this self-hosted runner." >&2
-            exit 1
-          fi
 
       - name: Restore Maven repository cache
         uses: actions/cache/restore@v5
@@ -176,12 +154,10 @@ jobs:
     name: http ITs (author + publish, cloud-ready)
     needs: prep
     if: ${{ github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components' }}
-    runs-on: self-hosted
-    # Generous: kept high from when the self-hosted runner ran the linux/amd64 AEM
-    # image under Docker emulation (author+publish boot alone took ~3.5 min each
-    # under emulation, vs. seconds/low-minutes natively). Revisit once this
-    # Ubuntu-in-Docker runner's actual architecture/performance is confirmed.
-    timeout-minutes: 120
+    runs-on: ubuntu-latest
+    # Native amd64 GitHub-hosted runner: author+publish boot + the full http
+    # suite ran in ~9 minutes in testing, so 90m is generous headroom.
+    timeout-minutes: 90
     env:
       WITH_PUBLISH: 'true'
       QP_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
@@ -194,24 +170,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '11'
-
-      # Self-hosted runners aren't guaranteed to have Maven pre-installed (unlike
-      # GitHub-hosted ubuntu-latest). Install it via apt if missing, so this job
-      # doesn't depend on manual provisioning of the runner container. Tries
-      # plain apt-get first (the container may already run as root), falling
-      # back to sudo for a non-root runner user.
-      - name: Setup Maven (if missing)
-        run: |
-          if command -v mvn >/dev/null 2>&1; then
-            echo "Maven already available: $(mvn -v | head -1)"
-          elif apt-get update && apt-get install -y maven; then
-            :
-          elif command -v sudo >/dev/null 2>&1 && sudo apt-get update && sudo apt-get install -y maven; then
-            :
-          else
-            echo "::error::mvn not found on PATH and apt-get install failed (as root and via sudo). Install Maven on this self-hosted runner." >&2
-            exit 1
-          fi
       - name: Restore Maven repository cache
         uses: actions/cache/restore@v5
         with:
@@ -263,12 +221,10 @@ jobs:
     name: Selenium ITs (${{ matrix.name }}, cloud-ready)
     needs: prep
     if: ${{ github.event_name == 'workflow_dispatch' }}
-    runs-on: self-hosted
-    # Generous: kept high from when the self-hosted runner emulated the
-    # linux/amd64 AEM image (browser-driven UI tests were noticeably slower under
-    # emulation locally). Revisit once this Ubuntu-in-Docker runner's actual
-    # architecture/performance is confirmed.
-    timeout-minutes: 180
+    runs-on: ubuntu-latest
+    # Native amd64 GitHub-hosted runner: a full @Tag group leg ran in ~7-13
+    # minutes in testing, so 60m is generous headroom.
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.prep.outputs.selenium_matrix) }}
@@ -286,38 +242,13 @@ jobs:
           distribution: temurin
           java-version: '11'
 
-      # Self-hosted runners aren't guaranteed to have Maven pre-installed (unlike
-      # GitHub-hosted ubuntu-latest). Install it via apt if missing, so this job
-      # doesn't depend on manual provisioning of the runner container. Tries
-      # plain apt-get first (the container may already run as root), falling
-      # back to sudo for a non-root runner user.
-      - name: Setup Maven (if missing)
-        run: |
-          if command -v mvn >/dev/null 2>&1; then
-            echo "Maven already available: $(mvn -v | head -1)"
-          elif apt-get update && apt-get install -y maven; then
-            :
-          elif command -v sudo >/dev/null 2>&1 && sudo apt-get update && sudo apt-get install -y maven; then
-            :
-          else
-            echo "::error::mvn not found on PATH and apt-get install failed (as root and via sudo). Install Maven on this self-hosted runner." >&2
-            exit 1
-          fi
-
-      # No GUI session inside the runner container, so give the host-local Chrome
-      # a virtual display: Xvfb (framebuffer) + fluxbox (window manager - the
-      # selenium base lib calls window.maximize() per test, which needs a real WM,
-      # not just a bare X server). Same root/sudo fallback as the Maven step.
+      # ubuntu-latest has no GUI session, so give the host-local Chrome a virtual
+      # display: Xvfb (framebuffer) + fluxbox (window manager - the selenium base
+      # lib calls window.maximize() per test, which needs a real WM, not just a
+      # bare X server).
       - name: Set up virtual display (Xvfb + fluxbox)
         run: |
-          if apt-get update && apt-get install -y xvfb fluxbox; then
-            :
-          elif command -v sudo >/dev/null 2>&1 && sudo apt-get update && sudo apt-get install -y xvfb fluxbox; then
-            :
-          else
-            echo "::error::apt-get install of xvfb/fluxbox failed (as root and via sudo)." >&2
-            exit 1
-          fi
+          sudo apt-get update && sudo apt-get install -y xvfb fluxbox
           Xvfb :99 -screen 0 1920x1080x24 >/tmp/xvfb.log 2>&1 &
           sleep 3
           DISPLAY=:99 fluxbox >/tmp/fluxbox.log 2>&1 &
@@ -376,7 +307,7 @@ jobs:
     name: Test results summary
     needs: [integration-test, selenium]
     if: ${{ always() && (github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components') }}
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5

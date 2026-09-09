@@ -351,8 +351,8 @@ run_selenium() {
     if [[ "${SEL_RERUN}" != "0" ]]; then
         args+=(-Dfailsafe.rerunFailingTestsCount="${SEL_RERUN}")
     fi
-    # Headless display: the CI workflow (a Linux/Ubuntu self-hosted runner with no
-    # GUI session) already starts Xvfb + fluxbox and exports DISPLAY before this
+    # Headless display: the CI workflow (GitHub-hosted ubuntu-latest, no GUI
+    # session) already starts Xvfb + fluxbox and exports DISPLAY before this
     # script runs, so this is normally a no-op there. This branch exists for
     # running the script standalone on a Linux box without that setup (falls back
     # to xvfb-run if available). On macOS (no xvfb-run, a real GUI session) it's
