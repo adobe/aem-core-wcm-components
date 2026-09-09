@@ -72,6 +72,15 @@
                                                 fieldLabel="ID"
                                                 name="./id"
 												validation="html-unique-id-validator"/>
+                                            <dropdown
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="${not empty cqDesign.isDropdown ? cqDesign.isDropdown : false}"
+                                                fieldDescription="The language structure use the dislosure pattern."
+                                                forceIgnoreFreshness="true"
+                                                name="./isDropdown"
+                                                uncheckedValue="false"
+                                                value="{Boolean}true"/>
                                         </items>
                                     </column>
                                 </items>
