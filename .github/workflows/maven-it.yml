@@ -105,7 +105,7 @@ jobs:
           key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
 
       - name: Upload deployable packages
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: it-packages
           if-no-files-found: error
@@ -178,7 +178,7 @@ jobs:
           restore-keys: |
             it-aem-m2-${{ env.CACHE_VERSION }}-
       - name: Download deployable packages
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: it-packages
       - name: Compute AEM image cache key
@@ -205,7 +205,7 @@ jobs:
           fail_on_failure: false
       - name: Upload test results and AEM logs
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: it-http-author-reports
           if-no-files-found: ignore
@@ -263,7 +263,7 @@ jobs:
           restore-keys: |
             it-aem-m2-${{ env.CACHE_VERSION }}-
       - name: Download deployable packages
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: it-packages
       - name: Compute AEM image cache key
@@ -290,7 +290,7 @@ jobs:
           fail_on_failure: true
       - name: Upload Selenium results and AEM logs
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: it-selenium-reports-${{ matrix.name }}
           if-no-files-found: ignore
@@ -312,7 +312,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Download all test report artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           path: all-reports
           pattern: 'it-*reports*'
