@@ -50,7 +50,6 @@ public class ImageDelegateRenderCondition extends SlingSafeMethodsServlet {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/renderconditions/imagedelegate";
     private static final String IMAGE_DELEGATE_DESCRIPTION = "imageDelegateDescription";
-    private static final String IMAGE_DELEGATE_DESCRIPTION_TEXT = "Image rendering is delegated to the {0} component.";
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
@@ -73,8 +72,7 @@ public class ImageDelegateRenderCondition extends SlingSafeMethodsServlet {
                             I18n i18n = new I18n(request);
                             ExpressionCustomizer customizer = ExpressionCustomizer.from(request);
                             customizer.setVariable(AbstractImageDelegatingModel.IMAGE_DELEGATE, delegate);
-                            customizer.setVariable(IMAGE_DELEGATE_DESCRIPTION, i18n.getVar(IMAGE_DELEGATE_DESCRIPTION_TEXT, null,
-                                    i18n.getVar(delegate.getTitle())));
+                            customizer.setVariable(IMAGE_DELEGATE_DESCRIPTION, i18n.get("Image rendering is delegated to the {0} component.", "{0} - component title", i18n.getVar(delegate.getTitle())));
                         }
                     }
                 }
