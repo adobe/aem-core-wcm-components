@@ -44,6 +44,9 @@ public class ElementsDataSourceServletTest extends AbstractContentFragmentDataSo
     private static final String DS_COMPONENT_PATH_STRUCTURED_DISPLAY_MODE_SINGLE =
             "elements-component-path-structured-display-mode-single";
     private static final String DS_FRAGMENT_PATH_OVERRIDE = "elements-fragment-path-override";
+    private static final String DS_FRAGMENT_PATH_COMPOSITE = "elements-fragment-path-composite";
+    private static final String DS_COMPONENT_PATH_COMPOSITE_DISPLAY_MODE_SINGLE =
+            "elements-component-path-composite-display-mode-single";
 
 
     /* names and titles of the elements of both the text-only and structured content fragment */
@@ -146,6 +149,22 @@ public class ElementsDataSourceServletTest extends AbstractContentFragmentDataSo
             throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_FRAGMENT_PATH_OVERRIDE);
         assertDataSource(dataSource, ELEMENT_NAMES, ELEMENT_TITLES);
+    }
+
+    @Test
+    void testCompositeElementExcludedFromDefaultMode()
+            throws ServletException, IOException {
+        // the composite field must not be offered as a selectable choice; only the scalar elements are
+        DataSource dataSource = getDataSource(servlet, DS_FRAGMENT_PATH_COMPOSITE);
+        assertDataSource(dataSource, ELEMENT_NAMES, ELEMENT_TITLES);
+    }
+
+    @Test
+    void testCompositeElementExcludedFromSingleTextMode()
+            throws ServletException, IOException {
+        // a single-value composite must not leak in via the ContentElement#getContentType() "text/plain" fallback
+        DataSource dataSource = getDataSource(servlet, DS_COMPONENT_PATH_COMPOSITE_DISPLAY_MODE_SINGLE);
+        assertDataSource(dataSource, ELEMENT_NAMES_MULTILINE_TEXT_ONLY, ELEMENT_TITLES_MULTILINE_TEXT_ONLY);
     }
 
 }

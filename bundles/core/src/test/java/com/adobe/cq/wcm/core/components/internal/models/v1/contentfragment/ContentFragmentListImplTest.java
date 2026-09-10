@@ -58,9 +58,15 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
     private static final String MODEL_ELEMENTS = "model-elements";
     private static final String NON_EXISTING_MODEL = "non-existing-model";
     private static final String NON_EXISTING_MODEL_WITH_PATH_AND_TAGS = "non-existing-model-path-tags";
+    private static final String MODEL_COMPOSITE = "model-composite";
     private static final String MODEL_MAX_LIMIT = "model-max-limit";
     private static final String MODEL_ORDER_BY = "model-order-by";
     private static final String DEFAULT_NO_MAX_LIMIT_SET = "-1";
+
+    private static final String TEXT_ONLY_FRAGMENT_PATH = "/content/dam/contentfragments-for-list/text-only";
+
+    /** Loaded by the shared {@link AbstractContentFragmentTest#setUp()}, not by this class's own fixtures. */
+    private static final String COMPOSITE_FRAGMENT_PATH = "/content/dam/contentfragments/structured-composite";
 
     private ResourceResolver leakingResourceResolverMock;
 
@@ -108,39 +114,48 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
 
     @Test
     void testListWithOneFragmentWithoutElements() {
-        testListWithOneFragment(MODEL_PATH_AND_TAGS);
+        testListWithOneFragment(MODEL_PATH_AND_TAGS, TEXT_ONLY_FRAGMENT_PATH);
     }
 
     @Test
     void testListWithOneFragmentWithElements() {
-        testListWithOneFragment(MODEL_ELEMENTS);
+        testListWithOneFragment(MODEL_ELEMENTS, TEXT_ONLY_FRAGMENT_PATH);
+    }
+
+    @Test
+    void testListWithCompositeFragmentOmitsCompositeElement() {
+        // The List component builds each item via the same DAMContentFragmentImpl the plain Content
+        // Fragment component uses, so this confirms that shared composite-omission filter also holds
+        // at the List export surface, asserted through the List's own .model.json serialization (not
+        // by calling the item model's getters directly).
+        testListWithOneFragment(MODEL_COMPOSITE, COMPOSITE_FRAGMENT_PATH);
     }
 
     @SuppressWarnings("unchecked")
-    private void testListWithOneFragment(String listName) {
-        Resource resource = context.resourceResolver().getResource("/content/dam/contentfragments-for-list/text-only");
-        if (resource != null) {
-            Resource DAMFragment = Mockito.spy(resource);
-            Query query = Mockito.mock(Query.class);
-            SearchResult searchResult = Mockito.mock(SearchResult.class);
-            Iterator<Resource> iterator = Mockito.mock(Iterator.class);
-            ResourceResolver spyResolver = Mockito.spy(DAMFragment.getResourceResolver());
+    private void testListWithOneFragment(String listName, String fragmentPath) {
+        Resource resource = context.resourceResolver().getResource(fragmentPath);
+        assertNotNull(resource, "Fixture resource not found: " + fragmentPath);
 
-            when(query.getResult()).thenReturn(searchResult);
-            when(searchResult.getResources()).thenReturn(iterator);
-            when(iterator.hasNext()).thenReturn(true, false);
-            when(iterator.next()).thenReturn(DAMFragment);
-            when(DAMFragment.getResourceResolver()).thenReturn(spyResolver);
-            Mockito.doNothing().when(spyResolver).close();
-            when(queryBuilderMock.createQuery(Mockito.any(PredicateGroup.class), Mockito.any(Session.class))).thenReturn(query);
+        Resource damFragment = Mockito.spy(resource);
+        Query query = Mockito.mock(Query.class);
+        SearchResult searchResult = Mockito.mock(SearchResult.class);
+        Iterator<Resource> iterator = Mockito.mock(Iterator.class);
+        ResourceResolver spyResolver = Mockito.spy(damFragment.getResourceResolver());
 
-            ContentFragmentList contentFragmentList = getModelInstanceUnderTest(listName);
-            assertEquals(ContentFragmentListImpl.RESOURCE_TYPE_V1, contentFragmentList.getExportedType());
-            assertEquals(contentFragmentList.getListItems().size(), 1);
-            Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, listName));
+        when(query.getResult()).thenReturn(searchResult);
+        when(searchResult.getResources()).thenReturn(iterator);
+        when(iterator.hasNext()).thenReturn(true, false);
+        when(iterator.next()).thenReturn(damFragment);
+        when(damFragment.getResourceResolver()).thenReturn(spyResolver);
+        Mockito.doNothing().when(spyResolver).close();
+        when(queryBuilderMock.createQuery(Mockito.any(PredicateGroup.class), Mockito.any(Session.class))).thenReturn(query);
 
-            Mockito.doCallRealMethod().when(spyResolver).close();
-        }
+        ContentFragmentList contentFragmentList = getModelInstanceUnderTest(listName);
+        assertEquals(ContentFragmentListImpl.RESOURCE_TYPE_V1, contentFragmentList.getExportedType());
+        assertEquals(1, contentFragmentList.getListItems().size());
+        Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, listName));
+
+        Mockito.doCallRealMethod().when(spyResolver).close();
     }
 
     @Test

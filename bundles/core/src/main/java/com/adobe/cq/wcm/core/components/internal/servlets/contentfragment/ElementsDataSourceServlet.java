@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.servlet.Servlet;
 
-import org.apache.commons.collections4.IteratorUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +29,7 @@ import org.osgi.service.component.annotations.Reference;
 
 import com.adobe.cq.dam.cfm.ContentElement;
 import com.adobe.cq.dam.cfm.ContentFragment;
+import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
 import com.adobe.granite.ui.components.Config;
 import com.adobe.granite.ui.components.ExpressionResolver;
 
@@ -65,7 +65,6 @@ public class ElementsDataSourceServlet extends AbstractContentFragmentDataSource
      */
     private static final String SINGLE_TEXT = "singleText";
 
-
     @Reference
     private transient ExpressionResolver expressionResolver;
 
@@ -91,6 +90,9 @@ public class ElementsDataSourceServlet extends AbstractContentFragmentDataSource
             List<ContentElement> elementList = new ArrayList<ContentElement>();
             while (elementIterator.hasNext()) {
                 ContentElement element = elementIterator.next();
+                if (ContentFragmentUtils.isCompositeElement(element)) {
+                    continue;
+                }
                 String contentType = element.getValue().getContentType();
                 if (contentType == null) {
                     contentType = element.getContentType();
@@ -103,7 +105,15 @@ public class ElementsDataSourceServlet extends AbstractContentFragmentDataSource
             }
             return elementList;
         }
-        return IteratorUtils.toList(fragment.getElements());
+        Iterator<ContentElement> elementIterator = fragment.getElements();
+        List<ContentElement> elementList = new ArrayList<ContentElement>();
+        while (elementIterator.hasNext()) {
+            ContentElement element = elementIterator.next();
+            if (!ContentFragmentUtils.isCompositeElement(element)) {
+                elementList.add(element);
+            }
+        }
+        return elementList;
     }
 
     @NotNull

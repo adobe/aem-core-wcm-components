@@ -1,0 +1,29 @@
+{
+    "id":"contentfragmentlist-5ad4edcd0a",
+    "items": [
+        {
+            "title": "Test Content Fragment",
+            "description": "This is a test content fragment.",
+            "model": "global/models/test",
+            "elements": {
+                "main": {
+                    "value": "<p>Main content</p>",
+                    "title": "Main",
+                    "multiValue": false,
+                    ":type": "text/html"
+                },
+                "second": {
+                    "value": ["one", "two", "three"],
+                    "title": "Second",
+                    "multiValue": true
+                }
+            },
+            "elementsOrder": [
+                "main",
+                "second"
+            ],
+            ":type": "dam:Asset"
+        }
+    ],
+    ":type": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist"
+}
