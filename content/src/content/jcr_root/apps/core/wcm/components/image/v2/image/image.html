@@ -14,7 +14,6 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.image="com.adobe.cq.wcm.core.components.models.Image"
-     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      data-sly-test="${image.src}"
      data-cmp-is="image"
@@ -27,7 +26,7 @@
      data-asset="${image.fileReference}"
      data-asset-id="${image.uuid}"
      data-title="${image.title || image.alt}"
-     id="${component.id}"
+     id="${image.id}"
      data-cmp-data-layer="${image.data.json}"
      class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}"
      itemscope itemtype="http://schema.org/ImageObject">
