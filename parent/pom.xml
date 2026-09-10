@@ -50,7 +50,7 @@
         <aem.port>4502</aem.port>
         <aem.publish.host>localhost</aem.publish.host>
         <aem.publish.port>4503</aem.publish.port>
-        <aem.contextPath />
+        <aem.contextPath/>
         <sling.user>admin</sling.user>
         <sling.password>admin</sling.password>
         <vault.user>admin</vault.user>
@@ -67,7 +67,7 @@
         <maven.compiler.target>${aem.java.version}</maven.compiler.target>
         <aem.selenium.base.it.version>0.2.48</aem.selenium.base.it.version>
         <selenide.version>6.19.1</selenide.version>
-        <selenium.version>4.13.0</selenium.version>
+        <selenium.version>4.14.0</selenium.version>
     </properties>
 
     <!-- ======================================================================= -->
