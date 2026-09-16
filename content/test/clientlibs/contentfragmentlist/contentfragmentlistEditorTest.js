@@ -102,7 +102,7 @@ describe("Content Fragment List v1 editor contentfragmentlist.js (Karma-loaded)"
                 api.renderElementNamesContainerForEditor(mxssNoscriptPayload, container);
                 expect(container.querySelector("img[onerror]")).toBeNull();
             } finally {
-                document.body.removeChild(container);
+                container.remove();
             }
         });
     });
