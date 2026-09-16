@@ -146,7 +146,7 @@ describe("Test VCF renderer for", function() {
         const responseMarkup =
             "<div class=\"cmp-contentfragment-vcf__preview\">visible preview" +
                 "<img src=\"x\" onerror=\"window.__vcfHandlerFired = true\">" +
-                "<script>window.__vcfHandlerFired = true;<\/script>" +
+                "<script>window.__vcfHandlerFired = true;</script>" +
             "</div>";
 
         jQuery._ajaxHandler = function(options, resolve) {
