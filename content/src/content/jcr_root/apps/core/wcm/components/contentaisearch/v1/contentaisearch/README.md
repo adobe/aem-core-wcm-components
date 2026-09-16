@@ -49,7 +49,7 @@ The component calls the Content AI `content-sources/search` and `content-sources
 | `defaultContentSource` | No | Default public content source name used when a component instance does not specify one. |
 | `connectionTimeout` | No | Connection timeout (ms) to Content AI. Defaults to `2000`. |
 | `socketTimeout` | No | Socket read timeout (ms). Defaults to `10000`. |
-| `baseUrlOverride` | No | Full Content AI base URL override, for local/non-Cloud-Service development only. |
+| `baseUrlOverride` | No | Full Content AI base URL override. Required on AEM 6.5 LTS / Adobe Managed Services (AMS) and for local development. |
 
 Without a valid `apiKey`, the component renders its results section but search/gensearch requests fail gracefully (see `ContentAIClientException`); no key is bundled with, or defaulted by, this component.
 
@@ -64,6 +64,11 @@ Without a valid `apiKey`, the component renders its results section but search/g
    ```
 3. Set `CONTENT_AI_API_KEY` as a secret environment variable for your environment in Cloud Manager, using the key copied in step 1.
 4. On the next deploy (or OSGi config reload), Cloud Manager's environment variable interpolation resolves the placeholder and the component starts sending `X-Api-Key` automatically. No AEM code changes are required.
+
+### Setting `apiKey` and `baseUrlOverride` on AEM 6.5 LTS / Adobe Managed Services
+AEM 6.5 LTS and AMS do not expose the `AEM_PROGRAM_ID`/`AEM_ENV_ID`/`AEM_SERVICE` environment variables that AEM as a Cloud Service uses to derive its own Content AI host, so both properties must be set explicitly:
+1. Obtain an X-Api-Key as in step 1 above, and the Content AI base URL for your provisioned bucket (of the form `https://{tier}-p{PID}-e{EID}.adobeaemcloud.com/adobe/experimental/aemcontentai-expires-20261231/contentAI`).
+2. Add an OSGi configuration targeting the PID above with both `apiKey` and `baseUrlOverride` set, via the standard AMS OSGi configuration delivery process (e.g. a `.cfg.json` file in your content package, or the Web Console on environments where that's permitted).
 
 ## Client Libraries
 The component provides a `core.wcm.components.contentaisearch.v1` client library category that contains recommended base CSS styling and JavaScript. It should be added to a relevant site client library using the `embed` property.
@@ -154,7 +159,8 @@ data-cmp-hook-contentaisearch="sourceText"
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
-* **Compatibility**: AEM as a Cloud Service
+* **Compatibility**: AEM as a Cloud Service, AEM 6.5 LTS (including Adobe Managed Services) for search results.
+* **Generative-summary toggle**: renders on AEM as a Cloud Service and on properly branded AEM 6.5 LTS (version qualifier `LTS`, e.g. `6.5.2.LTS`). It's hidden on a non-LTS classic AEM 6.5 (no `LTS` version qualifier, e.g. `6.5.0`).
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_ai\_search\_v1](https://www.adobe.com/go/aem_cmp_ai_search_v1)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_ai\_search](https://www.adobe.com/go/aem_cmp_library_ai_search)
