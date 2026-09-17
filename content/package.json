@@ -9,6 +9,7 @@
         "type": "git",
         "url": "https://github.com/adobe/aem-core-wcm-components"
     },
+    "main": "src/content/jcr_root/apps/core/wcm/components/main.js",
     "scripts": {
         "aemfed": "aemfed -e \"**/*___jb_+(old|tmp)___\" -w \"src/content/jcr_root/\"",
         "eslint": "eslint .",
