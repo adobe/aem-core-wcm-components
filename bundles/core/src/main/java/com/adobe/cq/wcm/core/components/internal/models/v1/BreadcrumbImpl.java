@@ -41,8 +41,8 @@ import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 
 @Model(adaptables = SlingHttpServletRequest.class,
-       adapters = {Breadcrumb.class, ComponentExporter.class},
-       resourceType = {BreadcrumbImpl.RESOURCE_TYPE_V1, BreadcrumbImpl.RESOURCE_TYPE_V2})
+    adapters = {Breadcrumb.class, ComponentExporter.class},
+    resourceType = {BreadcrumbImpl.RESOURCE_TYPE_V1, BreadcrumbImpl.RESOURCE_TYPE_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb {
 
@@ -61,9 +61,6 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
 
     @ScriptVariable
     private Page currentPage;
-
-    @Self
-    private SlingHttpServletRequest request;
 
     @Self
     protected LinkManager linkManager;
@@ -88,12 +85,6 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
         return Collections.unmodifiableList(items);
     }
 
-    @NotNull
-    @Override
-    public String getExportedType() {
-        return request.getResource().getResourceType();
-    }
-
     private List<NavigationItem> createItems() {
         List<NavigationItem> items = new ArrayList<>();
         int currentLevel = currentPage.getDepth();
@@ -105,8 +96,7 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
                     break;
                 }
                 if (checkIfNotHidden(page)) {
-                    NavigationItem navigationItem = newBreadcrumbItem(page, isActivePage, linkManager, currentLevel,
-                            Collections.emptyList(), getId(), component);
+                    NavigationItem navigationItem = newBreadcrumbItem(page, isActivePage, linkManager, currentLevel, getId(), component);
                     items.add(navigationItem);
                 }
             }
@@ -115,11 +105,37 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
         return items;
     }
 
-    protected NavigationItem newBreadcrumbItem(Page page, boolean active, @NotNull LinkManager linkManager, int level, List<NavigationItem> children, String parentId, Component component) {
-        return new BreadcrumbItemImpl(page, active, linkManager, level, children, parentId, component);
+    /**
+     * Create a Breadcrumb Item.
+     *
+     * @param page        The page for which to create a breadcrumb item.
+     * @param active      Flag indicating if the breadcrumb item is active.
+     * @param linkManager Link manager service.
+     * @param level       Depth level of the navigation item.
+     * @param parentId    ID of the parent navigation component.
+     * @param component   The parent navigation {@link Component}.
+     */
+    protected NavigationItem newBreadcrumbItem(@NotNull final Page page,
+                                               final boolean active,
+                                               @NotNull final LinkManager linkManager,
+                                               final int level,
+                                               final String parentId,
+                                               final Component component) {
+        return new BreadcrumbItemImpl(page, active, linkManager, level, parentId, component);
     }
 
-    private boolean checkIfNotHidden(Page page) {
-        return !page.isHideInNav() || showHidden;
+    /**
+     * Check if a page should be shown in the breadcrumb
+     * A page should be shown if either
+     * <ul>
+     *     <li>`showHidden` is set to true for this component; or,</li>
+     *     <li>The page is not configured to be hidden in navigation</li>
+     * </ul>
+     *
+     * @param page The page to check.
+     * @return True if the page should be shown in the breadcrumb, false if not.
+     */
+    private boolean checkIfNotHidden(@NotNull final Page page) {
+        return this.showHidden || !page.isHideInNav();
     }
 }
