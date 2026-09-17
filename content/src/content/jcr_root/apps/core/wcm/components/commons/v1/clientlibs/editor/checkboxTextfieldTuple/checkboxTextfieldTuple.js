@@ -27,9 +27,10 @@
      * @param {String} checkboxSelector The selector for the checkbox.
      * @param {String} textfieldSelector The selector for the text field.
      * @param {Boolean} isRichText Defines whether the text field is a rich text editor.
+     * @param {Boolean} useReadOnlyWhenDisabled Defines whether readonly should be used instead of disabled.
      * @constructor
      */
-    var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1 = function(dialog, checkboxSelector, textfieldSelector, isRichText) {
+    var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1 = function(dialog, checkboxSelector, textfieldSelector, isRichText, useReadOnlyWhenDisabled) {
         var self                  = this;
         self.ATTR_PREVIOUS_VALUE  = "data-previous-value";
         self.ATTR_SEEDED_VALUE    = "data-seeded-value";
@@ -41,8 +42,12 @@
         self._textfieldSelector   = textfieldSelector;
         self._textfieldFoundation = $(self._textfield).adaptTo("foundation-field");
         self._isRichText          = isRichText;
+        self._useReadOnlyWhenDisabled = !!useReadOnlyWhenDisabled;
         if (self._isRichText) {
             self._richTextInstance = $(self._textfield).data("rteinstance");
+        }
+        if (self._useReadOnlyWhenDisabled) {
+            self._bindReadOnlySubmitExclusion();
         }
         if (self._checkbox && self._checkboxFoundation) {
             self._checkbox.setAttribute(self.ATTR_PREVIOUS_VALUE, self._checkboxFoundation.getValue());
@@ -121,6 +126,8 @@
      *     attribute on the text field, if this exists
      *
      * The text field will be disabled when the checkbox is checked, or enabled if the checkbox is not checked.
+     * When {@link #useReadOnlyWhenDisabled} is enabled, the field is readonly instead of disabled for accessibility,
+     * and its value is excluded from dialog submission while the checkbox remains checked (same semantics as disabled).
      */
     CheckboxTextfieldTuple.prototype.update = function() {
         if (this._checkboxFoundation && (this._textfieldFoundation || this._isRichText) && this._textfield) {
@@ -250,7 +257,9 @@
     };
 
     /**
-     * Disables the text field, accounting for it being a rich-text
+     * Disables the text field, accounting for it being a rich-text.
+     * Readonly mode keeps the field in the tab order while {@link #_excludeReadOnlyTextfieldFromSubmit}
+     * prevents inherited values from being persisted.
      *
      * @param {Boolean} disabled {@code true} to disable, {@code false} to enable the field
      * @private
@@ -258,9 +267,58 @@
     CheckboxTextfieldTuple.prototype._disableTextfield = function(disabled) {
         if (this._isRichText) {
             $(this._textfield).attr("contenteditable", !disabled);
+        } else if (this._useReadOnlyWhenDisabled) {
+            this._textfieldFoundation.setDisabled(false);
+            this._textfield.readOnly = disabled;
+            this._textfield.setAttribute("aria-readonly", disabled ? "true" : "false");
         } else {
             this._textfieldFoundation.setDisabled(disabled);
         }
     };
+
+    /**
+     * Binds a submit handler so readonly inherited values are not posted with the dialog form.
+     *
+     * @private
+     */
+    CheckboxTextfieldTuple.prototype._bindReadOnlySubmitExclusion = function() {
+        var self = this;
+        var $form = $(this._dialog).closest("form.foundation-form");
+        if (!$form.length || this._readOnlySubmitHandlerBound) {
+            return;
+        }
+        this._readOnlySubmitHandlerBound = true;
+        $form.on("submit.checkboxTextfieldTuple", function() {
+            self._excludeReadOnlyTextfieldFromSubmit();
+        });
+    };
+
+    /**
+     * Temporarily disables a readonly inherited text field during form submit so its seeded value
+     * is not persisted on the component node (matching disabled-field submission semantics).
+     *
+     * @private
+     */
+    CheckboxTextfieldTuple.prototype._excludeReadOnlyTextfieldFromSubmit = function() {
+        if (!this._useReadOnlyWhenDisabled || this._isRichText || !this._checkboxFoundation || !this._textfieldFoundation || !this._textfield) {
+            return;
+        }
+        if (this._checkboxFoundation.getValue() !== "true" || !this._textfield.readOnly) {
+            return;
+        }
+        this._textfieldFoundation.setDisabled(true);
+        var self = this;
+        setTimeout(function() {
+            if (self._textfield && self._textfield.readOnly) {
+                self._textfieldFoundation.setDisabled(false);
+            }
+        }, 0);
+    };
+
+    if (typeof globalThis !== "undefined") {
+        globalThis.__CHECKBOX_TEXTFIELD_TUPLE_TEST_API = {
+            CheckboxTextfieldTuple: CheckboxTextfieldTuple
+        };
+    }
 
 })(jQuery);
