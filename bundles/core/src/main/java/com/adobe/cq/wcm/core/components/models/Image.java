@@ -216,6 +216,21 @@ public interface Image extends Component {
     String PN_DESIGN_RESIZE_WIDTH = "resizeWidth";
 
     /**
+     * Name of the configuration policy property that controls automatic PNG transparency preservation.
+     */
+    String PN_DESIGN_AUTO_PRESERVE_PNG_TRANSPARENCY = "autoPreservePngTransparency";
+
+    /**
+     * Dynamic Media image modifier for preserving PNG transparency.
+     */
+    String PNG_ALPHA_FORMAT_MODIFIER = "fmt=png-alpha";
+
+    /**
+     * DAM metadata property for bits per pixel information.
+     */
+    String DAM_BITS_PER_PIXEL = "dam:Bitsperpixel";
+
+    /**
      * Returns the value for the {@code src} attribute of the image.
      *
      * @return the image's URL
