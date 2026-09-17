@@ -254,12 +254,14 @@
                         if (i === parseInt(that._active)) {
                             tabpanels[i].classList.add(selectors.active.tabpanel);
                             tabpanels[i].removeAttribute("aria-hidden");
+                            tabpanels[i].setAttribute("tabindex", "0");
                             tabs[i].classList.add(selectors.active.tab);
                             tabs[i].setAttribute("aria-selected", true);
-                            tabs[i].setAttribute("tabindex", "0");
+                            tabs[i].removeAttribute("tabindex");
                         } else {
                             tabpanels[i].classList.remove(selectors.active.tabpanel);
                             tabpanels[i].setAttribute("aria-hidden", true);
+                            tabpanels[i].removeAttribute("tabindex");
                             tabs[i].classList.remove(selectors.active.tab);
                             tabs[i].setAttribute("aria-selected", false);
                             tabs[i].setAttribute("tabindex", "-1");
