@@ -124,6 +124,28 @@
                                 "variant": "default",
                                 "sling:resourceType": "dam/cfm/admin/components/datasources/optionrenderer"
                             }
+                        },
+                        "1538637484630": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "listOrder": "8",
+                            "valueType": "composite",
+                            "showEmptyInReadOnly": "true",
+                            "metaType": "composite",
+                            "name": "compositeField",
+                            "fieldLabel": "compositeFieldLabel",
+                            "sling:resourceType": "dam/cfm/models/editor/components/composite",
+                            "renderReadOnly": "false"
+                        },
+                        "1538637484631": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "listOrder": "9",
+                            "valueType": "composite[]",
+                            "showEmptyInReadOnly": "true",
+                            "metaType": "composite",
+                            "name": "multiCompositeField",
+                            "fieldLabel": "multiCompositeFieldLabel",
+                            "sling:resourceType": "dam/cfm/models/editor/components/composite/multifield",
+                            "renderReadOnly": "false"
                         }
                     }
                 }

@@ -71,6 +71,8 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
     private final String PN_ELEMENT_TITLE = "fieldLabel";
     private final String PN_VALUE_TYPE = "valueType";
     private final String MAIN_ELEMENT = "main";
+    private final String COMPOSITE_TYPE_STRING = "composite";
+    private final String ARRAY_SUFFIX = "[]";
 
     @Nullable
     @Override
@@ -206,12 +208,19 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
         DataType dataType = mock(DataType.class, withSettings().lenient());
         when(dataType.isMultiValue()).thenReturn(element.isMultiValued);
         when(dataType.getTypeString()).thenReturn(element.typeString);
+        // the production composite check reads getValueType(), not the deprecated getTypeString();
+        // this fixture never distinguishes the two, so both are backed by the same field
+        when(dataType.getValueType()).thenReturn(element.typeString);
+
+        boolean isComposite = COMPOSITE_TYPE_STRING.equals(element.typeString);
+        String[] scalarValues = element.values;
+        String firstValue = scalarValues == null ? null : scalarValues[0];
 
         // mock fragment data
         FragmentData data = mock(FragmentData.class, withSettings().lenient());
-        when(data.getValue()).thenReturn(element.isMultiValued ? element.values : element.values[0]);
-        when(data.getValue(String.class)).thenReturn(element.values[0]);
-        when(data.getValue(String[].class)).thenReturn(element.values);
+        when(data.getValue()).thenReturn(scalarValues == null ? null : (element.isMultiValued ? scalarValues : firstValue));
+        when(data.getValue(String.class)).thenReturn(firstValue);
+        when(data.getValue(String[].class)).thenReturn(scalarValues);
         when(data.getContentType()).thenReturn(element.contentType);
         when(data.getDataType()).thenReturn(dataType);
 
@@ -219,24 +228,30 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
         ContentElement contentElement = mock(ContentElement.class, withSettings().lenient());
         when(contentElement.getName()).thenReturn(element.name);
         when(contentElement.getTitle()).thenReturn(element.title);
-        when(contentElement.getContent()).thenReturn(element.values[0]);
-        when(contentElement.getContentType()).thenReturn(element.contentType);
+        when(contentElement.getContent()).thenReturn(firstValue);
+        // a composite element (CompositeElementImpl extends PropertyElement) normalizes its
+        // element-level content type to "text/plain" even though the FragmentData level is null
+        when(contentElement.getContentType()).thenReturn(isComposite ? "text/plain" : element.contentType);
         when(contentElement.getValue()).thenReturn(data);
 
         // mock variations
         Map<String, ContentVariation> variations = new LinkedHashMap<>();
         for (MockVariation variation : element.variations.values()) {
+            String[] variationValues = variation.values;
+            String variationFirstValue = variationValues == null ? null : variationValues[0];
+
             FragmentData variationData = mock(FragmentData.class, withSettings().lenient());
-            when(variationData.getValue()).thenReturn(element.isMultiValued ? variation.values : variation.values[0]);
-            when(variationData.getValue(String.class)).thenReturn(variation.values[0]);
-            when(variationData.getValue(String[].class)).thenReturn(variation.values);
+            when(variationData.getValue()).thenReturn(variationValues == null ? null
+                    : (element.isMultiValued ? variationValues : variationFirstValue));
+            when(variationData.getValue(String.class)).thenReturn(variationFirstValue);
+            when(variationData.getValue(String[].class)).thenReturn(variationValues);
             when(variationData.getContentType()).thenReturn(variation.contentType);
             when(variationData.getDataType()).thenReturn(dataType);
 
             ContentVariation contentVariation = mock(ContentVariation.class, withSettings().lenient());
             when(contentVariation.getName()).thenReturn(variation.name);
             when(contentVariation.getTitle()).thenReturn(variation.title);
-            when(contentVariation.getContent()).thenReturn(variation.values[0]);
+            when(contentVariation.getContent()).thenReturn(variationFirstValue);
             when(contentVariation.getContentType()).thenReturn(variation.contentType);
             when(contentVariation.getValue()).thenReturn(variationData);
             variations.put(variation.name, contentVariation);
@@ -326,8 +341,17 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
                 // set the element title
                 element.title = properties.get(PN_ELEMENT_TITLE, String.class);
                 // determine if the element is multi-valued (if the value type is e.g. "string[]")
-                element.isMultiValued = properties.get(PN_VALUE_TYPE, "").endsWith("[]");
-                element.typeString = properties.get(PN_VALUE_TYPE, String.class);
+                String rawValueType = properties.get(PN_VALUE_TYPE, "");
+                element.isMultiValued = rawValueType.endsWith(ARRAY_SUFFIX);
+                // mirrors FieldImpl#calculateDataType in the CFM platform: the array suffix is
+                // folded into isMultiValue and never appears in the resulting type string - the
+                // deprecated getTypeString() strips it exactly like getValueType() does, for every
+                // value type. "string[]" (multi) normalizes to "string", same
+                // as "string" (single); "composite[]" normalizes to "composite", same as
+                // "composite". A field's cardinality lives in isMultiValue(), never in the string.
+                element.typeString = element.isMultiValued
+                        ? rawValueType.substring(0, rawValueType.length() - ARRAY_SUFFIX.length())
+                        : rawValueType;
                 found = true;
                 break;
             }
@@ -338,15 +362,22 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
         }
 
         // loop over the data nodes
+        boolean isComposite = COMPOSITE_TYPE_STRING.equals(element.typeString);
         for (Resource data : resource.getChild(PATH_DATA).getChildren()) {
             ValueMap properties = data.getValueMap();
             String[] values = properties.get(element.name, String[].class);
             String contentType = properties.get(element.name + "@ContentType", String.class);
             if ("master".equals(data.getName())) {
-                element.values = values;
+                // a composite field's master property is only a placeholder to make it enumerable;
+                // its real value isn't representable as a scalar
+                element.values = isComposite ? null : values;
                 element.contentType = contentType;
-                element.typeString = properties.get(PN_VALUE_TYPE, String.class);
-            } else {
+                if (!isComposite) {
+                    element.typeString = properties.get(PN_VALUE_TYPE, String.class);
+                }
+                // else: keep the model-derived "composite" type
+            } else if (!isComposite) {
+                // composite fixtures carry no variation data
                 properties = resource.getChild(PATH_MODEL_VARIATIONS + "/" + data.getName()).getValueMap();
                 String title = properties.get(JCR_TITLE, String.class);
                 element.addVariation(data.getName(), title, contentType, values, true, values[0]);

@@ -9,121 +9,132 @@
                 "jcr:primaryType"   : "nt:unstructured",
                 "sling:resourceType": "wcm/foundation/components/responsivegrid",
                 "responsivegrid"    : {
-                    "jcr:primaryType"                      : "nt:unstructured",
-                    "sling:resourceType"                   : "wcm/foundation/components/responsivegrid",
-                    "text-only-no-path"                    : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "text-only-no-path"                       : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment"
                     },
-                    "text-only-non-existing-path"          : {
+                    "text-only-non-existing-path"             : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/non-existing"
                     },
-                    "text-only-invalid-path"               : {
+                    "text-only-invalid-path"                  : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments"
                     },
-                    "text-only"                            : {
+                    "text-only"                               : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/text-only"
                     },
-                    "text-only-variation"                  : {
+                    "text-only-variation"                     : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/text-only",
                         "variationName"     : "teaser"
                     },
-                    "text-only-non-existing-variation"     : {
+                    "text-only-non-existing-variation"        : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/text-only",
                         "variationName"     : "non-existing"
                     },
-                    "text-only-single-element"             : {
+                    "text-only-single-element"                : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/text-only",
                         "elementNames"      : ["second"]
                     },
-                    "text-only-multiple-elements"          : {
+                    "text-only-multiple-elements"             : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/text-only",
                         "elementNames"      : ["second", "non-existing", "main"]
                     },
-                    "structured-no-path"                   : {
+                    "structured-no-path"                      : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment"
                     },
-                    "structured-non-existing-path"         : {
+                    "structured-non-existing-path"            : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/non-existing"
                     },
-                    "structured-invalid-path"              : {
+                    "structured-invalid-path"                 : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments"
                     },
-                    "structured"                           : {
+                    "structured"                              : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured"
                     },
-                    "structured-display-mode-single"                           : {
+                    "structured-display-mode-single"          : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured",
                         "displayMode"       : "singleText"
                     },
-                    "structured-variation"                 : {
+                    "structured-variation"                    : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured",
                         "variationName"     : "teaser"
                     },
-                    "structured-non-existing-variation"    : {
+                    "structured-non-existing-variation"       : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured",
                         "variationName"     : "non-existing",
                         "displayMode"       : "singleText"
                     },
-                    "structured-nested-model"              : {
+                    "structured-nested-model"                 : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured-nested-model"
                     },
-                    "structured-single-element"            : {
+                    "structured-single-element"               : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured",
                         "elementNames"      : ["second"]
                     },
-                    "structured-single-element-main"       : {
+                    "structured-single-element-main"          : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured",
                         "elementNames"      : ["main"],
                         "displayMode"       : "singleText"
                     },
-                    "structured-multiple-elements"         : {
+                    "structured-multiple-elements"            : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured",
                         "elementNames"      : ["second", "non-existing", "main"]
                     },
-                    "vcf-with-template"                    : {
+                    "structured-composite"                    : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/structured-composite"
+                    },
+                    "structured-composite-display-mode-single": {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/structured-composite",
+                        "displayMode"       : "singleText"
+                    },
+                    "vcf-with-template"                       : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/text-only",
                         "displayMode"       : "vcf",
                         "vcfTemplate"       : "hero-banner"
                     },
-                    "vcf-with-template-and-variation"      : {
+                    "vcf-with-template-and-variation"         : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/text-only",
@@ -131,13 +142,13 @@
                         "vcfTemplate"       : "hero-banner",
                         "variationName"     : "teaser"
                     },
-                    "vcf-without-template"                 : {
+                    "vcf-without-template"                    : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/text-only",
                         "displayMode"       : "vcf"
                     },
-                    "vcf-with-master-variation"            : {
+                    "vcf-with-master-variation"               : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/text-only",
@@ -145,14 +156,14 @@
                         "vcfTemplate"       : "hero-banner",
                         "variationName"     : "master"
                     },
-                    "vcf-with-structured-fragment"         : {
+                    "vcf-with-structured-fragment"            : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured",
                         "displayMode"       : "vcf",
                         "vcfTemplate"       : "hero-banner"
                     },
-                    "vcf-no-fragment-id"                   : {
+                    "vcf-no-fragment-id"                      : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured-nested-model",

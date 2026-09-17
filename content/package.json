@@ -18,7 +18,7 @@
         "stylelint:fix": "stylelint \"**/*.css\" \"**/*.less\" --fix",
         "sync-pom-version": "sync-pom-version",
         "build": "clientlib --verbose",
-        "guardrails": "node test/guardrails/clientlibDependencies.js",
+        "guardrails": "node test/guardrails/clientlibDependencies.js && node test/guardrails/contentFragmentCompositeRendering.js",
         "unit": "npm run guardrails && karma start karma.conf.js",
         "test": "npm run unit --"
     },
