@@ -304,6 +304,70 @@
             }
         }
     },
+    "Adobe_Systems_logo_and_wordmark_full_quality.jpg": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:mixinTypes": [
+            "mix:referenceable"
+        ],
+        "jcr:createdBy": "admin",
+        "jcr:created": "Mon Mar 20 2017 11:20:39 GMT+0100",
+        "jcr:uuid": "81fa9d72-0d46-4267-920f-9a2f1919ef11",
+        "jcr:content": {
+            "jcr:primaryType": "dam:AssetContent",
+            "jcr:lastModifiedBy": "workflow-process-service",
+            "dam:assetState": "processed",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "renditions": {
+                "jcr:primaryType": "nt:folder",
+                "jcr:createdBy": "admin",
+                "jcr:created": "Mon Mar 20 2017 11:20:39 GMT+0100",
+                "original": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "admin",
+                    "jcr:created": "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "image/jpeg",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                        ":jcr:data": 251484
+                    }
+                }
+            },
+            "related": {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "metadata": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:mixinTypes": [
+                    "cq:Taggable"
+                ],
+                "ns1:API": "2.0",
+                "dam:Physicalheightininches": "27.77777862548828",
+                "dc:Format": "image/jpeg",
+                "dam:Physicalwidthininches": "27.77777862548828",
+                "dam:Fileformat": "JPEG",
+                "dam:Progressive": "yes",
+                "tiff:ImageLength": 2000,
+                "tiff:YResolution": "72/1",
+                "exif:ColorSpace": 1,
+                "dam:extracted": "Mon Mar 20 2017 11:20:39 GMT+0100",
+                "dc:format": "image/jpeg",
+                "dam:Bitsperpixel": 24,
+                "dam:MIMEtype": "image/jpeg",
+                "tiff:Orientation": 1,
+                "dam:Physicalwidthindpi": 72,
+                "dam:Physicalheightindpi": 72,
+                "tiff:ResolutionUnit": 2,
+                "dam:Numberofimages": 1,
+                "tiff:XResolution": "72/1",
+                "xmp:ModifyDate": "Mon Mar 20 2017 11:20:39 GMT+0100",
+                "tiff:ImageWidth": 2000,
+                "dam:sha1": "9f7162477728a0ae0f803914376689fd133a77ce",
+                "dam:size": 251484
+            }
+        }
+    },
     "Adobe_Systems_logo_and_wordmark"        : {
         "jcr:primaryType": "dam:Asset",
         "jcr:mixinTypes" : [

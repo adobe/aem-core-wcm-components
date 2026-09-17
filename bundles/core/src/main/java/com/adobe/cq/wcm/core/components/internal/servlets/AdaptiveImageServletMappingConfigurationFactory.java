@@ -81,6 +81,19 @@ public class AdaptiveImageServletMappingConfigurationFactory {
         )
         int maxSize() default AdaptiveImageServlet.DEFAULT_MAX_SIZE;
 
+        @AttributeDefinition(
+                name = "Non-transformable image types",
+                description = "Images of the following types (identified by lower-case extension) will never be transformed (e.g. " +
+                        "rotated, cropped, etc.). svg and gif images are never transformed, even if not defined in this list."
+        )
+        String[] nonTransformableImageTypes() default { "gif", "svg" };
+
+        @AttributeDefinition(
+                name ="Forced transformation image types",
+                description = "Images of the following types (identified by lower-case extensions) will always be transformed, reg. of " +
+                        "editorial application of rotation, transformation, etc. - ensuring e.g. compression is applied."
+        )
+        String[] forcedTransformationImageTypes() default{ } ;
     }
 
     private List<String> resourceTypes;
@@ -92,6 +105,10 @@ public class AdaptiveImageServletMappingConfigurationFactory {
     private int defaultResizeWidth;
 
     private int maxSize;
+
+    private List<String> nonTransformableImageTypes;
+
+    private List<String> forcedTransformationImageTypes;
 
     /**
      * Invoked when a configuration is created or modified.
@@ -106,6 +123,8 @@ public class AdaptiveImageServletMappingConfigurationFactory {
         extensions = getValues(config.extensions());
         defaultResizeWidth = config.defaultResizeWidth();
         maxSize = config.maxSize();
+        nonTransformableImageTypes = getValues(config.nonTransformableImageTypes());
+        forcedTransformationImageTypes = getValues(config.forcedTransformationImageTypes());
     }
 
     /**
@@ -156,6 +175,21 @@ public class AdaptiveImageServletMappingConfigurationFactory {
     }
 
     /**
+     * Returns the image types' extensions that will not be transformed by the {@link AdaptiveImageServlet}.
+     * @return
+     */
+    @NotNull
+    public List<String> getNonTransformableImageTypes() { return Collections.unmodifiableList(this.nonTransformableImageTypes); }
+
+    /**
+     * Returns the image types' extensions that will always be transformed by the {@link AdaptiveImageServlet} e.g. enforcing compression
+     * independently from editorial applied changes.
+     * @return
+     */
+    @NotNull
+    public List<String> getForcedTransformationImageTypes() { return Collections.unmodifiableList(this.forcedTransformationImageTypes); }
+
+    /**
      * Internal helper for filtering out null and empty values from the configuration options.
      *
      * @param config - Array of strings which might include null or empty values
@@ -176,6 +210,7 @@ public class AdaptiveImageServletMappingConfigurationFactory {
     @Override
     public String toString() {
         return "{resourceTypes: " + resourceTypes.toString() + ", selectors: " + selectors.toString() + ", extensions: " + extensions
-                .toString() + ", defaultResizeWidth: " + defaultResizeWidth + "}";
+                .toString() + ", defaultResizeWidth: " + defaultResizeWidth + ", nonTransformableImageTypes: " + nonTransformableImageTypes
+                .toString() + ", forcedTransformationImageTypes: " + forcedTransformationImageTypes.toString() + "}";
     }
 }
