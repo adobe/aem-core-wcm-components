@@ -274,6 +274,7 @@ public final class SearchResultServlet extends SlingSafeMethodsServlet {
         }
         long resultsOffset = Optional.ofNullable(request.getParameter(PARAM_RESULTS_OFFSET)).map(Long::parseLong).orElse(0L);
         Map<String, String> predicatesMap = new HashMap<>();
+        fulltext = StringUtils.isNotBlank(fulltext) ? fulltext.trim() + "*" : fulltext;
         predicatesMap.put(FulltextPredicateEvaluator.FULLTEXT, fulltext);
         predicatesMap.put(PathPredicateEvaluator.PATH, searchComponent.getSearchRootPagePath());
         predicatesMap.put(TypePredicateEvaluator.TYPE, NameConstants.NT_PAGE);
