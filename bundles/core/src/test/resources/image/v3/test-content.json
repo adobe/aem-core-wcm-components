@@ -764,7 +764,8 @@
           "cq:policy"         : "coretest/components/content/image/policy_1478854677326",
           "alt"               : "Adobe Logo",
           "jcr:title"         : "Adobe Logo",
-          "linkURL"           : "/content/test"
+          "linkURL"           : "/content/test",
+          "fetchPriority"     : "high"
         },
         "container"             : {
           "jcr:primaryType"   : "nt:unstructured",
