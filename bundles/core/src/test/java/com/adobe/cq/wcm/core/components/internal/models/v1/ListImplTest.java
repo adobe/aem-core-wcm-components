@@ -69,6 +69,9 @@ public class ListImplTest {
 
     protected static final String LIST_21 = TEST_PAGE_CONTENT_ROOT + "/staticOrderByTitleListTypeWithBlankTitle";
 
+    protected static final String LIST_22 = TEST_PAGE_CONTENT_ROOT + "/staticListTypeExcludeCurrentPage";
+
+
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
     protected String testBase;
@@ -101,6 +104,15 @@ public class ListImplTest {
             "/content/list/pages/page_2",
         });
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(testBase, LIST_2));
+    }
+
+    @Test
+    protected void testStaticListExcludeCurrentPage() {
+        this.context.currentPage("/content/list/pages/page_2");
+        List list = getListUnderTest(LIST_22);
+        checkListConsistencyByPaths(list, new String[]{
+            "/content/list/pages/page_1"
+        });
     }
 
     @Test

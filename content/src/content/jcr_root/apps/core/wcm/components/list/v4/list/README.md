@@ -68,7 +68,8 @@ last modification date of the item; possible values: `title`, `modified`
 14. `./showDescription` - if set to `true` each item's description will be rendered
 15. `./showModificationDate` - if set to `true` each item's last modification date will be rendered
 16. `./displayItemAsTeaser` - if set to `true` the rendering of each list item is delegated to the configured teaser component
-17. `./id` - defines the component HTML ID attribute.
+17. `./excludeCurrentPage` - if set to `true` the current page is excluded from results.
+18. `./id` - defines the component HTML ID attribute.
 
 ### Deprecated Edit Dialog Properties
 1. `./pages` - defines the pages to be rendered, when the `./listFrom` property is set to `static` up to component version `v3`.
