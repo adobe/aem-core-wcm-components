@@ -110,8 +110,10 @@ SEL_GROUPS="${SEL_GROUPS:-}"
 SEL_EXCLUDED_GROUPS="${SEL_EXCLUDED_GROUPS:-failing,nested,IgnoreOnSDK}"
 # Re-run failing Selenium tests up to N times before marking them failed. UI tests
 # are prone to transient timing flakiness (and search tests can miss the async Oak
-# index on the first attempt); a couple of reruns absorb that. 0 disables.
-SEL_RERUN="${SEL_RERUN:-2}"
+# index on the first attempt); one rerun absorbs most of that while keeping the
+# suite fast - important under Rosetta emulation where each rerun re-launches Chrome
+# and is expensive. Raise it if flakiness bites; 0 disables reruns entirely.
+SEL_RERUN="${SEL_RERUN:-1}"
 # Failsafe class selection (comma-separated FQNs). Fall back to a single smoke
 # class ONLY when neither an explicit selection nor a tag group is given. Do NOT
 # use ${SEL_IT_TEST:-<class>} here: an empty SEL_IT_TEST alongside SEL_GROUPS
