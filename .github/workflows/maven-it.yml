@@ -276,9 +276,11 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' }}
     # Routed per-leg by the generated matrix (self-hosted `aem-it` or ubuntu-latest).
     runs-on: ${{ matrix.runs_on }}
-    # Native amd64 (hosted or self-hosted Rosetta VM): a full @Tag group leg ran in
-    # ~7-13 minutes in testing, so 60m is generous headroom.
-    timeout-minutes: 60
+    # A full @Tag group leg ran in ~7-13 min on native amd64 GitHub-hosted runners,
+    # but much slower on a self-hosted runner where Chrome + AEM run under Rosetta
+    # emulation (a leg approached ~60 min there). 150m gives that path headroom; it
+    # costs nothing extra on hosted legs, which still finish in minutes.
+    timeout-minutes: 150
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.prep.outputs.selenium_matrix) }}
