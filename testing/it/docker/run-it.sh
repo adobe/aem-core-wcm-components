@@ -134,6 +134,21 @@ AEM_BASE_URL="http://localhost:${AEM_AUTHOR_PORT}"
 AEM_PUBLISH_URL="http://localhost:${AEM_PUBLISH_PORT}"
 AEM_CONTAINER="wcm-it-aem-${GITHUB_RUN_ID:-local}-$$"
 
+# Are we running INSIDE a container (self-hosted CI on a Dockerized runner)?
+# If so, the AEM sibling container - launched via the mounted host Docker socket -
+# would publish its ports to the HOST, not to our localhost, breaking the
+# localhost:PORT contract that Maven and the Selenium browser depend on. In that
+# case we share the runner's network namespace instead (see start_aem), which puts
+# AEM's ports on our localhost. On a bare host (GitHub-hosted runner, local macOS
+# dev) this is false and we publish ports as before. Override with AEM_IN_CONTAINER.
+if [[ -n "${AEM_IN_CONTAINER:-}" ]]; then
+    IN_CONTAINER="${AEM_IN_CONTAINER}"
+elif [[ -f /.dockerenv ]]; then
+    IN_CONTAINER=true
+else
+    IN_CONTAINER=false
+fi
+
 log() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
 
 # ---------------------------------------------------------------------------
@@ -187,12 +202,24 @@ start_instance() {
 
 start_aem() {
     log "Starting qp server container from ${AEM_IMAGE}"
-    # Publish the instance HTTP ports so the host can reach them once started.
-    local ports=(-p "${AEM_AUTHOR_PORT}:4502")
-    if [[ "${WITH_PUBLISH}" == "true" ]]; then
-        ports+=(-p "${AEM_PUBLISH_PORT}:4503")
+    local netargs=()
+    if [[ "${IN_CONTAINER}" == "true" ]]; then
+        # Share the runner container's network namespace so AEM's 4502/4503 land on
+        # OUR localhost (see IN_CONTAINER note above). Port publishing is invalid
+        # when joining another container's netns, so we omit -p; this assumes the
+        # default 4502/4503 ports (AEM binds them internally). ${HOSTNAME} is this
+        # container's id, which the host daemon (reached via the mounted socket)
+        # resolves.
+        log "In-container run: sharing the runner's network namespace (container:${HOSTNAME})"
+        netargs=(--network "container:${HOSTNAME}")
+    else
+        # Publish the instance HTTP ports so the host can reach them once started.
+        netargs=(-p "${AEM_AUTHOR_PORT}:4502")
+        if [[ "${WITH_PUBLISH}" == "true" ]]; then
+            netargs+=(-p "${AEM_PUBLISH_PORT}:4503")
+        fi
     fi
-    docker run -d --name "${AEM_CONTAINER}" "${ports[@]}" "${AEM_IMAGE}"
+    docker run -d --name "${AEM_CONTAINER}" "${netargs[@]}" "${AEM_IMAGE}"
 
     log "Waiting for the qp server to accept client commands"
     local deadline=$(( SECONDS + 120 ))
