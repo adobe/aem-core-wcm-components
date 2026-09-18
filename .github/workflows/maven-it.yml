@@ -30,10 +30,21 @@
 # private Adobe AEM image registry (not exposed to forks - hence the canonical-repo
 # guard).
 #
-# Runs on GitHub-hosted ubuntu-latest runners (native amd64, Docker and Maven
-# preinstalled). The Selenium job has no GUI session, so it starts its own
-# virtual display (Xvfb + fluxbox) for Chrome - see run-it.sh's
-# headless-display comment for how this differs from a local macOS dev run.
+# Hybrid runner routing: legs run on GitHub-hosted ubuntu-latest by default, but
+# can be spread onto self-hosted runners carrying the `aem-it` label (the
+# Dockerized runner at github.com/vladbailescu/actions-runner-docker, built amd64
+# to match hosted + the amd64 AEM image). The split is driven by SELF_HOSTED_COUNT
+# (workflow_dispatch input `self_hosted_count`, else the repo variable
+# vars.SELF_HOSTED_COUNT, else 0): the prep job routes the http job + the first N
+# Selenium legs to self-hosted and the rest to hosted. 0 => all hosted. A single
+# `runs-on` cannot span both pools (ubuntu-latest is a reserved hosted label), so
+# routing is done per-job/per-leg. Keep SELF_HOSTED_COUNT in step with how many
+# self-hosted runners are actually online, or the extra legs queue until timeout.
+#
+# The Selenium legs need a GUI-less display for Chrome, so they start their own
+# virtual display (Xvfb + fluxbox) - see run-it.sh's headless-display comment for
+# how this differs from a local macOS dev run. The self-hosted image bakes Maven,
+# Node, Chrome, Xvfb + fluxbox so the same steps run unmodified on either pool.
 
 name: Integration Tests (AEM)
 
@@ -44,6 +55,10 @@ on:
         description: 'Leave the AEM container running at the end of the job'
         type: boolean
         default: false
+      self_hosted_count:
+        description: 'How many legs to route to self-hosted aem-it runners (0 = all GitHub-hosted)'
+        type: string
+        default: '0'
   push:
     branches:
       - main
@@ -74,6 +89,7 @@ jobs:
     timeout-minutes: 30
     outputs:
       selenium_matrix: ${{ steps.genmatrix.outputs.matrix }}
+      http_runs_on: ${{ steps.route.outputs.http_runs_on }}
     steps:
       - uses: actions/checkout@v5
 
@@ -143,8 +159,28 @@ jobs:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
 
+      # Resolve how many legs go to self-hosted `aem-it` runners. No GitHub API
+      # probe: listing self-hosted runners needs repo `administration` scope, which
+      # the built-in GITHUB_TOKEN can't be granted - so the count is user-supplied
+      # (dispatch input, else repo variable, else 0 = all hosted).
+      - name: Resolve runner routing
+        id: route
+        env:
+          SELF_HOSTED_COUNT: ${{ inputs.self_hosted_count || vars.SELF_HOSTED_COUNT || '0' }}
+        run: |
+          shc="$(printf '%s' "${SELF_HOSTED_COUNT}" | grep -oE '^[0-9]+' || true)"
+          shc="${shc:-0}"
+          echo "count=${shc}" >> "$GITHUB_OUTPUT"
+          if [ "${shc}" -gt 0 ]; then
+            echo 'http_runs_on=["self-hosted","aem-it"]' >> "$GITHUB_OUTPUT"
+          else
+            echo 'http_runs_on=["ubuntu-latest"]' >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Generate Selenium shard matrix
         id: genmatrix
+        env:
+          SELF_HOSTED_COUNT: ${{ steps.route.outputs.count }}
         run: echo "matrix=$(bash testing/it/docker/gen-selenium-matrix.sh)" >> "$GITHUB_OUTPUT"
 
   # --------------------------------------------------------------------------
@@ -154,9 +190,10 @@ jobs:
     name: http ITs (author + publish, cloud-ready)
     needs: prep
     if: ${{ github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components' }}
-    runs-on: ubuntu-latest
-    # Native amd64 GitHub-hosted runner: author+publish boot + the full http
-    # suite ran in ~9 minutes in testing, so 90m is generous headroom.
+    # Routed by prep: self-hosted `aem-it` when SELF_HOSTED_COUNT > 0, else ubuntu-latest.
+    runs-on: ${{ fromJSON(needs.prep.outputs.http_runs_on) }}
+    # Native amd64 (hosted or self-hosted Rosetta VM): author+publish boot + the
+    # full http suite ran in ~9 minutes in testing, so 90m is generous headroom.
     timeout-minutes: 90
     env:
       WITH_PUBLISH: 'true'
@@ -221,9 +258,10 @@ jobs:
     name: Selenium ITs (${{ matrix.name }}, cloud-ready)
     needs: prep
     if: ${{ github.event_name == 'workflow_dispatch' }}
-    runs-on: ubuntu-latest
-    # Native amd64 GitHub-hosted runner: a full @Tag group leg ran in ~7-13
-    # minutes in testing, so 60m is generous headroom.
+    # Routed per-leg by the generated matrix (self-hosted `aem-it` or ubuntu-latest).
+    runs-on: ${{ matrix.runs_on }}
+    # Native amd64 (hosted or self-hosted Rosetta VM): a full @Tag group leg ran in
+    # ~7-13 minutes in testing, so 60m is generous headroom.
     timeout-minutes: 60
     strategy:
       fail-fast: false
