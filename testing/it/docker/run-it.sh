@@ -149,6 +149,16 @@ else
     IN_CONTAINER=false
 fi
 
+# The Selenium test lib (com.adobe.cq.testing.selenium.utils.Network) rebases
+# `localhost` test URLs to the host's LAN IP, but its getFirstLocalIP() only accepts
+# 10.* / 192.168.* addresses and throws "No value present" otherwise. A Docker-bridge
+# container has a 172.x address, so every Selenium test would error in setup. The lib
+# honours an IP env var as an explicit override; since AEM shares our netns, 127.0.0.1
+# reaches it. (GitHub-hosted VMs are 10.* so they don't need this.)
+if [[ "${IN_CONTAINER}" == "true" ]]; then
+    export IP="${IP:-127.0.0.1}"
+fi
+
 log() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
 
 # ---------------------------------------------------------------------------
