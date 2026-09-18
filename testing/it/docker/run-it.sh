@@ -156,6 +156,8 @@ log() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
 # ---------------------------------------------------------------------------
 cleanup() {
     local exit_code=$?
+    # Disarm so a signal-triggered run doesn't re-enter via the EXIT trap.
+    trap - EXIT INT TERM
     echo "::group::AEM container logs (${AEM_CONTAINER})"
     docker logs "${AEM_CONTAINER}" 2>&1 || true
     echo "::endgroup::"
@@ -185,7 +187,10 @@ cleanup() {
     fi
     exit "${exit_code}"
 }
-trap cleanup EXIT
+# Trap INT/TERM too (not just EXIT) so a cancelled CI job - GitHub sends SIGINT/
+# SIGTERM before SIGKILL - still tears down its AEM container instead of orphaning
+# it on the shared self-hosted daemon.
+trap cleanup EXIT INT TERM
 
 # Start one AEM instance inside the container via the qp client.
 # Args: <id> <runmode> <port> <vm-options>
@@ -204,6 +209,21 @@ start_aem() {
     log "Starting qp server container from ${AEM_IMAGE}"
     local netargs=()
     if [[ "${IN_CONTAINER}" == "true" ]]; then
+        # Reap any stale AEM container a prior job on THIS runner left behind when it
+        # was hard-killed (cancel/SIGKILL before cleanup ran). We match only
+        # containers attached to OUR network namespace (container:<our-id>), so this
+        # is safe when several self-hosted runners share one Docker daemon - other
+        # runners' live AEM containers use a different netns and are untouched. Only
+        # one job runs per runner at a time, so any such match is a dead orphan.
+        local stale
+        for stale in $(docker ps -aq --filter "name=wcm-it-aem-" 2>/dev/null); do
+            case "$(docker inspect -f '{{.HostConfig.NetworkMode}}' "${stale}" 2>/dev/null)" in
+                container:"${HOSTNAME}"*)
+                    log "Removing stale AEM orphan ${stale} from a previous job on this runner"
+                    docker rm -f "${stale}" >/dev/null 2>&1 || true ;;
+            esac
+        done
+
         # Share the runner container's network namespace so AEM's 4502/4503 land on
         # OUR localhost (see IN_CONTAINER note above). Port publishing is invalid
         # when joining another container's netns, so we omit -p; this assumes the
