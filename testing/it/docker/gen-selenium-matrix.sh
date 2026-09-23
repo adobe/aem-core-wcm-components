@@ -27,32 +27,13 @@
 #   sel_it_test - comma-separated failsafe -Dit.test class FQNs (only set for
 #                 the ungrouped leg; empty for tag-based legs so the whole
 #                 group runs)
-#   runs_on     - JSON array for the leg's `runs-on:` (routing, see below)
-#
-# Routing: SELF_HOSTED_COUNT (env, default 0) = number of self-hosted `aem-it`
-# runners the caller wants to use (user-supplied; see maven-it.yml). The first N legs get runs_on
-# ["self-hosted","aem-it"], the rest ["ubuntu-latest"] - so a single run spreads
-# legs across both runner pools, and with N=0 everything falls back to hosted.
 #
 # Consumed by .github/workflows/maven-it.yml via fromJSON(). Run standalone to
-# inspect the split:  SELF_HOSTED_COUNT=2 bash testing/it/docker/gen-selenium-matrix.sh | jq .
+# inspect the split:  bash testing/it/docker/gen-selenium-matrix.sh | jq .
 
 set -uo pipefail
 
 TAG_GROUPS=("group1" "group2" "group3" "group4")
-
-SELF_HOSTED_COUNT="${SELF_HOSTED_COUNT:-0}"
-SELF_HOSTED_RUNS_ON='["self-hosted","aem-it"]'
-HOSTED_RUNS_ON='["ubuntu-latest"]'
-
-# Assign the leg at 0-based index $1 to self-hosted while capacity remains, else hosted.
-runs_on_for() {
-    if [ "$1" -lt "${SELF_HOSTED_COUNT}" ]; then
-        printf '%s' "${SELF_HOSTED_RUNS_ON}"
-    else
-        printf '%s' "${HOSTED_RUNS_ON}"
-    fi
-}
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 SRC="${REPO_ROOT}/testing/it/e2e-selenium/src/test/java"
@@ -69,11 +50,9 @@ group_of() {
 }
 
 entries=()
-idx=0
 
 for grp in "${TAG_GROUPS[@]}"; do
-    entries+=("{\"name\":\"${grp}\",\"sel_groups\":\"${grp}\",\"sel_it_test\":\"\",\"runs_on\":$(runs_on_for "${idx}")}")
-    idx=$((idx + 1))
+    entries+=("{\"name\":\"${grp}\",\"sel_groups\":\"${grp}\",\"sel_it_test\":\"\"}")
 done
 
 ungrouped=()
@@ -86,8 +65,7 @@ done < <(find "${SRC}/${PKG_ROOT}" -name "*IT.java" 2>/dev/null | sort)
 
 if [ "${#ungrouped[@]}" -gt 0 ]; then
     joined=$(IFS=,; echo "${ungrouped[*]}")
-    entries+=("{\"name\":\"ungrouped\",\"sel_groups\":\"\",\"sel_it_test\":\"${joined}\",\"runs_on\":$(runs_on_for "${idx}")}")
-    idx=$((idx + 1))
+    entries+=("{\"name\":\"ungrouped\",\"sel_groups\":\"\",\"sel_it_test\":\"${joined}\"}")
 fi
 
 printf '{"include":[%s]}\n' "$(IFS=,; echo "${entries[*]}")"

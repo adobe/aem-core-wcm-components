@@ -110,10 +110,8 @@ SEL_GROUPS="${SEL_GROUPS:-}"
 SEL_EXCLUDED_GROUPS="${SEL_EXCLUDED_GROUPS:-failing,nested,IgnoreOnSDK}"
 # Re-run failing Selenium tests up to N times before marking them failed. UI tests
 # are prone to transient timing flakiness (and search tests can miss the async Oak
-# index on the first attempt); one rerun absorbs most of that while keeping the
-# suite fast - important under Rosetta emulation where each rerun re-launches Chrome
-# and is expensive. Raise it if flakiness bites; 0 disables reruns entirely.
-SEL_RERUN="${SEL_RERUN:-1}"
+# index on the first attempt); a couple of reruns absorb that. 0 disables.
+SEL_RERUN="${SEL_RERUN:-2}"
 # Failsafe class selection (comma-separated FQNs). Fall back to a single smoke
 # class ONLY when neither an explicit selection nor a tag group is given. Do NOT
 # use ${SEL_IT_TEST:-<class>} here: an empty SEL_IT_TEST alongside SEL_GROUPS
@@ -136,31 +134,6 @@ AEM_BASE_URL="http://localhost:${AEM_AUTHOR_PORT}"
 AEM_PUBLISH_URL="http://localhost:${AEM_PUBLISH_PORT}"
 AEM_CONTAINER="wcm-it-aem-${GITHUB_RUN_ID:-local}-$$"
 
-# Are we running INSIDE a container (self-hosted CI on a Dockerized runner)?
-# If so, the AEM sibling container - launched via the mounted host Docker socket -
-# would publish its ports to the HOST, not to our localhost, breaking the
-# localhost:PORT contract that Maven and the Selenium browser depend on. In that
-# case we share the runner's network namespace instead (see start_aem), which puts
-# AEM's ports on our localhost. On a bare host (GitHub-hosted runner, local macOS
-# dev) this is false and we publish ports as before. Override with AEM_IN_CONTAINER.
-if [[ -n "${AEM_IN_CONTAINER:-}" ]]; then
-    IN_CONTAINER="${AEM_IN_CONTAINER}"
-elif [[ -f /.dockerenv ]]; then
-    IN_CONTAINER=true
-else
-    IN_CONTAINER=false
-fi
-
-# The Selenium test lib (com.adobe.cq.testing.selenium.utils.Network) rebases
-# `localhost` test URLs to the host's LAN IP, but its getFirstLocalIP() only accepts
-# 10.* / 192.168.* addresses and throws "No value present" otherwise. A Docker-bridge
-# container has a 172.x address, so every Selenium test would error in setup. The lib
-# honours an IP env var as an explicit override; since AEM shares our netns, 127.0.0.1
-# reaches it. (GitHub-hosted VMs are 10.* so they don't need this.)
-if [[ "${IN_CONTAINER}" == "true" ]]; then
-    export IP="${IP:-127.0.0.1}"
-fi
-
 log() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
 
 # ---------------------------------------------------------------------------
@@ -168,8 +141,6 @@ log() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
 # ---------------------------------------------------------------------------
 cleanup() {
     local exit_code=$?
-    # Disarm so a signal-triggered run doesn't re-enter via the EXIT trap.
-    trap - EXIT INT TERM
     echo "::group::AEM container logs (${AEM_CONTAINER})"
     docker logs "${AEM_CONTAINER}" 2>&1 || true
     echo "::endgroup::"
@@ -199,10 +170,7 @@ cleanup() {
     fi
     exit "${exit_code}"
 }
-# Trap INT/TERM too (not just EXIT) so a cancelled CI job - GitHub sends SIGINT/
-# SIGTERM before SIGKILL - still tears down its AEM container instead of orphaning
-# it on the shared self-hosted daemon.
-trap cleanup EXIT INT TERM
+trap cleanup EXIT
 
 # Start one AEM instance inside the container via the qp client.
 # Args: <id> <runmode> <port> <vm-options>
@@ -219,39 +187,12 @@ start_instance() {
 
 start_aem() {
     log "Starting qp server container from ${AEM_IMAGE}"
-    local netargs=()
-    if [[ "${IN_CONTAINER}" == "true" ]]; then
-        # Reap any stale AEM container a prior job on THIS runner left behind when it
-        # was hard-killed (cancel/SIGKILL before cleanup ran). We match only
-        # containers attached to OUR network namespace (container:<our-id>), so this
-        # is safe when several self-hosted runners share one Docker daemon - other
-        # runners' live AEM containers use a different netns and are untouched. Only
-        # one job runs per runner at a time, so any such match is a dead orphan.
-        local stale
-        for stale in $(docker ps -aq --filter "name=wcm-it-aem-" 2>/dev/null); do
-            case "$(docker inspect -f '{{.HostConfig.NetworkMode}}' "${stale}" 2>/dev/null)" in
-                container:"${HOSTNAME}"*)
-                    log "Removing stale AEM orphan ${stale} from a previous job on this runner"
-                    docker rm -f "${stale}" >/dev/null 2>&1 || true ;;
-            esac
-        done
-
-        # Share the runner container's network namespace so AEM's 4502/4503 land on
-        # OUR localhost (see IN_CONTAINER note above). Port publishing is invalid
-        # when joining another container's netns, so we omit -p; this assumes the
-        # default 4502/4503 ports (AEM binds them internally). ${HOSTNAME} is this
-        # container's id, which the host daemon (reached via the mounted socket)
-        # resolves.
-        log "In-container run: sharing the runner's network namespace (container:${HOSTNAME})"
-        netargs=(--network "container:${HOSTNAME}")
-    else
-        # Publish the instance HTTP ports so the host can reach them once started.
-        netargs=(-p "${AEM_AUTHOR_PORT}:4502")
-        if [[ "${WITH_PUBLISH}" == "true" ]]; then
-            netargs+=(-p "${AEM_PUBLISH_PORT}:4503")
-        fi
+    # Publish the instance HTTP ports so the host can reach them once started.
+    local ports=(-p "${AEM_AUTHOR_PORT}:4502")
+    if [[ "${WITH_PUBLISH}" == "true" ]]; then
+        ports+=(-p "${AEM_PUBLISH_PORT}:4503")
     fi
-    docker run -d --name "${AEM_CONTAINER}" "${netargs[@]}" "${AEM_IMAGE}"
+    docker run -d --name "${AEM_CONTAINER}" "${ports[@]}" "${AEM_IMAGE}"
 
     log "Waiting for the qp server to accept client commands"
     local deadline=$(( SECONDS + 120 ))
