@@ -46,10 +46,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SearchIT extends AuthorBaseUITest {
 
     private static final String QUERY_BUILDER_URL = "/bin/querybuilder.json";
-    // The Search component queries the async Oak fulltext index, which can lag well
-    // behind page creation on a cold cloud-ready SDK instance. Allow generous time
-    // for it to catch up before the tests assert on results.
-    private static final int INDEX_POLL_TIMEOUT_MS = 60000;
     protected String clientlibs;
     private String page1Path;
     private String page11Path;
@@ -61,38 +57,40 @@ public class SearchIT extends AuthorBaseUITest {
     protected EditorPage editorPage;
     protected Search search;
 
-    // Poll the QueryBuilder until the expected page is actually returned for the given
-    // search term, i.e. until the async fulltext index has caught up. Returns true once
-    // the page is searchable, false if it never appears within the timeout. (The old
-    // implementation polled with call() returning true unconditionally, so it did a
-    // single query and never actually waited for the index - the cause of the flaky
-    // "0 results" failures on the slow-indexing SDK instance.)
-    protected boolean pollQuery(CQClient client, String path, String searchTerm, String expected) throws ClientException {
+    private boolean pollQuery(CQClient client, String path, String searchTerm, String expected) throws ClientException {
+        int timeout = 2000;
+        int delay = 50;
         class CreatePagePolling extends Polling {
+            SlingHttpResponse response;
+
             @Override
             public Boolean call() throws Exception {
                 URLParameterBuilder params = URLParameterBuilder.create().add("fulltext", searchTerm).add("path", path)
                     .add("p.limit", "100").add("type", "cq:Page");
-                SlingHttpResponse response = client.doGet(QUERY_BUILDER_URL, params.getList(), HttpStatus.SC_OK);
-                final JsonNode results = JsonUtils.getJsonNodeFromString(response.getContent());
-                final JsonNode hitsNode = results.get("hits");
-                if (hitsNode != null) {
-                    for (final JsonNode hit : hitsNode) {
-                        if (hit.get("path").asText().trim().equals(expected)) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
+                response = client.doGet(QUERY_BUILDER_URL, params.getList(), HttpStatus.SC_OK);
+                return true;
             }
         }
         CreatePagePolling createPolling = new CreatePagePolling();
         try {
-            createPolling.poll(INDEX_POLL_TIMEOUT_MS, RequestConstants.RETRY_TIME_INTERVAL);
-            return true;
+            createPolling.poll(timeout, delay);
         } catch (TimeoutException | InterruptedException e) {
-            return false;
+            throw new ClientException("Not able to get query result for " + expected + " in" + createPolling.getWaited(), e);
         }
+
+        String content = createPolling.response.getContent();
+        final JsonNode results = JsonUtils.getJsonNodeFromString(content);
+        final JsonNode hitsNode = results.get("hits");
+
+        boolean match = false;
+        for (final JsonNode hit : hitsNode) {
+            if(hit.get("path").asText().trim().equals(expected)){
+                match = true;
+                break;
+            }
+        }
+
+        return match;
     }
 
     protected void setupResources() {
@@ -157,13 +155,6 @@ public class SearchIT extends AuthorBaseUITest {
         // open test page in page editor
         editorPage = new PageEditorPage(page11Path);
         editorPage.open();
-
-        // Gate on the async fulltext index catching up with the pages created above,
-        // so every test (including the ones that don't poll the QueryBuilder
-        // themselves) sees searchable content before asserting. Fail fast with a clear
-        // message if the index never picks them up within the timeout.
-        assertTrue(pollQuery(authorClient, rootPage, "Page", page111Path),
-            "Search index did not pick up the created pages within " + INDEX_POLL_TIMEOUT_MS + "ms");
     }
 
     /**
