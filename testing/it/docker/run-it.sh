@@ -254,6 +254,61 @@ install_bundle() {
         "${base}/system/console/bundles" >/dev/null
 }
 
+# The base cloud-ready SDK image ships Core Components as a product feature (bundles
+# in the QuickStart's launchpad). After we install this repo's `all` package, BOTH the
+# product version and this repo's version of a bundle are Active, and they cross-wire
+# the exported `...models.*` packages -> OSGi ClassCastExceptions (e.g. the Search
+# servlet 500s -> SearchIT shows 0 results). Fix: keep the highest version (this repo's
+# build) and UNINSTALL the rest. Uninstall - not stop - is required: a *stopped* product
+# bundle is reverted to Active by the SDK's Sling installer, whereas an uninstalled one
+# stays gone for the run. Args: <base-url> <symbolic-name>
+dedupe_bundle() {
+    local base="$1" bsn="$2"
+    local attempt ids=""
+    # The `all` package installs its bundles ASYNChronously, so this repo's version may
+    # not be registered the instant the package upload returns. Poll (up to ~2 min) until
+    # a second (duplicate) version shows up, then uninstall the older (product) copies.
+    for attempt in $(seq 1 40); do
+        ids=$(curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/bundles.json" 2>/dev/null \
+            | python3 -c "
+import json, re, sys
+d = json.load(sys.stdin)
+bs = [b for b in d.get('data', []) if b.get('symbolicName') == '${bsn}']
+def ver(b):
+    return [int(x) for x in re.findall(r'\d+', b.get('version', ''))]
+if len(bs) > 1:
+    bs.sort(key=ver)                      # highest version last (= this repo's build)
+    print(' '.join(str(b['id']) for b in bs[:-1]))   # ids of the older product copies
+" 2>/dev/null)
+        [[ -n "${ids}" ]] && break
+        sleep 3
+    done
+    if [[ -z "${ids}" ]]; then
+        log "No duplicate ${bsn} bundle found to remove (only one version present)"
+        return 0
+    fi
+    local id
+    for id in ${ids}; do
+        log "Uninstalling duplicate product bundle ${bsn} (id ${id})"
+        curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
+            -X POST "${base}/system/console/bundles/${id}" -d action=uninstall >/dev/null || true
+    done
+    sleep 3
+    # Uninstalling the product copy disrupts Sling Model registration for the surviving
+    # bundle (its models drop out -> "Could not find an adapter factory for ...Search"
+    # -> component 500s). Restart the survivor so its @Model adapter factories re-register.
+    local keep
+    keep=$(curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/bundles.json" 2>/dev/null \
+        | python3 -c "import json,sys; d=json.load(sys.stdin); print(next((str(b['id']) for b in d.get('data',[]) if b.get('symbolicName')=='${bsn}'), ''))" 2>/dev/null)
+    if [[ -n "${keep}" ]]; then
+        log "Restarting ${bsn} (id ${keep}) to re-register its Sling models"
+        curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" -X POST "${base}/system/console/bundles/${keep}" -d action=stop >/dev/null || true
+        sleep 3
+        curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" -X POST "${base}/system/console/bundles/${keep}" -d action=start >/dev/null || true
+        sleep 6
+    fi
+}
+
 # Resolve the newest matching built package zip for a module target dir. Any glob
 # in $2 is expanded; $3 (optional) is an extended-regex of basenames to EXCLUDE.
 find_zip() {
@@ -273,10 +328,18 @@ find_zip() {
 # `-cloud` classified zip; we target a cloud-ready instance, so install `-cloud`.
 provision_packages() {
     local base="$1"
+    # This repo's cloud `all` package (component content, config, and the core + AMP
+    # bundles). The `-cloud` classified zip targets the cloud-ready instance.
     install_package "${base}" "$(find_zip "${REPO_ROOT}/all/target" 'core.wcm.components.all-*-cloud.zip')"
     install_package "${base}" "$(find_zip "${REPO_ROOT}/testing/it/it.ui.apps/target" 'core.wcm.components.it.ui.apps-*.zip')"
     install_package "${base}" "$(find_zip "${REPO_ROOT}/testing/it/it.ui.config/target" 'core.wcm.components.it.ui.config-*.zip')"
     install_package "${base}" "$(find_zip "${REPO_ROOT}/testing/it/it.ui.content/target" 'core.wcm.components.it.ui.content-*.zip')"
+    # The base SDK image already ships Core Components as a product feature, so the `all`
+    # package above leaves TWO active versions of the core/AMP bundles. Remove the older
+    # (product) copies so only this repo's build remains - otherwise the two versions
+    # cross-wire the models packages and components fail with ClassCastExceptions.
+    dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.core"
+    dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.extensions.amp"
 }
 
 provision() {
