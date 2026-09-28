@@ -161,7 +161,7 @@ public class TabsIT extends AuthorBaseUITest {
         childrenEditor.getInputItems().last().sendKeys("item2");
 
         //3.
-        Commons.saveConfigureDialog();
+        Commons.saveConfigureDialogAndWaitForClose();
 
         //4.
         tabs.openEditDialog(cmpPath);
@@ -171,7 +171,7 @@ public class TabsIT extends AuthorBaseUITest {
         assertTrue(items.get(0).getValue().equals("item0"), "First input item should be item0");
         assertTrue(items.get(1).getValue().equals("item1"), "Second input item should be item1");
         assertTrue(items.get(2).getValue().equals("item2"), "Third input item should be item2");
-        Commons.saveConfigureDialog();
+        Commons.saveConfigureDialogAndWaitForClose();
 
         return items;
     }
@@ -369,7 +369,7 @@ public class TabsIT extends AuthorBaseUITest {
         Commons.openPanelSelect();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         PanelSelector panelSelector = new PanelSelector();
-        assertTrue(panelSelector.isVisible(), "Panel selector should be visible");
+        assertTrue(panelSelector.waitShown(), "Panel selector should be visible");
 
         // verify that 3 items are available in the panel selector and the correct titles are visible
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
@@ -407,7 +407,7 @@ public class TabsIT extends AuthorBaseUITest {
         // open the panel selector and verify it's open
         Commons.openPanelSelect();
         PanelSelector panelSelector = new PanelSelector();
-        assertTrue(panelSelector.isVisible(), "Panel selector should be visible");
+        assertTrue(panelSelector.waitShown(), "Panel selector should be visible");
 
         // reorder: move first element to last position
         panelSelector.reorderItems(0, 2);

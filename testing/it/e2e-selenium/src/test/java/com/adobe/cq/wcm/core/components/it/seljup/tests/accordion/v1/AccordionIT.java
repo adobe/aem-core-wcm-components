@@ -164,7 +164,7 @@ public class AccordionIT extends AuthorBaseUITest {
         childrenEditor.getInputItems().last().sendKeys("item2");
 
         //3.
-        Commons.saveConfigureDialog();
+        Commons.saveConfigureDialogAndWaitForClose();
 
         //4.
         accordion.openEditDialog(cmpPath);
@@ -177,7 +177,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
         List<String> itemValues = items.stream().map(SelenideElement::getValue).map(String::toString).collect(Collectors.toList());
 
-        Commons.saveConfigureDialog();
+        Commons.saveConfigureDialogAndWaitForClose();
 
         return itemValues;
     }
@@ -622,7 +622,7 @@ public class AccordionIT extends AuthorBaseUITest {
         //6.
         editableToolbar.clickPanelSelect();
         PanelSelector panelSelector = new PanelSelector();
-        assertTrue(panelSelector.isVisible(), "Panel selector should be visible");
+        assertTrue(panelSelector.waitShown(), "Panel selector should be visible");
 
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
@@ -649,7 +649,7 @@ public class AccordionIT extends AuthorBaseUITest {
         //9.
         accordion.getCQOverlay().openPlaceholder(testPage);
         panelSelector = new PanelSelector();
-        assertTrue(panelSelector.isVisible() == false, "Panel selector should not be visible");
+        assertTrue(panelSelector.waitHidden(), "Panel selector should not be visible");
     }
 
     /**

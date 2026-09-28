@@ -140,7 +140,7 @@ public class CarouselIT extends AuthorBaseUITest {
         childrenEditor.clickAddButton();
         insertComponentDialog.selectComponent("/libs/wcm/foundation/components/responsivegrid");
         childrenEditor.getInputItems().last().sendKeys("item2");
-        Commons.saveConfigureDialog();
+        Commons.saveConfigureDialogAndWaitForClose();
 
         carousel.openEditDialog(cmpPath);
         ElementsCollection items = childrenEditor.getInputItems();
@@ -148,7 +148,7 @@ public class CarouselIT extends AuthorBaseUITest {
         assertTrue(items.get(0).getValue().equals("item0"), "First input item should be item0");
         assertTrue(items.get(1).getValue().equals("item1"), "Second input item should be item1");
         assertTrue(items.get(2).getValue().equals("item2"), "Third input item should be item2");
-        Commons.saveConfigureDialog();
+        Commons.saveConfigureDialogAndWaitForClose();
 
         return items;
     }
@@ -265,7 +265,7 @@ public class CarouselIT extends AuthorBaseUITest {
         Commons.openPanelSelect();
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         PanelSelector panelSelector = new PanelSelector();
-        assertTrue(panelSelector.isVisible(), "Panel selector should be visible");
+        assertTrue(panelSelector.waitShown(), "Panel selector should be visible");
 
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         ElementsCollection items = panelSelector.getItems();
@@ -293,7 +293,7 @@ public class CarouselIT extends AuthorBaseUITest {
 
         carousel.getCQOverlay().openPlaceholder(testPage);
         panelSelector = new PanelSelector();
-        assertTrue(panelSelector.isVisible() == false, "Panel selector should not be visible");
+        assertTrue(panelSelector.waitHidden(), "Panel selector should not be visible");
     }
 
     /**
