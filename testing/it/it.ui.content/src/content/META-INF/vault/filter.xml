@@ -19,8 +19,12 @@
     <filter root="/conf/core-components"/>
     <filter root="/content/core-components"/>
     <filter root="/content/campaigns/core_component_brand"/>
-    <filter root="/content/dam/core-components"/>
+    <!-- Tags must be imported before the DAM content that references them: FileVault's
+         TagValidatingEventListener strips cq:tags references that don't resolve to an
+         existing tag node at import time (permanently - it is not re-applied later), so
+         a tags-after-content order silently empties ContentFragmentIT's cq:tags. -->
     <filter root="/content/cq:tags/core-components"/>
+    <filter root="/content/dam/core-components"/>
     <filter root="/content/experience-fragments/core-components-test"/>
     <filter root="/home/users/core-component"/>
 </workspaceFilter>
