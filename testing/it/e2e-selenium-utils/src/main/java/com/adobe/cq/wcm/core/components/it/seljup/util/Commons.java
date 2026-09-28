@@ -23,7 +23,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.time.Duration;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Predicate;
 
 import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
 import com.codeborne.selenide.Condition;
@@ -42,6 +44,8 @@ import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
 import org.apache.sling.testing.clients.util.FormEntityBuilder;
 import org.apache.sling.testing.clients.util.HttpUtils;
+import org.apache.sling.testing.clients.util.JsonUtils;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.sling.testing.clients.util.poller.Polling;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -729,6 +733,15 @@ public class Commons {
     }
 
     /**
+     * Saves the configuration dialog and waits for it to close, so that subsequent editor interactions (e.g. switching
+     * to preview mode) are not swallowed while the dialog is still being dismissed and the editable refreshed.
+     */
+    public static void saveConfigureDialogAndWaitForClose() throws InterruptedException {
+        saveConfigureDialog();
+        $(Selectors.SELECTOR_CONFIG_DIALOG).should(Condition.disappear, Duration.ofMillis(DEFAULT_TIMEOUT));
+    }
+
+    /**
      * Close configuration for component
      */
     public static void closeConfigureDialog() throws InterruptedException {
@@ -845,6 +858,42 @@ public class Commons {
     public static String getCurrentUrl() {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         return webDriver.getCurrentUrl();
+    }
+
+    /**
+     * Waits until the current browser URL ends with the given suffix, returning the last seen URL.
+     */
+    public static String waitForCurrentUrlEndsWith(String suffix) {
+        try {
+            new WebDriverWait(WebDriverRunner.getWebDriver(), Duration.ofMillis(DEFAULT_TIMEOUT))
+                .until(driver -> driver.getCurrentUrl().endsWith(suffix));
+        } catch (org.openqa.selenium.TimeoutException ignored) {
+            // the caller asserts on the returned URL
+        }
+        return getCurrentUrl();
+    }
+
+    /**
+     * Polls a JSON resource until it exists and satisfies the condition. Used for content written asynchronously
+     * with respect to the test (e.g. by a form submitted from the browser).
+     */
+    public static JsonNode waitForJson(CQClient client, String path, int depth, Predicate<JsonNode> condition)
+        throws ClientException, InterruptedException {
+        final JsonNode[] result = new JsonNode[1];
+        Polling polling = new Polling(() -> {
+            SlingHttpResponse response = client.doGet(path + "." + depth + ".json");
+            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+                return false;
+            }
+            result[0] = JsonUtils.getJsonNodeFromString(response.getContent());
+            return condition.test(result[0]);
+        });
+        try {
+            polling.poll(DEFAULT_TIMEOUT, DEFAULT_RETRY_DELAY);
+        } catch (TimeoutException e) {
+            throw new ClientException("Condition not met for " + path + " after " + polling.getWaited() + "ms", e);
+        }
+        return result[0];
     }
 
     public static boolean iseditDialogVisible() {

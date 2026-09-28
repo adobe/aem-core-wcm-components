@@ -21,6 +21,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -39,6 +40,10 @@ public class FormContainerEditDialog extends Dialog {
         //Open selectlist
         $( "[name='./actionType'] > button").click();
         CoralSelectList coralSelectList = new CoralSelectList($("[name='./actionType']"));
+        // the popover opens with an animation; clicking again while it is still opening would toggle it closed
+        for (int i = 0; i < 10 && !coralSelectList.isVisible(); i++) {
+            Selenide.sleep(250);
+        }
         if(!coralSelectList.isVisible()) {
             CoralSelect selectList = new CoralSelect("name='./actionType'");
             coralSelectList = selectList.openSelectList();

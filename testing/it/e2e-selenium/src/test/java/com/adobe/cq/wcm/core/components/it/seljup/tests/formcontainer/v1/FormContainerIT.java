@@ -131,23 +131,25 @@ public class FormContainerIT extends AuthorBaseUITest {
         dialog.selectActionType("foundation/components/form/actions/store");
         String actionInputValue = dialog.getActionInputValue();
         String contentJsonUrl_allForm = actionInputValue.substring(0, actionInputValue.length() - 1);
-        Commons.saveConfigureDialog();
+        Commons.saveConfigureDialogAndWaitForClose();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         $(Selectors.SELECTOR_SUBMIT_BUTTON).click();
 
-        JsonNode json_allForm = authorClient.doGetJson(contentJsonUrl_allForm, 1, HttpStatus.SC_OK);
-        Iterator<JsonNode> itr = json_allForm.elements();
-        Boolean present = false;
-        while(itr.hasNext()) {
+        // the submission is stored asynchronously with respect to the click, so poll for it
+        JsonNode json_allForm = Commons.waitForJson(authorClient, contentJsonUrl_allForm, 1, FormContainerIT::hasStoredInput);
+        assertTrue(hasStoredInput(json_allForm), "input value for the form components is not saved");
+    }
+
+    private static boolean hasStoredInput(JsonNode json) {
+        Iterator<JsonNode> itr = json.elements();
+        while (itr.hasNext()) {
             JsonNode node = itr.next();
-            if(node.isObject()) {
-                if (node.get("inputName") != null && node.get("inputName").toString().equals("\"inputValue\"")) {
-                    present = true;
-                }
+            if (node.isObject() && node.get("inputName") != null && node.get("inputName").toString().equals("\"inputValue\"")) {
+                return true;
             }
         }
-        assertTrue(present, "input value for the form components is not saved");
+        return false;
     }
 
     /**
@@ -160,11 +162,11 @@ public class FormContainerIT extends AuthorBaseUITest {
         dialog.selectActionType("foundation/components/form/actions/store");
         String actionInputValue = userContent + "/xxx";
         dialog.setActionInputValue(actionInputValue);
-        Commons.saveConfigureDialog();
+        Commons.saveConfigureDialogAndWaitForClose();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         $(Selectors.SELECTOR_SUBMIT_BUTTON).click();
-        JsonNode formContentJson = authorClient.doGetJson(actionInputValue , 1, HttpStatus.SC_OK);
+        JsonNode formContentJson = Commons.waitForJson(authorClient, actionInputValue, 1, json -> json.has("inputName"));
         assertTrue(formContentJson.get("inputName").toString().equals("\"inputValue\""),"inputName field should be saved as inputValue");
     }
 
@@ -178,12 +180,12 @@ public class FormContainerIT extends AuthorBaseUITest {
         FormContainerEditDialog dialog = formComponents.openEditDialog(containerPath);
         dialog.selectActionType("foundation/components/form/actions/store");
         Commons.selectInAutocomplete("[name='./redirect']", rootPage);
-        Commons.saveConfigureDialog();
+        Commons.saveConfigureDialogAndWaitForClose();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         $(Selectors.SELECTOR_SUBMIT_BUTTON).click();
         Commons.switchToDefaultContext();
-        assertTrue(Commons.getCurrentUrl().endsWith(rootPage+".html"),"Current page should be thank you page set after redirection");
+        assertTrue(Commons.waitForCurrentUrlEndsWith(rootPage + ".html").endsWith(rootPage + ".html"),"Current page should be thank you page set after redirection");
     }
 
     /**
