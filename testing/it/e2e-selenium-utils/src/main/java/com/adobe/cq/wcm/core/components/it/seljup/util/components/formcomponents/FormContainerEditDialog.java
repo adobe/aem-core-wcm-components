@@ -41,7 +41,7 @@ public class FormContainerEditDialog extends Dialog {
         $( "[name='./actionType'] > button").click();
         CoralSelectList coralSelectList = new CoralSelectList($("[name='./actionType']"));
         // the popover opens with an animation; clicking again while it is still opening would toggle it closed
-        for (int i = 0; i < 10 && !coralSelectList.isVisible(); i++) {
+        for (int i = 0; i < 20 && !coralSelectList.isVisible(); i++) {
             Selenide.sleep(250);
         }
         if(!coralSelectList.isVisible()) {

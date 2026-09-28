@@ -22,6 +22,9 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.components.pdfviewer.PdfV
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 
+import static com.adobe.cq.testing.selenium.Constants.DEFAULT_RETRY_DELAY;
+import static com.adobe.cq.testing.selenium.Constants.DEFAULT_TIMEOUT;
+
 public class PdfViewer extends BaseComponent {
 
     private static final String PDF_VIEWER = ".cmp-pdfviewer";
@@ -40,8 +43,17 @@ public class PdfViewer extends BaseComponent {
         String id = viewerContent.getAttribute("id");
 
         SelenideElement contentFrame = viewerContent.$("#iframe-" + id);
-        Selenide.switchTo().frame(contentFrame);
-        boolean found = Selenide.$("body").getText().contains(content);
+        // the document is rendered asynchronously by the external Adobe PDF Embed API, so wait for its text
+        long deadline = System.currentTimeMillis() + DEFAULT_TIMEOUT;
+        boolean found = false;
+        while (!found && System.currentTimeMillis() < deadline) {
+            Selenide.switchTo().frame(contentFrame);
+            found = Selenide.$("body").getText().contains(content);
+            Selenide.switchTo().parentFrame();
+            if (!found) {
+                Selenide.sleep(DEFAULT_RETRY_DELAY);
+            }
+        }
         Commons.switchToDefaultContext();
 
         return found;

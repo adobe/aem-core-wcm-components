@@ -934,8 +934,11 @@ public class Commons {
 
     public static void useDialogSelect(String name, String value) throws InterruptedException {
         $( "[name='" + name + "'] > button").click();
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         CoralSelectList coralSelectList = new CoralSelectList($("[name='" + name + "']"));
+        // the popover opens with an animation; clicking again while it is still opening would toggle it closed
+        for (int i = 0; i < 20 && !coralSelectList.isVisible(); i++) {
+            Selenide.sleep(250);
+        }
         if(!coralSelectList.isVisible()) {
             CoralSelect selectList = new CoralSelect("name='" + name + "'");
             coralSelectList = selectList.openSelectList();
