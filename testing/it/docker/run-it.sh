@@ -268,7 +268,7 @@ dedupe_bundle() {
     # The `all` package installs its bundles ASYNChronously, so this repo's version may
     # not be registered the instant the package upload returns. Poll (up to ~2 min) until
     # a second (duplicate) version shows up, then uninstall the older (product) copies.
-    for attempt in $(seq 1 40); do
+    for _ in $(seq 1 40); do
         ids=$(curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/bundles.json" 2>/dev/null \
             | python3 -c "
 import json, re, sys
@@ -394,6 +394,12 @@ run_tests() {
 }
 
 run_selenium() {
+    # The test module is built standalone, so it would otherwise resolve
+    # e2e-selenium-utils from ~/.m2 - which may be a stale SNAPSHOT (e.g. CI's
+    # Maven cache is keyed on pom.xml hashes only). Install it from source first.
+    log "Installing e2e-selenium-utils from source"
+    mvn -B -q -f "${REPO_ROOT}/testing/it/e2e-selenium-utils/pom.xml" install -DskipTests
+
     log "Running Selenium ITs (local ${SEL_BROWSER}): ${SEL_IT_TEST:-<all>}"
     # -Dsel.jup.default.browser selects a LOCAL browser (vs the module's default
     # Chrome-in-Docker). The pom's test-all profile pins the author URL to
