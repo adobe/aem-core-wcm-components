@@ -83,13 +83,7 @@ public class EmbedEditDialog extends Dialog {
         }
 
         public void setEmbeddableField(String value) throws InterruptedException {
-            $( "["+embeddableField + "] > button").click();
-            Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-            CoralSelectList coralSelectList = new CoralSelectList($("["+embeddableField + "]"));
-            if(!coralSelectList.isVisible()) {
-                CoralSelect selectList = new CoralSelect(embeddableField);
-                coralSelectList = selectList.openSelectList();
-            }
+            CoralSelectList coralSelectList = Commons.openCoralSelect("[" + embeddableField + "]");
 
             final WebDriver webDriver = WebDriverRunner.getWebDriver();
             WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + value + "']"));

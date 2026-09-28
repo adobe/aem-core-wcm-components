@@ -932,17 +932,29 @@ public class Commons {
     }
 
 
+    /**
+     * Opens a Coral select (identified by the given selector) and returns its select list once visible.
+     * Coral moves the select's popover out of the {@code coral-select} element when it is first opened, so the list is
+     * located via the button's {@code aria-controls} instead of as a descendant. The button is clicked once and only
+     * clicked again if the list did not open, since clicking while it is opening would toggle it closed.
+     */
+    public static CoralSelectList openCoralSelect(String selectSelector) {
+        SelenideElement button = $(selectSelector + " > button");
+        String listSelector = "#" + button.shouldHave(Condition.attribute("aria-controls")).getAttribute("aria-controls");
+        for (int attempt = 0; attempt < 3 && !$(listSelector).isDisplayed(); attempt++) {
+            button.click();
+            try {
+                $(listSelector).shouldBe(Condition.visible, Duration.ofSeconds(5));
+            } catch (AssertionError e) {
+                // the click did not open the list, retry
+            }
+        }
+        $(listSelector).shouldBe(Condition.visible);
+        return new CoralSelectList(listSelector);
+    }
+
     public static void useDialogSelect(String name, String value) throws InterruptedException {
-        $( "[name='" + name + "'] > button").click();
-        CoralSelectList coralSelectList = new CoralSelectList($("[name='" + name + "']"));
-        // the popover opens with an animation; clicking again while it is still opening would toggle it closed
-        for (int i = 0; i < 20 && !coralSelectList.isVisible(); i++) {
-            Selenide.sleep(250);
-        }
-        if(!coralSelectList.isVisible()) {
-            CoralSelect selectList = new CoralSelect("name='" + name + "'");
-            coralSelectList = selectList.openSelectList();
-        }
+        CoralSelectList coralSelectList = openCoralSelect("[name='" + name + "']");
 
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + value + "']"));
