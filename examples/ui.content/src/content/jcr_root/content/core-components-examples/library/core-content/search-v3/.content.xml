@@ -46,7 +46,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_search_v2"
+                    linkURL="https://www.adobe.com/go/aem_cmp_search_v3"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <title

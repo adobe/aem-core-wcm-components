@@ -101,4 +101,4 @@ data-cmp-hook-search="itemTitle"
 * **Version**: v3
 * **Compatibility**: AEM 6.5
 * **Status**: work-in-progress
-* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_search\_v2](https://www.adobe.com/go/aem_cmp_search_v2)
+* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_search\_v3](https://www.adobe.com/go/aem_cmp_search_v3)
