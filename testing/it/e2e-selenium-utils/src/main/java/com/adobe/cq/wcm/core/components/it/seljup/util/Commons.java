@@ -949,6 +949,17 @@ public class Commons {
                 // the click did not open the list, retry
             }
         }
+        if (!$(listSelector).isDisplayed()) {
+            // TEMP diagnostics
+            Object info = ((JavascriptExecutor) WebDriverRunner.getWebDriver()).executeScript(
+                "var s=document.querySelector(arguments[0]);var l=document.querySelector(arguments[1]);"
+                + "var p=l&&l.closest('coral-popover');"
+                + "return JSON.stringify({sel:s&&s.outerHTML.substring(0,1500),list:l&&l.outerHTML.substring(0,3000),"
+                + "pop:p&&p.getAttribute('class')+' open='+p.open+' style='+p.getAttribute('style'),"
+                + "rect:l&&JSON.stringify(l.getBoundingClientRect())});",
+                selectSelector, listSelector);
+            System.out.println("[openCoralSelect DIAG] " + info);
+        }
         $(listSelector).shouldBe(Condition.visible);
         return new CoralSelectList(listSelector);
     }
