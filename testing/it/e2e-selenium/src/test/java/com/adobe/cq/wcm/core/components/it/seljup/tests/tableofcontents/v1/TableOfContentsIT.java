@@ -148,10 +148,10 @@ public class TableOfContentsIT extends AuthorBaseUITest {
         Commons.openEditDialog(editorPage, componentPath);
         TableOfContentsEditDialog tableOfContentsEditDialog = tableOfContents.getEditDialog();
         tableOfContentsEditDialog.setId(id);
-        Commons.saveConfigureDialog();
+        Commons.saveConfigureDialogAndWaitForClose();
 
         Commons.switchContext("ContentFrame");
-        assertEquals(id, tableOfContents.getId(), "ID should be configured");
+        assertTrue(tableOfContents.waitForId(id), "ID should be configured");
     }
 
     @Test

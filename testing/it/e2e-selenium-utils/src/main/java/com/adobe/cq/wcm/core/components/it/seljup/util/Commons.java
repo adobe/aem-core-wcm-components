@@ -953,6 +953,18 @@ public class Commons {
         return new CoralSelectList(listSelector);
     }
 
+    /**
+     * Opens a Coral select (see {@link #openCoralSelect(String)}) and clicks the item with the given value.
+     * The item is scrolled into view and clicked natively, since long lists may render it off-screen.
+     * @param selectSelector CSS selector of the coral-select element
+     * @param value value of the item to select
+     */
+    public static void selectInCoralSelect(String selectSelector, String value) {
+        SelenideElement item = openCoralSelect(selectSelector).element()
+            .$("coral-selectlist-item[value='" + value + "']").should(Condition.exist);
+        item.scrollIntoView(true).shouldBe(Condition.visible).click();
+    }
+
     public static void useDialogSelect(String name, String value) throws InterruptedException {
         CoralSelectList coralSelectList = openCoralSelect("[name='" + name + "']");
 
