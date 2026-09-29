@@ -421,6 +421,7 @@ public class PageTests {
         // Delete the added cloud configuration
         cloudServicesTab.deleteCloudConfiguration();
         $(CLOUD_CONFIG_TAG).should(Condition.disappear);
+        $(CLOUD_CONFIG_SELECT + " coral-select-item[value='" + cloudServiceConfig + "'][selected]").should(Condition.disappear);
 
         // Add cloud configuration again
         addCloudConfiguration(cloudServiceConfig);
@@ -440,10 +441,11 @@ public class PageTests {
      * since Coral moves the popover out of the select once it is opened.
      */
     private static void addCloudConfiguration(String value) {
-        Commons.selectInCoralSelect("coral-select[placeholder='Add Configuration']", value);
+        Commons.selectInCoralSelect(CLOUD_CONFIG_SELECT, value);
         $(CLOUD_CONFIG_TAG).should(Condition.appear);
     }
 
+    private static final String CLOUD_CONFIG_SELECT = "coral-select[placeholder='Add Configuration']";
     private static final String CLOUD_CONFIG_TAG = "button[data-title='Cloud Proxy Configuration']";
 
     public void testPersonalizationPageProperties() throws InterruptedException {

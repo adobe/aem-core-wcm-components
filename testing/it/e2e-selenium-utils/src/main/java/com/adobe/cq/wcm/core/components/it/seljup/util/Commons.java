@@ -942,23 +942,18 @@ public class Commons {
         SelenideElement button = $(selectSelector + " > button");
         String listSelector = "#" + button.shouldHave(Condition.attribute("aria-controls")).getAttribute("aria-controls");
         for (int attempt = 0; attempt < 3 && !$(listSelector).isDisplayed(); attempt++) {
+            if ("true".equals(button.getAttribute("aria-expanded"))) {
+                // open but the list is not shown (e.g. options not refreshed yet): close it first, so the click
+                // below re-opens it instead of toggling it closed
+                button.click();
+                button.shouldNotHave(Condition.attribute("aria-expanded", "true"), Duration.ofSeconds(5));
+            }
             button.click();
             try {
                 $(listSelector).shouldBe(Condition.visible, Duration.ofSeconds(5));
             } catch (AssertionError e) {
                 // the click did not open the list, retry
             }
-        }
-        if (!$(listSelector).isDisplayed()) {
-            // TEMP diagnostics
-            Object info = ((JavascriptExecutor) WebDriverRunner.getWebDriver()).executeScript(
-                "var s=document.querySelector(arguments[0]);var l=document.querySelector(arguments[1]);"
-                + "var p=l&&l.closest('coral-popover');"
-                + "return JSON.stringify({sel:s&&s.outerHTML.substring(0,1500),list:l&&l.outerHTML.substring(0,3000),"
-                + "pop:p&&p.getAttribute('class')+' open='+p.open+' style='+p.getAttribute('style'),"
-                + "rect:l&&JSON.stringify(l.getBoundingClientRect())});",
-                selectSelector, listSelector);
-            System.out.println("[openCoralSelect DIAG] " + info);
         }
         $(listSelector).shouldBe(Condition.visible);
         return new CoralSelectList(listSelector);
