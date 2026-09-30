@@ -93,6 +93,11 @@ public class FormButtonIT extends AuthorBaseUITest {
         return editorPage.openEditableToolbar(cmpPath).clickConfigure().adaptTo(ButtonEditDialog.class);
     }
 
+    private void waitForButtonText(String text) {
+        new WebDriverWait(WebDriverRunner.getWebDriver(), RequestConstants.DURATION_TIMEOUT)
+            .until(driver -> formButton.getButtonText().contains(text));
+    }
+
     /**
      * Test: Check the attributes of the default button rendered without any customisations via the edit dialog
      */
@@ -149,8 +154,8 @@ public class FormButtonIT extends AuthorBaseUITest {
         buttonEditDialog.setNameField(buttonName);
         Commons.saveConfigureDialog();
 
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.switchContext("ContentFrame");
+        waitForButtonText(buttonLabel);
         assertTrue(formButton.isButtonPresentByName(buttonName), "Button should be present with name " + buttonName);
         assertTrue(formButton.getButtonText().contains(buttonLabel), "Button should contain " + buttonLabel + " text");
     }
@@ -170,8 +175,8 @@ public class FormButtonIT extends AuthorBaseUITest {
         buttonEditDialog.setValueField(buttonValue);
         Commons.saveConfigureDialog();
 
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
         Commons.switchContext("ContentFrame");
+        waitForButtonText(buttonLabel);
         assertTrue(formButton.isButtonPresentByValue(buttonValue), "Button should be present with value " + buttonValue);
         assertTrue(formButton.getButtonText().contains(buttonLabel), "Button should contain " + buttonLabel + "text");
     }
