@@ -16,6 +16,8 @@
 package com.adobe.cq.wcm.core.components.internal.services.contentai;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Set;
@@ -118,12 +120,46 @@ public class ContentAIClientImpl implements ContentAIClient {
     }
 
     @Override
-    public ContentSourceListResult listContentSources() throws ContentAIClientException {
-        JsonNode response = executeGet("/content-sources");
+    public ContentSourceListResult listContentSources(String cursor) throws ContentAIClientException {
+        return listContentSourcesAtPath("/content-sources", cursor);
+    }
+
+    @Override
+    public ContentSourceListResult listContentSources(String contentSourceType, String cursor)
+        throws ContentAIClientException {
+        return listContentSourcesAtPath("/content-sources", contentSourceType, cursor);
+    }
+
+    private ContentSourceListResult listContentSourcesAtPath(String basePath, String cursor)
+        throws ContentAIClientException {
+        return listContentSourcesAtPath(basePath, null, cursor);
+    }
+
+    private ContentSourceListResult listContentSourcesAtPath(String basePath, String contentSourceType, String cursor)
+        throws ContentAIClientException {
+        StringBuilder path = new StringBuilder(basePath);
+        char separator = '?';
+        if (StringUtils.isNotBlank(contentSourceType)) {
+            path.append(separator).append("type=").append(urlEncode(contentSourceType));
+            separator = '&';
+        }
+        if (StringUtils.isNotBlank(cursor)) {
+            path.append(separator).append("cursor=").append(urlEncode(cursor));
+        }
+        JsonNode response = executeGet(path.toString());
         try {
             return mapper.treeToValue(response, ContentSourceListResult.class);
         } catch (IOException e) {
             throw new ContentAIClientException("Failed to parse Content AI content-sources response", e);
+        }
+    }
+
+    private static String urlEncode(String value) throws ContentAIClientException {
+        try {
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            // UTF-8 is guaranteed to be available on every JVM (see Charset's class-level javadoc); unreachable.
+            throw new ContentAIClientException("Failed to encode Content AI content-sources query parameter", e);
         }
     }
 
