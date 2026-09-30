@@ -19,6 +19,11 @@ import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.tableofcontents.TableOfContentsEditDialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.components.tableofcontents.TableOfContentsEditDialog65;
 
+import java.time.Duration;
+
+import com.codeborne.selenide.Condition;
+
+import static com.adobe.cq.testing.selenium.Constants.DEFAULT_TIMEOUT;
 import static com.codeborne.selenide.Selenide.$;
 
 public class TableOfContents extends BaseComponent {
@@ -43,6 +48,20 @@ public class TableOfContents extends BaseComponent {
 
     public String getId() {
         return $(tocContent).attr("id");
+    }
+
+    /**
+     * Waits for the TOC content to be re-rendered with the given id (the editor refreshes it asynchronously after save).
+     * @param id expected id
+     * @return true if the id was rendered within the default timeout
+     */
+    public boolean waitForId(String id) {
+        try {
+            $(tocContent).shouldHave(Condition.attribute("id", id), Duration.ofMillis(DEFAULT_TIMEOUT));
+            return true;
+        } catch (AssertionError e) {
+            return false;
+        }
     }
 
     public boolean isTocPlaceholderExists() {

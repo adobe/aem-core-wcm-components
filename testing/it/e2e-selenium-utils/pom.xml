@@ -64,6 +64,13 @@
             <artifactId>aem-selenium-it-base</artifactId>
             <version>${aem.selenium.base.it.version}</version>
         </dependency>
+        <!-- explicit version to get the non-deprecated ClientException subclasses (e.g. TestingValidationException),
+             overriding the older transitive version pulled in by aem-selenium-it-base -->
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.testing.clients</artifactId>
+            <version>3.0.18</version>
+        </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
