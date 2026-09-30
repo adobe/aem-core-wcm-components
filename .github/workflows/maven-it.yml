@@ -49,6 +49,8 @@ on:
   push:
     branches:
       - main
+      # POC: Selenium vs Playwright timing comparison (branch is not meant to be merged).
+      - it-playwright-poc
   pull_request:
     branches:
       - main
@@ -156,7 +158,8 @@ jobs:
   integration-test:
     name: http ITs (author + publish, cloud-ready)
     needs: prep
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.repository == 'adobe/aem-core-wcm-components' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)) }}
+    # POC branch: only the Selenium vs Playwright comparison runs.
+    if: ${{ github.ref_name != 'it-playwright-poc' && (github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components') }}
     runs-on: ubuntu-latest
     # Native amd64 GitHub-hosted runner: author+publish boot + the full http
     # suite ran in ~9 minutes in testing, so 90m is generous headroom.
@@ -230,12 +233,22 @@ jobs:
     timeout-minutes: 60
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.prep.outputs.selenium_matrix) }}
+      # POC: each leg runs the Selenium and the Playwright FormText v2 classes back-to-back on the same runner and
+      # AEM instance; the class order alternates between legs to cancel out AEM warm-up effects.
+      matrix:
+        include:
+          - { name: formtext-run1, order: alphabetical }
+          - { name: formtext-run2, order: reversealphabetical }
+          - { name: formtext-run3, order: alphabetical }
+          - { name: formtext-run4, order: reversealphabetical }
     env:
       WITH_SELENIUM: 'true'
       SEL_BROWSER: chrome
-      SEL_GROUPS: ${{ matrix.sel_groups }}
-      SEL_IT_TEST: ${{ matrix.sel_it_test }}
+      SEL_IT_TEST: 'com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.v2.FormTextIT,com.adobe.cq.wcm.core.components.it.pw.formtext.FormTextPwIT'
+      SEL_RERUN: '0'
+      MAVEN_ARGS: -Dfailsafe.runOrder=${{ matrix.order }}
+      # Playwright drives the runner's installed Chrome (channel=chrome), like Selenium: no bundled browser download.
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
       QP_VM_OPTIONS: '-Xmx4g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
     steps:
       - uses: actions/checkout@v5
@@ -300,6 +313,7 @@ jobs:
           retention-days: 14
           path: |
             testing/it/e2e-selenium/target/failsafe-reports
+            testing/it/e2e-selenium/target/playwright-traces
             testing/it/http/target/aem-logs
 
   # --------------------------------------------------------------------------
