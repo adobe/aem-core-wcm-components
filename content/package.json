@@ -1,6 +1,6 @@
 {
     "name": "com.adobe.cq.core.wcm.components.content",
-    "version": "2.32.7-SNAPSHOT",
+    "version": "2.32.9-SNAPSHOT",
     "description": "Adobe Experience Manager Core WCM Components Content Package",
     "license": "Apache-2.0",
     "private": false,
@@ -18,7 +18,7 @@
         "stylelint:fix": "stylelint \"**/*.css\" \"**/*.less\" --fix",
         "sync-pom-version": "sync-pom-version",
         "build": "clientlib --verbose",
-        "guardrails": "node test/guardrails/clientlibDependencies.js",
+        "guardrails": "node test/guardrails/clientlibDependencies.js && node test/guardrails/contentFragmentCompositeRendering.js",
         "unit": "npm run guardrails && karma start karma.conf.js",
         "test": "npm run unit --"
     },

@@ -42,6 +42,8 @@ import org.mockito.Mockito;
 
 import com.adobe.cq.dam.cfm.ContentElement;
 import com.adobe.cq.dam.cfm.ContentFragment;
+import com.adobe.cq.dam.cfm.DataType;
+import com.adobe.cq.dam.cfm.FragmentData;
 import com.adobe.cq.dam.cfm.FragmentTemplate;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
@@ -325,6 +327,36 @@ public class ContentFragmentUtilsTest {
         valueMap.put("metaType", "testMetaType");
         metaType = ContentFragmentUtils.getElementMetaType(element);
         assertEquals("testMetaType", metaType);
+    }
+
+    @Test
+    public void isCompositeElementIgnoresTheDeprecatedTypeString() {
+        // isCompositeElement() must key off getValueType() only. Each case here deliberately sets
+        // getTypeString() to contradict getValueType(), to prove the deprecated method plays no
+        // role in the outcome - only getValueType() does.
+        ContentElement matchingValueTypeOnly = mockElementWithDataType("composite", "somethingElseEntirely");
+        Assertions.assertTrue(ContentFragmentUtils.isCompositeElement(matchingValueTypeOnly));
+
+        ContentElement matchingTypeStringOnly = mockElementWithDataType("string", "composite[]");
+        Assertions.assertFalse(ContentFragmentUtils.isCompositeElement(matchingTypeStringOnly));
+    }
+
+    /**
+     * Mocks a {@link ContentElement} whose {@link FragmentData#getDataType()} independently
+     * controls {@code valueType} and the deprecated {@code typeString}, so tests can prove which
+     * one production code actually depends on.
+     */
+    private static ContentElement mockElementWithDataType(String valueType, String typeString) {
+        DataType dataType = Mockito.mock(DataType.class);
+        Mockito.when(dataType.getValueType()).thenReturn(valueType);
+        Mockito.when(dataType.getTypeString()).thenReturn(typeString);
+
+        FragmentData data = Mockito.mock(FragmentData.class);
+        Mockito.when(data.getDataType()).thenReturn(dataType);
+
+        ContentElement element = Mockito.mock(ContentElement.class);
+        Mockito.when(element.getValue()).thenReturn(data);
+        return element;
     }
 
     /**
