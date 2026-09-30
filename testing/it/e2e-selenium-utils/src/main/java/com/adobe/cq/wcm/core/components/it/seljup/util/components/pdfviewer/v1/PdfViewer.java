@@ -25,7 +25,8 @@ import com.codeborne.selenide.SelenideElement;
 import static com.adobe.cq.testing.selenium.Constants.DEFAULT_RETRY_DELAY;
 
 public class PdfViewer extends BaseComponent {
-    private static final long RENDER_TIMEOUT_MS = 120_000;
+    private static final long RENDER_TIMEOUT_MS = 45_000;
+    private static final int RENDER_ATTEMPTS = 3;
 
 
     private static final String PDF_VIEWER = ".cmp-pdfviewer";
@@ -40,24 +41,37 @@ public class PdfViewer extends BaseComponent {
     }
 
     public boolean hasContent(String content) {
-        SelenideElement viewerContent = currentElement.$(PDF_VIEWER_CONTENT);
-        String id = viewerContent.getAttribute("id");
-
-        SelenideElement contentFrame = viewerContent.$("#iframe-" + id);
-        // the document is rendered asynchronously by the external Adobe PDF Embed API, so wait for its text;
-        // a cold first load (SDK download + document fetch) can take well over the default timeout
-        long deadline = System.currentTimeMillis() + RENDER_TIMEOUT_MS;
-        boolean found = false;
-        while (!found && System.currentTimeMillis() < deadline) {
-            Selenide.switchTo().frame(contentFrame);
-            found = Selenide.$("body").getText().contains(content);
-            Selenide.switchTo().parentFrame();
-            if (!found) {
-                Selenide.sleep(DEFAULT_RETRY_DELAY);
+        // The document is rendered asynchronously by the external Adobe PDF Embed API. In a fresh browser session its
+        // first render occasionally never completes, while a reload renders right away, so reload the page once.
+        for (int attempt = 0; attempt < RENDER_ATTEMPTS; attempt++) {
+            if (attempt > 0) {
+                Commons.switchToDefaultContext();
+                Selenide.refresh();
+                Commons.switchContext("ContentFrame");
+            }
+            if (waitForContent(content)) {
+                Commons.switchToDefaultContext();
+                return true;
             }
         }
         Commons.switchToDefaultContext();
+        return false;
+    }
 
-        return found;
+    private boolean waitForContent(String content) {
+        SelenideElement viewerContent = currentElement.$(PDF_VIEWER_CONTENT);
+        String id = viewerContent.getAttribute("id");
+        SelenideElement contentFrame = viewerContent.$("#iframe-" + id);
+        long deadline = System.currentTimeMillis() + RENDER_TIMEOUT_MS;
+        while (System.currentTimeMillis() < deadline) {
+            Selenide.switchTo().frame(contentFrame);
+            boolean found = Selenide.$("body").getText().contains(content);
+            Selenide.switchTo().parentFrame();
+            if (found) {
+                return true;
+            }
+            Selenide.sleep(DEFAULT_RETRY_DELAY);
+        }
+        return false;
     }
 }
