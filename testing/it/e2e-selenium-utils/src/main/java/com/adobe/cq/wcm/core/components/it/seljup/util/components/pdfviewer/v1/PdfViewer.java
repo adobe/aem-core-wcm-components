@@ -23,9 +23,10 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 
 import static com.adobe.cq.testing.selenium.Constants.DEFAULT_RETRY_DELAY;
-import static com.adobe.cq.testing.selenium.Constants.DEFAULT_TIMEOUT;
 
 public class PdfViewer extends BaseComponent {
+    private static final long RENDER_TIMEOUT_MS = 120_000;
+
 
     private static final String PDF_VIEWER = ".cmp-pdfviewer";
     private static final String PDF_VIEWER_CONTENT = ".cmp-pdfviewer__content";
@@ -43,8 +44,9 @@ public class PdfViewer extends BaseComponent {
         String id = viewerContent.getAttribute("id");
 
         SelenideElement contentFrame = viewerContent.$("#iframe-" + id);
-        // the document is rendered asynchronously by the external Adobe PDF Embed API, so wait for its text
-        long deadline = System.currentTimeMillis() + DEFAULT_TIMEOUT;
+        // the document is rendered asynchronously by the external Adobe PDF Embed API, so wait for its text;
+        // a cold first load (SDK download + document fetch) can take well over the default timeout
+        long deadline = System.currentTimeMillis() + RENDER_TIMEOUT_MS;
         boolean found = false;
         while (!found && System.currentTimeMillis() < deadline) {
             Selenide.switchTo().frame(contentFrame);
