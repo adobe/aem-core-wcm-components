@@ -264,7 +264,7 @@ install_bundle() {
 # stays gone for the run. Args: <base-url> <symbolic-name>
 dedupe_bundle() {
     local base="$1" bsn="$2"
-    local attempt ids=""
+    local ids=""
     # The `all` package installs its bundles ASYNChronously, so this repo's version may
     # not be registered the instant the package upload returns. Poll (up to ~2 min) until
     # a second (duplicate) version shows up, then uninstall the older (product) copies.

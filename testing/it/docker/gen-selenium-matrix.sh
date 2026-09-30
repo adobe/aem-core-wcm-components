@@ -43,10 +43,13 @@ fqn_of() {
     local rel="${1#"${SRC}"/}"
     rel="${rel%.java}"
     echo "${rel//\//.}"
+    return 0
 }
 
 group_of() {
-    grep -oE '@Tag\("group[0-9]+"\)' "$1" 2>/dev/null | head -1 | grep -oE 'group[0-9]+'
+    local file="$1"
+    grep -oE '@Tag\("group[0-9]+"\)' "$file" 2>/dev/null | head -1 | grep -oE 'group[0-9]+'
+    return 0
 }
 
 entries=()
@@ -57,13 +60,13 @@ done
 
 ungrouped=()
 while IFS= read -r f; do
-    [ -z "$f" ] && continue
-    if [ -z "$(group_of "$f")" ]; then
+    [[ -z "$f" ]] && continue
+    if [[ -z "$(group_of "$f")" ]]; then
         ungrouped+=("$(fqn_of "$f")")
     fi
 done < <(find "${SRC}/${PKG_ROOT}" -name "*IT.java" 2>/dev/null | sort)
 
-if [ "${#ungrouped[@]}" -gt 0 ]; then
+if [[ "${#ungrouped[@]}" -gt 0 ]]; then
     joined=$(IFS=,; echo "${ungrouped[*]}")
     entries+=("{\"name\":\"ungrouped\",\"sel_groups\":\"\",\"sel_it_test\":\"${joined}\"}")
 fi
