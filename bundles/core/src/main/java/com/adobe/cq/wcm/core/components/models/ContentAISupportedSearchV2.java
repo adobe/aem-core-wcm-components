@@ -36,9 +36,10 @@ public interface ContentAISupportedSearchV2 extends ContentAISupportedSearch {
     /**
      * @return whether the "AI Mode" tab is rendered at all. When {@code false}, the component
      *         shows only a plain Search Results view with no tab bar and never calls the
-     *         generative-search endpoint. Only available on AEM as a Cloud Service; always
-     *         {@code false} on classic AEM regardless of author configuration (same platform
-     *         gating as v1's {@code genSearchToggleVisible}).
+     *         generative-search endpoint. Always {@code false} on a non-LTS classic AEM 6.5 (no
+     *         {@code LTS} version qualifier, unsupported); follows author configuration on AEM
+     *         as a Cloud Service and on properly branded AEM 6.5 LTS (same platform gating as
+     *         v1's {@code genSearchToggleVisible}).
      */
     default boolean isAiSearchModeEnabled() {
         return true;

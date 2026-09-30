@@ -47,7 +47,7 @@ Compared to v1: `genSearchEnabledByDefault` is removed (the default tab is alway
 Shares the same `ContentAIClient` OSGi service and configuration as v1 — see the [v1 README](../../v1/contentaisearch/README.md#configuration---content-ai-api-access) for the full `apiKey`/Cloud Manager secret setup. No v2-specific configuration exists; both versions call the same backend.
 
 ## Client Libraries
-The component provides a `core.wcm.components.contentaisearch.v2` client library category (base CSS + JS) and a `core.wcm.components.contentaisearch.v2.editor` category (dialog-time JS). Add the site category to a relevant site client library using the `embed` property.
+The component provides a `core.wcm.components.contentaisearch.v2` client library category (base CSS + JS, `allowProxy`-enabled so it's automatically included per component instance — no manual `embed` needed) and a `core.wcm.components.contentaisearch.v2.editor` category (dialog-time JS, embedded by the editor).
 
 ## BEM Description
 ```
@@ -149,5 +149,6 @@ data-cmp-hook-contentaisearch="prepaint"
 ## Information
 * **Vendor**: Adobe
 * **Version**: v2
-* **Compatibility**: AEM as a Cloud Service
+* **Compatibility**: AEM as a Cloud Service, AEM 6.5 LTS (including Adobe Managed Services) for search results.
+* **AI Mode toggle**: renders on AEM as a Cloud Service and on properly branded AEM 6.5 LTS (version qualifier `LTS`, e.g. `6.5.2.LTS`). It's hidden on a non-LTS classic AEM 6.5 (no `LTS` version qualifier, e.g. `6.5.0`).
 * **Status**: work-in-progress

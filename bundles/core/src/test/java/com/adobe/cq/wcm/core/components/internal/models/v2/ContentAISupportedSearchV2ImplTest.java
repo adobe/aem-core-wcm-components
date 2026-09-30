@@ -24,12 +24,16 @@ import org.apache.sling.i18n.impl.RootResourceBundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearchV2;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
+import com.adobe.granite.license.ProductInfoProvider;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -48,7 +52,7 @@ class ContentAISupportedSearchV2ImplTest {
 
     @BeforeEach
     void setUp() {
-        mockProductInfoProvider.setVersion(new Version("6.6.0")); // cloud, per AemCloudPlatformDetector.MIN_CLOUD_CLASSIC_VERSION
+        mockProductInfoProvider.setVersion(new Version("6.6.0")); // cloud, per AemVersionDetector.MIN_CLOUD_CLASSIC_VERSION
         context.registerInjectActivateService(mockProductInfoProvider);
         ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class);
         Mockito.when(resourceBundleProvider.getResourceBundle(Mockito.any())).thenReturn(new RootResourceBundle());
@@ -86,8 +90,21 @@ class ContentAISupportedSearchV2ImplTest {
     }
 
     @Test
-    void aiSearchModeEnabledFalseOnNonCloud() {
-        mockProductInfoProvider.setVersion(new Version("6.5.25")); // below MIN_CLOUD_CLASSIC_VERSION
+    void aiSearchModeEnabledFalseWhenAuthoredFalse() {
+        Map<String, Object> props = new HashMap<>();
+        props.put("aiSearchModeEnabled", false);
+        createResource(props);
+        context.currentResource(COMPONENT_PATH);
+
+        ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);
+
+        assertFalse(model.isAiSearchModeEnabled());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"6.5.0", "6.5.25", "6.5.27"}) // GA, latest known SP, and a future SP alike
+    void aiSearchModeEnabledAlwaysHiddenOnClassic65EvenWhenAuthorEnables(String version) {
+        mockProductInfoProvider.setVersion(new Version(version));
         createResource(new HashMap<>());
         context.currentResource(COMPONENT_PATH);
 
@@ -97,10 +114,33 @@ class ContentAISupportedSearchV2ImplTest {
     }
 
     @Test
-    void aiSearchModeEnabledFalseWhenAuthoredFalse() {
-        Map<String, Object> props = new HashMap<>();
-        props.put("aiSearchModeEnabled", false);
-        createResource(props);
+    void aiSearchModeEnabledVisibleOnBrandedClassic65LtsQualifier() {
+        mockProductInfoProvider.setVersion(new Version("6.5.2.LTS"));
+        createResource(new HashMap<>());
+        context.currentResource(COMPONENT_PATH);
+
+        ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);
+
+        assertTrue(model.isAiSearchModeEnabled());
+    }
+
+    @Test
+    void aiSearchModeEnabledVisibleOnCloudEvenWithHighVersionNumber() {
+        mockProductInfoProvider.setVersion(new Version("6.6.25"));
+        createResource(new HashMap<>());
+        context.currentResource(COMPONENT_PATH);
+
+        ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);
+
+        assertTrue(model.isAiSearchModeEnabled());
+    }
+
+    @Test
+    void aiSearchModeEnabledHiddenWhenPlatformIndeterminateEvenWhenAuthorEnables() {
+        // Fails closed rather than open: when ProductInfo can't be resolved at all, the toggle must stay hidden
+        // even though the author-configured property (aiSearchModeEnabledProperty) would otherwise allow it.
+        context.registerService(ProductInfoProvider.class, () -> null, Constants.SERVICE_RANKING, 100);
+        createResource(new HashMap<>());
         context.currentResource(COMPONENT_PATH);
 
         ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);

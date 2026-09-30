@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.AemCloudPlatformDetector;
+import com.adobe.cq.wcm.core.components.internal.AemVersionDetector;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearchV2;
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
@@ -105,7 +105,7 @@ public class ContentAISupportedSearchV2Impl extends AbstractComponentImpl implem
     }
 
     private boolean resolveAiSearchModeEnabled() {
-        if (!AemCloudPlatformDetector.isCloudPlatform(productInfoProvider)) {
+        if (!AemVersionDetector.isGenSearchSupportedPlatform(productInfoProvider)) {
             return false;
         }
         return aiSearchModeEnabledProperty == null || aiSearchModeEnabledProperty.booleanValue();
