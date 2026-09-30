@@ -1037,6 +1037,23 @@ public class Commons {
     }
 
     /**
+     * Waits for an element to become visible and scrolled into the viewport (e.g. after a deep link click, which
+     * expands the panel and scrolls asynchronously).
+     * @param element the element
+     * @return true if the element became visible and in the viewport within the default timeout
+     */
+    public static boolean waitForElementVisibleAndInViewport(SelenideElement element) {
+        long deadline = System.currentTimeMillis() + DEFAULT_TIMEOUT;
+        while (!isElementVisibleAndInViewport(element)) {
+            if (System.currentTimeMillis() > deadline) {
+                return false;
+            }
+            Selenide.sleep(200);
+        }
+        return true;
+    }
+
+    /**
      * Checks if the element is visible and in the viewport.
      *
      * @param element The element

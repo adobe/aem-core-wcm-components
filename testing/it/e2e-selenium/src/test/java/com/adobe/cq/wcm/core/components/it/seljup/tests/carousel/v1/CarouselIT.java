@@ -393,8 +393,8 @@ public class CarouselIT extends AuthorBaseUITest {
         itemButton.click();
         String fragment = Commons.getUrlFragment();
         SelenideElement itemContent = Selenide.$("#" + itemContentId3);
-        assertTrue(Commons.isElementVisibleAndInViewport(itemButton));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemButton));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent));
         assertEquals(itemId3 + "-tabpanel", fragment, "The URL fragment should be updated");
     }
 
@@ -411,29 +411,29 @@ public class CarouselIT extends AuthorBaseUITest {
         SelenideElement itemContent3 = Selenide.$("#" + itemContentId3);
 
         // make sure carousel items are not displayed before clicking the links
-        assertTrue(Commons.isElementVisibleAndInViewport(itemButton1));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemButton2));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemButton1));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent1));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemButton2));
         assertFalse(Commons.isElementVisibleAndInViewport(itemContent2));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemButton3));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemButton3));
         assertFalse(Commons.isElementVisibleAndInViewport(itemContent3));
 
         // clicking a link referencing a carousel item displays it and scrolls to it
         Selenide.$("#link-1").click();
-        assertTrue(Commons.isElementVisibleAndInViewport(itemButton2));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent2));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemButton2));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent2));
 
         // clicking a link referencing the first carousel item displays it and scrolls to it
         Selenide.$("#link-1a").click();
-        assertTrue(Commons.isElementVisibleAndInViewport(itemButton1));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemButton1));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent1));
 
         // clicking a link referencing a text element within a carousel item expands the item
         // and scrolls to the ID
         Commons.scrollToTop();
         Selenide.$("#link-2").click();
-        assertTrue(Commons.isElementVisibleAndInViewport(itemButton3));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent3));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemButton3));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent3));
     }
 
     @Test
@@ -445,8 +445,8 @@ public class CarouselIT extends AuthorBaseUITest {
         SelenideElement itemButton = Selenide.$("#" + itemId2 + "-tab");
         SelenideElement itemContent = Selenide.$("#" + itemContentId2);
         // when the URL fragment references a carousel item, the carousel item is expanded and scrolled to
-        assertTrue(Commons.isElementVisibleAndInViewport(itemButton));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemButton));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent));
     }
 
     @Test
@@ -459,8 +459,8 @@ public class CarouselIT extends AuthorBaseUITest {
         SelenideElement itemContent = Selenide.$("#" + itemContentId3);
         // when the URL fragment references an element ID that is part of a carousel item,
         // the carousel item is expanded and the element ID is scrolled to
-        assertTrue(Commons.isElementVisibleAndInViewport(itemButton));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemButton));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent));
     }
 
     /**

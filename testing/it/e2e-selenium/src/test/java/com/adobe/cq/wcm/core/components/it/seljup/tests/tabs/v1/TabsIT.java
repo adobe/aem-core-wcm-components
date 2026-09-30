@@ -554,8 +554,8 @@ public class TabsIT extends AuthorBaseUITest {
         itemTitle.click();
         String fragment = Commons.getUrlFragment();
         SelenideElement itemContent = Selenide.$("#" + itemContentId1);
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent));
         assertEquals(itemTitleId1, fragment, "The URL fragment should be updated");
     }
 
@@ -574,7 +574,7 @@ public class TabsIT extends AuthorBaseUITest {
         SelenideElement itemContent3 = Selenide.$("#" + itemContentId3);
 
         // make sure tabs items are not displayed before clicking the links
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle1));
         assertFalse(Commons.isElementVisibleAndInViewport(itemContent1));
         assertFalse(Commons.isElementVisibleAndInViewport(itemTitle2));
         assertFalse(Commons.isElementVisibleAndInViewport(itemContent2));
@@ -583,26 +583,26 @@ public class TabsIT extends AuthorBaseUITest {
 
         // clicking a link referencing a tabs item displays it and scrolls to it
         Selenide.$("#link-1").click();
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle1));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent1));
 
         // clicking a link referencing the first tabs item displays it and scrolls to it
         Selenide.$("#link-1a").click();
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1a));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1a));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle1a));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent1a));
 
         // clicking a link referencing a nested tabs item expands all intermediary items and scrolls to it
         Commons.scrollToTop();
         Selenide.$("#link-2").click();
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle2));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent2));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle2));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent2));
 
         // clicking a link referencing a text element within a nested tabs item expands all intermediary items
         // and scrolls to the ID
         Commons.scrollToTop();
         Selenide.$("#link-3").click();
         assertFalse(Commons.isElementVisibleAndInViewport(itemTitle3));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent3));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent3));
     }
 
     @Test
@@ -614,8 +614,8 @@ public class TabsIT extends AuthorBaseUITest {
         SelenideElement itemTitle = Selenide.$("#" + itemTitleId1);
         SelenideElement itemContent = Selenide.$("#" + itemContentId1);
         // when the URL fragment references a tabs item, the tabs item is expanded and scrolled to
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent));
     }
 
     @Test
@@ -628,8 +628,8 @@ public class TabsIT extends AuthorBaseUITest {
         SelenideElement itemContent = Selenide.$("#" + itemContentId2);
         // when the URL fragment references a nested tabs item, all intermediary tabs items are expanded and
         // the last item is scrolled to
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent));
     }
 
     @Test
@@ -643,7 +643,7 @@ public class TabsIT extends AuthorBaseUITest {
         // when the URL fragment references an element ID that is part of a nested tabs item, all intermediary
         // tabs items are expanded and the element ID is scrolled to
         assertFalse(Commons.isElementVisibleAndInViewport(itemTitle));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent));
     }
 
 }
