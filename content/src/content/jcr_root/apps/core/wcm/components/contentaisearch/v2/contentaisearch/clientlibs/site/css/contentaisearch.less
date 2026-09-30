@@ -92,28 +92,38 @@
     }
 
     &__tabs {
-        display: flex;
-        gap: .25rem;
+        display: inline-flex;
+        gap: .125rem;
         margin-top: .75rem;
-        border-bottom: 1px solid @card-border;
+        padding: .25rem;
+        background: @summary-bg;
+        border-radius: 999px;
     }
 
     &__tab {
-        margin: 0 0 -1px;
-        padding: .5em 1em;
-        border: 1px solid transparent;
-        border-bottom: none;
-        border-radius: 6px 6px 0 0;
+        margin: 0;
+        padding: .5em 1.25em;
+        border: none;
+        border-radius: 999px;
         background: transparent;
         font-size: .875rem;
         font-weight: 600;
         color: @text-muted;
         cursor: pointer;
+        transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
+
+        &:hover {
+            color: #333;
+        }
 
         &[aria-selected="true"] {
-            border-color: @card-border;
             background: #fff;
             color: @summary-accent;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+
+            &:hover {
+                color: @summary-accent;
+            }
         }
 
         &:focus-visible {
