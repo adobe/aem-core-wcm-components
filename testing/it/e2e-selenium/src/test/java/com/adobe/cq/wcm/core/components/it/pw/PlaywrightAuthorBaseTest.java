@@ -222,7 +222,7 @@ public abstract class PlaywrightAuthorBaseTest {
 
     protected void openEditor(String pagePath) {
         page.navigate(baseUrl + "/editor.html" + pagePath + ".html",
-            new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
+            new Page.NavigateOptions().setWaitUntil(WaitUntilState.COMMIT));
         waitEditorReady();
     }
 
