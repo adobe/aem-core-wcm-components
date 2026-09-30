@@ -15,7 +15,7 @@ limitations under the License.
 -->
 Content Fragment List (v2)
 ====
-Content Fragment List component written in HTL that renders a list of Content Fragments. Useful for authoring headless content that can be easily consumed by applications. 
+Content Fragment List component written in HTL that renders a list of Content Fragments. Useful for authoring headless content that can be easily consumed by applications. Note that composite elements are not supported.
 
 ## Features
 * Displays a list of a Content Fragment assets based on a Content Fragment model
