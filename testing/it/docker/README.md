@@ -127,7 +127,8 @@ WITH_SELENIUM=true SEL_IT_TEST='com.adobe.cq.wcm.core.components.it.seljup.tests
 
 - **Local:** needs Chrome installed (native, not emulated — so fast). Runs
   headed unless a virtual display is used.
-- **CI:** the workflow's `selenium` job (manual `workflow_dispatch`) runs Chrome
+- **CI:** the workflow's `selenium` job (on push to `main`, on pull requests to
+  `main`, and on manual `workflow_dispatch`) runs Chrome
   headless under **Xvfb + fluxbox** on the runner. It is a **parallel matrix**
   with one leg per `@Tag` group (`group1`..`group4`, selected via `-Dgroups`),
   plus an `ungrouped` leg (explicit class list) for the handful of classes with
@@ -135,7 +136,7 @@ WITH_SELENIUM=true SEL_IT_TEST='com.adobe.cq.wcm.core.components.it.seljup.tests
   [`gen-selenium-matrix.sh`](gen-selenium-matrix.sh). A shared `prep` job builds
   the packages and primes the AEM image cache **once**; every test leg (http and
   selenium) just downloads the packages and `docker load`s the cached image, so
-  the build/pull is not repeated per leg. Not on every push (slower than http ITs).
+  the build/pull is not repeated per leg.
 - Knobs: `SEL_BROWSER` (default `chrome`), `SEL_IT_TEST` (class selection),
   `SEL_GROUPS` (JUnit tag include, e.g. `group1`), `SEL_EXCLUDED_GROUPS` (default
   `failing,nested,IgnoreOnSDK` — the last mirrors the pipeline's cloud/SDK skip).

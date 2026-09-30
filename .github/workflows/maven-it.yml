@@ -14,8 +14,9 @@
 # limitations under the License.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Runs the testing/it/http and (on demand) testing/it/e2e-selenium ITs against a
-# Dockerized AEM. All container + provisioning + failsafe orchestration lives in
+# Runs the testing/it/http and testing/it/e2e-selenium ITs against a Dockerized
+# AEM, on every push to main, on every pull request targeting main, and on demand
+# (workflow_dispatch). All container + provisioning + failsafe orchestration lives in
 # testing/it/docker/run-it.sh so this workflow and the local dev flow share it.
 #
 # Structure: a single `prep` job builds the deployable packages and primes the
@@ -27,8 +28,9 @@
 # with no group tag.
 #
 # Requires repo secrets ARTIFACTORY_CLOUD_USER / ARTIFACTORY_CLOUD_PASS for the
-# private Adobe AEM image registry (not exposed to forks - hence the canonical-repo
-# guard).
+# private Adobe AEM image registry. Secrets are not exposed to forks, so automatic
+# runs are limited to the canonical repo and to pull requests from its own branches
+# (pull requests from forks are skipped).
 #
 # Runs on GitHub-hosted ubuntu-latest runners (native amd64, Docker and Maven
 # preinstalled). The Selenium job has no GUI session, so it starts its own
@@ -47,8 +49,9 @@ on:
   push:
     branches:
       - main
-      # TEMPORARY: allows validation directly on the feature branch. Remove before merge.
-      - it-docker-aem
+  pull_request:
+    branches:
+      - main
 
 concurrency:
   # Include the event name so a push run and a manual workflow_dispatch run on the
@@ -69,7 +72,7 @@ jobs:
   # --------------------------------------------------------------------------
   prep:
     name: prep (build + prime caches)
-    if: ${{ github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.repository == 'adobe/aem-core-wcm-components' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)) }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
@@ -153,7 +156,7 @@ jobs:
   integration-test:
     name: http ITs (author + publish, cloud-ready)
     needs: prep
-    if: ${{ github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.repository == 'adobe/aem-core-wcm-components' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)) }}
     runs-on: ubuntu-latest
     # Native amd64 GitHub-hosted runner: author+publish boot + the full http
     # suite ran in ~9 minutes in testing, so 90m is generous headroom.
@@ -215,14 +218,12 @@ jobs:
             testing/it/http/target/aem-logs
 
   # --------------------------------------------------------------------------
-  # Selenium ITs, one leg per @Tag group + ungrouped. Manual only.
+  # Selenium ITs, one leg per @Tag group + ungrouped.
   # --------------------------------------------------------------------------
   selenium:
     name: Selenium ITs (${{ matrix.name }}, cloud-ready)
     needs: prep
-    # TEMPORARY: also run Selenium on push to it-docker-aem to validate on GitHub while
-    # workflow_dispatch is unavailable (SSO). Revert to workflow_dispatch-only before merge.
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref_name == 'it-docker-aem') }}
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.repository == 'adobe/aem-core-wcm-components' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)) }}
     runs-on: ubuntu-latest
     # Native amd64 GitHub-hosted runner: a full @Tag group leg ran in ~7-13
     # minutes in testing, so 60m is generous headroom.
@@ -308,7 +309,7 @@ jobs:
   summary:
     name: Test results summary
     needs: [integration-test, selenium]
-    if: ${{ always() && (github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components') }}
+    if: ${{ always() && (github.event_name == 'workflow_dispatch' || (github.repository == 'adobe/aem-core-wcm-components' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository))) }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
