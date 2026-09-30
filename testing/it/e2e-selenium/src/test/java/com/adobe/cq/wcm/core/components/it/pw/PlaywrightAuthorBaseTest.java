@@ -23,6 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.jupiter.api.AfterAll;
@@ -45,12 +48,14 @@ import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.FrameLocator;
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.options.BoundingBox;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.Tracing;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.FormData;
 import com.microsoft.playwright.options.RequestOptions;
+import com.microsoft.playwright.options.WaitUntilState;
 
 import static com.adobe.cq.testing.selenium.Constants.GROUPID_CONTENT_AUTHORS;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -77,6 +82,8 @@ public abstract class PlaywrightAuthorBaseTest {
     protected CQClient authorClient;
     protected String rootPage;
     protected String defaultPageTemplate;
+    protected String responsiveGridPath;
+    protected String configPath;
     protected String label;
 
     protected BrowserContext context;
@@ -132,6 +139,8 @@ public abstract class PlaywrightAuthorBaseTest {
         authorClient = testContentBuilder.getDefaultUserClient();
         rootPage = testContentBuilder.getContentRootPath();
         defaultPageTemplate = testContentBuilder.getDefaultPageTemplatePath();
+        responsiveGridPath = testContentBuilder.getTopLevelComponentPath();
+        configPath = testContentBuilder.getConfigPath();
         label = testContentBuilder.getLabel();
         new DisableTour(authorClient).disableDefaultTours();
 
@@ -197,10 +206,23 @@ public abstract class PlaywrightAuthorBaseTest {
         return Commons.createComponentPolicy(adminClient, defaultPageTemplate, label, componentPath, properties);
     }
 
+    protected void addComponentToAllowedPolicy(String resourceType) throws ClientException {
+        String policyResourcePath = responsiveGridPath.replaceFirst("structure", "policies");
+        JsonNode policyAssignment = authorClient.doGetJson(policyResourcePath, 1, 200);
+        String policyPath = configPath + "/settings/wcm/policies/" + policyAssignment.get("cq:policy").asText();
+        JsonNode policy = authorClient.doGetJson(policyPath, 1, 200);
+        JSONObject policyJson = new JSONObject(policy.toString());
+        JSONArray components = policyJson.getJSONArray("components");
+        components.put(resourceType);
+        adminClient.deletePath(policyPath, 200);
+        adminClient.importContent(policyPath, "json", policyJson.toString(), 201);
+    }
+
     // ---------------------------------------------------------------- editor helpers
 
     protected void openEditor(String pagePath) {
-        page.navigate(baseUrl + "/editor.html" + pagePath + ".html");
+        page.navigate(baseUrl + "/editor.html" + pagePath + ".html",
+            new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
         waitEditorReady();
     }
 
@@ -220,21 +242,31 @@ public abstract class PlaywrightAuthorBaseTest {
     /** Selects the editable's overlay and opens its configure dialog. */
     protected void openEditDialog(String componentPath) {
         Locator overlay = page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + componentPath + "']");
-        Locator configure = page.locator("#EditableToolbar button[data-action='CONFIGURE']");
-        // Overlays are re-rendered after an editable refresh, which can swallow a click: retry selecting it.
-        for (int attempt = 1; ; attempt++) {
-            overlay.click();
+        Locator configure = page.locator("#EditableToolbar button[data-action='CONFIGURE'][data-path='"
+            + componentPath + "']");
+        // Nested editables overlap their parent overlay; try points on the parent's perimeter and verify the toolbar
+        // selected the requested editable before opening its dialog.
+        double[][] points = {{1, 1}, {1, 20}, {20, 1}, {1, 60}, {20, 20}};
+        com.microsoft.playwright.TimeoutError lastError = null;
+        for (int i = 0; i < points.length; i++) {
+            overlay.scrollIntoViewIfNeeded();
+            BoundingBox bounds = overlay.boundingBox();
+            double x = Math.min(points[i][0], Math.max(1, bounds.width - 1));
+            double y = Math.min(points[i][1], Math.max(1, bounds.height - 1));
+            overlay.click(new Locator.ClickOptions().setPosition(x, y));
             try {
                 configure.waitFor(new Locator.WaitForOptions().setTimeout(5_000));
-                break;
+                configure.click();
+                assertThat(dialog()).isVisible();
+                return;
             } catch (com.microsoft.playwright.TimeoutError e) {
-                if (attempt == 3) {
-                    throw e;
-                }
+                lastError = e;
             }
         }
-        configure.click();
-        assertThat(dialog()).isVisible();
+        if (lastError != null) {
+            throw lastError;
+        }
+        throw new IllegalStateException("Could not select editable in the author toolbar: " + componentPath);
     }
 
     protected Locator dialog() {
@@ -269,5 +301,14 @@ public abstract class PlaywrightAuthorBaseTest {
 
     protected void checkCoralCheckbox(String name) {
         dialog().locator("coral-checkbox[name='" + name + "'] input[type='checkbox']").check();
+    }
+
+    protected void selectAutocomplete(String selector, String value) {
+        Locator autocomplete = dialog().locator("foundation-autocomplete:has(" + selector + ")");
+        autocomplete.locator("input[role='combobox']").fill(value);
+        Locator suggestion = autocomplete.locator(
+            "coral-overlay coral-buttonlist button[is='coral-buttonlist-item'][value='" + value + "']");
+        assertThat(suggestion).isVisible();
+        suggestion.click();
     }
 }

@@ -233,18 +233,18 @@ jobs:
     timeout-minutes: 60
     strategy:
       fail-fast: false
-      # POC: each leg runs the Selenium and the Playwright FormText v2 classes back-to-back on the same runner and
-      # AEM instance; the class order alternates between legs to cancel out AEM warm-up effects.
+      # POC: each leg runs the full Selenium group1 and Playwright group1 suites against the same AEM instance;
+      # the test class order alternates between legs to cancel out AEM warm-up effects.
       matrix:
         include:
-          - { name: formtext-run1, order: alphabetical }
-          - { name: formtext-run2, order: reversealphabetical }
-          - { name: formtext-run3, order: alphabetical }
-          - { name: formtext-run4, order: reversealphabetical }
+          - { name: form-group1-run1, order: alphabetical }
+          - { name: form-group1-run2, order: reversealphabetical }
+          - { name: form-group1-run3, order: alphabetical }
+          - { name: form-group1-run4, order: reversealphabetical }
     env:
       WITH_SELENIUM: 'true'
       SEL_BROWSER: chrome
-      SEL_IT_TEST: 'com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.v2.FormTextIT,com.adobe.cq.wcm.core.components.it.pw.formtext.FormTextPwIT'
+      SEL_IT_TEST: 'com.adobe.cq.wcm.core.components.it.seljup.tests.formcomponents.v1.FormComponentsIT,com.adobe.cq.wcm.core.components.it.seljup.tests.formcomponents.v2.FormComponentsIT,com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.v1.FormTextIT,com.adobe.cq.wcm.core.components.it.seljup.tests.formtext.v2.FormTextIT,com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v1.FormOptionsIT,com.adobe.cq.wcm.core.components.it.seljup.tests.formoptions.v2.FormOptionsIT,com.adobe.cq.wcm.core.components.it.seljup.tests.formbutton.v1.FormButtonIT,com.adobe.cq.wcm.core.components.it.seljup.tests.formbutton.v2.FormButtonIT,com.adobe.cq.wcm.core.components.it.seljup.tests.formcontainer.v1.FormContainerIT,com.adobe.cq.wcm.core.components.it.seljup.tests.formcontainer.v2.FormContainerIT,com.adobe.cq.wcm.core.components.it.seljup.tests.formhidden.v1.FormHiddenIT,com.adobe.cq.wcm.core.components.it.seljup.tests.formhidden.v2.FormHiddenIT,com.adobe.cq.wcm.core.components.it.pw.formcomponents.FormComponentsPwIT,com.adobe.cq.wcm.core.components.it.pw.formtext.FormTextV1PwIT,com.adobe.cq.wcm.core.components.it.pw.formtext.FormTextPwIT,com.adobe.cq.wcm.core.components.it.pw.formoptions.FormOptionsPwIT,com.adobe.cq.wcm.core.components.it.pw.formbutton.FormButtonPwIT,com.adobe.cq.wcm.core.components.it.pw.formcontainer.FormContainerPwIT,com.adobe.cq.wcm.core.components.it.pw.formhidden.FormHiddenPwIT'
       SEL_RERUN: '0'
       MAVEN_ARGS: -Dfailsafe.runOrder=${{ matrix.order }}
       # Playwright drives the runner's installed Chrome (channel=chrome), like Selenium: no bundled browser download.
@@ -292,13 +292,13 @@ jobs:
           key: ${{ steps.imgkey.outputs.key }}
       - name: Load AEM image
         run: docker load -i /tmp/aem-image.tar
-      - name: Run Selenium ITs (${{ matrix.name }})
+      - name: Run Selenium and Playwright group1 ITs (${{ matrix.name }})
         run: bash testing/it/docker/run-it.sh
-      - name: Publish Selenium test results
+      - name: Publish Selenium and Playwright test results
         if: always()
         uses: mikepenz/action-junit-report@v6
         with:
-          check_name: Selenium ITs (${{ matrix.name }}, cloud-ready)
+          check_name: Selenium and Playwright group1 ITs (${{ matrix.name }}, cloud-ready)
           report_paths: testing/it/e2e-selenium/target/failsafe-reports/TEST-*.xml
           detailed_summary: true
           include_passed: true
@@ -308,7 +308,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: it-selenium-reports-${{ matrix.name }}
+          name: it-form-group1-reports-${{ matrix.name }}
           if-no-files-found: ignore
           retention-days: 14
           path: |
