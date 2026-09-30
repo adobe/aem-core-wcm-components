@@ -42,6 +42,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
+import org.apache.sling.testing.clients.exceptions.TestingValidationException;
 import org.apache.sling.testing.clients.util.FormEntityBuilder;
 import org.apache.sling.testing.clients.util.HttpUtils;
 import org.apache.sling.testing.clients.util.JsonUtils;
@@ -891,7 +892,7 @@ public class Commons {
         try {
             polling.poll(DEFAULT_TIMEOUT, DEFAULT_RETRY_DELAY);
         } catch (TimeoutException e) {
-            throw new ClientException("Condition not met for " + path + " after " + polling.getWaited() + "ms", e);
+            throw new TestingValidationException("Condition not met for " + path + " after " + polling.getWaited() + "ms", e);
         }
         return result[0];
     }
