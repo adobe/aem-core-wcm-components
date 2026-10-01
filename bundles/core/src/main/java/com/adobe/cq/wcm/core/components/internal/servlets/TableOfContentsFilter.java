@@ -70,7 +70,7 @@ import com.day.cq.wcm.api.WCMMode;
 )
 @SlingServletFilter(
     scope = {SlingServletFilterScope.REQUEST},
-    pattern = "/content/.*",
+    pattern = "(/content|/tmp/versionhistory)/.*",
     resourceTypes = "cq:Page",
     extensions = {"html"},
     methods = {"GET"}
