@@ -188,10 +188,12 @@ public class CarouselPwIT extends ComponentPwBaseTest {
         // the policy has to exist before the test page is created, otherwise the editor keeps the default policy
         String policyPath = createComponentPolicy("/carousel-v1",
             java.util.Collections.singletonMap("components", RT_TEASER_V1));
-        addCarousel();
-        clickToolbarAction(carouselPath, "INSERT");
-        assertThat(page.locator("coral-dialog:visible")
-            .locator("[value$='" + RT_TEASER_V1 + "']")).isVisible();
+        addCarousel("carousel-v1");
+        // the policy restricts what can be added as a panel, which the children editor offers through its picker
+        openEditDialog(carouselPath);
+        dialog().locator("[data-cmp-hook-childreneditor='add']").click();
+        assertThat(page.locator(".editor-ComponentBrowser-component[data-path$='" + RT_TEASER_V1 + "']")).isVisible();
+        assertThat(page.locator(".editor-ComponentBrowser-component[data-path$='/responsivegrid']")).hasCount(0);
         adminClient.deletePath(policyPath, 200);
     }
 

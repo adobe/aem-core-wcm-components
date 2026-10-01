@@ -210,8 +210,7 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         createItems();
         openPanelSelector();
         Locator rows = page.locator(".cmp-panelselector__table [is='coral-table-row']");
-        rows.nth(0).locator("button[coral-table-roworder='true']").dragTo(rows.nth(2),
-            new Locator.DragToOptions().setTargetPosition(10, rows.nth(2).boundingBox().height - 2));
+        dragBelow(rows.nth(0).locator("button[coral-table-roworder='true']"), rows.nth(2));
         assertThat(panelButtons().nth(0)).containsText("item1");
         assertThat(panelButtons().nth(1)).containsText("item2");
         assertThat(panelButtons().nth(2)).containsText("item0");
@@ -256,10 +255,13 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         // the policy has to exist before the test page is created, otherwise the editor keeps the default policy
         String policyPath = createComponentPolicy("/accordion-v1",
             java.util.Collections.singletonMap("components", RT_TEASER_V1));
-        addAccordion();
-        clickToolbarAction(accordionPath, "INSERT");
-        assertThat(page.locator("coral-dialog:visible")
-            .locator("[value$='" + RT_TEASER_V1 + "']")).isVisible();
+        addAccordion("accordion-v1");
+        // the policy restricts what can be added as a panel, which the children editor offers through its picker
+        openEditDialog(accordionPath);
+        dialog().locator("coral-tab[data-foundation-tracking-event*='items']").click();
+        dialog().locator("[data-cmp-hook-childreneditor='add']").click();
+        assertThat(page.locator(".editor-ComponentBrowser-component[data-path$='" + RT_TEASER_V1 + "']")).isVisible();
+        assertThat(page.locator(".editor-ComponentBrowser-component[data-path$='/responsivegrid']")).hasCount(0);
         adminClient.deletePath(policyPath, 200);
     }
 

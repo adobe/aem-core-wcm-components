@@ -344,10 +344,10 @@ public abstract class PlaywrightAuthorBaseTest {
     }
 
     /** Coral drag handles do not react to Playwright's atomic dragTo, so the gesture is replayed with the mouse. */
-    /** Drops the source past the bottom edge of the target, which sortable lists require to move an item down. */
+    /** Drops the source one row below the target's center, which Coral tables require to move an item down. */
     protected void dragBelow(Locator source, Locator target) {
         BoundingBox to = target.boundingBox();
-        dragAndDrop(source, to.x + to.width / 2, to.y + to.height - 2);
+        dragAndDrop(source, to.x + to.width / 2, to.y + to.height * 2.5);
     }
 
     protected void dragAndDrop(Locator source, Locator target) {

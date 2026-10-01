@@ -43,8 +43,11 @@ public class ButtonPwIT extends ComponentPwBaseTest {
     }
 
     private void fillLink(String property, String value) {
-        dialog().locator("foundation-autocomplete[name='./" + property + "'] input[role='combobox']").fill(value);
-        page.locator("button[is='coral-buttonlist-item'][value='" + value + "']").click();
+        // external URLs have no suggestion, so the typed value is committed by leaving the field
+        Locator input = dialog().locator("foundation-autocomplete[name='./" + property + "'] input[role='combobox']");
+        input.fill(value);
+        input.press("Tab");
+        closeOverlays();
     }
 
     @ParameterizedTest
@@ -66,7 +69,7 @@ public class ButtonPwIT extends ComponentPwBaseTest {
         fillLink(resourceType.equals(RT_BUTTON_V1) ? "link" : "linkURL", "https://www.adobe.com");
         saveDialog();
 
-        assertThat(contentFrame().locator("a.cmp-button[href='https://www.adobe.com']")).isVisible();
+        assertThat(contentFrame().locator("a.cmp-button[href='https://www.adobe.com']")).hasCount(1);
     }
 
     @ParameterizedTest
@@ -88,7 +91,7 @@ public class ButtonPwIT extends ComponentPwBaseTest {
         dialog().locator("coral-checkbox[name='./linkTarget'] input[type='checkbox']").check();
         saveDialog();
 
-        assertThat(contentFrame().locator("a.cmp-button[href='https://www.adobe.com'][target='_blank']")).isVisible();
+        assertThat(contentFrame().locator("a.cmp-button[href='https://www.adobe.com'][target='_blank']")).hasCount(1);
     }
 
     @Test

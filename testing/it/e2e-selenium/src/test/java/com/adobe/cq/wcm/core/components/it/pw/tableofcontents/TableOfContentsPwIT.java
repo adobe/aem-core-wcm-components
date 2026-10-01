@@ -67,7 +67,7 @@ public class TableOfContentsPwIT extends ComponentPwBaseTest {
         Commons.editNodeProperties(authorClient, titlePath, titleProperties);
         reloadEditor();
 
-        Locator toc = contentFrame().locator(".cmp-toc");
+        Locator toc = contentFrame().locator(".tableofcontents");
         assertThat(toc.locator(".cmp-toc__placeholder")).hasCount(0);
         assertThat(toc.locator(".cmp-toc__content")).hasCount(1);
         assertThat(toc.locator(".cmp-toc__content")).containsText(PAGE_TITLE);

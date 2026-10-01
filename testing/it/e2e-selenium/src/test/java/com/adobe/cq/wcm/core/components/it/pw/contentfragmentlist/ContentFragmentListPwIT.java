@@ -76,12 +76,7 @@ public class ContentFragmentListPwIT extends ComponentPwBaseTest {
         String path = addContentFragmentList(resourceType);
         openEditDialog(path);
         configureModelAndParent();
-        Locator tags = dialog().locator("foundation-autocomplete[name='./tagNames'] input[role='combobox']");
-        tags.fill(TAG_PATH);
-        Locator suggestion = page.locator("coral-overlay coral-buttonlist button[value='" + TAG_PATH + "']");
-        if (suggestion.count() > 0) {
-            suggestion.click();
-        }
+        selectInPicker("/content/cq:tags", "[name='./tagNames']", TAG_PATH);
         saveDialog();
 
         assertThat(contentFragments()).hasCount(2);
