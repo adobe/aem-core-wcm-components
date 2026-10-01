@@ -128,18 +128,19 @@ WITH_SELENIUM=true SEL_IT_TEST='com.adobe.cq.wcm.core.components.it.seljup.tests
 - **Local:** needs Chrome installed (native, not emulated — so fast). Runs
   headed unless a virtual display is used.
 - **CI:** the workflow's browser-test matrix runs Chrome headless under
-  **Xvfb + fluxbox** on the runner. This Playwright POC runs the group1 suites
-  independently: Selenium selects `group1`, while Playwright selects
-  `playwright-group1`. Each job uses its own AEM instance and reports its
-  duration and test results separately; reruns are disabled for a clean timing
-  comparison. A shared `prep` job builds the packages and primes the AEM image
-  cache **once**, so neither test leg repeats the expensive build or image pull.
+  **Xvfb + fluxbox** on the runner. This Playwright POC runs each group1–group4
+  suite separately for Selenium and Playwright, plus separate ungrouped jobs.
+  Each job uses its own AEM instance and reports duration and test results
+  separately; reruns are disabled for a clean timing comparison. A shared
+  `prep` job builds packages and primes the AEM image cache **once**, so test
+  legs do not repeat the expensive build or image pull. The matrix is generated
+  by [`gen-browser-matrix.sh`](gen-browser-matrix.sh).
 - Knobs: `SEL_BROWSER` (default `chrome`), `SEL_IT_TEST` (class selection),
   `SEL_GROUPS` (JUnit tag include, e.g. `group1`), `SEL_EXCLUDED_GROUPS` (default
   `failing,nested,IgnoreOnSDK` — the last mirrors the pipeline's cloud/SDK skip).
 
-To reproduce the group1 comparison locally against a provisioned AEM instance,
-run these separately:
+To reproduce a group comparison locally against a provisioned AEM instance,
+run the matching tagged suites separately. For example, group1:
 
 ```bash
 WITH_SELENIUM=true SEL_GROUPS=group1 SEL_RERUN=0 bash testing/it/docker/run-it.sh

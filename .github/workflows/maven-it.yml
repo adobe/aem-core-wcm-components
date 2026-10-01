@@ -22,8 +22,8 @@
 # Structure: a single `prep` job builds the deployable packages and primes the
 # AEM image cache ONCE; the test jobs depend on it and only download the packages
 # + load the cached image, so the expensive build/pull is not repeated per leg.
-# This POC runs group1 separately as Selenium (`group1`) and Playwright
-# (`playwright-group1`) to compare isolated runs.
+# This POC runs every group separately for Selenium and Playwright; each engine
+# receives its own tag-filtered job, including ungrouped classes.
 #
 # Requires repo secrets ARTIFACTORY_CLOUD_USER / ARTIFACTORY_CLOUD_PASS for the
 # private Adobe AEM image registry. Secrets are not exposed to forks, so automatic
@@ -68,7 +68,7 @@ env:
 
 jobs:
   # --------------------------------------------------------------------------
-  # Build packages + prime caches ONCE; publish artifacts + the selenium matrix.
+  # Build packages + prime caches ONCE; publish artifacts + the browser matrix.
   # --------------------------------------------------------------------------
   prep:
     name: prep (build + prime caches)
@@ -76,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
-      selenium_matrix: ${{ steps.genmatrix.outputs.matrix }}
+      browser_matrix: ${{ steps.genmatrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v5
 
@@ -146,10 +146,9 @@ jobs:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
 
-      - name: Generate isolated group1 comparison matrix
+      - name: Generate isolated browser comparison matrix
         id: genmatrix
-        run: |
-          echo 'matrix={"include":[{"name":"selenium-group1","engine":"Selenium","sel_groups":"group1"},{"name":"playwright-group1","engine":"Playwright","sel_groups":"playwright-group1"}]}' >> "$GITHUB_OUTPUT"
+        run: echo "matrix=$(bash testing/it/docker/gen-browser-matrix.sh)" >> "$GITHUB_OUTPUT"
 
   # --------------------------------------------------------------------------
   # http ITs (author + publish). Consumes prep's packages + cached image.
@@ -221,10 +220,10 @@ jobs:
             testing/it/http/target/aem-logs
 
   # --------------------------------------------------------------------------
-  # Run each browser implementation in isolation for a group1 comparison.
+  # Run each browser implementation in isolation for each matching test group.
   # --------------------------------------------------------------------------
   browser-test:
-    name: ${{ matrix.engine }} group1 ITs (cloud-ready)
+    name: ${{ matrix.engine }} ${{ matrix.group }} ITs (cloud-ready)
     needs: prep
     if: ${{ github.event_name == 'workflow_dispatch' || (github.repository == 'adobe/aem-core-wcm-components' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)) }}
     runs-on: ubuntu-latest
@@ -232,11 +231,12 @@ jobs:
     timeout-minutes: 60
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.prep.outputs.selenium_matrix) }}
+      matrix: ${{ fromJSON(needs.prep.outputs.browser_matrix) }}
     env:
       WITH_SELENIUM: 'true'
       SEL_BROWSER: chrome
       SEL_GROUPS: ${{ matrix.sel_groups }}
+      SEL_IT_TEST: ${{ matrix.sel_it_test }}
       SEL_RERUN: '0'
       # Playwright drives the runner's installed Chrome (channel=chrome), like Selenium: no bundled browser download.
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
@@ -283,13 +283,13 @@ jobs:
           key: ${{ steps.imgkey.outputs.key }}
       - name: Load AEM image
         run: docker load -i /tmp/aem-image.tar
-      - name: Run ${{ matrix.engine }} group1 ITs
+      - name: Run ${{ matrix.engine }} ${{ matrix.group }} ITs
         run: bash testing/it/docker/run-it.sh
       - name: Publish ${{ matrix.engine }} test results
         if: always()
         uses: mikepenz/action-junit-report@v6
         with:
-          check_name: ${{ matrix.engine }} group1 ITs (cloud-ready)
+          check_name: ${{ matrix.engine }} ${{ matrix.group }} ITs (cloud-ready)
           report_paths: testing/it/e2e-selenium/target/failsafe-reports/TEST-*.xml
           detailed_summary: true
           include_passed: true
@@ -299,7 +299,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: it-form-group1-${{ matrix.name }}-reports
+          name: it-browser-${{ matrix.name }}-reports
           if-no-files-found: ignore
           retention-days: 14
           path: |

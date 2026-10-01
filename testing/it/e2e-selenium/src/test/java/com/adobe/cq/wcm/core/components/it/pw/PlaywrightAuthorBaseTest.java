@@ -311,4 +311,32 @@ public abstract class PlaywrightAuthorBaseTest {
         assertThat(suggestion).isVisible();
         suggestion.click();
     }
+
+    protected void selectInPicker(String prefix, String selector, String value) {
+        String relativePath = value.startsWith("/") ? value.substring(1) : value;
+        String[] segments = relativePath.split("/");
+        String currentPath = prefix;
+        Locator autocomplete = dialog().locator("foundation-autocomplete" + selector);
+        autocomplete.locator("button").click();
+
+        Locator picker = page.locator("coral-dialog:visible").last();
+        assertThat(picker).isVisible();
+        for (int i = 0; i < segments.length - 1; i++) {
+            currentPath += "/" + segments[i];
+            Locator folder = picker.locator("[data-foundation-collection-item-id='" + currentPath + "']");
+            assertThat(folder).isVisible();
+            folder.click();
+        }
+
+        currentPath += "/" + segments[segments.length - 1];
+        Locator asset = picker.locator("[data-foundation-collection-item-id='" + currentPath + "']");
+        assertThat(asset).isVisible();
+        Locator checkbox = asset.locator("coral-checkbox");
+        if (checkbox.count() > 0 && checkbox.isVisible()) {
+            checkbox.click();
+        } else {
+            asset.locator("coral-columnview-item-thumbnail").click();
+        }
+        picker.locator("button.granite-pickerdialog-submit[is='coral-button']").click();
+    }
 }
