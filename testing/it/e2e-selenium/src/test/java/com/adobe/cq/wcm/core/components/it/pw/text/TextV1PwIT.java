@@ -33,6 +33,16 @@ public class TextV1PwIT extends ComponentPwBaseTest {
 
     protected String textPath;
 
+    /** CSS class the inline editor is attached to: v1 renders .cmp-text on the wrapper, v2 only on the inner div. */
+    protected String textSelector() {
+        return ".cmp-text";
+    }
+
+    /** The dialog's rich text widget is backed by a hidden input, which is what gets submitted. */
+    protected void setDialogText(String value) {
+        dialog().locator("input[name='./text']").evaluate("(e, v) => e.value = v", value);
+    }
+
     protected String createText() throws Exception {
         textPath = addStandaloneComponent(textResourceType(), "text");
         return textPath;
@@ -41,16 +51,16 @@ public class TextV1PwIT extends ComponentPwBaseTest {
     @Test
     public void testSetTextValueUsingInlineEditor() throws Exception {
         createText();
-        page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + textPath + "']").click();
-        page.locator("#EditableToolbar button[data-action='EDIT']").click();
-        page.frameLocator("#ContentFrame").locator(".cmp-text.aem-GridColumn p[contenteditable='true']")
+        clickToolbarAction(textPath, "EDIT");
+        contentFrame().locator(textSelector() + ".cq-Editable-dom[contenteditable]").waitFor();
+        contentFrame().locator(textSelector() + ".aem-GridColumn p").first()
             .evaluate("(e, html) => e.innerHTML = html", "<b>This</b> is a <i>rich</i> <u>text</u>.");
         page.locator("button[is='coral-button'][title='Save']").click();
         page.waitForTimeout(500);
-        assertThat(page.frameLocator("#ContentFrame").locator(".cmp-text.aem-GridColumn p"))
+        assertThat(contentFrame().locator(textSelector() + ".aem-GridColumn p").first())
             .hasText("This is a rich text.");
         reloadEditor();
-        assertThat(page.frameLocator("#ContentFrame").locator(".cmp-text.aem-GridColumn p"))
+        assertThat(contentFrame().locator(textSelector() + ".aem-GridColumn p").first())
             .hasText("This is a rich text.");
     }
 }

@@ -228,7 +228,10 @@ public abstract class PlaywrightAuthorBaseTest {
 
     protected void reloadEditor() {
         page.reload();
-        waitEditorReady();
+        // tests may already have navigated to the rendered page, where the editor globals never appear
+        if (page.url().contains("/editor.html")) {
+            waitEditorReady();
+        }
     }
 
     private void waitEditorReady() {
@@ -355,7 +358,31 @@ public abstract class PlaywrightAuthorBaseTest {
         dragAndDrop(source, to.x + to.width / 2, to.y + to.height / 2);
     }
 
-    private void dragAndDrop(Locator source, double endX, double endY) {
+    /**
+     * Moves panel selector row {@code from} to position {@code to} with a native mouse drag on the row order handle.
+     * Coral ignores synthetic mouse events and needs a settle delay before the drag starts.
+     */
+    protected void reorderPanelSelectorRow(int from, int to) {
+        Locator rows = page.locator(".cmp-panelselector__table [is='coral-table-row']");
+        assertThat(rows.nth(Math.max(from, to))).isVisible();
+        Locator handle = rows.nth(from).locator("button[coral-table-roworder='true']");
+        handle.scrollIntoViewIfNeeded();
+        com.microsoft.playwright.options.BoundingBox hb = handle.boundingBox();
+        com.microsoft.playwright.options.BoundingBox tb = rows.nth(to).boundingBox();
+        double x = hb.x + hb.width / 2, y = hb.y + hb.height / 2;
+        page.waitForTimeout(500);
+        page.mouse().move(x, y);
+        page.mouse().down();
+        page.waitForTimeout(300);
+        double ty = tb.y + (to > from ? tb.height + 2 : -2);
+        page.mouse().move(x, y + 5, new com.microsoft.playwright.Mouse.MoveOptions().setSteps(5));
+        page.mouse().move(x, ty, new com.microsoft.playwright.Mouse.MoveOptions().setSteps(20));
+        page.waitForTimeout(300);
+        page.mouse().up();
+        page.waitForTimeout(500);
+    }
+
+    protected void dragAndDrop(Locator source, double endX, double endY) {
         BoundingBox from = source.boundingBox();
         double startX = from.x + from.width / 2;
         double startY = from.y + from.height / 2;

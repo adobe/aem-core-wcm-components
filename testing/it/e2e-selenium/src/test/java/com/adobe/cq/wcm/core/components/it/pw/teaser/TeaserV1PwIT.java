@@ -29,6 +29,7 @@ import com.microsoft.playwright.Locator;
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_TEASER_V1;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("playwright-group3")
@@ -52,7 +53,7 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
     }
 
     protected String setTitleAllowedTypes(String... allowedTypes) throws Exception {
-        String policy = createComponentPolicy(teaserResourceType().substring(teaserResourceType().lastIndexOf("/")),
+        String policy = createComponentPolicy(policyPath(),
             Map.of("titleType", "h4", "showTitleType", "true"));
         adminClient.setPropertyStringArray(policy, "allowedTypes", Arrays.asList(allowedTypes), 200);
         return policy;
@@ -71,12 +72,37 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         reloadEditor();
     }
 
+    protected Locator tabs() {
+        return dialog().locator(".cmp-teaser__editor coral-tab");
+    }
+
+    protected void openTextTab() {
+        tabs().nth(1).click();
+    }
+
+    protected void openLinkTab() {
+        tabs().nth(2).click();
+    }
+
+    protected String actionHook(String name) {
+        return "[data-cmp-teaser-v1-dialog-edit-hook='" + name + "']";
+    }
+
+    protected Locator checkbox(String name) {
+        return dialog().locator("coral-checkbox[name='" + name + "'] input[type='checkbox']").first();
+    }
+
+    protected Locator titleInput() {
+        return dialog().locator("input[name='./jcr:title']");
+    }
+
     protected void setText(String title, String description) {
+        openTextTab();
         if (title != null) {
-            dialog().locator("[name='./jcr:title']").fill(title);
+            titleInput().fill(title);
         }
         if (description != null) {
-            dialog().locator("[name='./jcr:description']").fill(description);
+            dialog().locator("div[name='./jcr:description']").fill(description);
         }
     }
 
@@ -84,9 +110,26 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         return contentFrame().locator(".cmp-teaser");
     }
 
-    private void selectActionLink(String path) {
-        dialog().locator("[data-cmp-teaser-v1-dialog-edit-hook='actionLink'] input").last().fill(path);
-        page.locator("button[is='coral-buttonlist-item'][value='" + path + "']").click();
+    /** Enabling actions may already add an empty item; reuse it instead of leaving it to fail validation. */
+    protected Locator nextActionLinkInput() {
+        Locator links = dialog().locator(actionHook("actionLink"));
+        if (links.count() == 0 || !links.last().locator("input:not([type='hidden'])").first().inputValue().isEmpty()) {
+            dialog().locator("[coral-multifield-add]").click();
+        }
+        return links.last().locator("input:not([type='hidden'])").first();
+    }
+
+    protected void addActionLink(String path) {
+        nextActionLinkInput().fill(path);
+        page.locator("button[is='coral-buttonlist-item'][value='" + path + "']:visible").first().click();
+    }
+
+    protected void setActionTitle(String title) {
+        dialog().locator(actionHook("actionTitle")).last().fill(title);
+    }
+
+    protected String policyPath() {
+        return teaserResourceType().substring(teaserResourceType().lastIndexOf("/"));
     }
 
     @Test
@@ -94,6 +137,7 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         createTeaser();
         setImage();
         openEditDialog(teaserPath);
+        openLinkTab();
         selectAutocomplete("[name='./linkURL']", testPage);
         setText(TITLE, DESCRIPTION);
         dialog().locator("[name='./pretitle']").fill(PRETITLE);
@@ -109,9 +153,11 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         createTeaser();
         setImage();
         openEditDialog(teaserPath);
+        openLinkTab();
         selectAutocomplete("[name='./linkURL']", testPage);
-        dialog().locator("[name='./titleFromPage']").check();
-        dialog().locator("[name='./descriptionFromPage']").check();
+        openTextTab();
+        checkbox("./titleFromPage").check();
+        checkbox("./descriptionFromPage").check();
         saveDialog();
         assertThat(teaser().locator(".cmp-teaser__title-link")).containsText("Test Page Title");
         assertThat(teaser().locator(".cmp-teaser__description")).containsText("teaser page description");
@@ -131,7 +177,7 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
     @Test
     public void testHideElementsTeaser() throws Exception {
         createTeaser();
-        createComponentPolicy(teaserResourceType().substring(teaserResourceType().lastIndexOf("/")),
+        createComponentPolicy(policyPath(),
             Map.of("titleHidden", "true", "descriptionHidden", "true"));
         openEditor(testPage);
         openEditDialog(teaserPath);
@@ -143,10 +189,11 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
     public void testLinksToElementsTeaser() throws Exception {
         createTeaser();
         setImage();
-        createComponentPolicy(teaserResourceType().substring(teaserResourceType().lastIndexOf("/")),
+        createComponentPolicy(policyPath(),
             Map.of("titleLinkHidden", "true", "imageLinkHidden", "true"));
         openEditor(testPage);
         openEditDialog(teaserPath);
+        openLinkTab();
         selectAutocomplete("[name='./linkURL']", testPage);
         saveDialog();
         assertThat(teaser().locator("img")).isVisible();
@@ -156,12 +203,13 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
     @Test
     public void testDisableActionsTeaser() throws Exception {
         createTeaser();
-        createComponentPolicy(teaserResourceType().substring(teaserResourceType().lastIndexOf("/")),
+        createComponentPolicy(policyPath(),
             Map.of("actionsDisabled", "true"));
         openEditor(testPage);
         openEditDialog(teaserPath);
-        assertTrue(dialog().locator("[name='./actionsEnabled']").isDisabled());
-        assertFalse(dialog().locator("[name='./actionsEnabled']").isChecked());
+        openLinkTab();
+        assertNotNull(dialog().locator("coral-checkbox[name='./actionsEnabled']").first().getAttribute("disabled"));
+        assertFalse(checkbox("./actionsEnabled").isChecked());
     }
 
     @Test
@@ -169,13 +217,13 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         createTeaser();
         setImage();
         openEditDialog(teaserPath);
-        dialog().locator("[name='./titleFromPage']").check();
-        dialog().locator("[name='./descriptionFromPage']").check();
-        dialog().locator("[name='./actionsEnabled']").check();
-        dialog().locator("[coral-multifield-add]").click();
-        selectActionLink(testPage);
-        dialog().locator("[coral-multifield-add]").click();
-        selectActionLink(secondPage);
+        openTextTab();
+        checkbox("./titleFromPage").check();
+        checkbox("./descriptionFromPage").check();
+        openLinkTab();
+        checkbox("./actionsEnabled").check();
+        addActionLink(testPage);
+        addActionLink(secondPage);
         saveDialog();
         assertThat(teaser().locator(".cmp-teaser__action-link")).hasCount(2);
         assertThat(teaser().locator(".cmp-teaser__action-link").nth(0)).containsText("Test Page Title");
@@ -187,13 +235,12 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         createTeaser();
         setImage();
         openEditDialog(teaserPath);
-        dialog().locator("[name='./actionsEnabled']").check();
-        dialog().locator("[coral-multifield-add]").click();
-        dialog().locator("[data-cmp-teaser-v1-dialog-edit-hook='actionLink'] input").last().fill("http://www.adobe.com");
-        dialog().locator("[data-cmp-teaser-v1-dialog-edit-hook='actionTitle'] input").last().fill("Adobe");
-        dialog().locator("[coral-multifield-add]").click();
-        dialog().locator("[data-cmp-teaser-v1-dialog-edit-hook='actionLink'] input").last().fill(secondPage);
-        dialog().locator("[data-cmp-teaser-v1-dialog-edit-hook='actionTitle'] input").last().fill("Action Text 2");
+        openLinkTab();
+        checkbox("./actionsEnabled").check();
+        nextActionLinkInput().fill("http://www.adobe.com");
+        setActionTitle("Adobe");
+        addActionLink(secondPage);
+        setActionTitle("Action Text 2");
         saveDialog();
         assertThat(teaser().locator(".cmp-teaser__action-link")).hasCount(2);
         assertThat(teaser().locator(".cmp-teaser__action-link").first()).hasAttribute("href", "http://www.adobe.com");
@@ -205,19 +252,22 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
     public void testCheckboxTextfieldTuple() throws Exception {
         createTeaser();
         openEditDialog(teaserPath);
-        dialog().locator("[name='./jcr:title']").fill(TITLE);
+        setText(TITLE, null);
+        openLinkTab();
         selectAutocomplete("[name='./linkURL']", testPage);
-        assertThat(dialog().locator("[name='./jcr:title']")).hasValue(TITLE);
-        dialog().locator("[name='./titleFromPage']").check();
-        assertThat(dialog().locator("[name='./jcr:title']")).isDisabled();
-        dialog().locator("[name='./titleFromPage']").uncheck();
-        assertThat(dialog().locator("[name='./jcr:title']")).hasValue(TITLE);
+        openTextTab();
+        assertThat(titleInput()).hasValue(TITLE);
+        assertThat(titleInput()).isEnabled();
+        checkbox("./titleFromPage").check();
+        assertThat(titleInput()).isDisabled();
+        checkbox("./titleFromPage").uncheck();
+        assertThat(titleInput()).hasValue(TITLE);
     }
 
     @Test
     public void testNoTitleTypeSelectDropdownDisplayed() throws Exception {
         createTeaser();
-        createComponentPolicy("/teaser-v1", Map.of("titleType", "h4", "showTitleType", "false"));
+        createComponentPolicy(policyPath(), Map.of("titleType", "h4", "showTitleType", "false"));
         openEditor(testPage);
         openEditDialog(teaserPath);
         assertThat(dialog().locator("coral-select[name='./titleType']")).hasCount(0);
@@ -235,7 +285,7 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
     @Test
     public void testTitleTypeSelectDropdownValueUsingInvalidOption() throws Exception {
         createTeaser();
-        String policy = createComponentPolicy(teaserResourceType().substring(teaserResourceType().lastIndexOf("/")),
+        String policy = createComponentPolicy(policyPath(),
             Map.of("titleType", "h5", "showTitleType", "true"));
         adminClient.setPropertyStringArray(policy, "allowedTypes", Arrays.asList("h3", "h4", "h6"), 200);
         openEditor(testPage);
@@ -246,7 +296,7 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
     @Test
     public void testTypeTypeSelectDropdownNoAllowedTypes() throws Exception {
         createTeaser();
-        createComponentPolicy("/teaser-v1", Map.of("showTitleType", "true"));
+        createComponentPolicy(policyPath(), Map.of("showTitleType", "true"));
         openEditor(testPage);
         openEditDialog(teaserPath);
         assertThat(dialog().locator("coral-select[name='./titleType'] coral-select-item[selected]")).containsText("(default)");

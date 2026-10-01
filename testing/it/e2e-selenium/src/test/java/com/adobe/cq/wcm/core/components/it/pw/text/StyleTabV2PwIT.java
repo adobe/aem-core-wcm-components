@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.pw.text;
 
+import com.microsoft.playwright.Locator;
 import java.util.HashMap;
 
 import org.junit.jupiter.api.Tag;
@@ -54,12 +55,15 @@ public class StyleTabV2PwIT extends ComponentPwBaseTest {
     private void setText() {
         openEditDialog(textPath);
         dialog().locator("[name='./id']").fill("text-id");
-        dialog().locator("[name='./text']").fill(TEXT);
+        // the rich text widget is backed by a hidden input, which is what gets submitted
+        dialog().locator("input[name='./text']").evaluate("(e, v) => e.value = v", TEXT);
     }
+
+    private Locator styleList;
 
     private void openStyleDropdown() {
         dialog().locator("coral-tab[data-foundation-tracking-event*='styles']").click();
-        dialog().locator("coral-select[name='./cq:styleIds'] > button").click();
+        styleList = openCoralSelect("[name='./cq:styleIds']");
     }
 
     @Test
@@ -75,7 +79,7 @@ public class StyleTabV2PwIT extends ComponentPwBaseTest {
         createTextWithStyles();
         setText();
         openStyleDropdown();
-        page.locator("coral-selectlist-item").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Blue")).click();
+        styleList.locator("coral-selectlist-item").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Blue")).click();
         saveDialog();
         assertThat(contentFrame().locator(".cmp-blue-text #text-id")).isVisible();
         assertThat(contentFrame().locator(".cmp-red-text #text-id")).hasCount(0);
@@ -86,11 +90,11 @@ public class StyleTabV2PwIT extends ComponentPwBaseTest {
         createTextWithStyles();
         setText();
         openStyleDropdown();
-        page.locator("coral-selectlist-item").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Blue")).click();
+        styleList.locator("coral-selectlist-item").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Blue")).click();
         saveDialog();
         openEditDialog(textPath);
         openStyleDropdown();
-        page.locator("coral-selectlist-item").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Red")).click();
+        styleList.locator("coral-selectlist-item").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Red")).click();
         saveDialog();
         assertThat(contentFrame().locator(".cmp-red-text #text-id")).isVisible();
         assertThat(contentFrame().locator(".cmp-blue-text #text-id")).hasCount(0);

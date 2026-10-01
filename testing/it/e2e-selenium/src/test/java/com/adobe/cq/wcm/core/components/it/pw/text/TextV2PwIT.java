@@ -35,12 +35,16 @@ public class TextV2PwIT extends TextV1PwIT {
         return RT_TEXT_V2;
     }
 
+    @Override
+    protected String textSelector() {
+        return ".text";
+    }
+
     @Test
     public void testCheckTextWithXSSProtection() throws Exception {
         String path = createText();
         openEditDialog(path);
-        Locator richText = dialog().locator("[name='./text']");
-        richText.fill(XSS_TEXT);
+        setDialogText(XSS_TEXT);
         saveDialog();
         assertThat(page.frameLocator("#ContentFrame").locator(".cmp-text")).containsText("Hello World!");
         assertEquals(0, page.frameLocator("#ContentFrame").locator(".cmp-text img[onerror]").count());

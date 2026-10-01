@@ -99,13 +99,14 @@ public class SearchV1PwIT extends ComponentPwBaseTest {
     @Test
     public void testClearButton() throws Exception {
         createSearch();
+        // without a theme the clear button has no box, so its state is checked via aria-hidden
         Locator clear = page.locator(".cmp-search__clear");
-        assertThat(clear).isHidden();
+        assertThat(clear).not().hasAttribute("aria-hidden", "false");
         query("Page");
-        assertThat(clear).isVisible();
-        clear.click();
+        assertThat(clear).hasAttribute("aria-hidden", "false");
+        clear.dispatchEvent("click");
         assertThat(searchInput()).hasValue("");
-        assertThat(clear).isHidden();
+        assertThat(clear).hasAttribute("aria-hidden", "true");
         assertThat(results()).isHidden();
     }
 
@@ -123,7 +124,7 @@ public class SearchV1PwIT extends ComponentPwBaseTest {
         createSearch();
         query("Page");
         assertThat(results()).isVisible();
-        page.locator("body").click(new Locator.ClickOptions().setPosition(5, 5));
+        page.locator("body").evaluate("b => b.click()");
         assertThat(results()).isHidden();
     }
 
@@ -131,7 +132,7 @@ public class SearchV1PwIT extends ComponentPwBaseTest {
     public void testMark() throws Exception {
         createSearch();
         query("Page");
-        assertThat(results().locator("mark")).containsText("Page");
+        assertThat(results().locator("mark").first()).containsText("Page");
     }
 
     @Test

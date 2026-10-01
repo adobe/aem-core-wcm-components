@@ -45,7 +45,7 @@ public class SearchV2PwIT extends SearchV1PwIT {
         Locator status = page.locator(".cmp_search__info");
         page.locator(".cmp-search__input").fill("Page");
         assertThat(status).containsText("results");
-        page.locator(".cmp-search__clear").click();
+        page.locator(".cmp-search__clear").dispatchEvent("click");
         assertThat(status).isHidden();
         page.locator(".cmp-search__input").fill("no-results-expected-text");
         assertThat(status).hasText("No results");

@@ -152,7 +152,7 @@ public class EmbedV1PwIT extends ComponentPwBaseTest {
         setType("html");
         clickDone();
         assertThat(dialog()).isVisible();
-        dialog().locator("[data-cmp-embed-dialog-edit-showhidetargetvalue='html'] [name='./html']")
+        dialog().locator("textarea[name='./html']")
             .fill("<div id='CmpEmbedHtml'>HTML</div>");
         saveDialog();
         assertThat(contentFrame().locator("#CmpEmbedHtml")).containsText("HTML");

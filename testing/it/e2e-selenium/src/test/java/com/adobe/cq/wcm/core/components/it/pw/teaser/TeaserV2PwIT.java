@@ -49,8 +49,26 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         return Commons.CLIENTLIBS_TEASER_V2;
     }
 
-    private Locator tabs() {
-        return dialog().locator(".cmp-teaser__editor coral-tab");
+    @Override
+    protected void openLinkTab() {
+        tabs().nth(0).click();
+    }
+
+    private void openAssetsTab() {
+        tabs().nth(2).click();
+    }
+
+    @Override
+    protected String actionHook(String name) {
+        return "[data-cmp-teaser-v2-dialog-edit-hook='" + name + "']";
+    }
+
+    /** The v2 dialog inherits the image from the page by default; use the asset with an explicit alt. */
+    @Override
+    protected void setImage() throws Exception {
+        Commons.editNodeProperties(authorClient, teaserPath, new HashMap<>(Map.of("fileReference", ASSET,
+            "imageFromPageImage", "false", "altValueFromDAM", "false", "alt", "alt")));
+        reloadEditor();
     }
 
     private Locator rendered(String selector) {
@@ -60,17 +78,13 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     private void setPageImage(String targetPage, String asset, String alt) throws Exception {
         authorClient.setPageProperty(targetPage, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
         Commons.editNodeProperties(authorClient, targetPage + "/jcr:content",
-            new HashMap<>(Map.of("image/fileReference", asset, "image/alt", alt)));
+            new HashMap<>(Map.of("cq:featuredimage/fileReference", asset,
+                "cq:featuredimage/sling:resourceType", "core/wcm/components/image/v3/image")));
     }
 
     private void setLinkedPage() {
-        tabs().nth(0).click();
+        openLinkTab();
         selectAutocomplete("[name='./linkURL']", secondPage);
-    }
-
-    private void selectActionLink(String path) {
-        dialog().locator("[data-cmp-teaser-v2-dialog-edit-hook='actionLink'] input").last().fill(path);
-        page.locator("button[is='coral-buttonlist-item'][value='" + path + "']").click();
     }
 
     @Test
@@ -79,20 +93,20 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         createTeaser();
         setImage();
         openEditDialog(teaserPath);
-        tabs().nth(0).click();
+        openLinkTab();
         selectAutocomplete("[name='./linkURL']", testPage);
-        dialog().locator("coral-checkbox[name='./linkTarget'] input").check();
-        tabs().nth(1).click();
+        checkbox("./linkTarget").check();
+        openTextTab();
         dialog().locator("[name='./pretitle']").fill(PRETITLE);
-        dialog().locator("[name='./titleFromPage']").check();
-        dialog().locator("[name='./descriptionFromPage']").check();
-        dialog().locator("[name='./jcr:title']").fill(TITLE);
-        dialog().locator("[name='./jcr:description']").fill(DESCRIPTION);
+        checkbox("./titleFromPage").uncheck();
+        checkbox("./descriptionFromPage").uncheck();
+        setText(TITLE, DESCRIPTION);
         saveDialog();
         assertThat(rendered(".cmp-teaser img")).isVisible();
         assertThat(rendered(".cmp-teaser__pretitle")).hasText(PRETITLE);
-        assertThat(rendered(".cmp-teaser__title-link")).containsText(TITLE);
-        assertThat(rendered(".cmp-teaser__title-link")).hasAttribute("target", "_blank");
+        // with a link and no actions, v2 wraps the whole teaser in the link
+        assertThat(rendered(".cmp-teaser__link")).hasAttribute("target", "_blank");
+        assertThat(rendered(".cmp-teaser__title")).containsText(TITLE);
         assertThat(rendered(".cmp-teaser__description")).containsText(DESCRIPTION);
     }
 
@@ -102,10 +116,12 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         createTeaser();
         setImage();
         openEditDialog(teaserPath);
-        setLinkedPage();
+        openLinkTab();
+        selectAutocomplete("[name='./linkURL']", testPage);
         saveDialog();
-        assertThat(rendered(".cmp-teaser__title-link")).containsText(SECOND_TITLE);
-        assertThat(rendered(".cmp-teaser__description")).isVisible();
+        assertThat(rendered(".cmp-teaser__link")).hasAttribute("href", java.util.regex.Pattern.compile(".*" + testPage + "\\.html$"));
+        assertThat(rendered(".cmp-teaser__title")).containsText("Test Page Title");
+        assertThat(rendered(".cmp-teaser__description")).containsText("teaser page description");
     }
 
     @Test
@@ -113,20 +129,26 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     public void testNoImageTeaser() throws Exception {
         createTeaser();
         openEditDialog(teaserPath);
-        tabs().nth(1).click();
-        dialog().locator("[name='./titleFromPage']").check();
-        dialog().locator("[name='./jcr:title']").fill(TITLE);
-        dialog().locator("[name='./descriptionFromPage']").check();
-        dialog().locator("[name='./jcr:description']").fill(DESCRIPTION);
-        tabs().nth(0).click();
+        openTextTab();
+        checkbox("./titleFromPage").uncheck();
+        checkbox("./descriptionFromPage").uncheck();
+        setText(TITLE, DESCRIPTION);
+        openLinkTab();
         clickDone();
         assertThat(dialog().locator(".cmp-image__editor-alt .coral-Form-errorlabel, "
             + ".cmp-image__editor-alt coral-tooltip[variant='error'] > coral-tooltip-content").first())
             .hasText("Error: Please provide an asset which has a description that can be used as alt text.");
-        tabs().nth(2).click();
-        dialog().locator("[name='./imageFromPageImage']").check();
-        dialog().locator("[name='./altValueFromDAM']").check();
-        dialog().locator("[name='./alt']").fill("alt");
+        openAssetsTab();
+        checkbox("./imageFromPageImage").check();
+        // inheriting from the page hides the DAM alt options; the alt then comes from the page or the field
+        Locator altFromPage = dialog().locator("coral-checkbox[name='./altValueFromPageImage']:visible input");
+        if (altFromPage.count() > 0) {
+            altFromPage.first().uncheck();
+        }
+        Locator alt = dialog().locator("input[name='./alt']:visible");
+        if (alt.count() > 0 && alt.first().isEditable()) {
+            alt.first().fill("alt");
+        }
         saveDialog();
         assertThat(rendered(".cmp-teaser img")).hasCount(0);
         assertThat(rendered(".cmp-teaser__title")).containsText(TITLE);
@@ -137,10 +159,10 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     @Override
     public void testHideElementsTeaser() throws Exception {
         createTeaser();
-        createComponentPolicy("/teaser-v2", Map.of("titleHidden", "true", "descriptionHidden", "true"));
+        createComponentPolicy(policyPath(), Map.of("titleHidden", "true", "descriptionHidden", "true"));
         openEditor(testPage);
         openEditDialog(teaserPath);
-        tabs().nth(1).click();
+        openTextTab();
         assertThat(dialog().locator("[name='./titleFromPage']")).hasCount(0);
         assertThat(dialog().locator("[name='./descriptionFromPage']")).hasCount(0);
     }
@@ -151,7 +173,7 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         createTeaser();
         setImage();
         openEditDialog(teaserPath);
-        tabs().nth(2).click();
+        openLinkTab();
         selectAutocomplete("[name='./linkURL']", testPage);
         saveDialog();
         assertThat(rendered(".cmp-teaser img")).isVisible();
@@ -162,10 +184,10 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     @Override
     public void testDisableActionsTeaser() throws Exception {
         createTeaser();
-        createComponentPolicy("/teaser-v2", Map.of("actionsDisabled", "true"));
+        createComponentPolicy(policyPath(), Map.of("actionsDisabled", "true"));
         openEditor(testPage);
         openEditDialog(teaserPath);
-        tabs().nth(1).click();
+        openTextTab();
         assertThat(dialog().locator("[data-cmp-teaser-v2-dialog-edit-hook='actionLink']")).hasCount(0);
     }
 
@@ -175,11 +197,9 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         createTeaser();
         setImage();
         openEditDialog(teaserPath);
-        tabs().nth(0).click();
-        dialog().locator("[coral-multifield-add]").click();
-        selectActionLink(testPage);
-        dialog().locator("[coral-multifield-add]").click();
-        selectActionLink(secondPage);
+        openLinkTab();
+        addActionLink(testPage);
+        addActionLink(secondPage);
         saveDialog();
         assertThat(rendered(".cmp-teaser__action-link")).hasCount(2);
         assertThat(rendered(".cmp-teaser__action-link").nth(0)).containsText("Test Page Title");
@@ -192,13 +212,11 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         createTeaser();
         setImage();
         openEditDialog(teaserPath);
-        tabs().nth(0).click();
-        dialog().locator("[coral-multifield-add]").click();
-        dialog().locator("[data-cmp-teaser-v2-dialog-edit-hook='actionLink'] input").last().fill("http://www.adobe.com");
-        dialog().locator("[data-cmp-teaser-v2-dialog-edit-hook='actionTitle'] input").last().fill("Adobe");
-        dialog().locator("[coral-multifield-add]").click();
-        selectActionLink(secondPage);
-        dialog().locator("[data-cmp-teaser-v2-dialog-edit-hook='actionTitle'] input").last().fill("Action Text 2");
+        openLinkTab();
+        nextActionLinkInput().fill("http://www.adobe.com");
+        setActionTitle("Adobe");
+        addActionLink(secondPage);
+        setActionTitle("Action Text 2");
         dialog().locator(".cmp-teaser__editor-actionField-linkTarget").last().click();
         saveDialog();
         assertThat(rendered(".cmp-teaser__action-link")).hasCount(2);
@@ -212,14 +230,17 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     public void testCheckboxTextfieldTuple() throws Exception {
         createTeaser();
         openEditDialog(teaserPath);
-        tabs().nth(1).click();
-        dialog().locator("[name='./jcr:title']").fill(TITLE);
+        openTextTab();
+        checkbox("./titleFromPage").uncheck();
+        setText(TITLE, null);
         setLinkedPage();
-        assertThat(dialog().locator("[name='./jcr:title']")).hasValue(TITLE);
-        dialog().locator("[name='./titleFromPage']").check();
-        assertThat(dialog().locator("[name='./jcr:title']")).isDisabled();
-        dialog().locator("[name='./titleFromPage']").uncheck();
-        assertThat(dialog().locator("[name='./jcr:title']")).hasValue(TITLE);
+        openTextTab();
+        assertThat(titleInput()).hasValue(TITLE);
+        assertThat(titleInput()).isEnabled();
+        checkbox("./titleFromPage").check();
+        assertThat(titleInput()).isDisabled();
+        checkbox("./titleFromPage").uncheck();
+        assertThat(titleInput()).hasValue(TITLE);
     }
 
     @Test
@@ -227,7 +248,8 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         createTeaser();
         setImage();
         openEditDialog(teaserPath);
-        setLinkedPage();
+        openLinkTab();
+        selectAutocomplete("[name='./linkURL']", testPage);
         saveDialog();
         assertThat(rendered(".cmp-teaser img")).isVisible();
         assertThat(rendered(".cmp-teaser__title")).isVisible();
@@ -239,7 +261,7 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         createTeaser();
         setPageImage(testPage, CLIMBING, CLIMBING_ALT);
         Commons.editNodeProperties(authorClient, teaserPath, new HashMap<>(Map.of("imageFromPageImage", "true")));
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
         assertThat(page.locator(".cmp-teaser img")).hasAttribute("alt", CLIMBING_ALT);
         assertTrue(page.locator(".cmp-teaser img").getAttribute("src").contains("climbing"));
     }
@@ -249,8 +271,8 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         createTeaser();
         setPageImage(testPage, CLIMBING, CLIMBING_ALT);
         openEditDialog(teaserPath);
-        tabs().nth(2).click();
-        dialog().locator("coral-checkbox[name='./isDecorative'] input").check();
+        openAssetsTab();
+        checkbox("./isDecorative").check();
         saveDialog();
         assertThat(rendered(".cmp-teaser img")).hasAttribute("alt", "");
     }
@@ -260,9 +282,9 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         createTeaser();
         setPageImage(secondPage, SURFING, SURFING_ALT);
         openEditDialog(teaserPath);
-        tabs().nth(2).click();
-        selectAutocomplete("[name='./linkURL']", secondPage);
-        dialog().locator("coral-checkbox[name='./imageFromPageImage'] input").check();
+        setLinkedPage();
+        openAssetsTab();
+        checkbox("./imageFromPageImage").check();
         saveDialog();
         assertThat(rendered(".cmp-teaser img")).hasAttribute("alt", SURFING_ALT);
     }
@@ -272,10 +294,11 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         createTeaser();
         setPageImage(secondPage, SURFING, SURFING_ALT);
         openEditDialog(teaserPath);
-        tabs().nth(2).click();
-        selectAutocomplete("[name='./linkURL']", secondPage);
-        dialog().locator("coral-checkbox[name='./imageFromPageImage'] input").check();
-        dialog().locator("[name='./alt']").fill("Teaser alt text");
+        setLinkedPage();
+        openAssetsTab();
+        checkbox("./imageFromPageImage").check();
+        checkbox("./altValueFromPageImage").uncheck();
+        dialog().locator("input[name='./alt']").fill("Teaser alt text");
         saveDialog();
         assertThat(rendered(".cmp-teaser img")).hasAttribute("alt", "Teaser alt text");
     }
@@ -285,9 +308,8 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         createTeaser();
         setPageImage(thirdPage, SKIING, SKIING_ALT);
         openEditDialog(teaserPath);
-        tabs().nth(0).click();
-        dialog().locator("[coral-multifield-add]").click();
-        selectActionLink(thirdPage);
+        openLinkTab();
+        addActionLink(thirdPage);
         saveDialog();
         assertThat(rendered(".cmp-teaser img")).hasAttribute("alt", SKIING_ALT);
     }
@@ -297,11 +319,11 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         createTeaser();
         setPageImage(thirdPage, SKIING, SKIING_ALT);
         openEditDialog(teaserPath);
-        tabs().nth(0).click();
-        dialog().locator("[coral-multifield-add]").click();
-        selectActionLink(thirdPage);
-        tabs().nth(2).click();
-        dialog().locator("[name='./alt']").fill("Teaser alt text");
+        openLinkTab();
+        addActionLink(thirdPage);
+        openAssetsTab();
+        checkbox("./altValueFromPageImage").uncheck();
+        dialog().locator("input[name='./alt']").fill("Teaser alt text");
         saveDialog();
         assertThat(rendered(".cmp-teaser img")).hasAttribute("alt", "Teaser alt text");
     }

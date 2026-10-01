@@ -210,7 +210,8 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         createItems();
         openPanelSelector();
         Locator rows = page.locator(".cmp-panelselector__table [is='coral-table-row']");
-        dragBelow(rows.nth(0).locator("button[coral-table-roworder='true']"), rows.nth(2));
+        assertThat(rows).hasCount(3);
+        reorderPanelSelectorRow(0, 2);
         assertThat(panelButtons().nth(0)).containsText("item1");
         assertThat(panelButtons().nth(1)).containsText("item2");
         assertThat(panelButtons().nth(2)).containsText("item0");

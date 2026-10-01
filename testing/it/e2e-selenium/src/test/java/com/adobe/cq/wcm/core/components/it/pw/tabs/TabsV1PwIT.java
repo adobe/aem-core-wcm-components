@@ -64,6 +64,12 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         saveDialog();
     }
 
+    /** The tabs JS only handles keyboard navigation outside the editor, so these tests use wcmmode=disabled. */
+    private Locator disabledModeTabs() {
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        return page.locator(".cmp-tabs__tab");
+    }
+
     private Locator tabItems() {
         return contentFrame().locator(".cmp-tabs__tab");
     }
@@ -109,7 +115,7 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         openEditDialog(tabsPath);
         dialog().locator("coral-tab[data-foundation-tracking-event*='items']").click();
         Locator items = dialog().locator(".cmp-childreneditor coral-multifield-item");
-        items.nth(2).locator("button[handle='move']").dragTo(items.nth(0));
+        dragAndDrop(items.nth(2).locator("button[handle='move']"), items.nth(0));
         saveDialog();
         openEditDialog(tabsPath);
         dialog().locator("coral-tab[data-foundation-tracking-event*='items']").click();
@@ -123,14 +129,12 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         addItems();
         openEditDialog(tabsPath);
         dialog().locator("coral-tab[data-foundation-tracking-event*='properties']").click();
-        dialog().locator("[data-cmp-tabs-v1-dialog-edit-hook='activeSelect'] button").click();
-        page.locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText("item1")).click();
+        openSelectList("[data-cmp-tabs-v1-dialog-edit-hook='activeSelect']").locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText("item1")).click();
         saveDialog();
         assertThat(contentFrame().locator(".cmp-tabs__tab--active")).containsText("item1");
         openEditDialog(tabsPath);
         dialog().locator("coral-tab[data-foundation-tracking-event*='properties']").click();
-        dialog().locator("[data-cmp-tabs-v1-dialog-edit-hook='activeSelect'] button").click();
-        page.locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText("Default")).click();
+        openSelectList("[data-cmp-tabs-v1-dialog-edit-hook='activeSelect']").locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText("Default")).click();
         saveDialog();
         assertThat(contentFrame().locator(".cmp-tabs__tab--active")).containsText("item0");
     }
@@ -138,11 +142,11 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
     @Test
     public void testPanelSelectItems() throws Exception {
         createTabs();
-        page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + tabsPath + "']").click();
-        assertThat(page.locator(".cq-editable-action[data-action='PANEL_SELECT']")).hasCount(0);
+        assertThat(page.locator("#EditableToolbar button[data-action='PANEL_SELECT'][data-path='" + tabsPath + "']"))
+            .hasCount(0);
         addItems();
-        page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + tabsPath + "']").click();
-        page.locator(".cq-editable-action[data-action='PANEL_SELECT']").click();
+        clickToolbarAction(tabsPath, "PANEL_SELECT");
+        assertThat(page.locator(".cmp-panelselector")).isVisible();
         Locator panelItems = page.locator(".cmp-panelselector__table [is='coral-table-row']");
         assertThat(panelItems).hasCount(3);
         assertThat(panelItems.nth(0)).containsText("item0");
@@ -154,24 +158,13 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
     @Test
     public void testPanelSelectReorder() throws Exception {
         createTabs();
-        page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + tabsPath + "']").click();
-        assertThat(page.locator(".cq-editable-action[data-action='PANEL_SELECT']")).hasCount(0);
+        assertThat(page.locator("#EditableToolbar button[data-action='PANEL_SELECT'][data-path='" + tabsPath + "']"))
+            .hasCount(0);
         addItems();
-        page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + tabsPath + "']").click();
-        page.locator(".cq-editable-action[data-action='PANEL_SELECT']").click();
+        clickToolbarAction(tabsPath, "PANEL_SELECT");
+        assertThat(page.locator(".cmp-panelselector")).isVisible();
         Locator selectorItems = page.locator(".cmp-panelselector__table [is='coral-table-row']");
-        Locator dragHandle = selectorItems.nth(0).locator("button[coral-table-roworder='true']");
-        BoundingBox dragBounds = dragHandle.boundingBox();
-        BoundingBox targetBounds = selectorItems.nth(2).boundingBox();
-        page.mouse().move(dragBounds.x + dragBounds.width / 2, dragBounds.y + dragBounds.height / 2);
-        page.mouse().down();
-        page.mouse().move(targetBounds.x + targetBounds.width / 2,
-            targetBounds.y + targetBounds.height + 1,
-            new com.microsoft.playwright.Mouse.MoveOptions().setSteps(8));
-        page.mouse().up();
-        assertThat(selectorItems.nth(0)).containsText("item1");
-        assertThat(selectorItems.nth(1)).containsText("item2");
-        assertThat(selectorItems.nth(2)).containsText("item0");
+        reorderPanelSelectorRow(0, 2);
         assertTabTitles("item1", "item2", "item0");
     }
 
@@ -191,33 +184,36 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
     public void testAccessibilityNavigateRight() throws Exception {
         createTabs();
         addItems();
-        tabItems().first().click();
-        tabItems().first().press("ArrowRight");
-        assertThat(contentFrame().locator(".cmp-tabs__tab--active")).containsText("item1");
-        tabItems().nth(1).press("ArrowRight");
-        assertThat(contentFrame().locator(".cmp-tabs__tab--active")).containsText("item2");
+        Locator tabs = disabledModeTabs();
+        tabs.first().click();
+        tabs.first().press("ArrowRight");
+        assertThat(page.locator(".cmp-tabs__tab--active")).containsText("item1");
+        tabs.nth(1).press("ArrowRight");
+        assertThat(page.locator(".cmp-tabs__tab--active")).containsText("item2");
     }
 
     @Test
     public void testAccessibilityNavigateLeft() throws Exception {
         createTabs();
         addItems();
-        tabItems().nth(2).click();
-        tabItems().nth(2).press("ArrowLeft");
-        assertThat(contentFrame().locator(".cmp-tabs__tab--active")).containsText("item1");
-        tabItems().nth(1).press("ArrowLeft");
-        assertThat(contentFrame().locator(".cmp-tabs__tab--active")).containsText("item0");
+        Locator tabs = disabledModeTabs();
+        tabs.nth(2).click();
+        tabs.nth(2).press("ArrowLeft");
+        assertThat(page.locator(".cmp-tabs__tab--active")).containsText("item1");
+        tabs.nth(1).press("ArrowLeft");
+        assertThat(page.locator(".cmp-tabs__tab--active")).containsText("item0");
     }
 
     @Test
     public void testAccessibilityNavigateEndStart() throws Exception {
         createTabs();
         addItems();
-        tabItems().first().click();
-        tabItems().first().press("End");
-        assertThat(contentFrame().locator(".cmp-tabs__tab--active")).containsText("item2");
-        tabItems().nth(2).press("Home");
-        assertThat(contentFrame().locator(".cmp-tabs__tab--active")).containsText("item0");
+        Locator tabs = disabledModeTabs();
+        tabs.first().click();
+        tabs.first().press("End");
+        assertThat(page.locator(".cmp-tabs__tab--active")).containsText("item2");
+        tabs.nth(2).press("Home");
+        assertThat(page.locator(".cmp-tabs__tab--active")).containsText("item0");
     }
 
     @Test

@@ -74,7 +74,7 @@ public class TitleV2PwIT extends TitleV1PwIT {
         }
         assertThat(options.locator("coral-selectlist-item[value='h5']")).hasCount(0);
         saveDialog();
-        assertThat(page.locator(".cmp-title h2")).isVisible();
+        assertThat(contentFrame().locator(".cmp-title h2")).isVisible();
     }
 
     @Test
@@ -85,7 +85,7 @@ public class TitleV2PwIT extends TitleV1PwIT {
         openEditDialog(componentPath);
         assertFalse(dialog().locator("coral-select[name='./type']").isVisible());
         saveDialog();
-        assertThat(page.locator(".cmp-title h1")).isVisible();
+        assertThat(contentFrame().locator(".cmp-title h1")).isVisible();
     }
 
     @Test

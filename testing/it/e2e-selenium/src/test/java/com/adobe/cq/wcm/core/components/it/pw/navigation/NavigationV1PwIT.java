@@ -71,10 +71,10 @@ public class NavigationV1PwIT extends ComponentPwBaseTest {
         saveDialog();
         page.navigate(baseUrl + currentPage + ".html");
         assertThat(navigationItems()).hasCount(3);
-        assertThat(page.locator(".cmp-navigation__item--active")).containsText("Page 1.1");
-        assertThat(navigationItems()).containsText("Page 1.1.1");
-        assertThat(navigationItems()).containsText("Page 1.1.3");
-        assertThat(navigationItems()).not().containsText("Page 1.1.2");
+        assertThat(page.locator(".cmp-navigation__item--active").first()).containsText("Page 1.1");
+        assertThat(page.locator(".cmp-navigation").first()).containsText("Page 1.1.1");
+        assertThat(page.locator(".cmp-navigation").first()).containsText("Page 1.1.3");
+        assertThat(page.locator(".cmp-navigation").first()).not().containsText("Page 1.1.2");
         assertThat(page.locator(".cmp-navigation a[href*='page_1_1.html']")).isVisible();
     }
 
@@ -84,15 +84,15 @@ public class NavigationV1PwIT extends ComponentPwBaseTest {
         openEditor(currentPage);
         openEditDialog(navigationPath);
         selectAutocomplete("[name='./navigationRoot']", navigationRoot);
-        dialog().locator("[name='./structureStart']").fill("0");
+        dialog().locator("input[name='./structureStart']").fill("0");
         saveDialog();
         page.navigate(baseUrl + currentPage + ".html");
         assertThat(navigationItems()).hasCount(4);
-        assertThat(page.locator(".cmp-navigation__item--active")).containsText("Page 1.1");
-        assertThat(navigationItems()).containsText("Page 1");
-        assertThat(navigationItems()).containsText("Page 1.1.1");
-        assertThat(navigationItems()).containsText("Page 1.1.3");
-        assertThat(navigationItems()).not().containsText("Page 1.1.2");
+        assertThat(page.locator(".cmp-navigation__item--active").first()).containsText("Page 1.1");
+        assertThat(page.locator(".cmp-navigation").first()).containsText("Page 1");
+        assertThat(page.locator(".cmp-navigation").first()).containsText("Page 1.1.1");
+        assertThat(page.locator(".cmp-navigation").first()).containsText("Page 1.1.3");
+        assertThat(page.locator(".cmp-navigation").first()).not().containsText("Page 1.1.2");
     }
 
     @Test
@@ -103,11 +103,11 @@ public class NavigationV1PwIT extends ComponentPwBaseTest {
         selectAutocomplete("[name='./navigationRoot']", navigationRoot);
         Locator collectAll = dialog().locator("coral-checkbox[name='./collectAllPages'] input[type='checkbox']");
         collectAll.uncheck();
-        assertTrue(dialog().locator("[name='./structureDepth']").isVisible());
+        assertTrue(dialog().locator("input[name='./structureDepth']").isVisible());
         saveDialog();
         page.navigate(baseUrl + currentPage + ".html");
         assertThat(navigationItems()).hasCount(1);
-        assertThat(page.locator(".cmp-navigation__item--active")).containsText("Page 1.1");
-        assertThat(navigationItems()).not().containsText("Page 1.1.1");
+        assertThat(page.locator(".cmp-navigation__item--active").first()).containsText("Page 1.1");
+        assertThat(page.locator(".cmp-navigation").first()).not().containsText("Page 1.1.1");
     }
 }
