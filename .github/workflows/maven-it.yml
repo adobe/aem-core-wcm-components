@@ -157,8 +157,9 @@ jobs:
   integration-test:
     name: http ITs (author + publish, cloud-ready)
     needs: prep
-    # POC branch: only the Selenium vs Playwright comparison runs.
-    if: ${{ github.ref_name != 'it-playwright-poc' && (github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components') }}
+    # The POC branch runs only the Selenium vs Playwright comparison, including
+    # when its pull request targets main.
+    if: ${{ github.ref_name != 'it-playwright-poc' && github.head_ref != 'it-playwright-poc' && (github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components') }}
     runs-on: ubuntu-latest
     # Native amd64 GitHub-hosted runner: author+publish boot + the full http
     # suite ran in ~9 minutes in testing, so 90m is generous headroom.
