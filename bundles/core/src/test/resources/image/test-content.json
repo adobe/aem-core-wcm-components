@@ -414,6 +414,14 @@
                     "alt"               : "Adobe Logo",
                     "jcr:title"         : "Adobe Logo"
                 },
+                "image31": {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark_full_quality.jpg",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "Adobe Logo"
+                },
                 "image45"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
