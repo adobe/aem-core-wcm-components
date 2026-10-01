@@ -61,7 +61,15 @@ public class ImagePwIT extends ComponentPwBaseTest {
     }
 
     private String addImage(String resourceType) throws Exception {
+        String clientlibs = RT_IMAGE_V1.equals(resourceType) ? Commons.CLIENTLIBS_IMAGE_V1
+            : RT_IMAGE_V2.equals(resourceType) ? Commons.CLIENTLIBS_IMAGE_V2 : Commons.CLIENTLIBS_IMAGE_V3;
+        // v1/v2 build the <img> and image map areas client-side, so the page needs the image clientlibs
+        createPagePolicy(new HashMap<>(java.util.Collections.singletonMap("clientlibs", clientlibs)));
         return addStandaloneComponent(resourceType, "image");
+    }
+
+    private void openDialogTab(String trackingEvent) {
+        dialog().locator("coral-tab[data-foundation-tracking-event*='" + trackingEvent + "']").click();
     }
 
     private void saveProperties(String path, Map<String, String> properties) throws Exception {
@@ -76,11 +84,14 @@ public class ImagePwIT extends ComponentPwBaseTest {
         properties.put("./alt", alt);
         properties.put("./altValueFromDAM", "false");
         properties.put("./titleValueFromDAM", "false");
+        // a drag from the asset finder unchecks "inherit from page"; v3 hides the DAM checkboxes while it is checked
+        properties.put("./imageFromPageImage", "false");
         return properties;
     }
 
     private Locator image() {
-        return page.locator(".cmp-image__image");
+        // v1 renders a plain <img> without the cmp-image__image class
+        return page.locator(".cmp-image img");
     }
 
     @ParameterizedTest
@@ -88,7 +99,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
     public void testAddImageAndAltText(String resourceType) throws Exception {
         String path = addImage(resourceType);
         saveProperties(path, imageProperties("Return to Arkham"));
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).isVisible();
         assertThat(image()).hasAttribute("alt", "Return to Arkham");
@@ -102,9 +113,9 @@ public class ImagePwIT extends ComponentPwBaseTest {
         Map<String, String> properties = imageProperties("Return to Arkham");
         properties.put("./linkURL", "https://www.adobe.com");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
-        assertThat(page.locator(".cmp-image__link")).hasAttribute("href", "https://www.adobe.com");
+        assertThat(page.locator(".cmp-image__link, .cmp-image--link")).hasAttribute("href", "https://www.adobe.com");
     }
 
     @ParameterizedTest
@@ -114,9 +125,14 @@ public class ImagePwIT extends ComponentPwBaseTest {
         Map<String, String> properties = imageProperties("Return to Arkham");
         properties.put("./jcr:title", "The Last Guardian");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
-        assertThat(image()).hasAttribute("title", "The Last Guardian");
+        if (RT_IMAGE_V1.equals(resourceType)) {
+            // v1 renders a non-popup caption as a separate span
+            assertThat(page.locator("span.cmp-image--title")).hasText("The Last Guardian");
+        } else {
+            assertThat(image()).hasAttribute("title", "The Last Guardian");
+        }
     }
 
     @ParameterizedTest
@@ -127,7 +143,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         properties.put("./jcr:title", "The Last Guardian");
         properties.put("./displayPopupTitle", "true");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).hasAttribute("title", "The Last Guardian");
     }
@@ -140,10 +156,12 @@ public class ImagePwIT extends ComponentPwBaseTest {
         properties.put("./isDecorative", "true");
         properties.put("./linkURL", "https://www.adobe.com");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
-        assertThat(image()).hasAttribute("alt", "");
-        assertThat(page.locator(".cmp-image__link")).hasCount(0);
+        // v1 omits the alt attribute, v2/v3 render it empty
+        assertThat(image()).hasCount(1);
+        assertThat(page.locator(".cmp-image img[alt]:not([alt=''])")).hasCount(0);
+        assertThat(page.locator(".cmp-image__link, .cmp-image--link")).hasCount(0);
     }
 
     @ParameterizedTest
@@ -153,7 +171,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         Map<String, String> properties = imageProperties("House on a beach with blue sky");
         properties.put("./jcr:title", "Beach house");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).hasAttribute("alt", "House on a beach with blue sky");
         assertThat(image()).hasAttribute("title", "Beach house");
@@ -165,6 +183,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         String path = addImage(resourceType);
         saveProperties(path, imageProperties("House on a beach with blue sky"));
         openEditDialog(path);
+        openDialogTab("metadata");
 
         assertThat(dialog().locator("coral-checkbox[name='./altValueFromDAM']")).isVisible();
         if (resourceType.equals(RT_IMAGE_V2)) {
@@ -179,7 +198,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         Map<String, String> properties = imageProperties("Return to Arkham");
         properties.put("./jcr:title", "The Last Guardian");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).hasAttribute("alt", "Return to Arkham");
         assertThat(image()).hasAttribute("title", "The Last Guardian");
@@ -191,7 +210,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         Map<String, String> properties = imageProperties("House on a beach with blue sky");
         properties.put("./jcr:title", "Beach house");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).hasAttribute("alt", "House on a beach with blue sky");
         assertThat(image()).hasAttribute("title", "Beach house");
@@ -202,15 +221,16 @@ public class ImagePwIT extends ComponentPwBaseTest {
     public void testCheckMapAreaNavigationAndResponsiveResize(String resourceType) throws Exception {
         String path = addImage(resourceType);
         Map<String, String> properties = imageProperties("Return to Arkham");
-        properties.put("imageMap", "[rect(0,0,226,230)\"/content/target\"|\"\"|\"Alt Text\"|(0.0000,0.0000,0.1948,0.2295)]");
+        properties.put("./imageMap", "[rect(0,0,226,230)\"" + testPage + "\"|\"\"|\"Alt Text\"|(0.0000,0.0000,0.1948,0.2295)]");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         if (RT_IMAGE_V3.equals(resourceType)) {
             assertThat(page.locator("[data-cmp-hook-image='area']")).hasCount(0);
         } else {
-            assertThat(page.locator("[data-cmp-hook-image='area']")).isVisible();
-            assertThat(page.locator("[data-cmp-hook-image='map']")).isVisible();
+            // <map>/<area> never have a layout box, so Playwright reports them hidden; assert presence instead
+            assertThat(page.locator("[data-cmp-hook-image='area']")).not().hasCount(0);
+            assertThat(page.locator("[data-cmp-hook-image='map']")).hasCount(1);
         }
     }
 
@@ -218,9 +238,9 @@ public class ImagePwIT extends ComponentPwBaseTest {
     public void testCheckMapAreaNotAvailable() throws Exception {
         String path = addImage(RT_IMAGE_V3);
         Map<String, String> properties = imageProperties("Return to Arkham");
-        properties.put("imageMap", "[rect(0,0,226,230)\"/content/target\"|\"\"|\"Alt Text\"|(0.0000,0.0000,0.1948,0.2295)]");
+        properties.put("./imageMap", "[rect(0,0,226,230)\"" + testPage + "\"|\"\"|\"Alt Text\"|(0.0000,0.0000,0.1948,0.2295)]");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(page.locator("[data-cmp-hook-image='area']")).hasCount(0);
     }
@@ -229,7 +249,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
     public void testLazyLoadingEnabled() throws Exception {
         String path = addImage(RT_IMAGE_V3);
         saveProperties(path, imageProperties("Return to Arkham"));
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).hasAttribute("loading", "lazy");
     }
@@ -240,7 +260,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         Map<String, String> properties = imageProperties("Return to Arkham");
         properties.put("./disableLazyLoading", "true");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).not().hasAttribute("loading", "lazy");
     }
@@ -251,7 +271,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         saveProperties(path, imageProperties("Return to Arkham"));
         createComponentPolicy("/image-v3",
             new HashMap<>(java.util.Collections.singletonMap("sizes", "(min-width: 36em) 33.3vw, 100vw")));
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).hasAttribute("sizes", "(min-width: 36em) 33.3vw, 100vw");
     }
@@ -263,9 +283,9 @@ public class ImagePwIT extends ComponentPwBaseTest {
         properties.put("./linkURL", "https://www.adobe.com");
         properties.put("./linkTarget", "_blank");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
-        assertThat(page.locator(".cmp-image__link")).hasAttribute("target", "_blank");
+        assertThat(page.locator(".cmp-image__link, .cmp-image--link")).hasAttribute("target", "_blank");
     }
 
     @ParameterizedTest
@@ -312,7 +332,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         selectInCoralSelect("[name='./smartCropRendition']", "Small");
         dialog().locator("coral-checkbox[name='./isDecorative'] input[type='checkbox']").check();
         saveDialog();
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).hasAttribute("src", java.util.regex.Pattern.compile(".*smartcrop=Small.*"));
     }
@@ -335,9 +355,17 @@ public class ImagePwIT extends ComponentPwBaseTest {
         String path = addImage(resourceType);
         saveProperties(path, imageProperties("House on a beach with blue sky"));
         openEditDialog(path);
+        // v3 keeps the alt text on the Asset tab; v2 moves it to Metadata, next to the title
+        boolean v3 = RT_IMAGE_V3.equals(resourceType);
+        openDialogTab(v3 ? "asset" : "metadata");
         assertThat(dialog().locator("coral-checkbox[name='./altValueFromDAM']")).isVisible();
+        openDialogTab("metadata");
+        assertThat(dialog().locator("coral-checkbox[name='./titleValueFromDAM']")).isVisible();
+        openDialogTab("asset");
         dialog().locator(clearSelector).click();
+        openDialogTab(v3 ? "asset" : "metadata");
         assertThat(dialog().locator("coral-checkbox[name='./altValueFromDAM']")).isHidden();
+        openDialogTab("metadata");
         assertThat(dialog().locator("coral-checkbox[name='./titleValueFromDAM']")).isHidden();
     }
 
@@ -345,7 +373,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @Tag("IgnoreOn65")
     public void testPageImageWithEmptyAltTextFromPageImage() throws Exception {
         configureFeaturedImage("");
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).hasAttribute("alt", "");
         assertThat(image()).hasAttribute("src", java.util.regex.Pattern.compile(".*adobe-systems-logo-and-wordmark.*"));
@@ -361,7 +389,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @Tag("IgnoreOn65")
     public void testPageImageWithAltTextFromPageImage() throws Exception {
         configureFeaturedImage("page image alt");
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).hasAttribute("alt", "page image alt");
     }
@@ -382,7 +410,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         properties.put("./alt", "Return to Arkham");
         properties.put("_charset_", "UTF-8");
         Commons.editNodeProperties(authorClient, path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).hasAttribute("alt", "Return to Arkham");
     }
@@ -402,7 +430,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         properties.put("./isDecorative", "true");
         properties.put("_charset_", "UTF-8");
         Commons.editNodeProperties(authorClient, path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).hasAttribute("alt", "");
     }
@@ -420,7 +448,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         HashMap<String, String> properties = imageProperties("House on a beach with blue sky");
         properties.put("./imageFromPageImage", "false");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).hasAttribute("alt", "House on a beach with blue sky");
         assertThat(image()).hasAttribute("src", java.util.regex.Pattern.compile(".*core-comp-test-image.*"));
@@ -442,10 +470,10 @@ public class ImagePwIT extends ComponentPwBaseTest {
         properties.put("./linkURL", rootPage);
         properties.put("_charset_", "UTF-8");
         Commons.editNodeProperties(authorClient, path, properties);
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
 
         assertThat(image()).hasAttribute("alt", "Rock Climbing and Bouldering above the lake and mountains");
-        assertThat(page.locator(".cmp-image__link")).hasAttribute("href",
+        assertThat(page.locator(".cmp-image__link, .cmp-image--link")).hasAttribute("href",
             java.util.regex.Pattern.compile(".*" + rootPage + ".*"));
     }
 
