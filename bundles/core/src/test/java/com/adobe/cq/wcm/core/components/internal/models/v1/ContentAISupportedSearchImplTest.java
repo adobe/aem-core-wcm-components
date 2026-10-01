@@ -20,12 +20,16 @@ import org.apache.sling.i18n.impl.RootResourceBundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ContentAISupportedSearch;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
+import com.adobe.granite.license.ProductInfoProvider;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -52,7 +56,8 @@ class ContentAISupportedSearchImplTest {
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + "/test-content-dam.json", CONTENT_ROOT);
-        mockProductInfoProvider.setVersion(new Version("6.5.25"));
+        // Cloud Service by default, so tests unrelated to version gating aren't affected by the classic-6.5 block.
+        mockProductInfoProvider.setVersion(new Version("6.6.0"));
         context.registerInjectActivateService(mockProductInfoProvider);
         ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class);
         Mockito.when(resourceBundleProvider.getResourceBundle(Mockito.any())).thenReturn(new RootResourceBundle());
@@ -62,7 +67,6 @@ class ContentAISupportedSearchImplTest {
 
     @Test
     void testProperties() {
-        mockProductInfoProvider.setVersion(new Version("6.6.0"));
         context.currentResource(COMPONENT_PATH);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         assertEquals("my-content-source", search.getContentSource());
@@ -81,7 +85,6 @@ class ContentAISupportedSearchImplTest {
 
     @Test
     void testListLayoutAndTextProperties() {
-        mockProductInfoProvider.setVersion(new Version("6.6.0"));
         context.currentResource(COMPONENT_LIST_PATH);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         assertEquals("list", search.getResultsLayout());
@@ -96,7 +99,6 @@ class ContentAISupportedSearchImplTest {
 
     @Test
     void getI18nMessagesReturnsJson() throws Exception {
-        mockProductInfoProvider.setVersion(new Version("6.6.0"));
         context.currentResource(COMPONENT_PATH);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         JsonNode node = new ObjectMapper().readTree(search.getI18nMessages());
@@ -106,7 +108,6 @@ class ContentAISupportedSearchImplTest {
 
     @Test
     void resultsSize_defaultsToTwelve() {
-        mockProductInfoProvider.setVersion(new Version("6.6.0"));
         context.create().resource(CONTENT_ROOT + "/default-results-size",
             "sling:resourceType", ContentAISupportedSearchImpl.RESOURCE_TYPE,
             "contentSources", new String[] {"my-content-source"});
@@ -117,7 +118,6 @@ class ContentAISupportedSearchImplTest {
 
     @Test
     void resolvesContentSourceFromLegacyProperty() {
-        mockProductInfoProvider.setVersion(new Version("6.6.0"));
         context.create().resource(CONTENT_ROOT + "/legacy-source",
             "sling:resourceType", ContentAISupportedSearchImpl.RESOURCE_TYPE,
             "contentSource", "legacy-source");
@@ -129,7 +129,6 @@ class ContentAISupportedSearchImplTest {
 
     @Test
     void genSearchErrorFallback_defaultsToResultsOnlyWhenBlank() {
-        mockProductInfoProvider.setVersion(new Version("6.6.0"));
         String path = CONTENT_ROOT + "/blank-fallback";
         context.create().resource(path,
             "sling:resourceType", ContentAISupportedSearchImpl.RESOURCE_TYPE,
@@ -142,44 +141,53 @@ class ContentAISupportedSearchImplTest {
     }
 
     @Test
-    void genSearchToggleVisible_defaultHiddenOnAem65() {
-        mockProductInfoProvider.setVersion(new Version("6.5.25"));
+    void genSearchToggleVisible_defaultsToVisibleWhenPropertyAbsent() {
         context.currentResource(COMPONENT_DEFAULTS_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertTrue(search.isGenSearchToggleVisible());
+    }
+
+    @Test
+    void genSearchToggleVisible_authorCanDisable() {
+        context.currentResource(COMPONENT_DEFAULTS_PATH);
+        context.create().resource(COMPONENT_DEFAULTS_PATH,
+            "sling:resourceType", ContentAISupportedSearchImpl.RESOURCE_TYPE,
+            "genSearchToggleVisible", false);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         assertFalse(search.isGenSearchToggleVisible());
     }
 
-    @Test
-    void genSearchToggleVisible_defaultVisibleOnCloudPublish() {
-        mockProductInfoProvider.setVersion(new Version("6.6.0"));
-        context.currentResource(COMPONENT_DEFAULTS_PATH);
-        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
-        assertTrue(search.isGenSearchToggleVisible());
-    }
-
-    @Test
-    void genSearchToggleVisible_defaultVisibleOnCloudAuthorReleaseTrain() {
-        mockProductInfoProvider.setVersion(new Version("2026.2.24288"));
-        context.currentResource(COMPONENT_DEFAULTS_PATH);
-        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
-        assertTrue(search.isGenSearchToggleVisible());
-    }
-
-    @Test
-    void genSearchToggleVisible_alwaysHiddenOnAem65EvenWhenAuthorEnables() {
-        mockProductInfoProvider.setVersion(new Version("6.5.25"));
+    @ParameterizedTest
+    @ValueSource(strings = {"6.5.0", "6.5.25", "6.5.27"}) // GA, latest known SP, and a future SP alike
+    void genSearchToggleVisible_alwaysHiddenOnClassic65EvenWhenAuthorEnables(String version) {
+        mockProductInfoProvider.setVersion(new Version(version));
         context.currentResource(COMPONENT_PATH);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         assertFalse(search.isGenSearchToggleVisible());
     }
 
     @Test
-    void genSearchToggleVisible_authorCanDisableOnCloud() {
-        mockProductInfoProvider.setVersion(new Version("6.6.0"));
-        context.currentResource(COMPONENT_DEFAULTS_PATH);
-        context.create().resource(COMPONENT_DEFAULTS_PATH,
-            "sling:resourceType", ContentAISupportedSearchImpl.RESOURCE_TYPE,
-            "genSearchToggleVisible", false);
+    void genSearchToggleVisible_visibleOnBrandedClassic65LtsQualifier() {
+        mockProductInfoProvider.setVersion(new Version("6.5.2.LTS"));
+        context.currentResource(COMPONENT_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertTrue(search.isGenSearchToggleVisible());
+    }
+
+    @Test
+    void genSearchToggleVisible_visibleOnCloudEvenWithHighVersionNumber() {
+        mockProductInfoProvider.setVersion(new Version("6.6.25"));
+        context.currentResource(COMPONENT_PATH);
+        ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
+        assertTrue(search.isGenSearchToggleVisible());
+    }
+
+    @Test
+    void genSearchToggleVisible_hiddenWhenPlatformIndeterminateEvenWhenAuthorEnables() {
+        // Fails closed rather than open: when ProductInfo can't be resolved at all, the toggle must stay hidden
+        // even though the author-configured property (genSearchToggleVisibleProperty) would otherwise allow it.
+        context.registerService(ProductInfoProvider.class, () -> null, Constants.SERVICE_RANKING, 100);
+        context.currentResource(COMPONENT_PATH);
         ContentAISupportedSearch search = context.request().adaptTo(ContentAISupportedSearch.class);
         assertFalse(search.isGenSearchToggleVisible());
     }

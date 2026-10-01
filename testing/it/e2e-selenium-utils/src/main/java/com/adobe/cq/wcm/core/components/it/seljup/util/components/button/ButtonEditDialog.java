@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.button;
 
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
@@ -106,12 +107,7 @@ public class ButtonEditDialog extends Dialog {
     }
 
     public void selectButtonType(String type) {
-        $( "[name='./type'] > button").click();
-        CoralSelectList coralSelectList = new CoralSelectList($("[name='./type']"));
-        if(!coralSelectList.isVisible()) {
-            CoralSelect selectList = new CoralSelect("name='./type'");
-            coralSelectList = selectList.openSelectList();
-        }
+        CoralSelectList coralSelectList = Commons.openCoralSelect("[name='./type']");
 
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + type + "']"));

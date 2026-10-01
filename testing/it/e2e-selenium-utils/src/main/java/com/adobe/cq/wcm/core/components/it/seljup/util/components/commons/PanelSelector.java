@@ -19,9 +19,13 @@ package com.adobe.cq.wcm.core.components.it.seljup.util.components.commons;
 import com.adobe.cq.testing.selenium.pagewidgets.common.BaseComponent;
 import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
+import java.time.Duration;
+
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
+import static com.adobe.cq.testing.selenium.Constants.DEFAULT_TIMEOUT;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.actions;
 
@@ -30,6 +34,32 @@ public class PanelSelector extends BaseComponent {
 
     public PanelSelector() {
         super(".cmp-panelselector");
+    }
+
+    /**
+     * Waits for the panel selector popover to be shown (it opens with an animation).
+     * @return true if it became visible within the default timeout
+     */
+    public boolean waitShown() {
+        try {
+            element().shouldBe(Condition.visible, Duration.ofMillis(DEFAULT_TIMEOUT));
+            return true;
+        } catch (AssertionError e) {
+            return false;
+        }
+    }
+
+    /**
+     * Waits for the panel selector popover to be hidden (it closes with an animation).
+     * @return true if it became hidden within the default timeout
+     */
+    public boolean waitHidden() {
+        try {
+            element().shouldNotBe(Condition.visible, Duration.ofMillis(DEFAULT_TIMEOUT));
+            return true;
+        } catch (AssertionError e) {
+            return false;
+        }
     }
 
     /**

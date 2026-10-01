@@ -164,7 +164,7 @@ public class AccordionIT extends AuthorBaseUITest {
         childrenEditor.getInputItems().last().sendKeys("item2");
 
         //3.
-        Commons.saveConfigureDialog();
+        Commons.saveConfigureDialogAndWaitForClose();
 
         //4.
         accordion.openEditDialog(cmpPath);
@@ -177,7 +177,7 @@ public class AccordionIT extends AuthorBaseUITest {
 
         List<String> itemValues = items.stream().map(SelenideElement::getValue).map(String::toString).collect(Collectors.toList());
 
-        Commons.saveConfigureDialog();
+        Commons.saveConfigureDialogAndWaitForClose();
 
         return itemValues;
     }
@@ -622,7 +622,7 @@ public class AccordionIT extends AuthorBaseUITest {
         //6.
         editableToolbar.clickPanelSelect();
         PanelSelector panelSelector = new PanelSelector();
-        assertTrue(panelSelector.isVisible(), "Panel selector should be visible");
+        assertTrue(panelSelector.waitShown(), "Panel selector should be visible");
 
         Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
 
@@ -649,7 +649,7 @@ public class AccordionIT extends AuthorBaseUITest {
         //9.
         accordion.getCQOverlay().openPlaceholder(testPage);
         panelSelector = new PanelSelector();
-        assertTrue(panelSelector.isVisible() == false, "Panel selector should not be visible");
+        assertTrue(panelSelector.waitHidden(), "Panel selector should not be visible");
     }
 
     /**
@@ -823,14 +823,14 @@ public class AccordionIT extends AuthorBaseUITest {
         itemTitle.click();
         String fragment = Commons.getUrlFragment();
         SelenideElement itemContent = Selenide.$("#" + itemContentId1);
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent));
         assertEquals(itemTitleId1, fragment, "The URL fragment should be updated");
 
         // clicking an expanded accordion item closes it and removes the URL fragment
         itemTitle.click();
         fragment = Commons.getUrlFragment();
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle), "the item title should be visible");
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle), "the item title should be visible");
         assertFalse(Commons.isElementVisibleAndInViewport(itemContent), "the item content should be closed");
         assertNull(fragment, "The URL fragment should be empty");
     }
@@ -850,7 +850,7 @@ public class AccordionIT extends AuthorBaseUITest {
         SelenideElement itemContent3 = Selenide.$("#" + itemContentId3);
 
         // make sure accordion items are closed before clicking the links
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle1));
         assertFalse(Commons.isElementVisibleAndInViewport(itemContent1));
         assertFalse(Commons.isElementVisibleAndInViewport(itemTitle2));
         assertFalse(Commons.isElementVisibleAndInViewport(itemContent2));
@@ -859,26 +859,26 @@ public class AccordionIT extends AuthorBaseUITest {
 
         // clicking a link referencing an accordion item expands it and scrolls to it
         Selenide.$("#link-1").click();
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle1));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent1));
 
         // clicking a link referencing the first accordion item expands it and scrolls to it
         Selenide.$("#link-1a").click();
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle1a));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent1a));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle1a));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent1a));
 
         // clicking a link referencing a nested accordion item expands all intermediary items and scrolls to it
         Commons.scrollToTop();
         Selenide.$("#link-2").click();
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle2));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent2));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle2));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent2));
 
         // clicking a link referencing a text element within a nested accordion item expands all intermediary items
         // and scrolls to the ID
         Commons.scrollToTop();
         Selenide.$("#link-3").click();
         assertFalse(Commons.isElementVisibleAndInViewport(itemTitle3));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent3));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent3));
     }
 
     @Test
@@ -890,8 +890,8 @@ public class AccordionIT extends AuthorBaseUITest {
         SelenideElement itemTitle = Selenide.$("#" + itemTitleId1);
         SelenideElement itemContent = Selenide.$("#" + itemContentId1);
         // when the URL fragment references an accordion item, the accordion item is expanded and scrolled to
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent));
     }
 
     @Test
@@ -904,8 +904,8 @@ public class AccordionIT extends AuthorBaseUITest {
         SelenideElement itemContent = Selenide.$("#" + itemContentId2);
         // when the URL fragment references a nested accordion item, all intermediary accordion items are expanded and
         // the last item is scrolled to
-        assertTrue(Commons.isElementVisibleAndInViewport(itemTitle));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemTitle));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent));
     }
 
     @Test
@@ -919,7 +919,7 @@ public class AccordionIT extends AuthorBaseUITest {
         // when the URL fragment references an element ID that is part of a nested accordion item, all intermediary
         // accordion items are expanded and the element ID is scrolled to
         assertFalse(Commons.isElementVisibleAndInViewport(itemTitle));
-        assertTrue(Commons.isElementVisibleAndInViewport(itemContent));
+        assertTrue(Commons.waitForElementVisibleAndInViewport(itemContent));
     }
 
 }

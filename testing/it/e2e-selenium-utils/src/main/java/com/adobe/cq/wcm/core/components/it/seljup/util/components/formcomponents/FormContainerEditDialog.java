@@ -21,6 +21,7 @@ import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -36,13 +37,7 @@ public class FormContainerEditDialog extends Dialog {
     private static String actionInput = "input[name='./action']";
 
     public void selectActionType(String action) {
-        //Open selectlist
-        $( "[name='./actionType'] > button").click();
-        CoralSelectList coralSelectList = new CoralSelectList($("[name='./actionType']"));
-        if(!coralSelectList.isVisible()) {
-            CoralSelect selectList = new CoralSelect("name='./actionType'");
-            coralSelectList = selectList.openSelectList();
-        }
+        CoralSelectList coralSelectList = Commons.openCoralSelect("[name='./actionType']");
 
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + action + "']"));

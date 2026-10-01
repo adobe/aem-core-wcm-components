@@ -24,6 +24,56 @@
 
     var _observer = null;
 
+    var CT_SITES_49050 = "CT_SITES-49050";
+
+    /**
+     * Granite feature toggle CT_SITES-49050 gates markup normalization for the VCF preview response.
+     * When Granite or {@code Toggles} is unavailable, helpers are treated as enabled. When the toggle
+     * is explicitly disabled, behaviour matches earlier revisions.
+     *
+     * @returns {Boolean}
+     */
+    function isVcfAuthoringMarkupHelpersEnabled() {
+        if (typeof Granite === "undefined" || !Granite.Toggles || typeof Granite.Toggles.isEnabled !== "function") {
+            return true;
+        }
+        return Granite.Toggles.isEnabled(CT_SITES_49050) !== false;
+    }
+
+    /**
+     * @returns {Object|null} {@code CQ.CoreComponents.AuthoringEditorUtils.markup} when present
+     */
+    function getAuthoringMarkupUtils() {
+        if (window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils) {
+            return window.CQ.CoreComponents.AuthoringEditorUtils.markup;
+        }
+        return null;
+    }
+
+    /**
+     * Normalizes the VCF preview response markup before it is rendered in the editor, delegating to the
+     * shared authoring markup utility so the preview is inserted consistently with other authoring
+     * editor responses. Falls back to the raw markup when the toggle is disabled or the utility is
+     * unavailable.
+     *
+     * @param {String} html - response body for the VCF preview
+     * @returns {String} markup to assign to {@code innerHTML}
+     */
+    function resolveVcfPreviewMarkup(html) {
+        if (!isVcfAuthoringMarkupHelpersEnabled()) {
+            return html;
+        }
+        var markupUtils = getAuthoringMarkupUtils();
+        if (markupUtils && typeof markupUtils.parseAndNormalizeAuthoringDatasourceMarkup === "function") {
+            var doc = markupUtils.parseAndNormalizeAuthoringDatasourceMarkup(html);
+            if (doc && doc.body) {
+                return doc.body.innerHTML;
+            }
+            return "";
+        }
+        return html;
+    }
+
     function i18n(message) {
         if (typeof window !== "undefined" && window.Granite && window.Granite.I18n) {
             return window.Granite.I18n.get(message);
@@ -141,7 +191,7 @@
                 } else {
                     target.removeAttribute(ATTR_LOAD_FAILED);
                     target.removeAttribute(ATTR_NO_PREVIEW);
-                    target.innerHTML = html;
+                    target.innerHTML = resolveVcfPreviewMarkup(html);
                 }
                 target.removeAttribute(LOADING_ATTR);
             }

@@ -150,26 +150,27 @@ public class FormComponentsIT extends AuthorBaseUITest {
         dialog.selectActionType("foundation/components/form/actions/store");
         String actionInputValue = dialog.getActionInputValue();
         String contentJsonUrl_allForm = actionInputValue.substring(0, actionInputValue.length() - 1);
-        Commons.saveConfigureDialog();
+        Commons.saveConfigureDialogAndWaitForClose();
         editorPage.enterPreviewMode();
         Commons.switchContext("ContentFrame");
         $(Selectors.SELECTOR_SUBMIT_BUTTON).click();
 
-        JsonNode json_allForm = authorClient.doGetJson(contentJsonUrl_allForm, 3, HttpStatus.SC_OK);
-        Iterator<JsonNode> itr = json_allForm.elements();
-        Boolean present = false;
-        while(itr.hasNext()) {
-            JsonNode node = itr.next();
-            if(node.isObject()) {
-                if (node.get("inputName") != null && node.get("inputName").toString().equals("\"inputValue\"") &&
-                    node.get("hiddenName") != null && node.get("hiddenName").toString().equals("\"hiddenValue\"") &&
-                    node.get("optionName") != null && node.get("optionName").toString().equals("\"value1\"") ) {
-                    present = true;
-                }
+        // the submission is stored asynchronously with respect to the click, so poll for it
+        JsonNode json_allForm = Commons.waitForJson(authorClient, contentJsonUrl_allForm, 3, FormComponentsIT::hasStoredValues);
+        assertTrue(hasStoredValues(json_allForm), "All values for the form components are not saved");
+    }
 
+    private static boolean hasStoredValues(JsonNode json) {
+        Iterator<JsonNode> itr = json.elements();
+        while (itr.hasNext()) {
+            JsonNode node = itr.next();
+            if (node.isObject() &&
+                node.get("inputName") != null && node.get("inputName").toString().equals("\"inputValue\"") &&
+                node.get("hiddenName") != null && node.get("hiddenName").toString().equals("\"hiddenValue\"") &&
+                node.get("optionName") != null && node.get("optionName").toString().equals("\"value1\"")) {
+                return true;
             }
         }
-
-        assertTrue(present, "All values for the form components are not saved");
+        return false;
     }
 }
