@@ -16,6 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.image;
 
+import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
@@ -188,12 +189,7 @@ public class ImageEditDialog extends Dialog {
     }
 
     public void selectSmartCrop(String cropName) {
-        $(smartCropSelectButton).click();
-        CoralSelectList coralSelectList = new CoralSelectList($(smartCropField));
-        if (!coralSelectList.isVisible()) {
-            CoralSelect selectList = new CoralSelect($(smartCropField));
-            coralSelectList = selectList.openSelectList();
-        }
+        CoralSelectList coralSelectList = Commons.openCoralSelect(smartCropField);
         coralSelectList.selectByValue(cropName);
     }
 }

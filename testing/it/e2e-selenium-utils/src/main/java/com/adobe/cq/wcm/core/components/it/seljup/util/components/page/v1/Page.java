@@ -20,7 +20,6 @@ import com.adobe.cq.testing.selenium.pageobject.cq.sites.PropertiesPage;
 import com.adobe.cq.testing.selenium.pagewidgets.CalendarPicker;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralCheckbox;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralMultiField;
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelect;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralTagList;
 import com.adobe.cq.testing.selenium.pagewidgets.cq.AutoCompleteField;
@@ -186,8 +185,7 @@ public class Page {
     }
 
     public void setRobotsTags(String... values) {
-        CoralSelect selectList = new CoralSelect(robotsTags);
-        CoralSelectList coralSelectList = selectList.openSelectList();
+        CoralSelectList coralSelectList = Commons.openCoralSelect("coral-select[" + robotsTags + "]");
         for (String value : values) {
             coralSelectList.selectByValue(value);
         }

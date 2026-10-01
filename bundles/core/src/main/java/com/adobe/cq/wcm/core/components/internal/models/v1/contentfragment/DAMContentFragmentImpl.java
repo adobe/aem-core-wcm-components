@@ -88,8 +88,12 @@ public class DAMContentFragmentImpl implements DAMContentFragment {
             final Iterator<ContentElement> contentElementIterator =
                     ContentFragmentUtils.filterElements(contentFragment, elementNames);
 
-            // Wrap elements and get their configured variation (if any)
+            // Wrap elements and get their configured variation (if any). A composite (nested/structured)
+            // element is kept in `elements` (consumed by HTL and the data layer, which render an
+            // "unsupported" hint for it) but left out of `exportedElements` (consumed by the JSON
+            // export getters), so the export omits it while the page render can still flag it.
             this.exportedElements = new LinkedHashMap<>();
+            this.elements = new ArrayList<>();
             while (contentElementIterator.hasNext()) {
                 final ContentElement contentElement = contentElementIterator.next();
                 ContentVariation variation = null;
@@ -99,11 +103,12 @@ public class DAMContentFragmentImpl implements DAMContentFragment {
                         LOG.warn("Non-existing variation '{}' of element '{}'", variationName, contentElement.getName());
                     }
                 }
-                this.exportedElements.put(contentElement.getName(),
-                        new DAMContentElementImpl(contentTypeConverter, contentElement, variation));
+                final DAMContentElement damContentElement = new DAMContentElementImpl(contentTypeConverter, contentElement, variation);
+                this.elements.add(damContentElement);
+                if (!ContentFragmentUtils.isCompositeElement(contentElement)) {
+                    this.exportedElements.put(contentElement.getName(), damContentElement);
+                }
             }
-
-            this.elements = new ArrayList<>(exportedElements.values());
         }
     }
 
