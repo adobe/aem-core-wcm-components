@@ -317,7 +317,7 @@ public abstract class PlaywrightAuthorBaseTest {
         String[] segments = relativePath.split("/");
         String currentPath = prefix;
         Locator autocomplete = dialog().locator("foundation-autocomplete" + selector);
-        autocomplete.locator("button").click();
+        autocomplete.locator("button[title='Open Selection Dialog']").click();
 
         Locator picker = page.locator("coral-dialog:visible").last();
         assertThat(picker).isVisible();
