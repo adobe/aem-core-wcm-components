@@ -42,6 +42,7 @@ import org.apache.http.HttpStatus;
 import org.apache.sling.testing.clients.ClientException;
 
 import static com.adobe.cq.testing.selenium.utils.ElementUtils.clickableClick;
+import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -219,7 +220,8 @@ public class PageTests {
         AdvancedTab advancedTab = propertiesPage.clickTab("advanced", AdvancedTab.class);
 
         // set the language
-        advancedTab.selectLanguage(language);
+        // Same as AdvancedTab#selectLanguage, but robust to Coral moving the popover out of the select
+        Commons.selectInCoralSelect("coral-select[name='./jcr:language']", language);
         // set the desigh path
         page.setDesignPath(design);
         // set the alias
@@ -414,13 +416,15 @@ public class PageTests {
         CloudServicesTab cloudServicesTab = propertiesPage.clickTab("cloud services", CloudServicesTab.class);
 
         // Add cloud configuration
-        cloudServicesTab.addCloudConfiguration(cloudServiceConfig);
+        addCloudConfiguration(cloudServiceConfig);
 
         // Delete the added cloud configuration
         cloudServicesTab.deleteCloudConfiguration();
+        $(CLOUD_CONFIG_TAG).should(Condition.disappear);
+        $(CLOUD_CONFIG_SELECT + " coral-select-item[value='" + cloudServiceConfig + "'][selected]").should(Condition.disappear);
 
         // Add cloud configuration again
-        cloudServicesTab.addCloudConfiguration(cloudServiceConfig);
+        addCloudConfiguration(cloudServiceConfig);
 
         // save the configuration and open again the page property
         propertiesPage.saveAndClose();
@@ -431,6 +435,18 @@ public class PageTests {
         // Check is cloud configuration is set
         assertTrue(page.isCloudServiceConfigAdded(), "Cloud Service Config should be set");
     }
+
+    /**
+     * Same as {@link CloudServicesTab#addCloudConfiguration(String)}, but opens the select via its aria-controls list,
+     * since Coral moves the popover out of the select once it is opened.
+     */
+    private static void addCloudConfiguration(String value) {
+        Commons.selectInCoralSelect(CLOUD_CONFIG_SELECT, value);
+        $(CLOUD_CONFIG_TAG).should(Condition.appear);
+    }
+
+    private static final String CLOUD_CONFIG_SELECT = "coral-select[placeholder='Add Configuration']";
+    private static final String CLOUD_CONFIG_TAG = "button[data-title='Cloud Proxy Configuration']";
 
     public void testPersonalizationPageProperties() throws InterruptedException {
         // Open properties page

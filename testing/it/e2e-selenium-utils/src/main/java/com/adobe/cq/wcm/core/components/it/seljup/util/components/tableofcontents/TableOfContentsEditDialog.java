@@ -15,11 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.seljup.util.components.tableofcontents;
 
-import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralPopOver;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.CoralSelectList;
 import com.adobe.cq.testing.selenium.pagewidgets.coral.Dialog;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
-import com.adobe.cq.wcm.core.components.it.seljup.util.constant.RequestConstants;
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -29,7 +28,6 @@ import org.openqa.selenium.WebElement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.adobe.cq.testing.selenium.pagewidgets.Helpers.waitForElementAnimationFinished;
 import static com.codeborne.selenide.Selenide.$;
 
 public class TableOfContentsEditDialog extends Dialog {
@@ -117,21 +115,12 @@ public class TableOfContentsEditDialog extends Dialog {
         $(this.id).setValue(id);
     }
 
-    private void openSelectList(String select) throws InterruptedException {
-        $( select + " > button").click();
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
+    private void openSelectList(String select) {
+        Commons.openCoralSelect(select);
     }
 
     private CoralSelectList getSelectList(String select) {
-        CoralSelectList coralSelectList = new CoralSelectList($(select));
-        if(coralSelectList.isVisible()) {
-            return coralSelectList;
-        } else {
-            CoralPopOver popOver = CoralPopOver.firstOpened();
-            popOver.waitVisible();
-            waitForElementAnimationFinished(popOver.getCssSelector());
-            return new CoralSelectList(popOver.element());
-        }
+        return Commons.openCoralSelect(select);
     }
 
     private boolean isAllLevelsPresent(String levelSelect) throws InterruptedException {
@@ -156,6 +145,7 @@ public class TableOfContentsEditDialog extends Dialog {
 
     void selectItem(String select, String item) throws InterruptedException {
         openSelectList(select);
+        $(item).should(Condition.exist);
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         WebElement element = webDriver.findElement(By.cssSelector(item));
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", element);

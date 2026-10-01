@@ -23,7 +23,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.time.Duration;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Predicate;
 
 import com.adobe.cq.testing.selenium.pagewidgets.cq.InsertComponentDialog;
 import com.codeborne.selenide.Condition;
@@ -40,8 +42,11 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
+import org.apache.sling.testing.clients.exceptions.TestingValidationException;
 import org.apache.sling.testing.clients.util.FormEntityBuilder;
 import org.apache.sling.testing.clients.util.HttpUtils;
+import org.apache.sling.testing.clients.util.JsonUtils;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.sling.testing.clients.util.poller.Polling;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -729,6 +734,15 @@ public class Commons {
     }
 
     /**
+     * Saves the configuration dialog and waits for it to close, so that subsequent editor interactions (e.g. switching
+     * to preview mode) are not swallowed while the dialog is still being dismissed and the editable refreshed.
+     */
+    public static void saveConfigureDialogAndWaitForClose() throws InterruptedException {
+        saveConfigureDialog();
+        $(Selectors.SELECTOR_CONFIG_DIALOG).should(Condition.disappear, Duration.ofMillis(DEFAULT_TIMEOUT));
+    }
+
+    /**
      * Close configuration for component
      */
     public static void closeConfigureDialog() throws InterruptedException {
@@ -847,6 +861,42 @@ public class Commons {
         return webDriver.getCurrentUrl();
     }
 
+    /**
+     * Waits until the current browser URL ends with the given suffix, returning the last seen URL.
+     */
+    public static String waitForCurrentUrlEndsWith(String suffix) {
+        try {
+            new WebDriverWait(WebDriverRunner.getWebDriver(), Duration.ofMillis(DEFAULT_TIMEOUT))
+                .until(driver -> driver.getCurrentUrl().endsWith(suffix));
+        } catch (org.openqa.selenium.TimeoutException ignored) {
+            // the caller asserts on the returned URL
+        }
+        return getCurrentUrl();
+    }
+
+    /**
+     * Polls a JSON resource until it exists and satisfies the condition. Used for content written asynchronously
+     * with respect to the test (e.g. by a form submitted from the browser).
+     */
+    public static JsonNode waitForJson(CQClient client, String path, int depth, Predicate<JsonNode> condition)
+        throws ClientException, InterruptedException {
+        final JsonNode[] result = new JsonNode[1];
+        Polling polling = new Polling(() -> {
+            SlingHttpResponse response = client.doGet(path + "." + depth + ".json");
+            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+                return false;
+            }
+            result[0] = JsonUtils.getJsonNodeFromString(response.getContent());
+            return condition.test(result[0]);
+        });
+        try {
+            polling.poll(DEFAULT_TIMEOUT, DEFAULT_RETRY_DELAY);
+        } catch (TimeoutException e) {
+            throw new TestingValidationException("Condition not met for " + path + " after " + polling.getWaited() + "ms", e);
+        }
+        return result[0];
+    }
+
     public static boolean iseditDialogVisible() {
         return $(Selectors.SELECTOR_CONFIG_DIALOG).isDisplayed();
     }
@@ -883,14 +933,47 @@ public class Commons {
     }
 
 
-    public static void useDialogSelect(String name, String value) throws InterruptedException {
-        $( "[name='" + name + "'] > button").click();
-        Commons.webDriverWait(RequestConstants.WEBDRIVER_WAIT_TIME_MS);
-        CoralSelectList coralSelectList = new CoralSelectList($("[name='" + name + "']"));
-        if(!coralSelectList.isVisible()) {
-            CoralSelect selectList = new CoralSelect("name='" + name + "'");
-            coralSelectList = selectList.openSelectList();
+    /**
+     * Opens a Coral select (identified by the given selector) and returns its select list once visible.
+     * Coral moves the select's popover out of the {@code coral-select} element when it is first opened, so the list is
+     * located via the button's {@code aria-controls} instead of as a descendant. The button is clicked once and only
+     * clicked again if the list did not open, since clicking while it is opening would toggle it closed.
+     */
+    public static CoralSelectList openCoralSelect(String selectSelector) {
+        SelenideElement button = $(selectSelector + " > button");
+        String listSelector = "#" + button.shouldHave(Condition.attribute("aria-controls")).getAttribute("aria-controls");
+        for (int attempt = 0; attempt < 3 && !$(listSelector).isDisplayed(); attempt++) {
+            if ("true".equals(button.getAttribute("aria-expanded"))) {
+                // open but the list is not shown (e.g. options not refreshed yet): close it first, so the click
+                // below re-opens it instead of toggling it closed
+                button.click();
+                button.shouldNotHave(Condition.attribute("aria-expanded", "true"), Duration.ofSeconds(5));
+            }
+            button.click();
+            try {
+                $(listSelector).shouldBe(Condition.visible, Duration.ofSeconds(5));
+            } catch (AssertionError e) {
+                // the click did not open the list, retry
+            }
         }
+        $(listSelector).shouldBe(Condition.visible);
+        return new CoralSelectList(listSelector);
+    }
+
+    /**
+     * Opens a Coral select (see {@link #openCoralSelect(String)}) and clicks the item with the given value.
+     * The item is scrolled into view and clicked natively, since long lists may render it off-screen.
+     * @param selectSelector CSS selector of the coral-select element
+     * @param value value of the item to select
+     */
+    public static void selectInCoralSelect(String selectSelector, String value) {
+        SelenideElement item = openCoralSelect(selectSelector).element()
+            .$("coral-selectlist-item[value='" + value + "']").should(Condition.exist);
+        item.scrollIntoView(true).shouldBe(Condition.visible).click();
+    }
+
+    public static void useDialogSelect(String name, String value) throws InterruptedException {
+        CoralSelectList coralSelectList = openCoralSelect("[name='" + name + "']");
 
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         WebElement element = webDriver.findElement(By.cssSelector("coral-selectlist-item[value='" + value + "']"));
@@ -952,6 +1035,23 @@ public class Commons {
     public static void scrollToTop() {
         final WebDriver webDriver = WebDriverRunner.getWebDriver();
         ((JavascriptExecutor) webDriver).executeScript("window.scrollTo(0, 0);");
+    }
+
+    /**
+     * Waits for an element to become visible and scrolled into the viewport (e.g. after a deep link click, which
+     * expands the panel and scrolls asynchronously).
+     * @param element the element
+     * @return true if the element became visible and in the viewport within the default timeout
+     */
+    public static boolean waitForElementVisibleAndInViewport(SelenideElement element) {
+        long deadline = System.currentTimeMillis() + DEFAULT_TIMEOUT;
+        while (!isElementVisibleAndInViewport(element)) {
+            if (System.currentTimeMillis() > deadline) {
+                return false;
+            }
+            Selenide.sleep(200);
+        }
+        return true;
     }
 
     /**
