@@ -155,6 +155,65 @@ class ContentSourcesDataSourceServletTest {
     }
 
     @Test
+    void doGetHandlesNullFirstPageGracefully() throws Exception {
+        // Defensive branch: a null first-page response (rather than a thrown exception) must not NPE.
+        when(mockClient.listContentSources(anyString(), isNull())).thenReturn(null);
+
+        context.create().resource("/apps/datasource-null-first-page",
+            "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
+        context.currentResource("/apps/datasource-null-first-page");
+        underTest.doGet(context.request(), context.response());
+
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        assertNotNull(dataSource);
+        assertFalse(dataSource.iterator().hasNext());
+    }
+
+    @Test
+    void doGetHandlesNullSubsequentPageGracefully() throws Exception {
+        // Defensive branch: a null page returned while following the cursor must stop the loop without NPE.
+        ContentSourceListItem page1Item = new ContentSourceListItem();
+        page1Item.setName("page-1-source");
+        page1Item.setType("ACQUISITION");
+        ContentSourceListResult page1 = new ContentSourceListResult();
+        page1.setItems(List.of(page1Item));
+        page1.setCursor("cursor-page-2");
+        when(mockClient.listContentSources(anyString(), isNull())).thenReturn(page1);
+        when(mockClient.listContentSources(anyString(), eq("cursor-page-2"))).thenReturn(null);
+
+        context.create().resource("/apps/datasource-null-next-page",
+            "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
+        context.currentResource("/apps/datasource-null-next-page");
+        context.request().setParameterMap(java.util.Map.of("contentSourceType", "ACQUISITION"));
+        underTest.doGet(context.request(), context.response());
+
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        assertNotNull(dataSource);
+        List<String> values = new ArrayList<>();
+        Iterator<Resource> iterator = dataSource.iterator();
+        while (iterator.hasNext()) {
+            values.add(iterator.next().getValueMap().get(PN_VALUE, String.class));
+        }
+        assertEquals(List.of("page-1-source"), values);
+    }
+
+    @Test
+    void doGetHandlesPageWithNullItemsGracefully() throws Exception {
+        // Defensive branch: a page response with items == null (but a non-null page) must not NPE.
+        ContentSourceListResult pageWithNullItems = new ContentSourceListResult();
+        when(mockClient.listContentSources(anyString(), isNull())).thenReturn(pageWithNullItems);
+
+        context.create().resource("/apps/datasource-null-items",
+            "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
+        context.currentResource("/apps/datasource-null-items");
+        underTest.doGet(context.request(), context.response());
+
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        assertNotNull(dataSource);
+        assertFalse(dataSource.iterator().hasNext());
+    }
+
+    @Test
     void doGetFollowsCursorAcrossMultiplePages() throws Exception {
         ContentSourceListItem page1Item = new ContentSourceListItem();
         page1Item.setName("page-1-source");

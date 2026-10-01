@@ -149,6 +149,62 @@ class ContentAISupportedSearchV2ImplTest {
     }
 
     @Test
+    void aiSearchModeEnabledTrueWhenAuthoredTrueExplicitly() {
+        Map<String, Object> props = new HashMap<>();
+        props.put("aiSearchModeEnabled", true);
+        createResource(props);
+        context.currentResource(COMPONENT_PATH);
+
+        ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);
+
+        assertTrue(model.isAiSearchModeEnabled());
+    }
+
+    @Test
+    void getPlaceholderReturnsNullWhenNotAuthored() {
+        createResource(new HashMap<>());
+        context.currentResource(COMPONENT_PATH);
+
+        ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);
+
+        assertEquals(null, model.getPlaceholder());
+    }
+
+    @Test
+    void getPlaceholderReturnsAuthoredValue() {
+        Map<String, Object> props = new HashMap<>();
+        props.put("placeholder", "Search our content");
+        createResource(props);
+        context.currentResource(COMPONENT_PATH);
+
+        ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);
+
+        assertEquals("Search our content", model.getPlaceholder());
+    }
+
+    @Test
+    void getDisclaimerTextReturnsNullWhenNotAuthored() {
+        createResource(new HashMap<>());
+        context.currentResource(COMPONENT_PATH);
+
+        ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);
+
+        assertEquals(null, model.getDisclaimerText());
+    }
+
+    @Test
+    void getDisclaimerTextReturnsAuthoredValue() {
+        Map<String, Object> props = new HashMap<>();
+        props.put("disclaimerText", "AI-generated results may be inaccurate");
+        createResource(props);
+        context.currentResource(COMPONENT_PATH);
+
+        ContentAISupportedSearchV2 model = context.request().adaptTo(ContentAISupportedSearchV2.class);
+
+        assertEquals("AI-generated results may be inaccurate", model.getDisclaimerText());
+    }
+
+    @Test
     void genSearchErrorRetryVisibleDefaultsToTrue() {
         createResource(new HashMap<>());
         context.currentResource(COMPONENT_PATH);

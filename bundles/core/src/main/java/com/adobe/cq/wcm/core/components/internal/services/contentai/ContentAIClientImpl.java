@@ -155,10 +155,17 @@ public class ContentAIClientImpl implements ContentAIClient {
     }
 
     private static String urlEncode(String value) throws ContentAIClientException {
+        return urlEncode(value, StandardCharsets.UTF_8.name());
+    }
+
+    /**
+     * Package-private so the catch branch (otherwise unreachable with the real, always-supported UTF-8 charset
+     * name) can be exercised in tests by passing a bogus charset name.
+     */
+    static String urlEncode(String value, String charsetName) throws ContentAIClientException {
         try {
-            return URLEncoder.encode(value, StandardCharsets.UTF_8.name());
+            return URLEncoder.encode(value, charsetName);
         } catch (UnsupportedEncodingException e) {
-            // UTF-8 is guaranteed to be available on every JVM (see Charset's class-level javadoc); unreachable.
             throw new ContentAIClientException("Failed to encode Content AI content-sources query parameter", e);
         }
     }

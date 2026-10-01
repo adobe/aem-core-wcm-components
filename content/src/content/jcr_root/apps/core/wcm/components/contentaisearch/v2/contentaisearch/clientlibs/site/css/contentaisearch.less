@@ -318,9 +318,24 @@
 
     &__layout-toggle {
         display: inline-flex;
+        min-width: 0;
+        margin: 0;
+        padding: 0;
         border: 1px solid @card-border;
         border-radius: 6px;
         overflow: hidden;
+    }
+
+    &__layout-toggle-legend {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
 
     &__layout-btn {

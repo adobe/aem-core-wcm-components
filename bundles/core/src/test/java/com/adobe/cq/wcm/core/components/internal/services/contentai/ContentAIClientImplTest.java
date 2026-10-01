@@ -490,6 +490,13 @@ class ContentAIClientImplTest {
         assertEquals(0, exception.getStatusCode());
     }
 
+    @Test
+    void urlEncodeWrapsUnsupportedEncodingExceptionInContentAIClientException() {
+        ContentAIClientException exception = assertThrows(ContentAIClientException.class,
+            () -> ContentAIClientImpl.urlEncode("value", "not-a-real-charset"));
+        assertTrue(exception.getCause() instanceof java.io.UnsupportedEncodingException);
+    }
+
     public static void setField(@NotNull final Class<?> clazz,
                                  @NotNull final String fieldName,
                                  @Nullable final Object target,

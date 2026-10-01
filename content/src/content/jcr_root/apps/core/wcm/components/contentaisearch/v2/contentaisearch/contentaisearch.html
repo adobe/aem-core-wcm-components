@@ -84,10 +84,11 @@
              aria-labelledby="${search.id}-tab-results" data-cmp-hook-contentaisearch="panelSearchResults">
             <div class="cmp-contentaisearch__results-section" data-cmp-hook-contentaisearch="resultsSection" hidden="hidden">
                 <div class="cmp-contentaisearch__results-toolbar">
-                    <div class="cmp-contentaisearch__layout-toggle" role="group" aria-label="${'Results layout' @ i18n}">
+                    <fieldset class="cmp-contentaisearch__layout-toggle">
+                        <legend class="cmp-contentaisearch__layout-toggle-legend">${'Results layout' @ i18n}</legend>
                         <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutCard" aria-pressed="true">${'Cards' @ i18n}</button>
                         <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutList" aria-pressed="false">${'List' @ i18n}</button>
-                    </div>
+                    </fieldset>
                 </div>
                 <ul class="cmp-contentaisearch__results" data-cmp-hook-contentaisearch="results" aria-label="${'Search results' @ i18n}"></ul>
                 <button type="button" class="cmp-contentaisearch__load-more" data-cmp-hook-contentaisearch="loadMore" hidden="hidden">${'Load more results' @ i18n}</button>
@@ -124,10 +125,11 @@
     <sly data-sly-test="${!search.aiSearchModeEnabled}">
         <div class="cmp-contentaisearch__results-section" data-cmp-hook-contentaisearch="resultsSection" hidden="hidden">
             <div class="cmp-contentaisearch__results-toolbar">
-                <div class="cmp-contentaisearch__layout-toggle" role="group" aria-label="${'Results layout' @ i18n}">
+                <fieldset class="cmp-contentaisearch__layout-toggle">
+                    <legend class="cmp-contentaisearch__layout-toggle-legend">${'Results layout' @ i18n}</legend>
                     <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutCard" aria-pressed="true">${'Cards' @ i18n}</button>
                     <button type="button" class="cmp-contentaisearch__layout-btn" data-cmp-hook-contentaisearch="layoutList" aria-pressed="false">${'List' @ i18n}</button>
-                </div>
+                </fieldset>
             </div>
             <ul class="cmp-contentaisearch__results" data-cmp-hook-contentaisearch="results" aria-label="${'Search results' @ i18n}"></ul>
             <button type="button" class="cmp-contentaisearch__load-more" data-cmp-hook-contentaisearch="loadMore" hidden="hidden">${'Load more results' @ i18n}</button>
