@@ -39,13 +39,14 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
 
     protected void openProperties() {
         page.navigate(baseUrl + "/mnt/overlay/wcm/core/content/sites/properties.html?item=" + testPage);
-        assertThat(page.locator("coral-dialog, form.foundation-form")).isVisible();
+        assertThat(page.locator("#cq-sites-properties-form")).isVisible();
     }
 
     protected void fillAndSave(String selector, String value) {
         page.locator(selector).fill(value);
-        page.locator("button[type='submit'], button[variant='primary']").last().click();
-        assertThat(page.locator("coral-dialog, form.foundation-form")).isHidden();
+        page.locator("#cq-sites-properties-form button[type='submit'], #cq-sites-properties-form button[variant='primary']")
+            .last().click();
+        assertThat(page.locator("#cq-sites-properties-form")).isHidden();
     }
 
     protected void reopenAndAssert(String selector, String value) {
@@ -54,8 +55,9 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
     }
 
     protected void saveProperties() {
-        page.locator("button[type='submit'], button[variant='primary']").last().click();
-        assertThat(page.locator("coral-dialog, form.foundation-form")).isHidden();
+        page.locator("#cq-sites-properties-form button[type='submit'], #cq-sites-properties-form button[variant='primary']")
+            .last().click();
+        assertThat(page.locator("#cq-sites-properties-form")).isHidden();
     }
 
     protected void reopenProperties() {
@@ -98,11 +100,11 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
     public void testBasicVanityUrlPageProperties() {
         openProperties();
         page.locator("[name='./sling:vanityPath']").fill("test/test-Page-URL");
-        page.locator("[name='./sling:redirect']").check();
+        page.locator("coral-checkbox[name='./sling:redirect'] input[type='checkbox']").check();
         saveProperties();
         reopenProperties();
         assertThat(page.locator("[name='./sling:vanityPath']")).hasValue("test/test-Page-URL");
-        assertThat(page.locator("[name='./sling:redirect']")).isChecked();
+        assertThat(page.locator("coral-checkbox[name='./sling:redirect'] input[type='checkbox']")).isChecked();
     }
 
     @Test
@@ -123,12 +125,13 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
     public void testAdvancedAuthenticationPageProperties() {
         openProperties();
         page.locator("coral-tab-label").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Advanced")).click();
-        page.locator("[name='./cq:authenticationRequired']").check();
+        page.locator("coral-checkbox[name='./cq:authenticationRequired'] input[type='checkbox']").check();
         page.locator("[name='./cq:loginPage'] input").fill("/content/core-components/core-components-page");
         saveProperties();
         reopenProperties();
         page.locator("coral-tab-label").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Advanced")).click();
-        assertThat(page.locator("[name='./cq:authenticationRequired']")).isChecked();
+        assertThat(page.locator("coral-checkbox[name='./cq:authenticationRequired'] input[type='checkbox']"))
+            .isChecked();
         assertThat(page.locator("[name='./cq:loginPage'] input")).hasValue("/content/core-components/core-components-page");
     }
 

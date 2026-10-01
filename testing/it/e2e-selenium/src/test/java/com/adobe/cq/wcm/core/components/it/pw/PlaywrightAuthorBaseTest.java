@@ -241,25 +241,42 @@ public abstract class PlaywrightAuthorBaseTest {
 
     /** Selects the editable's overlay and opens its configure dialog. */
     protected void openEditDialog(String componentPath) {
+        clickToolbarAction(componentPath, "CONFIGURE");
+        assertThat(dialog()).isVisible();
+    }
+
+    /** Selects the editable's overlay and clicks the given action in the editable toolbar. */
+    protected void clickToolbarAction(String componentPath, String action) {
         Locator overlay = page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + componentPath + "']");
-        Locator configure = page.locator("#EditableToolbar button[data-action='CONFIGURE'][data-path='"
+        Locator configure = page.locator("#EditableToolbar button[data-action='" + action + "'][data-path='"
             + componentPath + "']");
         // Nested editables overlap their parent overlay; try points on the parent's perimeter and verify the toolbar
         // selected the requested editable before opening its dialog.
-        double[][] points = {{1, 1}, {1, 20}, {20, 1}, {1, 60}, {20, 20}};
-        com.microsoft.playwright.TimeoutError lastError = null;
-        for (int i = 0; i < points.length; i++) {
-            overlay.scrollIntoViewIfNeeded();
-            BoundingBox bounds = overlay.boundingBox();
-            double x = Math.min(points[i][0], Math.max(1, bounds.width - 1));
-            double y = Math.min(points[i][1], Math.max(1, bounds.height - 1));
-            overlay.click(new Locator.ClickOptions().setPosition(x, y));
+        double[][] points = {{0.5, 0.01}, {0.1, 0.01}, {0.9, 0.01}, {0.1, 0.9}, {0.9, 0.9},
+            {0.1, 0.5}, {0.9, 0.5}, {0.5, 0.95}, {0.5, 0.5}};
+        RuntimeException lastError = null;
+        for (double[] point : points) {
             try {
-                configure.waitFor(new Locator.WaitForOptions().setTimeout(5_000));
+                overlay.scrollIntoViewIfNeeded();
+                overlay.evaluate("element => Promise.all(element.getAnimations().map(animation => "
+                    + "animation.finished.catch(() => {})))");
+                BoundingBox bounds = overlay.boundingBox();
+                if (bounds == null) {
+                    lastError = new IllegalStateException("Editable overlay is not visible: " + componentPath);
+                    continue;
+                }
+                double x = Math.min(Math.max(1, bounds.width * point[0]), Math.max(1, bounds.width - 1));
+                double y = Math.min(Math.max(1, bounds.height * point[1]), Math.max(1, bounds.height - 1));
+                overlay.click(new Locator.ClickOptions().setPosition(x, y).setTimeout(2_000));
+                configure.waitFor(new Locator.WaitForOptions().setTimeout(10_000));
                 configure.click();
-                assertThat(dialog()).isVisible();
                 return;
             } catch (com.microsoft.playwright.TimeoutError e) {
+                lastError = e;
+            } catch (com.microsoft.playwright.PlaywrightException e) {
+                if (!e.getMessage().contains("Element is not attached to the DOM")) {
+                    throw e;
+                }
                 lastError = e;
             }
         }
@@ -281,7 +298,14 @@ public abstract class PlaywrightAuthorBaseTest {
     /** Clicks Done and waits for the dialog to close (the editable then refreshes asynchronously). */
     protected void saveDialog() {
         clickDone();
-        assertThat(dialog()).isHidden();
+        try {
+            dialog().waitFor(new Locator.WaitForOptions()
+                .setState(com.microsoft.playwright.options.WaitForSelectorState.HIDDEN).setTimeout(20_000));
+        } catch (com.microsoft.playwright.TimeoutError e) {
+            // the first click can be swallowed while the form is still initializing
+            clickDone();
+            assertThat(dialog()).isHidden();
+        }
     }
 
     /** Opens a Coral select; the popover is moved out of the select once opened, so it is resolved via aria-controls. */
@@ -299,8 +323,57 @@ public abstract class PlaywrightAuthorBaseTest {
             Arrays.asList(CONFIG_DIALOG + " coral-select" + selectSelector, value));
     }
 
-    protected void checkCoralCheckbox(String name) {
-        dialog().locator("coral-checkbox[name='" + name + "'] input[type='checkbox']").check();
+    /**
+     * Opens the Coral select carrying the given attribute selector and returns its (detached) item list.
+     * Several selects can be open at once, so the list must be resolved via the trigger's aria-controls.
+     */
+    protected Locator openSelectList(String selectSelector) {
+        Locator button = dialog().locator(selectSelector).locator("button[handle='button']").first();
+        button.click();
+        Locator list = page.locator("[id='" + button.getAttribute("aria-controls") + "']");
+        assertThat(list).isVisible();
+        return list;
+    }
+
+    /** Closes open Coral popovers so that they cannot swallow the following click on Done (Escape would close the
+     * whole dialog). */
+    protected void closeOverlays() {
+        page.evaluate("() => document.querySelectorAll('coral-popover[open], coral-overlay[open]')"
+            + ".forEach(overlay => { if (!overlay.closest('.cq-dialog')) { overlay.open = false; } })");
+        page.waitForTimeout(200);
+    }
+
+    /** Coral drag handles do not react to Playwright's atomic dragTo, so the gesture is replayed with the mouse. */
+    /** Drops the source past the bottom edge of the target, which sortable lists require to move an item down. */
+    protected void dragBelow(Locator source, Locator target) {
+        BoundingBox to = target.boundingBox();
+        dragAndDrop(source, to.x + to.width / 2, to.y + to.height - 2);
+    }
+
+    protected void dragAndDrop(Locator source, Locator target) {
+        BoundingBox to = target.boundingBox();
+        dragAndDrop(source, to.x + to.width / 2, to.y + to.height / 2);
+    }
+
+    private void dragAndDrop(Locator source, double endX, double endY) {
+        BoundingBox from = source.boundingBox();
+        double startX = from.x + from.width / 2;
+        double startY = from.y + from.height / 2;
+        page.mouse().move(startX, startY);
+        page.mouse().down();
+        // the drag has to start with a small movement, otherwise Coral does not enter its drag mode
+        page.mouse().move(startX, startY + (endY > startY ? 5 : -5));
+        page.waitForTimeout(100);
+        for (int step = 1; step <= 20; step++) {
+            page.mouse().move(startX + (endX - startX) * step / 20.0, startY + (endY - startY) * step / 20.0);
+            page.waitForTimeout(30);
+        }
+        page.waitForTimeout(200);
+        page.mouse().up();
+        page.waitForTimeout(200);
+    }
+
+    protected void checkCoralCheckbox(String name) {        dialog().locator("coral-checkbox[name='" + name + "'] input[type='checkbox']").check();
     }
 
     protected void selectAutocomplete(String selector, String value) {
@@ -313,7 +386,8 @@ public abstract class PlaywrightAuthorBaseTest {
     }
 
     protected void selectInPicker(String prefix, String selector, String value) {
-        String relativePath = value.startsWith("/") ? value.substring(1) : value;
+        String relativePath = value.startsWith(prefix + "/") ? value.substring(prefix.length() + 1)
+            : value.startsWith("/") ? value.substring(1) : value;
         String[] segments = relativePath.split("/");
         String currentPath = prefix;
         Locator autocomplete = dialog().locator("foundation-autocomplete" + selector);

@@ -123,7 +123,7 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         clickDone();
 
         assertThat(dialog()).isVisible();
-        assertThat(startLevel).hasAttribute("invalid", "true");
+        assertThat(startLevel).hasClass(java.util.regex.Pattern.compile(".*is-invalid.*"));
     }
 
     @ParameterizedTest

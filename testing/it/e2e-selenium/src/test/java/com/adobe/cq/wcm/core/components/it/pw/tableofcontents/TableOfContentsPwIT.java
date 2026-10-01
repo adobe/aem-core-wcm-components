@@ -51,7 +51,7 @@ public class TableOfContentsPwIT extends ComponentPwBaseTest {
         Locator templatePlaceholder = contentFrame().locator(".cmp-toc__template-placeholder");
         assertThat(templatePlaceholder).isVisible();
 
-        page.navigate(baseUrl + testPage + ".html");
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
         assertThat(page.locator(".cmp-toc__template-placeholder")).hasCount(0);
     }
 
@@ -59,12 +59,17 @@ public class TableOfContentsPwIT extends ComponentPwBaseTest {
     public void testTocRendering() throws Exception {
         addTableOfContents();
         addComponentToAllowedPolicy(RT_TITLE_V3);
-        Commons.addComponentWithRetry(authorClient, RT_TITLE_V3, testPage + Commons.relParentCompPath, "title");
+        String titlePath = Commons.addComponentWithRetry(authorClient, RT_TITLE_V3,
+            testPage + Commons.relParentCompPath, "title");
+        HashMap<String, String> titleProperties = new HashMap<>();
+        titleProperties.put("_charset_", "UTF-8");
+        titleProperties.put("./jcr:title", PAGE_TITLE);
+        Commons.editNodeProperties(authorClient, titlePath, titleProperties);
         reloadEditor();
 
         Locator toc = contentFrame().locator(".cmp-toc");
         assertThat(toc.locator(".cmp-toc__placeholder")).hasCount(0);
-        assertThat(toc.locator(".cmp-toc__content")).isVisible();
+        assertThat(toc.locator(".cmp-toc__content")).hasCount(1);
         assertThat(toc.locator(".cmp-toc__content")).containsText(PAGE_TITLE);
     }
 
@@ -73,9 +78,10 @@ public class TableOfContentsPwIT extends ComponentPwBaseTest {
         String componentPath = addTableOfContents();
         openEditDialog(componentPath);
         Locator dialog = dialog();
-        for (String name : new String[] {"./listType", "./startLevel", "./stopLevel", "./id"}) {
-            assertThat(dialog.locator("[name='" + name + "']")).isVisible();
+        for (String name : new String[] {"./listType", "./startLevel", "./stopLevel"}) {
+            assertThat(dialog.locator("coral-select[name='" + name + "']")).isVisible();
         }
+        assertThat(dialog.locator("input[name='./id']")).isVisible();
         for (String name : new String[] {"./listType", "./startLevel", "./stopLevel"}) {
             Locator list = openCoralSelect("[name='" + name + "']");
             assertThat(list.locator("coral-selectlist-item")).not().hasCount(0);

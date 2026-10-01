@@ -64,8 +64,10 @@ public class ContentFragmentListPwIT extends ComponentPwBaseTest {
         assertThat(contentFrame().locator(".cmp-contentfragmentlist")).hasCount(1);
         assertThat(contentFragments()).hasCount(3);
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasCount(12);
-        assertThat(contentFrame().locator(".cmp-contentfragment__title")).containsText("Image Fragment");
-        assertThat(contentFrame().locator(".cmp-contentfragment__title")).containsText("Text Fragment");
+        assertThat(contentFrame().locator(".cmp-contentfragment__title")
+            .filter(new Locator.FilterOptions().setHasText("Image Fragment"))).hasCount(1);
+        assertThat(contentFrame().locator(".cmp-contentfragment__title")
+            .filter(new Locator.FilterOptions().setHasText("Text Fragment"))).hasCount(1);
     }
 
     @ParameterizedTest
@@ -74,7 +76,7 @@ public class ContentFragmentListPwIT extends ComponentPwBaseTest {
         String path = addContentFragmentList(resourceType);
         openEditDialog(path);
         configureModelAndParent();
-        Locator tags = dialog().locator("foundation-autocomplete[name='./tagNames'] input");
+        Locator tags = dialog().locator("foundation-autocomplete[name='./tagNames'] input[role='combobox']");
         tags.fill(TAG_PATH);
         Locator suggestion = page.locator("coral-overlay coral-buttonlist button[value='" + TAG_PATH + "']");
         if (suggestion.count() > 0) {
@@ -84,8 +86,10 @@ public class ContentFragmentListPwIT extends ComponentPwBaseTest {
 
         assertThat(contentFragments()).hasCount(2);
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasCount(8);
-        assertThat(contentFrame().locator(".cmp-contentfragment__title")).containsText("Image Fragment");
-        assertThat(contentFrame().locator(".cmp-contentfragment__title")).containsText("Text Fragment");
+        assertThat(contentFrame().locator(".cmp-contentfragment__title")
+            .filter(new Locator.FilterOptions().setHasText("Image Fragment"))).hasCount(1);
+        assertThat(contentFrame().locator(".cmp-contentfragment__title")
+            .filter(new Locator.FilterOptions().setHasText("Text Fragment"))).hasCount(1);
     }
 
     @ParameterizedTest
@@ -101,7 +105,8 @@ public class ContentFragmentListPwIT extends ComponentPwBaseTest {
 
         assertThat(contentFragments()).hasCount(3);
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasCount(6);
-        assertThat(contentFrame().locator(".cmp-contentfragment__title")).containsText("Carousel Fragment");
+        assertThat(contentFrame().locator(".cmp-contentfragment__title")
+            .filter(new Locator.FilterOptions().setHasText("Carousel Fragment"))).hasCount(1);
     }
 
     private void addElement(String name) {

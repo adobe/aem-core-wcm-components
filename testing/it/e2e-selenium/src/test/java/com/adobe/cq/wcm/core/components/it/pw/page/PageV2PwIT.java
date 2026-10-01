@@ -31,12 +31,12 @@ public class PageV2PwIT extends PageV1PwIT {
         openProperties();
         page.locator("coral-tab-label").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Advanced")).click();
         page.locator("[name='./cq:canonicalUrl']").fill(testPage);
-        page.locator("[name='./sling:sitemapRoot']").check();
+        page.locator("coral-checkbox[name='./sling:sitemapRoot'] input[type='checkbox']").check();
         saveProperties();
         reopenProperties();
         page.locator("coral-tab-label").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Advanced")).click();
         assertThat(page.locator("[name='./cq:canonicalUrl']")).hasValue(testPage);
-        assertThat(page.locator("[name='./sling:sitemapRoot']")).isChecked();
+        assertThat(page.locator("coral-checkbox[name='./sling:sitemapRoot'] input[type='checkbox']")).isChecked();
     }
 
     @Test

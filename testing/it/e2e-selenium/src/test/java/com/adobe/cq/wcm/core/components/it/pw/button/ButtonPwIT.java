@@ -43,7 +43,8 @@ public class ButtonPwIT extends ComponentPwBaseTest {
     }
 
     private void fillLink(String property, String value) {
-        dialog().locator("foundation-autocomplete[name='./" + property + "'] input").fill(value);
+        dialog().locator("foundation-autocomplete[name='./" + property + "'] input[role='combobox']").fill(value);
+        page.locator("button[is='coral-buttonlist-item'][value='" + value + "']").click();
     }
 
     @ParameterizedTest
@@ -76,7 +77,7 @@ public class ButtonPwIT extends ComponentPwBaseTest {
         dialog().locator("input[name='./icon']").fill("email");
         saveDialog();
 
-        assertThat(contentFrame().locator(".cmp-button__icon--email")).isVisible();
+        assertThat(contentFrame().locator(".cmp-button__icon--email")).hasCount(1);
     }
 
     @Test
@@ -97,14 +98,14 @@ public class ButtonPwIT extends ComponentPwBaseTest {
         setProperty(path, "link", "");
         setProperty(path, "linkURL", "");
         openEditDialog(path);
-        Locator link = dialog().locator("foundation-autocomplete[name='./linkURL'] input");
+        Locator link = dialog().locator("foundation-autocomplete[name='./linkURL'] input[role='combobox']");
         assertThat(link).hasValue("");
         saveDialog();
 
         setProperty(path, "link", "http://www.google.com");
         setProperty(path, "linkURL", "");
         openEditDialog(path);
-        link = dialog().locator("foundation-autocomplete[name='./linkURL'] input");
+        link = dialog().locator("foundation-autocomplete[name='./linkURL'] input[role='combobox']");
         assertThat(link).hasValue("http://www.google.com");
         saveDialog();
         assertEquals(404, adminClient.doGet(path + "/link", 404).getStatusLine().getStatusCode());
@@ -112,14 +113,14 @@ public class ButtonPwIT extends ComponentPwBaseTest {
         setProperty(path, "link", "");
         setProperty(path, "linkURL", "http://www.adobe.com");
         openEditDialog(path);
-        link = dialog().locator("foundation-autocomplete[name='./linkURL'] input");
+        link = dialog().locator("foundation-autocomplete[name='./linkURL'] input[role='combobox']");
         assertThat(link).hasValue("http://www.adobe.com");
         saveDialog();
 
         setProperty(path, "link", "http://www.google.com");
         setProperty(path, "linkURL", "http://www.adobe.com");
         openEditDialog(path);
-        link = dialog().locator("foundation-autocomplete[name='./linkURL'] input");
+        link = dialog().locator("foundation-autocomplete[name='./linkURL'] input[role='combobox']");
         assertThat(link).hasValue("http://www.adobe.com");
         saveDialog();
         assertEquals(404, adminClient.doGet(path + "/link", 404).getStatusLine().getStatusCode());

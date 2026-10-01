@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.pw.accordion;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Tag;
@@ -42,26 +41,62 @@ public class AccordionPwIT extends ComponentPwBaseTest {
     private String accordionPath;
 
     private void addAccordion() throws Exception {
-        accordionPath = addStandaloneComponent(RT_ACCORDION_V1, "accordion");
-        createPagePolicy(java.util.Collections.singletonMap("clientlibs", "core.wcm.components.accordion.v1"));
+        addAccordion("accordion");
     }
 
-    private void createItems() throws Exception {
-        addAccordion();
-        for (int index = 0; index < 3; index++) {
-            addPanel(accordionPath, "item" + index);
-        }
+    private void addAccordion(String name) throws Exception {
+        accordionPath = addStandaloneComponent(RT_ACCORDION_V1, name);
+        createPagePolicy(java.util.Collections.singletonMap("clientlibs", "core.wcm.components.accordion.v1"));
+        // the editor loaded before the policy existed, so the component clientlibs are only applied after a reload
         reloadEditor();
     }
 
-    private String addPanel(String parentPath, String name) throws Exception {
-        String path = Commons.addComponentWithRetry(authorClient,
-            "/libs/wcm/foundation/components/responsivegrid", parentPath, name);
-        HashMap<String, String> properties = new HashMap<>();
-        properties.put("_charset_", "UTF-8");
-        properties.put("./jcr:title", name);
-        Commons.editNodeProperties(authorClient, path, properties);
-        return path;
+    private java.util.List<String> createItems() throws Exception {
+        addAccordion();
+        return addItems(accordionPath, "item0", "item1", "item2");
+    }
+
+    private java.util.List<String> addItems(String componentPath, String... titles) {
+        openEditDialog(componentPath);
+        dialog().locator("coral-tab[data-foundation-tracking-event*='items']").click();
+        Locator add = dialog().locator("[data-cmp-hook-childreneditor='add']");
+        for (String title : titles) {
+            add.click();
+            page.locator(".editor-ComponentBrowser-component[data-path='/libs/wcm/foundation/components/responsivegrid']").click();
+            dialog().locator("[data-cmp-hook-childreneditor='itemTitle']").last().fill(title);
+        }
+        saveDialog();
+        return itemNames(componentPath);
+    }
+
+    /** The children editor generates the item node names, so they have to be read back from the repository. */
+    private java.util.List<String> itemNames(String componentPath) {
+        java.util.List<String> names = new java.util.ArrayList<>();
+        try {
+            com.fasterxml.jackson.databind.JsonNode node = authorClient.doGetJson(componentPath, 1, 200);
+            java.util.Iterator<String> fields = node.fieldNames();
+            while (fields.hasNext()) {
+                String field = fields.next();
+                if (!field.contains(":") && node.get(field).isObject()) {
+                    names.add(field);
+                }
+            }
+        } catch (org.apache.sling.testing.clients.ClientException e) {
+            throw new IllegalStateException("Could not read the accordion items of " + componentPath, e);
+        }
+        return names;
+    }
+
+    /** Collapsed panels hide their content, so nested editables are only selectable once the item is expanded. */
+    private void expandItems(String... titles) {
+        openEditDialog(accordionPath);
+        dialog().locator("coral-tab[data-foundation-tracking-event*='properties']").click();
+        Locator list = openSelectList("[data-cmp-accordion-v1-dialog-edit-hook='expandedSelect']");
+        for (String title : titles) {
+            list.locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText(title)).click();
+        }
+        closeOverlays();
+        saveDialog();
     }
 
     private Locator accordion() {
@@ -103,7 +138,7 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         createItems();
         openEditDialog(accordionPath);
         Locator rows = dialog().locator(".cmp-childreneditor coral-multifield-item");
-        rows.nth(2).dragTo(rows.nth(0));
+        dragAndDrop(rows.nth(2).locator("button[handle='move']"), rows.nth(0));
         saveDialog();
         openEditDialog(accordionPath);
         assertThat(dialog().locator("[data-cmp-hook-childreneditor='itemTitle']").nth(2)).hasValue("item1");
@@ -114,16 +149,17 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         createItems();
         openEditDialog(accordionPath);
         dialog().locator("coral-tab[data-foundation-tracking-event*='properties']").click();
-        Locator select = dialog().locator("[data-cmp-accordion-v1-dialog-edit-hook='expandedSelect'] button");
-        select.click();
-        page.locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText("item1")).click();
+        openSelectList("[data-cmp-accordion-v1-dialog-edit-hook='expandedSelect']")
+            .locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText("item1")).click();
+        closeOverlays();
         saveDialog();
 
         assertThat(panels().nth(1)).hasAttribute("data-cmp-expanded", "");
         openEditDialog(accordionPath);
         dialog().locator("coral-tab[data-foundation-tracking-event*='properties']").click();
-        dialog().locator("[data-cmp-accordion-v1-dialog-edit-hook='expandedSelect'] button").click();
-        page.locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText("item2")).click();
+        openSelectList("[data-cmp-accordion-v1-dialog-edit-hook='expandedSelect']")
+            .locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText("item2")).click();
+        closeOverlays();
         saveDialog();
 
         assertThat(panels().nth(1)).hasAttribute("data-cmp-expanded", "");
@@ -135,16 +171,20 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         createItems();
         openEditDialog(accordionPath);
         dialog().locator("coral-tab[data-foundation-tracking-event*='properties']").click();
-        dialog().locator("[data-cmp-accordion-v1-dialog-edit-hook='singleExpansion'] input").check();
-        Locator select = dialog().locator("[data-cmp-accordion-v1-dialog-edit-hook='expandedSelectSingle'] button");
-        select.click();
-        page.locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText("item1")).click();
+        dialog().locator("[data-cmp-accordion-v1-dialog-edit-hook='singleExpansion']").click();
+        openSelectList("[data-cmp-accordion-v1-dialog-edit-hook='expandedSelectSingle']")
+            .locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText("item1")).click();
+        closeOverlays();
         saveDialog();
-        panelButtons().nth(0).click();
-        panelButtons().nth(2).click();
+        // the editor overlays swallow clicks on the panel buttons, so the expansion is exercised outside the editor
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        Locator buttons = page.locator("[data-cmp-hook-accordion='button']");
+        Locator items = page.locator("[data-cmp-hook-accordion='item']");
+        buttons.nth(0).click();
+        buttons.nth(2).click();
 
-        assertThat(panels().nth(2)).hasAttribute("data-cmp-expanded", "");
-        assertThat(panels().nth(0)).not().hasAttribute("data-cmp-expanded", "");
+        assertThat(items.nth(2)).hasAttribute("data-cmp-expanded", "");
+        assertThat(items.nth(0)).not().hasAttribute("data-cmp-expanded", "");
     }
 
     @Test
@@ -170,7 +210,8 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         createItems();
         openPanelSelector();
         Locator rows = page.locator(".cmp-panelselector__table [is='coral-table-row']");
-        rows.nth(0).locator("button[coral-table-roworder='true']").dragTo(rows.nth(2));
+        rows.nth(0).locator("button[coral-table-roworder='true']").dragTo(rows.nth(2),
+            new Locator.DragToOptions().setTargetPosition(10, rows.nth(2).boundingBox().height - 2));
         assertThat(panelButtons().nth(0)).containsText("item1");
         assertThat(panelButtons().nth(1)).containsText("item2");
         assertThat(panelButtons().nth(2)).containsText("item0");
@@ -178,24 +219,28 @@ public class AccordionPwIT extends ComponentPwBaseTest {
 
     @Test
     public void testNested() throws Exception {
-        createItems();
+        java.util.List<String> items = createItems();
+        expandItems("item0");
         String nested = Commons.addComponentWithRetry(authorClient, RT_ACCORDION_V1,
-            accordionPath + "/item0", "nestedAccordion");
-        addPanel(nested, "nested-item");
+            accordionPath + "/" + items.get(0), "nestedAccordion");
+        reloadEditor();
+        addItems(nested, "nested-item");
         reloadEditor();
 
         assertThat(contentFrame().locator(".cmp-accordion .cmp-accordion")).hasCount(1);
-        assertThat(contentFrame().locator(".cmp-accordion .cmp-accordion__item")).hasCount(1);
+        assertThat(contentFrame().locator(".cmp-accordion .cmp-accordion .cmp-accordion__item")).hasCount(1);
     }
 
     @Test
     public void testOpenConfigDialog() throws Exception {
-        createItems();
+        java.util.List<String> items = createItems();
+        expandItems("item0", "item1");
         String nestedPath = Commons.addComponentWithRetry(authorClient, RT_ACCORDION_V1,
-            accordionPath + "/item0", "nestedAccordion");
-        addPanel(nestedPath, "nested-item");
+            accordionPath + "/" + items.get(0), "nestedAccordion");
         String textPath = Commons.addComponentWithRetry(authorClient, RT_TEXT_V2,
-            accordionPath + "/item1", "text");
+            accordionPath + "/" + items.get(1), "text");
+        reloadEditor();
+        addItems(nestedPath, "nested-item");
         reloadEditor();
 
         openEditDialog(nestedPath);
@@ -208,16 +253,13 @@ public class AccordionPwIT extends ComponentPwBaseTest {
 
     @Test
     public void testAllowedComponents() throws Exception {
-        addAccordion();
+        // the policy has to exist before the test page is created, otherwise the editor keeps the default policy
         String policyPath = createComponentPolicy("/accordion-v1",
             java.util.Collections.singletonMap("components", RT_TEASER_V1));
-        openEditDialog(accordionPath);
-        saveDialog();
-        page.locator("#OverlayWrapper [data-path='" + accordionPath + "']").click();
-        Locator insert = page.locator("#EditableToolbar button[data-action='INSERT'][data-path='" + accordionPath + "']");
-        assertThat(insert).isVisible();
-        insert.click();
-        assertThat(page.locator("coral-dialog:visible")).containsText("Teaser");
+        addAccordion();
+        clickToolbarAction(accordionPath, "INSERT");
+        assertThat(page.locator("coral-dialog:visible")
+            .locator("[value$='" + RT_TEASER_V1 + "']")).isVisible();
         adminClient.deletePath(policyPath, 200);
     }
 
@@ -268,11 +310,7 @@ public class AccordionPwIT extends ComponentPwBaseTest {
     }
 
     private void openPanelSelector() {
-        page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + accordionPath + "']").click();
-        Locator panelSelect = page.locator(
-            "#EditableToolbar button[data-action='PANEL_SELECT'][data-path='" + accordionPath + "']");
-        assertThat(panelSelect).isVisible();
-        panelSelect.click();
+        clickToolbarAction(accordionPath, "PANEL_SELECT");
         assertThat(page.locator(".cmp-panelselector")).isVisible();
     }
 }

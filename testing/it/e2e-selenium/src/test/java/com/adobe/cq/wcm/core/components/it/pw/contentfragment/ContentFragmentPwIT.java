@@ -105,17 +105,20 @@ public class ContentFragmentPwIT extends ComponentPwBaseTest {
 
     @Test
     public void testSetSingleElement() throws Exception {
-        String path = addContentFragment();
+        addContentFragment();
         selectFragment(SIMPLE_FRAGMENT);
-        selectInCoralSelect("[name='./displayMode']", "singleText");
-        saveDialog();
-        openEditDialog(path);
+        dialog().locator("coral-radio[name='./displayMode'][value='singleText']").click();
+        clickDone();
         selectFragment(IMAGE_FRAGMENT);
+        com.microsoft.playwright.Locator replacementDialog = page.locator("[role='alertdialog']:visible").last();
+        assertThat(replacementDialog).isVisible();
+        replacementDialog.locator("button[variant='primary']").click();
+        assertThat(replacementDialog).isHidden();
+        clickDone();
         assertThat(dialog().locator("label.coral-Form-errorlabel, coral-tooltip[variant='error']")).hasCount(1);
-        saveDialog();
-        openEditDialog(path);
-        chooseElement("component-title");
-        saveDialog();
+        selectInCoralSelect("[name='./elementNames']", "component-title");
+        assertThat(dialog().locator("label.coral-Form-errorlabel, coral-tooltip[variant='error']")).hasCount(0);
+        clickDone();
 
         assertThat(contentFrame().locator(".cmp-contentfragment__title")).hasText("Image Fragment");
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasText("Title");
@@ -126,7 +129,7 @@ public class ContentFragmentPwIT extends ComponentPwBaseTest {
     public void testVcfClearsSingleTextElementValidationError() throws Exception {
         addContentFragment();
         selectFragment(IMAGE_FRAGMENT);
-        selectInCoralSelect("[name='./displayMode']", "singleText");
+        dialog().locator("coral-radio[name='./displayMode'][value='singleText']").click();
         clickDone();
         assertEquals(1, dialog().locator("label.coral-Form-errorlabel, coral-tooltip[variant='error']").count());
 

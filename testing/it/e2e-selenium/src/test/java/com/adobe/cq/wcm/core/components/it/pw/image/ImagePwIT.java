@@ -74,6 +74,8 @@ public class ImagePwIT extends ComponentPwBaseTest {
         HashMap<String, String> properties = new HashMap<>();
         properties.put("./fileReference", IMAGE);
         properties.put("./alt", alt);
+        properties.put("./altValueFromDAM", "false");
+        properties.put("./titleValueFromDAM", "false");
         return properties;
     }
 
@@ -164,9 +166,9 @@ public class ImagePwIT extends ComponentPwBaseTest {
         saveProperties(path, imageProperties("House on a beach with blue sky"));
         openEditDialog(path);
 
-        assertThat(dialog().locator("[name='./altValueFromDAM']")).isVisible();
+        assertThat(dialog().locator("coral-checkbox[name='./altValueFromDAM']")).isVisible();
         if (resourceType.equals(RT_IMAGE_V2)) {
-            assertThat(dialog().locator("[name='./titleValueFromDAM']")).isVisible();
+            assertThat(dialog().locator("coral-checkbox[name='./titleValueFromDAM']")).isVisible();
         }
     }
 
@@ -333,10 +335,10 @@ public class ImagePwIT extends ComponentPwBaseTest {
         String path = addImage(resourceType);
         saveProperties(path, imageProperties("House on a beach with blue sky"));
         openEditDialog(path);
-        assertThat(dialog().locator("[name='./altValueFromDAM']")).isVisible();
+        assertThat(dialog().locator("coral-checkbox[name='./altValueFromDAM']")).isVisible();
         dialog().locator(clearSelector).click();
-        assertThat(dialog().locator("[name='./altValueFromDAM']")).isHidden();
-        assertThat(dialog().locator("[name='./titleValueFromDAM']")).isHidden();
+        assertThat(dialog().locator("coral-checkbox[name='./altValueFromDAM']")).isHidden();
+        assertThat(dialog().locator("coral-checkbox[name='./titleValueFromDAM']")).isHidden();
     }
 
     @Test
@@ -376,7 +378,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         String path = configureFeaturedImage("page image alt");
         HashMap<String, String> properties = new HashMap<>();
         properties.put("./imageFromPageImage", "true");
-        properties.put("./altValueFromPageImage", "true");
+        properties.put("./altValueFromPageImage", "false");
         properties.put("./alt", "Return to Arkham");
         properties.put("_charset_", "UTF-8");
         Commons.editNodeProperties(authorClient, path, properties);

@@ -15,9 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.pw.title;
 
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -41,10 +44,12 @@ public class TitleV2PwIT extends TitleV1PwIT {
     }
 
     private String setTitlePolicy(String type, String... allowedTypes) throws Exception {
-        String policy = createComponentPolicy(RT_TITLE_V2.substring(RT_TITLE_V2.lastIndexOf("/")),
-            Map.of("type", type));
-        adminClient.setPropertyStringArray(policy, "allowedTypes", Arrays.asList(allowedTypes), 200);
-        return policy;
+        List<NameValuePair> properties = new ArrayList<>();
+        properties.add(new BasicNameValuePair("type", type));
+        Arrays.stream(allowedTypes).forEach(value -> properties.add(new BasicNameValuePair("allowedTypes", value)));
+        properties.add(new BasicNameValuePair("allowedTypes@TypeHint", "String[]"));
+        return Commons.createComponentPolicy(adminClient, defaultPageTemplate, label,
+            titleResourceType().substring(titleResourceType().lastIndexOf("/")), properties);
     }
 
     @Test

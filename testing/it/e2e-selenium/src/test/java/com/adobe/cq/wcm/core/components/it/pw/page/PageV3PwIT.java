@@ -37,12 +37,12 @@ public class PageV3PwIT extends PageV2PwIT {
         page.locator("[name='./cq:robotsTags']").locator("input").fill("index");
         page.locator("[name='./cq:robotsTags']").locator("input").press("Enter");
         page.locator("[name='./cq:canonicalUrl']").fill(testPage);
-        page.locator("[name='./sling:sitemapRoot']").check();
+        page.locator("coral-checkbox[name='./sling:sitemapRoot'] input[type='checkbox']").check();
         saveProperties();
         reopenProperties();
         page.locator("coral-tab-label").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Advanced")).click();
         assertThat(page.locator("[name='./cq:canonicalUrl']")).hasValue(testPage);
-        assertThat(page.locator("[name='./sling:sitemapRoot']")).isChecked();
+        assertThat(page.locator("coral-checkbox[name='./sling:sitemapRoot'] input[type='checkbox']")).isChecked();
         assertThat(page.locator("[name='./cq:robotsTags'], [name='./sling:sitemapRoot'], [name='./cq:canonicalUrl']")).hasCount(3);
     }
 

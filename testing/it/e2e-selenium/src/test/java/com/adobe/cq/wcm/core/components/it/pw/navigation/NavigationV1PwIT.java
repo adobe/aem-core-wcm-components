@@ -66,7 +66,7 @@ public class NavigationV1PwIT extends ComponentPwBaseTest {
         createNavigation();
         openEditor(currentPage);
         openEditDialog(navigationPath);
-        assertThat(dialog().locator("[name='./collectAllPages']")).isChecked();
+        assertThat(dialog().locator("coral-checkbox[name='./collectAllPages'] input[type='checkbox']")).isChecked();
         selectAutocomplete("[name='./navigationRoot']", navigationRoot);
         saveDialog();
         page.navigate(baseUrl + currentPage + ".html");
@@ -101,7 +101,7 @@ public class NavigationV1PwIT extends ComponentPwBaseTest {
         openEditor(currentPage);
         openEditDialog(navigationPath);
         selectAutocomplete("[name='./navigationRoot']", navigationRoot);
-        Locator collectAll = dialog().locator("[name='./collectAllPages']");
+        Locator collectAll = dialog().locator("coral-checkbox[name='./collectAllPages'] input[type='checkbox']");
         collectAll.uncheck();
         assertTrue(dialog().locator("[name='./structureDepth']").isVisible());
         saveDialog();

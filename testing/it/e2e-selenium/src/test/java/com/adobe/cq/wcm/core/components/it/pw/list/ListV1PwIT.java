@@ -254,8 +254,8 @@ public class ListV1PwIT extends ComponentPwBaseTest {
     }
 
     private void createListPages() throws Exception {
-        String parent = authorClient.createPage(testPage + "-parent", testPage + "-parent", rootPage, defaultPageTemplate)
-            .getSlingPath();
+        String parentName = testPage.substring(testPage.lastIndexOf('/') + 1) + "-parent";
+        String parent = authorClient.createPage(parentName, parentName, rootPage, defaultPageTemplate).getSlingPath();
         String tag1 = Commons.addTag(authorClient, "ellie");
         String tag2 = Commons.addTag(authorClient, "joel");
         for (int i = 1; i <= 5; i++) {

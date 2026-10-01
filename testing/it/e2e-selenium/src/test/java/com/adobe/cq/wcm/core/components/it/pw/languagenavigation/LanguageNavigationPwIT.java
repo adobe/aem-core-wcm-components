@@ -139,6 +139,6 @@ public class LanguageNavigationPwIT extends ComponentPwBaseTest {
         saveDialog();
 
         assertThat(navigation().locator("a")).hasCount(0);
-        assertThat(navigation().locator(".cmp-languagenavigation__placeholder")).isVisible();
+        assertThat(contentFrame().locator(".cq-placeholder.cmp-languagenavigation")).isVisible();
     }
 }
