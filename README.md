@@ -44,7 +44,7 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 3. [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v2/languagenavigation)
 4. [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v3/breadcrumb)
 5. [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v3/search)
-6. [ContentAI Supported Search](content/src/content/jcr_root/apps/core/wcm/components/contentaisearch/v1/contentaisearch)
+6. [ContentAI Supported Search](content/src/content/jcr_root/apps/core/wcm/components/contentaisearch/v2/contentaisearch)
 7. [Table of Contents](content/src/content/jcr_root/apps/core/wcm/components/tableofcontents/v1/tableofcontents)
 
 ### Page Authoring Components
