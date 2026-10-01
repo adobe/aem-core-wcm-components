@@ -7,6 +7,7 @@
 package com.adobe.cq.wcm.core.components.it.pw.list;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.microsoft.playwright.Locator;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.apache.http.NameValuePair;
@@ -32,10 +33,8 @@ public class ListV4PwIT extends ListV3PwIT {
         String page2 = authorClient.createPage("page_2", "page_2", rootPage, defaultPageTemplate).getSlingPath();
         openEditDialog(componentPath);
         selectInCoralSelect("[name='./listFrom']", "static");
-        dialog().locator("foundation-autocomplete[name='./static'] input").fill(page1);
-        dialog().locator("foundation-autocomplete[name='./static'] input").press("Enter");
-        dialog().locator("foundation-autocomplete[name='./static'] input").fill(page2);
-        dialog().locator("foundation-autocomplete[name='./static'] input").press("Enter");
+        addStaticItem(page1, null);
+        addStaticItem(page2, null);
         saveDialog();
         page.navigate(baseUrl + testPage + ".html");
         assertThat(page.locator(".cmp-list")).containsText("page_1");
@@ -49,10 +48,8 @@ public class ListV4PwIT extends ListV3PwIT {
         String page2 = authorClient.createPage("page_2", "page_2", rootPage, defaultPageTemplate).getSlingPath();
         openEditDialog(componentPath);
         selectInCoralSelect("[name='./listFrom']", "static");
-        dialog().locator("foundation-autocomplete[name='./static'] input").fill(page1);
-        dialog().locator("foundation-autocomplete[name='./static'] input").press("Enter");
-        dialog().locator("foundation-autocomplete[name='./static'] input").fill(page2);
-        dialog().locator("foundation-autocomplete[name='./static'] input").press("Enter");
+        addStaticItem(page1, null);
+        addStaticItem(page2, null);
         saveDialog();
         page.navigate(baseUrl + testPage + ".html");
         assertThat(page.locator(".cmp-list")).containsText("page_1");
@@ -65,10 +62,8 @@ public class ListV4PwIT extends ListV3PwIT {
         String page1 = authorClient.createPage("page_1", "page_1", rootPage, defaultPageTemplate).getSlingPath();
         openEditDialog(componentPath);
         selectInCoralSelect("[name='./listFrom']", "static");
-        dialog().locator("foundation-autocomplete[name='./static'] input").fill(page1);
-        dialog().locator("foundation-autocomplete[name='./static'] input").press("Enter");
-        dialog().locator("[name='./static/item1/linkURL']").fill("http://www.adobe.com");
-        dialog().locator("[name='./static/item1/linkText']").fill("Adobe");
+        addStaticItem(page1, null);
+        addStaticItem("http://www.adobe.com", "Adobe");
         saveDialog();
         page.navigate(baseUrl + testPage + ".html");
         assertThat(page.locator(".cmp-list")).containsText("page_1");
@@ -80,11 +75,11 @@ public class ListV4PwIT extends ListV3PwIT {
         String componentPath = addStandaloneComponent(RT_LIST_V4, "list");
         openEditDialog(componentPath);
         selectInCoralSelect("[name='./listFrom']", "static");
-        assertThat(dialog().locator("[name='./maxItems']")).isHidden();
+        assertThat(dialog().locator("input[name='./maxItems']")).isHidden();
         selectInCoralSelect("[name='./listFrom']", "children");
-        assertThat(dialog().locator("[name='./maxItems']")).isVisible();
+        assertThat(dialog().locator("input[name='./maxItems']")).isVisible();
         selectInCoralSelect("[name='./listFrom']", "static");
-        assertThat(dialog().locator("[name='./maxItems']")).isHidden();
+        assertThat(dialog().locator("input[name='./maxItems']")).isHidden();
     }
 
     @Test
@@ -103,6 +98,18 @@ public class ListV4PwIT extends ListV3PwIT {
         JsonNode after = authorClient.doGetJson(componentPath, -1);
         if (!after.has("static")) {
             throw new AssertionError("v4 list configuration was not converted to static items");
+        }
+    }
+
+    private void addStaticItem(String link, String text) {
+        Locator multifield = dialog().locator("coral-multifield[data-granite-coral-multifield-name='./static']");
+        multifield.locator("button[coral-multifield-add]").last().click();
+        Locator item = multifield.locator("coral-multifield-item").last();
+        Locator input = item.locator("foundation-autocomplete input[is='coral-textfield']").first();
+        input.fill(link);
+        input.press("Tab");
+        if (text != null) {
+            item.locator("input[name$='linkText']").fill(text);
         }
     }
 }

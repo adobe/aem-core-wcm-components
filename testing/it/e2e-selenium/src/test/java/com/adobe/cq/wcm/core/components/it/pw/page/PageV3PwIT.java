@@ -25,25 +25,28 @@ public class PageV3PwIT extends PageV2PwIT {
     }
 
     @Override
-    public void testSocialMediaPageProperties() {
+    public void testSocialMediaPageProperties() throws Exception {
         // Social Media is not an active v3 Selenium invocation.
     }
 
     @Test
     @Tag("IgnoreOn64")
-    public void testAdvancedSeoPageProperties() {
+    public void testAdvancedSeoPageProperties() throws Exception {
         openProperties();
-        page.locator("coral-tab-label").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Advanced")).click();
-        page.locator("[name='./cq:robotsTags']").locator("input").fill("index");
-        page.locator("[name='./cq:robotsTags']").locator("input").press("Enter");
-        page.locator("[name='./cq:canonicalUrl']").fill(testPage);
-        page.locator("coral-checkbox[name='./sling:sitemapRoot'] input[type='checkbox']").check();
+        openTab("Advanced");
+        selectInPageSelect("./cq:robotsTags", "index");
+        page.keyboard().press("Escape");
+        selectInPageSelect("./cq:robotsTags", "follow");
+        page.keyboard().press("Escape");
+        fillAutocomplete("./cq:canonicalUrl", testPage);
+        checkbox("./sling:sitemapRoot").check();
         saveProperties();
-        reopenProperties();
-        page.locator("coral-tab-label").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Advanced")).click();
-        assertThat(page.locator("[name='./cq:canonicalUrl']")).hasValue(testPage);
-        assertThat(page.locator("coral-checkbox[name='./sling:sitemapRoot'] input[type='checkbox']")).isChecked();
-        assertThat(page.locator("[name='./cq:robotsTags'], [name='./sling:sitemapRoot'], [name='./cq:canonicalUrl']")).hasCount(3);
+        openProperties();
+        openTab("Advanced");
+        assertThat(page.locator("coral-select[name='./cq:robotsTags'] coral-select-item[value='index'][selected]")).hasCount(1);
+        assertThat(page.locator("coral-select[name='./cq:robotsTags'] coral-select-item[value='follow'][selected]")).hasCount(1);
+        assertThat(page.locator("foundation-autocomplete[name='./cq:canonicalUrl'] input[is='coral-textfield']").first()).hasValue(testPage);
+        assertThat(checkbox("./sling:sitemapRoot")).isChecked();
     }
 
     @Test

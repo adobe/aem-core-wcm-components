@@ -31,7 +31,8 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 public class ListV1PwIT extends ComponentPwBaseTest {
 
     private static final String LIST = ".cmp-list";
-    private static final String PARENT = "coral-dialog[open] foundation-autocomplete[name='./parentPage'] input";
+    private final String[] listPages = new String[6];
+    private static final String PARENT = "foundation-autocomplete[name='./parentPage'] input[is='coral-textfield']";
 
     protected String listResourceType() {
         return com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_LIST_V1;
@@ -41,24 +42,24 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         selectInCoralSelect("[name='./listFrom']", source);
     }
 
-    private void selectTag(String tagPath) {
-        Locator tags = dialog().locator("foundation-autocomplete[name='./tags'] input");
-        tags.fill(tagPath);
-        Locator suggestion = page.locator("coral-overlay coral-buttonlist button[value='" + tagPath + "']");
-        assertThat(suggestion).isVisible();
-        suggestion.click();
+    private void selectTag(String tagPath) throws InterruptedException {
+        selectInPicker("/content/cq:tags", "[name='./tags']", tagPath);
     }
 
     private void setTagSearchRoot(String path) {
-        selectAutocomplete("[name='./tagsSearchRoot']", path);
+        fillPathAutocomplete(dialog(), "./tagsSearchRoot", path);
     }
 
     private void setParent(String path) {
-        dialog().locator(PARENT).fill(path);
+        fillPathAutocomplete(dialog(), "./parentPage", path);
+    }
+
+    private void openItemSettings() {
+        dialog().locator("coral-tab").filter(new Locator.FilterOptions().setHasText("Item Settings")).first().click();
     }
 
     private void setDepth(String depth) {
-        dialog().locator("[name='./childDepth']").fill(depth);
+        dialog().locator("input[name='./childDepth']").fill(depth);
     }
 
     private void saveAndAssertVisible(String... titles) {
@@ -123,8 +124,8 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         createListPages();
         openEditDialog(componentPath);
         configure("search");
-        dialog().locator("[name='./query']").fill("Victor Sullivan");
-        dialog().locator("[name='./searchRoot'] input").fill(testPage + "-parent");
+        dialog().locator("input[name='./query']").fill("Victor Sullivan");
+        fillPathAutocomplete(dialog(), "./searchIn", testPage + "-parent");
         saveAndAssertVisible("page_2", "sub_4_1");
     }
 
@@ -187,18 +188,21 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         setDepth("2");
         saveDialog();
         page.navigate(baseUrl + testPage + ".html");
-        assertThat(page.locator(LIST + " > li")).hasCount(8);
+        assertThat(page.locator(LIST + " li")).hasCount(8);
+        openEditor(testPage);
         openEditDialog(componentPath);
-        dialog().locator("[name='./maxItems']").fill("4");
+        dialog().locator("input[name='./maxItems']").fill("4");
         saveDialog();
         page.navigate(baseUrl + testPage + ".html");
-        assertThat(page.locator(LIST + " > li")).hasCount(4);
+        assertThat(page.locator(LIST + " li")).hasCount(4);
     }
 
     @Test
     public void testOrderByLastModifiedDate() throws Exception {
         String componentPath = addStandaloneComponent(listResourceType(), "list");
         createListPages();
+        retitle(5, "Modified Page 5");
+        retitle(1, "Modified Page 1");
         openEditDialog(componentPath);
         setParent(testPage + "-parent");
         setDepth("2");
@@ -211,6 +215,8 @@ public class ListV1PwIT extends ComponentPwBaseTest {
     public void testChangeOrderingDate() throws Exception {
         String componentPath = addStandaloneComponent(listResourceType(), "list");
         createListPages();
+        retitle(3, "Modified Page 3");
+        retitle(2, "Modified Page 2");
         openEditDialog(componentPath);
         setParent(testPage + "-parent");
         setDepth("2");
@@ -225,6 +231,7 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         createListPages();
         openEditDialog(componentPath);
         setParent(testPage + "-parent");
+        openItemSettings();
         checkCoralCheckbox("./linkItems");
         saveDialog();
         page.navigate(baseUrl + testPage + ".html");
@@ -237,6 +244,7 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         createListPages();
         openEditDialog(componentPath);
         setParent(testPage + "-parent");
+        openItemSettings();
         checkCoralCheckbox("./showDescription");
         saveAndAssertVisible("This is a child page");
     }
@@ -247,6 +255,7 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         createListPages();
         openEditDialog(componentPath);
         setParent(testPage + "-parent");
+        openItemSettings();
         checkCoralCheckbox("./showModificationDate");
         saveDialog();
         page.navigate(baseUrl + testPage + ".html");
@@ -260,6 +269,7 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         String tag2 = Commons.addTag(authorClient, "joel");
         for (int i = 1; i <= 5; i++) {
             String path = authorClient.createPage("page_" + i, "page_" + i, parent, defaultPageTemplate).getSlingPath();
+            listPages[i] = path;
             if (i == 1) {
                 Commons.setTagsToPage(authorClient, path, new String[]{tag1}, 200);
                 HashMap<String, String> properties = new HashMap<>();
@@ -270,16 +280,28 @@ public class ListV1PwIT extends ComponentPwBaseTest {
             } else if (i == 5) {
                 Commons.setTagsToPage(authorClient, path, new String[]{tag2}, 200);
             }
-            if (i == 2 || i == 4) {
-                String child = authorClient.createPage("sub_" + i + "_1", "sub_" + i + "_1", path, defaultPageTemplate)
-                    .getSlingPath();
-                String textPath = Commons.addComponentWithRetry(authorClient, RT_TEXT_V1,
-                    child + Commons.relParentCompPath, "text");
-                HashMap<String, String> properties = new HashMap<>();
-                properties.put("text", "Victor Sullivan");
-                Commons.editNodeProperties(authorClient, textPath, properties);
+            if (i == 2) {
+                addSearchText(path);
+                authorClient.createPage("sub_2_1", "sub_2_1", path, defaultPageTemplate);
+                authorClient.createPage("sub_2_2", "sub_2_2", path, defaultPageTemplate);
+            } else if (i == 4) {
+                addSearchText(authorClient.createPage("sub_4_1", "sub_4_1", path, defaultPageTemplate).getSlingPath());
             }
         }
+    }
+
+    private void addSearchText(String pagePath) throws Exception {
+        String textPath = Commons.addComponentWithRetry(authorClient, RT_TEXT_V1,
+            pagePath + Commons.relParentCompPath, "text");
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("text", "Victor Sullivan");
+        Commons.editNodeProperties(authorClient, textPath, properties);
+    }
+
+    private void retitle(int page, String title) throws Exception {
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("jcr:title", title);
+        Commons.editNodeProperties(authorClient, listPages[page] + "/jcr:content", properties);
     }
 
     private void createTaggedListPages() throws Exception {
@@ -287,8 +309,10 @@ public class ListV1PwIT extends ComponentPwBaseTest {
     }
 
     private void addStaticPage(String path) {
-        Locator staticItems = dialog().locator("foundation-autocomplete[name='./static'] input");
-        staticItems.fill(path);
-        staticItems.press("Enter");
+        dialog().locator("button[coral-multifield-add]:visible").first().click();
+        Locator input = dialog().locator(
+            "coral-multifield-item foundation-autocomplete input[is='coral-textfield']:visible").last();
+        input.fill(path);
+        input.press("Tab");
     }
 }

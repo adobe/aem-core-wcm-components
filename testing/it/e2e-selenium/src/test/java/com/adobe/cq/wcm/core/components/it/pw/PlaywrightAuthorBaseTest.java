@@ -412,6 +412,22 @@ public abstract class PlaywrightAuthorBaseTest {
         suggestion.click();
     }
 
+    /**
+     * Types a path in a foundation-autocomplete and commits it, preferring the matching suggestion. Pressing Enter
+     * is avoided since it submits the surrounding form.
+     */
+    protected void fillPathAutocomplete(Locator scope, String name, String value) {
+        Locator autocomplete = scope.locator("foundation-autocomplete[name='" + name + "']").first();
+        Locator input = autocomplete.locator("input[is='coral-textfield']").first();
+        input.fill(value);
+        Locator suggestion = autocomplete.locator("coral-overlay button[value='" + value + "']").first();
+        try {
+            suggestion.click(new Locator.ClickOptions().setTimeout(5000));
+        } catch (com.microsoft.playwright.TimeoutError e) {
+            input.press("Tab");
+        }
+    }
+
     protected void selectInPicker(String prefix, String selector, String value) {
         String relativePath = value.startsWith(prefix + "/") ? value.substring(prefix.length() + 1)
             : value.startsWith("/") ? value.substring(1) : value;

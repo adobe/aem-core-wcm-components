@@ -27,16 +27,16 @@ public class PageV2PwIT extends PageV1PwIT {
     @Test
     @Tag("IgnoreOn65")
     @Tag("IgnoreOn64")
-    public void testAdvancedSeoPageProperties() {
+    public void testAdvancedSeoPageProperties() throws Exception {
         openProperties();
-        page.locator("coral-tab-label").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Advanced")).click();
-        page.locator("[name='./cq:canonicalUrl']").fill(testPage);
-        page.locator("coral-checkbox[name='./sling:sitemapRoot'] input[type='checkbox']").check();
+        openTab("Advanced");
+        fillAutocomplete("./cq:canonicalUrl", testPage);
+        checkbox("./sling:sitemapRoot").check();
         saveProperties();
-        reopenProperties();
-        page.locator("coral-tab-label").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Advanced")).click();
-        assertThat(page.locator("[name='./cq:canonicalUrl']")).hasValue(testPage);
-        assertThat(page.locator("coral-checkbox[name='./sling:sitemapRoot'] input[type='checkbox']")).isChecked();
+        openProperties();
+        openTab("Advanced");
+        assertThat(page.locator("foundation-autocomplete[name='./cq:canonicalUrl'] input[is='coral-textfield']").first()).hasValue(testPage);
+        assertThat(checkbox("./sling:sitemapRoot")).isChecked();
     }
 
     @Test
