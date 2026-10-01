@@ -24,3 +24,4 @@ core.wcm.components.commons.datalayer.*
 **/coverage/**
 node
 **/node_modules/**
+.clawdea/wiki-state.local.json
