@@ -153,8 +153,11 @@ jobs:
 
       - name: Pull + save AEM image (on cache miss)
         if: ${{ steps.aem-image-cache.outputs.cache-hit != 'true' }}
+        env:
+          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_CLOUD_USER }}
+          ARTIFACTORY_PASS: ${{ secrets.ARTIFACTORY_CLOUD_PASS }}
         run: |
-          echo "${{ secrets.ARTIFACTORY_CLOUD_PASS }}" | docker login "${REGISTRY}" -u "${{ secrets.ARTIFACTORY_CLOUD_USER }}" --password-stdin
+          echo "$ARTIFACTORY_PASS" | docker login "$REGISTRY" -u "$ARTIFACTORY_USER" --password-stdin
           docker pull "$AEM_IMAGE"
           docker save -o /tmp/aem-image.tar "$AEM_IMAGE"
 
@@ -214,12 +217,15 @@ jobs:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
       - name: Load AEM image
+        env:
+          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_CLOUD_USER }}
+          ARTIFACTORY_PASS: ${{ secrets.ARTIFACTORY_CLOUD_PASS }}
         run: |
           if [[ -f /tmp/aem-image.tar ]]; then
             docker load -i /tmp/aem-image.tar
           else
             # A cache may be evicted between priming and restoration.
-            echo "${{ secrets.ARTIFACTORY_CLOUD_PASS }}" | docker login "${REGISTRY}" -u "${{ secrets.ARTIFACTORY_CLOUD_USER }}" --password-stdin
+            echo "$ARTIFACTORY_PASS" | docker login "$REGISTRY" -u "$ARTIFACTORY_USER" --password-stdin
             docker pull "$AEM_IMAGE"
           fi
       - name: Run http integration tests
@@ -313,12 +319,15 @@ jobs:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
       - name: Load AEM image
+        env:
+          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_CLOUD_USER }}
+          ARTIFACTORY_PASS: ${{ secrets.ARTIFACTORY_CLOUD_PASS }}
         run: |
           if [[ -f /tmp/aem-image.tar ]]; then
             docker load -i /tmp/aem-image.tar
           else
             # A cache may be evicted between priming and restoration.
-            echo "${{ secrets.ARTIFACTORY_CLOUD_PASS }}" | docker login "${REGISTRY}" -u "${{ secrets.ARTIFACTORY_CLOUD_USER }}" --password-stdin
+            echo "$ARTIFACTORY_PASS" | docker login "$REGISTRY" -u "$ARTIFACTORY_USER" --password-stdin
             docker pull "$AEM_IMAGE"
           fi
       - name: Run Playwright ${{ matrix.group.group }} ITs
