@@ -150,18 +150,6 @@ AEM_STARTUP_TIMEOUT="${AEM_STARTUP_TIMEOUT:-600}"
 # Leave the container running after the script exits (for debugging).
 KEEP_AEM="${KEEP_AEM:-false}"
 
-# prepare: provision and export a stopped author/publish snapshot.
-# test: start fresh instances and provision (the local default).
-# prepared: start the snapshot and run tests without provisioning.
-IT_MODE="${IT_MODE:-test}"
-case "${IT_MODE}" in
-    test|prepare|prepared) ;;
-    *) echo "Unsupported IT_MODE: ${IT_MODE}" >&2; exit 1 ;;
-esac
-PREPARED_IMAGE="${PREPARED_IMAGE:-wcm-it-prepared:${AEM_TYPE}}"
-PREPARED_IMAGE_TAR="${PREPARED_IMAGE_TAR:-/tmp/aem-prepared.tar.gz}"
-AEM_BUILD_REF="${AEM_BUILD_REF:-$(git -C "$(dirname "${BASH_SOURCE[0]}")" rev-parse HEAD)}"
-
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 AEM_BASE_URL="http://localhost:${AEM_AUTHOR_PORT}"
 AEM_PUBLISH_URL="http://localhost:${AEM_PUBLISH_PORT}"
@@ -471,27 +459,8 @@ wait_for_bundles_settled() {
     done
 }
 
-provision() {
-    log "Provisioning author"
-    provision_packages "${AEM_BASE_URL}"
-    # Server-side IT support bundle (TestTransformerFactory etc.), used by author-side
-    # ITs like TableOfContentsFilterIT (the 'core-components-test-transformer' rewriter).
-    # It is a plain OSGi bundle deployed via sling:install in the normal pipeline - not
-    # embedded in any content package - so install it explicitly on the author.
-    install_bundle "${AEM_BASE_URL}" \
-        "$(find_zip "${REPO_ROOT}/testing/it/it.core/target" 'core.wcm.components.it.core-*.jar' '\-(sources|javadoc)\.jar$')"
-
-    if [[ "${WITH_PUBLISH}" == "true" ]]; then
-        align_publish_with_author
-        log "Provisioning publish"
-        # Publish tests GET pre-deployed content, so the publish instance gets the same
-        # content packages (no replication needed).
-        provision_packages "${AEM_PUBLISH_URL}"
-    fi
-}
-
-# Package installation starts bundles asynchronously. Do not freeze an image
-# until the repository build and author-side test support are active.
+# Package installation starts bundles asynchronously. Do not start tests until
+# the core bundles (and author-side test support) are active.
 wait_for_provisioning() {
     local base="$1" support="$2" deadline=$(( SECONDS + 180 ))
     while true; do
@@ -517,73 +486,22 @@ if missing:
     done
 }
 
-export_prepared_image() {
-    if [[ "${WITH_PUBLISH}" != "true" ]]; then
-        echo "IT_MODE=prepare requires WITH_PUBLISH=true" >&2
-        return 1
-    fi
-    wait_for_provisioning "${AEM_BASE_URL}" true
-    wait_for_provisioning "${AEM_PUBLISH_URL}" false
-    # SIGTERM runs AEM's JVM shutdown hook. qp stop can hang after the JVM exits.
-    # Never force-kill or snapshot a JVM that did not close its repository.
-    for id in publish author; do
-        local pid
-        pid=$(docker exec "${AEM_CONTAINER}" pgrep -f "^java .* -jar ${QP_DIR}/${id}/cq-quickstart.jar ")
-        if [[ ! "${pid}" =~ ^[0-9]+$ ]]; then
-            echo "Expected exactly one running AEM ${id} JVM, found: ${pid}" >&2
-            return 1
-        fi
-        docker exec "${AEM_CONTAINER}" kill -TERM "${pid}"
-        local deadline=$(( SECONDS + 180 ))
-        while docker exec "${AEM_CONTAINER}" pgrep -f "^java .* -jar ${QP_DIR}/${id}/cq-quickstart.jar "; do
-            if (( SECONDS >= deadline )); then
-                echo "AEM ${id} did not stop cleanly within 180s; refusing to snapshot" >&2
-                return 1
-            fi
-            sleep 3
-        done
-    done
-    printf '%s\n%s\n' "${AEM_TYPE}" "${AEM_BUILD_REF}" \
-        | docker exec -i "${AEM_CONTAINER}" bash -c 'cat > /home/circleci/cq/.core-components-prepared'
-    log "Exporting prepared author/publish image ${PREPARED_IMAGE}"
-    # Export/import flattens the stopped filesystem into a self-contained layer.
-    # Preserve the base image startup configuration; no registry layers are needed
-    # to load it on another runner (including containerd-backed Docker engines).
-    python3 - "${AEM_CONTAINER}" "${PREPARED_IMAGE}" <<'PY'
-import json, subprocess, sys
-container, image = sys.argv[1:]
-info = json.loads(subprocess.check_output(["docker", "inspect", container]))[0]
-config = info["Config"]
-base = json.loads(subprocess.check_output(["docker", "image", "inspect", info["Image"]]))[0]
-args = ["docker", "import", "--platform", base["Os"] + "/" + base["Architecture"]]
-for key in ("Entrypoint", "Cmd"):
-    if config.get(key):
-        args += ["--change", key.upper() + " " + json.dumps(config[key])]
-for key in ("User", "WorkingDir"):
-    if config.get(key):
-        args += ["--change", ("WORKDIR" if key == "WorkingDir" else "USER") + " " + config[key]]
-for entry in config.get("Env", []):
-    key, value = entry.split("=", 1)
-    args += ["--change", "ENV " + key + "=" + json.dumps(value)]
-args += ["-", image]
-export = subprocess.Popen(["docker", "export", container], stdout=subprocess.PIPE)
-try:
-    subprocess.run(args, stdin=export.stdout, check=True)
-finally:
-    export.stdout.close()
-    result = export.wait()
-if result:
-    raise SystemExit("docker export failed: " + str(result))
-PY
-    docker save "${PREPARED_IMAGE}" | gzip -1 > "${PREPARED_IMAGE_TAR}"
-}
+provision() {
+    log "Provisioning author"
+    provision_packages "${AEM_BASE_URL}"
+    # Server-side IT support bundle (TestTransformerFactory etc.), used by author-side
+    # ITs like TableOfContentsFilterIT (the 'core-components-test-transformer' rewriter).
+    # It is a plain OSGi bundle deployed via sling:install in the normal pipeline - not
+    # embedded in any content package - so install it explicitly on the author.
+    install_bundle "${AEM_BASE_URL}" \
+        "$(find_zip "${REPO_ROOT}/testing/it/it.core/target" 'core.wcm.components.it.core-*.jar' '\-(sources|javadoc)\.jar$')"
 
-verify_prepared_image() {
-    local marker
-    marker=$(docker exec "${AEM_CONTAINER}" cat /home/circleci/cq/.core-components-prepared)
-    if [[ "${marker}" != "$(printf '%s\n%s' "${AEM_TYPE}" "${AEM_BUILD_REF}")" ]]; then
-        echo "Prepared image does not match AEM ${AEM_TYPE} / build ${AEM_BUILD_REF}" >&2
-        return 1
+    if [[ "${WITH_PUBLISH}" == "true" ]]; then
+        align_publish_with_author
+        log "Provisioning publish"
+        # Publish tests GET pre-deployed content, so the publish instance gets the same
+        # content packages (no replication needed).
+        provision_packages "${AEM_PUBLISH_URL}"
     fi
     wait_for_provisioning "${AEM_BASE_URL}" true
     if [[ "${WITH_PUBLISH}" == "true" ]]; then
@@ -674,15 +592,7 @@ main() {
         wait_for_aem "${AEM_PUBLISH_URL}" publish
         verify_aem_type "${AEM_PUBLISH_URL}"
     fi
-    if [[ "${IT_MODE}" == "prepared" ]]; then
-        verify_prepared_image
-    else
-        provision
-    fi
-    if [[ "${IT_MODE}" == "prepare" ]]; then
-        export_prepared_image
-        return
-    fi
+    provision
     if [[ "${WITH_SELENIUM}" == "true" ]]; then
         run_selenium
     else
