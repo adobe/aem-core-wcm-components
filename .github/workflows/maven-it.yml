@@ -19,8 +19,8 @@
 # (workflow_dispatch). All container + provisioning + failsafe orchestration lives in
 # testing/it/docker/run-it.sh so this workflow and the local dev flow share it.
 #
-# Structure: a single `prep` job builds the deployable packages and primes the
-# AEM image cache ONCE; the test jobs depend on it and only download the packages
+# Structure: a single `prep` job builds the deployable packages; image-cache jobs
+# prime each AEM image ONCE. Test jobs only download the packages
 # + load the cached image, so the expensive build/pull is not repeated per leg.
 # Browser ITs (Playwright) run as one job per @Tag("playwright-groupN"); prep fails
 # if any IT class is untagged (see testing/it/docker/gen-browser-matrix.sh).
@@ -62,7 +62,6 @@ concurrency:
 
 env:
   REGISTRY: docker-adobe-cif-release.dr-uw2.adobeitc.com
-  AEM_IMAGE: docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:27830-v2-openjdk21
   # Bump to force a fresh cache lineage (Maven + Docker image) without a code change.
   CACHE_VERSION: '1'
 
@@ -77,6 +76,7 @@ jobs:
     timeout-minutes: 30
     outputs:
       browser_matrix: ${{ steps.genmatrix.outputs.matrix }}
+      aem_matrix: ${{ steps.genmatrix.outputs.aem_matrix }}
     steps:
       - uses: actions/checkout@v5
 
@@ -120,7 +120,26 @@ jobs:
             testing/it/it.ui.content/target/*.zip
             testing/it/it.core/target/*.jar
 
-      # Prime the AEM image cache: pull once here so the test legs all get a cache hit.
+      - name: Generate browser IT matrix (fails on ungrouped ITs)
+        id: genmatrix
+        run: |
+          bash testing/it/docker/test-run-it.sh
+          matrix=$(bash testing/it/docker/gen-browser-matrix.sh)
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          echo 'aem_matrix={"include":[{"name":"cloud-ready","type":"sdk","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:27830-v2-openjdk21"},{"name":"6.5","type":"65","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem:6.5.24.0-openjdk11"},{"name":"LTS","type":"lts","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-lts:6.6.2-openjdk21"}]}' >> "$GITHUB_OUTPUT"
+
+  image-cache:
+    name: Cache AEM ${{ matrix.name }} image
+    needs: prep
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.prep.outputs.aem_matrix) }}
+    env:
+      AEM_IMAGE: ${{ matrix.image }}
+    steps:
+      # Each product has its own cache key, shared by all of its test legs.
       - name: Compute AEM image cache key
         id: imgkey
         run: echo "key=aem-image-${CACHE_VERSION}-$(echo "$AEM_IMAGE" | tr '/:' '__')" >> "$GITHUB_OUTPUT"
@@ -146,24 +165,22 @@ jobs:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
 
-      - name: Generate browser IT matrix (fails on ungrouped ITs)
-        id: genmatrix
-        run: echo "matrix=$(bash testing/it/docker/gen-browser-matrix.sh)" >> "$GITHUB_OUTPUT"
-
   # --------------------------------------------------------------------------
   # http ITs (author + publish). Consumes prep's packages + cached image.
   # --------------------------------------------------------------------------
   integration-test:
-    name: http ITs (author + publish, cloud-ready)
-    needs: prep
-    # The POC branch runs only the Playwright browser ITs, including
-    # when its pull request targets main.
-    if: ${{ github.ref_name != 'it-playwright-poc' && github.head_ref != 'it-playwright-poc' && (github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components') }}
+    name: http ITs (author + publish, ${{ matrix.name }})
+    needs: [prep, image-cache]
     runs-on: ubuntu-latest
     # Native amd64 GitHub-hosted runner: author+publish boot + the full http
     # suite ran in ~9 minutes in testing, so 90m is generous headroom.
     timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.prep.outputs.aem_matrix) }}
     env:
+      AEM_IMAGE: ${{ matrix.image }}
+      AEM_TYPE: ${{ matrix.type }}
       WITH_PUBLISH: 'true'
       QP_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
       PUBLISH_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
@@ -195,14 +212,21 @@ jobs:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
       - name: Load AEM image
-        run: docker load -i /tmp/aem-image.tar
+        run: |
+          if [[ -f /tmp/aem-image.tar ]]; then
+            docker load -i /tmp/aem-image.tar
+          else
+            # A cache may be evicted between priming and restoration.
+            echo "${{ secrets.ARTIFACTORY_CLOUD_PASS }}" | docker login "${REGISTRY}" -u "${{ secrets.ARTIFACTORY_CLOUD_USER }}" --password-stdin
+            docker pull "$AEM_IMAGE"
+          fi
       - name: Run http integration tests
         run: bash testing/it/docker/run-it.sh
       - name: Publish integration test results
         if: always()
         uses: mikepenz/action-junit-report@a9170d5795813c01ab4901ffb045b52bab4ab09d # v6
         with:
-          check_name: Integration Tests (http, author + publish, cloud-ready)
+          check_name: Integration Tests (http, author + publish, ${{ matrix.name }})
           report_paths: testing/it/http/target/failsafe-reports/TEST-*.xml
           detailed_summary: true
           include_passed: true
@@ -212,7 +236,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: it-http-author-reports
+          name: it-http-${{ matrix.name }}-reports
           if-no-files-found: ignore
           retention-days: 14
           path: |
@@ -223,20 +247,24 @@ jobs:
   # Run each Playwright test group in its own job.
   # --------------------------------------------------------------------------
   browser-test:
-    name: ${{ matrix.engine }} ${{ matrix.group }} ITs (cloud-ready)
-    needs: prep
+    name: Playwright ${{ matrix.group.group }} ITs (${{ matrix.aem.name }})
+    needs: [prep, image-cache]
     if: ${{ github.event_name == 'workflow_dispatch' || (github.repository == 'adobe/aem-core-wcm-components' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)) }}
     runs-on: ubuntu-latest
     # Native amd64 GitHub-hosted runner: each group1 run has generous headroom.
     timeout-minutes: 60
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.prep.outputs.browser_matrix) }}
+      matrix:
+        aem: ${{ fromJSON(needs.prep.outputs.aem_matrix).include }}
+        group: ${{ fromJSON(needs.prep.outputs.browser_matrix).include }}
     env:
+      AEM_IMAGE: ${{ matrix.aem.image }}
+      AEM_TYPE: ${{ matrix.aem.type }}
       WITH_SELENIUM: 'true'
       SEL_BROWSER: chrome
-      SEL_GROUPS: ${{ matrix.sel_groups }}
-      SEL_IT_TEST: ${{ matrix.sel_it_test }}
+      SEL_GROUPS: ${{ matrix.group.sel_groups }}
+      SEL_IT_TEST: ${{ matrix.group.sel_it_test }}
       SEL_RERUN: '0'
       # Playwright drives the runner's installed Chrome (channel=chrome), like Selenium: no bundled browser download.
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
@@ -282,14 +310,21 @@ jobs:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
       - name: Load AEM image
-        run: docker load -i /tmp/aem-image.tar
-      - name: Run ${{ matrix.engine }} ${{ matrix.group }} ITs
+        run: |
+          if [[ -f /tmp/aem-image.tar ]]; then
+            docker load -i /tmp/aem-image.tar
+          else
+            # A cache may be evicted between priming and restoration.
+            echo "${{ secrets.ARTIFACTORY_CLOUD_PASS }}" | docker login "${REGISTRY}" -u "${{ secrets.ARTIFACTORY_CLOUD_USER }}" --password-stdin
+            docker pull "$AEM_IMAGE"
+          fi
+      - name: Run Playwright ${{ matrix.group.group }} ITs
         run: bash testing/it/docker/run-it.sh
-      - name: Publish ${{ matrix.engine }} test results
+      - name: Publish Playwright test results
         if: always()
         uses: mikepenz/action-junit-report@a9170d5795813c01ab4901ffb045b52bab4ab09d # v6
         with:
-          check_name: ${{ matrix.engine }} ${{ matrix.group }} ITs (cloud-ready)
+          check_name: Playwright ${{ matrix.group.group }} ITs (${{ matrix.aem.name }})
           report_paths: testing/it/e2e-selenium/target/failsafe-reports/TEST-*.xml
           detailed_summary: true
           include_passed: true
@@ -299,7 +334,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: it-browser-${{ matrix.name }}-reports
+          name: it-browser-${{ matrix.aem.name }}-${{ matrix.group.name }}-reports
           if-no-files-found: ignore
           retention-days: 14
           path: |

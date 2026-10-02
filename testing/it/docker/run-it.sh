@@ -56,6 +56,30 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 REGISTRY="${REGISTRY:-docker-adobe-cif-release.dr-uw2.adobeitc.com}"
 AEM_IMAGE="${AEM_IMAGE:-${REGISTRY}/circleci-aem-cloudready:27830-v2-openjdk21}"
+# Infer the product for local runs; CI sets it explicitly alongside the image.
+if [[ -z "${AEM_TYPE:-}" ]]; then
+    case "${AEM_IMAGE}" in
+        */circleci-aem-cloudready:*) AEM_TYPE=sdk ;;
+        */circleci-aem-lts:*) AEM_TYPE=lts ;;
+        */circleci-aem:*) AEM_TYPE=65 ;;
+        *) echo "Set AEM_TYPE=sdk, 65, or lts for image ${AEM_IMAGE}" >&2; exit 1 ;;
+    esac
+fi
+case "${AEM_TYPE}" in
+    sdk)
+        DEFAULT_IT_EXCLUDED_GROUPS="com.adobe.cq.wcm.core.components.it.http.IgnoreOnCloud"
+        DEFAULT_SEL_EXCLUDED_GROUPS="failing,nested,IgnoreOnSDK"
+        ;;
+    65)
+        DEFAULT_IT_EXCLUDED_GROUPS="com.adobe.cq.wcm.core.components.it.http.IgnoreOn65"
+        DEFAULT_SEL_EXCLUDED_GROUPS="failing,nested,IgnoreOn65"
+        ;;
+    lts)
+        DEFAULT_IT_EXCLUDED_GROUPS=""
+        DEFAULT_SEL_EXCLUDED_GROUPS="failing,nested"
+        ;;
+    *) echo "Unsupported AEM_TYPE: ${AEM_TYPE} (expected sdk, 65, or lts)" >&2; exit 1 ;;
+esac
 AEM_AUTHOR_PORT="${AEM_AUTHOR_PORT:-4502}"
 AEM_PUBLISH_PORT="${AEM_PUBLISH_PORT:-4503}"
 AEM_ADMIN_USER="${AEM_ADMIN_USER:-admin}"
@@ -89,11 +113,8 @@ else
     IT_TEST="${IT_TEST:-${AUTHOR_ONLY_IT_TEST}}"
 fi
 
-# JUnit categories to exclude. We target a cloud(-ready) instance, so mirror the
-# core-components pipeline and skip @Category(IgnoreOnCloud) classes (SeoIT,
-# TableOfContentsFilterIT, ClientlibsIncludeIT) - features that are not exercised
-# on AEM as a Cloud Service. Override with IT_EXCLUDED_GROUPS="" to force them.
-IT_EXCLUDED_GROUPS="${IT_EXCLUDED_GROUPS:-com.adobe.cq.wcm.core.components.it.http.IgnoreOnCloud}"
+# Product-specific JUnit categories; an explicit empty override runs all categories.
+IT_EXCLUDED_GROUPS="${IT_EXCLUDED_GROUPS-${DEFAULT_IT_EXCLUDED_GROUPS}}"
 
 # --- Selenium (e2e-selenium) mode ---
 # When true, run the Selenium UI suite (testing/it/e2e-selenium) instead of the
@@ -107,7 +128,7 @@ SEL_GROUPS="${SEL_GROUPS:-}"
 # JUnit5 tag excludes. Keep the pom's failing,nested and add IgnoreOnSDK for the
 # cloud(-ready) target (mirrors the pipeline; the module tags cloud-unsupported
 # UI tests with @Tag("IgnoreOnSDK")).
-SEL_EXCLUDED_GROUPS="${SEL_EXCLUDED_GROUPS:-failing,nested,IgnoreOnSDK}"
+SEL_EXCLUDED_GROUPS="${SEL_EXCLUDED_GROUPS-${DEFAULT_SEL_EXCLUDED_GROUPS}}"
 # Re-run failing Selenium tests up to N times before marking them failed. UI tests
 # are prone to transient timing flakiness (and search tests can miss the async Oak
 # index on the first attempt); a couple of reruns absorb that. 0 disables.
@@ -170,7 +191,6 @@ cleanup() {
     fi
     exit "${exit_code}"
 }
-trap cleanup EXIT
 
 # Start one AEM instance inside the container via the qp client.
 # Args: <id> <runmode> <port> <vm-options>
@@ -225,6 +245,32 @@ wait_for_aem() {
         sleep 5
     done
     log "AEM ${label} is up."
+}
+
+# Validate the product from the runtime, not just the image tag.
+verify_aem_type() {
+    local base="$1" settings product detected
+    settings=$(curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
+        "${base}/system/console/status-slingsettings.txt")
+    if [[ "${settings}" =~ Run\ Modes.*sdk ]]; then
+        detected=sdk
+    else
+        product=$(curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
+            "${base}/system/console/status-productinfo.txt")
+        if [[ "${product}" == *".LTS"* ]]; then
+            detected=lts
+        elif [[ "${product}" == *"Adobe Experience Manager (6.5."* ]]; then
+            detected=65
+        else
+            echo "Unrecognized AEM product at ${base}: ${product}" >&2
+            return 1
+        fi
+    fi
+    if [[ "${detected}" != "${AEM_TYPE}" ]]; then
+        echo "AEM product mismatch at ${base}: expected ${AEM_TYPE}, detected ${detected}" >&2
+        return 1
+    fi
+    log "Verified AEM ${detected} at ${base}"
 }
 
 # Upload + install one content package. Args: <base-url> <zip>
@@ -325,12 +371,14 @@ find_zip() {
 # Install the core-components + IT content packages onto one instance. Args: <base-url>
 # Order matters: components first, then immutable test apps, OSGi config, then mutable
 # test content. The `all` module builds both a classic zip (no classifier) and a
-# `-cloud` classified zip; we target a cloud-ready instance, so install `-cloud`.
+# `-cloud` classified zip; choose the package matching the product.
 provision_packages() {
     local base="$1"
-    # This repo's cloud `all` package (component content, config, and the core + AMP
-    # bundles). The `-cloud` classified zip targets the cloud-ready instance.
-    install_package "${base}" "$(find_zip "${REPO_ROOT}/all/target" 'core.wcm.components.all-*-cloud.zip')"
+    if [[ "${AEM_TYPE}" == "sdk" ]]; then
+        install_package "${base}" "$(find_zip "${REPO_ROOT}/all/target" 'core.wcm.components.all-*-cloud.zip')"
+    else
+        install_package "${base}" "$(find_zip "${REPO_ROOT}/all/target" 'core.wcm.components.all-*.zip' '\-cloud\.zip$')"
+    fi
     install_package "${base}" "$(find_zip "${REPO_ROOT}/testing/it/it.ui.apps/target" 'core.wcm.components.it.ui.apps-*.zip')"
     install_package "${base}" "$(find_zip "${REPO_ROOT}/testing/it/it.ui.config/target" 'core.wcm.components.it.ui.config-*.zip')"
     install_package "${base}" "$(find_zip "${REPO_ROOT}/testing/it/it.ui.content/target" 'core.wcm.components.it.ui.content-*.zip')"
@@ -338,8 +386,10 @@ provision_packages() {
     # package above leaves TWO active versions of the core/AMP bundles. Remove the older
     # (product) copies so only this repo's build remains - otherwise the two versions
     # cross-wire the models packages and components fail with ClassCastExceptions.
-    dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.core"
-    dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.extensions.amp"
+    if [[ "${AEM_TYPE}" == "sdk" ]]; then
+        dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.core"
+        dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.extensions.amp"
+    fi
 }
 
 provision() {
@@ -373,9 +423,7 @@ run_tests() {
     if [[ -n "${IT_TEST}" ]]; then
         args+=(-Dit.test="${IT_TEST}")
     fi
-    if [[ -n "${IT_EXCLUDED_GROUPS}" ]]; then
-        args+=(-DexcludedGroups="${IT_EXCLUDED_GROUPS}")
-    fi
+    args+=(-DexcludedGroups="${IT_EXCLUDED_GROUPS}")
     if [[ "${WITH_PUBLISH}" == "true" ]]; then
         log "Running http ITs (author + publish): ${IT_TEST:-<all>}"
         args+=(
@@ -400,13 +448,17 @@ run_selenium() {
     log "Installing e2e-selenium-utils from source"
     mvn -B -q -f "${REPO_ROOT}/testing/it/e2e-selenium-utils/pom.xml" install -DskipTests
 
-    log "Running Selenium ITs (local ${SEL_BROWSER}): ${SEL_IT_TEST:-<all>}"
+    log "Running Playwright ITs (AEM ${AEM_TYPE}, local Chrome): ${SEL_IT_TEST:-<all>}"
     # -Dsel.jup.default.browser selects a LOCAL browser (vs the module's default
     # Chrome-in-Docker). The pom's test-all profile pins the author URL to
     # localhost:4502, which the host-local browser can reach directly.
     local -a args=(
         -B -f "${REPO_ROOT}/testing/it/e2e-selenium/pom.xml" verify -Ptest-all
         -Dsel.jup.default.browser="${SEL_BROWSER}"
+        -Dsling.it.instance.url.1="${AEM_BASE_URL}"
+        -Dsling.it.instance.adminUser.1="${AEM_ADMIN_USER}"
+        -Dsling.it.instance.adminPassword.1="${AEM_ADMIN_PASSWORD}"
+        -Dgranite.it.author.url="${AEM_BASE_URL}"
     )
     if [[ -n "${SEL_IT_TEST}" ]]; then
         args+=(-Dit.test="${SEL_IT_TEST}")
@@ -414,9 +466,7 @@ run_selenium() {
     if [[ -n "${SEL_GROUPS}" ]]; then
         args+=(-Dgroups="${SEL_GROUPS}")
     fi
-    if [[ -n "${SEL_EXCLUDED_GROUPS}" ]]; then
-        args+=(-DexcludedGroups="${SEL_EXCLUDED_GROUPS}")
-    fi
+    args+=(-DexcludedGroups="${SEL_EXCLUDED_GROUPS}")
     if [[ "${SEL_RERUN}" != "0" ]]; then
         args+=(-Dfailsafe.rerunFailingTestsCount="${SEL_RERUN}")
     fi
@@ -434,11 +484,14 @@ run_selenium() {
 }
 
 main() {
+    trap cleanup EXIT
     command -v docker >/dev/null || { echo "docker is required" >&2; exit 1; }
     start_aem
     wait_for_aem "${AEM_BASE_URL}" author
+    verify_aem_type "${AEM_BASE_URL}"
     if [[ "${WITH_PUBLISH}" == "true" ]]; then
         wait_for_aem "${AEM_PUBLISH_URL}" publish
+        verify_aem_type "${AEM_PUBLISH_URL}"
     fi
     provision
     if [[ "${WITH_SELENIUM}" == "true" ]]; then
@@ -448,4 +501,6 @@ main() {
     fi
 }
 
-main "$@"
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    main "$@"
+fi
