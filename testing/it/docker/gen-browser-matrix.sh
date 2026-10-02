@@ -31,7 +31,7 @@ while IFS= read -r file; do
     grep -qE "${TAG_RE}" "$file" || ungrouped+=("${file#"${SRC}"/}")
 done < <(find "${SRC}" -name "*IT.java" -print | sort)
 
-if [ "${#ungrouped[@]}" -gt 0 ]; then
+if [[ "${#ungrouped[@]}" -gt 0 ]]; then
     echo "ERROR: IT classes without a @Tag(\"playwright-groupN\") (add one to the fastest group):" >&2
     printf '  %s\n' "${ungrouped[@]}" >&2
     exit 1

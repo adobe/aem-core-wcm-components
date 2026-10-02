@@ -24,8 +24,8 @@
 //
 // Usage: node summarize-it.js <dir> [<dir> ...]
 
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 function findReports(dir, acc) {
     if (!fs.existsSync(dir)) {
@@ -62,7 +62,7 @@ for (const file of files) {
         const attrs = sm[1];
         const num = (k) => {
             const r = new RegExp(k + '="([0-9]+)"').exec(attrs);
-            return r ? parseInt(r[1], 10) : 0;
+            return r ? Number.parseInt(r[1], 10) : 0;
         };
         tests += num("tests");
         failures += num("failures");
@@ -109,9 +109,10 @@ if (failing.length === 0) {
     out += `### Failing tests (${failing.length})\n\n`;
     const byClass = {};
     for (const f of failing) {
-        (byClass[f.cls] = byClass[f.cls] || []).push(f);
+        byClass[f.cls] = byClass[f.cls] || [];
+        byClass[f.cls].push(f);
     }
-    for (const cls of Object.keys(byClass).sort()) {
+    for (const cls of Object.keys(byClass).sort((a, b) => a.localeCompare(b))) {
         out += `- \`${cls}\`\n`;
         for (const f of byClass[cls].sort((a, b) => a.name.localeCompare(b.name))) {
             out += `  - ${f.name} _(${f.kind})_\n`;

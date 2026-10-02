@@ -200,7 +200,7 @@ jobs:
         run: bash testing/it/docker/run-it.sh
       - name: Publish integration test results
         if: always()
-        uses: mikepenz/action-junit-report@v6
+        uses: mikepenz/action-junit-report@a9170d5795813c01ab4901ffb045b52bab4ab09d # v6
         with:
           check_name: Integration Tests (http, author + publish, cloud-ready)
           report_paths: testing/it/http/target/failsafe-reports/TEST-*.xml
@@ -287,7 +287,7 @@ jobs:
         run: bash testing/it/docker/run-it.sh
       - name: Publish ${{ matrix.engine }} test results
         if: always()
-        uses: mikepenz/action-junit-report@v6
+        uses: mikepenz/action-junit-report@a9170d5795813c01ab4901ffb045b52bab4ab09d # v6
         with:
           check_name: ${{ matrix.engine }} ${{ matrix.group }} ITs (cloud-ready)
           report_paths: testing/it/e2e-selenium/target/failsafe-reports/TEST-*.xml
