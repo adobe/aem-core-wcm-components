@@ -120,8 +120,21 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
     }
 
     protected void addActionLink(String path) {
-        nextActionLinkInput().fill(path);
-        page.locator("button[is='coral-buttonlist-item'][value='" + path + "']:visible").first().click();
+        Locator input = nextActionLinkInput();
+        Locator suggestion = page.locator("button[is='coral-buttonlist-item'][value='" + path + "']:visible").first();
+        // Suggestions for freshly created pages can lag; retype to re-query instead of waiting on a stale list.
+        for (int attempt = 1; ; attempt++) {
+            input.fill("");
+            input.fill(path);
+            try {
+                suggestion.click(new Locator.ClickOptions().setTimeout(10000));
+                return;
+            } catch (com.microsoft.playwright.TimeoutError e) {
+                if (attempt == 3) {
+                    throw e;
+                }
+            }
+        }
     }
 
     protected void setActionTitle(String title) {
