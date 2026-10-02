@@ -171,6 +171,10 @@ with product-specific report/check names and artifacts:
 | AEM LTS | `circleci-aem-lts:6.6.2-openjdk21` | Classic `all-*.zip` | No product exclusions |
 
 LTS is validated separately from 6.5: `IgnoreOn65` does not suppress LTS tests.
+
+The 6.5 image ships a service-packed author, but its publish starts from the GA
+quickstart jar. With `WITH_PUBLISH=true`, `run-it.sh` installs the author's
+`aem-service-pkg` on publish whenever their product versions differ.
 The AEM JVM comes from the image; the host build/test JVM remains JDK 11.
 Cloud-only bundle deduplication is not applied to on-prem instances.
 Explicit empty `IT_EXCLUDED_GROUPS=""` or `SEL_EXCLUDED_GROUPS=""` overrides clear exclusions.

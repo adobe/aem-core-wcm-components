@@ -121,3 +121,33 @@ echo 'Passed prepare/prepared/test orchestration: prepared jobs never provision.
     fi
 )
 echo 'Passed stale snapshot build rejection.'
+
+(
+    export AEM_TYPE=65 WITH_PUBLISH=true AEM_PUBLISH_PORT=4505
+    source "${SCRIPT_DIR}/run-it.sh"
+    state=$(mktemp)
+    echo 'Adobe Experience Manager (6.5.0)' > "${state}"
+    sleep() { :; }
+    wait_for_bundles_settled() { :; }
+    wait_for_aem() { :; }
+    curl() {
+        case "$*" in
+            *4502/system/console/status-productinfo.txt) echo 'Installed Products = Adobe Experience Manager (6.5.24.0)' ;;
+            *4505/system/console/status-productinfo.txt) echo "Installed Products = $(cat "${state}")" ;;
+            *cmd=ls) printf '%s' '<crx><response><data><packages>' \
+                '<package><group>adobe/cq650/servicepack</group><name>aem-service-pkg</name><version>6.5.9.0</version><downloadName>aem-service-pkg-6.5.9.0.zip</downloadName></package>' \
+                '<package><group>adobe/cq650/servicepack</group><name>aem-service-pkg</name><version>6.5.24.0</version><downloadName>aem-service-pkg-6.5.24.0.zip</downloadName></package>' \
+                '<package><group>day/cq650</group><name>other</name><version>1</version><downloadName>other.zip</downloadName></package>' \
+                '</packages></data></response></crx>' ;;
+            *4502/etc/packages/adobe/cq650/servicepack/aem-service-pkg-6.5.24.0.zip*) touch "${*: -2:1}" ;;
+            *4505/crx/packmgr/service.jsp) echo 'Adobe Experience Manager (6.5.24.0)' > "${state}" ;;
+            *) echo "Unexpected curl request: $*" >&2; return 1 ;;
+        esac
+    }
+    align_publish_with_author >/dev/null
+    [[ "$(product_version "${AEM_PUBLISH_URL}")" == 'Adobe Experience Manager (6.5.24.0)' ]]
+    curl() { [[ "$*" == *status-productinfo.txt ]] && echo 'Installed Products = Adobe Experience Manager (6.5.24.0)'; }
+    align_publish_with_author
+    rm -f "${state}"
+)
+echo 'Passed publish service-pack alignment.'

@@ -214,6 +214,8 @@ jobs:
   integration-test:
     name: http ITs (author + publish, ${{ matrix.name }})
     needs: [prep, image-cache]
+    # A failed product prepare leaves only that product's legs without an image.
+    if: ${{ !cancelled() && needs.prep.result == 'success' }}
     runs-on: ubuntu-latest
     # Native amd64 GitHub-hosted runner: author+publish boot + the full http
     # suite ran in ~9 minutes in testing, so 90m is generous headroom.
@@ -282,7 +284,8 @@ jobs:
   browser-test:
     name: Playwright ${{ matrix.group.group }} ITs (${{ matrix.aem.name }})
     needs: [prep, image-cache]
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.repository == 'adobe/aem-core-wcm-components' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)) }}
+    # A failed product prepare leaves only that product's legs without an image.
+    if: ${{ !cancelled() && needs.prep.result == 'success' }}
     runs-on: ubuntu-latest
     # Native amd64 GitHub-hosted runner: each group1 run has generous headroom.
     timeout-minutes: 60

@@ -404,6 +404,73 @@ provision_packages() {
     fi
 }
 
+product_version() {
+    curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "$1/system/console/status-productinfo.txt" \
+        | grep -m1 -oE 'Adobe Experience Manager \([^)]*\)' || true
+}
+
+# Some images ship a service-packed author but start publish from the GA
+# quickstart jar. Copy the author's service pack so both run the same product.
+align_publish_with_author() {
+    local author_version publish_version sp_path sp_zip deadline
+    author_version=$(product_version "${AEM_BASE_URL}")
+    publish_version=$(product_version "${AEM_PUBLISH_URL}")
+    [[ "${author_version}" == "${publish_version}" ]] && return
+    log "Publish runs ${publish_version:-unknown}, author runs ${author_version:-unknown}; installing author's service pack on publish"
+    sp_path=$(curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${AEM_BASE_URL}/crx/packmgr/service.jsp?cmd=ls" \
+        | python3 -c '
+import sys, xml.etree.ElementTree as ET
+packages = [p for p in ET.parse(sys.stdin).iter("package") if (p.findtext("name") or "").startswith("aem-service-pkg")]
+packages.sort(key=lambda p: [int(x) if x.isdigit() else 0 for x in (p.findtext("version") or "").split(".")])
+if packages:
+    print("/etc/packages/" + packages[-1].findtext("group") + "/" + packages[-1].findtext("downloadName"))
+')
+    if [[ -z "${sp_path}" ]]; then
+        echo "No aem-service-pkg package found on author to align publish" >&2
+        return 1
+    fi
+    sp_zip="$(mktemp -d)/$(basename "${sp_path}")"
+    curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" -o "${sp_zip}" "${AEM_BASE_URL}${sp_path}"
+    log "Installing ${sp_path} -> ${AEM_PUBLISH_URL}"
+    # The service pack restarts bundles while installing, so the upload request
+    # may be cut off; the product version below is the source of truth.
+    curl -sS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" --max-time 1800 \
+        -F file=@"${sp_zip}" -F name="$(basename "${sp_zip}")" -F force=true -F install=true \
+        "${AEM_PUBLISH_URL}/crx/packmgr/service.jsp" >/dev/null || true
+    rm -rf "$(dirname "${sp_zip}")"
+    deadline=$(( SECONDS + 1800 ))
+    until [[ "$(product_version "${AEM_PUBLISH_URL}")" == "${author_version}" ]]; do
+        if (( SECONDS >= deadline )); then
+            echo "Publish did not reach ${author_version} within 1800s" >&2
+            return 1
+        fi
+        sleep 15
+    done
+    wait_for_bundles_settled "${AEM_PUBLISH_URL}"
+    wait_for_aem "${AEM_PUBLISH_URL}" publish
+    log "Publish aligned to ${author_version}"
+}
+
+# Wait until the Felix bundle summary stops changing for three polls.
+wait_for_bundles_settled() {
+    local base="$1" previous="" current stable=0 deadline=$(( SECONDS + 900 ))
+    while (( stable < 3 )); do
+        if (( SECONDS >= deadline )); then
+            echo "Bundles at ${base} did not settle within 900s" >&2
+            return 1
+        fi
+        sleep 10
+        current=$(curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/bundles.json" 2>/dev/null \
+            | python3 -c 'import json, sys; print(json.load(sys.stdin)["s"])' 2>/dev/null || true)
+        if [[ -n "${current}" && "${current}" == "${previous}" ]]; then
+            stable=$(( stable + 1 ))
+        else
+            stable=0
+        fi
+        previous="${current}"
+    done
+}
+
 provision() {
     log "Provisioning author"
     provision_packages "${AEM_BASE_URL}"
@@ -415,6 +482,7 @@ provision() {
         "$(find_zip "${REPO_ROOT}/testing/it/it.core/target" 'core.wcm.components.it.core-*.jar' '\-(sources|javadoc)\.jar$')"
 
     if [[ "${WITH_PUBLISH}" == "true" ]]; then
+        align_publish_with_author
         log "Provisioning publish"
         # Publish tests GET pre-deployed content, so the publish instance gets the same
         # content packages (no replication needed).
