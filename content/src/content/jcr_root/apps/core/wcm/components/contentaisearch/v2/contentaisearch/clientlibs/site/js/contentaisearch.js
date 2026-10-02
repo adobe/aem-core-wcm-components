@@ -706,12 +706,27 @@
             .replace(/'/g, "&#39;");
     }
 
+    // Matches either a markdown link "[label](url)" (groups 1-2) or, failing that, a bare "https://..."
+    // URL (group 3) so plain-text URLs in the generative answer (e.g. "Page: https://...") render as
+    // clickable links too, not just explicit markdown links.
+    var MARKDOWN_LINK_OR_BARE_URL = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<]+)/g;
+
+    // Trailing punctuation that normally belongs to the surrounding sentence, not the URL itself
+    // (e.g. "https://example.com/page." at the end of a sentence).
+    var URL_TRAILING_PUNCTUATION = /[).,;:!?]+$/;
+
     ContentAISearch.prototype._renderMarkdownInline = function(text) {
         var self = this;
         var html = escapeHtml(text);
         html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-        html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, function(match, label, url) {
-            return self._isSafeUrl(url) ? '<a href="' + url + '">' + label + "</a>" : label;
+        html = html.replace(MARKDOWN_LINK_OR_BARE_URL, function(match, label, mdUrl, bareUrl) {
+            if (mdUrl) {
+                return self._isSafeUrl(mdUrl) ? '<a href="' + mdUrl + '">' + label + "</a>" : label;
+            }
+            var trailingMatch = bareUrl.match(URL_TRAILING_PUNCTUATION);
+            var trailing = trailingMatch ? trailingMatch[0] : "";
+            var url = trailing ? bareUrl.slice(0, -trailing.length) : bareUrl;
+            return self._isSafeUrl(url) ? '<a href="' + url + '">' + url + "</a>" + trailing : match;
         });
         return html;
     };
