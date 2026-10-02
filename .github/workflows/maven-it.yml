@@ -19,9 +19,9 @@
 # (workflow_dispatch). All container + provisioning + failsafe orchestration lives in
 # testing/it/docker/run-it.sh so this workflow and the local dev flow share it.
 #
-# Structure: a single `prep` job builds the deployable packages; image-cache jobs
-# prime each AEM image ONCE. Test jobs only download the packages
-# + load the cached image, so the expensive build/pull is not repeated per leg.
+# Structure: `prep` builds packages; image-cache jobs provision each product ONCE
+# and export cleanly stopped author/publish images as run-scoped artifacts.
+# Test jobs load these images and start instances without reinstalling packages.
 # Browser ITs (Playwright) run as one job per @Tag("playwright-groupN"); prep fails
 # if any IT class is untagged (see testing/it/docker/gen-browser-matrix.sh).
 #
@@ -129,16 +129,36 @@ jobs:
           echo 'aem_matrix={"include":[{"name":"cloud-ready","type":"sdk","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:27830-v2-openjdk21"},{"name":"6.5","type":"65","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem:6.5.24.0-openjdk11"},{"name":"LTS","type":"lts","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-lts:6.6.2-openjdk21"}]}' >> "$GITHUB_OUTPUT"
 
   image-cache:
-    name: Cache AEM ${{ matrix.name }} image
+    name: Prepare AEM ${{ matrix.name }} image
     needs: prep
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.prep.outputs.aem_matrix) }}
     env:
       AEM_IMAGE: ${{ matrix.image }}
+      AEM_TYPE: ${{ matrix.type }}
+      AEM_BUILD_REF: ${{ github.sha }}
+      IT_MODE: prepare
+      WITH_PUBLISH: 'true'
+      PREPARED_IMAGE: wcm-it-prepared:${{ matrix.type }}
+      PREPARED_IMAGE_TAR: /tmp/aem-prepared.tar.gz
+      QP_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
     steps:
+      - uses: actions/checkout@v5
+      # Base image + provisioned container + exported image + gzip tar peak at
+      # ~30GB. Drop unused hosted-runner toolchains; no-op where they are absent.
+      - name: Free runner disk space
+        run: |
+          for dir in /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL; do
+            if [[ -d "$dir" ]]; then sudo rm -rf "$dir"; fi
+          done
+          df -h /
+      - name: Download deployable packages
+        uses: actions/download-artifact@v7
+        with:
+          name: it-packages
       # Each product has its own cache key, shared by all of its test legs.
       - name: Compute AEM image cache key
         id: imgkey
@@ -165,6 +185,29 @@ jobs:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
 
+      - name: Load base image
+        run: |
+          docker load -i /tmp/aem-image.tar
+          rm /tmp/aem-image.tar
+      - name: Provision author/publish and export stopped image
+        run: bash testing/it/docker/run-it.sh
+      - name: Upload prepared image
+        uses: actions/upload-artifact@v7
+        with:
+          name: it-prepared-${{ matrix.type }}
+          path: /tmp/aem-prepared.tar.gz
+          compression-level: 0
+          retention-days: 1
+          if-no-files-found: error
+      - name: Upload preparation logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: it-preparation-${{ matrix.type }}-logs
+          path: testing/it/http/target/aem-logs
+          retention-days: 14
+          if-no-files-found: ignore
+
   # --------------------------------------------------------------------------
   # http ITs (author + publish). Consumes prep's packages + cached image.
   # --------------------------------------------------------------------------
@@ -179,8 +222,10 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJSON(needs.prep.outputs.aem_matrix) }}
     env:
-      AEM_IMAGE: ${{ matrix.image }}
+      AEM_IMAGE: wcm-it-prepared:${{ matrix.type }}
       AEM_TYPE: ${{ matrix.type }}
+      AEM_BUILD_REF: ${{ github.sha }}
+      IT_MODE: prepared
       WITH_PUBLISH: 'true'
       QP_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
       PUBLISH_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
@@ -199,27 +244,15 @@ jobs:
           key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             it-aem-m2-${{ env.CACHE_VERSION }}-
-      - name: Download deployable packages
+      - name: Download prepared image
         uses: actions/download-artifact@v7
         with:
-          name: it-packages
-      - name: Compute AEM image cache key
-        id: imgkey
-        run: echo "key=aem-image-${CACHE_VERSION}-$(echo "$AEM_IMAGE" | tr '/:' '__')" >> "$GITHUB_OUTPUT"
-      - name: Restore AEM Docker image cache
-        uses: actions/cache/restore@v5
-        with:
-          path: /tmp/aem-image.tar
-          key: ${{ steps.imgkey.outputs.key }}
-      - name: Load AEM image
+          name: it-prepared-${{ matrix.type }}
+          path: /tmp
+      - name: Load prepared image
         run: |
-          if [[ -f /tmp/aem-image.tar ]]; then
-            docker load -i /tmp/aem-image.tar
-          else
-            # A cache may be evicted between priming and restoration.
-            echo "${{ secrets.ARTIFACTORY_CLOUD_PASS }}" | docker login "${REGISTRY}" -u "${{ secrets.ARTIFACTORY_CLOUD_USER }}" --password-stdin
-            docker pull "$AEM_IMAGE"
-          fi
+          docker load -i /tmp/aem-prepared.tar.gz
+          rm /tmp/aem-prepared.tar.gz
       - name: Run http integration tests
         run: bash testing/it/docker/run-it.sh
       - name: Publish integration test results
@@ -259,8 +292,10 @@ jobs:
         aem: ${{ fromJSON(needs.prep.outputs.aem_matrix).include }}
         group: ${{ fromJSON(needs.prep.outputs.browser_matrix).include }}
     env:
-      AEM_IMAGE: ${{ matrix.aem.image }}
+      AEM_IMAGE: wcm-it-prepared:${{ matrix.aem.type }}
       AEM_TYPE: ${{ matrix.aem.type }}
+      AEM_BUILD_REF: ${{ github.sha }}
+      IT_MODE: prepared
       WITH_SELENIUM: 'true'
       SEL_BROWSER: chrome
       SEL_GROUPS: ${{ matrix.group.sel_groups }}
@@ -297,27 +332,15 @@ jobs:
           key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             it-aem-m2-${{ env.CACHE_VERSION }}-
-      - name: Download deployable packages
+      - name: Download prepared image
         uses: actions/download-artifact@v7
         with:
-          name: it-packages
-      - name: Compute AEM image cache key
-        id: imgkey
-        run: echo "key=aem-image-${CACHE_VERSION}-$(echo "$AEM_IMAGE" | tr '/:' '__')" >> "$GITHUB_OUTPUT"
-      - name: Restore AEM Docker image cache
-        uses: actions/cache/restore@v5
-        with:
-          path: /tmp/aem-image.tar
-          key: ${{ steps.imgkey.outputs.key }}
-      - name: Load AEM image
+          name: it-prepared-${{ matrix.aem.type }}
+          path: /tmp
+      - name: Load prepared image
         run: |
-          if [[ -f /tmp/aem-image.tar ]]; then
-            docker load -i /tmp/aem-image.tar
-          else
-            # A cache may be evicted between priming and restoration.
-            echo "${{ secrets.ARTIFACTORY_CLOUD_PASS }}" | docker login "${REGISTRY}" -u "${{ secrets.ARTIFACTORY_CLOUD_USER }}" --password-stdin
-            docker pull "$AEM_IMAGE"
-          fi
+          docker load -i /tmp/aem-prepared.tar.gz
+          rm /tmp/aem-prepared.tar.gz
       - name: Run Playwright ${{ matrix.group.group }} ITs
         run: bash testing/it/docker/run-it.sh
       - name: Publish Playwright test results

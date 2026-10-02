@@ -86,3 +86,38 @@ done
     [[ -z "${IT_EXCLUDED_GROUPS}" && -z "${SEL_EXCLUDED_GROUPS}" ]]
 )
 echo 'Passed explicit empty exclusion overrides.'
+
+(
+    export AEM_TYPE=lts
+    source "${SCRIPT_DIR}/run-it.sh"
+    # Keep main's EXIT trap from exiting the surrounding test process.
+    trap() { :; }
+    start_aem() { echo start; }
+    wait_for_aem() { :; }
+    verify_aem_type() { :; }
+    provision() { echo provision; }
+    verify_prepared_image() { echo verify-snapshot; }
+    export_prepared_image() { echo export; }
+    run_selenium() { echo browser-tests; }
+    run_tests() { echo http-tests; }
+    export WITH_PUBLISH=true WITH_SELENIUM=false IT_MODE=prepare
+    [[ "$(main)" == $'start\nprovision\nexport' ]]
+    export IT_MODE=prepared
+    [[ "$(main)" == $'start\nverify-snapshot\nhttp-tests' ]]
+    export WITH_PUBLISH=false WITH_SELENIUM=true
+    [[ "$(main)" == $'start\nverify-snapshot\nbrowser-tests' ]]
+    export IT_MODE="test"
+    [[ "$(main)" == $'start\nprovision\nbrowser-tests' ]]
+)
+echo 'Passed prepare/prepared/test orchestration: prepared jobs never provision.'
+
+(
+    export AEM_TYPE=lts AEM_BUILD_REF=expected-build
+    source "${SCRIPT_DIR}/run-it.sh"
+    docker() { printf 'lts\nwrong-build\n'; }
+    if verify_prepared_image >/dev/null 2>&1; then
+        echo 'Stale snapshot was not rejected' >&2
+        exit 1
+    fi
+)
+echo 'Passed stale snapshot build rejection.'
