@@ -104,6 +104,8 @@ public class NavigationV1PwIT extends ComponentPwBaseTest {
         Locator collectAll = dialog().locator("coral-checkbox[name='./collectAllPages'] input[type='checkbox']");
         collectAll.uncheck();
         assertTrue(dialog().locator("input[name='./structureDepth']").isVisible());
+        // 6.5 and LTS do not evaluate the dialog's EL default for this number field, so set the depth explicitly
+        dialog().locator("input[name='./structureDepth']").fill("1");
         saveDialog();
         page.navigate(baseUrl + currentPage + ".html");
         assertThat(navigationItems()).hasCount(1);

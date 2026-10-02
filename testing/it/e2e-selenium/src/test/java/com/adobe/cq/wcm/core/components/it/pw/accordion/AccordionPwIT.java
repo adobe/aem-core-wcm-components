@@ -62,7 +62,7 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         Locator add = dialog().locator("[data-cmp-hook-childreneditor='add']");
         for (String title : titles) {
             add.click();
-            page.locator(".editor-ComponentBrowser-component[data-path='/libs/wcm/foundation/components/responsivegrid']").click();
+            insertableComponent("='/libs/wcm/foundation/components/responsivegrid'").click();
             dialog().locator("[data-cmp-hook-childreneditor='itemTitle']").last().fill(title);
         }
         saveDialog();
@@ -91,8 +91,9 @@ public class AccordionPwIT extends ComponentPwBaseTest {
     private void expandItems(String... titles) {
         openEditDialog(accordionPath);
         dialog().locator("coral-tab[data-foundation-tracking-event*='properties']").click();
-        Locator list = openSelectList("[data-cmp-accordion-v1-dialog-edit-hook='expandedSelect']");
         for (String title : titles) {
+            // Coral 3 (6.5/LTS) closes the multi-select popover after each pick, so it is reopened per item.
+            Locator list = openSelectList("[data-cmp-accordion-v1-dialog-edit-hook='expandedSelect']");
             list.locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText(title)).click();
         }
         closeOverlays();
@@ -261,8 +262,8 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         openEditDialog(accordionPath);
         dialog().locator("coral-tab[data-foundation-tracking-event*='items']").click();
         dialog().locator("[data-cmp-hook-childreneditor='add']").click();
-        assertThat(page.locator(".editor-ComponentBrowser-component[data-path$='" + RT_TEASER_V1 + "']")).isVisible();
-        assertThat(page.locator(".editor-ComponentBrowser-component[data-path$='/responsivegrid']")).hasCount(0);
+        assertThat(insertableComponent("$='" + RT_TEASER_V1 + "'")).isVisible();
+        assertThat(insertableComponent("$='/responsivegrid'")).hasCount(0);
         adminClient.deletePath(policyPath, 200);
     }
 

@@ -63,7 +63,7 @@ for type in sdk 65 lts; do
             if [[ "${type}" == 65 ]]; then
                 [[ "${SEL_EXCLUDED_GROUPS}" == *IgnoreOn65* ]]
             else
-                [[ "${SEL_EXCLUDED_GROUPS}" == "failing,nested" && -z "${IT_EXCLUDED_GROUPS}" ]]
+                [[ "${SEL_EXCLUDED_GROUPS}" == "failing,nested,IgnoreOnLTS" && "${IT_EXCLUDED_GROUPS}" == *IgnoreOnLTS ]]
             fi
         fi
         mvn() { printf '%s\n' "$*"; }

@@ -148,6 +148,8 @@ public abstract class PlaywrightAuthorBaseTest {
             .setViewportSize(1920, 1080)
             .setLocale("en-US"));
         context.setDefaultTimeout(30_000);
+        // The editor and properties pages are server-rendered; tolerate short AEM stalls (GC, async jobs)
+        context.setDefaultNavigationTimeout(60_000);
         if (TRACE) {
             context.tracing().start(new Tracing.StartOptions().setScreenshots(true).setSnapshots(true));
         }
@@ -293,6 +295,17 @@ public abstract class PlaywrightAuthorBaseTest {
         return page.locator(CONFIG_DIALOG);
     }
 
+    /**
+     * Component offered by the Insert Component picker. AEM as a Cloud Service renders component browser cards, while
+     * 6.5 and LTS render a Coral 3 select list.
+     *
+     * @param pathMatch a CSS attribute operator and quoted value, e.g. {@code ="/libs/..."} or {@code $="/teaser"}
+     */
+    protected Locator insertableComponent(String pathMatch) {
+        return page.locator(".editor-ComponentBrowser-component[data-path" + pathMatch + "], "
+            + ".InsertComponentDialog-list coral-selectlist-item[value" + pathMatch + "]");
+    }
+
     /** Clicks Done without waiting for the dialog to close (e.g. when validation keeps it open). */
     protected void clickDone() {
         dialog().locator(DONE_BUTTON).click();
@@ -332,8 +345,13 @@ public abstract class PlaywrightAuthorBaseTest {
      */
     protected Locator openSelectList(String selectSelector) {
         Locator button = dialog().locator(selectSelector).locator("button[handle='button']").first();
-        button.click();
-        Locator list = page.locator("[id='" + button.getAttribute("aria-controls") + "']");
+        String listId = button.getAttribute("aria-controls");
+        Locator list = page.locator("[id='" + (listId == null ? "" : listId) + "']");
+        // Clicking an already open select would close it again.
+        if (listId == null || !list.isVisible()) {
+            button.click();
+            list = page.locator("[id='" + button.getAttribute("aria-controls") + "']");
+        }
         assertThat(list).isVisible();
         return list;
     }
@@ -367,10 +385,20 @@ public abstract class PlaywrightAuthorBaseTest {
         assertThat(rows.nth(Math.max(from, to))).isVisible();
         Locator handle = rows.nth(from).locator("button[coral-table-roworder='true']");
         handle.scrollIntoViewIfNeeded();
-        com.microsoft.playwright.options.BoundingBox hb = handle.boundingBox();
+        // The panel selector popover is still positioning itself after opening (notably on 6.5/LTS), so the
+        // coordinates are only taken once the target row stopped moving.
         com.microsoft.playwright.options.BoundingBox tb = rows.nth(to).boundingBox();
+        for (int i = 0; i < 20; i++) {
+            page.waitForTimeout(250);
+            com.microsoft.playwright.options.BoundingBox current = rows.nth(to).boundingBox();
+            boolean stable = current.y == tb.y && current.x == tb.x;
+            tb = current;
+            if (stable) {
+                break;
+            }
+        }
+        com.microsoft.playwright.options.BoundingBox hb = handle.boundingBox();
         double x = hb.x + hb.width / 2, y = hb.y + hb.height / 2;
-        page.waitForTimeout(500);
         page.mouse().move(x, y);
         page.mouse().down();
         page.waitForTimeout(300);

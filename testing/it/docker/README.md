@@ -165,9 +165,10 @@ with product-specific report/check names and artifacts:
 | --- | --- | --- | --- |
 | SDK | `circleci-aem-cloudready:27830-v2-openjdk21` | `all-*-cloud.zip` | Browser: `IgnoreOnSDK`; HTTP: `IgnoreOnCloud` |
 | AEM 6.5 | `circleci-aem:6.5.24.0-openjdk11` | Classic `all-*.zip` | Browser and HTTP: `IgnoreOn65` |
-| AEM LTS | `circleci-aem-lts:6.6.2-openjdk21` | Classic `all-*.zip` | No product exclusions |
+| AEM LTS | `circleci-aem-lts:6.6.2-openjdk21` | Classic `all-*.zip` | Browser and HTTP: `IgnoreOnLTS` |
 
-LTS is validated separately from 6.5: `IgnoreOn65` does not suppress LTS tests.
+LTS is validated separately from 6.5: `IgnoreOn65` does not suppress LTS tests;
+use `IgnoreOnLTS` for Cloud Service-only features that LTS does not ship.
 
 The 6.5 image ships a service-packed author, but its publish starts from the GA
 quickstart jar. With `WITH_PUBLISH=true`, `run-it.sh` installs the author's

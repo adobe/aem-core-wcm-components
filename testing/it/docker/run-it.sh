@@ -75,8 +75,8 @@ case "${AEM_TYPE}" in
         DEFAULT_SEL_EXCLUDED_GROUPS="failing,nested,IgnoreOn65"
         ;;
     lts)
-        DEFAULT_IT_EXCLUDED_GROUPS=""
-        DEFAULT_SEL_EXCLUDED_GROUPS="failing,nested"
+        DEFAULT_IT_EXCLUDED_GROUPS="com.adobe.cq.wcm.core.components.it.http.IgnoreOnLTS"
+        DEFAULT_SEL_EXCLUDED_GROUPS="failing,nested,IgnoreOnLTS"
         ;;
     *) echo "Unsupported AEM_TYPE: ${AEM_TYPE} (expected sdk, 65, or lts)" >&2; exit 1 ;;
 esac

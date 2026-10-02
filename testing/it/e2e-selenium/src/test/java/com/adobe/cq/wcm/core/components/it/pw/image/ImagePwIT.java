@@ -321,7 +321,10 @@ public class ImagePwIT extends ComponentPwBaseTest {
     }
 
     @Test
+    // Next-Gen Dynamic Media is only available on AEM as a Cloud Service (not the SDK)
     @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
+    @Tag("IgnoreOnLTS")
     public void testSmartCropOnNGDMImageV3_SmallCrop() throws Exception {
         String path = addImage(RT_IMAGE_V3);
         createComponentPolicy("/image-v3",
@@ -339,16 +342,9 @@ public class ImagePwIT extends ComponentPwBaseTest {
 
     @ParameterizedTest
     @MethodSource("v2AndV3Versions")
-    @Tag("IgnoreOn65")
-    public void testClearAssetInputGetDamInfoCheckboxesNotVisibleSDK(String resourceType) throws Exception {
-        testClearAssetInput(resourceType, "button.cq-FileUpload-clear._coral-Button");
-    }
-
-    @ParameterizedTest
-    @MethodSource("v2AndV3Versions")
-    @Tag("IgnoreOnSDK")
-    public void testClearAssetInputGetDamInfoCheckboxesNotVisible65(String resourceType) throws Exception {
-        testClearAssetInput(resourceType, "button.cq-FileUpload-clear.coral3-Button");
+    public void testClearAssetInputGetDamInfoCheckboxesNotVisible(String resourceType) throws Exception {
+        // the clear button is styled with Coral Spectrum on Cloud Service and Coral 3 on 6.5/LTS
+        testClearAssetInput(resourceType, "button.cq-FileUpload-clear:visible");
     }
 
     private void testClearAssetInput(String resourceType, String clearSelector) throws Exception {

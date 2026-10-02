@@ -57,7 +57,7 @@ public class CarouselPwIT extends ComponentPwBaseTest {
         Locator add = dialog().locator("[data-cmp-hook-childreneditor='add']");
         for (int index = 0; index < 3; index++) {
             add.click();
-            page.locator(".editor-ComponentBrowser-component[data-path='/libs/wcm/foundation/components/responsivegrid']").click();
+            insertableComponent("='/libs/wcm/foundation/components/responsivegrid'").click();
             dialog().locator("[data-cmp-hook-childreneditor='itemTitle']").last().fill("item" + index);
         }
         saveDialog();
@@ -192,8 +192,8 @@ public class CarouselPwIT extends ComponentPwBaseTest {
         // the policy restricts what can be added as a panel, which the children editor offers through its picker
         openEditDialog(carouselPath);
         dialog().locator("[data-cmp-hook-childreneditor='add']").click();
-        assertThat(page.locator(".editor-ComponentBrowser-component[data-path$='" + RT_TEASER_V1 + "']")).isVisible();
-        assertThat(page.locator(".editor-ComponentBrowser-component[data-path$='/responsivegrid']")).hasCount(0);
+        assertThat(insertableComponent("$='" + RT_TEASER_V1 + "'")).isVisible();
+        assertThat(insertableComponent("$='/responsivegrid'")).hasCount(0);
         adminClient.deletePath(policyPath, 200);
     }
 
