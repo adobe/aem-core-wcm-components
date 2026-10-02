@@ -24,7 +24,7 @@ import com.microsoft.playwright.Locator;
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_SEPARATOR_V1;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-@Tag("playwright-ungrouped")
+@Tag("playwright-group2")
 public class SeparatorPwIT extends ComponentPwBaseTest {
 
     @Test

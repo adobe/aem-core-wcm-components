@@ -15,45 +15,31 @@
 # limitations under the License.
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Emits one Selenium-only and one Playwright-only entry for each matching test
-# group, so CI can compare the same coverage independently. Untagged Selenium
-# classes are selected explicitly; their Playwright equivalents use a tag.
+# Emits one Playwright CI job per JUnit5 group tag (@Tag("playwright-groupN")),
+# derived from the test sources so new groups get a job automatically.
+# Fails if any *IT class has no group tag: such a class would never run in CI.
+# The same rule is enforced at build time by ItGroupTagTest.
 
 set -euo pipefail
 
-TAG_GROUPS=("group1" "group2" "group3" "group4")
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 SRC="${REPO_ROOT}/testing/it/e2e-selenium/src/test/java"
-SEL_ROOT="${SRC}/com/adobe/cq/wcm/core/components/it/seljup/tests"
-
-fqn_of() {
-    local rel="${1#"${SRC}"/}"
-    rel="${rel%.java}"
-    echo "${rel//\//.}"
-}
-
-group_of() {
-    grep -oE '@Tag\("group[0-9]+"\)' "$1" 2>/dev/null | head -1 | grep -oE 'group[0-9]+' || true
-}
-
-entries=()
-for group in "${TAG_GROUPS[@]}"; do
-    entries+=("{\"name\":\"${group}-selenium\",\"group\":\"${group}\",\"engine\":\"Selenium\",\"sel_groups\":\"${group}\",\"sel_it_test\":\"\"}")
-    entries+=("{\"name\":\"${group}-playwright\",\"group\":\"${group}\",\"engine\":\"Playwright\",\"sel_groups\":\"playwright-${group}\",\"sel_it_test\":\"\"}")
-done
+TAG_RE='@Tag\("playwright-group[0-9]+"\)'
 
 ungrouped=()
 while IFS= read -r file; do
-    [ -z "$file" ] && continue
-    if [ -z "$(group_of "$file")" ]; then
-        ungrouped+=("$(fqn_of "$file")")
-    fi
-done < <(find "${SEL_ROOT}" -name "*IT.java" -print | sort)
+    grep -qE "${TAG_RE}" "$file" || ungrouped+=("${file#"${SRC}"/}")
+done < <(find "${SRC}" -name "*IT.java" -print | sort)
 
 if [ "${#ungrouped[@]}" -gt 0 ]; then
-    joined=$(IFS=,; echo "${ungrouped[*]}")
-    entries+=("{\"name\":\"ungrouped-selenium\",\"group\":\"ungrouped\",\"engine\":\"Selenium\",\"sel_groups\":\"\",\"sel_it_test\":\"${joined}\"}")
+    echo "ERROR: IT classes without a @Tag(\"playwright-groupN\") (add one to the fastest group):" >&2
+    printf '  %s\n' "${ungrouped[@]}" >&2
+    exit 1
 fi
-entries+=("{\"name\":\"ungrouped-playwright\",\"group\":\"ungrouped\",\"engine\":\"Playwright\",\"sel_groups\":\"playwright-ungrouped\",\"sel_it_test\":\"\"}")
+
+entries=()
+while IFS= read -r group; do
+    entries+=("{\"name\":\"${group}-playwright\",\"group\":\"${group}\",\"engine\":\"Playwright\",\"sel_groups\":\"playwright-${group}\",\"sel_it_test\":\"\"}")
+done < <(grep -rhoE "${TAG_RE}" "${SRC}" | grep -oE 'group[0-9]+' | sort -u -V)
 
 printf '{"include":[%s]}\n' "$(IFS=,; echo "${entries[*]}")"

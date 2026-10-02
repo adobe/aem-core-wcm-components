@@ -30,7 +30,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Tag("playwright-ungrouped")
+@Tag("playwright-group2")
 public class DownloadV1PwIT extends ComponentPwBaseTest {
 
     protected String resourceType() {

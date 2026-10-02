@@ -119,7 +119,7 @@ SEL_RERUN="${SEL_RERUN:-2}"
 # would wrongly intersect the group with the single smoke class (running 0 tests
 # for any group that doesn't contain it).
 if [[ -z "${SEL_IT_TEST:-}" && -z "${SEL_GROUPS}" ]]; then
-    SEL_IT_TEST="com.adobe.cq.wcm.core.components.it.seljup.tests.list.v2.ListIT"
+    SEL_IT_TEST="com.adobe.cq.wcm.core.components.it.pw.list.ListV2PwIT"
 fi
 SEL_IT_TEST="${SEL_IT_TEST:-}"
 

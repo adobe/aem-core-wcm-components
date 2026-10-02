@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_DOWNLOAD_V2;
 
-@Tag("playwright-ungrouped")
+@Tag("playwright-group2")
 public class DownloadV2PwIT extends DownloadV1PwIT {
 
     @Override

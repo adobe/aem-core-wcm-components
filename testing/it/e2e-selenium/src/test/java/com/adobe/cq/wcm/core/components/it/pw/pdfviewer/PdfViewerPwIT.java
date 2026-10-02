@@ -29,7 +29,7 @@ import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.CLIENTLIBS
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_PDFVIEWER_V1;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-@Tag("playwright-ungrouped")
+@Tag("playwright-group2")
 public class PdfViewerPwIT extends ComponentPwBaseTest {
 
     private static final int RENDER_ATTEMPTS = 3;

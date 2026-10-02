@@ -22,8 +22,8 @@
 # Structure: a single `prep` job builds the deployable packages and primes the
 # AEM image cache ONCE; the test jobs depend on it and only download the packages
 # + load the cached image, so the expensive build/pull is not repeated per leg.
-# This POC runs every group separately for Selenium and Playwright; each engine
-# receives its own tag-filtered job, including ungrouped classes.
+# Browser ITs (Playwright) run as one job per @Tag("playwright-groupN"); prep fails
+# if any IT class is untagged (see testing/it/docker/gen-browser-matrix.sh).
 #
 # Requires repo secrets ARTIFACTORY_CLOUD_USER / ARTIFACTORY_CLOUD_PASS for the
 # private Adobe AEM image registry. Secrets are not exposed to forks, so automatic
@@ -31,7 +31,7 @@
 # (pull requests from forks are skipped).
 #
 # Runs on GitHub-hosted ubuntu-latest runners (native amd64, Docker and Maven
-# preinstalled). The Selenium job has no GUI session, so it starts its own
+# preinstalled). The browser jobs have no GUI session, so it starts its own
 # virtual display (Xvfb + fluxbox) for Chrome - see run-it.sh's
 # headless-display comment for how this differs from a local macOS dev run.
 
@@ -47,7 +47,7 @@ on:
   push:
     branches:
       - main
-      # POC: Selenium vs Playwright timing comparison (branch is not meant to be merged).
+      # POC branch: Playwright browser ITs.
       - it-playwright-poc
   pull_request:
     branches:
@@ -146,7 +146,7 @@ jobs:
           path: /tmp/aem-image.tar
           key: ${{ steps.imgkey.outputs.key }}
 
-      - name: Generate isolated browser comparison matrix
+      - name: Generate browser IT matrix (fails on ungrouped ITs)
         id: genmatrix
         run: echo "matrix=$(bash testing/it/docker/gen-browser-matrix.sh)" >> "$GITHUB_OUTPUT"
 
@@ -156,7 +156,7 @@ jobs:
   integration-test:
     name: http ITs (author + publish, cloud-ready)
     needs: prep
-    # The POC branch runs only the Selenium vs Playwright comparison, including
+    # The POC branch runs only the Playwright browser ITs, including
     # when its pull request targets main.
     if: ${{ github.ref_name != 'it-playwright-poc' && github.head_ref != 'it-playwright-poc' && (github.event_name == 'workflow_dispatch' || github.repository == 'adobe/aem-core-wcm-components') }}
     runs-on: ubuntu-latest
@@ -220,7 +220,7 @@ jobs:
             testing/it/http/target/aem-logs
 
   # --------------------------------------------------------------------------
-  # Run each browser implementation in isolation for each matching test group.
+  # Run each Playwright test group in its own job.
   # --------------------------------------------------------------------------
   browser-test:
     name: ${{ matrix.engine }} ${{ matrix.group }} ITs (cloud-ready)
@@ -295,7 +295,7 @@ jobs:
           include_passed: true
           group_suite: true
           fail_on_failure: true
-      - name: Upload group1 results and AEM logs
+      - name: Upload results and AEM logs
         if: always()
         uses: actions/upload-artifact@v7
         with:
