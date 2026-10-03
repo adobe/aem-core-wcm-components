@@ -56,6 +56,30 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 REGISTRY="${REGISTRY:-docker-adobe-cif-release.dr-uw2.adobeitc.com}"
 AEM_IMAGE="${AEM_IMAGE:-${REGISTRY}/circleci-aem-cloudready:27830-v2-openjdk21}"
+# Infer the product for local runs; CI sets it explicitly alongside the image.
+if [[ -z "${AEM_TYPE:-}" ]]; then
+    case "${AEM_IMAGE}" in
+        */circleci-aem-cloudready:*) AEM_TYPE=sdk ;;
+        */circleci-aem-lts:*) AEM_TYPE=lts ;;
+        */circleci-aem:*) AEM_TYPE=65 ;;
+        *) echo "Set AEM_TYPE=sdk, 65, or lts for image ${AEM_IMAGE}" >&2; exit 1 ;;
+    esac
+fi
+case "${AEM_TYPE}" in
+    sdk)
+        DEFAULT_IT_EXCLUDED_GROUPS="com.adobe.cq.wcm.core.components.it.http.IgnoreOnCloud"
+        DEFAULT_SEL_EXCLUDED_GROUPS="failing,nested,IgnoreOnSDK"
+        ;;
+    65)
+        DEFAULT_IT_EXCLUDED_GROUPS="com.adobe.cq.wcm.core.components.it.http.IgnoreOn65"
+        DEFAULT_SEL_EXCLUDED_GROUPS="failing,nested,IgnoreOn65"
+        ;;
+    lts)
+        DEFAULT_IT_EXCLUDED_GROUPS="com.adobe.cq.wcm.core.components.it.http.IgnoreOnLTS"
+        DEFAULT_SEL_EXCLUDED_GROUPS="failing,nested,IgnoreOnLTS"
+        ;;
+    *) echo "Unsupported AEM_TYPE: ${AEM_TYPE} (expected sdk, 65, or lts)" >&2; exit 1 ;;
+esac
 AEM_AUTHOR_PORT="${AEM_AUTHOR_PORT:-4502}"
 AEM_PUBLISH_PORT="${AEM_PUBLISH_PORT:-4503}"
 AEM_ADMIN_USER="${AEM_ADMIN_USER:-admin}"
@@ -89,11 +113,8 @@ else
     IT_TEST="${IT_TEST:-${AUTHOR_ONLY_IT_TEST}}"
 fi
 
-# JUnit categories to exclude. We target a cloud(-ready) instance, so mirror the
-# core-components pipeline and skip @Category(IgnoreOnCloud) classes (SeoIT,
-# TableOfContentsFilterIT, ClientlibsIncludeIT) - features that are not exercised
-# on AEM as a Cloud Service. Override with IT_EXCLUDED_GROUPS="" to force them.
-IT_EXCLUDED_GROUPS="${IT_EXCLUDED_GROUPS:-com.adobe.cq.wcm.core.components.it.http.IgnoreOnCloud}"
+# Product-specific JUnit categories; an explicit empty override runs all categories.
+IT_EXCLUDED_GROUPS="${IT_EXCLUDED_GROUPS-${DEFAULT_IT_EXCLUDED_GROUPS}}"
 
 # --- Selenium (e2e-selenium) mode ---
 # When true, run the Selenium UI suite (testing/it/e2e-selenium) instead of the
@@ -107,7 +128,7 @@ SEL_GROUPS="${SEL_GROUPS:-}"
 # JUnit5 tag excludes. Keep the pom's failing,nested and add IgnoreOnSDK for the
 # cloud(-ready) target (mirrors the pipeline; the module tags cloud-unsupported
 # UI tests with @Tag("IgnoreOnSDK")).
-SEL_EXCLUDED_GROUPS="${SEL_EXCLUDED_GROUPS:-failing,nested,IgnoreOnSDK}"
+SEL_EXCLUDED_GROUPS="${SEL_EXCLUDED_GROUPS-${DEFAULT_SEL_EXCLUDED_GROUPS}}"
 # Re-run failing Selenium tests up to N times before marking them failed. UI tests
 # are prone to transient timing flakiness (and search tests can miss the async Oak
 # index on the first attempt); a couple of reruns absorb that. 0 disables.
@@ -119,7 +140,7 @@ SEL_RERUN="${SEL_RERUN:-2}"
 # would wrongly intersect the group with the single smoke class (running 0 tests
 # for any group that doesn't contain it).
 if [[ -z "${SEL_IT_TEST:-}" && -z "${SEL_GROUPS}" ]]; then
-    SEL_IT_TEST="com.adobe.cq.wcm.core.components.it.seljup.tests.list.v2.ListIT"
+    SEL_IT_TEST="com.adobe.cq.wcm.core.components.it.pw.list.ListV2PwIT"
 fi
 SEL_IT_TEST="${SEL_IT_TEST:-}"
 
@@ -170,7 +191,6 @@ cleanup() {
     fi
     exit "${exit_code}"
 }
-trap cleanup EXIT
 
 # Start one AEM instance inside the container via the qp client.
 # Args: <id> <runmode> <port> <vm-options>
@@ -187,10 +207,11 @@ start_instance() {
 
 start_aem() {
     log "Starting qp server container from ${AEM_IMAGE}"
-    # Publish the instance HTTP ports so the host can reach them once started.
-    local ports=(-p "${AEM_AUTHOR_PORT}:4502")
+    # Publish the instance HTTP ports on loopback only (admin/admin must not be
+    # reachable from the network) so the host can reach them once started.
+    local ports=(-p "127.0.0.1:${AEM_AUTHOR_PORT}:4502")
     if [[ "${WITH_PUBLISH}" == "true" ]]; then
-        ports+=(-p "${AEM_PUBLISH_PORT}:4503")
+        ports+=(-p "127.0.0.1:${AEM_PUBLISH_PORT}:4503")
     fi
     docker run -d --name "${AEM_CONTAINER}" "${ports[@]}" "${AEM_IMAGE}"
 
@@ -227,6 +248,32 @@ wait_for_aem() {
     log "AEM ${label} is up."
 }
 
+# Validate the product from the runtime, not just the image tag.
+verify_aem_type() {
+    local base="$1" settings product detected
+    settings=$(curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
+        "${base}/system/console/status-slingsettings.txt")
+    if [[ "${settings}" =~ Run\ Modes.*sdk ]]; then
+        detected=sdk
+    else
+        product=$(curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
+            "${base}/system/console/status-productinfo.txt")
+        if [[ "${product}" == *".LTS"* ]]; then
+            detected=lts
+        elif [[ "${product}" == *"Adobe Experience Manager (6.5."* ]]; then
+            detected=65
+        else
+            echo "Unrecognized AEM product at ${base}: ${product}" >&2
+            return 1
+        fi
+    fi
+    if [[ "${detected}" != "${AEM_TYPE}" ]]; then
+        echo "AEM product mismatch at ${base}: expected ${AEM_TYPE}, detected ${detected}" >&2
+        return 1
+    fi
+    log "Verified AEM ${detected} at ${base}"
+}
+
 # Upload + install one content package. Args: <base-url> <zip>
 install_package() {
     local base="$1" zip="$2"
@@ -235,9 +282,22 @@ install_package() {
         return 1
     fi
     log "Installing $(basename "${zip}") -> ${base}"
-    curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
+    local response
+    response=$(curl -sSf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
         -F file=@"${zip}" -F name="$(basename "${zip}")" -F force=true -F install=true \
-        "${base}/crx/packmgr/service.jsp" >/dev/null
+        "${base}/crx/packmgr/service.jsp")
+    check_packmgr_response "${response}" "$(basename "${zip}")"
+}
+
+# service.jsp answers HTTP 200 even when the upload or install failed; the real
+# outcome is the <status code="..."> element of its XML body. Args: <body> <label>
+check_packmgr_response() {
+    local response="$1" label="$2"
+    if [[ "${response}" != *'<status code="200">'* ]]; then
+        echo "Package install failed for ${label}:" >&2
+        printf '%s\n' "${response}" | tail -n 20 >&2
+        return 1
+    fi
 }
 
 # Install + start an OSGi bundle jar via the Felix web console. Args: <base-url> <jar>
@@ -258,55 +318,93 @@ install_bundle() {
 # in the QuickStart's launchpad). After we install this repo's `all` package, BOTH the
 # product version and this repo's version of a bundle are Active, and they cross-wire
 # the exported `...models.*` packages -> OSGi ClassCastExceptions (e.g. the Search
-# servlet 500s -> SearchIT shows 0 results). Fix: keep the highest version (this repo's
-# build) and UNINSTALL the rest. Uninstall - not stop - is required: a *stopped* product
-# bundle is reverted to Active by the SDK's Sling installer, whereas an uninstalled one
-# stays gone for the run. Args: <base-url> <symbolic-name>
+# servlet 500s -> SearchIT shows 0 results). Fix: keep exactly this repo's build
+# (matched by the Bundle-Version embedded in the installed `all` package, not by
+# "highest version", which a newer product release would win) and UNINSTALL the rest.
+# Uninstall - not stop - is required: a *stopped* product bundle is reverted to Active
+# by the SDK's Sling installer, whereas an uninstalled one stays gone for the run.
+# Then refresh packages so bundles wired to the removed copy (including the survivor,
+# which imports its own exports) are rewired and restarted, re-registering its Sling
+# models. Args: <base-url> <symbolic-name> <all-package-zip>
 dedupe_bundle() {
-    local base="$1" bsn="$2"
-    local ids=""
+    local base="$1" bsn="$2" zip="$3"
+    local expected ids=""
+    expected=$(bundle_version_in_package "${zip}" "${bsn}")
+    if [[ -z "${expected}" ]]; then
+        echo "Could not find ${bsn} in $(basename "${zip}")" >&2
+        return 1
+    fi
     # The `all` package installs its bundles ASYNChronously, so this repo's version may
     # not be registered the instant the package upload returns. Poll (up to ~2 min) until
-    # a second (duplicate) version shows up, then uninstall the older (product) copies.
+    # it shows up, then uninstall every other copy.
+    local found=false
     for _ in $(seq 1 40); do
-        ids=$(curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/bundles.json" 2>/dev/null \
-            | python3 -c "
-import json, re, sys
-d = json.load(sys.stdin)
-bs = [b for b in d.get('data', []) if b.get('symbolicName') == '${bsn}']
-def ver(b):
-    return [int(x) for x in re.findall(r'\d+', b.get('version', ''))]
-if len(bs) > 1:
-    bs.sort(key=ver)                      # highest version last (= this repo's build)
-    print(' '.join(str(b['id']) for b in bs[:-1]))   # ids of the older product copies
-" 2>/dev/null)
-        [[ -n "${ids}" ]] && break
+        if ids=$(curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/bundles.json" 2>/dev/null \
+            | python3 -c '
+import json, sys
+bsn, expected = sys.argv[1], sys.argv[2]
+bs = [b for b in json.load(sys.stdin).get("data", []) if b.get("symbolicName") == bsn]
+if not any(b.get("version") == expected for b in bs):
+    sys.exit(1)
+print(" ".join(str(b["id"]) for b in bs if b.get("version") != expected))
+' "${bsn}" "${expected}" 2>/dev/null); then
+            found=true
+            break
+        fi
         sleep 3
     done
+    if [[ "${found}" != "true" ]]; then
+        echo "${bsn} ${expected} was not installed at ${base}" >&2
+        return 1
+    fi
     if [[ -z "${ids}" ]]; then
-        log "No duplicate ${bsn} bundle found to remove (only one version present)"
+        log "Only ${bsn} ${expected} is installed; nothing to remove"
         return 0
     fi
     local id
     for id in ${ids}; do
-        log "Uninstalling duplicate product bundle ${bsn} (id ${id})"
-        curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
-            -X POST "${base}/system/console/bundles/${id}" -d action=uninstall >/dev/null || true
+        log "Uninstalling duplicate product bundle ${bsn} (id ${id}); keeping ${expected}"
+        curl -sSf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
+            -X POST "${base}/system/console/bundles/${id}" -d action=uninstall >/dev/null
     done
-    sleep 3
-    # Uninstalling the product copy disrupts Sling Model registration for the surviving
-    # bundle (its models drop out -> "Could not find an adapter factory for ...Search"
-    # -> component 500s). Restart the survivor so its @Model adapter factories re-register.
-    local keep
-    keep=$(curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/bundles.json" 2>/dev/null \
-        | python3 -c "import json,sys; d=json.load(sys.stdin); print(next((str(b['id']) for b in d.get('data',[]) if b.get('symbolicName')=='${bsn}'), ''))" 2>/dev/null)
-    if [[ -n "${keep}" ]]; then
-        log "Restarting ${bsn} (id ${keep}) to re-register its Sling models"
-        curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" -X POST "${base}/system/console/bundles/${keep}" -d action=stop >/dev/null || true
-        sleep 3
-        curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" -X POST "${base}/system/console/bundles/${keep}" -d action=start >/dev/null || true
-        sleep 6
-    fi
+    log "Refreshing package wiring after removing ${bsn} duplicates"
+    curl -sSf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
+        -X POST "${base}/system/console/bundles" -d action=refreshPackages >/dev/null
+    wait_for_bundles_settled "${base}"
+}
+
+# Print the Bundle-Version of the <symbolic-name> jar embedded in a content package.
+# Args: <zip> <symbolic-name>
+bundle_version_in_package() {
+    python3 - "$1" "$2" <<'PY'
+import io, re, sys, zipfile
+
+def manifest(jar):
+    text = jar.read("META-INF/MANIFEST.MF").decode("utf-8")
+    headers = {}
+    for line in re.sub(r"\r?\n ", "", text).splitlines():
+        if ":" in line:
+            key, value = line.split(":", 1)
+            headers[key.strip()] = value.strip()
+    return headers
+
+def search(archive, bsn):
+    for name in archive.namelist():
+        if name.endswith(".jar"):
+            with zipfile.ZipFile(io.BytesIO(archive.read(name))) as jar:
+                headers = manifest(jar)
+                if headers.get("Bundle-SymbolicName", "").split(";")[0] == bsn:
+                    return headers.get("Bundle-Version")
+        elif name.endswith(".zip"):
+            with zipfile.ZipFile(io.BytesIO(archive.read(name))) as nested:
+                version = search(nested, bsn)
+                if version:
+                    return version
+    return None
+
+with zipfile.ZipFile(sys.argv[1]) as package:
+    print(search(package, sys.argv[2]) or "")
+PY
 }
 
 # Resolve the newest matching built package zip for a module target dir. Any glob
@@ -325,12 +423,15 @@ find_zip() {
 # Install the core-components + IT content packages onto one instance. Args: <base-url>
 # Order matters: components first, then immutable test apps, OSGi config, then mutable
 # test content. The `all` module builds both a classic zip (no classifier) and a
-# `-cloud` classified zip; we target a cloud-ready instance, so install `-cloud`.
+# `-cloud` classified zip; choose the package matching the product.
 provision_packages() {
-    local base="$1"
-    # This repo's cloud `all` package (component content, config, and the core + AMP
-    # bundles). The `-cloud` classified zip targets the cloud-ready instance.
-    install_package "${base}" "$(find_zip "${REPO_ROOT}/all/target" 'core.wcm.components.all-*-cloud.zip')"
+    local base="$1" all_zip
+    if [[ "${AEM_TYPE}" == "sdk" ]]; then
+        all_zip="$(find_zip "${REPO_ROOT}/all/target" 'core.wcm.components.all-*-cloud.zip')"
+    else
+        all_zip="$(find_zip "${REPO_ROOT}/all/target" 'core.wcm.components.all-*.zip' '\-cloud\.zip$')"
+    fi
+    install_package "${base}" "${all_zip}"
     install_package "${base}" "$(find_zip "${REPO_ROOT}/testing/it/it.ui.apps/target" 'core.wcm.components.it.ui.apps-*.zip')"
     install_package "${base}" "$(find_zip "${REPO_ROOT}/testing/it/it.ui.config/target" 'core.wcm.components.it.ui.config-*.zip')"
     install_package "${base}" "$(find_zip "${REPO_ROOT}/testing/it/it.ui.content/target" 'core.wcm.components.it.ui.content-*.zip')"
@@ -338,8 +439,109 @@ provision_packages() {
     # package above leaves TWO active versions of the core/AMP bundles. Remove the older
     # (product) copies so only this repo's build remains - otherwise the two versions
     # cross-wire the models packages and components fail with ClassCastExceptions.
-    dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.core"
-    dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.extensions.amp"
+    if [[ "${AEM_TYPE}" == "sdk" ]]; then
+        dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.core" "${all_zip}"
+        dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.extensions.amp" "${all_zip}"
+    fi
+}
+
+product_version() {
+    curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "$1/system/console/status-productinfo.txt" \
+        | grep -m1 -oE 'Adobe Experience Manager \([^)]*\)' || true
+}
+
+# Some images ship a service-packed author but start publish from the GA
+# quickstart jar. Copy the author's service pack so both run the same product.
+align_publish_with_author() {
+    local author_version publish_version sp_path sp_zip deadline
+    author_version=$(product_version "${AEM_BASE_URL}")
+    publish_version=$(product_version "${AEM_PUBLISH_URL}")
+    [[ "${author_version}" == "${publish_version}" ]] && return
+    log "Publish runs ${publish_version:-unknown}, author runs ${author_version:-unknown}; installing author's service pack on publish"
+    sp_path=$(curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${AEM_BASE_URL}/crx/packmgr/service.jsp?cmd=ls" \
+        | python3 -c '
+import sys, xml.etree.ElementTree as ET
+packages = [p for p in ET.parse(sys.stdin).iter("package") if (p.findtext("name") or "").startswith("aem-service-pkg")]
+packages.sort(key=lambda p: [int(x) if x.isdigit() else 0 for x in (p.findtext("version") or "").split(".")])
+if packages:
+    print("/etc/packages/" + packages[-1].findtext("group") + "/" + packages[-1].findtext("downloadName"))
+')
+    if [[ -z "${sp_path}" ]]; then
+        echo "No aem-service-pkg package found on author to align publish" >&2
+        return 1
+    fi
+    sp_zip="$(mktemp -d)/$(basename "${sp_path}")"
+    curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" -o "${sp_zip}" "${AEM_BASE_URL}${sp_path}"
+    log "Installing ${sp_path} -> ${AEM_PUBLISH_URL}"
+    # The service pack restarts bundles while installing, so the upload request
+    # may be cut off; then the product version below is the source of truth. A
+    # complete response, however, must report success.
+    local response
+    response=$(curl -sS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" --max-time 1800 \
+        -F file=@"${sp_zip}" -F name="$(basename "${sp_zip}")" -F force=true -F install=true \
+        "${AEM_PUBLISH_URL}/crx/packmgr/service.jsp" 2>/dev/null || true)
+    rm -rf "$(dirname "${sp_zip}")"
+    if [[ "${response}" == *'</crx>'* ]]; then
+        check_packmgr_response "${response}" "$(basename "${sp_path}") on publish"
+    fi
+    deadline=$(( SECONDS + 1800 ))
+    until [[ "$(product_version "${AEM_PUBLISH_URL}")" == "${author_version}" ]]; do
+        if (( SECONDS >= deadline )); then
+            echo "Publish did not reach ${author_version} within 1800s" >&2
+            return 1
+        fi
+        sleep 15
+    done
+    wait_for_bundles_settled "${AEM_PUBLISH_URL}"
+    wait_for_aem "${AEM_PUBLISH_URL}" publish
+    log "Publish aligned to ${author_version}"
+}
+
+# Wait until the Felix bundle summary stops changing for three polls.
+wait_for_bundles_settled() {
+    local base="$1" previous="" current stable=0 deadline=$(( SECONDS + 900 ))
+    while (( stable < 3 )); do
+        if (( SECONDS >= deadline )); then
+            echo "Bundles at ${base} did not settle within 900s" >&2
+            return 1
+        fi
+        sleep 10
+        current=$(curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/bundles.json" 2>/dev/null \
+            | python3 -c 'import json, sys; print(json.load(sys.stdin)["s"])' 2>/dev/null || true)
+        if [[ -n "${current}" && "${current}" == "${previous}" ]]; then
+            stable=$(( stable + 1 ))
+        else
+            stable=0
+        fi
+        previous="${current}"
+    done
+}
+
+# Package installation starts bundles asynchronously. Do not start tests until
+# the core bundles (and author-side test support) are active.
+wait_for_provisioning() {
+    local base="$1" support="$2" deadline=$(( SECONDS + 180 ))
+    while true; do
+        if curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/bundles.json" \
+            | python3 -c '
+import json, sys
+data = json.load(sys.stdin)["data"]
+required = ["com.adobe.cq.core.wcm.components.core", "com.adobe.cq.core.wcm.components.extensions.amp"]
+if sys.argv[1] == "true":
+    required.append("com.adobe.cq.core.wcm.components.it.core")
+missing = [name for name in required if not any(b.get("symbolicName") == name and b.get("state") == "Active" for b in data)]
+if missing:
+    print("Waiting for active bundles: " + ", ".join(missing), file=sys.stderr)
+    sys.exit(1)
+' "${support}"; then
+            return
+        fi
+        if (( SECONDS >= deadline )); then
+            echo "Provisioning did not settle at ${base} within 180s" >&2
+            return 1
+        fi
+        sleep 5
+    done
 }
 
 provision() {
@@ -353,10 +555,15 @@ provision() {
         "$(find_zip "${REPO_ROOT}/testing/it/it.core/target" 'core.wcm.components.it.core-*.jar' '\-(sources|javadoc)\.jar$')"
 
     if [[ "${WITH_PUBLISH}" == "true" ]]; then
+        align_publish_with_author
         log "Provisioning publish"
         # Publish tests GET pre-deployed content, so the publish instance gets the same
         # content packages (no replication needed).
         provision_packages "${AEM_PUBLISH_URL}"
+    fi
+    wait_for_provisioning "${AEM_BASE_URL}" true
+    if [[ "${WITH_PUBLISH}" == "true" ]]; then
+        wait_for_provisioning "${AEM_PUBLISH_URL}" false
     fi
 }
 
@@ -373,9 +580,7 @@ run_tests() {
     if [[ -n "${IT_TEST}" ]]; then
         args+=(-Dit.test="${IT_TEST}")
     fi
-    if [[ -n "${IT_EXCLUDED_GROUPS}" ]]; then
-        args+=(-DexcludedGroups="${IT_EXCLUDED_GROUPS}")
-    fi
+    args+=(-DexcludedGroups="${IT_EXCLUDED_GROUPS}")
     if [[ "${WITH_PUBLISH}" == "true" ]]; then
         log "Running http ITs (author + publish): ${IT_TEST:-<all>}"
         args+=(
@@ -395,18 +600,24 @@ run_tests() {
 
 run_selenium() {
     # The test module is built standalone, so it would otherwise resolve
-    # e2e-selenium-utils from ~/.m2 - which may be a stale SNAPSHOT (e.g. CI's
-    # Maven cache is keyed on pom.xml hashes only). Install it from source first.
-    log "Installing e2e-selenium-utils from source"
+    # e2e-selenium-utils (and the parent pom its pom refers to) from ~/.m2, which
+    # may hold a stale SNAPSHOT or none at all (CI's Maven cache excludes this
+    # repo's SNAPSHOTs). Install both from source first.
+    log "Installing the parent pom and e2e-selenium-utils from source"
+    mvn -B -q -N -f "${REPO_ROOT}/parent/pom.xml" install
     mvn -B -q -f "${REPO_ROOT}/testing/it/e2e-selenium-utils/pom.xml" install -DskipTests
 
-    log "Running Selenium ITs (local ${SEL_BROWSER}): ${SEL_IT_TEST:-<all>}"
+    log "Running Playwright ITs (AEM ${AEM_TYPE}, local Chrome): ${SEL_IT_TEST:-<all>}"
     # -Dsel.jup.default.browser selects a LOCAL browser (vs the module's default
     # Chrome-in-Docker). The pom's test-all profile pins the author URL to
     # localhost:4502, which the host-local browser can reach directly.
     local -a args=(
         -B -f "${REPO_ROOT}/testing/it/e2e-selenium/pom.xml" verify -Ptest-all
         -Dsel.jup.default.browser="${SEL_BROWSER}"
+        -Dsling.it.instance.url.1="${AEM_BASE_URL}"
+        -Dsling.it.instance.adminUser.1="${AEM_ADMIN_USER}"
+        -Dsling.it.instance.adminPassword.1="${AEM_ADMIN_PASSWORD}"
+        -Dgranite.it.author.url="${AEM_BASE_URL}"
     )
     if [[ -n "${SEL_IT_TEST}" ]]; then
         args+=(-Dit.test="${SEL_IT_TEST}")
@@ -414,9 +625,7 @@ run_selenium() {
     if [[ -n "${SEL_GROUPS}" ]]; then
         args+=(-Dgroups="${SEL_GROUPS}")
     fi
-    if [[ -n "${SEL_EXCLUDED_GROUPS}" ]]; then
-        args+=(-DexcludedGroups="${SEL_EXCLUDED_GROUPS}")
-    fi
+    args+=(-DexcludedGroups="${SEL_EXCLUDED_GROUPS}")
     if [[ "${SEL_RERUN}" != "0" ]]; then
         args+=(-Dfailsafe.rerunFailingTestsCount="${SEL_RERUN}")
     fi
@@ -434,11 +643,14 @@ run_selenium() {
 }
 
 main() {
+    trap cleanup EXIT
     command -v docker >/dev/null || { echo "docker is required" >&2; exit 1; }
     start_aem
     wait_for_aem "${AEM_BASE_URL}" author
+    verify_aem_type "${AEM_BASE_URL}"
     if [[ "${WITH_PUBLISH}" == "true" ]]; then
         wait_for_aem "${AEM_PUBLISH_URL}" publish
+        verify_aem_type "${AEM_PUBLISH_URL}"
     fi
     provision
     if [[ "${WITH_SELENIUM}" == "true" ]]; then
@@ -448,4 +660,6 @@ main() {
     fi
 }
 
-main "$@"
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    main "$@"
+fi

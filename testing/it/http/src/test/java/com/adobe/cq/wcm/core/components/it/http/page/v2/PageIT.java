@@ -32,6 +32,7 @@ import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
 import com.adobe.cq.testing.junit.rules.CQRule;
 import com.adobe.cq.wcm.core.components.it.http.IgnoreOn64;
 import com.adobe.cq.wcm.core.components.it.http.IgnoreOn65;
+import com.adobe.cq.wcm.core.components.it.http.IgnoreOnLTS;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -98,7 +99,7 @@ public class PageIT {
     }
 
     @Test
-    @Category({IgnoreOn64.class, IgnoreOn65.class})
+    @Category({IgnoreOn64.class, IgnoreOn65.class, IgnoreOnLTS.class})
     public void testServiceWorkerConfiguration() throws ClientException {
         String content = adminAuthor.doGet("/content/core-components/simple-page.sw.js", 200).getContent();
         Pattern swconfigPattern = Pattern.compile("const swconfig = (?<swconfigjson>\\{.*})", Pattern.MULTILINE);

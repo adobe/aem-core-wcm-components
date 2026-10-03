@@ -275,7 +275,7 @@
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.testing.clients</artifactId>
-            <version>3.0.18</version>
+            <version>3.0.22</version>
             <scope>test</scope>
         </dependency>
         <dependency>

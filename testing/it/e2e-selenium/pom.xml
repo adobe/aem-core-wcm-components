@@ -169,6 +169,8 @@
                                 <id>default-integration-test</id>
                                 <goals>
                                     <goal>integration-test</goal>
+                                    <!-- fail the build on test failures/errors (integration-test alone never does) -->
+                                    <goal>verify</goal>
                                 </goals>
                                 <configuration>
                                     <trimStackTrace>false</trimStackTrace>
@@ -253,6 +255,12 @@
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.it.e2e-selenium-utils</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.playwright</groupId>
+            <artifactId>playwright</artifactId>
+            <version>1.52.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>

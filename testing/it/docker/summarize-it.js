@@ -20,7 +20,12 @@
 //
 // Rerun-aware: a test retried via rerunFailingTestsCount that ultimately passed is
 // recorded with <flakyFailure>/<flakyError> (not <failure>/<error>), so it is not
-// counted as failing here - matching the suite's own counters.
+// counted as failing here - matching the suite's own counters - but it is listed
+// under "Flaky tests".
+//
+// Each test is reported per leg (the first directory below a root, i.e. the
+// downloaded artifact, which identifies the AEM product and browser group), so the
+// same test failing on several products is listed once per product.
 //
 // Usage: node summarize-it.js <dir> [<dir> ...]
 
@@ -42,19 +47,47 @@ function findReports(dir, acc) {
     return acc;
 }
 
+// The direct <failure>/<error>/<flakyFailure>/<flakyError> children of a <testcase>
+// body. Output and nested elements are removed first so that test output that
+// merely contains "<error" (e.g. logged HTML) is not mistaken for a result.
+function outcomes(body) {
+    const stripped = body
+        .replace(/<!\[CDATA\[[\s\S]*?\]\]>/g, "")
+        .replace(/<(system-out|system-err)\b[^>]*\/>/g, "")
+        .replace(/<(system-out|system-err)\b[^>]*>[\s\S]*?<\/\1>/g, "")
+        .replace(/<(flakyFailure|flakyError|rerunFailure|rerunError)\b([^>]*?)(\/>|>[\s\S]*?<\/\1>)/g, "<$1/>");
+    return {
+        error: /<error\b/.test(stripped),
+        failure: /<failure\b/.test(stripped),
+        flaky: /<flaky(Failure|Error)\b/.test(stripped),
+    };
+}
+
+function legOf(root, file) {
+    const rel = path.relative(root, file).split(path.sep);
+    const leg = rel.length > 1 ? rel[0] : path.basename(root);
+    return leg.replace(/^it-/, "").replace(/-reports$/, "");
+}
+
 const roots = process.argv.slice(2);
 const files = [];
-roots.forEach((r) => findReports(r, files));
+for (const root of roots) {
+    for (const file of findReports(root, [])) {
+        files.push({ root, file });
+    }
+}
 
 let tests = 0;
 let failures = 0;
 let errors = 0;
 let skipped = 0;
 const failing = [];
-const seen = new Set(); // de-dupe a test that appears in more than one downloaded copy
+const flaky = [];
+const seen = new Set(); // de-dupe a test that appears in more than one copy of the same leg
 
-for (const file of files) {
+for (const { root, file } of files) {
     const xml = fs.readFileSync(file, "utf8");
+    const leg = legOf(root, file);
 
     let sm;
     const suiteRe = /<testsuite\b([^>]*)>/g;
@@ -76,16 +109,21 @@ for (const file of files) {
         const attrs = tm[1];
         const body = tm[3] || "";
         // Only genuine failures/errors (final result), never <flakyFailure>/<rerunFailure>.
-        const isError = /<error\b/.test(body);
-        const isFailure = /<failure\b/.test(body);
-        if (isError || isFailure) {
-            const cls = (/classname="([^"]*)"/.exec(attrs) || [])[1] || "";
-            const name = (/\bname="([^"]*)"/.exec(attrs) || [])[1] || "";
-            const key = cls + "#" + name;
-            if (!seen.has(key)) {
-                seen.add(key);
-                failing.push({ cls, name, kind: isError ? "error" : "failure" });
-            }
+        const result = outcomes(body);
+        if (!result.error && !result.failure && !result.flaky) {
+            continue;
+        }
+        const cls = (/classname="([^"]*)"/.exec(attrs) || [])[1] || "";
+        const name = (/\bname="([^"]*)"/.exec(attrs) || [])[1] || "";
+        const key = leg + "|" + cls + "#" + name;
+        if (seen.has(key)) {
+            continue;
+        }
+        seen.add(key);
+        if (result.error || result.failure) {
+            failing.push({ leg, cls, name, kind: result.error ? "error" : "failure" });
+        } else {
+            flaky.push({ leg, cls, name, kind: "flaky" });
         }
     }
 }
@@ -103,21 +141,30 @@ out += "| Total | ✅ Passing | ❌ Failing | ⚠️ Errors | ⏭️ Skipped |\n
 out += "|---:|---:|---:|---:|---:|\n";
 out += `| ${tests} | ${passing} | ${failures} | ${errors} | ${skipped} |\n\n`;
 
-if (failing.length === 0) {
-    out += "All tests passed. 🎉\n";
-} else {
-    out += `### Failing tests (${failing.length})\n\n`;
+function list(title, entries) {
+    let text = `### ${title} (${entries.length})\n\n`;
     const byClass = {};
-    for (const f of failing) {
+    for (const f of entries) {
         byClass[f.cls] = byClass[f.cls] || [];
         byClass[f.cls].push(f);
     }
     for (const cls of Object.keys(byClass).sort((a, b) => a.localeCompare(b))) {
-        out += `- \`${cls}\`\n`;
-        for (const f of byClass[cls].sort((a, b) => a.name.localeCompare(b.name))) {
-            out += `  - ${f.name} _(${f.kind})_\n`;
+        text += `- \`${cls}\`\n`;
+        const sorted = byClass[cls].sort((a, b) => a.name.localeCompare(b.name) || a.leg.localeCompare(b.leg));
+        for (const f of sorted) {
+            text += `  - ${f.name} _(${f.kind}, ${f.leg})_\n`;
         }
     }
+    return text + "\n";
+}
+
+if (failing.length === 0) {
+    out += "All tests passed. 🎉\n\n";
+} else {
+    out += list("Failing tests", failing);
+}
+if (flaky.length > 0) {
+    out += list("Flaky tests (passed on rerun)", flaky);
 }
 
 process.stdout.write(out);

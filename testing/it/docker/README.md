@@ -1,15 +1,18 @@
 # Integration tests against a Dockerized AEM
 
-This runs the [`testing/it/http`](../http) integration tests against an AEM
-author instance started from a Docker image, so you can exercise the HTTP ITs
-locally the same way CI does. The orchestration lives in [`run-it.sh`](run-it.sh)
+This runs the [`testing/it/http`](../http) integration tests and the
+[`testing/it/e2e-selenium`](../e2e-selenium) Playwright browser ITs (see
+[Browser UI suite](#browser-ui-suite-with_seleniumtrue)) against AEM instances
+started from a Docker image (cloud-ready SDK, 6.5 or 6.6 LTS), so you can run
+them locally the same way CI does. The orchestration lives in [`run-it.sh`](run-it.sh)
 and is shared by the [`Integration Tests (AEM)`](../../../.github/workflows/maven-it.yml)
 GitHub Actions workflow.
 
 ## Scope
 
 Runs against the `circleci-aem-cloudready` image with the cloud (`-cloud`)
-core-components package. Two modes:
+core-components package by default; set `AEM_IMAGE` to a `circleci-aem` (6.5) or
+`circleci-aem-lts` image to use the classic package instead. Two http modes:
 
 - **Author only (default).** Runs just the IT classes that do not use a publish
   instance: `AdaptiveImageServletIT`, `ComponentsIT`, `ExperienceFragmentIT`.
@@ -18,7 +21,7 @@ core-components package. Two modes:
   publish-touching tests just `GET` pre-deployed content from publish, so the
   same content packages are installed there (no replication configured).
 
-Because the target is a cloud(-ready) image, classes annotated
+For the default cloud(-ready) image, classes annotated
 `@Category(IgnoreOnCloud)` are excluded (via `excludedGroups`), mirroring the
 core-components pipeline's cloud run — currently `SeoIT`,
 `TableOfContentsFilterIT`, and `ClientlibsIncludeIT`. Override with
@@ -53,7 +56,7 @@ WITH_PUBLISH=true bash testing/it/docker/run-it.sh
 > (the default 7-8 GB is enough for author-only but not for author + publish).
 
 The script starts the AEM container, waits for it to answer HTTP, installs the
-cloud (`-cloud`) `all` package + `it.ui.apps` + `it.ui.config` + `it.ui.content`
+product-specific `all` package + `it.ui.apps` + `it.ui.config` + `it.ui.content`
 via the CRX Package Manager, then runs the failsafe suite against
 `http://localhost:4502`. On exit it dumps the container logs and removes the
 container.
@@ -65,6 +68,7 @@ All knobs are environment variables (see the top of `run-it.sh`). The common one
 | Variable | Default | Purpose |
 |---|---|---|
 | `AEM_IMAGE` | `…/circleci-aem-cloudready:27830-v2-openjdk21` | AEM Docker image to run |
+| `AEM_TYPE` | Inferred from image repository | `sdk`, `65`, or `lts`; verified against runtime run modes/product info before provisioning |
 | `AEM_AUTHOR_PORT` | `4502` | Host port the author is published on |
 | `WITH_PUBLISH` | `false` | Also start/provision publish and run the full suite |
 | `AEM_PUBLISH_PORT` | `4503` | Host port the publish is published on |
@@ -102,48 +106,104 @@ flaky — this only affects local dev on Apple Silicon. CI runs on GitHub-hosted
 `ubuntu-latest`, which is native amd64, so it doesn't hit this. On a native amd64
 host (Linux or Mac) it runs natively.
 
-## Open items
+## CI notes
 
-- **CI secrets.** `ARTIFACTORY_CLOUD_USER` / `ARTIFACTORY_CLOUD_PASS` must be
-  added as repository secrets for the workflow to pull the image.
+- **Secrets.** The workflow pulls the images with the `ARTIFACTORY_CLOUD_USER` /
+  `ARTIFACTORY_CLOUD_PASS` repository secrets (passed via `env:`, never expanded
+  into the script, and logged out right after the pull).
+- **Image cache.** Each product image is pulled once per run by an image-cache
+  job and stored as a zstd-compressed `docker save` archive in the Actions cache
+  of the triggering ref; test jobs restore it and fall back to a direct pull when
+  it was evicted. Pull requests from forks never run the workflow.
+- **Duplicate clientlibs on the SDK.** The cloud-ready SDK ships Core Components
+  under `/libs`, and the `all` package adds this repo's copy under `/apps`, so the
+  SDK author loads every Core Components clientlib twice (both copies resolve
+  to the `/apps` code, so each component's JS initializes twice). `/libs` is
+  immutable on the SDK, so this cannot be removed by the test setup; it does not
+  happen on 6.5/LTS or in real deployments. Keep it in mind when triaging
+  SDK-only editor flakiness.
 
-## Selenium UI suite (`WITH_SELENIUM=true`)
+## Browser UI suite (`WITH_SELENIUM=true`)
 
-Runs the `testing/it/e2e-selenium` suite with a **local** browser on the host
-(`-Dsel.jup.default.browser=chrome`), which reaches AEM at the published
-`localhost:4502` — no browser-container networking. The module's default
-Chrome-in-Docker (Selenoid) mode is not used because the e2e-selenium pom pins
-the author URL to `localhost:4502`, which a browser in a separate container
-cannot reach.
+Runs the `testing/it/e2e-selenium` suite (Playwright tests; the module keeps its
+historical name) with a **local** Chrome on the host, which reaches
+AEM at the published `localhost:4502` — no browser-container networking. The
+module's default Chrome-in-Docker (Selenoid) mode is not used because the
+e2e-selenium pom pins the author URL to `localhost:4502`, which a browser in a
+separate container cannot reach.
 
 ```bash
 # Full suite (author instance)
 WITH_SELENIUM=true bash testing/it/docker/run-it.sh
 
 # A single class / method
-WITH_SELENIUM=true SEL_IT_TEST='com.adobe.cq.wcm.core.components.it.seljup.tests.list.v2.ListIT' \
+WITH_SELENIUM=true SEL_IT_TEST='com.adobe.cq.wcm.core.components.it.pw.list.ListV2PwIT' \
   bash testing/it/docker/run-it.sh
 ```
 
 - **Local:** needs Chrome installed (native, not emulated — so fast). Runs
   headed unless a virtual display is used.
-- **CI:** the workflow's `selenium` job (on push to `main`, on pull requests to
-  `main`, and on manual `workflow_dispatch`) runs Chrome
-  headless under **Xvfb + fluxbox** on the runner. It is a **parallel matrix**
-  with one leg per `@Tag` group (`group1`..`group4`, selected via `-Dgroups`),
-  plus an `ungrouped` leg (explicit class list) for the handful of classes with
-  no group tag — 5 legs total, generated by
-  [`gen-selenium-matrix.sh`](gen-selenium-matrix.sh). A shared `prep` job builds
-  the packages and primes the AEM image cache **once**; every test leg (http and
-  selenium) just downloads the packages and `docker load`s the cached image, so
-  the build/pull is not repeated per leg.
+- **CI:** the workflow's browser-test matrix runs headed Chrome on an
+  **Xvfb** virtual display (with the fluxbox window manager) on the runner, one job per `@Tag("playwright-groupN")`
+  **per AEM product** (12 browser jobs). Each job uses its own AEM instance.
+  A shared `prep` job builds both classic and cloud packages, and three
+  image-cache jobs prime each image **once**, so test legs do not repeat the
+  expensive build or image pull. The group matrix is generated by
+  [`gen-browser-matrix.sh`](gen-browser-matrix.sh) from the group tags found in
+  the sources.
+- **Every IT class must have a `playwright-groupN` tag** (add new ones to the
+  fastest group, currently `playwright-group2`). Untagged ITs fail the build
+  (`ItGroupTagTest`, surefire) and the CI `prep` job (`gen-browser-matrix.sh`).
 - Knobs: `SEL_BROWSER` (default `chrome`), `SEL_IT_TEST` (class selection),
-  `SEL_GROUPS` (JUnit tag include, e.g. `group1`), `SEL_EXCLUDED_GROUPS` (default
+  `SEL_GROUPS` (JUnit tag include, e.g. `playwright-group1`), `SEL_EXCLUDED_GROUPS` (default
   `failing,nested,IgnoreOnSDK` — the last mirrors the pipeline's cloud/SDK skip).
+
+To run a single group locally against a provisioned AEM instance:
+
+```bash
+WITH_SELENIUM=true SEL_GROUPS=playwright-group1 SEL_RERUN=0 bash testing/it/docker/run-it.sh
+```
 
 ## Roadmap
 
 1. ✅ Author-only http ITs, cloud-ready image.
 2. ✅ Publish instance (`:4503`) + full `*IT.java` http suite (`WITH_PUBLISH=true`).
-3. ✅ Selenium/e2e suite (`testing/it/e2e-selenium`, `WITH_SELENIUM=true`).
-4. Matrix across AEM flavors (classic 6.5, LTS), mirroring the CIF `test-aem` job.
+3. ✅ Browser e2e suite (Playwright) (`testing/it/e2e-selenium`, `WITH_SELENIUM=true`).
+4. ✅ Matrix across AEM SDK, classic 6.5, and LTS.
+
+## Cross-version validation
+
+CI runs all four Playwright groups and the HTTP author/publish suite against each image,
+with product-specific report/check names and artifacts:
+
+| Product | Image (under `docker-adobe-cif-release.dr-uw2.adobeitc.com/`) | Package | Exclusions beyond `failing,nested` for browsers |
+| --- | --- | --- | --- |
+| SDK | `circleci-aem-cloudready:27830-v2-openjdk21` | `all-*-cloud.zip` | Browser: `IgnoreOnSDK`; HTTP: `IgnoreOnCloud` |
+| AEM 6.5 | `circleci-aem:6.5.24.0-openjdk11` | Classic `all-*.zip` | Browser and HTTP: `IgnoreOn65` |
+| AEM LTS | `circleci-aem-lts:6.6.2-openjdk21` | Classic `all-*.zip` | Browser and HTTP: `IgnoreOnLTS` |
+
+LTS is validated separately from 6.5: `IgnoreOn65` does not suppress LTS tests;
+use `IgnoreOnLTS` for Cloud Service-only features that LTS does not ship.
+
+The 6.5 image ships a service-packed author, but its publish starts from the GA
+quickstart jar. With `WITH_PUBLISH=true`, `run-it.sh` installs the author's
+`aem-service-pkg` on publish whenever their product versions differ.
+The AEM JVM comes from the image; the host build/test JVM remains JDK 11.
+Cloud-only bundle deduplication is not applied to on-prem instances.
+Explicit empty `IT_EXCLUDED_GROUPS=""` or `SEL_EXCLUDED_GROUPS=""` overrides clear exclusions.
+
+Local examples (build packages first as shown above):
+
+```bash
+# AEM 6.5 HTTP author/publish
+AEM_IMAGE=docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem:6.5.24.0-openjdk11 \
+  WITH_PUBLISH=true bash testing/it/docker/run-it.sh
+
+# LTS Playwright group2
+AEM_IMAGE=docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-lts:6.6.2-openjdk21 \
+  WITH_SELENIUM=true SEL_GROUPS=playwright-group2 SEL_RERUN=0 \
+  bash testing/it/docker/run-it.sh
+
+# Product selection, package/exclusion routing, URL and mismatch guard checks (no AEM needed)
+bash testing/it/docker/test-run-it.sh
+```
