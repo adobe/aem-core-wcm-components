@@ -25,6 +25,8 @@ import org.junit.jupiter.api.Test;
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
 import com.adobe.cq.wcm.core.components.it.seljup.util.Commons;
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.assertions.LocatorAssertions;
+import org.opentest4j.AssertionFailedError;
 
 import static com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_TEASER_V1;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -128,6 +130,7 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
             input.fill(path);
             try {
                 suggestion.click(new Locator.ClickOptions().setTimeout(10000));
+                awaitActionTitleAutofill();
                 return;
             } catch (com.microsoft.playwright.TimeoutError e) {
                 if (attempt == 3) {
@@ -137,8 +140,23 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         }
     }
 
+    /**
+     * The editor fills an empty action title from the linked page's jcr:title via async AJAX; wait for it so a
+     * subsequent {@link #setActionTitle} is not overwritten by a late response.
+     */
+    private void awaitActionTitleAutofill() {
+        try {
+            assertThat(dialog().locator(actionHook("actionTitle")).last())
+                .not().hasValue("", new LocatorAssertions.HasValueOptions().setTimeout(10000));
+        } catch (AssertionFailedError e) {
+            // Linked page without a title: nothing will be auto-filled.
+        }
+    }
+
     protected void setActionTitle(String title) {
-        dialog().locator(actionHook("actionTitle")).last().fill(title);
+        Locator field = dialog().locator(actionHook("actionTitle")).last();
+        field.fill(title);
+        assertThat(field).hasValue(title);
     }
 
     protected String policyPath() {

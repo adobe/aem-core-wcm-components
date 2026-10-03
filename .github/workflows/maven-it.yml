@@ -21,7 +21,9 @@
 #
 # Structure: a single `prep` job builds the deployable packages; image-cache jobs
 # pull each AEM image ONCE and store it as a zstd-compressed archive in the Actions
-# cache of the triggering ref. Test jobs only download the packages + load the
+# cache of the triggering ref (pull request runs also read main's caches, so feature
+# branches are covered by their PR run only - a branch push trigger would duplicate
+# every multi-GB archive in the 10 GB cache quota). Test jobs only download the packages + load the
 # cached image, so the expensive build/pull is not repeated per leg.
 # Browser ITs (Playwright) run as one job per @Tag("playwright-groupN"); prep fails
 # if any IT class is untagged (see testing/it/docker/gen-browser-matrix.sh).
@@ -43,8 +45,6 @@ on:
   push:
     branches:
       - main
-      # POC branch: Playwright browser ITs.
-      - it-playwright-poc
   pull_request:
     branches:
       - main
