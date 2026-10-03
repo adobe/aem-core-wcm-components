@@ -95,7 +95,8 @@ public class EmbedV1PwIT extends ComponentPwBaseTest {
         page.waitForTimeout(1500);
         assertThat(urlStatus()).containsText(expectedName);
         saveDialog();
-        assertThat(contentFrame().locator(renderedSelector)).isVisible();
+        // Provider widget scripts (e.g. Twitter) briefly keep the original markup next to the rendered copy.
+        assertThat(contentFrame().locator(renderedSelector).first()).isVisible();
     }
 
     @Test

@@ -160,7 +160,6 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         addItems();
         clickToolbarAction(tabsPath, "PANEL_SELECT");
         assertThat(page.locator(".cmp-panelselector")).isVisible();
-        Locator selectorItems = page.locator(".cmp-panelselector__table [is='coral-table-row']");
         reorderPanelSelectorRow(0, 2);
         assertTabTitles("item1", "item2", "item0");
     }

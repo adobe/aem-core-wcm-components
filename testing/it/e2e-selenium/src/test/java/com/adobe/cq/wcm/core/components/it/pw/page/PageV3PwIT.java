@@ -31,6 +31,7 @@ public class PageV3PwIT extends PageV2PwIT {
 
     @Test
     @Tag("IgnoreOn64")
+    @Override
     public void testAdvancedSeoPageProperties() throws Exception {
         openProperties();
         openTab("Advanced");
@@ -56,6 +57,7 @@ public class PageV3PwIT extends PageV2PwIT {
     }
 
     @Test
+    @Override
     public void testBlueprintPageProperties() {
         openProperties();
         assertThat(page.locator("coral-tabview")).isVisible();

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Tag;
 
 @Tag("playwright-group4")
 public class ListV2PwIT extends ListV1PwIT {
+    @Override
     protected String listResourceType() {
         return com.adobe.cq.wcm.core.components.it.seljup.util.Commons.RT_LIST_V2;
     }

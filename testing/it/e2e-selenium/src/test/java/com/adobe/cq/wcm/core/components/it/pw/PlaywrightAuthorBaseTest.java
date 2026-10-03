@@ -77,7 +77,7 @@ public abstract class PlaywrightAuthorBaseTest {
     private static Browser browser;
     protected static String baseUrl;
 
-    protected final String randomPassword = RandomStringUtils.randomAlphabetic(8);
+    protected final String randomPassword = RandomStringUtils.secure().nextAlphabetic(8);
     protected CQClient adminClient;
     protected CQClient authorClient;
     protected String rootPage;

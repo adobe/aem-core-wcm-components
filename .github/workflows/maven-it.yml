@@ -57,11 +57,11 @@ concurrency:
   group: it-aem-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
-# Least privilege: read the code and publish the JUnit report check runs. Caches and
-# artifacts use the runner's own token, not GITHUB_TOKEN.
+# Least privilege: read-only by default; only the test jobs that publish JUnit report
+# check runs get checks: write. Caches and artifacts use the runner's own token, not
+# GITHUB_TOKEN.
 permissions:
   contents: read
-  checks: write
 
 env:
   REGISTRY: docker-adobe-cif-release.dr-uw2.adobeitc.com
@@ -206,6 +206,9 @@ jobs:
     needs: [prep, image-cache]
     # A failed product image cache leaves only that product's legs without an image.
     if: ${{ !cancelled() && needs.prep.result == 'success' }}
+    permissions:
+      contents: read
+      checks: write
     runs-on: ubuntu-latest
     # Native amd64 GitHub-hosted runner: author+publish boot + the full http
     # suite ran in ~9 minutes in testing, so 90m is generous headroom.
@@ -294,6 +297,9 @@ jobs:
     needs: [prep, image-cache]
     # A failed product image cache leaves only that product's legs without an image.
     if: ${{ !cancelled() && needs.prep.result == 'success' }}
+    permissions:
+      contents: read
+      checks: write
     runs-on: ubuntu-latest
     # Native amd64 GitHub-hosted runner: groups take ~20-30 min including AEM
     # boot and provisioning, so 60m leaves headroom without hiding a hang.

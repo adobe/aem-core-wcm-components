@@ -75,7 +75,7 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         return contentFrame().locator(selector);
     }
 
-    private void setPageImage(String targetPage, String asset, String alt) throws Exception {
+    private void setPageImage(String targetPage, String asset) throws Exception {
         authorClient.setPageProperty(targetPage, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
         Commons.editNodeProperties(authorClient, targetPage + "/jcr:content",
             new HashMap<>(Map.of("cq:featuredimage/fileReference", asset,
@@ -259,7 +259,7 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     @Test
     public void testInheritImageFromCurrentPage() throws Exception {
         createTeaser();
-        setPageImage(testPage, CLIMBING, CLIMBING_ALT);
+        setPageImage(testPage, CLIMBING);
         Commons.editNodeProperties(authorClient, teaserPath, new HashMap<>(Map.of("imageFromPageImage", "true")));
         page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
         assertThat(page.locator(".cmp-teaser img")).hasAttribute("alt", CLIMBING_ALT);
@@ -269,7 +269,7 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     @Test
     public void testInheritImageFromCurrentPage_isDecorative() throws Exception {
         createTeaser();
-        setPageImage(testPage, CLIMBING, CLIMBING_ALT);
+        setPageImage(testPage, CLIMBING);
         openEditDialog(teaserPath);
         openAssetsTab();
         checkbox("./isDecorative").check();
@@ -280,7 +280,7 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     @Test
     public void testInheritImageFromLinkedPage() throws Exception {
         createTeaser();
-        setPageImage(secondPage, SURFING, SURFING_ALT);
+        setPageImage(secondPage, SURFING);
         openEditDialog(teaserPath);
         setLinkedPage();
         openAssetsTab();
@@ -292,7 +292,7 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     @Test
     public void testInheritImageFromLinkedPage_altNotInherited() throws Exception {
         createTeaser();
-        setPageImage(secondPage, SURFING, SURFING_ALT);
+        setPageImage(secondPage, SURFING);
         openEditDialog(teaserPath);
         setLinkedPage();
         openAssetsTab();
@@ -306,7 +306,7 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     @Test
     public void testInheritImageFromAction() throws Exception {
         createTeaser();
-        setPageImage(thirdPage, SKIING, SKIING_ALT);
+        setPageImage(thirdPage, SKIING);
         openEditDialog(teaserPath);
         openLinkTab();
         addActionLink(thirdPage);
@@ -317,7 +317,7 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     @Test
     public void testInheritImageFromAction_altNotInherited() throws Exception {
         createTeaser();
-        setPageImage(thirdPage, SKIING, SKIING_ALT);
+        setPageImage(thirdPage, SKIING);
         openEditDialog(teaserPath);
         openLinkTab();
         addActionLink(thirdPage);
