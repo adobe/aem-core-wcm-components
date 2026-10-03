@@ -1,15 +1,18 @@
 # Integration tests against a Dockerized AEM
 
-This runs the [`testing/it/http`](../http) integration tests against an AEM
-author instance started from a Docker image, so you can exercise the HTTP ITs
-locally the same way CI does. The orchestration lives in [`run-it.sh`](run-it.sh)
+This runs the [`testing/it/http`](../http) integration tests and the
+[`testing/it/e2e-selenium`](../e2e-selenium) Playwright browser ITs (see
+[Browser UI suite](#browser-ui-suite-with_seleniumtrue)) against AEM instances
+started from a Docker image (cloud-ready SDK, 6.5 or 6.6 LTS), so you can run
+them locally the same way CI does. The orchestration lives in [`run-it.sh`](run-it.sh)
 and is shared by the [`Integration Tests (AEM)`](../../../.github/workflows/maven-it.yml)
 GitHub Actions workflow.
 
 ## Scope
 
 Runs against the `circleci-aem-cloudready` image with the cloud (`-cloud`)
-core-components package. Two modes:
+core-components package by default; set `AEM_IMAGE` to a `circleci-aem` (6.5) or
+`circleci-aem-lts` image to use the classic package instead. Two http modes:
 
 - **Author only (default).** Runs just the IT classes that do not use a publish
   instance: `AdaptiveImageServletIT`, `ComponentsIT`, `ExperienceFragmentIT`.
@@ -103,10 +106,22 @@ flaky — this only affects local dev on Apple Silicon. CI runs on GitHub-hosted
 `ubuntu-latest`, which is native amd64, so it doesn't hit this. On a native amd64
 host (Linux or Mac) it runs natively.
 
-## Open items
+## CI notes
 
-- **CI secrets.** `ARTIFACTORY_CLOUD_USER` / `ARTIFACTORY_CLOUD_PASS` must be
-  added as repository secrets for the workflow to pull the image.
+- **Secrets.** The workflow pulls the images with the `ARTIFACTORY_CLOUD_USER` /
+  `ARTIFACTORY_CLOUD_PASS` repository secrets (passed via `env:`, never expanded
+  into the script, and logged out right after the pull).
+- **Image cache.** Each product image is pulled once per run by an image-cache
+  job and stored as a zstd-compressed `docker save` archive in the Actions cache
+  of the triggering ref; test jobs restore it and fall back to a direct pull when
+  it was evicted. Pull requests from forks never run the workflow.
+- **Duplicate clientlibs on the SDK.** The cloud-ready SDK ships Core Components
+  under `/libs`, and the `all` package adds this repo's copy under `/apps`, so the
+  SDK author loads every Core Components clientlib twice (both copies resolve
+  to the `/apps` code, so each component's JS initializes twice). `/libs` is
+  immutable on the SDK, so this cannot be removed by the test setup; it does not
+  happen on 6.5/LTS or in real deployments. Keep it in mind when triaging
+  SDK-only editor flakiness.
 
 ## Browser UI suite (`WITH_SELENIUM=true`)
 
@@ -128,8 +143,8 @@ WITH_SELENIUM=true SEL_IT_TEST='com.adobe.cq.wcm.core.components.it.pw.list.List
 
 - **Local:** needs Chrome installed (native, not emulated — so fast). Runs
   headed unless a virtual display is used.
-- **CI:** the workflow's browser-test matrix runs Chrome headless under
-  **Xvfb + fluxbox** on the runner, one job per `@Tag("playwright-groupN")`
+- **CI:** the workflow's browser-test matrix runs headed Chrome on an
+  **Xvfb** virtual display (with the fluxbox window manager) on the runner, one job per `@Tag("playwright-groupN")`
   **per AEM product** (12 browser jobs). Each job uses its own AEM instance.
   A shared `prep` job builds both classic and cloud packages, and three
   image-cache jobs prime each image **once**, so test legs do not repeat the

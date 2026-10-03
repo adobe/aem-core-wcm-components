@@ -116,3 +116,57 @@ echo 'Passed explicit empty exclusion overrides.'
     rm -f "${state}"
 )
 echo 'Passed publish service-pack alignment.'
+
+(
+    export AEM_TYPE=sdk
+    source "${SCRIPT_DIR}/run-it.sh"
+    zip_file="$(mktemp -d)/pkg.zip"
+    trap 'rm -rf "$(dirname "${zip_file}")"' EXIT
+    echo zip > "${zip_file}"
+    curl() { echo '<crx><response><status code="500">Package is broken</status></response></crx>'; }
+    if install_package "${AEM_BASE_URL}" "${zip_file}" >/dev/null 2>&1; then
+        echo 'Failed package install was not rejected' >&2
+        exit 1
+    fi
+    curl() { echo '<crx><response><data/><status code="200">ok</status></response></crx>'; }
+    install_package "${AEM_BASE_URL}" "${zip_file}" >/dev/null
+)
+echo 'Passed package manager status checks.'
+
+(
+    export AEM_TYPE=sdk
+    source "${SCRIPT_DIR}/run-it.sh"
+    work=$(mktemp -d)
+    trap 'rm -rf "${work}"' EXIT
+    python3 - "${work}/all.zip" <<'PY'
+import io, sys, zipfile
+jar = io.BytesIO()
+with zipfile.ZipFile(jar, "w") as j:
+    j.writestr("META-INF/MANIFEST.MF", "Manifest-Version: 1.0\r\nBundle-SymbolicName: com.example.core;singlet\r\n on:=true\r\nBundle-Version: 2.0.0.SNAPSHOT\r\n")
+inner = io.BytesIO()
+with zipfile.ZipFile(inner, "w") as z:
+    z.writestr("jcr_root/apps/install/core.jar", jar.getvalue())
+with zipfile.ZipFile(sys.argv[1], "w") as z:
+    z.writestr("jcr_root/etc/packages/content.zip", inner.getvalue())
+PY
+    [[ "$(bundle_version_in_package "${work}/all.zip" com.example.core)" == 2.0.0.SNAPSHOT ]]
+    sleep() { :; }
+    wait_for_bundles_settled() { echo settled >> "${work}/calls"; }
+    curl() {
+        case "$*" in
+            */bundles.json) echo '{"data":[{"id":1,"symbolicName":"com.example.core","version":"3.0.0"},{"id":2,"symbolicName":"com.example.core","version":"2.0.0.SNAPSHOT"}]}' ;;
+            *) echo "$*" >> "${work}/calls" ;;
+        esac
+    }
+    dedupe_bundle "${AEM_BASE_URL}" com.example.core "${work}/all.zip" >/dev/null
+    calls=$(cat "${work}/calls")
+    # The newer product copy (3.0.0) is removed; this repo's build stays.
+    [[ "${calls}" == *"bundles/1 -d action=uninstall"* && "${calls}" != *"bundles/2 "* ]]
+    [[ "${calls}" == *"action=refreshPackages"*settled* ]]
+    curl() { echo '{"data":[{"id":1,"symbolicName":"com.example.core","version":"3.0.0"}]}'; }
+    if dedupe_bundle "${AEM_BASE_URL}" com.example.core "${work}/all.zip" >/dev/null 2>&1; then
+        echo 'Missing repository bundle was not rejected' >&2
+        exit 1
+    fi
+)
+echo 'Passed bundle de-duplication by package version.'

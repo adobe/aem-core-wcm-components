@@ -19,10 +19,11 @@
     <filter root="/conf/core-components"/>
     <filter root="/content/core-components"/>
     <filter root="/content/campaigns/core_component_brand"/>
-    <!-- Tags must be imported before the DAM content that references them: FileVault's
+    <!-- Tags must be imported before the DAM content that references them (FileVault
+         imports in filter order): AEM's tagging bundle (com.day.cq.tagging.impl)
          TagValidatingEventListener strips cq:tags references that don't resolve to an
          existing tag node at import time (permanently - it is not re-applied later), so
-         a tags-after-content order silently empties ContentFragmentIT's cq:tags. -->
+         a tags-after-content order silently empties ContentFragmentListPwIT's cq:tags. -->
     <filter root="/content/cq:tags/core-components"/>
     <filter root="/content/dam/core-components"/>
     <filter root="/content/experience-fragments/core-components-test"/>

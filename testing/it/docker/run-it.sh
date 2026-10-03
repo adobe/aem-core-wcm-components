@@ -207,10 +207,11 @@ start_instance() {
 
 start_aem() {
     log "Starting qp server container from ${AEM_IMAGE}"
-    # Publish the instance HTTP ports so the host can reach them once started.
-    local ports=(-p "${AEM_AUTHOR_PORT}:4502")
+    # Publish the instance HTTP ports on loopback only (admin/admin must not be
+    # reachable from the network) so the host can reach them once started.
+    local ports=(-p "127.0.0.1:${AEM_AUTHOR_PORT}:4502")
     if [[ "${WITH_PUBLISH}" == "true" ]]; then
-        ports+=(-p "${AEM_PUBLISH_PORT}:4503")
+        ports+=(-p "127.0.0.1:${AEM_PUBLISH_PORT}:4503")
     fi
     docker run -d --name "${AEM_CONTAINER}" "${ports[@]}" "${AEM_IMAGE}"
 
@@ -281,9 +282,22 @@ install_package() {
         return 1
     fi
     log "Installing $(basename "${zip}") -> ${base}"
-    curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
+    local response
+    response=$(curl -sSf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
         -F file=@"${zip}" -F name="$(basename "${zip}")" -F force=true -F install=true \
-        "${base}/crx/packmgr/service.jsp" >/dev/null
+        "${base}/crx/packmgr/service.jsp")
+    check_packmgr_response "${response}" "$(basename "${zip}")"
+}
+
+# service.jsp answers HTTP 200 even when the upload or install failed; the real
+# outcome is the <status code="..."> element of its XML body. Args: <body> <label>
+check_packmgr_response() {
+    local response="$1" label="$2"
+    if [[ "${response}" != *'<status code="200">'* ]]; then
+        echo "Package install failed for ${label}:" >&2
+        printf '%s\n' "${response}" | tail -n 20 >&2
+        return 1
+    fi
 }
 
 # Install + start an OSGi bundle jar via the Felix web console. Args: <base-url> <jar>
@@ -304,55 +318,93 @@ install_bundle() {
 # in the QuickStart's launchpad). After we install this repo's `all` package, BOTH the
 # product version and this repo's version of a bundle are Active, and they cross-wire
 # the exported `...models.*` packages -> OSGi ClassCastExceptions (e.g. the Search
-# servlet 500s -> SearchIT shows 0 results). Fix: keep the highest version (this repo's
-# build) and UNINSTALL the rest. Uninstall - not stop - is required: a *stopped* product
-# bundle is reverted to Active by the SDK's Sling installer, whereas an uninstalled one
-# stays gone for the run. Args: <base-url> <symbolic-name>
+# servlet 500s -> SearchIT shows 0 results). Fix: keep exactly this repo's build
+# (matched by the Bundle-Version embedded in the installed `all` package, not by
+# "highest version", which a newer product release would win) and UNINSTALL the rest.
+# Uninstall - not stop - is required: a *stopped* product bundle is reverted to Active
+# by the SDK's Sling installer, whereas an uninstalled one stays gone for the run.
+# Then refresh packages so bundles wired to the removed copy (including the survivor,
+# which imports its own exports) are rewired and restarted, re-registering its Sling
+# models. Args: <base-url> <symbolic-name> <all-package-zip>
 dedupe_bundle() {
-    local base="$1" bsn="$2"
-    local ids=""
+    local base="$1" bsn="$2" zip="$3"
+    local expected ids=""
+    expected=$(bundle_version_in_package "${zip}" "${bsn}")
+    if [[ -z "${expected}" ]]; then
+        echo "Could not find ${bsn} in $(basename "${zip}")" >&2
+        return 1
+    fi
     # The `all` package installs its bundles ASYNChronously, so this repo's version may
     # not be registered the instant the package upload returns. Poll (up to ~2 min) until
-    # a second (duplicate) version shows up, then uninstall the older (product) copies.
+    # it shows up, then uninstall every other copy.
+    local found=false
     for _ in $(seq 1 40); do
-        ids=$(curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/bundles.json" 2>/dev/null \
-            | python3 -c "
-import json, re, sys
-d = json.load(sys.stdin)
-bs = [b for b in d.get('data', []) if b.get('symbolicName') == '${bsn}']
-def ver(b):
-    return [int(x) for x in re.findall(r'\d+', b.get('version', ''))]
-if len(bs) > 1:
-    bs.sort(key=ver)                      # highest version last (= this repo's build)
-    print(' '.join(str(b['id']) for b in bs[:-1]))   # ids of the older product copies
-" 2>/dev/null)
-        [[ -n "${ids}" ]] && break
+        if ids=$(curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/bundles.json" 2>/dev/null \
+            | python3 -c '
+import json, sys
+bsn, expected = sys.argv[1], sys.argv[2]
+bs = [b for b in json.load(sys.stdin).get("data", []) if b.get("symbolicName") == bsn]
+if not any(b.get("version") == expected for b in bs):
+    sys.exit(1)
+print(" ".join(str(b["id"]) for b in bs if b.get("version") != expected))
+' "${bsn}" "${expected}" 2>/dev/null); then
+            found=true
+            break
+        fi
         sleep 3
     done
+    if [[ "${found}" != "true" ]]; then
+        echo "${bsn} ${expected} was not installed at ${base}" >&2
+        return 1
+    fi
     if [[ -z "${ids}" ]]; then
-        log "No duplicate ${bsn} bundle found to remove (only one version present)"
+        log "Only ${bsn} ${expected} is installed; nothing to remove"
         return 0
     fi
     local id
     for id in ${ids}; do
-        log "Uninstalling duplicate product bundle ${bsn} (id ${id})"
-        curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
-            -X POST "${base}/system/console/bundles/${id}" -d action=uninstall >/dev/null || true
+        log "Uninstalling duplicate product bundle ${bsn} (id ${id}); keeping ${expected}"
+        curl -sSf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
+            -X POST "${base}/system/console/bundles/${id}" -d action=uninstall >/dev/null
     done
-    sleep 3
-    # Uninstalling the product copy disrupts Sling Model registration for the surviving
-    # bundle (its models drop out -> "Could not find an adapter factory for ...Search"
-    # -> component 500s). Restart the survivor so its @Model adapter factories re-register.
-    local keep
-    keep=$(curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/bundles.json" 2>/dev/null \
-        | python3 -c "import json,sys; d=json.load(sys.stdin); print(next((str(b['id']) for b in d.get('data',[]) if b.get('symbolicName')=='${bsn}'), ''))" 2>/dev/null)
-    if [[ -n "${keep}" ]]; then
-        log "Restarting ${bsn} (id ${keep}) to re-register its Sling models"
-        curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" -X POST "${base}/system/console/bundles/${keep}" -d action=stop >/dev/null || true
-        sleep 3
-        curl -sf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" -X POST "${base}/system/console/bundles/${keep}" -d action=start >/dev/null || true
-        sleep 6
-    fi
+    log "Refreshing package wiring after removing ${bsn} duplicates"
+    curl -sSf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
+        -X POST "${base}/system/console/bundles" -d action=refreshPackages >/dev/null
+    wait_for_bundles_settled "${base}"
+}
+
+# Print the Bundle-Version of the <symbolic-name> jar embedded in a content package.
+# Args: <zip> <symbolic-name>
+bundle_version_in_package() {
+    python3 - "$1" "$2" <<'PY'
+import io, re, sys, zipfile
+
+def manifest(jar):
+    text = jar.read("META-INF/MANIFEST.MF").decode("utf-8")
+    headers = {}
+    for line in re.sub(r"\r?\n ", "", text).splitlines():
+        if ":" in line:
+            key, value = line.split(":", 1)
+            headers[key.strip()] = value.strip()
+    return headers
+
+def search(archive, bsn):
+    for name in archive.namelist():
+        if name.endswith(".jar"):
+            with zipfile.ZipFile(io.BytesIO(archive.read(name))) as jar:
+                headers = manifest(jar)
+                if headers.get("Bundle-SymbolicName", "").split(";")[0] == bsn:
+                    return headers.get("Bundle-Version")
+        elif name.endswith(".zip"):
+            with zipfile.ZipFile(io.BytesIO(archive.read(name))) as nested:
+                version = search(nested, bsn)
+                if version:
+                    return version
+    return None
+
+with zipfile.ZipFile(sys.argv[1]) as package:
+    print(search(package, sys.argv[2]) or "")
+PY
 }
 
 # Resolve the newest matching built package zip for a module target dir. Any glob
@@ -373,12 +425,13 @@ find_zip() {
 # test content. The `all` module builds both a classic zip (no classifier) and a
 # `-cloud` classified zip; choose the package matching the product.
 provision_packages() {
-    local base="$1"
+    local base="$1" all_zip
     if [[ "${AEM_TYPE}" == "sdk" ]]; then
-        install_package "${base}" "$(find_zip "${REPO_ROOT}/all/target" 'core.wcm.components.all-*-cloud.zip')"
+        all_zip="$(find_zip "${REPO_ROOT}/all/target" 'core.wcm.components.all-*-cloud.zip')"
     else
-        install_package "${base}" "$(find_zip "${REPO_ROOT}/all/target" 'core.wcm.components.all-*.zip' '\-cloud\.zip$')"
+        all_zip="$(find_zip "${REPO_ROOT}/all/target" 'core.wcm.components.all-*.zip' '\-cloud\.zip$')"
     fi
+    install_package "${base}" "${all_zip}"
     install_package "${base}" "$(find_zip "${REPO_ROOT}/testing/it/it.ui.apps/target" 'core.wcm.components.it.ui.apps-*.zip')"
     install_package "${base}" "$(find_zip "${REPO_ROOT}/testing/it/it.ui.config/target" 'core.wcm.components.it.ui.config-*.zip')"
     install_package "${base}" "$(find_zip "${REPO_ROOT}/testing/it/it.ui.content/target" 'core.wcm.components.it.ui.content-*.zip')"
@@ -387,8 +440,8 @@ provision_packages() {
     # (product) copies so only this repo's build remains - otherwise the two versions
     # cross-wire the models packages and components fail with ClassCastExceptions.
     if [[ "${AEM_TYPE}" == "sdk" ]]; then
-        dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.core"
-        dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.extensions.amp"
+        dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.core" "${all_zip}"
+        dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.extensions.amp" "${all_zip}"
     fi
 }
 
@@ -421,11 +474,16 @@ if packages:
     curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" -o "${sp_zip}" "${AEM_BASE_URL}${sp_path}"
     log "Installing ${sp_path} -> ${AEM_PUBLISH_URL}"
     # The service pack restarts bundles while installing, so the upload request
-    # may be cut off; the product version below is the source of truth.
-    curl -sS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" --max-time 1800 \
+    # may be cut off; then the product version below is the source of truth. A
+    # complete response, however, must report success.
+    local response
+    response=$(curl -sS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" --max-time 1800 \
         -F file=@"${sp_zip}" -F name="$(basename "${sp_zip}")" -F force=true -F install=true \
-        "${AEM_PUBLISH_URL}/crx/packmgr/service.jsp" >/dev/null || true
+        "${AEM_PUBLISH_URL}/crx/packmgr/service.jsp" 2>/dev/null || true)
     rm -rf "$(dirname "${sp_zip}")"
+    if [[ "${response}" == *'</crx>'* ]]; then
+        check_packmgr_response "${response}" "$(basename "${sp_path}") on publish"
+    fi
     deadline=$(( SECONDS + 1800 ))
     until [[ "$(product_version "${AEM_PUBLISH_URL}")" == "${author_version}" ]]; do
         if (( SECONDS >= deadline )); then
@@ -542,9 +600,11 @@ run_tests() {
 
 run_selenium() {
     # The test module is built standalone, so it would otherwise resolve
-    # e2e-selenium-utils from ~/.m2 - which may be a stale SNAPSHOT (e.g. CI's
-    # Maven cache is keyed on pom.xml hashes only). Install it from source first.
-    log "Installing e2e-selenium-utils from source"
+    # e2e-selenium-utils (and the parent pom its pom refers to) from ~/.m2, which
+    # may hold a stale SNAPSHOT or none at all (CI's Maven cache excludes this
+    # repo's SNAPSHOTs). Install both from source first.
+    log "Installing the parent pom and e2e-selenium-utils from source"
+    mvn -B -q -N -f "${REPO_ROOT}/parent/pom.xml" install
     mvn -B -q -f "${REPO_ROOT}/testing/it/e2e-selenium-utils/pom.xml" install -DskipTests
 
     log "Running Playwright ITs (AEM ${AEM_TYPE}, local Chrome): ${SEL_IT_TEST:-<all>}"

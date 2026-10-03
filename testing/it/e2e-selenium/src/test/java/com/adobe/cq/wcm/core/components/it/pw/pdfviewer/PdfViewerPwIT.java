@@ -19,6 +19,8 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
 import com.microsoft.playwright.FrameLocator;
@@ -32,6 +34,9 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 @Tag("playwright-group2")
 public class PdfViewerPwIT extends ComponentPwBaseTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PdfViewerPwIT.class);
+    // The embedded PDF viewer occasionally does not render on the first page load in CI.
+    // Each reload is logged so that a real first-render regression stays visible.
     private static final int RENDER_ATTEMPTS = 3;
     private static final int RENDER_TIMEOUT_MS = 45_000;
 
@@ -64,6 +69,10 @@ public class PdfViewerPwIT extends ComponentPwBaseTest {
                 return;
             } catch (AssertionError e) {
                 renderFailure = e;
+                if (attempt + 1 < RENDER_ATTEMPTS) {
+                    LOG.warn("PDF viewer did not render on attempt {}/{}, reloading the page: {}",
+                        attempt + 1, RENDER_ATTEMPTS, e.getMessage());
+                }
             }
         }
         throw renderFailure;
