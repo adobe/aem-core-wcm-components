@@ -48,6 +48,7 @@ import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientExcept
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -361,6 +362,56 @@ class ContentAIClientImplTest {
     }
 
     @Test
+    void listContentSourcesParsesCursorFromResponse() throws Exception {
+        respondWith(200, "{\"items\":[],\"cursor\":\"next-page\"}");
+
+        assertEquals("next-page", client.listContentSources().getCursor());
+    }
+
+    @Test
+    void listContentSourcesOmitsCursorParamOnFirstPage() throws Exception {
+        respondWith(200, "{\"items\":[]}");
+
+        client.listContentSources();
+
+        HttpGet sent = (HttpGet) captureExecutedRequest();
+        assertFalse(sent.getURI().toString().contains("cursor"));
+    }
+
+    @Test
+    void listContentSourcesWithCursorIncludesItAsQueryParam() throws Exception {
+        respondWith(200, "{\"items\":[]}");
+
+        client.listContentSources("page-2-cursor");
+
+        HttpGet sent = (HttpGet) captureExecutedRequest();
+        assertTrue(sent.getURI().toString().endsWith("/content-sources?cursor=page-2-cursor"),
+            "Expected cursor query param, got " + sent.getURI());
+    }
+
+    @Test
+    void listContentSourcesByTypeUsesTypeQueryParam() throws Exception {
+        respondWith(200, "{\"items\":[]}");
+
+        client.listContentSources("AEM_PUBLISH", null);
+
+        HttpGet sent = (HttpGet) captureExecutedRequest();
+        assertTrue(sent.getURI().toString().endsWith("/content-sources?type=AEM_PUBLISH"),
+            "Expected generic endpoint with type query param, got " + sent.getURI());
+    }
+
+    @Test
+    void listContentSourcesByTypeIncludesCursorAsQueryParam() throws Exception {
+        respondWith(200, "{\"items\":[]}");
+
+        client.listContentSources("ACQUISITION", "page-2-cursor");
+
+        HttpGet sent = (HttpGet) captureExecutedRequest();
+        assertTrue(sent.getURI().toString().endsWith("/content-sources?type=ACQUISITION&cursor=page-2-cursor"),
+            "Expected generic endpoint with type and cursor query params, got " + sent.getURI());
+    }
+
+    @Test
     void searchThrowsOnTransportError() throws IOException {
         when(mockHttpClient.execute(any(HttpUriRequest.class))).thenThrow(new IOException("network down"));
 
@@ -437,6 +488,13 @@ class ContentAIClientImplTest {
         ContentAIClientException exception = assertThrows(ContentAIClientException.class,
             () -> envClient.listContentSources());
         assertEquals(0, exception.getStatusCode());
+    }
+
+    @Test
+    void urlEncodeWrapsUnsupportedEncodingExceptionInContentAIClientException() {
+        ContentAIClientException exception = assertThrows(ContentAIClientException.class,
+            () -> ContentAIClientImpl.urlEncode("value", "not-a-real-charset"));
+        assertTrue(exception.getCause() instanceof java.io.UnsupportedEncodingException);
     }
 
     public static void setField(@NotNull final Class<?> clazz,
