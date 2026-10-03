@@ -306,6 +306,21 @@ public abstract class PlaywrightAuthorBaseTest {
             + ".InsertComponentDialog-list coral-selectlist-item[value" + pathMatch + "]");
     }
 
+    /**
+     * Adds a layout-container item through the panel container's children editor and titles it. The new item is
+     * appended asynchronously after the component is picked; filling before it exists would title the previous item
+     * and leave the new, required title empty, so Done would be blocked by validation.
+     */
+    protected void addChildrenEditorItem(String title) {
+        Locator titles = dialog().locator("[data-cmp-hook-childreneditor='itemTitle']");
+        int before = titles.count();
+        dialog().locator("[data-cmp-hook-childreneditor='add']").click();
+        insertableComponent("='/libs/wcm/foundation/components/responsivegrid'").click();
+        assertThat(titles).hasCount(before + 1);
+        titles.last().fill(title);
+        assertThat(titles.last()).hasValue(title);
+    }
+
     /** Clicks Done without waiting for the dialog to close (e.g. when validation keeps it open). */
     protected void clickDone() {
         dialog().locator(DONE_BUTTON).click();

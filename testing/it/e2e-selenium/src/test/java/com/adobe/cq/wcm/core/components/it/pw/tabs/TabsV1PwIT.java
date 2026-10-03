@@ -55,11 +55,8 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
     private void addItems() throws Exception {
         openEditDialog(tabsPath);
         dialog().locator("coral-tab[data-foundation-tracking-event*='items']").click();
-        Locator add = dialog().locator("[data-cmp-hook-childreneditor='add']");
         for (int i = 0; i < 3; i++) {
-            add.click();
-            insertableComponent("='/libs/wcm/foundation/components/responsivegrid'").click();
-            itemInputs().last().fill("item" + i);
+            addChildrenEditorItem("item" + i);
         }
         saveDialog();
     }

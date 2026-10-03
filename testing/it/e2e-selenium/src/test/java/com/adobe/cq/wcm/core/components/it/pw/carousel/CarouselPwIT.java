@@ -54,11 +54,8 @@ public class CarouselPwIT extends ComponentPwBaseTest {
     private void createItems() throws Exception {
         addCarousel();
         openEditDialog(carouselPath);
-        Locator add = dialog().locator("[data-cmp-hook-childreneditor='add']");
         for (int index = 0; index < 3; index++) {
-            add.click();
-            insertableComponent("='/libs/wcm/foundation/components/responsivegrid'").click();
-            dialog().locator("[data-cmp-hook-childreneditor='itemTitle']").last().fill("item" + index);
+            addChildrenEditorItem("item" + index);
         }
         saveDialog();
     }

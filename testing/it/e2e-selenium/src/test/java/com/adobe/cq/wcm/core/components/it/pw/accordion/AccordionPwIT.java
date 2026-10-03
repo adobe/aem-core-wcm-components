@@ -59,11 +59,8 @@ public class AccordionPwIT extends ComponentPwBaseTest {
     private java.util.List<String> addItems(String componentPath, String... titles) {
         openEditDialog(componentPath);
         dialog().locator("coral-tab[data-foundation-tracking-event*='items']").click();
-        Locator add = dialog().locator("[data-cmp-hook-childreneditor='add']");
         for (String title : titles) {
-            add.click();
-            insertableComponent("='/libs/wcm/foundation/components/responsivegrid'").click();
-            dialog().locator("[data-cmp-hook-childreneditor='itemTitle']").last().fill(title);
+            addChildrenEditorItem(title);
         }
         saveDialog();
         return itemNames(componentPath);

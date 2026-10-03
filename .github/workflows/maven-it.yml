@@ -65,8 +65,10 @@ permissions:
 
 env:
   REGISTRY: docker-adobe-cif-release.dr-uw2.adobeitc.com
-  # Bump to force a fresh cache lineage (Maven + Docker image) without a code change.
+  # Bump to force a fresh cache lineage without a code change: CACHE_VERSION for the
+  # Docker image archives, M2_CACHE_VERSION for the Maven repository.
   CACHE_VERSION: '1'
+  M2_CACHE_VERSION: '2'
 
 jobs:
   # --------------------------------------------------------------------------
@@ -94,14 +96,25 @@ jobs:
         uses: actions/cache/restore@v5
         with:
           path: ~/.m2/repository
-          key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
+          key: it-aem-m2-${{ env.M2_CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            it-aem-m2-${{ env.CACHE_VERSION }}-
+            it-aem-m2-${{ env.M2_CACHE_VERSION }}-
 
       # Full reactor build once: produces the deployable zips uploaded below and
       # fills ~/.m2 with the third-party dependencies the test jobs need.
       - name: Build packages
         run: mvn -B -U clean install -Pcloud,adobe-public -DskipTests -s ./.github/workflows/settings.xml
+
+      # The IT runs use plugins outside the reactor build (failsafe + its JUnit
+      # providers from the test-all profiles). Resolve them here, with a filter that
+      # matches no test, so the test jobs never download them from Maven Central.
+      - name: Prime IT plugins in the Maven cache
+        if: ${{ steps.m2-cache.outputs.cache-hit != 'true' }}
+        run: |
+          for module in http e2e-selenium; do
+            mvn -B -q -f "testing/it/$module/pom.xml" verify -Ptest-all -s ./.github/workflows/settings.xml \
+              -Dit.test=NoSuchPrimeIT -Dfailsafe.failIfNoSpecifiedTests=false -DfailIfNoTests=false
+          done
 
       # The key is immutable, so only save when the restore missed it. This repo's
       # own SNAPSHOTs are left out: the cache is only refreshed when a pom changes,
@@ -116,7 +129,7 @@ jobs:
         uses: actions/cache/save@v5
         with:
           path: ~/.m2/repository
-          key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
+          key: it-aem-m2-${{ env.M2_CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
 
       - name: Upload deployable packages
         uses: actions/upload-artifact@v7
@@ -217,9 +230,9 @@ jobs:
         uses: actions/cache/restore@v5
         with:
           path: ~/.m2/repository
-          key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
+          key: it-aem-m2-${{ env.M2_CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            it-aem-m2-${{ env.CACHE_VERSION }}-
+            it-aem-m2-${{ env.M2_CACHE_VERSION }}-
       - name: Download deployable packages
         uses: actions/download-artifact@v7
         with:
@@ -325,9 +338,9 @@ jobs:
         uses: actions/cache/restore@v5
         with:
           path: ~/.m2/repository
-          key: it-aem-m2-${{ env.CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
+          key: it-aem-m2-${{ env.M2_CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            it-aem-m2-${{ env.CACHE_VERSION }}-
+            it-aem-m2-${{ env.M2_CACHE_VERSION }}-
       - name: Download deployable packages
         uses: actions/download-artifact@v7
         with:
