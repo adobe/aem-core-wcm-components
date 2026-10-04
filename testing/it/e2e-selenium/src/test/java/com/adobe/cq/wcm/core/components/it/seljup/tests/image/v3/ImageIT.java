@@ -226,6 +226,26 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     }
 
     /**
+     * Test: set page featured image from page properties.
+     */
+    @Tag("IgnoreOn65")
+    @Test
+    @DisplayName("Test: set page featured image from page properties")
+    public void testSetPageFeaturedImageInPageProperties() throws InterruptedException, ClientException {
+        imageTests.testSetPageFeaturedImageInPageProperties(false);
+    }
+
+    /**
+     * Test: set page featured image from page properties.
+     */
+    @Tag("IgnoreOnSDK")
+    @Test
+    @DisplayName("Test (6.5): set page featured image from page properties")
+    public void testSetPageFeaturedImageInPageProperties65() throws InterruptedException, ClientException {
+        imageTests.testSetPageFeaturedImageInPageProperties(true);
+    }
+
+    /**
      * Test: set link with target on image
      */
     @Test
@@ -281,6 +301,7 @@ public class ImageIT extends com.adobe.cq.wcm.core.components.it.seljup.tests.im
     }
 
     @Tag("IgnoreOnSDK")
+    @Tag("IgnoreOn65")
     @Test
     @DisplayName("Test : NextGen DM image smart crop : small crop.")
     public void testSmartCropOnNGDMImageV3_SmallCrop() throws TimeoutException, InterruptedException, ClientException {
