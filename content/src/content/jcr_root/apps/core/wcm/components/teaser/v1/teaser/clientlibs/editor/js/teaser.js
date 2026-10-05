@@ -63,7 +63,7 @@
 
     // Initialize all fields once both the dialog and the description textfield RTE have loaded
     function init(e, $dialog, $dialogContent, dialogContent) {
-        titleTuple = new CheckboxTextfieldTuple(dialogContent, titleCheckboxSelector, titleTextfieldSelector, false);
+        titleTuple = new CheckboxTextfieldTuple(dialogContent, titleCheckboxSelector, titleTextfieldSelector, false, true);
         descriptionTuple = new CheckboxTextfieldTuple(dialogContent, descriptionCheckboxSelector, descriptionTextfieldSelector, true);
         retrievePageInfo($dialogContent);
 
