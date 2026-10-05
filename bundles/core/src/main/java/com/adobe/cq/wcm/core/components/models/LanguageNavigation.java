@@ -60,4 +60,13 @@ public interface LanguageNavigation extends Component {
         return null;
     }
 
+    /**
+     * Indicates whether the language navigation use the disclosure pattern.
+     *
+     * @return true if the language navigation use the disclosure pattern; false otherwise
+     */
+    default boolean isDropdown() {
+        return false;
+    }
+
 }
