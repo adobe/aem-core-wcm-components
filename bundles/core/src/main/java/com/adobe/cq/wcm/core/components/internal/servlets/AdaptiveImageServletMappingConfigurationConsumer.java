@@ -71,7 +71,7 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
 
     @Reference
     private ConfigurationAdmin configurationAdmin;
-    
+
     @Reference
     AdaptiveImageServletMetrics metrics;
 
@@ -171,7 +171,9 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
                                         assetStore,
                                         metrics,
                                         oldAISDefaultResizeWidth > 0 ? oldAISDefaultResizeWidth : config.getDefaultResizeWidth(),
-                                        config.getMaxSize()),
+                                        config.getMaxSize(),
+                                        config.getNonTransformableImageTypes(),
+                                        config.getForcedTransformationImageTypes()),
                                 properties
                         )
                 );
