@@ -90,6 +90,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private String srcSet = StringUtils.EMPTY;
     private Map<String, String> srcSetWithMimeType = Collections.EMPTY_MAP;
     private String sizes;
+    private String fetchPriority;
 
     private Dimension dimension;
 
@@ -109,6 +110,16 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             imageLinkHidden = properties.get(PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
             sizes = String.join((", "), currentStyle.get(PN_DESIGN_SIZES, new String[0]));
             disableLazyLoading = properties.get(PN_DESIGN_LAZY_LOADING_ENABLED, currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false));
+
+            boolean allowOverride = currentStyle.get(PN_DESIGN_ALLOW_FETCH_PRIORITY_OVERRIDE, true);
+            String componentFetchPriority = properties.get(PN_FETCH_PRIORITY, String.class);
+            String policyFetchPriority = currentStyle.get(PN_DESIGN_FETCH_PRIORITY, String.class);
+
+            if (allowOverride && StringUtils.isNotEmpty(componentFetchPriority)) {
+                fetchPriority = componentFetchPriority;
+            } else if (StringUtils.isNotEmpty(policyFetchPriority)) {
+                fetchPriority = policyFetchPriority;
+            }
         }
     }
 
@@ -255,6 +266,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return !disableLazyLoading;
     }
 
+    @Override
+    @Nullable
+    public String getFetchPriority() {
+        return fetchPriority;
+    }
 
     private Dimension getOriginalDimension() {
         if (this.dimension == null) {
