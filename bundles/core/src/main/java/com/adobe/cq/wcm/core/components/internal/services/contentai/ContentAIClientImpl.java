@@ -201,7 +201,7 @@ public class ContentAIClientImpl implements ContentAIClient {
         ObjectNode fulltextQuery = queries.addObject();
         fulltextQuery.put("type", "fulltext");
         fulltextQuery.put("text", query);
-        fulltextQuery.putObject("options").put("boost", 1.5);
+        fulltextQuery.putObject("options").put("boost", fulltextBoost(query));
 
         ObjectNode pagination = body.putObject("queryOptions").putObject("pagination");
         pagination.put("limit", limit);
@@ -237,6 +237,21 @@ public class ContentAIClientImpl implements ContentAIClient {
         } catch (IOException e) {
             throw new ContentAIClientException("Failed to parse Content AI gensearch response", e);
         }
+    }
+
+    /**
+     * Deboosts the full-text query as the number of tokens in the query text grows, since longer/multi-word
+     * queries are generally better served by the semantic vector match (kept at its default boost of 1) than by
+     * literal term matching. Single-token queries keep full-text at full weight, since vector search alone is
+     * less reliable for very short queries.
+     *
+     * @param query the validated, non-blank user query
+     * @return the full-text query's boost factor
+     */
+    // TODO: make configurable (e.g. via ContentAIConfig) once we have data on the right divisor for production traffic
+    private static double fulltextBoost(String query) {
+        int tokens = query.trim().split("\\s+").length;
+        return (tokens > 1) ? 1.0d / (5 * tokens) : 1.0d;
     }
 
     private JsonNode executeGet(String path) throws ContentAIClientException {
