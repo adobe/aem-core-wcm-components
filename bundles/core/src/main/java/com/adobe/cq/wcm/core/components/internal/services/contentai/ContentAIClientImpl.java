@@ -203,7 +203,16 @@ public class ContentAIClientImpl implements ContentAIClient {
         fulltextQuery.put("text", query);
         fulltextQuery.putObject("options").put("boost", fulltextBoost(query));
 
-        ObjectNode pagination = body.putObject("queryOptions").putObject("pagination");
+        ObjectNode queryOptions = body.putObject("queryOptions");
+        // Trims the response payload to only the fields the results list and Sources chips actually read
+        // (see resolveMetadataUrl, _generateSourceItems etc. in contentaisearch.js) - drops source-noise fields
+        // like page_metadata/canonical_url/content-page-ref/processing_fingerprint that are never rendered.
+        // Field paths are relative to each result's "data" object, e.g. "metadata.url" -> data.metadata.url.
+        ArrayNode resultFieldIncludes = queryOptions.putObject("resultFields").putArray("includes");
+        resultFieldIncludes.add("text").add("source")
+            .add("metadata.url").add("metadata.source").add("metadata.title")
+            .add("metadata.description").add("metadata.image");
+        ObjectNode pagination = queryOptions.putObject("pagination");
         pagination.put("limit", limit);
         if (StringUtils.isNotBlank(cursor)) {
             pagination.put("cursor", cursor);
