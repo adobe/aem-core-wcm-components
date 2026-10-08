@@ -201,7 +201,14 @@ public class ContentAIClientImpl implements ContentAIClient {
         ObjectNode fulltextQuery = queries.addObject();
         fulltextQuery.put("type", "fulltext");
         fulltextQuery.put("text", query);
-        fulltextQuery.putObject("options").put("boost", fulltextBoost(query));
+        ObjectNode fulltextOptions = fulltextQuery.putObject("options");
+        fulltextOptions.put("boost", fulltextBoost(query));
+        // AND requires every query term to be present (vs. OR, which matches on any term) - trades recall for
+        // precision now that boost already deboosts full-text's influence for longer queries.
+        fulltextOptions.put("operator", "AND");
+        // COMBINED_FIELDS scores all target fields as one unified blob of text, avoiding the scoring skew
+        // INDEPENDENT_FIELDS can produce when short fields (e.g. title) are scored separately from long ones (body).
+        fulltextOptions.put("matchStrategy", "COMBINED_FIELDS");
 
         ObjectNode queryOptions = body.putObject("queryOptions");
         // Trims the response payload to only the fields the results list and Sources chips actually read
