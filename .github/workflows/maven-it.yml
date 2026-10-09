@@ -33,7 +33,7 @@
 # runs are limited to the canonical repo and to pull requests from its own branches
 # (pull requests from forks are skipped).
 #
-# Runs on GitHub-hosted ubuntu-latest runners (native amd64, Docker and Maven
+# Runs on GitHub-hosted ubuntu-26.04 runners (native amd64, Docker and Maven
 # preinstalled). The browser jobs have no GUI session, so they start their own
 # virtual display (Xvfb + fluxbox) for headed Chrome - see run-it.sh's
 # headless-display comment for how this differs from a local macOS dev run.
@@ -77,7 +77,7 @@ jobs:
   prep:
     name: prep (build + prime caches)
     if: ${{ github.event_name == 'workflow_dispatch' || (github.repository == 'adobe/aem-core-wcm-components' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)) }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 30
     outputs:
       browser_matrix: ${{ steps.genmatrix.outputs.matrix }}
@@ -155,7 +155,7 @@ jobs:
   image-cache:
     name: Cache AEM ${{ matrix.name }} image
     needs: prep
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 45
     strategy:
       fail-fast: false
@@ -209,7 +209,7 @@ jobs:
     permissions:
       contents: read
       checks: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     # Native amd64 GitHub-hosted runner: author+publish boot + the full http
     # suite ran in ~9 minutes in testing, so 90m is generous headroom.
     timeout-minutes: 90
@@ -300,7 +300,7 @@ jobs:
     permissions:
       contents: read
       checks: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     # Native amd64 GitHub-hosted runner: groups take ~20-30 min including AEM
     # boot and provisioning, so 60m leaves headroom without hiding a hang.
     timeout-minutes: 60
@@ -328,7 +328,7 @@ jobs:
           distribution: temurin
           java-version: '11'
 
-      # ubuntu-latest has no GUI session, so give the host-local (headed) Chrome a
+      # ubuntu-26.04 has no GUI session, so give the host-local (headed) Chrome a
       # virtual display: Xvfb (framebuffer) + fluxbox (window manager, so Chrome
       # windows get normal focus and sizing).
       - name: Set up virtual display (Xvfb + fluxbox)
@@ -407,7 +407,7 @@ jobs:
     name: Test results summary
     needs: [integration-test, browser-test]
     if: ${{ always() && (github.event_name == 'workflow_dispatch' || (github.repository == 'adobe/aem-core-wcm-components' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository))) }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
