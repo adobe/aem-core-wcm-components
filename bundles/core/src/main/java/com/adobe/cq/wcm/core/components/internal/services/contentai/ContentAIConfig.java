@@ -43,7 +43,7 @@ public @interface ContentAIConfig {
             "local development, where the AEM_PROGRAM_ID+AEM_ENV_ID (or AEM_SERVICE) environment variables are " +
             "absent. Leave empty on AEM as a Cloud Service: the base URL is derived from the running environment. " +
             "Example: " +
-            "https://publish-p12345-e123456.adobeaemcloud.com/adobe/experimental/aemcontentai-expires-20261231/contentAI"
+            "https://publish-p12345-e123456.adobeaemcloud.com/adobe/contentAI"
     )
     String baseUrlOverride() default "";
 
