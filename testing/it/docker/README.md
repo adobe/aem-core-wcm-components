@@ -1,8 +1,8 @@
 # Integration tests against a Dockerized AEM
 
 This runs the [`testing/it/http`](../http) integration tests and the
-[`testing/it/e2e-selenium`](../e2e-selenium) Playwright browser ITs (see
-[Browser UI suite](#browser-ui-suite-with_seleniumtrue)) against AEM instances
+[`testing/it/e2e-testing`](../e2e-testing) Playwright browser ITs (see
+[Browser UI suite](#browser-ui-suite-with_e2etrue)) against AEM instances
 started from a Docker image (cloud-ready SDK, 6.5 or 6.6 LTS), so you can run
 them locally the same way CI does. The orchestration lives in [`run-it.sh`](run-it.sh)
 and is shared by the [`Integration Tests (AEM)`](../../../.github/workflows/maven-it.yml)
@@ -123,21 +123,20 @@ host (Linux or Mac) it runs natively.
   happen on 6.5/LTS or in real deployments. Keep it in mind when triaging
   SDK-only editor flakiness.
 
-## Browser UI suite (`WITH_SELENIUM=true`)
+## Browser UI suite (`WITH_E2E=true`)
 
-Runs the `testing/it/e2e-selenium` suite (Playwright tests; the module keeps its
-historical name) with a **local** Chrome on the host, which reaches
+Runs the `testing/it/e2e-testing` suite (Playwright tests) with a **local** Chrome on the host, which reaches
 AEM at the published `localhost:4502` — no browser-container networking. The
-module's default Chrome-in-Docker (Selenoid) mode is not used because the
-e2e-selenium pom pins the author URL to `localhost:4502`, which a browser in a
+browser runs on the host because the
+e2e-testing pom pins the author URL to `localhost:4502`, which a browser in a
 separate container cannot reach.
 
 ```bash
 # Full suite (author instance)
-WITH_SELENIUM=true bash testing/it/docker/run-it.sh
+WITH_E2E=true bash testing/it/docker/run-it.sh
 
 # A single class / method
-WITH_SELENIUM=true SEL_IT_TEST='com.adobe.cq.wcm.core.components.it.pw.list.ListV2PwIT' \
+WITH_E2E=true E2E_IT_TEST='com.adobe.cq.wcm.core.components.it.pw.list.ListV2PwIT' \
   bash testing/it/docker/run-it.sh
 ```
 
@@ -154,21 +153,21 @@ WITH_SELENIUM=true SEL_IT_TEST='com.adobe.cq.wcm.core.components.it.pw.list.List
 - **Every IT class must have a `playwright-groupN` tag** (add new ones to the
   fastest group, currently `playwright-group2`). Untagged ITs fail the build
   (`ItGroupTagTest`, surefire) and the CI `prep` job (`gen-browser-matrix.sh`).
-- Knobs: `SEL_BROWSER` (default `chrome`), `SEL_IT_TEST` (class selection),
-  `SEL_GROUPS` (JUnit tag include, e.g. `playwright-group1`), `SEL_EXCLUDED_GROUPS` (default
+- Knobs: `E2E_IT_TEST` (class selection),
+  `E2E_GROUPS` (JUnit tag include, e.g. `playwright-group1`), `E2E_EXCLUDED_GROUPS` (default
   `failing,nested,IgnoreOnSDK` — the last mirrors the pipeline's cloud/SDK skip).
 
 To run a single group locally against a provisioned AEM instance:
 
 ```bash
-WITH_SELENIUM=true SEL_GROUPS=playwright-group1 SEL_RERUN=0 bash testing/it/docker/run-it.sh
+WITH_E2E=true E2E_GROUPS=playwright-group1 E2E_RERUN=0 bash testing/it/docker/run-it.sh
 ```
 
 ## Roadmap
 
 1. ✅ Author-only http ITs, cloud-ready image.
 2. ✅ Publish instance (`:4503`) + full `*IT.java` http suite (`WITH_PUBLISH=true`).
-3. ✅ Browser e2e suite (Playwright) (`testing/it/e2e-selenium`, `WITH_SELENIUM=true`).
+3. ✅ Browser e2e suite (Playwright) (`testing/it/e2e-testing`, `WITH_E2E=true`).
 4. ✅ Matrix across AEM SDK, classic 6.5, and LTS.
 
 ## Cross-version validation
@@ -190,7 +189,7 @@ quickstart jar. With `WITH_PUBLISH=true`, `run-it.sh` installs the author's
 `aem-service-pkg` on publish whenever their product versions differ.
 The AEM JVM comes from the image; the host build/test JVM remains JDK 11.
 Cloud-only bundle deduplication is not applied to on-prem instances.
-Explicit empty `IT_EXCLUDED_GROUPS=""` or `SEL_EXCLUDED_GROUPS=""` overrides clear exclusions.
+Explicit empty `IT_EXCLUDED_GROUPS=""` or `E2E_EXCLUDED_GROUPS=""` overrides clear exclusions.
 
 Local examples (build packages first as shown above):
 
@@ -201,7 +200,7 @@ AEM_IMAGE=docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem:6.5.24.0-ope
 
 # LTS Playwright group2
 AEM_IMAGE=docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-lts:6.6.2-openjdk21 \
-  WITH_SELENIUM=true SEL_GROUPS=playwright-group2 SEL_RERUN=0 \
+  WITH_E2E=true E2E_GROUPS=playwright-group2 E2E_RERUN=0 \
   bash testing/it/docker/run-it.sh
 
 # Product selection, package/exclusion routing, URL and mismatch guard checks (no AEM needed)

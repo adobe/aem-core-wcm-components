@@ -68,15 +68,15 @@ fi
 case "${AEM_TYPE}" in
     sdk)
         DEFAULT_IT_EXCLUDED_GROUPS="com.adobe.cq.wcm.core.components.it.http.IgnoreOnCloud"
-        DEFAULT_SEL_EXCLUDED_GROUPS="failing,nested,IgnoreOnSDK"
+        DEFAULT_E2E_EXCLUDED_GROUPS="failing,nested,IgnoreOnSDK"
         ;;
     65)
         DEFAULT_IT_EXCLUDED_GROUPS="com.adobe.cq.wcm.core.components.it.http.IgnoreOn65"
-        DEFAULT_SEL_EXCLUDED_GROUPS="failing,nested,IgnoreOn65"
+        DEFAULT_E2E_EXCLUDED_GROUPS="failing,nested,IgnoreOn65"
         ;;
     lts)
         DEFAULT_IT_EXCLUDED_GROUPS="com.adobe.cq.wcm.core.components.it.http.IgnoreOnLTS"
-        DEFAULT_SEL_EXCLUDED_GROUPS="failing,nested,IgnoreOnLTS"
+        DEFAULT_E2E_EXCLUDED_GROUPS="failing,nested,IgnoreOnLTS"
         ;;
     *) echo "Unsupported AEM_TYPE: ${AEM_TYPE} (expected sdk, 65, or lts)" >&2; exit 1 ;;
 esac
@@ -116,33 +116,32 @@ fi
 # Product-specific JUnit categories; an explicit empty override runs all categories.
 IT_EXCLUDED_GROUPS="${IT_EXCLUDED_GROUPS-${DEFAULT_IT_EXCLUDED_GROUPS}}"
 
-# --- Selenium (e2e-selenium) mode ---
-# When true, run the Selenium UI suite (testing/it/e2e-selenium) instead of the
+# --- Browser e2e (e2e-testing) mode ---
+# When true, run the Playwright UI suite (testing/it/e2e-testing) instead of the
 # http ITs, driving a LOCAL browser on the host. The browser runs where Maven
-# runs, so it reaches AEM at the published localhost port (the e2e-selenium pom
+# runs, so it reaches AEM at the published localhost port (the e2e-testing pom
 # hard-codes the author URL to localhost:4502) - no browser-container networking.
-WITH_SELENIUM="${WITH_SELENIUM:-false}"
-SEL_BROWSER="${SEL_BROWSER:-chrome}"
+WITH_E2E="${WITH_E2E:-false}"
 # JUnit5 tag include (e.g. group1) so CI can shard the suite across parallel jobs.
-SEL_GROUPS="${SEL_GROUPS:-}"
+E2E_GROUPS="${E2E_GROUPS:-}"
 # JUnit5 tag excludes. Keep the pom's failing,nested and add IgnoreOnSDK for the
 # cloud(-ready) target (mirrors the pipeline; the module tags cloud-unsupported
 # UI tests with @Tag("IgnoreOnSDK")).
-SEL_EXCLUDED_GROUPS="${SEL_EXCLUDED_GROUPS-${DEFAULT_SEL_EXCLUDED_GROUPS}}"
-# Re-run failing Selenium tests up to N times before marking them failed. UI tests
+E2E_EXCLUDED_GROUPS="${E2E_EXCLUDED_GROUPS-${DEFAULT_E2E_EXCLUDED_GROUPS}}"
+# Re-run failing browser tests up to N times before marking them failed. UI tests
 # are prone to transient timing flakiness (and search tests can miss the async Oak
 # index on the first attempt); a couple of reruns absorb that. 0 disables.
-SEL_RERUN="${SEL_RERUN:-2}"
+E2E_RERUN="${E2E_RERUN:-2}"
 # Failsafe class selection (comma-separated FQNs). Fall back to a single smoke
 # class ONLY when neither an explicit selection nor a tag group is given. Do NOT
-# use ${SEL_IT_TEST:-<class>} here: an empty SEL_IT_TEST alongside SEL_GROUPS
+# use ${E2E_IT_TEST:-<class>} here: an empty E2E_IT_TEST alongside E2E_GROUPS
 # (the CI group-shard case) must stay empty so the WHOLE group runs - a :- default
 # would wrongly intersect the group with the single smoke class (running 0 tests
 # for any group that doesn't contain it).
-if [[ -z "${SEL_IT_TEST:-}" && -z "${SEL_GROUPS}" ]]; then
-    SEL_IT_TEST="com.adobe.cq.wcm.core.components.it.pw.list.ListV2PwIT"
+if [[ -z "${E2E_IT_TEST:-}" && -z "${E2E_GROUPS}" ]]; then
+    E2E_IT_TEST="com.adobe.cq.wcm.core.components.it.pw.list.ListV2PwIT"
 fi
-SEL_IT_TEST="${SEL_IT_TEST:-}"
+E2E_IT_TEST="${E2E_IT_TEST:-}"
 
 # Max seconds to wait for an instance to answer HTTP before giving up.
 AEM_STARTUP_TIMEOUT="${AEM_STARTUP_TIMEOUT:-600}"
@@ -598,36 +597,32 @@ run_tests() {
     mvn "${args[@]}"
 }
 
-run_selenium() {
-    # The test module is built standalone, so it would otherwise resolve
-    # e2e-selenium-utils (and the parent pom its pom refers to) from ~/.m2, which
-    # may hold a stale SNAPSHOT or none at all (CI's Maven cache excludes this
-    # repo's SNAPSHOTs). Install both from source first.
-    log "Installing the parent pom and e2e-selenium-utils from source"
+run_e2e() {
+    # The test module is built standalone, so it would otherwise resolve the
+    # parent pom from ~/.m2, which may hold a stale SNAPSHOT or none at all
+    # (CI's Maven cache excludes this repo's SNAPSHOTs). Install it from source first.
+    log "Installing the parent pom from source"
     mvn -B -q -N -f "${REPO_ROOT}/parent/pom.xml" install
-    mvn -B -q -f "${REPO_ROOT}/testing/it/e2e-selenium-utils/pom.xml" install -DskipTests
 
-    log "Running Playwright ITs (AEM ${AEM_TYPE}, local Chrome): ${SEL_IT_TEST:-<all>}"
-    # -Dsel.jup.default.browser selects a LOCAL browser (vs the module's default
-    # Chrome-in-Docker). The pom's test-all profile pins the author URL to
-    # localhost:4502, which the host-local browser can reach directly.
+    log "Running Playwright ITs (AEM ${AEM_TYPE}, local Chrome): ${E2E_IT_TEST:-<all>}"
+    # The pom's test-all profile pins the author URL to localhost:4502, which the
+    # host-local browser can reach directly.
     local -a args=(
-        -B -f "${REPO_ROOT}/testing/it/e2e-selenium/pom.xml" verify -Ptest-all
-        -Dsel.jup.default.browser="${SEL_BROWSER}"
+        -B -f "${REPO_ROOT}/testing/it/e2e-testing/pom.xml" verify -Ptest-all
         -Dsling.it.instance.url.1="${AEM_BASE_URL}"
         -Dsling.it.instance.adminUser.1="${AEM_ADMIN_USER}"
         -Dsling.it.instance.adminPassword.1="${AEM_ADMIN_PASSWORD}"
         -Dgranite.it.author.url="${AEM_BASE_URL}"
     )
-    if [[ -n "${SEL_IT_TEST}" ]]; then
-        args+=(-Dit.test="${SEL_IT_TEST}")
+    if [[ -n "${E2E_IT_TEST}" ]]; then
+        args+=(-Dit.test="${E2E_IT_TEST}")
     fi
-    if [[ -n "${SEL_GROUPS}" ]]; then
-        args+=(-Dgroups="${SEL_GROUPS}")
+    if [[ -n "${E2E_GROUPS}" ]]; then
+        args+=(-Dgroups="${E2E_GROUPS}")
     fi
-    args+=(-DexcludedGroups="${SEL_EXCLUDED_GROUPS}")
-    if [[ "${SEL_RERUN}" != "0" ]]; then
-        args+=(-Dfailsafe.rerunFailingTestsCount="${SEL_RERUN}")
+    args+=(-DexcludedGroups="${E2E_EXCLUDED_GROUPS}")
+    if [[ "${E2E_RERUN}" != "0" ]]; then
+        args+=(-Dfailsafe.rerunFailingTestsCount="${E2E_RERUN}")
     fi
     # Headless display: the CI workflow (GitHub-hosted ubuntu-latest, no GUI
     # session) already starts Xvfb + fluxbox and exports DISPLAY before this
@@ -653,8 +648,8 @@ main() {
         verify_aem_type "${AEM_PUBLISH_URL}"
     fi
     provision
-    if [[ "${WITH_SELENIUM}" == "true" ]]; then
-        run_selenium
+    if [[ "${WITH_E2E}" == "true" ]]; then
+        run_e2e
     else
         run_tests
     fi

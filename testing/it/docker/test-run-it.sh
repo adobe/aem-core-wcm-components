@@ -16,7 +16,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Exercise product configuration and orchestration without Docker or live AEM.
 for type in sdk 65 lts; do
     (
-        unset AEM_TYPE IT_EXCLUDED_GROUPS SEL_EXCLUDED_GROUPS
+        unset AEM_TYPE IT_EXCLUDED_GROUPS E2E_EXCLUDED_GROUPS
         case "${type}" in
             sdk) export AEM_IMAGE="registry/circleci-aem-cloudready:test" ;;
             65) export AEM_IMAGE="registry/circleci-aem:test" ;;
@@ -55,22 +55,22 @@ for type in sdk 65 lts; do
         packages=$(provision_packages "${AEM_BASE_URL}")
         if [[ "${type}" == sdk ]]; then
             [[ "${packages}" == *"all-*-cloud.zip"* && "${packages}" == *"dedupe "* ]]
-            [[ "${IT_EXCLUDED_GROUPS}" == *IgnoreOnCloud && "${SEL_EXCLUDED_GROUPS}" == *IgnoreOnSDK ]]
+            [[ "${IT_EXCLUDED_GROUPS}" == *IgnoreOnCloud && "${E2E_EXCLUDED_GROUPS}" == *IgnoreOnSDK ]]
         else
             [[ "${packages}" == *"all-*.zip"* && "${packages}" != *"dedupe "* ]]
-            [[ "${SEL_EXCLUDED_GROUPS}" != *IgnoreOnSDK* && "${IT_EXCLUDED_GROUPS}" != *IgnoreOnCloud* ]]
-            [[ "${SEL_EXCLUDED_GROUPS}" != *IgnoreOn64* && "${IT_EXCLUDED_GROUPS}" != *IgnoreOn64* ]]
+            [[ "${E2E_EXCLUDED_GROUPS}" != *IgnoreOnSDK* && "${IT_EXCLUDED_GROUPS}" != *IgnoreOnCloud* ]]
+            [[ "${E2E_EXCLUDED_GROUPS}" != *IgnoreOn64* && "${IT_EXCLUDED_GROUPS}" != *IgnoreOn64* ]]
             if [[ "${type}" == 65 ]]; then
-                [[ "${SEL_EXCLUDED_GROUPS}" == *IgnoreOn65* ]]
+                [[ "${E2E_EXCLUDED_GROUPS}" == *IgnoreOn65* ]]
             else
-                [[ "${SEL_EXCLUDED_GROUPS}" == "failing,nested,IgnoreOnLTS" && "${IT_EXCLUDED_GROUPS}" == *IgnoreOnLTS ]]
+                [[ "${E2E_EXCLUDED_GROUPS}" == "failing,nested,IgnoreOnLTS" && "${IT_EXCLUDED_GROUPS}" == *IgnoreOnLTS ]]
             fi
         fi
         mvn() { printf '%s\n' "$*"; }
         export DISPLAY=:test
-        browser_args=$(run_selenium)
+        browser_args=$(run_e2e)
         [[ "${browser_args}" == *"-Dsling.it.instance.url.1=http://localhost:4504"* ]]
-        [[ "${browser_args}" == *"-DexcludedGroups=${SEL_EXCLUDED_GROUPS}"* ]]
+        [[ "${browser_args}" == *"-DexcludedGroups=${E2E_EXCLUDED_GROUPS}"* ]]
         WITH_PUBLISH=true
         http_args=$(run_tests)
         [[ "${http_args}" == *"-Dsling.it.instances=2"* ]]
@@ -81,9 +81,9 @@ for type in sdk 65 lts; do
 done
 
 (
-    export AEM_TYPE=65 IT_EXCLUDED_GROUPS="" SEL_EXCLUDED_GROUPS=""
+    export AEM_TYPE=65 IT_EXCLUDED_GROUPS="" E2E_EXCLUDED_GROUPS=""
     source "${SCRIPT_DIR}/run-it.sh"
-    [[ -z "${IT_EXCLUDED_GROUPS}" && -z "${SEL_EXCLUDED_GROUPS}" ]]
+    [[ -z "${IT_EXCLUDED_GROUPS}" && -z "${E2E_EXCLUDED_GROUPS}" ]]
 )
 echo 'Passed explicit empty exclusion overrides.'
 

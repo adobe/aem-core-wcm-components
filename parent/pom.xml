@@ -65,9 +65,6 @@
         <byte-buddy.version>1.14.11</byte-buddy.version>
         <maven.compiler.source>${aem.java.version}</maven.compiler.source>
         <maven.compiler.target>${aem.java.version}</maven.compiler.target>
-        <aem.selenium.base.it.version>0.2.48</aem.selenium.base.it.version>
-        <selenide.version>6.19.1</selenide.version>
-        <selenium.version>4.13.0</selenium.version>
     </properties>
 
     <!-- ======================================================================= -->

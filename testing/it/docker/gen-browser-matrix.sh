@@ -23,7 +23,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-SRC="${REPO_ROOT}/testing/it/e2e-selenium/src/test/java"
+SRC="${REPO_ROOT}/testing/it/e2e-testing/src/test/java"
 TAG_RE='@Tag\("playwright-group[0-9]+"\)'
 
 ungrouped=()
@@ -39,7 +39,7 @@ fi
 
 entries=()
 while IFS= read -r group; do
-    entries+=("{\"name\":\"${group}-playwright\",\"group\":\"${group}\",\"engine\":\"Playwright\",\"sel_groups\":\"playwright-${group}\",\"sel_it_test\":\"\"}")
+    entries+=("{\"name\":\"${group}-playwright\",\"group\":\"${group}\",\"engine\":\"Playwright\",\"e2e_groups\":\"playwright-${group}\",\"e2e_it_test\":\"\"}")
 done < <(grep -rhoE "${TAG_RE}" "${SRC}" | grep -oE 'group[0-9]+' | sort -u -V)
 
 printf '{"include":[%s]}\n' "$(IFS=,; echo "${entries[*]}")"

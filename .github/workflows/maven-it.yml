@@ -14,7 +14,7 @@
 # limitations under the License.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Runs the testing/it/http and testing/it/e2e-selenium ITs against a Dockerized
+# Runs the testing/it/http and testing/it/e2e-testing ITs against a Dockerized
 # AEM, on every push to main, on every pull request targeting main, and on demand
 # (workflow_dispatch). All container + provisioning + failsafe orchestration lives in
 # testing/it/docker/run-it.sh so this workflow and the local dev flow share it.
@@ -111,7 +111,7 @@ jobs:
       - name: Prime IT plugins in the Maven cache
         if: ${{ steps.m2-cache.outputs.cache-hit != 'true' }}
         run: |
-          for module in http e2e-selenium; do
+          for module in http e2e-testing; do
             mvn -B -q -f "testing/it/$module/pom.xml" verify -Ptest-all -s ./.github/workflows/settings.xml \
               -Dit.test=NoSuchPrimeIT -Dfailsafe.failIfNoSpecifiedTests=false -DfailIfNoTests=false
           done
@@ -119,7 +119,7 @@ jobs:
       # The key is immutable, so only save when the restore missed it. This repo's
       # own SNAPSHOTs are left out: the cache is only refreshed when a pom changes,
       # so they would go stale. The test jobs build the few they need from source
-      # (see run_selenium in run-it.sh).
+      # (see run_e2e in run-it.sh).
       - name: Remove this repository's SNAPSHOTs from the Maven cache
         if: ${{ always() && steps.m2-cache.outputs.cache-hit != 'true' }}
         run: rm -rf ~/.m2/repository/com/adobe/cq/core.wcm.components.*
@@ -312,12 +312,11 @@ jobs:
     env:
       AEM_IMAGE: ${{ matrix.aem.image }}
       AEM_TYPE: ${{ matrix.aem.type }}
-      WITH_SELENIUM: 'true'
-      SEL_BROWSER: chrome
-      SEL_GROUPS: ${{ matrix.group.sel_groups }}
-      SEL_IT_TEST: ${{ matrix.group.sel_it_test }}
-      SEL_RERUN: '0'
-      # Playwright drives the runner's installed Chrome (channel=chrome), like Selenium: no bundled browser download.
+      WITH_E2E: 'true'
+      E2E_GROUPS: ${{ matrix.group.e2e_groups }}
+      E2E_IT_TEST: ${{ matrix.group.e2e_it_test }}
+      E2E_RERUN: '0'
+      # Playwright drives the runner's installed Chrome (channel=chrome): no bundled browser download.
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
       QP_VM_OPTIONS: '-Xmx4g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
     steps:
@@ -380,7 +379,7 @@ jobs:
         uses: mikepenz/action-junit-report@a9170d5795813c01ab4901ffb045b52bab4ab09d # v6
         with:
           check_name: Playwright ${{ matrix.group.group }} IT results (${{ matrix.aem.name }})
-          report_paths: testing/it/e2e-selenium/target/failsafe-reports/TEST-*.xml
+          report_paths: testing/it/e2e-testing/target/failsafe-reports/TEST-*.xml
           detailed_summary: true
           include_passed: true
           group_suite: true
@@ -395,8 +394,8 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
           path: |
-            testing/it/e2e-selenium/target/failsafe-reports
-            testing/it/e2e-selenium/target/playwright-traces
+            testing/it/e2e-testing/target/failsafe-reports
+            testing/it/e2e-testing/target/playwright-traces
             testing/it/http/target/aem-logs
 
   # --------------------------------------------------------------------------
