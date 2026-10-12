@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.it.pw.tableofcontents;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.sling.testing.clients.ClientException;
@@ -29,11 +30,11 @@ import com.microsoft.playwright.Locator;
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_TABLEOFCONTENTS_V1;
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_TITLE_V3;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("playwright-group2")
 public class TableOfContentsPwIT extends ComponentPwBaseTest {
 
+    private static final String[] LEVELS = {"h1", "h2", "h3", "h4", "h5", "h6"};
     private static final String PAGE_TITLE = "Test Page for Table of Contents";
 
     private String addTableOfContents() throws Exception {
@@ -51,20 +52,16 @@ public class TableOfContentsPwIT extends ComponentPwBaseTest {
         Locator templatePlaceholder = contentFrame().locator(".cmp-toc__template-placeholder");
         assertThat(templatePlaceholder).isVisible();
 
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
-        assertThat(page.locator(".cmp-toc__template-placeholder")).hasCount(0);
+        page.evaluate("() => Granite.author.layerManager.activate('Preview')");
+        assertThat(templatePlaceholder).isHidden();
     }
 
     @Test
     public void testTocRendering() throws Exception {
         addTableOfContents();
         addComponentToAllowedPolicy(RT_TITLE_V3);
-        String titlePath = Commons.addComponentWithRetry(authorClient, RT_TITLE_V3,
-            testPage + Commons.relParentCompPath, "title");
-        HashMap<String, String> titleProperties = new HashMap<>();
-        titleProperties.put("_charset_", "UTF-8");
-        titleProperties.put("./jcr:title", PAGE_TITLE);
-        Commons.editNodeProperties(authorClient, titlePath, titleProperties);
+        // the title component renders the page title by default, which the table of contents then lists
+        Commons.addComponentWithRetry(authorClient, RT_TITLE_V3, testPage + Commons.relParentCompPath, "title");
         reloadEditor();
 
         Locator toc = contentFrame().locator(".tableofcontents");
@@ -82,9 +79,15 @@ public class TableOfContentsPwIT extends ComponentPwBaseTest {
             assertThat(dialog.locator("coral-select[name='" + name + "']")).isVisible();
         }
         assertThat(dialog.locator("input[name='./id']")).isVisible();
-        for (String name : new String[] {"./listType", "./startLevel", "./stopLevel"}) {
-            Locator list = openCoralSelect("[name='" + name + "']");
-            assertThat(list.locator("coral-selectlist-item")).not().hasCount(0);
+        Map<String, String[]> expectedOptions = new LinkedHashMap<>();
+        expectedOptions.put("./listType", new String[] {"bulleted", "numbered"});
+        expectedOptions.put("./startLevel", LEVELS);
+        expectedOptions.put("./stopLevel", LEVELS);
+        for (Map.Entry<String, String[]> select : expectedOptions.entrySet()) {
+            Locator list = openCoralSelect("[name='" + select.getKey() + "']");
+            for (String value : select.getValue()) {
+                assertThat(list.locator("coral-selectlist-item[value='" + value + "']")).hasCount(1);
+            }
             list.locator("coral-selectlist-item").first().click();
         }
         dialog.locator(DONE_BUTTON).click();
@@ -135,10 +138,10 @@ public class TableOfContentsPwIT extends ComponentPwBaseTest {
         openEditDialog(componentPath);
         selectInCoralSelect("[name='./startLevel']", "h4");
         selectInCoralSelect("[name='./stopLevel']", "h3");
-        assertThat(dialog().locator(".cmp-toc__editor coral-tooltip.is-open[variant='error']")).isVisible();
+        assertThat(page.locator(".cmp-toc__editor coral-tooltip.is-open[variant='error']")).isVisible();
 
         selectInCoralSelect("[name='./stopLevel']", "h5");
-        assertThat(dialog().locator(".cmp-toc__editor coral-tooltip.is-open[variant='error']")).hasCount(0);
+        assertThat(page.locator(".cmp-toc__editor coral-tooltip.is-open[variant='error']")).hasCount(0);
         saveDialog();
     }
 }

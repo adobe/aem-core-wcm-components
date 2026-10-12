@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.it.pw.image;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Tag;
@@ -27,6 +28,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
 import com.adobe.cq.wcm.core.components.it.util.Commons;
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.TimeoutError;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_IMAGE_V1;
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_IMAGE_V2;
@@ -39,6 +41,9 @@ public class ImagePwIT extends ComponentPwBaseTest {
     private static final String IMAGE = "/content/dam/core-components/core-comp-test-image.jpg";
     private static final String NO_DESCRIPTION_IMAGE =
         "/content/dam/core-components/Adobe_Systems_logo_and_wordmark.png";
+    private static final String NO_DESCRIPTION_ERROR =
+        "Error: Please provide an asset which has a description that can be used as alt text.";
+    private static final String DAM_ALT = "House on a beach with blue sky";
 
     static Stream<String> allVersions() {
         return Stream.of(RT_IMAGE_V1, RT_IMAGE_V2, RT_IMAGE_V3);
@@ -84,7 +89,6 @@ public class ImagePwIT extends ComponentPwBaseTest {
         properties.put("./alt", alt);
         properties.put("./altValueFromDAM", "false");
         properties.put("./titleValueFromDAM", "false");
-        // a drag from the asset finder unchecks "inherit from page"; v3 hides the DAM checkboxes while it is checked
         properties.put("./imageFromPageImage", "false");
         return properties;
     }
@@ -94,44 +98,143 @@ public class ImagePwIT extends ComponentPwBaseTest {
         return page.locator(".cmp-image img");
     }
 
+    private Locator editorImage() {
+        return contentFrame().locator(".cmp-image img");
+    }
+
+    private void openPreview() {
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+    }
+
+    private String createRedirectPage() throws Exception {
+        return authorClient.createPage("redirectPage", "Redirect Test Page Title", rootPage, defaultPageTemplate)
+            .getSlingPath();
+    }
+
+    /**
+     * Finds a dialog field wherever the version lays it out (v1: single tab, v2/v3: asset or metadata tab) and
+     * switches to the tab holding it.
+     */
+    private Locator field(String resourceType, String selector) {
+        Locator target = dialog().locator(selector).first();
+        if (RT_IMAGE_V1.equals(resourceType) || target.isVisible()) {
+            return target;
+        }
+        for (String tab : new String[] {"asset", "metadata"}) {
+            openDialogTab(tab);
+            try {
+                target.waitFor(new Locator.WaitForOptions().setTimeout(1_500));
+                return target;
+            } catch (TimeoutError e) {
+                // try the next tab
+            }
+        }
+        return target;
+    }
+
+    private Locator checkboxInput(String resourceType, String name) {
+        Locator box = field(resourceType, "coral-checkbox[name='" + name + "']");
+        assertThat(box).isVisible();
+        return box.locator("input[type='checkbox']");
+    }
+
+    private void setCheckbox(String resourceType, String name, boolean checked) {
+        checkboxInput(resourceType, name).setChecked(checked);
+    }
+
+    /** Applies the state only when the checkbox exists and is currently shown by the dialog. */
+    private void setCheckboxIfShown(String resourceType, String name, boolean checked) {
+        if (dialog().locator("coral-checkbox[name='" + name + "']").count() == 0) {
+            return;
+        }
+        Locator box = field(resourceType, "coral-checkbox[name='" + name + "']");
+        if (box.isVisible()) {
+            box.locator("input[type='checkbox']").setChecked(checked);
+        }
+    }
+
+    private void setAlt(String resourceType, String alt) {
+        setCheckboxIfShown(resourceType, "./altValueFromDAM", false);
+        setCheckboxIfShown(resourceType, "./altValueFromPageImage", false);
+        field(resourceType, "input[name='./alt']").fill(alt);
+    }
+
+    private void setTitle(String resourceType, String title) {
+        setCheckboxIfShown(resourceType, "./titleValueFromDAM", false);
+        field(resourceType, "input[name='./jcr:title']").fill(title);
+    }
+
+    private void setLink(String resourceType, String link) {
+        field(resourceType, "[name='./linkURL']");
+        fillPathAutocomplete(dialog(), "./linkURL", link);
+    }
+
+    /** Drags the asset from the side panel's asset finder into the open dialog's file upload. */
+    private void dragImage(String path, String asset) {
+        ImageSidePanelHelper.openSidePanel(page);
+        ImageSidePanelHelper.setAssetFilter(page, ImageSidePanelHelper.TEST_ASSETS_PATH);
+        openEditDialog(path);
+        uncheckInheritFromPageImage();
+        ImageSidePanelHelper.dragAssetToFileUpload(page, dialog(), dialog().locator("coral-fileupload[name='./file']")
+            .first(), asset);
+    }
+
+    private void uncheckInheritFromPageImage() {
+        Locator inherit = dialog().locator("coral-checkbox[name='./imageFromPageImage'] input[type='checkbox']");
+        if (inherit.count() > 0 && inherit.isChecked()) {
+            inherit.uncheck();
+        }
+    }
+
+    private void cancelDialog() {
+        dialog().locator("button.cq-dialog-cancel, button[is='coral-button'][title='Cancel']").first().click();
+        assertThat(dialog()).isHidden();
+    }
+
     @ParameterizedTest
     @MethodSource("allVersions")
     public void testAddImageAndAltText(String resourceType) throws Exception {
         String path = addImage(resourceType);
-        saveProperties(path, imageProperties("Return to Arkham"));
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        dragImage(path, IMAGE);
+        setAlt(resourceType, "Return to Arkham");
+        saveDialog();
 
-        assertThat(image()).isVisible();
-        assertThat(image()).hasAttribute("alt", "Return to Arkham");
-        assertThat(image()).hasAttribute("src", java.util.regex.Pattern.compile(".*core-comp-test-image.*"));
+        assertThat(editorImage()).isVisible();
+        assertThat(editorImage()).hasAttribute("alt", "Return to Arkham");
+        assertThat(editorImage()).hasAttribute("src", Pattern.compile(".*" + Pattern.quote(testPage)
+            + "/_jcr_content/root/responsivegrid/image\\.(core)?img\\..*"));
     }
 
     @ParameterizedTest
     @MethodSource("allVersions")
     public void testSetLink(String resourceType) throws Exception {
         String path = addImage(resourceType);
-        Map<String, String> properties = imageProperties("Return to Arkham");
-        properties.put("./linkURL", "https://www.adobe.com");
-        saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        String redirectPage = createRedirectPage();
+        dragImage(path, IMAGE);
+        setAlt(resourceType, "Return to Arkham");
+        setLink(resourceType, redirectPage);
+        saveDialog();
+        openPreview();
 
-        assertThat(page.locator(".cmp-image__link, .cmp-image--link")).hasAttribute("href", "https://www.adobe.com");
+        assertThat(page.locator(".cmp-image__link, .cmp-image--link")).hasAttribute("href", redirectPage + ".html");
+        image().click();
+        assertThat(page).hasURL(Pattern.compile(".*" + Pattern.quote(redirectPage) + "\\.html$"));
     }
 
     @ParameterizedTest
     @MethodSource("allVersions")
     public void testSetCaption(String resourceType) throws Exception {
         String path = addImage(resourceType);
-        Map<String, String> properties = imageProperties("Return to Arkham");
-        properties.put("./jcr:title", "The Last Guardian");
-        saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        dragImage(path, IMAGE);
+        setAlt(resourceType, "Return to Arkham");
+        setTitle(resourceType, "The Last Guardian");
+        setCheckbox(resourceType, "./displayPopupTitle", false);
+        saveDialog();
 
         if (RT_IMAGE_V1.equals(resourceType)) {
-            // v1 renders a non-popup caption as a separate span
-            assertThat(page.locator("span.cmp-image--title")).hasText("The Last Guardian");
+            assertThat(contentFrame().locator("span.cmp-image--title")).hasText("The Last Guardian");
         } else {
-            assertThat(image()).hasAttribute("title", "The Last Guardian");
+            assertThat(contentFrame().locator(".cmp-image__title")).hasText("The Last Guardian");
         }
     }
 
@@ -139,24 +242,26 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @MethodSource("allVersions")
     public void testSetCaptionAsPopup(String resourceType) throws Exception {
         String path = addImage(resourceType);
-        Map<String, String> properties = imageProperties("Return to Arkham");
-        properties.put("./jcr:title", "The Last Guardian");
-        properties.put("./displayPopupTitle", "true");
-        saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        dragImage(path, IMAGE);
+        setAlt(resourceType, "Return to Arkham");
+        setTitle(resourceType, "The Last Guardian");
+        setCheckbox(resourceType, "./displayPopupTitle", true);
+        saveDialog();
 
-        assertThat(image()).hasAttribute("title", "The Last Guardian");
+        assertThat(editorImage()).hasAttribute("title", "The Last Guardian");
     }
 
     @ParameterizedTest
     @MethodSource("allVersions")
     public void testSetImageAsDecorative(String resourceType) throws Exception {
         String path = addImage(resourceType);
-        Map<String, String> properties = imageProperties("");
-        properties.put("./isDecorative", "true");
-        properties.put("./linkURL", "https://www.adobe.com");
-        saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        String redirectPage = createRedirectPage();
+        dragImage(path, IMAGE);
+        setLink(resourceType, redirectPage);
+        setCheckbox(resourceType, "./isDecorative", true);
+        assertThat(checkboxInput(resourceType, "./isDecorative")).isChecked();
+        saveDialog();
+        openPreview();
 
         // v1 omits the alt attribute, v2/v3 render it empty
         assertThat(image()).hasCount(1);
@@ -168,79 +273,102 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @MethodSource("v2AndV3")
     public void testAddImage(String resourceType) throws Exception {
         String path = addImage(resourceType);
-        Map<String, String> properties = imageProperties("House on a beach with blue sky");
-        properties.put("./jcr:title", "Beach house");
-        saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        dragImage(path, IMAGE);
+        setAlt(resourceType, DAM_ALT);
+        setTitle(resourceType, "Beach house");
+        setCheckbox(resourceType, "./displayPopupTitle", true);
+        saveDialog();
 
-        assertThat(image()).hasAttribute("alt", "House on a beach with blue sky");
-        assertThat(image()).hasAttribute("title", "Beach house");
+        assertThat(editorImage()).hasAttribute("alt", DAM_ALT);
+        assertThat(editorImage()).hasAttribute("title", "Beach house");
     }
 
     @ParameterizedTest
-    @MethodSource("v2Only")
+    @MethodSource("v2AndV3")
     public void testDragImageToComponent(String resourceType) throws Exception {
         String path = addImage(resourceType);
-        saveProperties(path, imageProperties("House on a beach with blue sky"));
+        ImageSidePanelHelper.openSidePanel(page);
+        ImageSidePanelHelper.setAssetFilter(page, ImageSidePanelHelper.TEST_ASSETS_PATH);
+        ImageSidePanelHelper.dragSidePanelImageToComponent(page, IMAGE, path);
+        ImageSidePanelHelper.closeSidePanel(page);
         openEditDialog(path);
-        openDialogTab("metadata");
 
-        assertThat(dialog().locator("coral-checkbox[name='./altValueFromDAM']")).isVisible();
-        if (resourceType.equals(RT_IMAGE_V2)) {
-            assertThat(dialog().locator("coral-checkbox[name='./titleValueFromDAM']")).isVisible();
+        assertThat(checkboxInput(resourceType, "./altValueFromDAM")).isChecked();
+        if (RT_IMAGE_V2.equals(resourceType)) {
+            assertThat(checkboxInput(resourceType, "./titleValueFromDAM")).isChecked();
+            assertThat(checkboxInput(resourceType, "./displayPopupTitle")).isChecked();
         }
+        cancelDialog();
+
+        assertThat(editorImage()).hasAttribute("alt", DAM_ALT);
+        assertThat(editorImage()).hasAttribute("title", "Beach house");
     }
 
     @ParameterizedTest
     @MethodSource("v2AndV3")
     public void testAddAltTextAndTitle(String resourceType) throws Exception {
         String path = addImage(resourceType);
-        Map<String, String> properties = imageProperties("Return to Arkham");
-        properties.put("./jcr:title", "The Last Guardian");
-        saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        dragImage(path, IMAGE);
+        setAlt(resourceType, "Return to Arkham");
+        setTitle(resourceType, "The Last Guardian");
+        setCheckbox(resourceType, "./displayPopupTitle", true);
+        saveDialog();
 
-        assertThat(image()).hasAttribute("alt", "Return to Arkham");
-        assertThat(image()).hasAttribute("title", "The Last Guardian");
+        assertThat(editorImage()).hasAttribute("alt", "Return to Arkham");
+        assertThat(editorImage()).hasAttribute("title", "The Last Guardian");
     }
 
     @Test
     public void testDisableCaptionAsPopup() throws Exception {
         String path = addImage(RT_IMAGE_V2);
-        Map<String, String> properties = imageProperties("House on a beach with blue sky");
-        properties.put("./jcr:title", "Beach house");
-        saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        dragImage(path, IMAGE);
+        setCheckbox(RT_IMAGE_V2, "./displayPopupTitle", false);
+        saveDialog();
 
-        assertThat(image()).hasAttribute("alt", "House on a beach with blue sky");
-        assertThat(image()).hasAttribute("title", "Beach house");
+        assertThat(editorImage()).hasAttribute("alt", DAM_ALT);
+        assertThat(contentFrame().locator(".cmp-image__title")).containsText("Beach house");
     }
 
     @ParameterizedTest
     @MethodSource("v2AndV3")
     public void testCheckMapAreaNavigationAndResponsiveResize(String resourceType) throws Exception {
         String path = addImage(resourceType);
+        String redirectPage = createRedirectPage();
         Map<String, String> properties = imageProperties("Return to Arkham");
-        properties.put("./imageMap", "[rect(0,0,226,230)\"" + testPage + "\"|\"\"|\"Alt Text\"|(0.0000,0.0000,0.1948,0.2295)]");
+        properties.put("./imageMap", "[rect(0,0,226,230)\"" + redirectPage
+            + "\"|\"\"|\"Alt Text\"|(0.0000,0.0000,0.1948,0.2295)]");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        openPreview();
 
         if (RT_IMAGE_V3.equals(resourceType)) {
             assertThat(page.locator("[data-cmp-hook-image='area']")).hasCount(0);
-        } else {
-            // <map>/<area> never have a layout box, so Playwright reports them hidden; assert presence instead
-            assertThat(page.locator("[data-cmp-hook-image='area']")).not().hasCount(0);
-            assertThat(page.locator("[data-cmp-hook-image='map']")).hasCount(1);
+            return;
         }
+        // <map>/<area> never have a layout box, so Playwright reports them hidden; assert presence instead
+        Locator area = page.locator("[data-cmp-hook-image='area']");
+        assertThat(area).not().hasCount(0);
+        assertThat(page.locator("[data-cmp-hook-image='map']")).hasCount(1);
+
+        // the area covers the top-left corner of the image, so clicking there follows the area link
+        image().click(new Locator.ClickOptions().setPosition(5, 5));
+        assertThat(page).hasURL(Pattern.compile(".*" + Pattern.quote(redirectPage) + ".*"));
+
+        openPreview();
+        assertThat(area).not().hasCount(0);
+        image().evaluate("img => { img.style.width = '300px'; }");
+        page.setViewportSize(300, 600);
+        page.evaluate("() => window.dispatchEvent(new Event('resize'))");
+        assertThat(area.first()).hasAttribute("coords", "0,0,58,38");
     }
 
     @Test
     public void testCheckMapAreaNotAvailable() throws Exception {
         String path = addImage(RT_IMAGE_V3);
         Map<String, String> properties = imageProperties("Return to Arkham");
-        properties.put("./imageMap", "[rect(0,0,226,230)\"" + testPage + "\"|\"\"|\"Alt Text\"|(0.0000,0.0000,0.1948,0.2295)]");
+        properties.put("./imageMap", "[rect(0,0,226,230)\"" + testPage
+            + "\"|\"\"|\"Alt Text\"|(0.0000,0.0000,0.1948,0.2295)]");
         saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        openPreview();
 
         assertThat(page.locator("[data-cmp-hook-image='area']")).hasCount(0);
     }
@@ -248,8 +376,10 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @Test
     public void testLazyLoadingEnabled() throws Exception {
         String path = addImage(RT_IMAGE_V3);
-        saveProperties(path, imageProperties("Return to Arkham"));
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        dragImage(path, IMAGE);
+        setAlt(RT_IMAGE_V3, "Return to Arkham");
+        saveDialog();
+        openPreview();
 
         assertThat(image()).hasAttribute("loading", "lazy");
     }
@@ -257,10 +387,11 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @Test
     public void testLazyLoadingDisabled() throws Exception {
         String path = addImage(RT_IMAGE_V3);
-        Map<String, String> properties = imageProperties("Return to Arkham");
-        properties.put("./disableLazyLoading", "true");
-        saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        dragImage(path, IMAGE);
+        setAlt(RT_IMAGE_V3, "Return to Arkham");
+        setCheckbox(RT_IMAGE_V3, "./disableLazyLoading", true);
+        saveDialog();
+        openPreview();
 
         assertThat(image()).not().hasAttribute("loading", "lazy");
     }
@@ -268,10 +399,12 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @Test
     public void testSizesAttribute() throws Exception {
         String path = addImage(RT_IMAGE_V3);
-        saveProperties(path, imageProperties("Return to Arkham"));
         createComponentPolicy("/image-v3",
             new HashMap<>(java.util.Collections.singletonMap("sizes", "(min-width: 36em) 33.3vw, 100vw")));
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        dragImage(path, IMAGE);
+        setAlt(RT_IMAGE_V3, "Return to Arkham");
+        saveDialog();
+        openPreview();
 
         assertThat(image()).hasAttribute("sizes", "(min-width: 36em) 33.3vw, 100vw");
     }
@@ -279,42 +412,42 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @Test
     public void testSetLinkWithTarget() throws Exception {
         String path = addImage(RT_IMAGE_V3);
-        Map<String, String> properties = imageProperties("Return to Arkham");
-        properties.put("./linkURL", "https://www.adobe.com");
-        properties.put("./linkTarget", "_blank");
-        saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        String redirectPage = createRedirectPage();
+        dragImage(path, IMAGE);
+        setAlt(RT_IMAGE_V3, "Return to Arkham");
+        setLink(RT_IMAGE_V3, redirectPage);
+        setCheckbox(RT_IMAGE_V3, "./linkTarget", true);
+        saveDialog();
+        openPreview();
 
-        assertThat(page.locator(".cmp-image__link, .cmp-image--link")).hasAttribute("target", "_blank");
+        assertThat(page.locator("a[href='" + redirectPage + ".html'][target='_blank']")).isVisible();
     }
 
     @ParameterizedTest
     @MethodSource("v2AndV3")
     public void testSetAssetWithoutDescription(String resourceType) throws Exception {
         String path = addImage(resourceType);
-        Map<String, String> properties = new HashMap<>();
-        properties.put("./fileReference", NO_DESCRIPTION_IMAGE);
-        properties.put("_charset_", "UTF-8");
-        Commons.editNodeProperties(authorClient, path, new HashMap<>(properties));
-        reloadEditor();
-        openEditDialog(path);
+        dragImage(path, NO_DESCRIPTION_IMAGE);
+        if (RT_IMAGE_V2.equals(resourceType)) {
+            openDialogTab("metadata");
+        }
         clickDone();
 
-        assertThat(dialog().locator(".coral-Form-errorlabel, coral-tooltip[variant='error'] > coral-tooltip-content"))
-            .containsText("Please provide an asset which has a description that can be used as alt text.");
+        assertThat(dialog().locator(".coral-Form-errorlabel, coral-tooltip[variant='error'] > coral-tooltip-content")
+            .first()).hasText(NO_DESCRIPTION_ERROR);
+        if (RT_IMAGE_V3.equals(resourceType)) {
+            Locator alertIcon = dialog().locator("input[name='./alt'] + coral-icon[icon='alert']");
+            alertIcon.scrollIntoViewIfNeeded();
+            assertThat(alertIcon).isVisible();
+        }
     }
 
     @ParameterizedTest
     @MethodSource("v2AndV3")
     public void testSetAssetWithoutDescriptionAsDecorative(String resourceType) throws Exception {
         String path = addImage(resourceType);
-        Map<String, String> properties = new HashMap<>();
-        properties.put("./fileReference", NO_DESCRIPTION_IMAGE);
-        properties.put("./isDecorative", "true");
-        properties.put("_charset_", "UTF-8");
-        Commons.editNodeProperties(authorClient, path, new HashMap<>(properties));
-        reloadEditor();
-        openEditDialog(path);
+        dragImage(path, NO_DESCRIPTION_IMAGE);
+        setCheckbox(resourceType, "./isDecorative", true);
         saveDialog();
 
         assertThat(dialog()).isHidden();
@@ -332,12 +465,13 @@ public class ImagePwIT extends ComponentPwBaseTest {
         Commons.setNGDMImage(adminClient, path);
         reloadEditor();
         openEditDialog(path);
+        uncheckInheritFromPageImage();
         selectInCoralSelect("[name='./smartCropRendition']", "Small");
         dialog().locator("coral-checkbox[name='./isDecorative'] input[type='checkbox']").check();
         saveDialog();
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        openPreview();
 
-        assertThat(image()).hasAttribute("src", java.util.regex.Pattern.compile(".*smartcrop=Small.*"));
+        assertThat(image()).hasAttribute("src", Pattern.compile(".*smartcrop=Small.*"));
     }
 
     @ParameterizedTest
@@ -349,8 +483,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
 
     private void testClearAssetInput(String resourceType, String clearSelector) throws Exception {
         String path = addImage(resourceType);
-        saveProperties(path, imageProperties("House on a beach with blue sky"));
-        openEditDialog(path);
+        dragImage(path, IMAGE);
         // v3 keeps the alt text on the Asset tab; v2 moves it to Metadata, next to the title
         boolean v3 = RT_IMAGE_V3.equals(resourceType);
         openDialogTab(v3 ? "asset" : "metadata");
@@ -368,11 +501,11 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @Test
     @Tag("IgnoreOn65")
     public void testPageImageWithEmptyAltTextFromPageImage() throws Exception {
-        configureFeaturedImage("");
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        configureFeaturedImage(NO_DESCRIPTION_IMAGE, "", true);
+        openPreview();
 
         assertThat(image()).hasAttribute("alt", "");
-        assertThat(image()).hasAttribute("src", java.util.regex.Pattern.compile(".*adobe-systems-logo-and-wordmark.*"));
+        assertThat(image()).hasAttribute("src", Pattern.compile(".*adobe-systems-logo-and-wordmark.*"));
     }
 
     @Test
@@ -384,8 +517,8 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @Test
     @Tag("IgnoreOn65")
     public void testPageImageWithAltTextFromPageImage() throws Exception {
-        configureFeaturedImage("page image alt");
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        configureFeaturedImage(NO_DESCRIPTION_IMAGE, "page image alt", false);
+        openPreview();
 
         assertThat(image()).hasAttribute("alt", "page image alt");
     }
@@ -399,14 +532,12 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @Test
     @Tag("IgnoreOn65")
     public void testPageImageWithAltTextFromImage() throws Exception {
-        String path = configureFeaturedImage("page image alt");
-        HashMap<String, String> properties = new HashMap<>();
-        properties.put("./imageFromPageImage", "true");
-        properties.put("./altValueFromPageImage", "false");
-        properties.put("./alt", "Return to Arkham");
-        properties.put("_charset_", "UTF-8");
-        Commons.editNodeProperties(authorClient, path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        String path = configureFeaturedImage(NO_DESCRIPTION_IMAGE, "page image alt", false);
+        openEditDialog(path);
+        setCheckboxIfShown(RT_IMAGE_V3, "./altValueFromPageImage", false);
+        field(RT_IMAGE_V3, "input[name='./alt']").fill("Return to Arkham");
+        saveDialog();
+        openPreview();
 
         assertThat(image()).hasAttribute("alt", "Return to Arkham");
     }
@@ -420,13 +551,11 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @Test
     @Tag("IgnoreOn65")
     public void testPageImageWithDecorative() throws Exception {
-        String path = configureFeaturedImage("page image alt");
-        HashMap<String, String> properties = new HashMap<>();
-        properties.put("./imageFromPageImage", "true");
-        properties.put("./isDecorative", "true");
-        properties.put("_charset_", "UTF-8");
-        Commons.editNodeProperties(authorClient, path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        String path = configureFeaturedImage(NO_DESCRIPTION_IMAGE, "page image alt", false);
+        openEditDialog(path);
+        setCheckbox(RT_IMAGE_V3, "./isDecorative", true);
+        saveDialog();
+        openPreview();
 
         assertThat(image()).hasAttribute("alt", "");
     }
@@ -440,14 +569,13 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @Test
     @Tag("IgnoreOn65")
     public void testPageImageWithDragAndDropImage() throws Exception {
-        String path = configureFeaturedImage("page image alt");
-        HashMap<String, String> properties = imageProperties("House on a beach with blue sky");
-        properties.put("./imageFromPageImage", "false");
-        saveProperties(path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        String path = configureFeaturedImage(NO_DESCRIPTION_IMAGE, "page image alt", false);
+        dragImage(path, IMAGE);
+        saveDialog();
+        openPreview();
 
-        assertThat(image()).hasAttribute("alt", "House on a beach with blue sky");
-        assertThat(image()).hasAttribute("src", java.util.regex.Pattern.compile(".*core-comp-test-image.*"));
+        assertThat(image()).hasAttribute("alt", DAM_ALT);
+        assertThat(image()).hasAttribute("src", Pattern.compile(".*core-comp-test-image.*"));
     }
 
     @Test
@@ -459,18 +587,19 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @Test
     @Tag("IgnoreOn65")
     public void testPageImageWithLinkedPage() throws Exception {
-        String path = addImage(RT_IMAGE_V3);
-        HashMap<String, String> properties = new HashMap<>();
-        properties.put("./fileReference", "/content/dam/core-components/AdobeStock_140634652_climbing.jpeg");
-        properties.put("./alt", "Rock Climbing and Bouldering above the lake and mountains");
-        properties.put("./linkURL", rootPage);
-        properties.put("_charset_", "UTF-8");
-        Commons.editNodeProperties(authorClient, path, properties);
-        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        String redirectPage = createRedirectPage();
+        ImageSidePanelHelper.setPageFeaturedImage(page, baseUrl, redirectPage, "AdobeStock_140634652_climbing.jpeg",
+            true);
+        String path = configureFeaturedImage(NO_DESCRIPTION_IMAGE, null, true);
+        openEditDialog(path);
+        setLink(RT_IMAGE_V3, redirectPage);
+        saveDialog();
+        openPreview();
 
         assertThat(image()).hasAttribute("alt", "Rock Climbing and Bouldering above the lake and mountains");
-        assertThat(page.locator(".cmp-image__link, .cmp-image--link")).hasAttribute("href",
-            java.util.regex.Pattern.compile(".*" + rootPage + ".*"));
+        assertThat(image()).hasAttribute("src", Pattern.compile(".*adobe-stock-140634652-climbing\\.jpeg.*"));
+        image().click();
+        assertThat(page).hasURL(Pattern.compile(".*" + Pattern.quote(redirectPage) + "\\.html$"));
     }
 
     @Test
@@ -479,11 +608,18 @@ public class ImagePwIT extends ComponentPwBaseTest {
         testPageImageWithLinkedPage();
     }
 
-    private String configureFeaturedImage(String altText) throws Exception {
+    /**
+     * Creates a v3 page whose featured image is set through the page properties UI and adds an image component that
+     * inherits it.
+     */
+    private String configureFeaturedImage(String assetPath, String altText, boolean altFromDam) throws Exception {
         testPage = authorClient.createPage("image-page", "Image Page", rootPage, defaultPageTemplate).getSlingPath();
         adminClient.setPageProperty(testPage, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
-        adminClient.setPageProperty(testPage, "cq:featuredimage/fileReference", NO_DESCRIPTION_IMAGE, 200);
-        adminClient.setPageProperty(testPage, "cq:featuredimage/alt", altText, 200);
+        ImageSidePanelHelper.setPageFeaturedImage(page, baseUrl, testPage,
+            assetPath.substring(assetPath.lastIndexOf('/') + 1), altFromDam);
+        if (altText != null && !altFromDam) {
+            ImageSidePanelHelper.setPageFeaturedImageAlt(page, baseUrl, testPage, altText);
+        }
         addComponentToAllowedPolicy(RT_IMAGE_V3);
         String path = Commons.addComponentWithRetry(authorClient, RT_IMAGE_V3,
             testPage + Commons.relParentCompPath, "image");

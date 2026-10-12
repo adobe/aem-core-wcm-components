@@ -19,10 +19,11 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
-import com.adobe.cq.wcm.core.components.it.util.Commons;
+import com.microsoft.playwright.Locator;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_TEXT_V1;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Tag("playwright-group3")
 public class TextV1PwIT extends ComponentPwBaseTest {
@@ -32,6 +33,26 @@ public class TextV1PwIT extends ComponentPwBaseTest {
     }
 
     protected String textPath;
+
+    /** Selector of the rendered paragraph (v1 renders on the grid column wrapper, v2 inside .cmp-text). */
+    protected String renderedSelector() {
+        return ".cmp-text.aem-GridColumn p";
+    }
+
+    /** Waits for the element's trimmed innerHTML to equal the expected markup, then asserts it. */
+    protected void assertInnerHtml(Locator locator, String expected) {
+        assertThat(locator).isVisible();
+        String actual = null;
+        long deadline = System.currentTimeMillis() + 20_000;
+        while (System.currentTimeMillis() < deadline) {
+            actual = locator.innerHTML().trim();
+            if (expected.equals(actual)) {
+                break;
+            }
+            page.waitForTimeout(250);
+        }
+        assertEquals(expected, actual);
+    }
 
     /** CSS class the inline editor is attached to: v1 renders .cmp-text on the wrapper, v2 only on the inner div. */
     protected String textSelector() {
@@ -50,17 +71,17 @@ public class TextV1PwIT extends ComponentPwBaseTest {
 
     @Test
     public void testSetTextValueUsingInlineEditor() throws Exception {
+        String value = "<b>This</b> is a <i>rich</i> <u>text</u>.";
         createText();
         clickToolbarAction(textPath, "EDIT");
         contentFrame().locator(textSelector() + ".cq-Editable-dom[contenteditable]").waitFor();
         contentFrame().locator(textSelector() + ".aem-GridColumn p").first()
-            .evaluate("(e, html) => e.innerHTML = html", "<b>This</b> is a <i>rich</i> <u>text</u>.");
-        page.locator("button[is='coral-button'][title='Save']").click();
-        page.waitForTimeout(500);
-        assertThat(contentFrame().locator(textSelector() + ".aem-GridColumn p").first())
-            .hasText("This is a rich text.");
+            .evaluate("(e, html) => e.innerHTML = html", value);
+        Locator save = page.locator("button[is='coral-button'][title='Save']");
+        save.click();
+        assertThat(save).isHidden();
+        assertInnerHtml(contentFrame().locator(renderedSelector()).first(), value);
         reloadEditor();
-        assertThat(contentFrame().locator(textSelector() + ".aem-GridColumn p").first())
-            .hasText("This is a rich text.");
+        assertInnerHtml(contentFrame().locator(renderedSelector()).first(), value);
     }
 }

@@ -28,6 +28,16 @@ public class DownloadV2PwIT extends DownloadV1PwIT {
         return RT_DOWNLOAD_V2;
     }
 
+    @Override
+    protected void filterSidePanel(SidePanelPw sidePanel, String assetPath) {
+        if (assetPath.endsWith(".jpg")) {
+            super.filterSidePanel(sidePanel, assetPath);
+            return;
+        }
+        sidePanel.selectType("assetfilter_type_selector", "Documents");
+        sidePanel.filterByPath("assetfilter_document_path", ASSETS_PATH);
+    }
+
     @Test
     public void downloadWordFile() throws Exception {
         assertDownloadHeaders("core-comp-test-word.doc",

@@ -94,6 +94,7 @@ public class FormTextPwIT extends FormTextPwBase {
     private void testValidationMessage(String type, String requiredMessage) throws Exception {
         enableValidationPolicies(true);
         saveRequiredAndReload(type, requiredMessage, null);
+        assertThat(validationMessage()).isVisible();
         if (requiredMessage == null) {
             assertThat(validationMessage()).containsText("fill out");
         } else {
@@ -127,8 +128,10 @@ public class FormTextPwIT extends FormTextPwBase {
     public void testDisplayCustomValidationMessageForEmail() throws Exception {
         enableValidationPolicies(true);
         saveRequiredAndReload("email", "Custom required message", "Custom constraint message");
+        assertThat(validationMessage()).isVisible();
         assertThat(validationMessage()).hasText("Custom required message");
         typeValue("email");
+        assertThat(validationMessage()).isVisible();
         assertThat(validationMessage()).hasText("Custom constraint message");
         typeValue("@email.em");
         assertThat(validationMessage()).isHidden();

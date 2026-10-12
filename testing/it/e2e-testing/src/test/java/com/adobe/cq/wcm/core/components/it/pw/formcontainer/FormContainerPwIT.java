@@ -159,15 +159,25 @@ public class FormContainerPwIT extends FormGroupPwBase {
 
     private void setMailFields(String from, String subject, String[] mailto, String[] cc) {
         selectAction("foundation/components/form/actions/mail");
+        assertThat(dialog().locator("[name='./from']")).isVisible();
         dialog().locator("[name='./from']").fill(from);
+        assertThat(dialog().locator("[name='./subject']")).isVisible();
         dialog().locator("[name='./subject']").fill(subject);
-        for (String address : mailto) {
-            dialog().locator("coral-multifield[data-granite-coral-multifield-name='./mailto'] > button").click();
-            dialog().locator("input[name='./mailto']").last().fill(address);
-        }
-        for (String address : cc) {
-            dialog().locator("coral-multifield[data-granite-coral-multifield-name='./cc'] > button").click();
-            dialog().locator("input[name='./cc']").last().fill(address);
+        addMultifieldValues("mailto", mailto);
+        addMultifieldValues("cc", cc);
+    }
+
+    // waits for each new multifield row before typing, otherwise the previous row would be overwritten
+    private void addMultifieldValues(String name, String[] values) {
+        Locator inputs = dialog().locator("input[name='./" + name + "']");
+        for (String value : values) {
+            int before = inputs.count();
+            Locator add = dialog().locator("coral-multifield[data-granite-coral-multifield-name='./" + name + "'] > button");
+            assertThat(add).isVisible();
+            add.click();
+            assertThat(inputs).hasCount(before + 1);
+            assertThat(inputs.last()).isVisible();
+            inputs.last().fill(value);
         }
     }
 

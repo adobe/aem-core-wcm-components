@@ -26,7 +26,7 @@ import com.microsoft.playwright.Locator;
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_FORMOPTIONS_V1;
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_FORMOPTIONS_V2;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @Tag("playwright-group1")
@@ -49,8 +49,11 @@ public class FormOptionsPwIT extends FormGroupPwBase {
         selectInCoralSelect("[name='./type']", type);
         dialog().locator("[name='./name']").fill(NAME);
         dialog().locator("[name='./jcr:title']:visible").first().fill(TITLE);
+        Locator values = dialog().locator("input[name$='./value']");
+        int existingOptions = values.count();
         dialog().locator("button[coral-multifield-add='']").click();
-        dialog().locator("input[name$='./value']").last().fill(VALUE);
+        assertThat(values).hasCount(existingOptions + 1);
+        values.last().fill(VALUE);
         dialog().locator("input[name$='./text']").last().fill(TEXT);
         if (help) {
             dialog().locator("[name='./helpMessage']").fill(HELP);
@@ -63,6 +66,16 @@ public class FormOptionsPwIT extends FormGroupPwBase {
         }
         saveDialog();
         return path;
+    }
+
+    private Locator helpMessage(String resourceType) {
+        return contentFrame().locator(fieldSelector(resourceType, ".help-block", ".cmp-form-options__help-message"))
+            .first();
+    }
+
+    private Locator description(String resourceType) {
+        return contentFrame().locator(fieldSelector(resourceType, ".form-group input ~ span",
+            ".cmp-form-options__field-description")).first();
     }
 
     private String fieldSelector(String resourceType, String versionOne, String versionTwo) {
@@ -117,24 +130,22 @@ public class FormOptionsPwIT extends FormGroupPwBase {
     @MethodSource("resourceTypes")
     public void testSetHelpMessage(String resourceType) throws Exception {
         prepareOptions(resourceType, "checkbox", true, false, false);
-        assertThat(contentFrame().locator(".help-block, .cmp-form-options__help-message")
-            .filter(new Locator.FilterOptions().setHasText(HELP))).isVisible();
+        assertThat(helpMessage(resourceType)).isVisible();
+        assertThat(helpMessage(resourceType)).hasText(HELP);
     }
 
     @ParameterizedTest
     @MethodSource("resourceTypes")
     public void testSetCheckbox(String resourceType) throws Exception {
         assertOptionType(resourceType, "checkbox");
-        assertThat(contentFrame().locator(".cmp-form-options__field-description, .form-group input ~ span")
-            .filter(new Locator.FilterOptions().setHasText(TEXT))).isVisible();
+        assertThat(description(resourceType)).hasText(TEXT);
     }
 
     @ParameterizedTest
     @MethodSource("resourceTypes")
     public void testSetRadioButton(String resourceType) throws Exception {
         assertOptionType(resourceType, "radio");
-        assertThat(contentFrame().locator(".cmp-form-options__field-description, .form-group input ~ span")
-            .filter(new Locator.FilterOptions().setHasText(TEXT))).isVisible();
+        assertThat(description(resourceType)).hasText(TEXT);
     }
 
     @ParameterizedTest
@@ -201,11 +212,15 @@ public class FormOptionsPwIT extends FormGroupPwBase {
     private void assertHelpRelationship(String resourceType, String type, boolean hasHelp) throws Exception {
         prepareOptions(resourceType, type, hasHelp, false, false);
         Locator target = contentFrame().locator("drop-down".equals(type) ? "option" : "input[type='checkbox']");
+        assertThat(contentFrame().locator("legend")).hasText(TITLE);
         if (hasHelp) {
-            Locator help = contentFrame().locator(".help-block, .cmp-form-options__help-message");
+            Locator help = helpMessage(resourceType);
             assertThat(help).isVisible();
-            assertEquals(help.getAttribute("id"), target.getAttribute("aria-describedby"));
+            String helpId = help.getAttribute("id");
+            assertNotNull(helpId, "The help message should have an id");
+            assertThat(target).hasAttribute("aria-describedby", helpId);
         } else {
+            assertThat(target).isAttached();
             assertNull(target.getAttribute("aria-describedby"));
         }
     }

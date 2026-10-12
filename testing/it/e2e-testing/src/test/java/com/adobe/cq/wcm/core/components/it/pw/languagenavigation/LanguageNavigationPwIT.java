@@ -94,6 +94,11 @@ public class LanguageNavigationPwIT extends ComponentPwBaseTest {
         return contentFrame().locator(".cmp-languagenavigation");
     }
 
+    private Locator items(String suffix, String text) {
+        return navigation().locator(".cmp-languagenavigation__item" + suffix)
+            .filter(new Locator.FilterOptions().setHasText(text));
+    }
+
     @ParameterizedTest
     @MethodSource("versions")
     public void testDefaultConfiguration(String resourceType) throws Exception {
@@ -101,10 +106,10 @@ public class LanguageNavigationPwIT extends ComponentPwBaseTest {
         configureRoot(componentPath, siteRoot, null);
         saveDialog();
 
-        assertThat(navigation()).containsText("LOCALE 1");
-        assertThat(navigation()).containsText("LOCALE 2");
-        assertThat(navigation()).not().containsText("hideInNav");
-        assertThat(navigation()).not().containsText("LOCALE 3 1");
+        assertThat(items(".cmp-languagenavigation__item--level-0.cmp-languagenavigation__item--active", "LOCALE 1")).hasCount(1);
+        assertThat(items(".cmp-languagenavigation__item--level-0", "LOCALE 2")).hasCount(1);
+        assertThat(items(".cmp-languagenavigation__item--level-0", "hideInNav")).hasCount(0);
+        assertThat(items("", "LOCALE 3 1")).hasCount(0);
     }
 
     @ParameterizedTest
@@ -114,11 +119,17 @@ public class LanguageNavigationPwIT extends ComponentPwBaseTest {
         configureRoot(componentPath, siteRoot, "2");
         saveDialog();
 
-        assertThat(navigation()).containsText("LOCALE 3 1");
-        assertThat(navigation()).containsText("LOCALE 3 2");
-        assertThat(navigation()).containsText("LOCALE 4");
-        assertThat(navigation()).containsText("LOCALE 5");
-        assertThat(navigation()).not().containsText("About Us");
+        String l0 = ".cmp-languagenavigation__item--level-0";
+        String l1 = ".cmp-languagenavigation__item--level-1";
+        assertThat(items(l0 + ".cmp-languagenavigation__item--active", "LOCALE 1")).hasCount(1);
+        assertThat(items(l0, "LOCALE 2")).hasCount(1);
+        assertThat(items(l0, "hideInNav")).hasCount(0);
+        assertThat(navigation().locator(l0 + " .cmp-languagenavigation__item-link")).hasCount(0);
+        assertThat(items(l1 + ".cmp-languagenavigation__item--active", "LOCALE 3 1")).hasCount(1);
+        assertThat(items(l1, "LOCALE 3 2")).hasCount(1);
+        assertThat(items(l1, "LOCALE 4")).hasCount(1);
+        assertThat(items(l1, "LOCALE 5")).hasCount(1);
+        assertThat(items("", "About Us")).hasCount(0);
     }
 
     @ParameterizedTest
@@ -138,7 +149,7 @@ public class LanguageNavigationPwIT extends ComponentPwBaseTest {
         configureRoot(componentPath, noStructure, null);
         saveDialog();
 
-        assertThat(navigation().locator("a")).hasCount(0);
+        assertThat(navigation().locator(".cmp-languagenavigation__item")).hasCount(0);
         assertThat(contentFrame().locator(".cq-placeholder.cmp-languagenavigation")).isVisible();
     }
 }

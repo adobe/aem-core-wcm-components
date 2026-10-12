@@ -15,13 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.pw.download;
 
-import java.util.HashMap;
-
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
-import com.adobe.cq.wcm.core.components.it.util.Commons;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.Locator;
 
@@ -37,17 +34,25 @@ public class DownloadV1PwIT extends ComponentPwBaseTest {
         return RT_DOWNLOAD_V1;
     }
 
+    protected static final String ASSETS_PATH = "/content/dam/core-components";
+
+    protected void filterSidePanel(SidePanelPw sidePanel, String assetPath) {
+        sidePanel.filterByPath("assetfilter_image_path", ASSETS_PATH);
+    }
+
     protected void assertDownloadHeaders(String assetName, String assetPath) throws Exception {
         String componentPath = addStandaloneComponent(resourceType(), "download");
-        HashMap<String, String> properties = new HashMap<>();
-        properties.put("fileReference", assetPath);
-        properties.put("jcr:title", assetName);
-        Commons.editNodeProperties(authorClient, componentPath, properties);
 
-        page.navigate(baseUrl + testPage + ".html");
-        Locator titleLink = page.locator(".cmp-download__title-link");
+        SidePanelPw sidePanel = new SidePanelPw(page);
+        sidePanel.open();
+        filterSidePanel(sidePanel, assetPath);
+        openEditDialog(componentPath);
+        sidePanel.dragAssetTo(assetPath, dialog().locator("coral-fileupload[name='./file']"));
+        saveDialog();
+
+        Locator titleLink = contentFrame().locator(".cmp-download__title-link");
         assertThat(titleLink).isVisible();
-        String downloadUrl = titleLink.getAttribute("href");
+        String downloadUrl = titleLink.getAttribute("href").trim();
         if (!downloadUrl.startsWith("http")) {
             downloadUrl = baseUrl + (downloadUrl.startsWith("/") ? downloadUrl : "/" + downloadUrl);
         }

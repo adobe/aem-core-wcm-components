@@ -49,6 +49,11 @@ public class ContentFragmentListPwIT extends ComponentPwBaseTest {
         selectAutocomplete("[name='./parentPath']", PARENT_PATH);
     }
 
+    private Locator fragmentTitle(String text) {
+        return contentFrame().locator(".cmp-contentfragment__title")
+            .filter(new Locator.FilterOptions().setHasText(text));
+    }
+
     private Locator contentFragments() {
         return contentFrame().locator(".cmp-contentfragmentlist .cmp-contentfragment");
     }
@@ -64,10 +69,9 @@ public class ContentFragmentListPwIT extends ComponentPwBaseTest {
         assertThat(contentFrame().locator(".cmp-contentfragmentlist")).hasCount(1);
         assertThat(contentFragments()).hasCount(3);
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasCount(12);
-        assertThat(contentFrame().locator(".cmp-contentfragment__title")
-            .filter(new Locator.FilterOptions().setHasText("Image Fragment"))).hasCount(1);
-        assertThat(contentFrame().locator(".cmp-contentfragment__title")
-            .filter(new Locator.FilterOptions().setHasText("Text Fragment"))).hasCount(1);
+        assertThat(fragmentTitle("Image Fragment")).hasCount(1);
+        assertThat(fragmentTitle("Text Fragment")).hasCount(1);
+        assertThat(fragmentTitle("Carousel Fragment")).hasCount(1);
     }
 
     @ParameterizedTest
@@ -80,11 +84,11 @@ public class ContentFragmentListPwIT extends ComponentPwBaseTest {
         saveDialog();
 
         assertThat(contentFragments()).hasCount(2);
+        assertThat(contentFrame().locator(".cmp-contentfragmentlist")).hasCount(1);
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasCount(8);
-        assertThat(contentFrame().locator(".cmp-contentfragment__title")
-            .filter(new Locator.FilterOptions().setHasText("Image Fragment"))).hasCount(1);
-        assertThat(contentFrame().locator(".cmp-contentfragment__title")
-            .filter(new Locator.FilterOptions().setHasText("Text Fragment"))).hasCount(1);
+        assertThat(fragmentTitle("Image Fragment")).hasCount(1);
+        assertThat(fragmentTitle("Text Fragment")).hasCount(1);
+        assertThat(fragmentTitle("Carousel Fragment")).hasCount(0);
     }
 
     @ParameterizedTest
@@ -98,18 +102,25 @@ public class ContentFragmentListPwIT extends ComponentPwBaseTest {
         addElement("component-type");
         saveDialog();
 
+        assertThat(contentFrame().locator(".cmp-contentfragmentlist")).hasCount(1);
         assertThat(contentFragments()).hasCount(3);
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasCount(6);
-        assertThat(contentFrame().locator(".cmp-contentfragment__title")
-            .filter(new Locator.FilterOptions().setHasText("Carousel Fragment"))).hasCount(1);
+        assertThat(fragmentTitle("Image Fragment")).hasCount(1);
+        assertThat(fragmentTitle("Text Fragment")).hasCount(1);
+        assertThat(fragmentTitle("Carousel Fragment")).hasCount(1);
     }
 
     private void addElement(String name) {
+        Locator rows = dialog().locator("coral-multifield-item");
+        int before = rows.count();
         dialog().locator("[coral-multifield-add]").click();
-        Locator button = dialog().locator("coral-multifield-item").last()
-            .locator("coral-select[name='./elementNames'] > button");
+        assertThat(rows).hasCount(before + 1);
+        Locator button = rows.last().locator("coral-select[name='./elementNames'] > button");
         button.click();
-        Locator list = page.locator("#" + button.getAttribute("aria-controls"));
-        list.locator("coral-selectlist-item[value='" + name + "']").click();
+        Locator list = page.locator("[id='" + button.getAttribute("aria-controls") + "']");
+        assertThat(list).isVisible();
+        Locator item = list.locator("coral-selectlist-item[value='" + name + "']");
+        item.scrollIntoViewIfNeeded();
+        item.click();
     }
 }

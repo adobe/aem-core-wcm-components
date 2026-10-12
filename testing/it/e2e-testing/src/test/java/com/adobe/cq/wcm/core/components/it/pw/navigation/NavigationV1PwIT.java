@@ -26,7 +26,6 @@ import com.microsoft.playwright.Locator;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_NAVIGATION_V1;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("playwright-group3")
 public class NavigationV1PwIT extends ComponentPwBaseTest {
@@ -61,6 +60,14 @@ public class NavigationV1PwIT extends ComponentPwBaseTest {
         return page.locator(".cmp-navigation__item");
     }
 
+    private Locator levelItems(int level) {
+        return page.locator(".cmp-navigation__item.cmp-navigation__item--level-" + level);
+    }
+
+    private Locator activeItem(int level) {
+        return page.locator(".cmp-navigation__item.cmp-navigation__item--level-" + level + ".cmp-navigation__item--active");
+    }
+
     @Test
     public void testDefaultConfiguration() throws Exception {
         createNavigation();
@@ -71,11 +78,11 @@ public class NavigationV1PwIT extends ComponentPwBaseTest {
         saveDialog();
         page.navigate(baseUrl + currentPage + ".html");
         assertThat(navigationItems()).hasCount(3);
-        assertThat(page.locator(".cmp-navigation__item--active").first()).containsText("Page 1.1");
-        assertThat(page.locator(".cmp-navigation").first()).containsText("Page 1.1.1");
-        assertThat(page.locator(".cmp-navigation").first()).containsText("Page 1.1.3");
-        assertThat(page.locator(".cmp-navigation").first()).not().containsText("Page 1.1.2");
-        assertThat(page.locator(".cmp-navigation a[href*='page_1_1.html']")).isVisible();
+        assertThat(activeItem(0)).containsText("Page 1.1");
+        assertThat(page.locator("a.cmp-navigation__item-link[href$='/page_1_1.html']").first()).isVisible();
+        assertThat(levelItems(1).filter(new Locator.FilterOptions().setHasText("Page 1.1.1"))).hasCount(1);
+        assertThat(levelItems(1).filter(new Locator.FilterOptions().setHasText("Page 1.1.2"))).hasCount(0);
+        assertThat(levelItems(1).filter(new Locator.FilterOptions().setHasText("Page 1.1.3"))).hasCount(1);
     }
 
     @Test
@@ -83,16 +90,18 @@ public class NavigationV1PwIT extends ComponentPwBaseTest {
         createNavigation();
         openEditor(currentPage);
         openEditDialog(navigationPath);
+        assertThat(dialog().locator("coral-checkbox[name='./collectAllPages'] input[type='checkbox']")).isChecked();
         selectAutocomplete("[name='./navigationRoot']", navigationRoot);
         dialog().locator("input[name='./structureStart']").fill("0");
         saveDialog();
         page.navigate(baseUrl + currentPage + ".html");
         assertThat(navigationItems()).hasCount(4);
-        assertThat(page.locator(".cmp-navigation__item--active").first()).containsText("Page 1.1");
-        assertThat(page.locator(".cmp-navigation").first()).containsText("Page 1");
-        assertThat(page.locator(".cmp-navigation").first()).containsText("Page 1.1.1");
-        assertThat(page.locator(".cmp-navigation").first()).containsText("Page 1.1.3");
-        assertThat(page.locator(".cmp-navigation").first()).not().containsText("Page 1.1.2");
+        assertThat(activeItem(0)).containsText("Page 1");
+        assertThat(activeItem(1)).containsText("Page 1.1");
+        assertThat(page.locator("a.cmp-navigation__item-link[href$='/page_1_1.html']").first()).isVisible();
+        assertThat(levelItems(2).filter(new Locator.FilterOptions().setHasText("Page 1.1.1"))).hasCount(1);
+        assertThat(levelItems(2).filter(new Locator.FilterOptions().setHasText("Page 1.1.2"))).hasCount(0);
+        assertThat(levelItems(2).filter(new Locator.FilterOptions().setHasText("Page 1.1.3"))).hasCount(1);
     }
 
     @Test
@@ -103,13 +112,13 @@ public class NavigationV1PwIT extends ComponentPwBaseTest {
         selectAutocomplete("[name='./navigationRoot']", navigationRoot);
         Locator collectAll = dialog().locator("coral-checkbox[name='./collectAllPages'] input[type='checkbox']");
         collectAll.uncheck();
-        assertTrue(dialog().locator("input[name='./structureDepth']").isVisible());
+        assertThat(dialog().locator("input[name='./structureDepth']")).isVisible();
         // 6.5 and LTS do not evaluate the dialog's EL default for this number field, so set the depth explicitly
         dialog().locator("input[name='./structureDepth']").fill("1");
         saveDialog();
         page.navigate(baseUrl + currentPage + ".html");
         assertThat(navigationItems()).hasCount(1);
-        assertThat(page.locator(".cmp-navigation__item--active").first()).containsText("Page 1.1");
-        assertThat(page.locator(".cmp-navigation").first()).not().containsText("Page 1.1.1");
+        assertThat(activeItem(0)).containsText("Page 1.1");
+        assertThat(levelItems(1)).hasCount(0);
     }
 }

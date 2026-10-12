@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.it.pw.embed;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
 import com.adobe.cq.wcm.core.components.it.util.Commons;
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.assertions.LocatorAssertions;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_EMBED_V1;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -34,6 +36,10 @@ public class EmbedV1PwIT extends ComponentPwBaseTest {
     protected String embedResourceType() {
         return RT_EMBED_V1;
     }
+
+    private static final Pattern INVALID = Pattern.compile("(^|\\s)is-invalid(\\s|$)");
+    // oEmbed lookups and provider widgets depend on external sites, so allow more time than the default
+    private static final double EXTERNAL_TIMEOUT = 60_000;
 
     protected String embedPath;
 
@@ -57,6 +63,19 @@ public class EmbedV1PwIT extends ComponentPwBaseTest {
         dialog().locator("[data-cmp-embed-dialog-edit-hook='urlField']").fill(url);
     }
 
+    private Locator urlField() {
+        return dialog().locator("[data-cmp-embed-dialog-edit-hook='urlField']");
+    }
+
+    private void waitForUrlValidation(boolean valid) {
+        if (valid) {
+            assertThat(urlField()).not().hasClass(INVALID, new LocatorAssertions.HasClassOptions().setTimeout(EXTERNAL_TIMEOUT));
+        } else {
+            assertThat(urlField()).hasClass(INVALID, new LocatorAssertions.HasClassOptions().setTimeout(EXTERNAL_TIMEOUT));
+            assertThat(urlStatus()).isHidden();
+        }
+    }
+
     private Locator urlStatus() {
         return dialog().locator("[data-cmp-embed-dialog-edit-hook='urlStatus']");
     }
@@ -67,7 +86,7 @@ public class EmbedV1PwIT extends ComponentPwBaseTest {
         openEmbedDialog();
         assertTrue(urlStatus().innerText().trim().isEmpty());
         setUrl("https://www.youtube.com/watch?v=5vOOa3-fifY");
-        page.waitForTimeout(1500);
+        waitForUrlValidation(true);
         assertThat(urlStatus()).containsText("YouTube");
         clickDone();
         assertThat(dialog()).isHidden();
@@ -75,28 +94,23 @@ public class EmbedV1PwIT extends ComponentPwBaseTest {
         openEmbedDialog();
         assertThat(urlStatus()).containsText("YouTube");
         setUrl("https://www.youtube.com/watch?v=5vOOa3-fifYinvalid");
-        page.waitForTimeout(1500);
-        assertThat(urlStatus()).isHidden();
-        assertThat(dialog().locator("[data-cmp-embed-dialog-edit-hook='urlField'].is-invalid")).isVisible();
+        waitForUrlValidation(false);
         setUrl("malformed");
-        page.waitForTimeout(1000);
-        assertThat(urlStatus()).isHidden();
-        assertThat(dialog().locator("[data-cmp-embed-dialog-edit-hook='urlField'].is-invalid")).isVisible();
+        waitForUrlValidation(false);
         setUrl("");
-        page.waitForTimeout(1000);
-        assertThat(urlStatus()).isHidden();
-        assertThat(dialog().locator("[data-cmp-embed-dialog-edit-hook='urlField'].is-invalid")).isVisible();
+        waitForUrlValidation(false);
     }
 
     private void testOEmbed(String url, String expectedName, String renderedSelector) throws Exception {
         createEmbed();
         openEmbedDialog();
         setUrl(url);
-        page.waitForTimeout(1500);
-        assertThat(urlStatus()).containsText(expectedName);
+        waitForUrlValidation(true);
+        assertThat(urlStatus()).containsText(expectedName, new LocatorAssertions.ContainsTextOptions().setTimeout(EXTERNAL_TIMEOUT));
         saveDialog();
         // Provider widget scripts (e.g. Twitter) briefly keep the original markup next to the rendered copy.
-        assertThat(contentFrame().locator(renderedSelector).first()).isVisible();
+        assertThat(contentFrame().locator(renderedSelector).first())
+            .isVisible(new LocatorAssertions.IsVisibleOptions().setTimeout(EXTERNAL_TIMEOUT));
     }
 
     @Test
@@ -122,10 +136,11 @@ public class EmbedV1PwIT extends ComponentPwBaseTest {
         for (String url : new String[]{"https://www.youtube.com/watch?v=5vOOa3-fifY", "https://youtu.be/5vOOa3-fifY"}) {
             openEmbedDialog();
             setUrl(url);
-            page.waitForTimeout(1500);
-            assertThat(urlStatus()).containsText("YouTube");
+            waitForUrlValidation(true);
+            assertThat(urlStatus()).containsText("YouTube", new LocatorAssertions.ContainsTextOptions().setTimeout(EXTERNAL_TIMEOUT));
             saveDialog();
-            assertThat(contentFrame().locator(".cmp-embed [src^='https://www.youtube.com/embed']")).isVisible();
+            assertThat(contentFrame().locator(".cmp-embed [src^='https://www.youtube.com/embed']"))
+                .isVisible(new LocatorAssertions.IsVisibleOptions().setTimeout(EXTERNAL_TIMEOUT));
         }
     }
 
@@ -141,6 +156,7 @@ public class EmbedV1PwIT extends ComponentPwBaseTest {
             "core/wcm/components/embed/v1/embed/embeddable/youtube");
         clickDone();
         assertThat(dialog()).isVisible();
+        assertThat(dialog().locator("[name='./youtubeVideoId']")).hasClass(INVALID);
         dialog().locator("[name='./youtubeVideoId']").fill("5vOOa3-fifY");
         saveDialog();
         assertThat(contentFrame().locator(".cmp-embed iframe[src*='youtube.com/embed']")).isVisible();
@@ -153,6 +169,7 @@ public class EmbedV1PwIT extends ComponentPwBaseTest {
         setType("html");
         clickDone();
         assertThat(dialog()).isVisible();
+        assertThat(dialog().locator("textarea[name='./html']")).hasClass(INVALID);
         dialog().locator("textarea[name='./html']")
             .fill("<div id='CmpEmbedHtml'>HTML</div>");
         saveDialog();

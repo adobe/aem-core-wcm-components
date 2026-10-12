@@ -43,7 +43,7 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
     }
 
     private String createBreadcrumbPage(String resourceType) throws Exception {
-        testPage = authorClient.createPage("breadcrumb-root", "breadcrumb-root", rootPage, defaultPageTemplate)
+        testPage = authorClient.createPage("breadcrumb-root", "testPage_L1", rootPage, defaultPageTemplate)
             .getSlingPath();
         String currentPage = testPage;
         for (int level = 2; level <= 5; level++) {
@@ -78,11 +78,13 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
     public void testHideCurrent(String resourceType) throws Exception {
         String componentPath = createBreadcrumbPage(resourceType);
         assertThat(activeItem()).hasCount(1);
+        assertThat(activeItem()).containsText("testPage_L5");
         openEditDialog(componentPath);
         setCheckbox("./hideCurrent");
         saveDialog();
 
         assertThat(activeItem()).hasCount(0);
+        assertThat(items().filter(new Locator.FilterOptions().setHasText("testPage_L5"))).hasCount(0);
         assertThat(items()).hasCount(4);
     }
 
@@ -93,11 +95,13 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         Commons.hidePage(authorClient, hiddenPagePath);
         reloadEditor();
         assertThat(items()).hasCount(4);
+        assertThat(items().filter(new Locator.FilterOptions().setHasText("testPage_L3"))).hasCount(0);
         openEditDialog(componentPath);
         setCheckbox("./showHidden");
         saveDialog();
 
         assertThat(items()).hasCount(5);
+        assertThat(items().filter(new Locator.FilterOptions().setHasText("testPage_L3"))).hasCount(1);
     }
 
     @ParameterizedTest
@@ -107,6 +111,7 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         assertThat(items()).hasCount(5);
         openEditDialog(componentPath);
         Locator startLevel = dialog().locator("input[name='./startLevel']");
+        assertThat(startLevel).hasValue("2");
         startLevel.fill("4");
         saveDialog();
 
@@ -117,8 +122,10 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
     @MethodSource("breadcrumbVersions")
     public void testSetZeroStartLevel(String resourceType) throws Exception {
         String componentPath = createBreadcrumbPage(resourceType);
+        assertThat(items()).hasCount(5);
         openEditDialog(componentPath);
         Locator startLevel = dialog().locator("input[name='./startLevel']");
+        assertThat(startLevel).hasValue("2");
         startLevel.fill("0");
         clickDone();
 
@@ -130,7 +137,10 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
     @MethodSource("breadcrumbVersions")
     public void testSet100StartLevel(String resourceType) throws Exception {
         String componentPath = createBreadcrumbPage(resourceType);
+        assertThat(items()).hasCount(5);
+        assertThat(activeItem()).hasCount(1);
         openEditDialog(componentPath);
+        assertThat(dialog().locator("input[name='./startLevel']")).hasValue("2");
         dialog().locator("input[name='./startLevel']").fill("100");
         saveDialog();
 
@@ -146,6 +156,8 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         Locator list = contentFrame().locator(".cmp-breadcrumb__list[itemtype='http://schema.org/BreadcrumbList']");
         assertThat(list).isVisible();
         assertThat(list.locator("[itemprop='itemListElement']")).hasCount(5);
+        assertThat(items()).hasCount(5);
+        assertThat(activeItem()).hasCount(1);
     }
 
     static Stream<String> structureDataVersions() {

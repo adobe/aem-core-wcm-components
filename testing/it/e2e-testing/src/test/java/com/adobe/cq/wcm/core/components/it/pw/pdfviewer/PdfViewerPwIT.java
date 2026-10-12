@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
 import com.microsoft.playwright.FrameLocator;
 import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.options.WaitUntilState;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.CLIENTLIBS_PDFVIEWER_V1;
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_PDFVIEWER_V1;
@@ -50,18 +49,15 @@ public class PdfViewerPwIT extends ComponentPwBaseTest {
         selectInPicker("/content/dam", "[name='./documentPath']", "core-components/Bodea_Brochure.pdf");
         saveDialog();
 
-        page.navigate(baseUrl + testPage + ".html",
-            new com.microsoft.playwright.Page.NavigateOptions().setWaitUntil(WaitUntilState.COMMIT));
-        Locator viewerContent = page.locator(".cmp-pdfviewer__content");
+        Locator viewerContent = contentFrame().locator(".cmp-pdfviewer__content");
         assertThat(viewerContent).isVisible();
-        String iframeSelector = "#iframe-" + viewerContent.getAttribute("id");
         AssertionError renderFailure = null;
         for (int attempt = 0; attempt < RENDER_ATTEMPTS; attempt++) {
             if (attempt > 0) {
-                page.reload(new com.microsoft.playwright.Page.ReloadOptions().setWaitUntil(WaitUntilState.COMMIT));
+                reloadEditor();
                 assertThat(viewerContent).isVisible();
             }
-            FrameLocator pdfFrame = page.frameLocator(iframeSelector);
+            FrameLocator pdfFrame = contentFrame().frameLocator("#iframe-" + viewerContent.getAttribute("id"));
             try {
                 assertThat(pdfFrame.locator("body")).containsText("Bodea_Brochure",
                     new com.microsoft.playwright.assertions.LocatorAssertions.ContainsTextOptions()

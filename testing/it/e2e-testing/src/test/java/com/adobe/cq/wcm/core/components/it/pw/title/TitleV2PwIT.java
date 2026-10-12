@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.it.pw.title;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -58,8 +59,10 @@ public class TitleV2PwIT extends TitleV1PwIT {
         openEditDialog(componentPath);
         selectAutocomplete("[name='./linkURL']", redirectPage);
         saveDialog();
-        page.navigate(baseUrl + testPage + ".html");
-        assertThat(page.locator(".cmp-title__link")).hasAttribute("href", redirectPage + ".html");
+        assertThat(contentFrame().locator(".cmp-title__link")).hasAttribute("href", redirectPage + ".html");
+        enterPreviewMode();
+        contentFrame().locator(".cmp-title__link").click();
+        assertThat(page).hasURL(Pattern.compile(".*" + Pattern.quote(redirectPage + ".html") + "$"));
     }
 
     @Test
@@ -73,6 +76,7 @@ public class TitleV2PwIT extends TitleV1PwIT {
             assertThat(options.locator("coral-selectlist-item[value='" + titleType + "']")).isVisible();
         }
         assertThat(options.locator("coral-selectlist-item[value='h5']")).hasCount(0);
+        options.locator("coral-selectlist-item").first().click();
         saveDialog();
         assertThat(contentFrame().locator(".cmp-title h2")).isVisible();
     }
@@ -94,7 +98,7 @@ public class TitleV2PwIT extends TitleV1PwIT {
         setTitlePolicy("h4", "h1", "h2", "h3", "h4", "h6");
         openEditor(testPage);
         openEditDialog(componentPath);
-        assertThat(dialog().locator("coral-select[name='./type'] coral-select-item[selected]")).containsText("h4");
+        assertThat(dialog().locator("coral-select[name='./type'] coral-select-item[selected]")).hasText("h4");
     }
 
     @Test
@@ -103,6 +107,6 @@ public class TitleV2PwIT extends TitleV1PwIT {
         setTitlePolicy("h5", "h3", "h4", "h6");
         openEditor(testPage);
         openEditDialog(componentPath);
-        assertThat(dialog().locator("coral-select[name='./type'] coral-select-item[selected]")).containsText("h3");
+        assertThat(dialog().locator("coral-select[name='./type'] coral-select-item[selected]")).hasText("h3");
     }
 }

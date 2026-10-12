@@ -21,6 +21,7 @@ import java.util.HashMap;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import com.adobe.cq.wcm.core.components.it.pw.image.ImageSidePanelHelper;
 import com.adobe.cq.wcm.core.components.it.util.Commons;
 import com.microsoft.playwright.Locator;
 
@@ -63,23 +64,41 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         return "[data-cmp-teaser-v2-dialog-edit-hook='" + name + "']";
     }
 
-    /** The v2 dialog inherits the image from the page by default; use the asset with an explicit alt. */
+    /**
+     * The v2 dialog inherits the image from the page by default; drag the asset from the side panel into the Assets
+     * tab's file upload instead. The dialog stays open on the Assets tab.
+     */
     @Override
     protected void setImage() throws Exception {
-        Commons.editNodeProperties(authorClient, teaserPath, new HashMap<>(Map.of("fileReference", ASSET,
-            "imageFromPageImage", "false", "altValueFromDAM", "false", "alt", "alt")));
-        reloadEditor();
+        ImageSidePanelHelper.openSidePanel(page);
+        ImageSidePanelHelper.setAssetFilter(page, ImageSidePanelHelper.TEST_ASSETS_PATH);
+        openEditDialog(teaserPath);
+        openAssetsTab();
+        Locator inherit = checkbox("./imageFromPageImage");
+        if (inherit.isChecked()) {
+            inherit.uncheck();
+        }
+        dragAssetIntoDialog();
     }
 
     private Locator rendered(String selector) {
         return contentFrame().locator(selector);
     }
 
+    private Locator imageLink() {
+        return rendered(".cmp-teaser .cmp-image__link");
+    }
+
+    private Locator teaserLink(String path) {
+        return rendered(".cmp-teaser a.cmp-teaser__link[href$='" + path + ".html']");
+    }
+
+    /** Sets the page's featured image through the page properties UI and returns to the editor. */
     private void setPageImage(String targetPage, String asset) throws Exception {
         authorClient.setPageProperty(targetPage, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
-        Commons.editNodeProperties(authorClient, targetPage + "/jcr:content",
-            new HashMap<>(Map.of("cq:featuredimage/fileReference", asset,
-                "cq:featuredimage/sling:resourceType", "core/wcm/components/image/v3/image")));
+        ImageSidePanelHelper.setPageFeaturedImage(page, baseUrl, targetPage,
+            asset.substring(asset.lastIndexOf('/') + 1), true);
+        openEditor(testPage);
     }
 
     private void setLinkedPage() {
@@ -92,22 +111,25 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     public void testFullyConfiguredTeaser() throws Exception {
         createTeaser();
         setImage();
-        openEditDialog(teaserPath);
         openLinkTab();
         selectAutocomplete("[name='./linkURL']", testPage);
         checkbox("./linkTarget").check();
         openTextTab();
         dialog().locator("[name='./pretitle']").fill(PRETITLE);
+        assertThat(dialog().locator("coral-checkbox[name='./titleFromPage']")).isVisible();
+        assertThat(dialog().locator("coral-checkbox[name='./descriptionFromPage']")).isVisible();
         checkbox("./titleFromPage").uncheck();
         checkbox("./descriptionFromPage").uncheck();
         setText(TITLE, DESCRIPTION);
         saveDialog();
-        assertThat(rendered(".cmp-teaser img")).isVisible();
+        assertThat(renderedImage()).isVisible();
+        assertThat(imageLink()).hasCount(0);
         assertThat(rendered(".cmp-teaser__pretitle")).hasText(PRETITLE);
         // with a link and no actions, v2 wraps the whole teaser in the link
-        assertThat(rendered(".cmp-teaser__link")).hasAttribute("target", "_blank");
-        assertThat(rendered(".cmp-teaser__title")).containsText(TITLE);
-        assertThat(rendered(".cmp-teaser__description")).containsText(DESCRIPTION);
+        assertThat(rendered(".cmp-teaser a.cmp-teaser__link[href$='" + testPage + ".html'][target='_blank']"))
+            .isVisible();
+        assertThat(rendered(".cmp-teaser a.cmp-teaser__link .cmp-teaser__title")).hasText(TITLE);
+        assertThat(rendered(".cmp-teaser__description")).hasText(DESCRIPTION);
     }
 
     @Test
@@ -115,13 +137,13 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     public void testInheritedPropertiesTeaser() throws Exception {
         createTeaser();
         setImage();
-        openEditDialog(teaserPath);
         openLinkTab();
         selectAutocomplete("[name='./linkURL']", testPage);
         saveDialog();
-        assertThat(rendered(".cmp-teaser__link")).hasAttribute("href", java.util.regex.Pattern.compile(".*" + testPage + "\\.html$"));
-        assertThat(rendered(".cmp-teaser__title")).containsText("Test Page Title");
-        assertThat(rendered(".cmp-teaser__description")).containsText("teaser page description");
+        assertThat(renderedImage()).isVisible();
+        assertThat(teaserLink(testPage)).isVisible();
+        assertThat(teaserLink(testPage).locator(".cmp-teaser__title")).hasText("Test Page Title");
+        assertThat(rendered(".cmp-teaser__description")).hasText("teaser page description");
     }
 
     @Test
@@ -172,11 +194,10 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     public void testLinksToElementsTeaser() throws Exception {
         createTeaser();
         setImage();
-        openEditDialog(teaserPath);
         openLinkTab();
         selectAutocomplete("[name='./linkURL']", testPage);
         saveDialog();
-        assertThat(rendered(".cmp-teaser img")).isVisible();
+        assertThat(renderedImage()).isVisible();
         assertThat(rendered(".cmp-teaser__title-link")).hasCount(0);
     }
 
@@ -196,11 +217,14 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     public void testWithActionsTeaser() throws Exception {
         createTeaser();
         setImage();
-        openEditDialog(teaserPath);
         openLinkTab();
         addActionLink(testPage);
         addActionLink(secondPage);
         saveDialog();
+        assertThat(renderedImage()).isVisible();
+        assertThat(imageLink()).hasCount(0);
+        assertThat(teaserLink(testPage)).hasCount(0);
+        assertThat(rendered(".cmp-teaser__description")).hasText("teaser page description");
         assertThat(rendered(".cmp-teaser__action-link")).hasCount(2);
         assertThat(rendered(".cmp-teaser__action-link").nth(0)).containsText("Test Page Title");
         assertThat(rendered(".cmp-teaser__action-link").nth(1)).containsText(SECOND_TITLE);
@@ -211,7 +235,6 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     public void testWithExternalActionsTeaser() throws Exception {
         createTeaser();
         setImage();
-        openEditDialog(teaserPath);
         openLinkTab();
         nextActionLinkInput().fill("http://www.adobe.com");
         setActionTitle("Adobe");
@@ -219,6 +242,10 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         setActionTitle("Action Text 2");
         dialog().locator(".cmp-teaser__editor-actionField-linkTarget").last().click();
         saveDialog();
+        assertThat(renderedImage()).isVisible();
+        assertThat(imageLink()).hasCount(0);
+        assertThat(teaserLink(testPage)).hasCount(0);
+        assertThat(rendered(".cmp-teaser__description")).hasText("teaser page description");
         assertThat(rendered(".cmp-teaser__action-link")).hasCount(2);
         assertThat(rendered(".cmp-teaser__action-link").first()).containsText("Adobe");
         assertThat(rendered(".cmp-teaser__action-link").nth(1)).containsText("Action Text 2");
@@ -247,13 +274,28 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     public void testWithLinkAndImageTeaser() throws Exception {
         createTeaser();
         setImage();
-        openEditDialog(teaserPath);
         openLinkTab();
         selectAutocomplete("[name='./linkURL']", testPage);
         saveDialog();
-        assertThat(rendered(".cmp-teaser img")).isVisible();
+        assertThat(renderedImage()).isVisible();
+        assertThat(imageLink()).hasCount(0);
         assertThat(rendered(".cmp-teaser__title")).isVisible();
         assertThat(rendered(".cmp-teaser__description")).isVisible();
+    }
+
+    @Test
+    public void testDropImageToTeaser() throws Exception {
+        createTeaser();
+        ImageSidePanelHelper.openSidePanel(page);
+        ImageSidePanelHelper.setAssetFilter(page, ImageSidePanelHelper.TEST_ASSETS_PATH);
+        ImageSidePanelHelper.dragSidePanelImageToComponent(page, ASSET, teaserPath);
+        ImageSidePanelHelper.closeSidePanel(page);
+        openEditDialog(teaserPath);
+        openAssetsTab();
+        assertThat(checkbox("./altValueFromDAM")).isChecked();
+        dialog().locator("button.cq-dialog-cancel, button[is='coral-button'][title='Cancel']").first().click();
+        assertThat(dialog()).isHidden();
+        assertThat(rendered(".cmp-teaser__image img[alt='House on a beach with blue sky']")).isVisible();
     }
 
     @Test
@@ -272,9 +314,12 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         setPageImage(testPage, CLIMBING);
         openEditDialog(teaserPath);
         openAssetsTab();
+        checkbox("./altValueFromPageImage").uncheck();
+        dialog().locator("input[name='./alt']").fill("");
         checkbox("./isDecorative").check();
+        assertThat(checkbox("./isDecorative")).isChecked();
         saveDialog();
-        assertThat(rendered(".cmp-teaser img")).hasAttribute("alt", "");
+        assertThat(rendered(".cmp-teaser__image img[src*='climbing']")).hasAttribute("alt", "");
     }
 
     @Test

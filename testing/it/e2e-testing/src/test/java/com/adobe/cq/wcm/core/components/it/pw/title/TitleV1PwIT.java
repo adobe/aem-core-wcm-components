@@ -47,13 +47,18 @@ public class TitleV1PwIT extends ComponentPwBaseTest {
         return path;
     }
 
+    /** Switches the page editor to preview mode so that the content frame links can be followed. */
+    protected void enterPreviewMode() {
+        page.evaluate("() => Granite.author.layerManager.activate('Preview')");
+    }
+
     @Test
     public void SetTitleValueUsingConfigDialog() throws Exception {
         String componentPath = createTitle();
         openEditDialog(componentPath);
         dialog().locator("[name='./jcr:title']").fill("Content name");
         saveDialog();
-        assertThat(contentFrame().locator("h1")).hasText("Content name");
+        assertThat(contentFrame().locator(".cmp-title h1")).hasText("Content name");
     }
 
     @Test
@@ -73,6 +78,6 @@ public class TitleV1PwIT extends ComponentPwBaseTest {
         openEditDialog(componentPath);
         selectInCoralSelect("[name='./type']", "h6");
         saveDialog();
-        assertThat(contentFrame().locator("h6")).isVisible();
+        assertThat(contentFrame().locator(".cmp-title h6")).isVisible();
     }
 }

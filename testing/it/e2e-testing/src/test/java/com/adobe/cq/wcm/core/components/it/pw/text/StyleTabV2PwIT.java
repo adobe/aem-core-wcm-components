@@ -15,14 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.pw.text;
 
-import com.microsoft.playwright.Locator;
 import java.util.HashMap;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
-import com.adobe.cq.wcm.core.components.it.util.Commons;
+import com.microsoft.playwright.Locator;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_TEXT_V2;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -61,9 +60,21 @@ public class StyleTabV2PwIT extends ComponentPwBaseTest {
 
     private Locator styleList;
 
-    private void openStyleDropdown() {
+    private static final String BLUE_ID = "1547060098888";
+    private static final String RED_ID = "1550165689999";
+    private static final String STYLE_SELECT = "coral-select[name='./cq:styleIds']";
+
+    private void openStylesTab() {
         dialog().locator("coral-tab[data-foundation-tracking-event*='styles']").click();
+        assertThat(dialog().locator(STYLE_SELECT)).isVisible();
+    }
+
+    private void openStyleDropdown() {
         styleList = openCoralSelect("[name='./cq:styleIds']");
+    }
+
+    private void selectStyle(String label) {
+        styleList.locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText(label)).click();
     }
 
     @Test
@@ -78,8 +89,13 @@ public class StyleTabV2PwIT extends ComponentPwBaseTest {
     public void testApplyStyle() throws Exception {
         createTextWithStyles();
         setText();
+        openStylesTab();
+        assertThat(dialog().locator(STYLE_SELECT + " > coral-select-item[selected]")).hasText("None");
         openStyleDropdown();
-        styleList.locator("coral-selectlist-item").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Blue")).click();
+        assertThat(styleList.locator("coral-selectlist-item[selected]")).hasText("None");
+        assertThat(styleList.locator("coral-selectlist-item[value='" + BLUE_ID + "']")).hasCount(1);
+        assertThat(styleList.locator("coral-selectlist-item[value='" + RED_ID + "']")).hasCount(1);
+        selectStyle("Blue");
         saveDialog();
         assertThat(contentFrame().locator(".cmp-blue-text #text-id")).isVisible();
         assertThat(contentFrame().locator(".cmp-red-text #text-id")).hasCount(0);
@@ -89,12 +105,18 @@ public class StyleTabV2PwIT extends ComponentPwBaseTest {
     public void testChangeAppliedStyle() throws Exception {
         createTextWithStyles();
         setText();
+        openStylesTab();
         openStyleDropdown();
-        styleList.locator("coral-selectlist-item").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Blue")).click();
+        selectStyle("Blue");
         saveDialog();
+        assertThat(contentFrame().locator(".cmp-blue-text #text-id")).isVisible();
         openEditDialog(textPath);
+        openStylesTab();
         openStyleDropdown();
-        styleList.locator("coral-selectlist-item").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Red")).click();
+        assertThat(styleList.locator("coral-selectlist-item[selected][value='" + BLUE_ID + "']")).hasCount(1);
+        assertThat(styleList.locator("coral-selectlist-item[value='" + RED_ID + "']")).hasCount(1);
+        assertThat(dialog().locator(STYLE_SELECT + " > coral-select-item[selected]")).hasText("Blue");
+        selectStyle("Red");
         saveDialog();
         assertThat(contentFrame().locator(".cmp-red-text #text-id")).isVisible();
         assertThat(contentFrame().locator(".cmp-blue-text #text-id")).hasCount(0);

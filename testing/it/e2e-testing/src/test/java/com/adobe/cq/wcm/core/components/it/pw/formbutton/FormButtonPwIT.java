@@ -65,7 +65,7 @@ public class FormButtonPwIT extends FormGroupPwBase {
         selectInCoralSelect("[name='./type']", "button");
         dialog().locator("[name='./jcr:title']:visible").first().fill("Button");
         saveDialog();
-        Locator button = contentFrame().locator(buttonSelector(resourceType));
+        Locator button = contentFrame().locator(buttonSelector(resourceType) + "[type='button']");
         assertThat(button).isVisible();
         assertThat(button).containsText("Button");
     }
@@ -111,6 +111,7 @@ public class FormButtonPwIT extends FormGroupPwBase {
         dialog().locator("[name='./jcr:title']:visible").first().fill("BUTTON WITH NAME");
         dialog().locator("input[name='./value']").fill("thisisthevalue");
         clickDone();
+        assertThat(dialog()).isVisible();
         assertThat(dialog().locator("[name='./name'][invalid='true'], [name='./name'][aria-invalid='true']")).hasCount(1);
     }
 }

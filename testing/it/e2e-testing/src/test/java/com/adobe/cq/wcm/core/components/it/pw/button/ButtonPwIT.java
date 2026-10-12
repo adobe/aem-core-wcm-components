@@ -58,7 +58,8 @@ public class ButtonPwIT extends ComponentPwBaseTest {
         dialog().locator("input[name='./jcr:title']").fill("test button");
         saveDialog();
 
-        assertThat(contentFrame().locator(".cmp-button")).containsText("test button");
+        assertThat(contentFrame().locator(".cmp-button")).isVisible();
+        assertThat(contentFrame().locator(".cmp-button .cmp-button__text")).hasText("test button");
     }
 
     @ParameterizedTest
@@ -69,6 +70,7 @@ public class ButtonPwIT extends ComponentPwBaseTest {
         fillLink(resourceType.equals(RT_BUTTON_V1) ? "link" : "linkURL", "https://www.adobe.com");
         saveDialog();
 
+        assertThat(contentFrame().locator("a[href='https://www.adobe.com']")).isVisible();
         assertThat(contentFrame().locator("a.cmp-button[href='https://www.adobe.com']")).hasCount(1);
     }
 
@@ -91,6 +93,7 @@ public class ButtonPwIT extends ComponentPwBaseTest {
         dialog().locator("coral-checkbox[name='./linkTarget'] input[type='checkbox']").check();
         saveDialog();
 
+        assertThat(contentFrame().locator("a[href='https://www.adobe.com'][target='_blank']")).isVisible();
         assertThat(contentFrame().locator("a.cmp-button[href='https://www.adobe.com'][target='_blank']")).hasCount(1);
     }
 

@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.it.pw.PlaywrightAuthorBaseTest;
 import com.adobe.cq.wcm.core.components.it.util.RequestConstants;
+import com.microsoft.playwright.Frame;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -39,9 +40,14 @@ public class DataLayerPwIT extends PlaywrightAuthorBaseTest {
             "/content/core-components", "/conf/core-components/settings/wcm/templates/simple-template")
             .getSlingPath();
 
-        page.navigate(baseUrl + testPage + ".html");
-        Map<?, ?> state = (Map<?, ?>) page.evaluate(
-            "() => window.adobeDataLayer && window.adobeDataLayer.getState()");
+        openEditor(testPage);
+        page.evaluate("() => Granite.author.layerManager.activate('Preview')");
+        Frame frame = contentFrame().owner().elementHandle().contentFrame();
+        // the content frame may reload when switching to preview mode, so wait until the data layer is initialized
+        frame.waitForFunction("() => !!window.adobeDataLayer && typeof window.adobeDataLayer.getState === 'function'"
+            + " && !!window.adobeDataLayer.getState().component");
+        assertNotNull(frame.evaluate("() => window.adobeDataLayer"), "adobeDataLayer is undefined!");
+        Map<?, ?> state = (Map<?, ?>) frame.evaluate("() => window.adobeDataLayer.getState()");
         assertNotNull(state, "adobeDataLayer.getState(): returned state object is null!");
         assertNotNull(state.get("page"), "returned state is missing 'page' property!");
         assertNotNull(state.get("component"), "returned state is missing 'component' property!");

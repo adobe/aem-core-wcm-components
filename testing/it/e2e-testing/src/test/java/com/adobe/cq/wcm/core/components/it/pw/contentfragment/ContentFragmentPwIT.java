@@ -19,11 +19,10 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
-import com.adobe.cq.wcm.core.components.it.util.Commons;
+import com.microsoft.playwright.Locator;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_CONTENTFRAGMENT_V1;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Tag("playwright-group2")
 public class ContentFragmentPwIT extends ComponentPwBaseTest {
@@ -42,12 +41,17 @@ public class ContentFragmentPwIT extends ComponentPwBaseTest {
     }
 
     private void chooseElement(String value) {
+        Locator items = dialog().locator("coral-multifield-item");
+        int before = items.count();
         dialog().locator("[coral-multifield-add]").click();
-        com.microsoft.playwright.Locator button = dialog().locator("coral-multifield-item").last()
-            .locator("coral-select[name='./elementNames'] > button");
+        assertThat(items).hasCount(before + 1);
+        Locator button = items.last().locator("coral-select[name='./elementNames'] > button");
         button.click();
-        page.locator("#" + button.getAttribute("aria-controls"))
-            .locator("coral-selectlist-item[value='" + value + "']").click();
+        Locator list = page.locator("[id='" + button.getAttribute("aria-controls") + "']");
+        assertThat(list).isVisible();
+        Locator item = list.locator("coral-selectlist-item[value='" + value + "']");
+        item.scrollIntoViewIfNeeded();
+        item.click();
     }
 
     @Test
@@ -56,8 +60,11 @@ public class ContentFragmentPwIT extends ComponentPwBaseTest {
         selectFragment(SIMPLE_FRAGMENT);
         saveDialog();
 
+        assertThat(contentFrame().locator(".cmp-contentfragment__title")).hasCount(1);
         assertThat(contentFrame().locator(".cmp-contentfragment__title")).hasText("Simple Fragment");
+        assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasCount(1);
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasText("Main");
+        assertThat(contentFrame().locator(".cmp-contentfragment__element-value")).hasCount(1);
         assertThat(contentFrame().locator(".cmp-contentfragment__element-value h2")).hasText("Master variation");
     }
 
@@ -68,7 +75,11 @@ public class ContentFragmentPwIT extends ComponentPwBaseTest {
         selectInCoralSelect("[name='./variationName']", "short");
         saveDialog();
 
+        assertThat(contentFrame().locator(".cmp-contentfragment__title")).hasCount(1);
         assertThat(contentFrame().locator(".cmp-contentfragment__title")).hasText("Simple Fragment");
+        assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasCount(1);
+        assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasText("Main");
+        assertThat(contentFrame().locator(".cmp-contentfragment__element-value")).hasCount(1);
         assertThat(contentFrame().locator(".cmp-contentfragment__element-value h2")).hasText("Short variation");
     }
 
@@ -78,8 +89,10 @@ public class ContentFragmentPwIT extends ComponentPwBaseTest {
         selectFragment(IMAGE_FRAGMENT);
         saveDialog();
 
+        assertThat(contentFrame().locator(".cmp-contentfragment__title")).hasCount(1);
         assertThat(contentFrame().locator(".cmp-contentfragment__title")).hasText("Image Fragment");
-        assertEquals(4, contentFrame().locator(".cmp-contentfragment__element-title").count());
+        assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasCount(4);
+        assertThat(contentFrame().locator(".cmp-contentfragment__element-value")).hasCount(4);
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title").nth(0)).hasText("Title");
         assertThat(contentFrame().locator(".cmp-contentfragment__element-value").nth(0)).hasText("Image");
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title").nth(1)).hasText("Description");
@@ -98,8 +111,12 @@ public class ContentFragmentPwIT extends ComponentPwBaseTest {
         chooseElement("component-type");
         saveDialog();
 
+        assertThat(contentFrame().locator(".cmp-contentfragment__title")).hasCount(1);
+        assertThat(contentFrame().locator(".cmp-contentfragment__title")).hasText("Image Fragment");
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasCount(2);
+        assertThat(contentFrame().locator(".cmp-contentfragment__element-value")).hasCount(2);
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title").nth(0)).hasText("Title");
+        assertThat(contentFrame().locator(".cmp-contentfragment__element-value").nth(0)).hasText("Image");
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title").nth(1)).hasText("Type");
     }
 
@@ -120,6 +137,7 @@ public class ContentFragmentPwIT extends ComponentPwBaseTest {
         assertThat(dialog().locator("label.coral-Form-errorlabel, coral-tooltip[variant='error']")).hasCount(0);
         clickDone();
 
+        assertThat(contentFrame().locator(".cmp-contentfragment__title")).hasCount(1);
         assertThat(contentFrame().locator(".cmp-contentfragment__title")).hasText("Image Fragment");
         assertThat(contentFrame().locator(".cmp-contentfragment__element-title")).hasText("Title");
         assertThat(contentFrame().locator(".cmp-contentfragment__element-value")).hasText("Image");
@@ -131,7 +149,7 @@ public class ContentFragmentPwIT extends ComponentPwBaseTest {
         selectFragment(IMAGE_FRAGMENT);
         dialog().locator("coral-radio[name='./displayMode'][value='singleText']").click();
         clickDone();
-        assertEquals(1, dialog().locator("label.coral-Form-errorlabel, coral-tooltip[variant='error']").count());
+        assertThat(dialog().locator("label.coral-Form-errorlabel, coral-tooltip[variant='error']")).hasCount(1);
 
         dialog().locator("coral-radio[name='./displayMode'][value='vcf']").click();
         assertThat(dialog().locator("label.coral-Form-errorlabel, coral-tooltip[variant='error']")).hasCount(0);
@@ -153,6 +171,7 @@ public class ContentFragmentPwIT extends ComponentPwBaseTest {
         selectFragment(SIMPLE_FRAGMENT);
         dialog().locator("coral-radio[name='./displayMode'][value='vcf']").click();
         saveDialog();
+        page.evaluate("() => Granite.author.layerManager.activate('Preview')");
 
         assertThat(contentFrame().locator(".cmp-contentfragment--vcf")).isVisible();
     }

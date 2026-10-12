@@ -43,8 +43,8 @@ public class TitleV3PwIT extends TitleV2PwIT {
         selectAutocomplete("[name='./linkURL']", redirectPage);
         dialog().locator("coral-checkbox[name='./linkTarget'] input").check();
         saveDialog();
-        page.navigate(baseUrl + testPage + ".html");
-        assertThat(page.locator(".cmp-title__link")).hasAttribute("href", redirectPage + ".html");
-        assertThat(page.locator(".cmp-title__link")).hasAttribute("target", "_blank");
+        enterPreviewMode();
+        assertThat(contentFrame().locator("a.cmp-title__link[href='" + redirectPage + ".html'][target='_blank']"))
+            .isVisible();
     }
 }

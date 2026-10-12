@@ -19,10 +19,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.it.util.Commons;
-import com.microsoft.playwright.Locator;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_TEXT_V2;
-import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Tag("playwright-group3")
@@ -36,6 +34,11 @@ public class TextV2PwIT extends TextV1PwIT {
     }
 
     @Override
+    protected String renderedSelector() {
+        return ".cmp-text > p";
+    }
+
+    @Override
     protected String textSelector() {
         return ".text";
     }
@@ -46,8 +49,8 @@ public class TextV2PwIT extends TextV1PwIT {
         openEditDialog(path);
         setDialogText(XSS_TEXT);
         saveDialog();
-        assertThat(page.frameLocator("#ContentFrame").locator(".cmp-text")).containsText("Hello World!");
-        assertEquals(0, page.frameLocator("#ContentFrame").locator(".cmp-text img[onerror]").count());
+        assertInnerHtml(contentFrame().locator(".text.aem-GridColumn div").first(), "Hello World! <img>");
+        assertEquals(0, contentFrame().locator(".cmp-text img[onerror]").count());
         String stored = authorClient.doGetJson(path, 1, 200).get("text").asText();
         assertEquals("Hello World! <img />", stored.trim());
     }

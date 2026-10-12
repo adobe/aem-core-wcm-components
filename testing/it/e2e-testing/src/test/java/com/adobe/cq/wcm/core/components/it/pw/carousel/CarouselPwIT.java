@@ -24,6 +24,7 @@ import org.apache.sling.testing.clients.util.FormEntityBuilder;
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
 import com.adobe.cq.wcm.core.components.it.util.Commons;
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.options.BoundingBox;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_CAROUSEL_V1;
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_TEASER_V1;
@@ -53,6 +54,10 @@ public class CarouselPwIT extends ComponentPwBaseTest {
 
     private void createItems() throws Exception {
         addCarousel();
+        addItems();
+    }
+
+    private void addItems() {
         openEditDialog(carouselPath);
         for (int index = 0; index < 3; index++) {
             addChildrenEditorItem("item" + index);
@@ -76,6 +81,35 @@ public class CarouselPwIT extends ComponentPwBaseTest {
 
     private Locator items() {
         return carousel().locator(".cmp-carousel__item");
+    }
+
+    /** Outside the editor: exactly the given indicator and its item are active. */
+    private void assertActive(int index) {
+        java.util.regex.Pattern indicatorActive = java.util.regex.Pattern.compile(".*cmp-carousel__indicator--active.*");
+        java.util.regex.Pattern itemActive = java.util.regex.Pattern.compile(".*cmp-carousel__item--active.*");
+        assertThat(page.locator(".cmp-carousel__indicator--active")).hasCount(1);
+        assertThat(page.locator(".cmp-carousel__indicator").nth(index)).hasClass(indicatorActive);
+        assertThat(page.locator(".cmp-carousel__item--active")).hasCount(1);
+        assertThat(page.locator(".cmp-carousel__item").nth(index)).hasClass(itemActive);
+    }
+
+    private Locator toolbarAction(String action) {
+        return page.locator("#EditableToolbar button[data-action='" + action + "'][data-path='" + carouselPath + "']");
+    }
+
+    /** Selects the editable's overlay so that its toolbar is shown. */
+    private void selectEditable() {
+        Locator overlay = page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + carouselPath + "']");
+        overlay.scrollIntoViewIfNeeded();
+        overlay.evaluate("element => Promise.all(element.getAnimations().map(animation => "
+            + "animation.finished.catch(() => {})))");
+        BoundingBox bounds = overlay.boundingBox();
+        overlay.click(new Locator.ClickOptions().setPosition(Math.max(1, bounds.width / 2), 2));
+        assertThat(toolbarAction("CONFIGURE")).isVisible();
+    }
+
+    private void scrollToTop() {
+        page.evaluate("() => window.scrollTo(0, 0)");
     }
 
     @Test
@@ -111,6 +145,11 @@ public class CarouselPwIT extends ComponentPwBaseTest {
         openEditDialog(carouselPath);
 
         assertThat(dialog().locator("[data-cmp-hook-childreneditor='itemTitle']")).hasCount(3);
+        // the drag does not always settle the same way in every browser, the Selenium test accepted both orders
+        assertThat(dialog().locator("[data-cmp-hook-childreneditor='itemTitle']").nth(0))
+            .hasValue(java.util.regex.Pattern.compile("item2|item0"));
+        assertThat(dialog().locator("[data-cmp-hook-childreneditor='itemTitle']").nth(1))
+            .hasValue(java.util.regex.Pattern.compile("item0|item2"));
         assertThat(dialog().locator("[data-cmp-hook-childreneditor='itemTitle']").nth(2)).hasValue("item1");
     }
 
@@ -131,9 +170,12 @@ public class CarouselPwIT extends ComponentPwBaseTest {
 
     @Test
     public void testPanelSelect() throws Exception {
-        createItems();
-        Locator toolbar = page.locator("#EditableToolbar");
-        assertThat(toolbar.locator("button[data-action='PANEL_SELECT'][data-path='" + carouselPath + "']")).hasCount(0);
+        addCarousel();
+        selectEditable();
+        assertThat(toolbarAction("PANEL_SELECT")).hasCount(0);
+        addItems();
+        selectEditable();
+        assertThat(toolbarAction("PANEL_SELECT")).isVisible();
         openPanelSelector();
         Locator rows = page.locator(".cmp-panelselector__table [is='coral-table-row']");
         assertThat(rows).hasCount(3);
@@ -144,18 +186,30 @@ public class CarouselPwIT extends ComponentPwBaseTest {
         assertThat(indicators().nth(0)).containsText("item0");
         assertThat(indicators().nth(1)).containsText("item1");
         assertThat(indicators().nth(2)).containsText("item2");
-        page.keyboard().press("Escape");
+
+        reorderPanelSelectorRow(0, 2);
+        assertThat(indicators()).hasCount(3);
+        assertThat(indicators().nth(0)).containsText("item1");
+        assertThat(indicators().nth(1)).containsText("item2");
+        assertThat(indicators().nth(2)).containsText("item0");
+
+        // an out of area click closes the panel selector
+        page.locator(".cq-Overlay[data-path='" + testPage + "/jcr:content/root/responsivegrid/*']").click();
+        assertThat(page.locator(".cmp-panelselector")).isHidden();
     }
+
+    // The keyboard tests focus the indicator by clicking it, like a user does, and then send the keys to whatever has focus.
 
     @Test
     public void testAccessibilityNavigateRight() throws Exception {
         createItems();
         Locator buttons = disabledModeIndicators();
-        buttons.first().click();
-        buttons.first().press("ArrowRight");
-        assertThat(buttons.nth(1)).hasClass(java.util.regex.Pattern.compile(".*cmp-carousel__indicator--active.*"));
-        buttons.nth(1).press("ArrowRight");
-        assertThat(buttons.nth(2)).hasClass(java.util.regex.Pattern.compile(".*cmp-carousel__indicator--active.*"));
+        buttons.nth(0).click();
+        assertActive(0);
+        page.keyboard().press("ArrowRight");
+        assertActive(1);
+        page.keyboard().press("ArrowRight");
+        assertActive(2);
     }
 
     @Test
@@ -163,21 +217,23 @@ public class CarouselPwIT extends ComponentPwBaseTest {
         createItems();
         Locator indicators = disabledModeIndicators();
         indicators.nth(2).click();
-        indicators.nth(2).press("ArrowLeft");
-        assertThat(indicators.nth(1)).hasClass(java.util.regex.Pattern.compile(".*cmp-carousel__indicator--active.*"));
-        indicators.nth(1).press("ArrowLeft");
-        assertThat(indicators.first()).hasClass(java.util.regex.Pattern.compile(".*cmp-carousel__indicator--active.*"));
+        assertActive(2);
+        page.keyboard().press("ArrowLeft");
+        assertActive(1);
+        page.keyboard().press("ArrowLeft");
+        assertActive(0);
     }
 
     @Test
     public void testAccessibilityNavigateEndStart() throws Exception {
         createItems();
         Locator indicators = disabledModeIndicators();
-        indicators.first().click();
-        indicators.first().press("End");
-        assertThat(indicators.nth(2)).hasClass(java.util.regex.Pattern.compile(".*cmp-carousel__indicator--active.*"));
-        indicators.nth(2).press("Home");
-        assertThat(indicators.first()).hasClass(java.util.regex.Pattern.compile(".*cmp-carousel__indicator--active.*"));
+        indicators.nth(0).click();
+        assertActive(0);
+        page.keyboard().press("End");
+        assertActive(2);
+        page.keyboard().press("Home");
+        assertActive(0);
     }
 
     @Test
@@ -186,6 +242,14 @@ public class CarouselPwIT extends ComponentPwBaseTest {
         String policyPath = createComponentPolicy("/carousel-v1",
             java.util.Collections.singletonMap("components", RT_TEASER_V1));
         addCarousel("carousel-v1");
+
+        // the toolbar's insert action offers the allowed teaser
+        selectEditable();
+        assertThat(toolbarAction("INSERT")).isVisible();
+        toolbarAction("INSERT").click();
+        assertThat(insertableComponent("$='" + RT_TEASER_V1 + "'")).isVisible();
+        reloadEditor();
+
         // the policy restricts what can be added as a panel, which the children editor offers through its picker
         openEditDialog(carouselPath);
         dialog().locator("[data-cmp-hook-childreneditor='add']").click();
@@ -197,20 +261,51 @@ public class CarouselPwIT extends ComponentPwBaseTest {
     @Test
     public void testDeepLink_clickingCarouselItem() {
         page.navigate(baseUrl + DEEP_LINK_PAGE);
-        page.locator("#" + ITEM3 + "-tab").click();
+        Locator button = page.locator("#" + ITEM3 + "-tab");
+        button.click();
         assertThat(page.locator("#text-3")).isVisible();
+        assertThat(button).isInViewport();
+        assertThat(page.locator("#text-3")).isInViewport();
         assertEquals("#" + ITEM3 + "-tabpanel", page.evaluate("() => window.location.hash"));
     }
 
     @Test
     public void testDeepLink_clickingLinksReferencingCarouselItems() {
         page.navigate(baseUrl + DEEP_LINK_PAGE);
+        Locator button1 = page.locator("#" + ITEM1 + "-tab");
+        Locator content1 = page.locator("#text-1");
+        Locator button2 = page.locator("#" + ITEM2 + "-tab");
+        Locator content2 = page.locator("#text-2");
+        Locator button3 = page.locator("#" + ITEM3 + "-tab");
+        Locator content3 = page.locator("#text-3");
+
+        // only the first carousel item is displayed before clicking the links
+        assertThat(button1).isInViewport();
+        assertThat(content1).isInViewport();
+        assertThat(button2).isInViewport();
+        assertThat(content2).not().isInViewport();
+        assertThat(button3).isInViewport();
+        assertThat(content3).not().isInViewport();
+
+        // clicking a link referencing a carousel item displays it and scrolls to it
         page.locator("#link-1").click();
-        assertThat(page.locator("#text-2")).isVisible();
+        assertThat(content2).isVisible();
+        assertThat(button2).isInViewport();
+        assertThat(content2).isInViewport();
+
+        // clicking a link referencing the first carousel item displays it and scrolls to it
         page.locator("#link-1a").click();
-        assertThat(page.locator("#text-1")).isVisible();
+        assertThat(content1).isVisible();
+        assertThat(button1).isInViewport();
+        assertThat(content1).isInViewport();
+
+        // clicking a link referencing a text element within a carousel item expands the item
+        // and scrolls to the ID
+        scrollToTop();
         page.locator("#link-2").click();
-        assertThat(page.locator("#text-3")).isVisible();
+        assertThat(content3).isVisible();
+        assertThat(button3).isInViewport();
+        assertThat(content3).isInViewport();
     }
 
     @Test
@@ -218,6 +313,8 @@ public class CarouselPwIT extends ComponentPwBaseTest {
         page.navigate(baseUrl + DEEP_LINK_PAGE + "#" + ITEM2 + "-tabpanel");
         assertThat(page.locator("#" + ITEM2 + "-tab")).isVisible();
         assertThat(page.locator("#text-2")).isVisible();
+        assertThat(page.locator("#" + ITEM2 + "-tab")).isInViewport();
+        assertThat(page.locator("#text-2")).isInViewport();
     }
 
     @Test
@@ -225,6 +322,8 @@ public class CarouselPwIT extends ComponentPwBaseTest {
         page.navigate(baseUrl + DEEP_LINK_PAGE + "#text-3");
         assertThat(page.locator("#" + ITEM3 + "-tab")).isVisible();
         assertThat(page.locator("#text-3")).isVisible();
+        assertThat(page.locator("#" + ITEM3 + "-tab")).isInViewport();
+        assertThat(page.locator("#text-3")).isInViewport();
     }
 
     @Test

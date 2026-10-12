@@ -31,7 +31,8 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 public class ListV1PwIT extends ComponentPwBaseTest {
 
     private static final String LIST = ".cmp-list";
-    private final String[] listPages = new String[6];
+    protected final String[] listPages = new String[6];
+    protected String page21Path;
     private static final String PARENT = "foundation-autocomplete[name='./parentPage'] input[is='coral-textfield']";
 
     protected String listResourceType() {
@@ -67,6 +68,15 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         page.navigate(baseUrl + testPage + ".html");
         for (String title : titles) {
             assertThat(page.locator(LIST)).containsText(title);
+        }
+    }
+
+    private void saveAndAssertOrder(int startIndex, String... titles) {
+        saveDialog();
+        page.navigate(baseUrl + testPage + ".html");
+        Locator items = page.locator(LIST + " li");
+        for (int i = 0; i < titles.length; i++) {
+            assertThat(items.nth(startIndex + i)).containsText(titles[i]);
         }
     }
 
@@ -107,15 +117,13 @@ public class ListV1PwIT extends ComponentPwBaseTest {
     @Test
     public void testCreateFixedList() throws Exception {
         String componentPath = addStandaloneComponent(listResourceType(), "list");
-        String page1 = authorClient.createPage("page_1", "page_1", rootPage, defaultPageTemplate).getSlingPath();
-        String page2 = authorClient.createPage("page_2", "page_2", rootPage, defaultPageTemplate).getSlingPath();
-        String page3 = authorClient.createPage("page_3", "page_3", rootPage, defaultPageTemplate).getSlingPath();
+        createListPages();
         openEditDialog(componentPath);
         configure("static");
-        addStaticPage(page1);
-        addStaticPage(page2);
-        addStaticPage(page3);
-        saveAndAssertVisible("page_1", "page_2", "page_3");
+        addStaticPage(listPages[1]);
+        addStaticPage(page21Path);
+        addStaticPage(listPages[4]);
+        saveAndAssertVisible("page_1", "sub_2_1", "page_4");
     }
 
     @Test
@@ -164,7 +172,7 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         setDepth("2");
         selectInCoralSelect("[name='./orderBy']", "title");
         selectInCoralSelect("[name='./sortOrder']", "asc");
-        saveAndAssertVisible("page_1", "page_2", "page_3", "page_4", "page_5");
+        saveAndAssertOrder(0, "page_1", "page_2", "page_3", "page_4", "page_5", "sub_2_1", "sub_2_2", "sub_4_1");
     }
 
     @Test
@@ -176,7 +184,7 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         setDepth("2");
         selectInCoralSelect("[name='./orderBy']", "title");
         selectInCoralSelect("[name='./sortOrder']", "desc");
-        saveAndAssertVisible("sub_4_1", "sub_2_2", "sub_2_1", "page_5");
+        saveAndAssertOrder(0, "sub_4_1", "sub_2_2", "sub_2_1", "page_5", "page_4", "page_3", "page_2", "page_1");
     }
 
     @Test
@@ -208,7 +216,7 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         setDepth("2");
         selectInCoralSelect("[name='./orderBy']", "modified");
         selectInCoralSelect("[name='./sortOrder']", "asc");
-        saveAndAssertVisible("Modified Page 5", "Modified Page 1");
+        saveAndAssertOrder(6, "Modified Page 5", "Modified Page 1");
     }
 
     @Test
@@ -222,7 +230,7 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         setDepth("2");
         selectInCoralSelect("[name='./orderBy']", "modified");
         selectInCoralSelect("[name='./sortOrder']", "desc");
-        saveAndAssertVisible("Modified Page 2", "Modified Page 3");
+        saveAndAssertOrder(0, "Modified Page 2", "Modified Page 3");
     }
 
     @Test
@@ -236,6 +244,7 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         saveDialog();
         page.navigate(baseUrl + testPage + ".html");
         assertThat(page.locator(LIST + " a")).hasCount(5);
+        assertThat(page.locator(LIST + " a[href*='page_1.html']").first()).isVisible();
     }
 
     @Test
@@ -259,10 +268,10 @@ public class ListV1PwIT extends ComponentPwBaseTest {
         checkCoralCheckbox("./showModificationDate");
         saveDialog();
         page.navigate(baseUrl + testPage + ".html");
-        assertThat(page.locator(LIST)).containsText("-");
+        assertThat(page.locator(LIST)).containsText(java.time.LocalDate.now().toString());
     }
 
-    private void createListPages() throws Exception {
+    protected void createListPages() throws Exception {
         String parentName = testPage.substring(testPage.lastIndexOf('/') + 1) + "-parent";
         String parent = authorClient.createPage(parentName, parentName, rootPage, defaultPageTemplate).getSlingPath();
         String tag1 = Commons.addTag(authorClient, "ellie");
@@ -282,7 +291,7 @@ public class ListV1PwIT extends ComponentPwBaseTest {
             }
             if (i == 2) {
                 addSearchText(path);
-                authorClient.createPage("sub_2_1", "sub_2_1", path, defaultPageTemplate);
+                page21Path = authorClient.createPage("sub_2_1", "sub_2_1", path, defaultPageTemplate).getSlingPath();
                 authorClient.createPage("sub_2_2", "sub_2_2", path, defaultPageTemplate);
             } else if (i == 4) {
                 addSearchText(authorClient.createPage("sub_4_1", "sub_4_1", path, defaultPageTemplate).getSlingPath());

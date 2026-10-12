@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.it.pw.tabs;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -71,6 +72,43 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         return contentFrame().locator(".cmp-tabs__tab");
     }
 
+    private Locator toolbarAction(String action) {
+        return page.locator("#EditableToolbar button[data-action='" + action + "'][data-path='" + tabsPath + "']");
+    }
+
+    /** Selects the editable's overlay so that its toolbar is shown. */
+    private void selectEditable() {
+        Locator overlay = page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + tabsPath + "']");
+        overlay.scrollIntoViewIfNeeded();
+        overlay.evaluate("element => Promise.all(element.getAnimations().map(animation => "
+            + "animation.finished.catch(() => {})))");
+        BoundingBox bounds = overlay.boundingBox();
+        overlay.click(new Locator.ClickOptions().setPosition(Math.max(1, bounds.width / 2), 2));
+        assertThat(toolbarAction("CONFIGURE")).isVisible();
+    }
+
+    private void scrollToTop() {
+        page.evaluate("() => window.scrollTo(0, 0)");
+    }
+
+    /** Exactly one tab is active and it is the given one, and so is its panel. */
+    private void assertTabActive(int index, String title) {
+        Locator active = page.locator(".cmp-tabs__tab--active");
+        assertThat(active).hasCount(1);
+        assertThat(active).containsText(title);
+        assertThat(page.locator(".cmp-tabs__tabpanel--active")).hasCount(1);
+        assertThat(page.locator(".cmp-tabs__tabpanel").nth(index)).hasClass(Pattern.compile(".*cmp-tabs__tabpanel--active.*"));
+    }
+
+    private void assertEditorTabActive(int index, String title) {
+        Locator active = contentFrame().locator(".cmp-tabs__tab--active");
+        assertThat(active).hasCount(1);
+        assertThat(active).containsText(title);
+        assertThat(contentFrame().locator(".cmp-tabs__tabpanel--active")).hasCount(1);
+        assertThat(contentFrame().locator(".cmp-tabs__tabpanel").nth(index))
+            .hasClass(Pattern.compile(".*cmp-tabs__tabpanel--active.*"));
+    }
+
     private void assertTabTitles(String... titles) {
         assertThat(tabItems()).hasCount(titles.length);
         for (int i = 0; i < titles.length; i++) {
@@ -117,6 +155,9 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         openEditDialog(tabsPath);
         dialog().locator("coral-tab[data-foundation-tracking-event*='items']").click();
         assertThat(itemInputs()).hasCount(3);
+        // the drag does not always settle the same way in every browser, the Selenium test accepted both orders
+        assertThat(itemInputs().nth(0)).hasValue(Pattern.compile("item2|item0"));
+        assertThat(itemInputs().nth(1)).hasValue(Pattern.compile("item0|item2"));
         assertThat(itemInputs().nth(2)).hasValue("item1");
     }
 
@@ -128,20 +169,22 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         dialog().locator("coral-tab[data-foundation-tracking-event*='properties']").click();
         openSelectList("[data-cmp-tabs-v1-dialog-edit-hook='activeSelect']").locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText("item1")).click();
         saveDialog();
-        assertThat(contentFrame().locator(".cmp-tabs__tab--active")).containsText("item1");
+        assertEditorTabActive(1, "item1");
         openEditDialog(tabsPath);
         dialog().locator("coral-tab[data-foundation-tracking-event*='properties']").click();
         openSelectList("[data-cmp-tabs-v1-dialog-edit-hook='activeSelect']").locator("coral-selectlist-item").filter(new Locator.FilterOptions().setHasText("Default")).click();
         saveDialog();
-        assertThat(contentFrame().locator(".cmp-tabs__tab--active")).containsText("item0");
+        assertEditorTabActive(0, "item0");
     }
 
     @Test
     public void testPanelSelectItems() throws Exception {
         createTabs();
-        assertThat(page.locator("#EditableToolbar button[data-action='PANEL_SELECT'][data-path='" + tabsPath + "']"))
-            .hasCount(0);
+        selectEditable();
+        assertThat(toolbarAction("PANEL_SELECT")).hasCount(0);
         addItems();
+        selectEditable();
+        assertThat(toolbarAction("PANEL_SELECT")).isVisible();
         clickToolbarAction(tabsPath, "PANEL_SELECT");
         assertThat(page.locator(".cmp-panelselector")).isVisible();
         Locator panelItems = page.locator(".cmp-panelselector__table [is='coral-table-row']");
@@ -155,9 +198,11 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
     @Test
     public void testPanelSelectReorder() throws Exception {
         createTabs();
-        assertThat(page.locator("#EditableToolbar button[data-action='PANEL_SELECT'][data-path='" + tabsPath + "']"))
-            .hasCount(0);
+        selectEditable();
+        assertThat(toolbarAction("PANEL_SELECT")).hasCount(0);
         addItems();
+        selectEditable();
+        assertThat(toolbarAction("PANEL_SELECT")).isVisible();
         clickToolbarAction(tabsPath, "PANEL_SELECT");
         assertThat(page.locator(".cmp-panelselector")).isVisible();
         reorderPanelSelectorRow(0, 2);
@@ -170,22 +215,25 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         createComponentPolicy(RT_TABS_V1.substring(RT_TABS_V1.lastIndexOf("/")),
             Map.of("components", Commons.RT_TEASER_V1));
         openEditor(testPage);
-        Locator editable = page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + tabsPath + "']");
-        editable.click();
-        page.locator(".cq-editable-action[data-action='INSERT']").click();
-        assertThat(page.locator("coral-dialog:visible")).containsText("Teaser");
+        selectEditable();
+        assertThat(toolbarAction("INSERT")).isVisible();
+        toolbarAction("INSERT").click();
+        assertThat(insertableComponent("$='" + Commons.RT_TEASER_V1 + "'")).isVisible();
     }
+
+    // The keyboard tests focus the tab by clicking it, like a user does, and then send the keys to whatever has focus.
 
     @Test
     public void testAccessibilityNavigateRight() throws Exception {
         createTabs();
         addItems();
         Locator tabs = disabledModeTabs();
-        tabs.first().click();
-        tabs.first().press("ArrowRight");
-        assertThat(page.locator(".cmp-tabs__tab--active")).containsText("item1");
-        tabs.nth(1).press("ArrowRight");
-        assertThat(page.locator(".cmp-tabs__tab--active")).containsText("item2");
+        tabs.nth(0).click();
+        assertTabActive(0, "item0");
+        page.keyboard().press("ArrowRight");
+        assertTabActive(1, "item1");
+        page.keyboard().press("ArrowRight");
+        assertTabActive(2, "item2");
     }
 
     @Test
@@ -194,10 +242,11 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         addItems();
         Locator tabs = disabledModeTabs();
         tabs.nth(2).click();
-        tabs.nth(2).press("ArrowLeft");
-        assertThat(page.locator(".cmp-tabs__tab--active")).containsText("item1");
-        tabs.nth(1).press("ArrowLeft");
-        assertThat(page.locator(".cmp-tabs__tab--active")).containsText("item0");
+        assertTabActive(2, "item2");
+        page.keyboard().press("ArrowLeft");
+        assertTabActive(1, "item1");
+        page.keyboard().press("ArrowLeft");
+        assertTabActive(0, "item0");
     }
 
     @Test
@@ -205,11 +254,12 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         createTabs();
         addItems();
         Locator tabs = disabledModeTabs();
-        tabs.first().click();
-        tabs.first().press("End");
-        assertThat(page.locator(".cmp-tabs__tab--active")).containsText("item2");
-        tabs.nth(2).press("Home");
-        assertThat(page.locator(".cmp-tabs__tab--active")).containsText("item0");
+        tabs.nth(0).click();
+        assertTabActive(0, "item0");
+        page.keyboard().press("End");
+        assertTabActive(2, "item2");
+        page.keyboard().press("Home");
+        assertTabActive(0, "item0");
     }
 
     @Test
@@ -238,20 +288,57 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         page.navigate(baseUrl + DEEP_LINK);
         page.locator("#" + TAB1).click();
         assertThat(page.locator("#" + CONTENT1)).isVisible();
+        assertThat(page.locator("#" + TAB1)).isInViewport();
+        assertThat(page.locator("#" + CONTENT1)).isInViewport();
         assertThat(page).hasURL(baseUrl + DEEP_LINK + "#" + TAB1);
     }
 
     @Test
     public void testDeepLink_clickingLinksReferencingTabsItems() {
         page.navigate(baseUrl + DEEP_LINK);
+        Locator title1 = page.locator("#" + TAB1);
+        Locator content1 = page.locator("#" + CONTENT1);
+        Locator title1a = page.locator("#" + TAB1A);
+        Locator content1a = page.locator("#" + CONTENT1A);
+        Locator title2 = page.locator("#" + TAB2);
+        Locator content2 = page.locator("#" + CONTENT2);
+        Locator title3 = page.locator("#" + TAB3);
+        Locator content3 = page.locator("#" + CONTENT3);
+
+        // make sure tabs items are not displayed before clicking the links
+        assertThat(title1).isInViewport();
+        assertThat(content1).not().isInViewport();
+        assertThat(title2).not().isInViewport();
+        assertThat(content2).not().isInViewport();
+        assertThat(title3).not().isInViewport();
+        assertThat(content3).not().isInViewport();
+
+        // clicking a link referencing a tabs item displays it and scrolls to it
         page.locator("#link-1").click();
-        assertThat(page.locator("#" + CONTENT1)).isVisible();
+        assertThat(content1).isVisible();
+        assertThat(title1).isInViewport();
+        assertThat(content1).isInViewport();
+
+        // clicking a link referencing the first tabs item displays it and scrolls to it
         page.locator("#link-1a").click();
-        assertThat(page.locator("#" + CONTENT1A)).isVisible();
+        assertThat(content1a).isVisible();
+        assertThat(title1a).isInViewport();
+        assertThat(content1a).isInViewport();
+
+        // clicking a link referencing a nested tabs item expands all intermediary items and scrolls to it
+        scrollToTop();
         page.locator("#link-2").click();
-        assertThat(page.locator("#" + CONTENT2)).isVisible();
+        assertThat(content2).isVisible();
+        assertThat(title2).isInViewport();
+        assertThat(content2).isInViewport();
+
+        // clicking a link referencing a text element within a nested tabs item expands all intermediary items
+        // and scrolls to the ID
+        scrollToTop();
         page.locator("#link-3").click();
-        assertThat(page.locator("#" + CONTENT3)).isVisible();
+        assertThat(content3).isVisible();
+        assertThat(content3).isInViewport();
+        assertThat(title3).not().isInViewport();
     }
 
     @Test
@@ -259,6 +346,8 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         page.navigate(baseUrl + DEEP_LINK + "#" + TAB1);
         assertThat(page.locator("#" + TAB1)).isVisible();
         assertThat(page.locator("#" + CONTENT1)).isVisible();
+        assertThat(page.locator("#" + TAB1)).isInViewport();
+        assertThat(page.locator("#" + CONTENT1)).isInViewport();
     }
 
     @Test
@@ -266,12 +355,16 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         page.navigate(baseUrl + DEEP_LINK + "#" + TAB2);
         assertThat(page.locator("#" + TAB2)).isVisible();
         assertThat(page.locator("#" + CONTENT2)).isVisible();
+        assertThat(page.locator("#" + TAB2)).isInViewport();
+        assertThat(page.locator("#" + CONTENT2)).isInViewport();
     }
 
     @Test
     public void testDeepLinkFromHash_IdInNestedTabsItem() {
         page.navigate(baseUrl + DEEP_LINK + "#" + CONTENT3);
         assertThat(page.locator("#" + CONTENT3)).isVisible();
+        assertThat(page.locator("#" + CONTENT3)).isInViewport();
         assertThat(page.locator("#" + TAB3)).isVisible();
+        assertThat(page.locator("#" + TAB3)).not().isInViewport();
     }
 }

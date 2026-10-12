@@ -81,7 +81,9 @@ public class SearchV1PwIT extends ComponentPwBaseTest {
     public void testDefaultConfiguration() throws Exception {
         createSearch();
         query("Page 1.1.1");
+        assertThat(results()).isVisible();
         assertThat(results()).containsText("Page 1.1.1");
+        assertThat(results().locator(".cmp-search__item[href$='" + searchPage + "/page_1_1_1.html']")).isVisible();
     }
 
     @Test
@@ -94,6 +96,7 @@ public class SearchV1PwIT extends ComponentPwBaseTest {
         page.navigate(baseUrl + searchPage + ".html");
         query("Page 1");
         assertThat(results()).not().containsText("Parent Page 1");
+        assertThat(page.locator(".cmp-search__item[href$='" + searchRoot + ".html']")).hasCount(0);
     }
 
     @Test
@@ -122,7 +125,9 @@ public class SearchV1PwIT extends ComponentPwBaseTest {
     @Test
     public void testOutsideClick() throws Exception {
         createSearch();
+        assertThat(page.locator(".cmp-search__clear")).not().hasAttribute("aria-hidden", "false");
         query("Page");
+        assertThat(page.locator(".cmp-search__clear")).hasAttribute("aria-hidden", "false");
         assertThat(results()).isVisible();
         page.locator("body").evaluate("b => b.click()");
         assertThat(results()).isHidden();
@@ -132,7 +137,8 @@ public class SearchV1PwIT extends ComponentPwBaseTest {
     public void testMark() throws Exception {
         createSearch();
         query("Page");
-        assertThat(results().locator("mark").first()).containsText("Page");
+        assertThat(results().locator(".cmp-search__item-mark").first()).isVisible();
+        assertThat(results().locator(".cmp-search__item-mark").first()).containsText("Page");
     }
 
     @Test

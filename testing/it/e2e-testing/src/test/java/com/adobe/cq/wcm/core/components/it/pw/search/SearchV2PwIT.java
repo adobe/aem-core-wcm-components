@@ -44,10 +44,14 @@ public class SearchV2PwIT extends SearchV1PwIT {
         createSearch();
         Locator status = page.locator(".cmp_search__info");
         page.locator(".cmp-search__input").fill("Page");
+        assertThat(status).isVisible();
         assertThat(status).containsText("results");
+        int count = page.locator(".cmp-search__item").count();
+        assertThat(status).hasText(count + " results");
         page.locator(".cmp-search__clear").dispatchEvent("click");
         assertThat(status).isHidden();
         page.locator(".cmp-search__input").fill("no-results-expected-text");
+        assertThat(status).isVisible();
         assertThat(status).hasText("No results");
         page.locator(".cmp-search__input").fill("");
         assertThat(status).isHidden();

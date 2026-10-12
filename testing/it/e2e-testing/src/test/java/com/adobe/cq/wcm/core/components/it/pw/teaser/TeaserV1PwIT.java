@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
 import com.adobe.cq.wcm.core.components.it.util.Commons;
+import com.adobe.cq.wcm.core.components.it.pw.image.ImageSidePanelHelper;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.assertions.LocatorAssertions;
 import org.opentest4j.AssertionFailedError;
@@ -69,9 +70,28 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         authorClient.setPageProperty(testPage, "jcr:description", "teaser page description", 200);
     }
 
+    /**
+     * Opens the teaser's edit dialog and uploads {@link #ASSET} by dragging it from the side panel's asset finder
+     * into the dialog's file upload, like a user would. The dialog stays open afterwards.
+     */
     protected void setImage() throws Exception {
-        Commons.editNodeProperties(authorClient, teaserPath, new HashMap<>(Map.of("fileReference", ASSET)));
-        reloadEditor();
+        ImageSidePanelHelper.openSidePanel(page);
+        ImageSidePanelHelper.setAssetFilter(page, ImageSidePanelHelper.TEST_ASSETS_PATH);
+        openEditDialog(teaserPath);
+        dragAssetIntoDialog();
+    }
+
+    protected void dragAssetIntoDialog() {
+        ImageSidePanelHelper.dragAssetToFileUpload(page, dialog(),
+            dialog().locator(".cmp-teaser__editor coral-fileupload[name='./file']").first(), ASSET);
+    }
+
+    protected Locator renderedImage() {
+        return teaser().locator(".cmp-teaser__image img[src*='" + testPage + "/_jcr_content/root/responsivegrid/teaser']");
+    }
+
+    protected Locator titleLink(String path) {
+        return teaser().locator("a.cmp-teaser__title-link[href$='" + path + ".html']");
     }
 
     protected Locator tabs() {
@@ -108,7 +128,7 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         }
     }
 
-    private Locator teaser() {
+    protected Locator teaser() {
         return contentFrame().locator(".cmp-teaser");
     }
 
@@ -116,7 +136,10 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
     protected Locator nextActionLinkInput() {
         Locator links = dialog().locator(actionHook("actionLink"));
         if (links.count() == 0 || !links.last().locator("input:not([type='hidden'])").first().inputValue().isEmpty()) {
+            int before = links.count();
             dialog().locator("[coral-multifield-add]").click();
+            // the new row is appended asynchronously; filling earlier would land in the previous row
+            assertThat(links).hasCount(before + 1);
         }
         return links.last().locator("input:not([type='hidden'])").first();
     }
@@ -167,31 +190,30 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
     public void testFullyConfiguredTeaser() throws Exception {
         createTeaser();
         setImage();
-        openEditDialog(teaserPath);
         openLinkTab();
         selectAutocomplete("[name='./linkURL']", testPage);
         setText(TITLE, DESCRIPTION);
         dialog().locator("[name='./pretitle']").fill(PRETITLE);
         saveDialog();
-        assertThat(teaser().locator("img")).isVisible();
+        assertThat(renderedImage()).isVisible();
         assertThat(teaser().locator(".cmp-teaser__pretitle")).hasText(PRETITLE);
-        assertThat(teaser().locator(".cmp-teaser__title-link")).containsText(TITLE);
-        assertThat(teaser().locator(".cmp-teaser__description")).containsText(DESCRIPTION);
+        assertThat(titleLink(testPage)).hasText(TITLE);
+        assertThat(teaser().locator(".cmp-teaser__description")).hasText(DESCRIPTION);
     }
 
     @Test
     public void testInheritedPropertiesTeaser() throws Exception {
         createTeaser();
         setImage();
-        openEditDialog(teaserPath);
         openLinkTab();
         selectAutocomplete("[name='./linkURL']", testPage);
         openTextTab();
         checkbox("./titleFromPage").check();
         checkbox("./descriptionFromPage").check();
         saveDialog();
-        assertThat(teaser().locator(".cmp-teaser__title-link")).containsText("Test Page Title");
-        assertThat(teaser().locator(".cmp-teaser__description")).containsText("teaser page description");
+        assertThat(renderedImage()).isVisible();
+        assertThat(titleLink(testPage)).hasText("Test Page Title");
+        assertThat(teaser().locator(".cmp-teaser__description")).hasText("teaser page description");
     }
 
     @Test
@@ -201,8 +223,8 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         setText(TITLE, DESCRIPTION);
         saveDialog();
         assertThat(teaser().locator("img")).hasCount(0);
-        assertThat(teaser().locator(".cmp-teaser__title")).containsText(TITLE);
-        assertThat(teaser().locator(".cmp-teaser__description")).containsText(DESCRIPTION);
+        assertThat(teaser().locator(".cmp-teaser__title")).hasText(TITLE);
+        assertThat(teaser().locator(".cmp-teaser__description")).hasText(DESCRIPTION);
     }
 
     @Test
@@ -212,6 +234,7 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
             Map.of("titleHidden", "true", "descriptionHidden", "true"));
         openEditor(testPage);
         openEditDialog(teaserPath);
+        openTextTab();
         assertThat(dialog().locator("[name='./titleFromPage']")).hasCount(0);
         assertThat(dialog().locator("[name='./descriptionFromPage']")).hasCount(0);
     }
@@ -219,16 +242,16 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
     @Test
     public void testLinksToElementsTeaser() throws Exception {
         createTeaser();
-        setImage();
         createComponentPolicy(policyPath(),
             Map.of("titleLinkHidden", "true", "imageLinkHidden", "true"));
         openEditor(testPage);
-        openEditDialog(teaserPath);
+        setImage();
         openLinkTab();
         selectAutocomplete("[name='./linkURL']", testPage);
         saveDialog();
-        assertThat(teaser().locator("img")).isVisible();
+        assertThat(renderedImage()).isVisible();
         assertThat(teaser().locator(".cmp-teaser__title-link")).hasCount(0);
+        assertThat(teaser().locator(".cmp-teaser__image a")).hasCount(0);
     }
 
     @Test
@@ -247,7 +270,6 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
     public void testWithActionsTeaser() throws Exception {
         createTeaser();
         setImage();
-        openEditDialog(teaserPath);
         openTextTab();
         checkbox("./titleFromPage").check();
         checkbox("./descriptionFromPage").check();
@@ -256,6 +278,10 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         addActionLink(testPage);
         addActionLink(secondPage);
         saveDialog();
+        assertThat(renderedImage()).isVisible();
+        assertThat(teaser().locator(".cmp-teaser__image a")).hasCount(0);
+        assertThat(titleLink(testPage)).hasText("Test Page Title");
+        assertThat(teaser().locator(".cmp-teaser__description")).hasText("teaser page description");
         assertThat(teaser().locator(".cmp-teaser__action-link")).hasCount(2);
         assertThat(teaser().locator(".cmp-teaser__action-link").nth(0)).containsText("Test Page Title");
         assertThat(teaser().locator(".cmp-teaser__action-link").nth(1)).containsText(SECOND_TITLE);
@@ -265,7 +291,6 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
     public void testWithExternalActionsTeaser() throws Exception {
         createTeaser();
         setImage();
-        openEditDialog(teaserPath);
         openLinkTab();
         checkbox("./actionsEnabled").check();
         nextActionLinkInput().fill("http://www.adobe.com");
@@ -273,6 +298,10 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         addActionLink(secondPage);
         setActionTitle("Action Text 2");
         saveDialog();
+        assertThat(renderedImage()).isVisible();
+        assertThat(teaser().locator(".cmp-teaser__image a")).hasCount(0);
+        assertThat(teaser().locator(".cmp-teaser__title-link")).hasCount(0);
+        assertThat(teaser().locator(".cmp-teaser__description")).hasCount(0);
         assertThat(teaser().locator(".cmp-teaser__action-link")).hasCount(2);
         assertThat(teaser().locator(".cmp-teaser__action-link").first()).hasAttribute("href", "http://www.adobe.com");
         assertThat(teaser().locator(".cmp-teaser__action-link").first()).containsText("Adobe");
@@ -290,6 +319,7 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         assertThat(titleInput()).hasValue(TITLE);
         assertThat(titleInput()).isEnabled();
         checkbox("./titleFromPage").check();
+        assertThat(titleInput()).hasValue("Test Page Title");
         assertThat(titleInput()).isDisabled();
         checkbox("./titleFromPage").uncheck();
         assertThat(titleInput()).hasValue(TITLE);
@@ -301,6 +331,7 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         createComponentPolicy(policyPath(), Map.of("titleType", "h4", "showTitleType", "false"));
         openEditor(testPage);
         openEditDialog(teaserPath);
+        openTextTab();
         assertThat(dialog().locator("coral-select[name='./titleType']")).hasCount(0);
     }
 
@@ -310,6 +341,8 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         setTitleAllowedTypes("h1", "h2", "h3", "h4", "h6");
         openEditor(testPage);
         openEditDialog(teaserPath);
+        openTextTab();
+        assertThat(dialog().locator("coral-select[name='./titleType']")).isVisible();
         assertThat(dialog().locator("coral-select[name='./titleType'] coral-select-item[selected]")).containsText("h4");
     }
 
@@ -321,6 +354,8 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         adminClient.setPropertyStringArray(policy, "allowedTypes", Arrays.asList("h3", "h4", "h6"), 200);
         openEditor(testPage);
         openEditDialog(teaserPath);
+        openTextTab();
+        assertThat(dialog().locator("coral-select[name='./titleType']")).isVisible();
         assertThat(dialog().locator("coral-select[name='./titleType'] coral-select-item[selected]")).containsText("h3");
     }
 
@@ -330,6 +365,8 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         createComponentPolicy(policyPath(), Map.of("showTitleType", "true"));
         openEditor(testPage);
         openEditDialog(teaserPath);
+        openTextTab();
+        assertThat(dialog().locator("coral-select[name='./titleType']")).isVisible();
         assertThat(dialog().locator("coral-select[name='./titleType'] coral-select-item[selected]")).containsText("(default)");
     }
 }

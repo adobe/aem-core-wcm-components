@@ -28,7 +28,7 @@ import com.microsoft.playwright.Locator;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_FORMTEXT_V1;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
@@ -292,7 +292,9 @@ public abstract class FormTextPwBase extends PlaywrightAuthorBaseTest {
     private void assertDescribedByHelp(String type) {
         Locator help = helpBlock(HELP_MESSAGE);
         assertThat(help).isVisible();
-        assertEquals(help.getAttribute("id"), field(type).getAttribute("aria-describedby"));
+        String helpId = help.getAttribute("id");
+        assertNotNull(helpId, "The help message should have an id");
+        assertThat(field(type)).hasAttribute("aria-describedby", helpId);
     }
 
     @Test
