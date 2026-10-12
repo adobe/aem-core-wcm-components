@@ -27,7 +27,7 @@ On input, the component fetches merged search results from `.search.json`. When 
 
 Search combines vector and full-text queries with `OR`. Vector boost remains `1`; full-text boost is `1` for a single whitespace-delimited token and `1 / (5 * token count)` for longer queries. Full-text matching uses `AND` and `COMBINED_FIELDS`, favouring precision across fields while vector matching remains available for semantic results.
 
-Search requests include `queryOptions.resultFields.includes` with `text`, `source`, `metadata.url`, `metadata.source`, `metadata.title`, `metadata.description`, and `metadata.image` to ask the backend to filter result data. Pagination still sends the requested limit and optional cursor. Generative-search requests do not include this field filter.
+Search requests include `queryOptions.resultFields.includes` with `text`, `source`, `title`, `name`, `metadata.url`, `metadata.source`, `metadata.title`, `metadata.description`, and `metadata.image` to ask the backend to filter result data while retaining display fallbacks. Pagination still sends the requested limit and optional cursor. Generative-search requests do not include this field filter.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for the ContentAI Supported Search component:
