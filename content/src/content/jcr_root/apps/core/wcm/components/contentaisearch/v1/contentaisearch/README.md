@@ -25,6 +25,10 @@ The ContentAI Supported Search component uses the `com.adobe.cq.wcm.core.compone
 ### Behavior
 On input, the component fetches merged search results from `.search.json`. When the generative summary toggle is enabled, it fetches `.gensearch.json` in parallel. Results are rendered from HTL `x-template` markup; the JavaScript clones those templates and populates title, description, image, and link fields from each API result.
 
+Search combines vector and full-text queries with `OR`. Vector boost remains `1`; full-text boost is `1` for a single whitespace-delimited token and `1 / (5 * token count)` for longer queries. Full-text matching uses `AND` and `COMBINED_FIELDS`, favouring precision across fields while vector matching remains available for semantic results.
+
+Search requests include `queryOptions.resultFields.includes` with `text`, `source`, `metadata.url`, `metadata.source`, `metadata.title`, `metadata.description`, and `metadata.image` to ask the backend to filter result data. Pagination still sends the requested limit and optional cursor. Generative-search requests do not include this field filter.
+
 ### Edit Dialog Properties
 The following properties are written to JCR for the ContentAI Supported Search component:
 
