@@ -17,6 +17,7 @@
 package com.adobe.cq.wcm.core.components.it.pw;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -30,7 +31,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 public final class SidePanelPw {
 
     private static final String PANEL = "#SidePanel";
-    private static final String TOGGLE = "button.toggle-sidepanel, button.js-editor-SidePanel-toggle";
+    private static final String TOGGLE = "#Content button.toggle-sidepanel";
 
     private final Page page;
 
@@ -39,8 +40,7 @@ public final class SidePanelPw {
     }
 
     private boolean isOpen() {
-        return (Boolean) page.locator(PANEL).evaluate(
-            "el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.right > 0 && r.left < window.innerWidth; }");
+        return (Boolean) page.locator(PANEL).evaluate("el => el.classList.contains('sidepanel-opened')");
     }
 
     /** Opens the side panel (if closed) and makes sure its Assets tab is the active one. */
@@ -48,8 +48,8 @@ public final class SidePanelPw {
         assertThat(page.locator(PANEL)).isAttached();
         if (!isOpen()) {
             page.locator(TOGGLE).first().click();
-            page.waitForFunction("() => { const el = document.querySelector('" + PANEL + "'); if (!el) return false;"
-                + " const r = el.getBoundingClientRect(); return r.width > 0 && r.right > 10; }");
+            assertThat(page.locator(PANEL)).hasClass(Pattern.compile("sidepanel-opened"));
+            waitForPanelAnimation();
         }
         Locator filters = page.locator(PANEL + " [name^='assetfilter_']").first();
         try {
@@ -64,9 +64,16 @@ public final class SidePanelPw {
     public void close() {
         if (isOpen()) {
             page.locator(TOGGLE).first().click();
-            page.waitForFunction("() => { const el = document.querySelector('" + PANEL + "'); if (!el) return true;"
-                + " const r = el.getBoundingClientRect(); return r.width === 0 || r.right <= 10; }");
+            assertThat(page.locator(PANEL)).hasClass(Pattern.compile("sidepanel-closed"));
+            waitForPanelAnimation();
         }
+    }
+
+    /** The panel slides in and out and the editor content is resized, so wait until its position is stable. */
+    private void waitForPanelAnimation() {
+        page.locator(PANEL).evaluate("el => new Promise(resolve => { let last = null; let same = 0;"
+            + " const tick = () => { const x = el.getBoundingClientRect().left; same = x === last ? same + 1 : 0;"
+            + " last = x; if (same >= 10) { resolve(true); } else { requestAnimationFrame(tick); } }; tick(); })");
     }
 
     /** Filters the assets list by a folder path using the given path autocomplete of the asset filter. */
@@ -78,6 +85,7 @@ public final class SidePanelPw {
             + path + "']").first();
         assertThat(suggestion).isVisible();
         suggestion.click();
+        assertThat(suggestion).isHidden();
     }
 
     /**
@@ -125,7 +133,8 @@ public final class SidePanelPw {
     /** Drags the asset card onto the target using native mouse events, as the editor drag and drop ignores dragTo. */
     public void dragAssetTo(String assetPath, Locator target) {
         Locator card = card(assetPath);
-        assertThat(card).isVisible();
+        // the asset list is reloaded after the path filter is applied
+        assertThat(card).isVisible(new LocatorAssertions.IsVisibleOptions().setTimeout(15_000));
         card.scrollIntoViewIfNeeded();
         BoundingBox from = card.boundingBox();
         BoundingBox to = target.boundingBox();

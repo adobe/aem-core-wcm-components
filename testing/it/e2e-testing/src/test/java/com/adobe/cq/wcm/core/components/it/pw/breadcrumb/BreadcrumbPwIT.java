@@ -42,9 +42,20 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         return Stream.of(RT_BREADCRUMB_V1, RT_BREADCRUMB_V2, RT_BREADCRUMB_V3);
     }
 
-    // the default (2) is rendered in the dialog on cloud, while 6.5 leaves the field empty
+    /**
+     * The dialog field defaults to 2 through {@code value="${not empty cqDesign.startLevel ? ... : 2}"}. This is what
+     * the Selenium test asserted, and it holds on AEM as a Cloud Service. On the 6.5 and LTS images CI observed the
+     * field rendered empty (the EL default is not resolved in the edit dialog there; the rendered breadcrumb still
+     * uses the default level, which the item counts in the tests verify). The relaxed expectation is bound to
+     * exactly those two flavours, as announced by the CI through AEM_TYPE, and is an exact empty value, not a pattern.
+     */
     private static void assertDefaultStartLevel(Locator startLevel) {
-        assertThat(startLevel).hasValue(java.util.regex.Pattern.compile("^2?$"));
+        String aemType = System.getenv("AEM_TYPE");
+        if ("65".equals(aemType) || "lts".equals(aemType)) {
+            assertThat(startLevel).hasValue("");
+        } else {
+            assertThat(startLevel).hasValue("2");
+        }
     }
 
     private String createBreadcrumbPage(String resourceType) throws Exception {

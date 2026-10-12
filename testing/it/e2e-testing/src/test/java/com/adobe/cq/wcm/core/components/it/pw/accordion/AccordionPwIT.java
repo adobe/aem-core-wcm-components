@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
 import com.adobe.cq.wcm.core.components.it.util.Commons;
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.BoundingBox;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_ACCORDION_V1;
@@ -401,6 +402,9 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         String accordion1Path = addChildItem(RT_ACCORDION_V1, accordionPath, "Accordion 1");
         openPanelSelector();
         panelSelectorRows().nth(0).click();
+        // the nested accordion can only be selected once its item is expanded and the editor laid out its overlay
+        assertThat(panels().nth(0)).hasAttribute("data-cmp-expanded", Pattern.compile(".*"));
+        awaitOverlayHittable(accordion1Path);
         addChildItem(RT_ACCORDION_V1, accordion1Path, "Accordion 1.2");
         String textPath = addChildItem(RT_TEXT_V2, accordionPath, "Text 1");
 
@@ -420,12 +424,15 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         // the policy has to exist before the test page is created, otherwise the editor keeps the default policy
         String policyPath = createComponentPolicy("/accordion-v1",
             java.util.Collections.singletonMap("components", RT_TEASER_V1));
+        // the toolbar's insert action adds a sibling, so the component also has to be allowed in the parent container
+        addComponentToAllowedPolicy(RT_TEASER_V1);
         addAccordion("accordion-v1");
 
         // the toolbar's insert action offers the allowed teaser
         selectEditable(accordionPath);
         assertThat(toolbarAction(accordionPath, "INSERT")).isVisible();
         toolbarAction(accordionPath, "INSERT").click();
+        assertThat(page.locator("coral-dialog.InsertComponentDialog")).isVisible();
         assertThat(insertDialogComponent("$='" + RT_TEASER_V1 + "'")).isVisible();
         reloadEditor();
 
@@ -532,6 +539,19 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         assertThat(page.locator("#text-3")).isVisible();
         assertThat(page.locator("#text-3")).isInViewport();
         assertThat(page.locator("#" + ITEM3 + "-button")).not().isInViewport();
+    }
+
+    /** Waits until the editor has laid out the editable's overlay so that a click at its centre reaches it. */
+    private void awaitOverlayHittable(String componentPath) {
+        page.evaluate("() => { window.dispatchEvent(new Event('resize')); const frame = document.querySelector('#ContentFrame');"
+            + " if (frame && frame.contentWindow) { frame.contentWindow.dispatchEvent(new Event('resize')); } }");
+        Locator overlay = page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + componentPath + "']");
+        overlay.scrollIntoViewIfNeeded();
+        page.waitForFunction("path => { const o = document.querySelector(\"#OverlayWrapper [data-type='Editable'][data-path='\" + path + \"']\");"
+            + " if (!o) { return false; } const r = o.getBoundingClientRect(); if (r.width < 2 || r.height < 2) { return false; }"
+            + " const e = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);"
+            + " return !!e && e.id !== 'OverlayWrapper'; }", componentPath,
+            new Page.WaitForFunctionOptions().setTimeout(10_000));
     }
 
     private void openPanelSelector() {

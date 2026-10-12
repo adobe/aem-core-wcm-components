@@ -65,7 +65,8 @@ public final class ImageSidePanelHelper {
     }
 
     private static void saveAndClose(Page page) {
-        page.locator("#shell-propertiespage-saveclose").click();
+        // "Save & Close" (shell-propertiespage-saveclose does not exist on the properties page)
+        page.locator("#shell-propertiespage-doneactivator").click();
         page.waitForURL(url -> !url.contains("properties.html"));
     }
 

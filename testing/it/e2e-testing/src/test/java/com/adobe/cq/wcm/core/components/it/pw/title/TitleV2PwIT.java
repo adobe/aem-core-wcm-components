@@ -62,7 +62,7 @@ public class TitleV2PwIT extends TitleV1PwIT {
         assertThat(contentFrame().locator(".cmp-title__link")).hasAttribute("href", redirectPage + ".html");
         enterPreviewMode();
         contentFrame().locator(".cmp-title__link").click();
-        assertThat(page).hasURL(Pattern.compile(".*" + Pattern.quote(redirectPage + ".html") + "$"));
+        assertThat(page).hasURL(Pattern.compile(".*" + (redirectPage + ".html").replace(".", "\\.") + "$"));
     }
 
     @Test

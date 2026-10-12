@@ -231,12 +231,15 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
     @Test
     public void testAllowedComponents() throws Exception {
         createTabs();
+        // the toolbar's insert action adds a sibling, so the component also has to be allowed in the parent container
+        addComponentToAllowedPolicy(Commons.RT_TEASER_V1);
         createComponentPolicy(RT_TABS_V1.substring(RT_TABS_V1.lastIndexOf("/")),
             Map.of("components", Commons.RT_TEASER_V1));
         openEditor(testPage);
         selectEditable();
         assertThat(toolbarAction("INSERT")).isVisible();
         toolbarAction("INSERT").click();
+        assertThat(page.locator("coral-dialog.InsertComponentDialog")).isVisible();
         assertThat(insertDialogComponent("$='" + Commons.RT_TEASER_V1 + "'")).isVisible();
     }
 

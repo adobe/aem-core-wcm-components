@@ -260,12 +260,15 @@ public class CarouselPwIT extends ComponentPwBaseTest {
         // the policy has to exist before the test page is created, otherwise the editor keeps the default policy
         String policyPath = createComponentPolicy("/carousel-v1",
             java.util.Collections.singletonMap("components", RT_TEASER_V1));
+        // the toolbar's insert action adds a sibling, so the component also has to be allowed in the parent container
+        addComponentToAllowedPolicy(RT_TEASER_V1);
         addCarousel("carousel-v1");
 
         // the toolbar's insert action offers the allowed teaser
         selectEditable();
         assertThat(toolbarAction("INSERT")).isVisible();
         toolbarAction("INSERT").click();
+        assertThat(page.locator("coral-dialog.InsertComponentDialog")).isVisible();
         assertThat(insertDialogComponent("$='" + RT_TEASER_V1 + "'")).isVisible();
         reloadEditor();
 

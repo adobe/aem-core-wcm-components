@@ -96,32 +96,8 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
     /** Sets the page's featured image through the page properties UI and returns to the editor. */
     private void setPageImage(String targetPage, String asset) throws Exception {
         authorClient.setPageProperty(targetPage, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
-        String assetName = asset.substring(asset.lastIndexOf('/') + 1);
-        String assetsPath = ImageSidePanelHelper.TEST_ASSETS_PATH;
-        page.navigate(baseUrl + "/mnt/overlay/wcm/core/content/sites/properties.html?item=" + targetPage);
-        page.locator("coral-tab[data-foundation-tracking-event*='images']").click();
-        // the file upload renders two pickers (text button and icon button)
-        page.locator(".cq-FileUpload-picker").first().click();
-        Locator picker = page.locator("coral-dialog:visible").last();
-        assertThat(picker).isVisible();
-        Locator folder = picker.locator("[data-foundation-collection-item-id='" + assetsPath + "']");
-        assertThat(folder).isVisible();
-        folder.click();
-        Locator assetItem = picker.locator("[data-foundation-collection-item-id='" + assetsPath + "/" + assetName + "']");
-        assertThat(assetItem).isVisible();
-        Locator checkbox = assetItem.locator("coral-checkbox");
-        if (checkbox.count() > 0 && checkbox.first().isVisible()) {
-            checkbox.first().click();
-        } else {
-            assetItem.locator("coral-columnview-item-thumbnail").click();
-        }
-        picker.locator("button.granite-pickerdialog-submit[is='coral-button']").click();
-        assertThat(page.locator("input[name='./cq:featuredimage/fileReference']"))
-            .hasValue(assetsPath + "/" + assetName);
-        page.locator(".cq-siteadmin-admin-properties coral-checkbox[name='./cq:featuredimage/altValueFromDAM']"
-            + " input[type='checkbox']").check();
-        page.locator("#shell-propertiespage-saveclose").click();
-        page.waitForURL(url -> !url.contains("properties.html"));
+        ImageSidePanelHelper.setPageFeaturedImage(page, baseUrl, targetPage,
+            asset.substring(asset.lastIndexOf('/') + 1), true);
         openEditor(testPage);
     }
 

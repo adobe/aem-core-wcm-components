@@ -48,7 +48,7 @@ public class DownloadV1PwIT extends ComponentPwBaseTest {
         sidePanel.open();
         filterSidePanel(sidePanel, assetPath);
         openEditDialog(componentPath);
-        sidePanel.dragAssetTo(assetPath, dialog().locator("coral-fileupload[name='./file']"));
+        sidePanel.dragAssetToFileUpload(dialog(), dialog().locator("coral-fileupload[name='./file']"), assetPath);
         saveDialog();
 
         Locator titleLink = contentFrame().locator(".cmp-download__title-link");

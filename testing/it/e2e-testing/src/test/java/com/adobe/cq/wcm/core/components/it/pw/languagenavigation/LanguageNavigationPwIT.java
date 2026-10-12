@@ -124,6 +124,10 @@ public class LanguageNavigationPwIT extends ComponentPwBaseTest {
         assertThat(items(l0 + ".cmp-languagenavigation__item--active", "LOCALE 1")).hasCount(1);
         assertThat(items(l0, "LOCALE 2")).hasCount(1);
         assertThat(items(l0, "hideInNav")).hasCount(0);
+        // items with children render only a title; the link is rendered for the leaf items, so none directly at level 0
+        assertThat(navigation().locator(l0 + " > .cmp-languagenavigation__item-link")).hasCount(0);
+        assertThat(navigation().locator(l0 + " > .cmp-languagenavigation__item-title")).hasCount(2);
+        assertThat(navigation().locator(l1 + " > .cmp-languagenavigation__item-link")).hasCount(4);
         assertThat(items(l1 + ".cmp-languagenavigation__item--active", "LOCALE 3 1")).hasCount(1);
         assertThat(items(l1, "LOCALE 3 2")).hasCount(1);
         assertThat(items(l1, "LOCALE 4")).hasCount(1);

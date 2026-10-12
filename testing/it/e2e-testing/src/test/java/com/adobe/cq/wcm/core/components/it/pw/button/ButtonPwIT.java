@@ -67,9 +67,12 @@ public class ButtonPwIT extends ComponentPwBaseTest {
     public void testSetLink(String resourceType) throws Exception {
         String path = addButton(resourceType);
         openEditDialog(path);
+        // a button without text renders an empty anchor with no box, which Playwright (unlike Selenium) reports as hidden
+        dialog().locator("input[name='./jcr:title']").fill("test button");
         fillLink(resourceType.equals(RT_BUTTON_V1) ? "link" : "linkURL", "https://www.adobe.com");
         saveDialog();
 
+        assertThat(contentFrame().locator("a[href='https://www.adobe.com']")).isVisible();
         assertThat(contentFrame().locator("a.cmp-button[href='https://www.adobe.com']")).hasCount(1);
     }
 
@@ -88,10 +91,13 @@ public class ButtonPwIT extends ComponentPwBaseTest {
     public void testSetLinkWithTarget() throws Exception {
         String path = addButton(RT_BUTTON_V2);
         openEditDialog(path);
+        // a button without text renders an empty anchor with no box, which Playwright (unlike Selenium) reports as hidden
+        dialog().locator("input[name='./jcr:title']").fill("test button");
         fillLink("linkURL", "https://www.adobe.com");
         dialog().locator("coral-checkbox[name='./linkTarget'] input[type='checkbox']").check();
         saveDialog();
 
+        assertThat(contentFrame().locator("a[href='https://www.adobe.com'][target='_blank']")).isVisible();
         assertThat(contentFrame().locator("a.cmp-button[href='https://www.adobe.com'][target='_blank']")).hasCount(1);
     }
 

@@ -240,6 +240,11 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
 
     // the cancelled flag may live on jcr:content or on its live sync child nodes depending on the version
     private static boolean isCancelled(JsonNode json) {
+        for (JsonNode mixin : json.path("jcr:mixinTypes")) {
+            if ("cq:LiveSyncCancelled".equals(mixin.asText())) {
+                return true;
+            }
+        }
         for (JsonNode v : json.findValues("cq:isCancelled")) {
             if (v.asBoolean(false)) {
                 return true;
