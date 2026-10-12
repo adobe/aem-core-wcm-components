@@ -232,7 +232,7 @@ class ContentAIClientImplTest {
         HttpPost sent = (HttpPost) captureExecutedRequest();
         ObjectMapper mapper = new ObjectMapper();
         JsonNode options = mapper.readTree(sent.getEntity().getContent()).path("queryOptions");
-        assertEquals(mapper.readTree("[\"text\",\"source\",\"metadata.url\",\"metadata.source\","
+        assertEquals(mapper.readTree("[\"text\",\"source\",\"title\",\"name\",\"metadata.url\",\"metadata.source\","
             + "\"metadata.title\",\"metadata.description\",\"metadata.image\"]"),
             options.path("resultFields").path("includes"));
         assertEquals(5, options.path("pagination").path("limit").asInt());
