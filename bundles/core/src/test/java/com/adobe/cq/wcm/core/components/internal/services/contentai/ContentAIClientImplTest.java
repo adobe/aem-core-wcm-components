@@ -301,7 +301,7 @@ class ContentAIClientImplTest {
 
         HttpPost sent = (HttpPost) captureExecutedRequest();
         assertEquals("https://publish-p12345-e67890.adobeaemcloud.com"
-            + "/adobe/experimental/aemcontentai-expires-20261231/contentAI/content-sources/search",
+            + "/adobe/contentAI/content-sources/search",
             sent.getURI().toString());
     }
 
@@ -316,9 +316,8 @@ class ContentAIClientImplTest {
         envClient.search("my-content-source", "electric cars", 10);
 
         HttpPost sent = (HttpPost) captureExecutedRequest();
-        assertTrue(sent.getURI().toString().startsWith(
-            "https://publish-p12345-e67890.adobeaemcloud.com/adobe/experimental/aemcontentai-expires-20261231/contentAI"),
-            "Expected bucket parsed from AEM_SERVICE, got " + sent.getURI());
+        assertEquals("https://publish-p12345-e67890.adobeaemcloud.com/adobe/contentAI/content-sources/search",
+            sent.getURI().toString());
     }
 
     @Test
@@ -332,9 +331,56 @@ class ContentAIClientImplTest {
         envClient.search("my-content-source", "electric cars", 10);
 
         HttpPost sent = (HttpPost) captureExecutedRequest();
-        assertTrue(sent.getURI().toString().startsWith(
-            "https://author-p12345-e67890.adobeaemcloud.com/adobe/experimental/aemcontentai-expires-20261231/contentAI"),
-            "Expected author- host on author tier, got " + sent.getURI());
+        assertEquals("https://author-p12345-e67890.adobeaemcloud.com/adobe/contentAI/content-sources/search",
+            sent.getURI().toString());
+    }
+
+    @Test
+    void genSearchUsesStableApiUrl() throws Exception {
+        Map<String, String> env = new HashMap<>();
+        env.put("AEM_PROGRAM_ID", "12345");
+        env.put("AEM_ENV_ID", "67890");
+        ContentAIClientImpl envClient = envClient(config(TEST_API_KEY, ""), env);
+        respondWith(200, "{\"query\":\"electric cars\",\"result\":\"Electric cars are efficient.\",\"hits\":[]}");
+
+        envClient.genSearch("my-content-source", "ACQUISITION", "electric cars");
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        assertEquals("https://publish-p12345-e67890.adobeaemcloud.com/adobe/contentAI/content-sources/gensearch",
+            sent.getURI().toString());
+        assertEquals(TEST_API_KEY, sent.getFirstHeader("X-Api-Key").getValue());
+    }
+
+    @Test
+    void listContentSourcesUsesStableApiUrl() throws Exception {
+        Map<String, String> env = new HashMap<>();
+        env.put("AEM_PROGRAM_ID", "12345");
+        env.put("AEM_ENV_ID", "67890");
+        ContentAIClientImpl envClient = envClient(config(TEST_API_KEY, ""), env);
+        respondWith(200, "{\"items\":[]}");
+
+        envClient.listContentSources();
+
+        HttpGet sent = (HttpGet) captureExecutedRequest();
+        assertEquals("https://publish-p12345-e67890.adobeaemcloud.com/adobe/contentAI/content-sources",
+            sent.getURI().toString());
+        assertEquals(TEST_API_KEY, sent.getFirstHeader("X-Api-Key").getValue());
+    }
+
+    @Test
+    void baseUrlOverrideTakesPrecedenceOverEnvironment() throws Exception {
+        Map<String, String> env = new HashMap<>();
+        env.put("AEM_PROGRAM_ID", "12345");
+        env.put("AEM_ENV_ID", "67890");
+        ContentAIClientImpl envClient = envClient(config(TEST_API_KEY,
+            " https://publish-p11111-e22222.adobeaemcloud.com/adobe/contentAI/ "), env);
+        respondWith(200, "{\"totalResults\":0,\"results\":[]}");
+
+        envClient.search("my-content-source", "electric cars", 10);
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        assertEquals("https://publish-p11111-e22222.adobeaemcloud.com/adobe/contentAI/content-sources/search",
+            sent.getURI().toString());
     }
 
     @Test

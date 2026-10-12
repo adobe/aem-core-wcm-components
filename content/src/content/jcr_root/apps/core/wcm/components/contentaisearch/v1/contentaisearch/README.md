@@ -43,6 +43,8 @@ The following properties are written to JCR for the ContentAI Supported Search c
 ## Configuration - Content AI API Access
 The component calls the Content AI `content-sources/search` and `content-sources/gensearch` APIs through the `ContentAIClient` OSGi service, which is configured via the `Core Components Content AI Client` OSGi configuration (PID `com.adobe.cq.wcm.core.components.internal.services.contentai.ContentAIClientImpl`):
 
+Environment-derived URLs use the stable `/adobe/contentAI` base path. See the [stable Content AI API documentation](https://developer.adobe.com/experience-cloud/experience-manager-apis/api/stable/contentai/).
+
 | Property | Required | Description |
 |---|---|---|
 | `apiKey` | Yes | Adobe Developer Console client ID (X-Api-Key) used for anonymous, public-index Content AI access. |
@@ -54,7 +56,7 @@ The component calls the Content AI `content-sources/search` and `content-sources
 Without a valid `apiKey`, the component renders its results section but search/gensearch requests fail gracefully (see `ContentAIClientException`); no key is bundled with, or defaulted by, this component.
 
 ### Setting `apiKey` on AEM as a Cloud Service
-1. Obtain an X-Api-Key by requesting Content AI API access for your AEM CS Program/Environment (via the Content AI onboarding process) and creating a Server-to-Server credential in Adobe Developer Console. Copy its "API Key (Client ID)".
+1. In Adobe Developer Console, add the "AEM Content AI" card to your project and create a Server-to-Server credential. Copy its "API Key (Client ID)" for use as the X-Api-Key for public content-source access.
 2. In your own Cloud Manager Git repository, add an OSGi configuration targeting the PID above, for example at:
    `ui.config/src/main/content/jcr_root/apps/<your-app>/osgiconfig/config.author/com.adobe.cq.wcm.core.components.internal.services.contentai.ContentAIClientImpl.cfg.json`
    ```json
@@ -67,8 +69,10 @@ Without a valid `apiKey`, the component renders its results section but search/g
 
 ### Setting `apiKey` and `baseUrlOverride` on AEM 6.5 LTS / Adobe Managed Services
 AEM 6.5 LTS and AMS do not expose the `AEM_PROGRAM_ID`/`AEM_ENV_ID`/`AEM_SERVICE` environment variables that AEM as a Cloud Service uses to derive its own Content AI host, so both properties must be set explicitly:
-1. Obtain an X-Api-Key as in step 1 above, and the Content AI base URL for your provisioned bucket (of the form `https://{tier}-p{PID}-e{EID}.adobeaemcloud.com/adobe/experimental/aemcontentai-expires-20261231/contentAI`).
+1. Obtain an X-Api-Key as in step 1 above, and the Content AI base URL for your provisioned bucket (of the form `https://{tier}-p{PID}-e{EID}.adobeaemcloud.com/adobe/contentAI`).
 2. Add an OSGi configuration targeting the PID above with both `apiKey` and `baseUrlOverride` set, via the standard AMS OSGi configuration delivery process (e.g. a `.cfg.json` file in your content package, or the Web Console on environments where that's permitted).
+
+The client uses `baseUrlOverride` exactly as configured, apart from trimming whitespace and a trailing slash. Ensure this value includes the stable `/adobe/contentAI` base path.
 
 ## Client Libraries
 The component provides a `core.wcm.components.contentaisearch.v1` client library category that contains recommended base CSS styling and JavaScript. It should be added to a relevant site client library using the `embed` property.
