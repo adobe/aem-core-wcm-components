@@ -14,12 +14,14 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.it.pw.download;
+package com.adobe.cq.wcm.core.components.it.pw;
 
 import java.util.Arrays;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.TimeoutError;
+import com.microsoft.playwright.assertions.LocatorAssertions;
 import com.microsoft.playwright.options.BoundingBox;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -41,11 +43,29 @@ public final class SidePanelPw {
             "el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.right > 0 && r.left < window.innerWidth; }");
     }
 
+    /** Opens the side panel (if closed) and makes sure its Assets tab is the active one. */
     public void open() {
         assertThat(page.locator(PANEL)).isAttached();
         if (!isOpen()) {
             page.locator(TOGGLE).first().click();
-            assertThat(page.locator(PANEL + " coral-card, " + PANEL + " [name^='assetfilter_']").first()).isVisible();
+            page.waitForFunction("() => { const el = document.querySelector('" + PANEL + "'); if (!el) return false;"
+                + " const r = el.getBoundingClientRect(); return r.width > 0 && r.right > 10; }");
+        }
+        Locator filters = page.locator(PANEL + " [name^='assetfilter_']").first();
+        try {
+            filters.waitFor(new Locator.WaitForOptions().setTimeout(3_000));
+        } catch (TimeoutError e) {
+            // another content tab (e.g. Components) was remembered as active
+            page.locator(PANEL + " coral-tab:has-text('Assets')").first().click();
+        }
+        assertThat(filters).isVisible();
+    }
+
+    public void close() {
+        if (isOpen()) {
+            page.locator(TOGGLE).first().click();
+            page.waitForFunction("() => { const el = document.querySelector('" + PANEL + "'); if (!el) return true;"
+                + " const r = el.getBoundingClientRect(); return r.width === 0 || r.right <= 10; }");
         }
     }
 
@@ -54,9 +74,37 @@ public final class SidePanelPw {
         Locator autocomplete = page.locator(PANEL + " foundation-autocomplete[name='" + filterName + "']").first();
         Locator input = autocomplete.locator("input[is='coral-textfield']").first();
         input.fill(path);
-        Locator suggestion = autocomplete.locator("coral-overlay button[value='" + path + "']").first();
+        Locator suggestion = autocomplete.locator("[is='coral-buttonlist-item'][value='" + path + "'], coral-overlay button[value='"
+            + path + "']").first();
         assertThat(suggestion).isVisible();
         suggestion.click();
+    }
+
+    /**
+     * Drags the asset card onto a dialog file upload and waits until the dialog took the asset over as its
+     * {@code fileReference}, retrying the gesture as it is occasionally ignored.
+     */
+    public void dragAssetToFileUpload(Locator dialog, Locator fileUpload, String assetPath) {
+        Locator reference = dialog.locator("input[name='./fileReference']");
+        for (int attempt = 1; ; attempt++) {
+            fileUpload.scrollIntoViewIfNeeded();
+            dragAssetTo(assetPath, fileUpload);
+            try {
+                assertThat(reference).hasValue(assetPath, new LocatorAssertions.HasValueOptions().setTimeout(5_000));
+                return;
+            } catch (AssertionError e) {
+                if (attempt == 3) {
+                    throw e;
+                }
+            }
+        }
+    }
+
+    /** Drags the asset card onto the editable's overlay in the editor. */
+    public void dragAssetToComponent(String assetPath, String componentPath) {
+        Locator overlay = page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + componentPath + "']");
+        overlay.scrollIntoViewIfNeeded();
+        dragAssetTo(assetPath, overlay);
     }
 
     /** Selects the asset type in the side panel type selector, e.g. "Documents". */
@@ -87,10 +135,14 @@ public final class SidePanelPw {
         double endY = to.y + to.height / 2;
         page.mouse().move(startX, startY);
         page.mouse().down();
+        // the drag has to start with a small movement, otherwise the draggable does not enter its drag mode
         page.mouse().move(startX + 5, startY + 5);
+        page.waitForTimeout(100);
         for (int step = 1; step <= 20; step++) {
             page.mouse().move(startX + (endX - startX) * step / 20.0, startY + (endY - startY) * step / 20.0);
+            page.waitForTimeout(30);
         }
+        page.waitForTimeout(200);
         page.mouse().up();
     }
 }

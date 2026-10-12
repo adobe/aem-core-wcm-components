@@ -18,6 +18,8 @@ package com.adobe.cq.wcm.core.components.it.pw.download;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import com.adobe.cq.wcm.core.components.it.pw.SidePanelPw;
+
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_DOWNLOAD_V2;
 
 @Tag("playwright-group2")

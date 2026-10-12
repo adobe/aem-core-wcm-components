@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
+import com.adobe.cq.wcm.core.components.it.pw.SidePanelPw;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.Locator;
 

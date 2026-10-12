@@ -15,10 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.pw.image;
 
+import com.adobe.cq.wcm.core.components.it.pw.SidePanelPw;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.TimeoutError;
-import com.microsoft.playwright.options.BoundingBox;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -31,110 +30,33 @@ public final class ImageSidePanelHelper {
 
     public static final String TEST_ASSETS_PATH = "/content/dam/core-components";
 
-    private static final String SIDE_PANEL = "#SidePanel";
-    private static final String TOGGLE_BUTTON = "button.toggle-sidepanel";
-    private static final String ASSET_FILTER = "foundation-autocomplete[name='assetfilter_image_path']";
+    private static final String ASSET_FILTER_NAME = "assetfilter_image_path";
 
     private ImageSidePanelHelper() {
     }
 
-    private static boolean isSidePanelOpen(Page page) {
-        Locator panel = page.locator(SIDE_PANEL);
-        return panel.count() > 0 && (Boolean) panel.evaluate(
-            "el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.right > 10 && r.left < window.innerWidth; }");
-    }
-
     /** Opens the editor side panel (if closed) and makes sure its Assets tab is the active one. */
     public static void openSidePanel(Page page) {
-        if (!isSidePanelOpen(page)) {
-            page.locator(TOGGLE_BUTTON).first().click();
-            page.waitForFunction("() => { const el = document.querySelector('" + SIDE_PANEL + "'); if (!el) return false;"
-                + " const r = el.getBoundingClientRect(); return r.width > 0 && r.right > 10; }");
-        }
-        Locator filter = page.locator(ASSET_FILTER);
-        try {
-            filter.waitFor(new Locator.WaitForOptions().setTimeout(3_000));
-        } catch (TimeoutError e) {
-            // another content tab (e.g. Components) was remembered as active
-            page.locator(SIDE_PANEL + " coral-tab:has-text('Assets')").first().click();
-        }
-        assertThat(filter).isVisible();
+        new SidePanelPw(page).open();
     }
 
     public static void closeSidePanel(Page page) {
-        if (isSidePanelOpen(page)) {
-            page.locator(TOGGLE_BUTTON).first().click();
-            page.waitForFunction("() => { const el = document.querySelector('" + SIDE_PANEL + "'); if (!el) return true;"
-                + " const r = el.getBoundingClientRect(); return r.width === 0 || r.right <= 10; }");
-        }
+        new SidePanelPw(page).close();
     }
 
     /** Restricts the asset finder to the given DAM folder, like {@code AssetFinder.setFiltersPath}. */
     public static void setAssetFilter(Page page, String path) {
-        Locator autocomplete = page.locator(ASSET_FILTER);
-        autocomplete.locator("input[is='coral-textfield']").first().fill(path);
-        Locator suggestion = autocomplete.locator("[is='coral-buttonlist-item'][value='" + path + "']");
-        assertThat(suggestion).isVisible();
-        suggestion.click();
+        new SidePanelPw(page).filterByPath(ASSET_FILTER_NAME, path);
     }
 
-    private static Locator card(Page page, String assetPath) {
-        return page.locator("coral-card.cq-draggable[data-path=\"" + assetPath + "\"]");
-    }
-
-    /**
-     * Drags an asset card from the asset finder onto the given drop target (a dialog file upload) and waits until the
-     * dialog took the asset over as its {@code fileReference}.
-     */
+    /** Drags an asset card onto a dialog file upload and waits until the dialog took it over as its fileReference. */
     public static void dragAssetToFileUpload(Page page, Locator dialog, Locator fileUpload, String assetPath) {
-        Locator card = card(page, assetPath);
-        assertThat(card).isVisible();
-        Locator reference = dialog.locator("input[name='./fileReference']");
-        for (int attempt = 1; ; attempt++) {
-            card.scrollIntoViewIfNeeded();
-            fileUpload.scrollIntoViewIfNeeded();
-            drag(page, card, fileUpload);
-            try {
-                assertThat(reference).hasValue(assetPath,
-                    new com.microsoft.playwright.assertions.LocatorAssertions.HasValueOptions().setTimeout(5_000));
-                return;
-            } catch (AssertionError e) {
-                if (attempt == 3) {
-                    throw e;
-                }
-            }
-        }
+        new SidePanelPw(page).dragAssetToFileUpload(dialog, fileUpload, assetPath);
     }
 
     /** Drags an asset card from the asset finder onto the editable's overlay in the editor. */
     public static void dragSidePanelImageToComponent(Page page, String assetPath, String componentPath) {
-        Locator card = card(page, assetPath);
-        assertThat(card).isVisible();
-        Locator overlay = page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + componentPath + "']");
-        card.scrollIntoViewIfNeeded();
-        overlay.scrollIntoViewIfNeeded();
-        drag(page, card, overlay);
-    }
-
-    /** Coral/jQuery UI drags do not react to Playwright's atomic dragTo, so the gesture is replayed with the mouse. */
-    private static void drag(Page page, Locator source, Locator target) {
-        BoundingBox from = source.boundingBox();
-        BoundingBox to = target.boundingBox();
-        double startX = from.x + from.width / 2;
-        double startY = from.y + from.height / 2;
-        double endX = to.x + to.width / 2;
-        double endY = to.y + to.height / 2;
-        page.mouse().move(startX, startY);
-        page.mouse().down();
-        // the drag has to start with a small movement, otherwise the draggable does not enter its drag mode
-        page.mouse().move(startX + 5, startY + 5);
-        page.waitForTimeout(100);
-        for (int step = 1; step <= 20; step++) {
-            page.mouse().move(startX + (endX - startX) * step / 20.0, startY + (endY - startY) * step / 20.0);
-            page.waitForTimeout(30);
-        }
-        page.waitForTimeout(200);
-        page.mouse().up();
+        new SidePanelPw(page).dragAssetToComponent(assetPath, componentPath);
     }
 
     private static void openProperties(Page page, String baseUrl, String pagePath) {
