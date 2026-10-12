@@ -47,6 +47,8 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.FrameLocator;
+import java.util.regex.Pattern;
+
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.options.BoundingBox;
 import com.microsoft.playwright.Page;
@@ -228,6 +230,13 @@ public abstract class PlaywrightAuthorBaseTest {
         waitEditorReady();
     }
 
+    /** Switches the page editor to preview mode through the global bar, like a user would. */
+    protected void enterPreviewMode() {
+        Locator preview = page.locator("button.editor-GlobalBar-item[data-layer='Preview']");
+        preview.click();
+        assertThat(preview).hasClass(Pattern.compile("is-selected"));
+    }
+
     protected void reloadEditor() {
         page.reload();
         // tests may already have navigated to the rendered page, where the editor globals never appear
@@ -304,6 +313,37 @@ public abstract class PlaywrightAuthorBaseTest {
     protected Locator insertableComponent(String pathMatch) {
         return page.locator(".editor-ComponentBrowser-component[data-path" + pathMatch + "], "
             + ".InsertComponentDialog-list coral-selectlist-item[value" + pathMatch + "]");
+    }
+
+    // ---- toolbar helpers for already selected editables
+
+    /**
+     * Component offered by the insert dialog opened from the editable toolbar, which on some versions is a plain
+     * coral-list rather than a select list or component browser.
+     */
+    protected Locator insertDialogComponent(String pathMatch) {
+        return insertableComponent(pathMatch)
+            .or(page.locator("coral-dialog.InsertComponentDialog [value" + pathMatch + "]")).first();
+    }
+
+    /**
+     * Clicks the toolbar action of an editable. When the editable is already selected its toolbar is used directly:
+     * clicking the overlay again right after selecting it is seen as a double click that opens the configure dialog.
+     */
+    protected void clickSelectedToolbarAction(String componentPath, String action) {
+        Locator backdrop = page.locator(".cq-dialog-backdrop.is-open");
+        try {
+            assertThat(backdrop).hasCount(0);
+        } catch (AssertionError e) {
+            // a closing dialog may leave its backdrop for a moment; the click below reports a persistent one
+        }
+        Locator button = page.locator("#EditableToolbar button[data-action='" + action + "'][data-path='"
+            + componentPath + "']");
+        if (button.isVisible()) {
+            button.click();
+        } else {
+            clickToolbarAction(componentPath, action);
+        }
     }
 
     /**

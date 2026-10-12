@@ -106,6 +106,11 @@ public class ImagePwIT extends ComponentPwBaseTest {
         page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
     }
 
+    /** Escapes regex metacharacters; Pattern.quote output ({@code \Q..\E}) is not valid in the browser's JS regex engine. */
+    private static String regex(String literal) {
+        return literal.replaceAll("[\\\\^$.|?*+()\\[\\]{}]", "\\\\$0");
+    }
+
     private String createRedirectPage() throws Exception {
         return authorClient.createPage("redirectPage", "Redirect Test Page Title", rootPage, defaultPageTemplate)
             .getSlingPath();
@@ -201,7 +206,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
 
         assertThat(editorImage()).isVisible();
         assertThat(editorImage()).hasAttribute("alt", "Return to Arkham");
-        assertThat(editorImage()).hasAttribute("src", Pattern.compile(".*" + Pattern.quote(testPage)
+        assertThat(editorImage()).hasAttribute("src", Pattern.compile(".*" + regex(testPage)
             + "/_jcr_content/root/responsivegrid/image\\.(core)?img\\..*"));
     }
 
@@ -218,7 +223,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
 
         assertThat(page.locator(".cmp-image__link, .cmp-image--link")).hasAttribute("href", redirectPage + ".html");
         image().click();
-        assertThat(page).hasURL(Pattern.compile(".*" + Pattern.quote(redirectPage) + "\\.html$"));
+        assertThat(page).hasURL(Pattern.compile(".*" + regex(redirectPage) + "\\.html$"));
     }
 
     @ParameterizedTest
@@ -351,7 +356,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
 
         // the area covers the top-left corner of the image, so clicking there follows the area link
         image().click(new Locator.ClickOptions().setPosition(5, 5));
-        assertThat(page).hasURL(Pattern.compile(".*" + Pattern.quote(redirectPage) + ".*"));
+        assertThat(page).hasURL(Pattern.compile(".*" + regex(redirectPage) + ".*"));
 
         openPreview();
         assertThat(area).not().hasCount(0);
@@ -588,6 +593,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
     @Tag("IgnoreOn65")
     public void testPageImageWithLinkedPage() throws Exception {
         String redirectPage = createRedirectPage();
+        adminClient.setPageProperty(redirectPage, "sling:resourceType", "core/wcm/components/page/v3/page", 200);
         ImageSidePanelHelper.setPageFeaturedImage(page, baseUrl, redirectPage, "AdobeStock_140634652_climbing.jpeg",
             true);
         String path = configureFeaturedImage(NO_DESCRIPTION_IMAGE, null, true);
@@ -599,7 +605,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         assertThat(image()).hasAttribute("alt", "Rock Climbing and Bouldering above the lake and mountains");
         assertThat(image()).hasAttribute("src", Pattern.compile(".*adobe-stock-140634652-climbing\\.jpeg.*"));
         image().click();
-        assertThat(page).hasURL(Pattern.compile(".*" + Pattern.quote(redirectPage) + "\\.html$"));
+        assertThat(page).hasURL(Pattern.compile(".*" + regex(redirectPage) + "\\.html$"));
     }
 
     @Test

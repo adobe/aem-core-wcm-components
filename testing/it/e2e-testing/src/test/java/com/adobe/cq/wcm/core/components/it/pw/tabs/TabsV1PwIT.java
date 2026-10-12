@@ -78,13 +78,32 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
 
     /** Selects the editable's overlay so that its toolbar is shown. */
     private void selectEditable() {
+        if (toolbarAction("CONFIGURE").isVisible()) {
+            return;
+        }
         Locator overlay = page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + tabsPath + "']");
-        overlay.scrollIntoViewIfNeeded();
-        overlay.evaluate("element => Promise.all(element.getAnimations().map(animation => "
-            + "animation.finished.catch(() => {})))");
-        BoundingBox bounds = overlay.boundingBox();
-        overlay.click(new Locator.ClickOptions().setPosition(Math.max(1, bounds.width / 2), 2));
+        // the overlay is replaced when the editable refreshes after a dialog was saved
+        for (int attempt = 0; ; attempt++) {
+            try {
+                overlay.scrollIntoViewIfNeeded();
+                overlay.evaluate("element => Promise.all(element.getAnimations().map(animation => "
+                    + "animation.finished.catch(() => {})))");
+                BoundingBox bounds = overlay.boundingBox();
+                overlay.click(new Locator.ClickOptions().setPosition(Math.max(1, bounds.width / 2), 2));
+                break;
+            } catch (com.microsoft.playwright.PlaywrightException e) {
+                if (attempt >= 3 || !String.valueOf(e.getMessage()).contains("not attached")) {
+                    throw e;
+                }
+            }
+        }
         assertThat(toolbarAction("CONFIGURE")).isVisible();
+    }
+
+    @Override
+    protected void openEditDialog(String componentPath) {
+        clickSelectedToolbarAction(componentPath, "CONFIGURE");
+        assertThat(dialog()).isVisible();
     }
 
     private void scrollToTop() {
@@ -185,7 +204,7 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         addItems();
         selectEditable();
         assertThat(toolbarAction("PANEL_SELECT")).isVisible();
-        clickToolbarAction(tabsPath, "PANEL_SELECT");
+        clickSelectedToolbarAction(tabsPath, "PANEL_SELECT");
         assertThat(page.locator(".cmp-panelselector")).isVisible();
         Locator panelItems = page.locator(".cmp-panelselector__table [is='coral-table-row']");
         assertThat(panelItems).hasCount(3);
@@ -203,7 +222,7 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         addItems();
         selectEditable();
         assertThat(toolbarAction("PANEL_SELECT")).isVisible();
-        clickToolbarAction(tabsPath, "PANEL_SELECT");
+        clickSelectedToolbarAction(tabsPath, "PANEL_SELECT");
         assertThat(page.locator(".cmp-panelselector")).isVisible();
         reorderPanelSelectorRow(0, 2);
         assertTabTitles("item1", "item2", "item0");
@@ -218,7 +237,7 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
         selectEditable();
         assertThat(toolbarAction("INSERT")).isVisible();
         toolbarAction("INSERT").click();
-        assertThat(insertableComponent("$='" + Commons.RT_TEASER_V1 + "'")).isVisible();
+        assertThat(insertDialogComponent("$='" + Commons.RT_TEASER_V1 + "'")).isVisible();
     }
 
     // The keyboard tests focus the tab by clicking it, like a user does, and then send the keys to whatever has focus.

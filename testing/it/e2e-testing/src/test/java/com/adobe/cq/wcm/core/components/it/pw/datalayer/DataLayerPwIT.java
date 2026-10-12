@@ -41,7 +41,7 @@ public class DataLayerPwIT extends PlaywrightAuthorBaseTest {
             .getSlingPath();
 
         openEditor(testPage);
-        page.evaluate("() => Granite.author.layerManager.activate('Preview')");
+        enterPreviewMode();
         Frame frame = contentFrame().owner().elementHandle().contentFrame();
         // the content frame may reload when switching to preview mode, so wait until the data layer is initialized
         frame.waitForFunction("() => !!window.adobeDataLayer && typeof window.adobeDataLayer.getState === 'function'"

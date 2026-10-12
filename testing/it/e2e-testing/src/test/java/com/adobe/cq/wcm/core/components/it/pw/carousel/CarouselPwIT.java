@@ -99,13 +99,32 @@ public class CarouselPwIT extends ComponentPwBaseTest {
 
     /** Selects the editable's overlay so that its toolbar is shown. */
     private void selectEditable() {
+        if (toolbarAction("CONFIGURE").isVisible()) {
+            return;
+        }
         Locator overlay = page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + carouselPath + "']");
-        overlay.scrollIntoViewIfNeeded();
-        overlay.evaluate("element => Promise.all(element.getAnimations().map(animation => "
-            + "animation.finished.catch(() => {})))");
-        BoundingBox bounds = overlay.boundingBox();
-        overlay.click(new Locator.ClickOptions().setPosition(Math.max(1, bounds.width / 2), 2));
+        // the overlay is replaced when the editable refreshes after a dialog was saved
+        for (int attempt = 0; ; attempt++) {
+            try {
+                overlay.scrollIntoViewIfNeeded();
+                overlay.evaluate("element => Promise.all(element.getAnimations().map(animation => "
+                    + "animation.finished.catch(() => {})))");
+                BoundingBox bounds = overlay.boundingBox();
+                overlay.click(new Locator.ClickOptions().setPosition(Math.max(1, bounds.width / 2), 2));
+                break;
+            } catch (com.microsoft.playwright.PlaywrightException e) {
+                if (attempt >= 3 || !String.valueOf(e.getMessage()).contains("not attached")) {
+                    throw e;
+                }
+            }
+        }
         assertThat(toolbarAction("CONFIGURE")).isVisible();
+    }
+
+    @Override
+    protected void openEditDialog(String componentPath) {
+        clickSelectedToolbarAction(componentPath, "CONFIGURE");
+        assertThat(dialog()).isVisible();
     }
 
     private void scrollToTop() {
@@ -247,7 +266,7 @@ public class CarouselPwIT extends ComponentPwBaseTest {
         selectEditable();
         assertThat(toolbarAction("INSERT")).isVisible();
         toolbarAction("INSERT").click();
-        assertThat(insertableComponent("$='" + RT_TEASER_V1 + "'")).isVisible();
+        assertThat(insertDialogComponent("$='" + RT_TEASER_V1 + "'")).isVisible();
         reloadEditor();
 
         // the policy restricts what can be added as a panel, which the children editor offers through its picker
@@ -351,7 +370,7 @@ public class CarouselPwIT extends ComponentPwBaseTest {
     }
 
     private void openPanelSelector() {
-        clickToolbarAction(carouselPath, "PANEL_SELECT");
+        clickSelectedToolbarAction(carouselPath, "PANEL_SELECT");
         assertThat(page.locator(".cmp-panelselector")).isVisible();
     }
 }

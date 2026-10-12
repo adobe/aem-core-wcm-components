@@ -171,7 +171,7 @@ public class ContentFragmentPwIT extends ComponentPwBaseTest {
         selectFragment(SIMPLE_FRAGMENT);
         dialog().locator("coral-radio[name='./displayMode'][value='vcf']").click();
         saveDialog();
-        page.evaluate("() => Granite.author.layerManager.activate('Preview')");
+        enterPreviewMode();
 
         assertThat(contentFrame().locator(".cmp-contentfragment--vcf")).isVisible();
     }

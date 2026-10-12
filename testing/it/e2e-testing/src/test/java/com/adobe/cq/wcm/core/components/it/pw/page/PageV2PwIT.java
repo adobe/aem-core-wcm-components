@@ -87,12 +87,14 @@ public class PageV2PwIT extends PageV1PwIT {
 
         openProperties();
         openTab("Blueprint");
+        assertThat(page.locator("coral-tab[selected]").filter(new Locator.FilterOptions().setHasText("Blueprint")))
+            .hasCount(1);
 
         Locator rolloutButton = page.locator(
             "coral-actionbar-item .cq-siteadmin-admin-properties-actions-blueprint[href*='rollout']");
         Locator rolloutDialog = page.locator("coral-dialog.msm-rollout-dialog[open]");
 
-        rolloutButton.click();
+        openRollout(rolloutButton);
         assertThat(rolloutDialog).isVisible();
         // the live copy is present for rollout and selected
         Locator rows = rolloutDialog.locator("[handle=table] tbody tr");
@@ -106,7 +108,7 @@ public class PageV2PwIT extends PageV1PwIT {
         assertThat(rolloutDialog).hasCount(0);
 
         // roll out now
-        rolloutButton.click();
+        openRollout(rolloutButton);
         assertThat(rolloutDialog).isVisible();
         rolloutDialog.locator("button[title='Rollout']").click();
         Locator scheduleDialog = page.locator("coral-dialog#aem-sites-rollout-schedule-dialog");
@@ -118,5 +120,14 @@ public class PageV2PwIT extends PageV1PwIT {
         page.waitForLoadState(LoadState.NETWORKIDLE);
         assertEquals(200, adminClient.doGet(liveCopyPage + ".html").getStatusLine().getStatusCode(),
             "The live copy should still be available after the rollout");
+    }
+
+    private void openRollout(Locator rolloutButton) {
+        try {
+            rolloutButton.click(new Locator.ClickOptions().setTimeout(10000));
+        } catch (com.microsoft.playwright.TimeoutError e) {
+            // the action bar item can be rendered hidden although it is wired
+            rolloutButton.dispatchEvent("click");
+        }
     }
 }

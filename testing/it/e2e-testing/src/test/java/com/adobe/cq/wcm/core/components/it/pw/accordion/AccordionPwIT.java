@@ -190,13 +190,32 @@ public class AccordionPwIT extends ComponentPwBaseTest {
 
     /** Selects the editable's overlay so that its toolbar is shown. */
     private void selectEditable(String componentPath) {
+        if (toolbarAction(componentPath, "CONFIGURE").isVisible()) {
+            return;
+        }
         Locator overlay = page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + componentPath + "']");
-        overlay.scrollIntoViewIfNeeded();
-        overlay.evaluate("element => Promise.all(element.getAnimations().map(animation => "
-            + "animation.finished.catch(() => {})))");
-        BoundingBox bounds = overlay.boundingBox();
-        overlay.click(new Locator.ClickOptions().setPosition(Math.max(1, bounds.width / 2), 2));
+        // the overlay is replaced when the editable refreshes after a dialog was saved
+        for (int attempt = 0; ; attempt++) {
+            try {
+                overlay.scrollIntoViewIfNeeded();
+                overlay.evaluate("element => Promise.all(element.getAnimations().map(animation => "
+                    + "animation.finished.catch(() => {})))");
+                BoundingBox bounds = overlay.boundingBox();
+                overlay.click(new Locator.ClickOptions().setPosition(Math.max(1, bounds.width / 2), 2));
+                break;
+            } catch (com.microsoft.playwright.PlaywrightException e) {
+                if (attempt >= 3 || !String.valueOf(e.getMessage()).contains("not attached")) {
+                    throw e;
+                }
+            }
+        }
         assertThat(toolbarAction(componentPath, "CONFIGURE")).isVisible();
+    }
+
+    @Override
+    protected void openEditDialog(String componentPath) {
+        clickSelectedToolbarAction(componentPath, "CONFIGURE");
+        assertThat(dialog()).isVisible();
     }
 
     private void scrollToTop() {
@@ -407,7 +426,7 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         selectEditable(accordionPath);
         assertThat(toolbarAction(accordionPath, "INSERT")).isVisible();
         toolbarAction(accordionPath, "INSERT").click();
-        assertThat(insertableComponent("$='" + RT_TEASER_V1 + "'")).isVisible();
+        assertThat(insertDialogComponent("$='" + RT_TEASER_V1 + "'")).isVisible();
         reloadEditor();
 
         // the policy restricts what can be added as a panel, which the children editor offers through its picker
@@ -485,7 +504,7 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         page.locator("#link-3").click();
         assertThat(content3).isVisible();
         assertThat(content3).isInViewport();
-        assertThat(title3).not().isInViewport();
+        assertThat(page.locator("#" + ITEM3 + "-button")).not().isInViewport();
     }
 
     @Test
@@ -512,11 +531,11 @@ public class AccordionPwIT extends ComponentPwBaseTest {
         assertThat(page.locator("#" + ITEM3)).isVisible();
         assertThat(page.locator("#text-3")).isVisible();
         assertThat(page.locator("#text-3")).isInViewport();
-        assertThat(page.locator("#" + ITEM3)).not().isInViewport();
+        assertThat(page.locator("#" + ITEM3 + "-button")).not().isInViewport();
     }
 
     private void openPanelSelector() {
-        clickToolbarAction(accordionPath, "PANEL_SELECT");
+        clickSelectedToolbarAction(accordionPath, "PANEL_SELECT");
         assertThat(page.locator(".cmp-panelselector")).isVisible();
     }
 }

@@ -211,8 +211,9 @@ public class FormOptionsPwIT extends FormGroupPwBase {
 
     private void assertHelpRelationship(String resourceType, String type, boolean hasHelp) throws Exception {
         prepareOptions(resourceType, type, hasHelp, false, false);
-        Locator target = contentFrame().locator("drop-down".equals(type) ? "option" : "input[type='checkbox']");
-        assertThat(contentFrame().locator("legend")).hasText(TITLE);
+        boolean dropDown = "drop-down".equals(type);
+        Locator target = contentFrame().locator(dropDown ? "option" : "input[type='checkbox']");
+        assertThat(contentFrame().locator(dropDown ? "label[for]" : "legend")).hasText(TITLE);
         if (hasHelp) {
             Locator help = helpMessage(resourceType);
             assertThat(help).isVisible();

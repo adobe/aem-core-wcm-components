@@ -56,7 +56,7 @@ public final class SidePanelPw {
             filters.waitFor(new Locator.WaitForOptions().setTimeout(3_000));
         } catch (TimeoutError e) {
             // another content tab (e.g. Components) was remembered as active
-            page.locator(PANEL + " coral-tab:has-text('Assets')").first().click();
+            page.locator(PANEL + " coral-tab[data-foundation-tracking-event*='assets' i]").first().click();
         }
         assertThat(filters).isVisible();
     }

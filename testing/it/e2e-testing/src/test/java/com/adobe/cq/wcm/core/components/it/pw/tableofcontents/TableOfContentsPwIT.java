@@ -52,7 +52,7 @@ public class TableOfContentsPwIT extends ComponentPwBaseTest {
         Locator templatePlaceholder = contentFrame().locator(".cmp-toc__template-placeholder");
         assertThat(templatePlaceholder).isVisible();
 
-        page.evaluate("() => Granite.author.layerManager.activate('Preview')");
+        enterPreviewMode();
         assertThat(templatePlaceholder).isHidden();
     }
 

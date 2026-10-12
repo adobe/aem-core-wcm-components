@@ -78,7 +78,7 @@ public final class ImageSidePanelHelper {
     public static void setPageFeaturedImage(Page page, String baseUrl, String pagePath, String assetName,
                                             boolean altFromDam) {
         openProperties(page, baseUrl, pagePath);
-        page.locator(".cq-FileUpload-picker").click();
+        page.locator(".cq-FileUpload-picker").first().click();
         Locator picker = page.locator("coral-dialog:visible").last();
         assertThat(picker).isVisible();
         Locator folder = picker.locator("[data-foundation-collection-item-id='" + TEST_ASSETS_PATH + "']");

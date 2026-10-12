@@ -47,11 +47,6 @@ public class TitleV1PwIT extends ComponentPwBaseTest {
         return path;
     }
 
-    /** Switches the page editor to preview mode so that the content frame links can be followed. */
-    protected void enterPreviewMode() {
-        page.evaluate("() => Granite.author.layerManager.activate('Preview')");
-    }
-
     @Test
     public void SetTitleValueUsingConfigDialog() throws Exception {
         String componentPath = createTitle();

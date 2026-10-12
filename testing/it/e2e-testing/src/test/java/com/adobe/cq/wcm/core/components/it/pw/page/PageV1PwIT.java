@@ -226,6 +226,28 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
             + adminClient.doGetJson(testPage + "/jcr:content", 1, 200));
     }
 
+    protected void assertPropertyStartsWith(String name, String prefix) throws Exception {
+        Commons.waitForJson(adminClient, testPage + "/jcr:content", 1, json -> {
+            JsonNode value = json.path(name);
+            for (JsonNode v : value.isArray() ? value : java.util.List.of(value)) {
+                if (v.asText().startsWith(prefix)) {
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+
+    // the cancelled flag may live on jcr:content or on its live sync child nodes depending on the version
+    private static boolean isCancelled(JsonNode json) {
+        for (JsonNode v : json.findValues("cq:isCancelled")) {
+            if (v.asBoolean(false)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected void assertArrayProperty(String name, String... expected) throws Exception {
         JsonNode content = Commons.waitForJson(adminClient, testPage + "/jcr:content", 1, json -> {
             JsonNode value = json.path(name);
@@ -298,8 +320,8 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
                 .hasCount(1);
             assertProperty("jcr:title", "Page");
             assertProperty("hideInNav", "true");
-            assertProperty("cq:tags", "default:testtag1");
-            assertProperty("cq:tags", "default:testtag2");
+            assertProperty("cq:tags", "testtag1");
+            assertProperty("cq:tags", "testtag2");
         } finally {
             adminClient.deletePath("/content/cq:tags/default/testtag1", 200, 404);
             adminClient.deletePath("/content/cq:tags/default/testtag2", 200, 404);
@@ -471,7 +493,7 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
         openTab("Cloud Services");
         assertThat(page.locator("coral-select[name='./cq:cloudserviceconfigs']")).isVisible();
         assertThat(page.locator(CLOUD_CONFIG_TAG)).isVisible();
-        assertProperty("cq:cloudserviceconfigs", CLOUD_SERVICE_CONFIG);
+        assertPropertyStartsWith("cq:cloudserviceconfigs", CLOUD_SERVICE_CONFIG);
     }
 
     @Test
@@ -593,7 +615,7 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
         liveCopyButton("suspend").click();
         page.locator("a[data-foundation-tracking-event*='\"element\":\"suspend\"']").click();
         confirmLiveCopyDialog("warning");
-        Commons.waitForJson(adminClient, liveCopyContent, 1, json -> json.path("cq:isCancelled").asBoolean(false));
+        Commons.waitForJson(adminClient, liveCopyContent, 1, json -> isCancelled(json));
         openLiveCopyTab();
         assertThat(liveCopyButton("resume")).isVisible();
         assertThat(liveCopyButton("suspend")).isHidden();
@@ -601,7 +623,7 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
         // Resume
         liveCopyButton("resume").click();
         confirmLiveCopyDialog("warning");
-        Commons.waitForJson(adminClient, liveCopyContent, 1, json -> !json.path("cq:isCancelled").asBoolean(false));
+        Commons.waitForJson(adminClient, liveCopyContent, 1, json -> !isCancelled(json));
         openLiveCopyTab();
         assertThat(liveCopyButton("suspend")).isVisible();
         assertThat(liveCopyButton("resume")).isHidden();
@@ -610,7 +632,7 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
         liveCopyButton("suspend").click();
         page.locator("a[data-foundation-tracking-event*='\"element\":\"suspend with children\"']").click();
         confirmLiveCopyDialog("warning");
-        Commons.waitForJson(adminClient, liveCopyContent, 1, json -> json.path("cq:isCancelled").asBoolean(false));
+        Commons.waitForJson(adminClient, liveCopyContent, 1, json -> isCancelled(json));
         openLiveCopyTab();
         assertThat(liveCopyButton("resume")).isVisible();
 

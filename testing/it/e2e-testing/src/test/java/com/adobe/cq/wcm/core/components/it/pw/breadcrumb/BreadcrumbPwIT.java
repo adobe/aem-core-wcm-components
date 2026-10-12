@@ -42,6 +42,11 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         return Stream.of(RT_BREADCRUMB_V1, RT_BREADCRUMB_V2, RT_BREADCRUMB_V3);
     }
 
+    // the default (2) is rendered in the dialog on cloud, while 6.5 leaves the field empty
+    private static void assertDefaultStartLevel(Locator startLevel) {
+        assertThat(startLevel).hasValue(java.util.regex.Pattern.compile("^2?$"));
+    }
+
     private String createBreadcrumbPage(String resourceType) throws Exception {
         testPage = authorClient.createPage("breadcrumb-root", "testPage_L1", rootPage, defaultPageTemplate)
             .getSlingPath();
@@ -111,7 +116,7 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         assertThat(items()).hasCount(5);
         openEditDialog(componentPath);
         Locator startLevel = dialog().locator("input[name='./startLevel']");
-        assertThat(startLevel).hasValue("2");
+        assertDefaultStartLevel(startLevel);
         startLevel.fill("4");
         saveDialog();
 
@@ -125,7 +130,7 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         assertThat(items()).hasCount(5);
         openEditDialog(componentPath);
         Locator startLevel = dialog().locator("input[name='./startLevel']");
-        assertThat(startLevel).hasValue("2");
+        assertDefaultStartLevel(startLevel);
         startLevel.fill("0");
         clickDone();
 
@@ -140,7 +145,7 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         assertThat(items()).hasCount(5);
         assertThat(activeItem()).hasCount(1);
         openEditDialog(componentPath);
-        assertThat(dialog().locator("input[name='./startLevel']")).hasValue("2");
+        assertDefaultStartLevel(dialog().locator("input[name='./startLevel']"));
         dialog().locator("input[name='./startLevel']").fill("100");
         saveDialog();
 
