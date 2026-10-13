@@ -660,7 +660,9 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
     private void confirmLiveCopyDialog(String variant) {
         Locator dialog = page.locator("coral-dialog[open]").last();
         assertThat(dialog).isVisible();
-        dialog.locator("button[variant='" + variant + "']").click();
+        // the properties page reloads itself once the live copy action is done; wait for that reload so the next
+        // navigation does not race it
+        page.waitForNavigation(() -> dialog.locator("button[variant='" + variant + "']").click());
         assertThat(dialog).isHidden();
         page.waitForLoadState(LoadState.NETWORKIDLE);
     }

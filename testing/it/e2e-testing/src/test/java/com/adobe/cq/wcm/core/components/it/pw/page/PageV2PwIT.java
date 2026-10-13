@@ -94,7 +94,7 @@ public class PageV2PwIT extends PageV1PwIT {
             "coral-actionbar-item .cq-siteadmin-admin-properties-actions-blueprint[href*='rollout']");
         Locator rolloutDialog = page.locator("coral-dialog.msm-rollout-dialog[open]");
 
-        openRollout(rolloutButton);
+        rolloutButton.click();
         assertThat(rolloutDialog).isVisible();
         // the live copy is present for rollout and selected
         Locator rows = rolloutDialog.locator("[handle=table] tbody tr");
@@ -103,15 +103,21 @@ public class PageV2PwIT extends PageV1PwIT {
         assertThat(liveCopyRow).hasCount(1);
         assertThat(liveCopyRow.locator("td").first().locator("coral-checkbox input[type='checkbox']")).isChecked();
 
-        // cancel the rollout
-        rolloutDialog.locator("button[title='Cancel']").click();
+        // cancelling the rollout reloads the properties page, which resets the selected tab
+        page.waitForNavigation(() -> rolloutDialog.locator("button[title='Cancel']").click());
         assertThat(rolloutDialog).hasCount(0);
+        assertThat(page.locator("#cq-sites-properties-form")).isVisible();
+        page.waitForLoadState(LoadState.NETWORKIDLE);
 
         // roll out now
-        openRollout(rolloutButton);
+        openTab("Blueprint");
+        rolloutButton.click();
         assertThat(rolloutDialog).isVisible();
         rolloutDialog.locator("button[title='Rollout']").click();
-        Locator scheduleDialog = page.locator("coral-dialog#aem-sites-rollout-schedule-dialog");
+        // AEM as a Cloud Service renders the schedule dialog as #aem-sites-schedule-dialog, 6.5/LTS as
+        // #aem-sites-rollout-schedule-dialog
+        Locator scheduleDialog = page.locator(
+            "coral-dialog#aem-sites-schedule-dialog, coral-dialog#aem-sites-rollout-schedule-dialog");
         assertThat(scheduleDialog).isVisible();
         scheduleDialog.locator("coral-radio[name='reportSchedule'][value='now']").click();
         scheduleDialog.locator("button[trackingelement='continue']").click();
@@ -120,14 +126,5 @@ public class PageV2PwIT extends PageV1PwIT {
         page.waitForLoadState(LoadState.NETWORKIDLE);
         assertEquals(200, adminClient.doGet(liveCopyPage + ".html").getStatusLine().getStatusCode(),
             "The live copy should still be available after the rollout");
-    }
-
-    private void openRollout(Locator rolloutButton) {
-        try {
-            rolloutButton.click(new Locator.ClickOptions().setTimeout(10000));
-        } catch (com.microsoft.playwright.TimeoutError e) {
-            // the action bar item can be rendered hidden although it is wired
-            rolloutButton.dispatchEvent("click");
-        }
     }
 }

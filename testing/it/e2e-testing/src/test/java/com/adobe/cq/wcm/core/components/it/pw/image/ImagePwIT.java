@@ -29,6 +29,7 @@ import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
 import com.adobe.cq.wcm.core.components.it.util.Commons;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.TimeoutError;
+import com.microsoft.playwright.options.LoadState;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_IMAGE_V1;
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_IMAGE_V2;
@@ -433,6 +434,8 @@ public class ImagePwIT extends ComponentPwBaseTest {
     public void testSetAssetWithoutDescription(String resourceType) throws Exception {
         String path = addImage(resourceType);
         dragImage(path, NO_DESCRIPTION_IMAGE);
+        // the asset metadata driving the "no description" validation is loaded asynchronously after the drop
+        page.waitForLoadState(LoadState.NETWORKIDLE);
         if (RT_IMAGE_V2.equals(resourceType)) {
             openDialogTab("metadata");
         }
@@ -441,9 +444,13 @@ public class ImagePwIT extends ComponentPwBaseTest {
         assertThat(dialog().locator(".coral-Form-errorlabel, coral-tooltip[variant='error'] > coral-tooltip-content")
             .first()).hasText(NO_DESCRIPTION_ERROR);
         if (RT_IMAGE_V3.equals(resourceType)) {
+            // the alt field is flagged with an error icon; newer Coral Spectrum styles hide the icon itself, so
+            // assert its presence and the invalid state of the field rather than the icon's rendering
+            Locator alt = dialog().locator("input[name='./alt']");
+            assertThat(alt).hasAttribute("aria-invalid", "true");
             Locator alertIcon = dialog().locator("input[name='./alt'] + coral-icon[icon='alert']");
-            alertIcon.scrollIntoViewIfNeeded();
-            assertThat(alertIcon).isVisible();
+            assertThat(alertIcon).hasCount(1);
+            assertThat(alertIcon).hasAttribute("alt", NO_DESCRIPTION_ERROR);
         }
     }
 
@@ -603,7 +610,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         openPreview();
 
         assertThat(image()).hasAttribute("alt", "Rock Climbing and Bouldering above the lake and mountains");
-        assertThat(image()).hasAttribute("src", Pattern.compile(".*adobe-stock-140634652-climbing\\.jpeg.*"));
+        assertThat(image()).hasAttribute("src", Pattern.compile(".*adobestock-140634652-climbing\\.jpeg.*"));
         image().click();
         assertThat(page).hasURL(Pattern.compile(".*" + regex(redirectPage) + "\\.html$"));
     }

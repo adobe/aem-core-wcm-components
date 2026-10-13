@@ -315,7 +315,11 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         openEditDialog(teaserPath);
         openAssetsTab();
         checkbox("./altValueFromPageImage").uncheck();
-        dialog().locator("input[name='./alt']").fill("");
+        Locator alt = dialog().locator("input[name='./alt']");
+        alt.fill("");
+        // leaving the emptied alt field validates it and inserts an error label above the decorative checkbox; blur it
+        // first so the checkbox click is not shifted off target by that layout change
+        alt.blur();
         checkbox("./isDecorative").check();
         assertThat(checkbox("./isDecorative")).isChecked();
         saveDialog();
