@@ -20,6 +20,10 @@ disable the Playwright traces (kept in `target/playwright-traces` for failing te
 
 # Usage
 
+This module is not part of the default reactor build (so a regular build does not download the Playwright driver)
+and is not published to Maven Central. Build it from the repository root with the `e2e-testing` profile
+(`mvn clean install -Pe2e-testing`), or run the commands below from this directory.
+
 Running all tests against a local instance (running on the default 4502 port):
 
 ```
@@ -54,9 +58,10 @@ Running against a non local AEM (Skyline for example), use the usual Sling Testi
 
 To run the tests against a Dockerized AEM, see [`testing/it/docker`](../docker/README.md).
 
-# Running released tests using the generated jar with dependencies
+# Running the tests from the jar with dependencies
 
-Download the latest `junit-platform-console-standalone-<version>.jar`, then:
+`mvn package` in this module produces `target/core.wcm.components.it.e2e-testing-<version>-it-jar-with-dependencies.jar`
+(the jar is not published). Download the latest `junit-platform-console-standalone-<version>.jar`, then:
 
 ```
 java -jar junit-platform-console-standalone-<version>.jar -cp 'target/core.wcm.components.it.e2e-testing-<version>-it-jar-with-dependencies.jar' --select-package "com.adobe.cq.wcm.core.components.it.pw" --include-classname "^.*IT?$"

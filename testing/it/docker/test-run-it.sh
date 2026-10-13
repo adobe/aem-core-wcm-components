@@ -21,6 +21,7 @@ for type in sdk 65 lts; do
             sdk) export AEM_IMAGE="registry/circleci-aem-cloudready:test" ;;
             65) export AEM_IMAGE="registry/circleci-aem:test" ;;
             lts) export AEM_IMAGE="registry/circleci-aem-lts:test" ;;
+            *) echo "unexpected type ${type}" >&2; exit 1 ;;
         esac
         export AEM_AUTHOR_PORT=4504
         source "${SCRIPT_DIR}/run-it.sh"
@@ -31,7 +32,8 @@ for type in sdk 65 lts; do
                     if [[ "${type}" == sdk ]]; then
                         echo 'Run Modes = [author, sdk]'
                     else
-                        echo 'Run Modes = [author]'
+                        # "sdk" outside the Run Modes line must not be mistaken for the SDK
+                        printf '%s\n' 'Run Modes = [author]' 'Sling Home = /opt/sdk/crx-quickstart'
                     fi ;;
                 */status-productinfo.txt)
                     if [[ "${type}" == lts ]]; then

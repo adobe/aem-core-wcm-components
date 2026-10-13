@@ -103,7 +103,7 @@ The image is `linux/amd64`. On an arm64 (Apple Silicon) Mac it runs under Docker
 emulation, so AEM boot is **slower than on native amd64** (author/publish took
 ~3.5 min each to come up in testing, vs. seconds/low-minutes natively) and can be
 flaky — this only affects local dev on Apple Silicon. CI runs on GitHub-hosted
-`ubuntu-latest`, which is native amd64, so it doesn't hit this. On a native amd64
+`ubuntu-26.04`, which is native amd64, so it doesn't hit this. On a native amd64
 host (Linux or Mac) it runs natively.
 
 ## CI notes
@@ -114,7 +114,11 @@ host (Linux or Mac) it runs natively.
 - **Image cache.** Each product image is pulled once per run by an image-cache
   job and stored as a zstd-compressed `docker save` archive in the Actions cache
   of the triggering ref; test jobs restore it and fall back to a direct pull when
-  it was evicted. Pull requests from forks never run the workflow.
+  it was evicted or cannot be decrypted. The workflow's jobs skip pull requests
+  from forks, but a fork can edit the workflow, and pull requests can read
+  `main`'s caches. The archive is therefore encrypted (AES-256, PBKDF2) with a key
+  derived from `ARTIFACTORY_CLOUD_PASS`, which fork runs never receive. Bump
+  `CACHE_VERSION` in the workflow after rotating that secret.
 - **Duplicate clientlibs on the SDK.** The cloud-ready SDK ships Core Components
   under `/libs`, and the `all` package adds this repo's copy under `/apps`, so the
   SDK author loads every Core Components clientlib twice (both copies resolve

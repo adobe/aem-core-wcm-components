@@ -22,12 +22,12 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.sling.testing.clients.ClientException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -40,23 +40,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.wcm.core.components.it.util.Commons;
 import com.adobe.cq.wcm.core.components.it.util.DisableTour;
 import com.adobe.cq.wcm.core.components.it.util.TestContentBuilder;
-import com.adobe.cq.wcm.core.components.it.util.Commons;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.FrameLocator;
-import java.util.regex.Pattern;
-
 import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.options.BoundingBox;
+import com.microsoft.playwright.Mouse;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.TimeoutError;
 import com.microsoft.playwright.Tracing;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
+import com.microsoft.playwright.options.BoundingBox;
 import com.microsoft.playwright.options.FormData;
 import com.microsoft.playwright.options.RequestOptions;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import com.microsoft.playwright.options.WaitUntilState;
 
 import static com.adobe.cq.wcm.core.components.it.util.ItConstants.GROUPID_CONTENT_AUTHORS;
@@ -102,6 +104,11 @@ public abstract class PlaywrightAuthorBaseTest {
 
         @Override
         public void testSuccessful(ExtensionContext ctx) {
+            closeContext(false);
+        }
+
+        @Override
+        public void testAborted(ExtensionContext ctx, Throwable cause) {
             closeContext(false);
         }
     };
@@ -285,7 +292,7 @@ public abstract class PlaywrightAuthorBaseTest {
                 configure.waitFor(new Locator.WaitForOptions().setTimeout(10_000));
                 configure.click();
                 return;
-            } catch (com.microsoft.playwright.TimeoutError e) {
+            } catch (TimeoutError e) {
                 lastError = e;
             } catch (com.microsoft.playwright.PlaywrightException e) {
                 if (!e.getMessage().contains("Element is not attached to the DOM")) {
@@ -371,8 +378,8 @@ public abstract class PlaywrightAuthorBaseTest {
         clickDone();
         try {
             dialog().waitFor(new Locator.WaitForOptions()
-                .setState(com.microsoft.playwright.options.WaitForSelectorState.HIDDEN).setTimeout(20_000));
-        } catch (com.microsoft.playwright.TimeoutError e) {
+                .setState(WaitForSelectorState.HIDDEN).setTimeout(20_000));
+        } catch (TimeoutError e) {
             // the first click can be swallowed while the form is still initializing
             clickDone();
             assertThat(dialog()).isHidden();
@@ -419,7 +426,6 @@ public abstract class PlaywrightAuthorBaseTest {
         page.waitForTimeout(200);
     }
 
-    /** Coral drag handles do not react to Playwright's atomic dragTo, so the gesture is replayed with the mouse. */
     /** Drops the source one row below the target's center, which Coral tables require to move an item down. */
     protected void dragBelow(Locator source, Locator target) {
         BoundingBox to = target.boundingBox();
@@ -442,29 +448,30 @@ public abstract class PlaywrightAuthorBaseTest {
         handle.scrollIntoViewIfNeeded();
         // The panel selector popover is still positioning itself after opening (notably on 6.5/LTS), so the
         // coordinates are only taken once the target row stopped moving.
-        com.microsoft.playwright.options.BoundingBox tb = rows.nth(to).boundingBox();
+        BoundingBox tb = rows.nth(to).boundingBox();
         for (int i = 0; i < 20; i++) {
             page.waitForTimeout(250);
-            com.microsoft.playwright.options.BoundingBox current = rows.nth(to).boundingBox();
+            BoundingBox current = rows.nth(to).boundingBox();
             boolean stable = current.y == tb.y && current.x == tb.x;
             tb = current;
             if (stable) {
                 break;
             }
         }
-        com.microsoft.playwright.options.BoundingBox hb = handle.boundingBox();
+        BoundingBox hb = handle.boundingBox();
         double x = hb.x + hb.width / 2, y = hb.y + hb.height / 2;
         page.mouse().move(x, y);
         page.mouse().down();
         page.waitForTimeout(300);
         double ty = tb.y + (to > from ? tb.height + 2 : -2);
-        page.mouse().move(x, y + 5, new com.microsoft.playwright.Mouse.MoveOptions().setSteps(5));
-        page.mouse().move(x, ty, new com.microsoft.playwright.Mouse.MoveOptions().setSteps(20));
+        page.mouse().move(x, y + 5, new Mouse.MoveOptions().setSteps(5));
+        page.mouse().move(x, ty, new Mouse.MoveOptions().setSteps(20));
         page.waitForTimeout(300);
         page.mouse().up();
         page.waitForTimeout(500);
     }
 
+    /** Coral drag handles do not react to Playwright's atomic dragTo, so the gesture is replayed with the mouse. */
     protected void dragAndDrop(Locator source, double endX, double endY) {
         BoundingBox from = source.boundingBox();
         double startX = from.x + from.width / 2;
@@ -483,7 +490,8 @@ public abstract class PlaywrightAuthorBaseTest {
         page.waitForTimeout(200);
     }
 
-    protected void checkCoralCheckbox(String name) {        dialog().locator("coral-checkbox[name='" + name + "'] input[type='checkbox']").check();
+    protected void checkCoralCheckbox(String name) {
+        dialog().locator("coral-checkbox[name='" + name + "'] input[type='checkbox']").check();
     }
 
     protected void selectAutocomplete(String selector, String value) {
@@ -506,7 +514,7 @@ public abstract class PlaywrightAuthorBaseTest {
         Locator suggestion = autocomplete.locator("coral-overlay button[value='" + value + "']").first();
         try {
             suggestion.click(new Locator.ClickOptions().setTimeout(5000));
-        } catch (com.microsoft.playwright.TimeoutError e) {
+        } catch (TimeoutError e) {
             input.press("Tab");
         }
     }

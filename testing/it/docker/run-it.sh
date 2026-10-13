@@ -249,10 +249,12 @@ wait_for_aem() {
 
 # Validate the product from the runtime, not just the image tag.
 verify_aem_type() {
-    local base="$1" settings product detected
+    local base="$1" settings runmodes product detected
     settings=$(curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
         "${base}/system/console/status-slingsettings.txt")
-    if [[ "${settings}" =~ Run\ Modes.*sdk ]]; then
+    # Only the "Run Modes = [...]" line counts: bash's =~ lets "." span newlines.
+    runmodes=$(grep -m1 '^Run Modes = ' <<<"${settings}" || true)
+    if [[ "${runmodes}" =~ [[,\ ]sdk[],] ]]; then
         detected=sdk
     else
         product=$(curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
@@ -375,7 +377,8 @@ print(" ".join(str(b["id"]) for b in bs if b.get("version") != expected))
 # Print the Bundle-Version of the <symbolic-name> jar embedded in a content package.
 # Args: <zip> <symbolic-name>
 bundle_version_in_package() {
-    python3 - "$1" "$2" <<'PY'
+    local zip="$1" symbolic_name="$2"
+    python3 - "${zip}" "${symbolic_name}" <<'PY'
 import io, re, sys, zipfile
 
 def manifest(jar):
@@ -410,8 +413,8 @@ PY
 # in $2 is expanded; $3 (optional) is an extended-regex of basenames to EXCLUDE.
 find_zip() {
     local dir="$1" pattern="$2" exclude="${3:-}"
-    # shellcheck disable=SC2012
     local matches
+    # shellcheck disable=SC2012,SC2086 # ${pattern} is an intentional glob
     matches=$(ls -t "${dir}"/${pattern} 2>/dev/null || true)
     if [[ -n "${exclude}" ]]; then
         matches=$(printf '%s\n' "${matches}" | grep -Ev "${exclude}" || true)
@@ -445,7 +448,8 @@ provision_packages() {
 }
 
 product_version() {
-    curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "$1/system/console/status-productinfo.txt" \
+    local base="$1"
+    curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/status-productinfo.txt" \
         | grep -m1 -oE 'Adobe Experience Manager \([^)]*\)' || true
 }
 
@@ -624,7 +628,7 @@ run_e2e() {
     if [[ "${E2E_RERUN}" != "0" ]]; then
         args+=(-Dfailsafe.rerunFailingTestsCount="${E2E_RERUN}")
     fi
-    # Headless display: the CI workflow (GitHub-hosted ubuntu-latest, no GUI
+    # Headless display: the CI workflow (GitHub-hosted ubuntu-26.04, no GUI
     # session) already starts Xvfb + fluxbox and exports DISPLAY before this
     # script runs, so this is normally a no-op there. This branch exists for
     # running the script standalone on a Linux box without that setup (falls back

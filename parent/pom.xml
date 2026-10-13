@@ -594,6 +594,10 @@
                         <configuration>
                             <publishingServerId>central</publishingServerId>
                             <autoPublish>true</autoPublish>
+                            <!-- the browser ITs are built and versioned with the release, but not published -->
+                            <excludeArtifacts>
+                                <artifact>core.wcm.components.it.e2e-testing</artifact>
+                            </excludeArtifacts>
                         </configuration>
                     </plugin>
                 </plugins>
