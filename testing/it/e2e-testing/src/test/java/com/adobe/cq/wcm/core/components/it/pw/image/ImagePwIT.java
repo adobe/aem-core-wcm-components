@@ -162,7 +162,9 @@ public class ImagePwIT extends ComponentPwBaseTest {
     private void setAlt(String resourceType, String alt) {
         setCheckboxIfShown(resourceType, "./altValueFromDAM", false);
         setCheckboxIfShown(resourceType, "./altValueFromPageImage", false);
-        field(resourceType, "input[name='./alt']").fill(alt);
+        Locator altInput = field(resourceType, "input[name='./alt']");
+        assertThat(altInput).isEnabled();
+        altInput.fill(alt);
     }
 
     private void setTitle(String resourceType, String title) {
@@ -183,6 +185,9 @@ public class ImagePwIT extends ComponentPwBaseTest {
         uncheckInheritFromPageImage();
         ImageSidePanelHelper.dragAssetToFileUpload(page, dialog(), dialog().locator("coral-fileupload[name='./file']")
             .first(), asset);
+        // the editor loads the asset's DAM metadata asynchronously after the drop and then re-initialises the
+        // "from DAM" checkboxes (which disable the alt/caption fields); let that settle before editing the dialog
+        page.waitForLoadState(LoadState.NETWORKIDLE);
     }
 
     private void uncheckInheritFromPageImage() {
@@ -434,8 +439,6 @@ public class ImagePwIT extends ComponentPwBaseTest {
     public void testSetAssetWithoutDescription(String resourceType) throws Exception {
         String path = addImage(resourceType);
         dragImage(path, NO_DESCRIPTION_IMAGE);
-        // the asset metadata driving the "no description" validation is loaded asynchronously after the drop
-        page.waitForLoadState(LoadState.NETWORKIDLE);
         if (RT_IMAGE_V2.equals(resourceType)) {
             openDialogTab("metadata");
         }
