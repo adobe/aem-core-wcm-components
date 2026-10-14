@@ -30,7 +30,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-26.04 ]
+        os: [ ubuntu-latest ]
         java: [11, 17, 21]
         profile: ['-Pcloud,adobe-public']
 
@@ -65,7 +65,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }} # required
           verbose: true # optional (default = false)
   build-js:
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: content

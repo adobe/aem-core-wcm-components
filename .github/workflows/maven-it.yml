@@ -194,6 +194,8 @@ jobs:
         env:
           ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_CLOUD_USER }}
           ARTIFACTORY_PASS: ${{ secrets.ARTIFACTORY_CLOUD_PASS }}
+        # explicit bash enables pipefail, so a failing docker save/openssl/zstd fails the step
+        shell: bash
         run: |
           echo "$ARTIFACTORY_PASS" | docker login "$REGISTRY" -u "$ARTIFACTORY_USER" --password-stdin
           trap 'docker logout "$REGISTRY"' EXIT
@@ -264,6 +266,8 @@ jobs:
         env:
           ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_CLOUD_USER }}
           ARTIFACTORY_PASS: ${{ secrets.ARTIFACTORY_CLOUD_PASS }}
+        # explicit bash enables pipefail, so a failing docker save/openssl/zstd fails the step
+        shell: bash
         run: |
           export IMAGE_CACHE_KEY="aem-image-cache:${ARTIFACTORY_PASS}"
           if [[ -f /tmp/aem-image.tar.zst.enc ]] \
@@ -377,6 +381,8 @@ jobs:
         env:
           ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_CLOUD_USER }}
           ARTIFACTORY_PASS: ${{ secrets.ARTIFACTORY_CLOUD_PASS }}
+        # explicit bash enables pipefail, so a failing docker save/openssl/zstd fails the step
+        shell: bash
         run: |
           export IMAGE_CACHE_KEY="aem-image-cache:${ARTIFACTORY_PASS}"
           if [[ -f /tmp/aem-image.tar.zst.enc ]] \

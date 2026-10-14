@@ -116,6 +116,16 @@ fi
 # Product-specific JUnit categories; an explicit empty override runs all categories.
 IT_EXCLUDED_GROUPS="${IT_EXCLUDED_GROUPS-${DEFAULT_IT_EXCLUDED_GROUPS}}"
 
+# The Selenium-era WITH_SELENIUM/SEL_* variables were renamed to WITH_E2E/E2E_*. Fail fast rather than
+# silently running the http ITs when an old invocation is used.
+for legacy_var in WITH_SELENIUM SEL_BROWSER SEL_EXCLUDED_GROUPS SEL_GROUPS SEL_IT_TEST SEL_RERUN; do
+    if declare -p "${legacy_var}" >/dev/null 2>&1; then
+        echo "${legacy_var} is no longer supported; use WITH_E2E / E2E_* instead (see testing/it/docker/README.md)" >&2
+        exit 1
+    fi
+done
+unset legacy_var
+
 # --- Browser e2e (e2e-testing) mode ---
 # When true, run the Playwright UI suite (testing/it/e2e-testing) instead of the
 # http ITs, driving a LOCAL browser on the host. The browser runs where Maven

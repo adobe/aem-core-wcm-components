@@ -19,11 +19,13 @@ package com.adobe.cq.wcm.core.components.it.pw;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import com.microsoft.playwright.JSHandle;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.TimeoutError;
 import com.microsoft.playwright.assertions.LocatorAssertions;
 import com.microsoft.playwright.options.BoundingBox;
+import com.microsoft.playwright.options.LoadState;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -86,6 +88,11 @@ public final class SidePanelPw {
         assertThat(suggestion).isVisible();
         suggestion.click();
         assertThat(suggestion).isHidden();
+        // the path field keeps the focus after picking a suggestion and only commits on blur, which reloads (and
+        // scrolls) the asset list; commit it now, otherwise the mouse-down of a later drag triggers the reload and
+        // the drag picks up whichever card ends up under the pointer
+        input.blur();
+        page.waitForLoadState(LoadState.NETWORKIDLE);
     }
 
     /**
@@ -136,10 +143,22 @@ public final class SidePanelPw {
         // the asset list is reloaded after the path filter is applied
         assertThat(card).isVisible(new LocatorAssertions.IsVisibleOptions().setTimeout(15_000));
         card.scrollIntoViewIfNeeded();
-        BoundingBox from = card.boundingBox();
+        // the card list can still shift (e.g. thumbnails loading) after the card is visible; only press once the card
+        // centre is stable across two animation frames and actually hit-tests to this card, so the drag cannot pick
+        // up a neighbouring asset
+        JSHandle point = page.waitForFunction("p => {"
+            + " const card = document.querySelector('" + PANEL + " coral-card.cq-draggable[data-path=\"' + p + '\"]');"
+            + " if (!card) { return false; }"
+            + " const r = card.getBoundingClientRect();"
+            + " const x = r.x + r.width / 2, y = r.y + r.height / 2;"
+            + " const hit = document.elementFromPoint(x, y);"
+            + " const key = x + ',' + y + ',' + p, stable = window.__pwDragPoint === key;"
+            + " window.__pwDragPoint = key;"
+            + " return stable && !!hit && hit.closest('coral-card') === card ? { x, y } : false;"
+            + " }", assetPath, new Page.WaitForFunctionOptions().setTimeout(15_000));
+        double startX = ((Number) point.evaluate("p => p.x")).doubleValue();
+        double startY = ((Number) point.evaluate("p => p.y")).doubleValue();
         BoundingBox to = target.boundingBox();
-        double startX = from.x + from.width / 2;
-        double startY = from.y + from.height / 2;
         double endX = to.x + to.width / 2;
         double endY = to.y + to.height / 2;
         page.mouse().move(startX, startY);

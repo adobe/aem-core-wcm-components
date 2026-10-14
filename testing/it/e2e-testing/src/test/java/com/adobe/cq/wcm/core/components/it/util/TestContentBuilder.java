@@ -373,7 +373,7 @@ public final class TestContentBuilder {
 
 
     public static String randomSmallText() {
-        return RandomStringUtils.randomAlphabetic(DEFAULT_SMALL_SIZE);
+        return RandomStringUtils.insecure().nextAlphabetic(DEFAULT_SMALL_SIZE);
     }
 
     public static String randomSmallTextSearch() {

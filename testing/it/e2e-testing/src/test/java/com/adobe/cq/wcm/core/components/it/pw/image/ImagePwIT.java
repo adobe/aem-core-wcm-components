@@ -29,7 +29,6 @@ import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
 import com.adobe.cq.wcm.core.components.it.util.Commons;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.TimeoutError;
-import com.microsoft.playwright.options.LoadState;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_IMAGE_V1;
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_IMAGE_V2;
@@ -185,9 +184,11 @@ public class ImagePwIT extends ComponentPwBaseTest {
         uncheckInheritFromPageImage();
         ImageSidePanelHelper.dragAssetToFileUpload(page, dialog(), dialog().locator("coral-fileupload[name='./file']")
             .first(), asset);
-        // the editor loads the asset's DAM metadata asynchronously after the drop and then re-initialises the
-        // "from DAM" checkboxes (which disable the alt/caption fields); let that settle before editing the dialog
-        page.waitForLoadState(LoadState.NETWORKIDLE);
+        // the v2/v3 editor loads the asset's DAM metadata ($.ajax) after the drop and then, in an async jQuery
+        // callback, re-initialises the "from DAM" checkboxes (which disable the alt/caption fields); wait for the
+        // request to complete and flush a task so that callback has run before the dialog is edited
+        page.waitForFunction("() => !window.jQuery || window.jQuery.active === 0");
+        page.evaluate("() => new Promise(resolve => setTimeout(resolve, 0))");
     }
 
     private void uncheckInheritFromPageImage() {
@@ -470,6 +471,8 @@ public class ImagePwIT extends ComponentPwBaseTest {
 
     @Test
     // Next-Gen Dynamic Media is only available on AEM as a Cloud Service (not the SDK)
+    // so this runs on none of the CI products; NGDM smart-crop coverage is tracked in
+    // https://github.com/adobe/aem-core-wcm-components/issues/3100
     @Tag("IgnoreOnSDK")
     @Tag("IgnoreOn65")
     @Tag("IgnoreOnLTS")

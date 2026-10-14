@@ -104,7 +104,7 @@ public class PageV2PwIT extends PageV1PwIT {
         assertThat(liveCopyRow.locator("td").first().locator("coral-checkbox input[type='checkbox']")).isChecked();
 
         // cancelling the rollout reloads the properties page, which resets the selected tab
-        page.waitForNavigation(() -> rolloutDialog.locator("button[title='Cancel']").click());
+        waitForPageReload(() -> rolloutDialog.locator("button[title='Cancel']").click());
         assertThat(rolloutDialog).hasCount(0);
         assertThat(page.locator("#cq-sites-properties-form")).isVisible();
         page.waitForLoadState(LoadState.NETWORKIDLE);

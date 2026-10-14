@@ -31,6 +31,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
+import org.apache.sling.testing.clients.exceptions.TestingSetupException;
 import org.apache.sling.testing.clients.exceptions.TestingValidationException;
 import org.apache.sling.testing.clients.util.FormEntityBuilder;
 import org.apache.sling.testing.clients.util.HttpUtils;
@@ -158,7 +159,7 @@ public class Commons {
     public static final String RT_DOWNLOAD_V2 = "core-component/components/download-v2";
 
     private static String randomSmallText() {
-        return RandomStringUtils.randomAlphabetic(DEFAULT_SMALL_SIZE);
+        return RandomStringUtils.insecure().nextAlphabetic(DEFAULT_SMALL_SIZE);
     }
 
     /**
@@ -188,7 +189,7 @@ public class Commons {
         try {
              return client.doPost(plcyPath + componentPath, createFEB(data).build(), HttpUtils.getExpectedStatus(201, expectedStatus)).getSlingPath();
         } catch (ClientException ex) {
-            throw new ClientException("Policy creation failed for component " + componentPath + "with error : " + ex, ex);
+            throw new TestingSetupException("Policy creation failed for component " + componentPath + "with error : " + ex, ex);
         }
     }
 
@@ -207,7 +208,7 @@ public class Commons {
         try {
             return client.doPost(plcyPath + componentPath, formEntry, HttpUtils.getExpectedStatus(201, expectedStatus)).getSlingPath();
         } catch (ClientException ex) {
-            throw new ClientException("Policy creation failed for component " + componentPath + "with error : " + ex, ex);
+            throw new TestingSetupException("Policy creation failed for component " + componentPath + "with error : " + ex, ex);
         }
     }
 
@@ -221,7 +222,7 @@ public class Commons {
         try {
             templatePolling.poll(DEFAULT_TIMEOUT, DEFAULT_RETRY_DELAY);
         } catch (InterruptedException | TimeoutException ex) {
-            throw new ClientException("Page template " + templatePath + " does not exist after " + DEFAULT_TIMEOUT + "ms", ex);
+            throw new TestingSetupException("Page template " + templatePath + " does not exist after " + DEFAULT_TIMEOUT + "ms", ex);
         }
     }
 
@@ -319,7 +320,7 @@ public class Commons {
         try {
             return client.doPost("/libs/wcm/core/content/sites/createpagewizard/_jcr_content", feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus)).getSlingPath();
         } catch(ClientException ex) {
-            throw new ClientException("Unable to create new page " + pageName + " at " + parentPath + " with error : " + ex, ex);
+            throw new TestingSetupException("Unable to create new page " + pageName + " at " + parentPath + " with error : " + ex, ex);
         }
     }
 
@@ -336,7 +337,7 @@ public class Commons {
         try {
             return client.doPost("/bin/wcmcommand", feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus)).getSlingPath();
         } catch(ClientException ex) {
-            throw new ClientException("Unable to create livecopy of " + srcPath + " at " + destPath + " with error : " + ex, ex);
+            throw new TestingSetupException("Unable to create livecopy of " + srcPath + " at " + destPath + " with error : " + ex, ex);
         }
     }
 
@@ -354,7 +355,7 @@ public class Commons {
         try {
             client.doPost(plcyAssignmentPath + componentPath, createFEB(data).build(), HttpUtils.getExpectedStatus(200, expectedStatus));
         } catch (ClientException ex) {
-            throw new ClientException("Policy assignment failed for component " + componentPath, ex);
+            throw new TestingSetupException("Policy assignment failed for component " + componentPath, ex);
         }
     }
 
@@ -371,7 +372,7 @@ public class Commons {
         try {
              client.doPost(plcyPath + componentPath, feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus));
         } catch (ClientException ex) {
-            throw new ClientException("Delete policy failed for component " + componentPath + " with error: " + ex, ex);
+            throw new TestingSetupException("Delete policy failed for component " + componentPath + " with error: " + ex, ex);
         }
     }
 
@@ -381,7 +382,7 @@ public class Commons {
         try {
             client.doPost(policyAssignmentPath + componentPath, feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus));
         } catch (ClientException ex) {
-            throw new ClientException("Delete policy Assignment failed for component " + componentPath + " with error: " + ex, ex);
+            throw new TestingSetupException("Delete policy Assignment failed for component " + componentPath + " with error: " + ex, ex);
         }
     }
 
@@ -397,7 +398,7 @@ public class Commons {
         try {
             client.doPost( path, createFEB(data).build(), HttpUtils.getExpectedStatus(200, expectedStatus));
         } catch (ClientException ex) {
-            throw new ClientException("Edit properties failed for path " + path, ex);
+            throw new TestingSetupException("Edit properties failed for path " + path, ex);
         }
     }
 
@@ -405,7 +406,7 @@ public class Commons {
         try {
             client.setPageProperties(pagePath, props, HttpUtils.getExpectedStatus(200, expectedStatus));
         } catch (ClientException ex) {
-            throw new ClientException("Set page properties failed for path " + pagePath, ex);
+            throw new TestingSetupException("Set page properties failed for path " + pagePath, ex);
         }
     }
 
@@ -448,7 +449,7 @@ public class Commons {
         try {
             return client.doPost( parentCompPath, feb.build(), HttpUtils.getExpectedStatus(201, expectedStatus)).getSlingPath();
         } catch (Exception ex) {
-            throw new ClientException(" failed to add component " + component + " with error: " + ex, ex);
+            throw new TestingSetupException(" failed to add component " + component + " with error: " + ex, ex);
         }
     }
 
@@ -491,7 +492,7 @@ public class Commons {
         try {
             addComponentPolling.poll(timeout, delay);
         } catch (TimeoutException | InterruptedException e) {
-            throw new ClientException("Failed to add component " + component + " in " + addComponentPolling.getWaited(), e);
+            throw new TestingSetupException("Failed to add component " + component + " in " + addComponentPolling.getWaited(), e);
         }
 
         return addComponentPolling.componentPath;
@@ -510,7 +511,7 @@ public class Commons {
         try {
             client.doPost( pagePath, feb.build(), HttpUtils.getExpectedStatus(200, expectedStatus)).getSlingPath();
         } catch (Exception ex) {
-            throw new ClientException(" failed to hide page " + pagePath + " with error: " + ex, ex);
+            throw new TestingSetupException(" failed to hide page " + pagePath + " with error: " + ex, ex);
         }
     }
 
@@ -555,7 +556,7 @@ public class Commons {
         try {
             return client.doPost("/bin/tagcommand" , form.build(), HttpStatus.SC_OK, HttpStatus.SC_CREATED).getSlingPath();
         } catch (Exception ex) {
-            throw new ClientException(" failed to add tag " + tag + " with error: " + ex, ex);
+            throw new TestingSetupException(" failed to add tag " + tag + " with error: " + ex, ex);
         }
     }
 

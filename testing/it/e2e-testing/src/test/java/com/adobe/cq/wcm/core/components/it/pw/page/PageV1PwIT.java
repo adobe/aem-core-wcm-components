@@ -662,7 +662,7 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
         assertThat(dialog).isVisible();
         // the properties page reloads itself once the live copy action is done; wait for that reload so the next
         // navigation does not race it
-        page.waitForNavigation(() -> dialog.locator("button[variant='" + variant + "']").click());
+        waitForPageReload(() -> dialog.locator("button[variant='" + variant + "']").click());
         assertThat(dialog).isHidden();
         page.waitForLoadState(LoadState.NETWORKIDLE);
     }

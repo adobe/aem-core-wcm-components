@@ -57,6 +57,7 @@ import com.microsoft.playwright.Tracing;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.BoundingBox;
 import com.microsoft.playwright.options.FormData;
+import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.RequestOptions;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import com.microsoft.playwright.options.WaitUntilState;
@@ -488,6 +489,17 @@ public abstract class PlaywrightAuthorBaseTest {
         page.waitForTimeout(200);
         page.mouse().up();
         page.waitForTimeout(200);
+    }
+
+    /**
+     * Runs an action that makes the page reload itself (possibly to the same URL, which {@code waitForURL} cannot
+     * detect) and waits until the new document has loaded.
+     */
+    protected void waitForPageReload(Runnable action) {
+        page.evaluate("() => { window.__pwBeforeReload = true; }");
+        action.run();
+        page.waitForFunction("() => window.__pwBeforeReload === undefined");
+        page.waitForLoadState(LoadState.LOAD);
     }
 
     protected void checkCoralCheckbox(String name) {
