@@ -44,7 +44,7 @@ public class TitleV3PwIT extends TitleV2PwIT {
         dialog().locator("coral-checkbox[name='./linkTarget'] input").check();
         saveDialog();
         enterPreviewMode();
-        assertThat(contentFrame().locator("a.cmp-title__link[href='" + redirectPage + ".html'][target='_blank']"))
+        assertThat(contentFrame().locator("a.cmp-title__link[href='" + contextPath + redirectPage + ".html'][target='_blank']"))
             .isVisible();
     }
 }

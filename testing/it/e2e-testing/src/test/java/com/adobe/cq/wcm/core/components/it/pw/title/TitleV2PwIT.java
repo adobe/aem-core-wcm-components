@@ -59,7 +59,7 @@ public class TitleV2PwIT extends TitleV1PwIT {
         openEditDialog(componentPath);
         selectAutocomplete("[name='./linkURL']", redirectPage);
         saveDialog();
-        assertThat(contentFrame().locator(".cmp-title__link")).hasAttribute("href", redirectPage + ".html");
+        assertThat(contentFrame().locator(".cmp-title__link")).hasAttribute("href", contextPath + redirectPage + ".html");
         enterPreviewMode();
         contentFrame().locator(".cmp-title__link").click();
         assertThat(page).hasURL(Pattern.compile(".*" + (redirectPage + ".html").replace(".", "\\.") + "$"));
