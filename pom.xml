@@ -70,8 +70,6 @@
         <module>testing/junit/core</module>
         <module>testing/aem-mock-plugin</module>
         <module>testing/it/http</module>
-        <module>testing/it/e2e-selenium-utils</module>
-        <module>testing/it/e2e-selenium</module>
         <module>testing/it/it.core</module>
         <module>testing/it/it.ui.apps</module>
         <module>testing/it/it.ui.config</module>
@@ -82,5 +80,16 @@
         <module>examples</module>
         <module>extensions/amp</module>
     </modules>
+
+    <profiles>
+        <!-- The Playwright browser ITs pull in a large driver bundle, so they are only part of the
+             build on demand (CI integration tests, releases to keep the module version in step). -->
+        <profile>
+            <id>e2e-testing</id>
+            <modules>
+                <module>testing/it/e2e-testing</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>
