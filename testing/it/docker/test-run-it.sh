@@ -172,3 +172,38 @@ PY
     fi
 )
 echo 'Passed bundle de-duplication by package version.'
+
+(
+    export AEM_TYPE=sdk WITH_PUBLISH=true
+    source "${SCRIPT_DIR}/run-it.sh"
+    work=$(mktemp -d)
+    trap 'rm -rf "${work}"' EXIT
+    # shellcheck disable=SC2034 # read by the sourced run-it.sh functions
+    IT_COVERAGE_DIR="${work}"
+    fetch_jacoco() { echo fetch >> "${work}/calls"; }
+    docker() { echo "docker $*" >> "${work}/calls"; }
+    java() { echo "java $*" >> "${work}/calls"; }
+    find_zip() { echo "$1/bundle.jar"; }
+    # Disabled (the default): no agent, nothing collected.
+    start_aem >/dev/null
+    collect_coverage
+    [[ "$(cat "${work}/calls")" != *javaagent* && "$(cat "${work}/calls")" != *fetch* && "$(cat "${work}/calls")" != *jacococli* ]]
+    : > "${work}/calls"
+    # shellcheck disable=SC2034 # read by the sourced run-it.sh functions
+    IT_COVERAGE=true
+    start_aem >/dev/null
+    calls=$(cat "${work}/calls")
+    [[ "${calls}" == *fetch*"jacocoagent.jar"*"--id author"*"-javaagent:/tmp/jacoco/jacocoagent.jar=output=tcpserver,address=127.0.0.1,port=6300,sessionid=author,includes=com.adobe.cq.wcm.core.components.*"* ]]
+    [[ "${calls}" == *"--id publish"*"port=6301,sessionid=publish"* ]]
+    : > "${work}/calls"
+    collect_coverage >/dev/null
+    calls=$(cat "${work}/calls")
+    [[ "${calls}" == *"dump"*"--port 6300"*"author.exec"*"dump"*"--port 6301"*"publish.exec"* ]]
+    [[ "${calls}" == *"report ${work}/author.exec ${work}/publish.exec --classfiles ${REPO_ROOT}/bundles/core/target/bundle.jar --classfiles ${REPO_ROOT}/extensions/amp/bundle/target/bundle.jar"*"--xml ${work}/jacoco.xml"* ]]
+    # A failed dump is reported, not fatal, and the other instance is still collected.
+    docker() { [[ "$*" != *"--port 6300"* ]] && echo "docker $*" >> "${work}/calls"; }
+    : > "${work}/calls"
+    collect_coverage >/dev/null 2>"${work}/err"
+    [[ "$(cat "${work}/err")" == *"no JaCoCo coverage dumped from AEM author"* && "$(cat "${work}/calls")" == *"report ${work}/publish.exec --classfiles"* ]]
+)
+echo 'Passed JaCoCo coverage agent + collection.'
