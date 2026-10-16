@@ -24,8 +24,17 @@ class ContentAIClientDefaultsTest {
 
     private final ContentAIClient client = new ContentAIClient() {
         @Override
-        public ContentSourceListResult listContentSources() {
-            return new ContentSourceListResult();
+        public ContentSourceListResult listContentSources(String cursor) {
+            ContentSourceListResult result = new ContentSourceListResult();
+            result.setCursor(cursor);
+            return result;
+        }
+
+        @Override
+        public ContentSourceListResult listContentSources(String contentSourceType, String cursor) {
+            ContentSourceListResult result = new ContentSourceListResult();
+            result.setCursor(contentSourceType + ":" + cursor);
+            return result;
         }
 
         @Override
@@ -73,5 +82,11 @@ class ContentAIClientDefaultsTest {
     @Test
     void defaultContentSourceTypeConstant() {
         assertEquals("ACQUISITION", ContentAIClient.DEFAULT_CONTENT_SOURCE_TYPE);
+    }
+
+    @Test
+    void defaultListContentSourcesDelegatesToCursorOverload() throws Exception {
+        ContentSourceListResult result = client.listContentSources();
+        assertEquals(null, result.getCursor());
     }
 }

@@ -435,7 +435,8 @@
                         self._hasMoreResults = false;
                     }
                 } else {
-                    // error status
+                    // eslint-disable-next-line no-console
+                    console.error("Quick Search request failed with status " + request.status);
                 }
             };
             // when the results are loading: display the loading indicator and hide the search icon

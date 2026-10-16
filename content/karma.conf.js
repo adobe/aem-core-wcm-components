@@ -35,6 +35,8 @@ module.exports = function(config) {
             'src/content/jcr_root/apps/core/wcm/components/image/v3/image/clientlibs/site/**/js/*.js',
             'src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment/clientlibs/editor/authoring/js/editAction.js',
             'src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment/clientlibs/editor/authoring/js/vcfRenderer.js',
+            'src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/panelselect/js/namespace.js',
+            'src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/panelselect/js/panelselect.js',
             'src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/authoringutils/js/*.js',
             'src/content/jcr_root/apps/core/wcm/components/commons/editor/clientlibs/htmlidvalidator/js/*.js',
             'src/content/jcr_root/apps/core/wcm/components/commons/v1/clientlibs/editor/checkboxTextfieldTuple/checkboxTextfieldTuple.js',

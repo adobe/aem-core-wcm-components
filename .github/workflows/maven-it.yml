@@ -1,0 +1,443 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Copyright 2026 Adobe Systems Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Runs the testing/it/http and testing/it/e2e-testing ITs against a Dockerized
+# AEM, on every push to main, on every pull request targeting main, and on demand
+# (workflow_dispatch). All container + provisioning + failsafe orchestration lives in
+# testing/it/docker/run-it.sh so this workflow and the local dev flow share it.
+#
+# Structure: a single `prep` job builds the deployable packages; image-cache jobs
+# pull each AEM image ONCE and store it as an encrypted, zstd-compressed archive in
+# the Actions cache of the triggering ref (pull request runs also read main's caches, so feature
+# branches are covered by their PR run only - a branch push trigger would duplicate
+# every multi-GB archive in the 10 GB cache quota). Test jobs only download the packages + load the
+# cached image, so the expensive build/pull is not repeated per leg.
+# Browser ITs (Playwright) run as one job per @Tag("playwright-groupN"); prep fails
+# if any IT class is untagged (see testing/it/docker/gen-browser-matrix.sh).
+#
+# Requires repo secrets ARTIFACTORY_CLOUD_USER / ARTIFACTORY_CLOUD_PASS for the
+# private Adobe AEM image registry. Secrets are not exposed to forks, so automatic
+# runs are limited to the canonical repo and to pull requests from its own branches
+# (pull requests from forks are skipped). Caches are readable by any pull request
+# targeting main, including a fork that edits this workflow, so the proprietary image
+# archives are encrypted with a key derived from ARTIFACTORY_CLOUD_PASS (AES-256,
+# PBKDF2); without the secret a cached archive is unusable.
+#
+# Runs on GitHub-hosted ubuntu-26.04 runners (native amd64, Docker and Maven
+# preinstalled). The browser jobs have no GUI session, so they start their own
+# virtual display (Xvfb + fluxbox) for headed Chrome - see run-it.sh's
+# headless-display comment for how this differs from a local macOS dev run.
+
+name: Integration Tests (AEM)
+
+on:
+  workflow_dispatch:
+  # Documentation-only changes cannot affect the ITs (a full run costs ~20 jobs).
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+
+concurrency:
+  # Include the event name so a push run and a manual workflow_dispatch run on the
+  # same ref don't cancel each other (they are different intents). Only pull request
+  # runs cancel the in-progress run on a newer push; push/dispatch runs (e.g. on main)
+  # are not cancelled once started, but GitHub keeps only the latest pending run per
+  # group, so commits pushed while a run is in progress may be skipped.
+  group: it-aem-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Least privilege: read-only by default; only the test jobs that publish JUnit report
+# check runs get checks: write. Caches and artifacts use the runner's own token, not
+# GITHUB_TOKEN.
+permissions:
+  contents: read
+
+env:
+  REGISTRY: docker-adobe-cif-release.dr-uw2.adobeitc.com
+  # Bump to force a fresh cache lineage without a code change: CACHE_VERSION for the
+  # Docker image archives (also after rotating ARTIFACTORY_CLOUD_PASS, which keys their
+  # encryption), M2_CACHE_VERSION for the Maven repository.
+  CACHE_VERSION: '2'
+  M2_CACHE_VERSION: '2'
+
+jobs:
+  # --------------------------------------------------------------------------
+  # Build packages + prime caches ONCE; publish artifacts + the browser matrix.
+  # --------------------------------------------------------------------------
+  prep:
+    name: prep (build + prime caches)
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.repository == 'adobe/aem-core-wcm-components' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)) }}
+    runs-on: ubuntu-26.04
+    timeout-minutes: 30
+    outputs:
+      browser_matrix: ${{ steps.genmatrix.outputs.matrix }}
+      aem_matrix: ${{ steps.genmatrix.outputs.aem_matrix }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup JDK 11
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '11'
+
+      - name: Restore Maven repository cache
+        id: m2-cache
+        uses: actions/cache/restore@v5
+        with:
+          path: ~/.m2/repository
+          key: it-aem-m2-${{ env.M2_CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            it-aem-m2-${{ env.M2_CACHE_VERSION }}-
+
+      # Full reactor build once: produces the deployable zips uploaded below and
+      # fills ~/.m2 with the third-party dependencies the test jobs need.
+      - name: Build packages
+        run: mvn -B -U clean install -Pcloud,adobe-public,e2e-testing -DskipTests -s ./.github/workflows/settings.xml
+
+      # The IT runs use plugins outside the reactor build (failsafe + its JUnit
+      # providers from the test-all profiles). Resolve them here, with a filter that
+      # matches no test, so the test jobs never download them from Maven Central.
+      - name: Prime IT plugins in the Maven cache
+        if: ${{ steps.m2-cache.outputs.cache-hit != 'true' }}
+        run: |
+          for module in http e2e-testing; do
+            mvn -B -q -f "testing/it/$module/pom.xml" verify -Ptest-all -s ./.github/workflows/settings.xml \
+              -Dit.test=NoSuchPrimeIT -Dfailsafe.failIfNoSpecifiedTests=false -DfailIfNoTests=false
+          done
+
+      # The key is immutable, so only save when the restore missed it. This repo's
+      # own SNAPSHOTs are left out: the cache is only refreshed when a pom changes,
+      # so they would go stale. The test jobs build the few they need from source
+      # (see run_e2e in run-it.sh).
+      - name: Remove this repository's SNAPSHOTs from the Maven cache
+        if: ${{ always() && steps.m2-cache.outputs.cache-hit != 'true' }}
+        run: rm -rf ~/.m2/repository/com/adobe/cq/core.wcm.components.*
+
+      - name: Save Maven repository cache
+        if: ${{ always() && steps.m2-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v5
+        with:
+          path: ~/.m2/repository
+          key: it-aem-m2-${{ env.M2_CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
+
+      - name: Upload deployable packages
+        uses: actions/upload-artifact@v7
+        with:
+          name: it-packages
+          if-no-files-found: error
+          retention-days: 1
+          path: |
+            all/target/*.zip
+            testing/it/it.ui.apps/target/*.zip
+            testing/it/it.ui.config/target/*.zip
+            testing/it/it.ui.content/target/*.zip
+            testing/it/it.core/target/*.jar
+
+      - name: Generate browser IT matrix (fails on ungrouped ITs)
+        id: genmatrix
+        run: |
+          bash testing/it/docker/test-run-it.sh
+          matrix=$(bash testing/it/docker/gen-browser-matrix.sh)
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          echo 'aem_matrix={"include":[{"name":"cloud-ready","type":"sdk","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:27830-v2-openjdk21"},{"name":"6.5","type":"65","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem:6.5.24.0-openjdk11"},{"name":"LTS","type":"lts","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-lts:6.6.2-openjdk21"}]}' >> "$GITHUB_OUTPUT"
+
+  image-cache:
+    name: Cache AEM ${{ matrix.name }} image
+    needs: prep
+    runs-on: ubuntu-26.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.prep.outputs.aem_matrix) }}
+    env:
+      AEM_IMAGE: ${{ matrix.image }}
+    steps:
+      # Each product has its own cache key, shared by all of its test legs.
+      - name: Compute AEM image cache key
+        id: imgkey
+        run: echo "key=aem-image-zst-${CACHE_VERSION}-$(echo "$AEM_IMAGE" | tr '/:' '__')" >> "$GITHUB_OUTPUT"
+
+      - name: Restore AEM Docker image cache
+        id: aem-image-cache
+        uses: actions/cache/restore@v5
+        with:
+          path: /tmp/aem-image.tar.zst.enc
+          key: ${{ steps.imgkey.outputs.key }}
+          lookup-only: true
+
+      # Encrypted, zstd-compressed `docker save` archive. actions/cache only applies fast zstd
+      # (level 3); a higher level with a long-range window (repeated jars across
+      # layers) keeps the three product images within the repository's 10 GB quota.
+      - name: Pull + archive AEM image (on cache miss)
+        if: ${{ steps.aem-image-cache.outputs.cache-hit != 'true' }}
+        env:
+          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_CLOUD_USER }}
+          ARTIFACTORY_PASS: ${{ secrets.ARTIFACTORY_CLOUD_PASS }}
+        # explicit bash enables pipefail, so a failing docker save/openssl/zstd fails the step
+        shell: bash
+        run: |
+          echo "$ARTIFACTORY_PASS" | docker login "$REGISTRY" -u "$ARTIFACTORY_USER" --password-stdin
+          trap 'docker logout "$REGISTRY"' EXIT
+          docker pull "$AEM_IMAGE"
+          export IMAGE_CACHE_KEY="aem-image-cache:${ARTIFACTORY_PASS}"
+          docker save "$AEM_IMAGE" | zstd -T0 -12 --long=30 -q \
+            | openssl enc -aes-256-cbc -pbkdf2 -iter 200000 -salt -pass env:IMAGE_CACHE_KEY -out /tmp/aem-image.tar.zst.enc
+          echo "Image: $(docker image inspect --format '{{.Size}}' "$AEM_IMAGE" | numfmt --to=iec), archive: $(stat -c %s /tmp/aem-image.tar.zst.enc | numfmt --to=iec)"
+
+      - name: Save AEM Docker image cache
+        if: ${{ steps.aem-image-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v5
+        with:
+          path: /tmp/aem-image.tar.zst.enc
+          key: ${{ steps.imgkey.outputs.key }}
+
+  # --------------------------------------------------------------------------
+  # http ITs (author + publish). Consumes prep's packages + cached image.
+  # --------------------------------------------------------------------------
+  integration-test:
+    name: http ITs (author + publish, ${{ matrix.name }})
+    needs: [prep, image-cache]
+    # A failed product image cache leaves only that product's legs without an image.
+    if: ${{ !cancelled() && needs.prep.result == 'success' }}
+    permissions:
+      contents: read
+      checks: write
+    runs-on: ubuntu-26.04
+    # Native amd64 GitHub-hosted runner: author+publish boot + the full http
+    # suite ran in ~9 minutes in testing, so 90m is generous headroom.
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.prep.outputs.aem_matrix) }}
+    env:
+      AEM_IMAGE: ${{ matrix.image }}
+      AEM_TYPE: ${{ matrix.type }}
+      WITH_PUBLISH: 'true'
+      QP_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
+      PUBLISH_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup JDK 11
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '11'
+      - name: Restore Maven repository cache
+        uses: actions/cache/restore@v5
+        with:
+          path: ~/.m2/repository
+          key: it-aem-m2-${{ env.M2_CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            it-aem-m2-${{ env.M2_CACHE_VERSION }}-
+      - name: Download deployable packages
+        uses: actions/download-artifact@v7
+        with:
+          name: it-packages
+      - name: Compute AEM image cache key
+        id: imgkey
+        run: echo "key=aem-image-zst-${CACHE_VERSION}-$(echo "$AEM_IMAGE" | tr '/:' '__')" >> "$GITHUB_OUTPUT"
+      - name: Restore AEM Docker image cache
+        uses: actions/cache/restore@v5
+        with:
+          path: /tmp/aem-image.tar.zst.enc
+          key: ${{ steps.imgkey.outputs.key }}
+      - name: Load AEM image
+        env:
+          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_CLOUD_USER }}
+          ARTIFACTORY_PASS: ${{ secrets.ARTIFACTORY_CLOUD_PASS }}
+        # explicit bash enables pipefail, so a failing docker save/openssl/zstd fails the step
+        shell: bash
+        run: |
+          export IMAGE_CACHE_KEY="aem-image-cache:${ARTIFACTORY_PASS}"
+          if [[ -f /tmp/aem-image.tar.zst.enc ]] \
+            && openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -pass env:IMAGE_CACHE_KEY -in /tmp/aem-image.tar.zst.enc \
+              | zstd -T0 -dc --long=30 | docker load; then
+            rm -f /tmp/aem-image.tar.zst.enc
+          else
+            # The cache may be evicted between priming and restoration, or keyed by a rotated secret.
+            rm -f /tmp/aem-image.tar.zst.enc
+            echo "$ARTIFACTORY_PASS" | docker login "$REGISTRY" -u "$ARTIFACTORY_USER" --password-stdin
+            trap 'docker logout "$REGISTRY"' EXIT
+            docker pull "$AEM_IMAGE"
+          fi
+      - name: Run http integration tests
+        run: bash testing/it/docker/run-it.sh
+      - name: Publish integration test results
+        if: always()
+        uses: mikepenz/action-junit-report@a9170d5795813c01ab4901ffb045b52bab4ab09d # v6
+        with:
+          # Distinct from the job name so the job and its report don't show as two
+          # identically named checks.
+          check_name: http IT results (${{ matrix.name }})
+          report_paths: testing/it/http/target/failsafe-reports/TEST-*.xml
+          detailed_summary: true
+          include_passed: true
+          group_suite: true
+          # Maven (failsafe:verify) already fails the job on test failures.
+          fail_on_failure: false
+          require_tests: true
+      - name: Upload test results and AEM logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: it-http-${{ matrix.name }}-reports
+          if-no-files-found: ignore
+          retention-days: 14
+          path: |
+            testing/it/http/target/failsafe-reports
+            testing/it/http/target/aem-logs
+
+  # --------------------------------------------------------------------------
+  # Run each Playwright test group in its own job.
+  # --------------------------------------------------------------------------
+  browser-test:
+    name: Playwright ${{ matrix.group.group }} ITs (${{ matrix.aem.name }})
+    needs: [prep, image-cache]
+    # A failed product image cache leaves only that product's legs without an image.
+    if: ${{ !cancelled() && needs.prep.result == 'success' }}
+    permissions:
+      contents: read
+      checks: write
+    runs-on: ubuntu-26.04
+    # Native amd64 GitHub-hosted runner: groups take ~20-30 min including AEM
+    # boot and provisioning, so 60m leaves headroom without hiding a hang.
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        aem: ${{ fromJSON(needs.prep.outputs.aem_matrix).include }}
+        group: ${{ fromJSON(needs.prep.outputs.browser_matrix).include }}
+    env:
+      AEM_IMAGE: ${{ matrix.aem.image }}
+      AEM_TYPE: ${{ matrix.aem.type }}
+      WITH_E2E: 'true'
+      E2E_GROUPS: ${{ matrix.group.e2e_groups }}
+      E2E_IT_TEST: ${{ matrix.group.e2e_it_test }}
+      E2E_RERUN: '0'
+      # Playwright drives the runner's installed Chrome (channel=chrome): no bundled browser download.
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+      QP_VM_OPTIONS: '-Xmx4g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup JDK 11
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '11'
+
+      # ubuntu-26.04 has no GUI session, so give the host-local (headed) Chrome a
+      # virtual display: Xvfb (framebuffer) + fluxbox (window manager, so Chrome
+      # windows get normal focus and sizing).
+      - name: Set up virtual display (Xvfb + fluxbox)
+        run: |
+          sudo apt-get update && sudo apt-get install -y xvfb fluxbox
+          Xvfb :99 -screen 0 1920x1080x24 >/tmp/xvfb.log 2>&1 &
+          sleep 3
+          DISPLAY=:99 fluxbox >/tmp/fluxbox.log 2>&1 &
+          sleep 2
+          echo "DISPLAY=:99" >> "$GITHUB_ENV"
+
+      - name: Restore Maven repository cache
+        uses: actions/cache/restore@v5
+        with:
+          path: ~/.m2/repository
+          key: it-aem-m2-${{ env.M2_CACHE_VERSION }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            it-aem-m2-${{ env.M2_CACHE_VERSION }}-
+      - name: Download deployable packages
+        uses: actions/download-artifact@v7
+        with:
+          name: it-packages
+      - name: Compute AEM image cache key
+        id: imgkey
+        run: echo "key=aem-image-zst-${CACHE_VERSION}-$(echo "$AEM_IMAGE" | tr '/:' '__')" >> "$GITHUB_OUTPUT"
+      - name: Restore AEM Docker image cache
+        uses: actions/cache/restore@v5
+        with:
+          path: /tmp/aem-image.tar.zst.enc
+          key: ${{ steps.imgkey.outputs.key }}
+      - name: Load AEM image
+        env:
+          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_CLOUD_USER }}
+          ARTIFACTORY_PASS: ${{ secrets.ARTIFACTORY_CLOUD_PASS }}
+        # explicit bash enables pipefail, so a failing docker save/openssl/zstd fails the step
+        shell: bash
+        run: |
+          export IMAGE_CACHE_KEY="aem-image-cache:${ARTIFACTORY_PASS}"
+          if [[ -f /tmp/aem-image.tar.zst.enc ]] \
+            && openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -pass env:IMAGE_CACHE_KEY -in /tmp/aem-image.tar.zst.enc \
+              | zstd -T0 -dc --long=30 | docker load; then
+            rm -f /tmp/aem-image.tar.zst.enc
+          else
+            # The cache may be evicted between priming and restoration, or keyed by a rotated secret.
+            rm -f /tmp/aem-image.tar.zst.enc
+            echo "$ARTIFACTORY_PASS" | docker login "$REGISTRY" -u "$ARTIFACTORY_USER" --password-stdin
+            trap 'docker logout "$REGISTRY"' EXIT
+            docker pull "$AEM_IMAGE"
+          fi
+      - name: Run Playwright ${{ matrix.group.group }} ITs
+        run: bash testing/it/docker/run-it.sh
+      - name: Publish Playwright test results
+        if: always()
+        uses: mikepenz/action-junit-report@a9170d5795813c01ab4901ffb045b52bab4ab09d # v6
+        with:
+          check_name: Playwright ${{ matrix.group.group }} IT results (${{ matrix.aem.name }})
+          report_paths: testing/it/e2e-testing/target/failsafe-reports/TEST-*.xml
+          detailed_summary: true
+          include_passed: true
+          group_suite: true
+          # Maven (failsafe:verify) fails the job too; this also catches an empty leg.
+          fail_on_failure: true
+          require_tests: true
+      - name: Upload results and AEM logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: it-browser-${{ matrix.aem.name }}-${{ matrix.group.name }}-reports
+          if-no-files-found: ignore
+          retention-days: 14
+          path: |
+            testing/it/e2e-testing/target/failsafe-reports
+            testing/it/e2e-testing/target/playwright-traces
+            testing/it/http/target/aem-logs
+
+  # --------------------------------------------------------------------------
+  # Aggregate every leg's failsafe reports into one Step Summary (totals + the
+  # list of failing tests). Runs regardless of test outcomes.
+  # --------------------------------------------------------------------------
+  summary:
+    name: Test results summary
+    needs: [integration-test, browser-test]
+    if: ${{ always() && (github.event_name == 'workflow_dispatch' || (github.repository == 'adobe/aem-core-wcm-components' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository))) }}
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - name: Download all test report artifacts
+        uses: actions/download-artifact@v7
+        with:
+          path: all-reports
+          pattern: 'it-*reports*'
+      - name: Write results summary
+        run: node testing/it/docker/summarize-it.js all-reports >> "$GITHUB_STEP_SUMMARY"

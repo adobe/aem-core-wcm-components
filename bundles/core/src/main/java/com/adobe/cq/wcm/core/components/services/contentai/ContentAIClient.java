@@ -32,7 +32,37 @@ public interface ContentAIClient {
      * @throws ContentAIClientException if the call to Content AI fails
      * @since com.adobe.cq.wcm.core.components.services.contentai 1.0.0
      */
-    ContentSourceListResult listContentSources() throws ContentAIClientException;
+    default ContentSourceListResult listContentSources() throws ContentAIClientException {
+        return listContentSources(null);
+    }
+
+    /**
+     * Lists available Content AI content sources for the configured environment, with optional cursor-based
+     * pagination. {@code GET /content-sources} returns at most one page of sources per call; callers that need
+     * the complete set must keep calling this with {@link ContentSourceListResult#getCursor()} from the previous
+     * response until it comes back blank.
+     *
+     * @param cursor optional pagination cursor from a previous response, or {@code null}/blank for the first page
+     * @return parsed list response from {@code GET /content-sources}
+     * @throws ContentAIClientException if the call to Content AI fails
+     * @since com.adobe.cq.wcm.core.components.services.contentai 1.0.0
+     */
+    ContentSourceListResult listContentSources(String cursor) throws ContentAIClientException;
+
+    /**
+     * Lists available Content AI content sources filtered to a single type, with optional cursor-based pagination.
+     * {@code GET /content-sources?type={type}} returns at most one page of sources per call; callers that need the
+     * complete set must keep calling this with {@link ContentSourceListResult#getCursor()} from the previous
+     * response until it comes back blank.
+     *
+     * @param contentSourceType the Content AI content source type, e.g. {@code "AEM_PUBLISH"} or
+     *                           {@code "ACQUISITION"}
+     * @param cursor optional pagination cursor from a previous response, or {@code null}/blank for the first page
+     * @return parsed list response from {@code GET /content-sources?type={type}}
+     * @throws ContentAIClientException if the call to Content AI fails
+     * @since com.adobe.cq.wcm.core.components.services.contentai 1.0.0
+     */
+    ContentSourceListResult listContentSources(String contentSourceType, String cursor) throws ContentAIClientException;
 
     /**
      * Executes a hybrid (vector + fulltext) search against the given content source.

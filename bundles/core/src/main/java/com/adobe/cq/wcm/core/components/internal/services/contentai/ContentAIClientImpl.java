@@ -16,6 +16,8 @@
 package com.adobe.cq.wcm.core.components.internal.services.contentai;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Set;
@@ -118,12 +120,53 @@ public class ContentAIClientImpl implements ContentAIClient {
     }
 
     @Override
-    public ContentSourceListResult listContentSources() throws ContentAIClientException {
-        JsonNode response = executeGet("/content-sources");
+    public ContentSourceListResult listContentSources(String cursor) throws ContentAIClientException {
+        return listContentSourcesAtPath("/content-sources", cursor);
+    }
+
+    @Override
+    public ContentSourceListResult listContentSources(String contentSourceType, String cursor)
+        throws ContentAIClientException {
+        return listContentSourcesAtPath("/content-sources", contentSourceType, cursor);
+    }
+
+    private ContentSourceListResult listContentSourcesAtPath(String basePath, String cursor)
+        throws ContentAIClientException {
+        return listContentSourcesAtPath(basePath, null, cursor);
+    }
+
+    private ContentSourceListResult listContentSourcesAtPath(String basePath, String contentSourceType, String cursor)
+        throws ContentAIClientException {
+        StringBuilder path = new StringBuilder(basePath);
+        char separator = '?';
+        if (StringUtils.isNotBlank(contentSourceType)) {
+            path.append(separator).append("type=").append(urlEncode(contentSourceType));
+            separator = '&';
+        }
+        if (StringUtils.isNotBlank(cursor)) {
+            path.append(separator).append("cursor=").append(urlEncode(cursor));
+        }
+        JsonNode response = executeGet(path.toString());
         try {
             return mapper.treeToValue(response, ContentSourceListResult.class);
         } catch (IOException e) {
             throw new ContentAIClientException("Failed to parse Content AI content-sources response", e);
+        }
+    }
+
+    private static String urlEncode(String value) throws ContentAIClientException {
+        return urlEncode(value, StandardCharsets.UTF_8.name());
+    }
+
+    /**
+     * Package-private so the catch branch (otherwise unreachable with the real, always-supported UTF-8 charset
+     * name) can be exercised in tests by passing a bogus charset name.
+     */
+    static String urlEncode(String value, String charsetName) throws ContentAIClientException {
+        try {
+            return URLEncoder.encode(value, charsetName);
+        } catch (UnsupportedEncodingException e) {
+            throw new ContentAIClientException("Failed to encode Content AI content-sources query parameter", e);
         }
     }
 
@@ -177,6 +220,9 @@ public class ContentAIClientImpl implements ContentAIClient {
     @Override
     public ContentSourceQueryResult genSearch(String contentSource, String contentSourceType, String query)
         throws ContentAIClientException {
+        // Forward whatever contentSourceType the component instance is configured with, same as search() - the
+        // author's dialog selection (ACQUISITION/AEM_PUBLISH) is passed straight through so gensearch routes to
+        // the same backend/index the plain search-results list already queries.
         ObjectNode body = mapper.createObjectNode();
         body.put("query", query);
         ObjectNode contentSourceNode = body.putObject("contentSource");
@@ -246,8 +292,9 @@ public class ContentAIClientImpl implements ContentAIClient {
 
     /**
      * Resolves the Content AI base URL from the running AEM as a Cloud Service environment, so the component always
-     * targets its own environment's bucket rather than a hand-configured value. Falls back to the dev-only
-     * {@code baseUrlOverride} config when the CS environment variables are absent (local/non-CS development).
+     * targets its own environment's bucket rather than a hand-configured value. Falls back to the
+     * {@code baseUrlOverride} config when the CS environment variables are absent - required on AEM 6.5 LTS /
+     * Adobe Managed Services and for local development, neither of which expose those environment variables.
      *
      * @param config the config snapshot to resolve against (see callers' notes on why this isn't read from the
      *               instance field directly)
