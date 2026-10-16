@@ -179,7 +179,8 @@ else
 fi
 # Where the JaCoCo agent + CLI jars are kept; CI fetches them once and ships them here.
 JACOCO_LIB_DIR="${JACOCO_LIB_DIR:-${REPO_ROOT}/testing/it/docker/target/jacoco-${JACOCO_IT_VERSION}}"
-JACOCO_INCLUDES="com.adobe.cq.wcm.core.components.*"
+# Core + AMP extension packages (JaCoCo separates patterns with ":").
+JACOCO_INCLUDES="com.adobe.cq.wcm.core.components.*:com.adobe.cq.wcm.core.extensions.amp.*"
 JACOCO_CONTAINER_DIR=/tmp/jacoco
 JACOCO_AUTHOR_PORT=6300
 JACOCO_PUBLISH_PORT=6301

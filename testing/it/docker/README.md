@@ -93,8 +93,8 @@ IT_TEST=ComponentsIT KEEP_AEM=true bash testing/it/docker/run-it.sh
 
 With `IT_COVERAGE=true`, each AEM JVM (author, and publish when `WITH_PUBLISH=true`)
 starts with the JaCoCo agent, limited to `com.adobe.cq.wcm.core.components.*` and
-listening as a `tcpserver` on the container's loopback (author `6300`, publish
-`6301`). On exit, including after test failures, the script dumps each instance's
+`com.adobe.cq.wcm.core.extensions.amp.*`, and listening as a `tcpserver` on the
+container's loopback (author `6300`, publish `6301`). On exit, including after test failures, the script dumps each instance's
 data (`author.exec`, `publish.exec`) and reports it against the built
 `bundles/core` and `extensions/amp/bundle` jars, which are the same jars that
 `all/` deploys. The report goes to `IT_COVERAGE_DIR` as `jacoco.xml` and

@@ -193,7 +193,7 @@ echo 'Passed bundle de-duplication by package version.'
     IT_COVERAGE=true
     start_aem >/dev/null
     calls=$(cat "${work}/calls")
-    [[ "${calls}" == *fetch*"jacocoagent.jar"*"--id author"*"-javaagent:/tmp/jacoco/jacocoagent.jar=output=tcpserver,address=127.0.0.1,port=6300,sessionid=author,includes=com.adobe.cq.wcm.core.components.*"* ]]
+    [[ "${calls}" == *fetch*"jacocoagent.jar"*"--id author"*"-javaagent:/tmp/jacoco/jacocoagent.jar=output=tcpserver,address=127.0.0.1,port=6300,sessionid=author,includes=com.adobe.cq.wcm.core.components.*:com.adobe.cq.wcm.core.extensions.amp.*"* ]]
     [[ "${calls}" == *"--id publish"*"port=6301,sessionid=publish"* ]]
     : > "${work}/calls"
     collect_coverage >/dev/null
