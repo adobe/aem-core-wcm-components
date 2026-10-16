@@ -177,6 +177,8 @@ if [[ "${WITH_E2E}" == "true" ]]; then
 else
     IT_COVERAGE_DIR="${IT_COVERAGE_DIR:-${REPO_ROOT}/testing/it/http/target/jacoco-it}"
 fi
+# Where the JaCoCo agent + CLI jars are kept; CI fetches them once and ships them here.
+JACOCO_LIB_DIR="${JACOCO_LIB_DIR:-${REPO_ROOT}/testing/it/docker/target/jacoco-${JACOCO_IT_VERSION}}"
 JACOCO_INCLUDES="com.adobe.cq.wcm.core.components.*"
 JACOCO_CONTAINER_DIR=/tmp/jacoco
 JACOCO_AUTHOR_PORT=6300
@@ -234,15 +236,18 @@ start_instance() {
         "cd ${QP_DIR} && ./qp.sh -v start --id ${id} --runmode ${runmode} --port ${port} --qs-jar ${QS_JAR} --timeout ${QP_START_TIMEOUT} --vm-options \"'${vmopts}'\""
 }
 
-# Download the JaCoCo agent + CLI jars into IT_COVERAGE_DIR (via the local Maven
-# repository, so CI can serve them from its cache). Run outside any pom so the
-# goal executes standalone instead of once per reactor module.
+# Download the JaCoCo agent + CLI jars into JACOCO_LIB_DIR, unless already there
+# (CI ships them from the prep job). Run outside any pom so the goal executes
+# standalone instead of once per reactor module.
 fetch_jacoco() {
-    mkdir -p "${IT_COVERAGE_DIR}"
+    if [[ -f "${JACOCO_LIB_DIR}/org.jacoco.agent-runtime.jar" && -f "${JACOCO_LIB_DIR}/org.jacoco.cli-nodeps.jar" ]]; then
+        return 0
+    fi
+    mkdir -p "${JACOCO_LIB_DIR}" || return 1
     local artifact
     for artifact in "org.jacoco.agent:${JACOCO_IT_VERSION}:jar:runtime" "org.jacoco.cli:${JACOCO_IT_VERSION}:jar:nodeps"; do
-        (cd "${IT_COVERAGE_DIR}" && mvn -B -q org.apache.maven.plugins:maven-dependency-plugin:3.6.1:copy \
-            -Dartifact="org.jacoco:${artifact}" -DoutputDirectory="${IT_COVERAGE_DIR}" -Dmdep.stripVersion=true)
+        (cd "${JACOCO_LIB_DIR}" && mvn -B -q org.apache.maven.plugins:maven-dependency-plugin:3.6.1:copy \
+            -Dartifact="org.jacoco:${artifact}" -DoutputDirectory="${JACOCO_LIB_DIR}" -Dmdep.stripVersion=true) || return 1
     done
 }
 
@@ -256,10 +261,10 @@ jacoco_agent_opts() {
 # Copy the JaCoCo jars into the container, where the AEM JVMs and the dump run.
 install_jacoco() {
     log "Enabling JaCoCo ${JACOCO_IT_VERSION} coverage (${JACOCO_INCLUDES})"
-    fetch_jacoco
-    docker exec "${AEM_CONTAINER}" mkdir -p "${JACOCO_CONTAINER_DIR}"
-    docker cp "${IT_COVERAGE_DIR}/org.jacoco.agent-runtime.jar" "${AEM_CONTAINER}:${JACOCO_CONTAINER_DIR}/jacocoagent.jar"
-    docker cp "${IT_COVERAGE_DIR}/org.jacoco.cli-nodeps.jar" "${AEM_CONTAINER}:${JACOCO_CONTAINER_DIR}/jacococli.jar"
+    fetch_jacoco || return 1
+    docker exec "${AEM_CONTAINER}" mkdir -p "${JACOCO_CONTAINER_DIR}" || return 1
+    docker cp "${JACOCO_LIB_DIR}/org.jacoco.agent-runtime.jar" "${AEM_CONTAINER}:${JACOCO_CONTAINER_DIR}/jacocoagent.jar" || return 1
+    docker cp "${JACOCO_LIB_DIR}/org.jacoco.cli-nodeps.jar" "${AEM_CONTAINER}:${JACOCO_CONTAINER_DIR}/jacococli.jar" || return 1
 }
 
 # Dump each instance's coverage and report it against this repo's bundle jars.
@@ -269,6 +274,7 @@ collect_coverage() {
     local -a instances=("author:${JACOCO_AUTHOR_PORT}") execs=() report=()
     [[ "${WITH_PUBLISH}" == "true" ]] && instances+=("publish:${JACOCO_PUBLISH_PORT}")
     local entry inst port
+    mkdir -p "${IT_COVERAGE_DIR}" || return 1
     for entry in "${instances[@]}"; do
         inst="${entry%%:*}" port="${entry##*:}"
         if docker exec "${AEM_CONTAINER}" bash -lc \
@@ -296,7 +302,7 @@ collect_coverage() {
         --name "Core Components ITs (AEM ${AEM_TYPE})"
         --xml "${IT_COVERAGE_DIR}/jacoco.xml" --html "${IT_COVERAGE_DIR}/html"
     )
-    java -jar "${IT_COVERAGE_DIR}/org.jacoco.cli-nodeps.jar" report "${report[@]}" || return 1
+    java -jar "${JACOCO_LIB_DIR}/org.jacoco.cli-nodeps.jar" report "${report[@]}" || return 1
     log "IT coverage report: ${IT_COVERAGE_DIR}/html/index.html"
 }
 
@@ -320,8 +326,10 @@ start_aem() {
         sleep 3
     done
 
-    if [[ "${IT_COVERAGE}" == "true" ]]; then
-        install_jacoco
+    # Coverage is best effort: a setup failure must not cost the test run.
+    if [[ "${IT_COVERAGE}" == "true" ]] && ! install_jacoco; then
+        echo "WARNING: JaCoCo setup failed, running without IT coverage" >&2
+        IT_COVERAGE=false
     fi
 
     start_instance author author 4502 "${QP_VM_OPTIONS}$(jacoco_agent_opts author "${JACOCO_AUTHOR_PORT}")"

@@ -80,7 +80,8 @@ All knobs are environment variables (see the top of `run-it.sh`). The common one
 | `KEEP_AEM` | `false` | Leave the container running after the run (for debugging) |
 | `IT_COVERAGE` | `false` (CI: `true`) | Collect JaCoCo coverage of the core + AMP bundles from the AEM JVMs (see [Code coverage](#code-coverage)) |
 | `JACOCO_IT_VERSION` | `0.8.13` | JaCoCo agent/CLI version used for `IT_COVERAGE` (must support the image's Java) |
-| `IT_COVERAGE_DIR` | `testing/it/{http,e2e-testing}/target/jacoco-it` | Where the agent jars, `*.exec` dumps and the XML/HTML report go |
+| `IT_COVERAGE_DIR` | `testing/it/{http,e2e-testing}/target/jacoco-it` | Where the `*.exec` dumps and the XML/HTML report go |
+| `JACOCO_LIB_DIR` | `testing/it/docker/target/jacoco-<version>` | JaCoCo agent + CLI jars; downloaded via Maven only when missing |
 
 Example — run a single test class and keep AEM up afterwards:
 
@@ -97,7 +98,8 @@ listening as a `tcpserver` on the container's loopback (author `6300`, publish
 data (`author.exec`, `publish.exec`) and reports it against the built
 `bundles/core` and `extensions/amp/bundle` jars, which are the same jars that
 `all/` deploys. The report goes to `IT_COVERAGE_DIR` as `jacoco.xml` and
-`html/index.html`. Collection is best-effort: it never changes the test outcome.
+`html/index.html`. Coverage is best-effort: if the JaCoCo setup fails the tests
+run without the agent, and collection never changes the test outcome.
 This covers server-side Java only, not the clientlib JavaScript the browser ITs
 exercise.
 
@@ -106,7 +108,8 @@ IT_COVERAGE=true IT_TEST=ComponentsIT bash testing/it/docker/run-it.sh
 open testing/it/http/target/jacoco-it/html/index.html
 ```
 
-In CI every http and Playwright leg uploads its `jacoco.xml` to Codecov with the
+In CI the prep job fetches the JaCoCo jars once and ships them with the
+packages. Every http and Playwright leg uploads its `jacoco.xml` to Codecov with the
 `httpits` and `browserits` flags (see `.github/codecov.yml`). Codecov merges the
 legs per commit. These flags have no status checks; only `unittests` is gated.
 
