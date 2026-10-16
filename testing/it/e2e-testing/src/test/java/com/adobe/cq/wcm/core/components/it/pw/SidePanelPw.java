@@ -142,19 +142,21 @@ public final class SidePanelPw {
         Locator card = card(assetPath);
         // the asset list is reloaded after the path filter is applied
         assertThat(card).isVisible(new LocatorAssertions.IsVisibleOptions().setTimeout(15_000));
-        card.scrollIntoViewIfNeeded();
-        // the card list can still shift (e.g. thumbnails loading) after the card is visible; only press once the card
-        // centre is stable across two animation frames and actually hit-tests to this card, so the drag cannot pick
-        // up a neighbouring asset
+        // the card list can still shift (e.g. thumbnails loading) or be re-rendered (detaching the card) after the card
+        // is visible, so re-query the card on every animation frame, scroll it into view when it does not hit-test,
+        // and only press once its centre is stable across two frames and hit-tests to this card, so the drag cannot
+        // pick up a neighbouring asset
         JSHandle point = page.waitForFunction("p => {"
             + " const card = document.querySelector('" + PANEL + " coral-card.cq-draggable[data-path=\"' + p + '\"]');"
             + " if (!card) { return false; }"
             + " const r = card.getBoundingClientRect();"
             + " const x = r.x + r.width / 2, y = r.y + r.height / 2;"
             + " const hit = document.elementFromPoint(x, y);"
+            + " if (!hit || hit.closest('coral-card') !== card) {"
+            + " window.__pwDragPoint = null; card.scrollIntoView({ block: 'center', inline: 'nearest' }); return false; }"
             + " const key = x + ',' + y + ',' + p, stable = window.__pwDragPoint === key;"
             + " window.__pwDragPoint = key;"
-            + " return stable && !!hit && hit.closest('coral-card') === card ? { x, y } : false;"
+            + " return stable ? { x, y } : false;"
             + " }", assetPath, new Page.WaitForFunctionOptions().setTimeout(15_000));
         double startX = ((Number) point.evaluate("p => p.x")).doubleValue();
         double startY = ((Number) point.evaluate("p => p.y")).doubleValue();

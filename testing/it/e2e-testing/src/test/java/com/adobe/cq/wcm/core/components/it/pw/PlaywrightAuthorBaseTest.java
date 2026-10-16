@@ -54,6 +54,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.TimeoutError;
 import com.microsoft.playwright.Tracing;
+import com.microsoft.playwright.assertions.LocatorAssertions;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.BoundingBox;
 import com.microsoft.playwright.options.FormData;
@@ -241,8 +242,20 @@ public abstract class PlaywrightAuthorBaseTest {
     /** Switches the page editor to preview mode through the global bar, like a user would. */
     protected void enterPreviewMode() {
         Locator preview = page.locator("button.editor-GlobalBar-item[data-layer='Preview']");
-        preview.click();
-        assertThat(preview).hasClass(Pattern.compile("is-selected"));
+        // a freshly started editor occasionally ignores the first click (layer switcher not yet bound), so retry it;
+        // clicking the already active Preview layer is a no-op
+        for (int attempt = 1; ; attempt++) {
+            preview.click();
+            try {
+                assertThat(preview).hasClass(Pattern.compile("is-selected"),
+                    new LocatorAssertions.HasClassOptions().setTimeout(7_000));
+                return;
+            } catch (AssertionError e) {
+                if (attempt == 3) {
+                    throw e;
+                }
+            }
+        }
     }
 
     protected void reloadEditor() {

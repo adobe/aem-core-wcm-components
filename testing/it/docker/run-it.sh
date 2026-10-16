@@ -164,6 +164,27 @@ AEM_BASE_URL="http://localhost:${AEM_AUTHOR_PORT}"
 AEM_PUBLISH_URL="http://localhost:${AEM_PUBLISH_PORT}"
 AEM_CONTAINER="wcm-it-aem-${GITHUB_RUN_ID:-local}-$$"
 
+# --- Code coverage (JaCoCo) ---
+# When true, every AEM JVM runs the JaCoCo agent (limited to this repo's Java
+# packages) as a tcpserver bound to the container's loopback. On exit the
+# execution data is dumped from each instance and reported (XML + HTML) against
+# the built core and AMP bundle jars into IT_COVERAGE_DIR. The agent version is
+# independent of the unit-test JaCoCo and must support the images' Java 21.
+IT_COVERAGE="${IT_COVERAGE:-false}"
+JACOCO_IT_VERSION="${JACOCO_IT_VERSION:-0.8.13}"
+if [[ "${WITH_E2E}" == "true" ]]; then
+    IT_COVERAGE_DIR="${IT_COVERAGE_DIR:-${REPO_ROOT}/testing/it/e2e-testing/target/jacoco-it}"
+else
+    IT_COVERAGE_DIR="${IT_COVERAGE_DIR:-${REPO_ROOT}/testing/it/http/target/jacoco-it}"
+fi
+# Where the JaCoCo agent + CLI jars are kept; CI fetches them once and ships them here.
+JACOCO_LIB_DIR="${JACOCO_LIB_DIR:-${REPO_ROOT}/testing/it/docker/target/jacoco-${JACOCO_IT_VERSION}}"
+# Core + AMP extension packages (JaCoCo separates patterns with ":").
+JACOCO_INCLUDES="com.adobe.cq.wcm.core.components.*:com.adobe.cq.wcm.core.extensions.amp.*"
+JACOCO_CONTAINER_DIR=/tmp/jacoco
+JACOCO_AUTHOR_PORT=6300
+JACOCO_PUBLISH_PORT=6301
+
 log() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
 
 # ---------------------------------------------------------------------------
@@ -171,6 +192,8 @@ log() { printf '\n\033[1;34m==> %s\033[0m\n' "$*"; }
 # ---------------------------------------------------------------------------
 cleanup() {
     local exit_code=$?
+    # Coverage is best-effort: it must neither mask the test outcome nor skip teardown.
+    collect_coverage || echo "WARNING: collecting IT coverage failed" >&2
     echo "::group::AEM container logs (${AEM_CONTAINER})"
     docker logs "${AEM_CONTAINER}" 2>&1 || true
     echo "::endgroup::"
@@ -214,6 +237,76 @@ start_instance() {
         "cd ${QP_DIR} && ./qp.sh -v start --id ${id} --runmode ${runmode} --port ${port} --qs-jar ${QS_JAR} --timeout ${QP_START_TIMEOUT} --vm-options \"'${vmopts}'\""
 }
 
+# Download the JaCoCo agent + CLI jars into JACOCO_LIB_DIR, unless already there
+# (CI ships them from the prep job). Run outside any pom so the goal executes
+# standalone instead of once per reactor module.
+fetch_jacoco() {
+    if [[ -f "${JACOCO_LIB_DIR}/org.jacoco.agent-runtime.jar" && -f "${JACOCO_LIB_DIR}/org.jacoco.cli-nodeps.jar" ]]; then
+        return 0
+    fi
+    mkdir -p "${JACOCO_LIB_DIR}" || return 1
+    local artifact
+    for artifact in "org.jacoco.agent:${JACOCO_IT_VERSION}:jar:runtime" "org.jacoco.cli:${JACOCO_IT_VERSION}:jar:nodeps"; do
+        (cd "${JACOCO_LIB_DIR}" && mvn -B -q org.apache.maven.plugins:maven-dependency-plugin:3.6.1:copy \
+            -Dartifact="org.jacoco:${artifact}" -DoutputDirectory="${JACOCO_LIB_DIR}" -Dmdep.stripVersion=true) || return 1
+    done
+}
+
+# Extra JVM options attaching the JaCoCo agent. Args: <session-id> <port>
+jacoco_agent_opts() {
+    [[ "${IT_COVERAGE}" == "true" ]] || return 0
+    printf ' -javaagent:%s/jacocoagent.jar=output=tcpserver,address=127.0.0.1,port=%s,sessionid=%s,includes=%s' \
+        "${JACOCO_CONTAINER_DIR}" "$2" "$1" "${JACOCO_INCLUDES}"
+}
+
+# Copy the JaCoCo jars into the container, where the AEM JVMs and the dump run.
+install_jacoco() {
+    log "Enabling JaCoCo ${JACOCO_IT_VERSION} coverage (${JACOCO_INCLUDES})"
+    fetch_jacoco || return 1
+    docker exec "${AEM_CONTAINER}" mkdir -p "${JACOCO_CONTAINER_DIR}" || return 1
+    docker cp "${JACOCO_LIB_DIR}/org.jacoco.agent-runtime.jar" "${AEM_CONTAINER}:${JACOCO_CONTAINER_DIR}/jacocoagent.jar" || return 1
+    docker cp "${JACOCO_LIB_DIR}/org.jacoco.cli-nodeps.jar" "${AEM_CONTAINER}:${JACOCO_CONTAINER_DIR}/jacococli.jar" || return 1
+}
+
+# Dump each instance's coverage and report it against this repo's bundle jars.
+# The agents listen on the container's loopback only, so the dump runs inside it.
+collect_coverage() {
+    [[ "${IT_COVERAGE}" == "true" ]] || return 0
+    local -a instances=("author:${JACOCO_AUTHOR_PORT}") execs=() report=()
+    [[ "${WITH_PUBLISH}" == "true" ]] && instances+=("publish:${JACOCO_PUBLISH_PORT}")
+    local entry inst port
+    mkdir -p "${IT_COVERAGE_DIR}" || return 1
+    for entry in "${instances[@]}"; do
+        inst="${entry%%:*}" port="${entry##*:}"
+        if docker exec "${AEM_CONTAINER}" bash -lc \
+                "java -jar ${JACOCO_CONTAINER_DIR}/jacococli.jar dump --quiet --address 127.0.0.1 --port ${port} --destfile ${JACOCO_CONTAINER_DIR}/${inst}.exec" \
+            && docker cp "${AEM_CONTAINER}:${JACOCO_CONTAINER_DIR}/${inst}.exec" "${IT_COVERAGE_DIR}/${inst}.exec"; then
+            execs+=("${IT_COVERAGE_DIR}/${inst}.exec")
+        else
+            echo "WARNING: no JaCoCo coverage dumped from AEM ${inst}" >&2
+        fi
+    done
+    [[ ${#execs[@]} -gt 0 ]] || return 1
+
+    local core_jar amp_jar
+    core_jar="$(find_zip "${REPO_ROOT}/bundles/core/target" 'core.wcm.components.core-*.jar' '\-(sources|javadoc|tests)\.jar$')"
+    amp_jar="$(find_zip "${REPO_ROOT}/extensions/amp/bundle/target" 'core.wcm.components.extensions.amp-*.jar' '\-(sources|javadoc|tests)\.jar$')"
+    if [[ -z "${core_jar}" || -z "${amp_jar}" ]]; then
+        echo "Bundle jars not found under bundles/core/target and extensions/amp/bundle/target (build the project first)" >&2
+        return 1
+    fi
+    report=(
+        "${execs[@]}"
+        --classfiles "${core_jar}" --classfiles "${amp_jar}"
+        --sourcefiles "${REPO_ROOT}/bundles/core/src/main/java"
+        --sourcefiles "${REPO_ROOT}/extensions/amp/bundle/src/main/java"
+        --name "Core Components ITs (AEM ${AEM_TYPE})"
+        --xml "${IT_COVERAGE_DIR}/jacoco.xml" --html "${IT_COVERAGE_DIR}/html"
+    )
+    java -jar "${JACOCO_LIB_DIR}/org.jacoco.cli-nodeps.jar" report "${report[@]}" || return 1
+    log "IT coverage report: ${IT_COVERAGE_DIR}/html/index.html"
+}
+
 start_aem() {
     log "Starting qp server container from ${AEM_IMAGE}"
     # Publish the instance HTTP ports on loopback only (admin/admin must not be
@@ -234,9 +327,15 @@ start_aem() {
         sleep 3
     done
 
-    start_instance author author 4502 "${QP_VM_OPTIONS}"
+    # Coverage is best effort: a setup failure must not cost the test run.
+    if [[ "${IT_COVERAGE}" == "true" ]] && ! install_jacoco; then
+        echo "WARNING: JaCoCo setup failed, running without IT coverage" >&2
+        IT_COVERAGE=false
+    fi
+
+    start_instance author author 4502 "${QP_VM_OPTIONS}$(jacoco_agent_opts author "${JACOCO_AUTHOR_PORT}")"
     if [[ "${WITH_PUBLISH}" == "true" ]]; then
-        start_instance publish publish 4503 "${PUBLISH_VM_OPTIONS}"
+        start_instance publish publish 4503 "${PUBLISH_VM_OPTIONS}$(jacoco_agent_opts publish "${JACOCO_PUBLISH_PORT}")"
     fi
 }
 
