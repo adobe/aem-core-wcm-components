@@ -61,9 +61,9 @@ public class ContentAIClientImpl implements ContentAIClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentAIClientImpl.class);
 
     /**
-     * The experimental, expiry-dated Content AI API path appended to the environment's own host.
+     * The stable Content AI API path appended to the environment's own host.
      */
-    private static final String CONTENT_AI_PATH = "/adobe/experimental/aemcontentai-expires-20261231/contentAI";
+    private static final String CONTENT_AI_PATH = "/adobe/contentAI";
 
     /**
      * AEM as a Cloud Service environment variables (sourced from pod annotations aemProgramId/aemEnvId/aemService)
