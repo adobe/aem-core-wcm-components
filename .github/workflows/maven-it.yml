@@ -126,6 +126,12 @@ jobs:
               -Dit.test=NoSuchPrimeIT -Dfailsafe.failIfNoSpecifiedTests=false -DfailIfNoTests=false
           done
 
+      # JaCoCo agent + CLI for the IT coverage (IT_COVERAGE in the test jobs), fetched
+      # once here (whether or not the Maven cache hit) and shipped with the packages,
+      # so the test legs never download them.
+      - name: Fetch JaCoCo for IT coverage
+        run: bash -c 'source testing/it/docker/run-it.sh && fetch_jacoco'
+
       # The key is immutable, so only save when the restore missed it. This repo's
       # own SNAPSHOTs are left out: the cache is only refreshed when a pom changes,
       # so they would go stale. The test jobs build the few they need from source
@@ -147,13 +153,17 @@ jobs:
           name: it-packages
           if-no-files-found: error
           retention-days: 1
+          # The core + AMP bundle jars are the class files the IT coverage report is
+          # matched against (the same jars all/ embeds); the JaCoCo jars collect it.
           path: |
             all/target/*.zip
             testing/it/it.ui.apps/target/*.zip
             testing/it/it.ui.config/target/*.zip
             testing/it/it.ui.content/target/*.zip
             testing/it/it.core/target/*.jar
-
+            bundles/core/target/core.wcm.components.core-*.jar
+            extensions/amp/bundle/target/core.wcm.components.extensions.amp-*.jar
+            testing/it/docker/target/jacoco-*/*.jar
       - name: Generate browser IT matrix (fails on ungrouped ITs)
         id: genmatrix
         run: |
@@ -234,6 +244,8 @@ jobs:
       AEM_IMAGE: ${{ matrix.image }}
       AEM_TYPE: ${{ matrix.type }}
       WITH_PUBLISH: 'true'
+      # JaCoCo agent on author + publish; run-it.sh writes target/jacoco-it/jacoco.xml.
+      IT_COVERAGE: 'true'
       QP_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
       PUBLISH_VM_OPTIONS: '-Xmx3g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
     steps:
@@ -283,6 +295,16 @@ jobs:
           fi
       - name: Run http integration tests
         run: bash testing/it/docker/run-it.sh
+      - name: Upload http IT coverage to Codecov
+        if: ${{ !cancelled() && hashFiles('testing/it/http/target/jacoco-it/jacoco.xml') != '' }}
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: testing/it/http/target/jacoco-it/jacoco.xml
+          disable_search: true
+          flags: httpits
+          name: http-${{ matrix.name }}
+          fail_ci_if_error: false
       - name: Publish integration test results
         if: always()
         uses: mikepenz/action-junit-report@a9170d5795813c01ab4901ffb045b52bab4ab09d # v6
@@ -307,6 +329,8 @@ jobs:
           path: |
             testing/it/http/target/failsafe-reports
             testing/it/http/target/aem-logs
+            testing/it/http/target/jacoco-it/*.exec
+            testing/it/http/target/jacoco-it/jacoco.xml
 
   # --------------------------------------------------------------------------
   # Run each Playwright test group in its own job.
@@ -335,6 +359,8 @@ jobs:
       E2E_GROUPS: ${{ matrix.group.e2e_groups }}
       E2E_IT_TEST: ${{ matrix.group.e2e_it_test }}
       E2E_RERUN: '0'
+      # JaCoCo agent on author; run-it.sh writes target/jacoco-it/jacoco.xml.
+      IT_COVERAGE: 'true'
       # Playwright drives the runner's installed Chrome (channel=chrome): no bundled browser download.
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
       QP_VM_OPTIONS: '-Xmx4g -XX:MaxMetaspaceSize=1g -Djava.awt.headless=true'
@@ -398,6 +424,16 @@ jobs:
           fi
       - name: Run Playwright ${{ matrix.group.group }} ITs
         run: bash testing/it/docker/run-it.sh
+      - name: Upload Playwright IT coverage to Codecov
+        if: ${{ !cancelled() && hashFiles('testing/it/e2e-testing/target/jacoco-it/jacoco.xml') != '' }}
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: testing/it/e2e-testing/target/jacoco-it/jacoco.xml
+          disable_search: true
+          flags: browserits
+          name: browser-${{ matrix.aem.name }}-${{ matrix.group.name }}
+          fail_ci_if_error: false
       - name: Publish Playwright test results
         if: always()
         uses: mikepenz/action-junit-report@a9170d5795813c01ab4901ffb045b52bab4ab09d # v6
@@ -420,6 +456,8 @@ jobs:
           path: |
             testing/it/e2e-testing/target/failsafe-reports
             testing/it/e2e-testing/target/playwright-traces
+            testing/it/e2e-testing/target/jacoco-it/*.exec
+            testing/it/e2e-testing/target/jacoco-it/jacoco.xml
             testing/it/http/target/aem-logs
 
   # --------------------------------------------------------------------------

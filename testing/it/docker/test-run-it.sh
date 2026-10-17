@@ -172,3 +172,68 @@ PY
     fi
 )
 echo 'Passed bundle de-duplication by package version.'
+
+(
+    export AEM_TYPE=sdk WITH_PUBLISH=true
+    source "${SCRIPT_DIR}/run-it.sh"
+    work=$(mktemp -d)
+    trap 'rm -rf "${work}"' EXIT
+    # shellcheck disable=SC2034 # read by the sourced run-it.sh functions
+    IT_COVERAGE_DIR="${work}"
+    fetch_jacoco() { echo fetch >> "${work}/calls"; }
+    docker() { echo "docker $*" >> "${work}/calls"; }
+    java() { echo "java $*" >> "${work}/calls"; }
+    find_zip() { echo "$1/bundle.jar"; }
+    # Disabled (the default): no agent, nothing collected.
+    start_aem >/dev/null
+    collect_coverage
+    [[ "$(cat "${work}/calls")" != *javaagent* && "$(cat "${work}/calls")" != *fetch* && "$(cat "${work}/calls")" != *jacococli* ]]
+    : > "${work}/calls"
+    # shellcheck disable=SC2034 # read by the sourced run-it.sh functions
+    IT_COVERAGE=true
+    start_aem >/dev/null
+    calls=$(cat "${work}/calls")
+    [[ "${calls}" == *fetch*"jacocoagent.jar"*"--id author"*"-javaagent:/tmp/jacoco/jacocoagent.jar=output=tcpserver,address=127.0.0.1,port=6300,sessionid=author,includes=com.adobe.cq.wcm.core.components.*:com.adobe.cq.wcm.core.extensions.amp.*"* ]]
+    [[ "${calls}" == *"--id publish"*"port=6301,sessionid=publish"* ]]
+    : > "${work}/calls"
+    collect_coverage >/dev/null
+    calls=$(cat "${work}/calls")
+    [[ "${calls}" == *"dump"*"--port 6300"*"author.exec"*"dump"*"--port 6301"*"publish.exec"* ]]
+    [[ "${calls}" == *"report ${work}/author.exec ${work}/publish.exec --classfiles ${REPO_ROOT}/bundles/core/target/bundle.jar --classfiles ${REPO_ROOT}/extensions/amp/bundle/target/bundle.jar"*"--xml ${work}/jacoco.xml"* ]]
+    # A failed dump is reported, not fatal, and the other instance is still collected.
+    docker() { [[ "$*" != *"--port 6300"* ]] && echo "docker $*" >> "${work}/calls"; }
+    : > "${work}/calls"
+    collect_coverage >/dev/null 2>"${work}/err"
+    [[ "$(cat "${work}/err")" == *"no JaCoCo coverage dumped from AEM author"* && "$(cat "${work}/calls")" == *"report ${work}/publish.exec --classfiles"* ]]
+    # A JaCoCo setup failure only disables coverage; AEM still starts, without the agent.
+    docker() { echo "docker $*" >> "${work}/calls"; }
+    fetch_jacoco() { return 1; }
+    : > "${work}/calls"
+    start_aem >/dev/null 2>"${work}/err"
+    [[ "${IT_COVERAGE}" == "false" && "$(cat "${work}/err")" == *"running without IT coverage"* ]]
+    [[ "$(cat "${work}/calls")" == *"--id author"* && "$(cat "${work}/calls")" != *javaagent* ]]
+)
+echo 'Passed JaCoCo coverage agent + collection.'
+
+(
+    source "${SCRIPT_DIR}/run-it.sh"
+    work=$(mktemp -d)
+    trap 'rm -rf "${work}"' EXIT
+    # shellcheck disable=SC2034 # read by the sourced run-it.sh functions
+    JACOCO_LIB_DIR="${work}/lib"
+    mvn() { echo "mvn $*" >> "${work}/calls"; }
+    # Downloads both jars when missing, and fails when Maven does.
+    fetch_jacoco
+    [[ "$(grep -c 'maven-dependency-plugin' "${work}/calls")" == 2 ]]
+    rm -rf "${work:?}/lib"
+    if (mvn() { return 1; }; fetch_jacoco); then
+        echo 'Maven failure was not reported by fetch_jacoco' >&2
+        exit 1
+    fi
+    # Jars already shipped (CI's prep job): no download at all.
+    : > "${work}/calls"
+    touch "${work}/lib/org.jacoco.agent-runtime.jar" "${work}/lib/org.jacoco.cli-nodeps.jar"
+    fetch_jacoco
+    [[ ! -s "${work}/calls" ]]
+)
+echo 'Passed JaCoCo jar fetch.'
