@@ -228,7 +228,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         saveDialog();
         openPreview();
 
-        assertThat(page.locator(".cmp-image__link, .cmp-image--link")).hasAttribute("href", redirectPage + ".html");
+        assertThat(page.locator(".cmp-image__link, .cmp-image--link")).hasAttribute("href", contextPath + redirectPage + ".html");
         image().click();
         assertThat(page).hasURL(Pattern.compile(".*" + regex(redirectPage) + "\\.html$"));
     }
@@ -432,7 +432,7 @@ public class ImagePwIT extends ComponentPwBaseTest {
         saveDialog();
         openPreview();
 
-        assertThat(page.locator("a[href='" + redirectPage + ".html'][target='_blank']")).isVisible();
+        assertThat(page.locator("a[href='" + contextPath + redirectPage + ".html'][target='_blank']")).isVisible();
     }
 
     @ParameterizedTest

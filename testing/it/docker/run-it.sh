@@ -84,6 +84,13 @@ AEM_AUTHOR_PORT="${AEM_AUTHOR_PORT:-4502}"
 AEM_PUBLISH_PORT="${AEM_PUBLISH_PORT:-4503}"
 AEM_ADMIN_USER="${AEM_ADMIN_USER:-admin}"
 AEM_ADMIN_PASSWORD="${AEM_ADMIN_PASSWORD:-admin}"
+# Servlet context path both instances are served under (e.g. /cp), as on the
+# internal pipeline; empty serves AEM at the root. Every URL below carries it.
+AEM_CONTEXT_PATH="${AEM_CONTEXT_PATH:-}"
+if [[ -n "${AEM_CONTEXT_PATH}" && ! "${AEM_CONTEXT_PATH}" =~ ^(/[A-Za-z0-9._-]+)+$ ]]; then
+    echo "AEM_CONTEXT_PATH must be empty or like /cp (leading slash, no trailing slash): ${AEM_CONTEXT_PATH}" >&2
+    exit 1
+fi
 
 # When true, also start an AEM publish instance, provision it, and run the full
 # http IT suite (author + publish) instead of the author-only subset.
@@ -160,8 +167,8 @@ AEM_STARTUP_TIMEOUT="${AEM_STARTUP_TIMEOUT:-600}"
 KEEP_AEM="${KEEP_AEM:-false}"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-AEM_BASE_URL="http://localhost:${AEM_AUTHOR_PORT}"
-AEM_PUBLISH_URL="http://localhost:${AEM_PUBLISH_PORT}"
+AEM_BASE_URL="http://localhost:${AEM_AUTHOR_PORT}${AEM_CONTEXT_PATH}"
+AEM_PUBLISH_URL="http://localhost:${AEM_PUBLISH_PORT}${AEM_CONTEXT_PATH}"
 AEM_CONTAINER="wcm-it-aem-${GITHUB_RUN_ID:-local}-$$"
 
 # --- Code coverage (JaCoCo) ---
@@ -252,6 +259,13 @@ fetch_jacoco() {
     done
 }
 
+# Extra JVM option serving the instance under AEM_CONTEXT_PATH. qp has no CLI flag
+# for it; its config-file contextPath sets this same Felix HTTP property.
+context_path_opts() {
+    [[ -n "${AEM_CONTEXT_PATH}" ]] || return 0
+    printf ' -Dorg.apache.felix.http.context_path=%s' "${AEM_CONTEXT_PATH}"
+}
+
 # Extra JVM options attaching the JaCoCo agent. Args: <session-id> <port>
 jacoco_agent_opts() {
     [[ "${IT_COVERAGE}" == "true" ]] || return 0
@@ -333,9 +347,9 @@ start_aem() {
         IT_COVERAGE=false
     fi
 
-    start_instance author author 4502 "${QP_VM_OPTIONS}$(jacoco_agent_opts author "${JACOCO_AUTHOR_PORT}")"
+    start_instance author author 4502 "${QP_VM_OPTIONS}$(context_path_opts)$(jacoco_agent_opts author "${JACOCO_AUTHOR_PORT}")"
     if [[ "${WITH_PUBLISH}" == "true" ]]; then
-        start_instance publish publish 4503 "${PUBLISH_VM_OPTIONS}$(jacoco_agent_opts publish "${JACOCO_PUBLISH_PORT}")"
+        start_instance publish publish 4503 "${PUBLISH_VM_OPTIONS}$(context_path_opts)$(jacoco_agent_opts publish "${JACOCO_PUBLISH_PORT}")"
     fi
 }
 

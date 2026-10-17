@@ -82,6 +82,8 @@ public abstract class PlaywrightAuthorBaseTest {
     private static Playwright playwright;
     private static Browser browser;
     protected static String baseUrl;
+    /** Servlet context path of the instance (e.g. "/cp"), or "" when deployed at the root. */
+    protected static String contextPath;
 
     protected final String randomPassword = RandomStringUtils.secure().nextAlphabetic(8);
     protected CQClient adminClient;
@@ -118,6 +120,7 @@ public abstract class PlaywrightAuthorBaseTest {
     @BeforeAll
     static void launchBrowser() {
         baseUrl = System.getProperty("sling.it.instance.url.1", "http://localhost:4502").replaceAll("/$", "");
+        contextPath = URI.create(baseUrl).getPath();
         PlaywrightAssertions.setDefaultAssertionTimeout(20_000);
         playwright = Playwright.create();
         // Same Chrome binary as the Selenium suite; headed by default (like Selenium under Xvfb).

@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.pw.download;
 
+import java.net.URI;
+
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -54,9 +56,8 @@ public class DownloadV1PwIT extends ComponentPwBaseTest {
         Locator titleLink = contentFrame().locator(".cmp-download__title-link");
         assertThat(titleLink).isVisible();
         String downloadUrl = titleLink.getAttribute("href").trim();
-        if (!downloadUrl.startsWith("http")) {
-            downloadUrl = baseUrl + (downloadUrl.startsWith("/") ? downloadUrl : "/" + downloadUrl);
-        }
+        // the href already carries the context path, so resolve it against the instance origin
+        downloadUrl = URI.create(baseUrl + "/").resolve(downloadUrl).toString();
 
         APIResponse response = context.request().get(downloadUrl);
         assertEquals(200, response.status());

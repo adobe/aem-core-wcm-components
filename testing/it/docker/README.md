@@ -72,6 +72,7 @@ All knobs are environment variables (see the top of `run-it.sh`). The common one
 | `AEM_AUTHOR_PORT` | `4502` | Host port the author is published on |
 | `WITH_PUBLISH` | `false` | Also start/provision publish and run the full suite |
 | `AEM_PUBLISH_PORT` | `4503` | Host port the publish is published on |
+| `AEM_CONTEXT_PATH` | empty | Servlet context path (e.g. `/cp`) both instances are served under; all AEM and test URLs include it |
 | `IT_TEST` | author-only classes (empty=all when publish on) | Comma-separated failsafe test selection |
 | `IT_EXCLUDED_GROUPS` | `…it.http.IgnoreOnCloud` | JUnit categories excluded (cloud target); set empty to force them |
 | `AEM_STARTUP_TIMEOUT` | `600` | Seconds to wait for each instance to answer HTTP |
@@ -147,6 +148,10 @@ host (Linux or Mac) it runs natively.
   `main`'s caches. The archive is therefore encrypted (AES-256, PBKDF2) with a key
   derived from `ARTIFACTORY_CLOUD_PASS`, which fork runs never receive. Bump
   `CACHE_VERSION` in the workflow after rotating that secret.
+- **Context path.** The 6.5 legs (http + Playwright) run with
+  `AEM_CONTEXT_PATH=/cp`, matching the internal pipeline, so tests that assume
+  AEM is served at the root fail on GitHub too. The other products stay at the
+  root, so both setups are covered.
 - **Duplicate clientlibs on the SDK.** The cloud-ready SDK ships Core Components
   under `/libs`, and the `all` package adds this repo's copy under `/apps`, so the
   SDK author loads every Core Components clientlib twice (both copies resolve
