@@ -90,6 +90,35 @@ done
 echo 'Passed explicit empty exclusion overrides.'
 
 (
+    export AEM_TYPE=65 WITH_PUBLISH=true AEM_CONTEXT_PATH=/cp
+    source "${SCRIPT_DIR}/run-it.sh"
+    [[ "${AEM_BASE_URL}" == "http://localhost:4502/cp" && "${AEM_PUBLISH_URL}" == "http://localhost:4503/cp" ]]
+    work=$(mktemp -d)
+    trap 'rm -rf "${work}"' EXIT
+    docker() { echo "docker $*" >> "${work}/calls"; }
+    start_aem >/dev/null
+    [[ "$(grep -c 'Dorg.apache.felix.http.context_path=/cp' "${work}/calls")" == 2 ]]
+    mvn() { printf '%s\n' "$*"; }
+    http_args=$(run_tests)
+    [[ "${http_args}" == *"-Dsling.it.instance.url.1=http://localhost:4502/cp "* && "${http_args}" == *"-Dsling.it.instance.url.2=http://localhost:4503/cp "* ]]
+    export DISPLAY=:test
+    [[ "$(run_e2e)" == *"-Dsling.it.instance.url.1=http://localhost:4502/cp "* ]]
+    # Without a context path, AEM is served at the root.
+    unset AEM_CONTEXT_PATH
+    source "${SCRIPT_DIR}/run-it.sh"
+    : > "${work}/calls"
+    start_aem >/dev/null
+    [[ "${AEM_BASE_URL}" == "http://localhost:4502" && "$(cat "${work}/calls")" != *context_path* ]]
+    for bad in cp /cp/ /; do
+        if (AEM_CONTEXT_PATH="${bad}" source "${SCRIPT_DIR}/run-it.sh") 2>/dev/null; then
+            echo "Invalid AEM_CONTEXT_PATH ${bad} was not rejected" >&2
+            exit 1
+        fi
+    done
+)
+echo 'Passed context path.'
+
+(
     export AEM_TYPE=65 WITH_PUBLISH=true AEM_PUBLISH_PORT=4505
     source "${SCRIPT_DIR}/run-it.sh"
     state=$(mktemp)

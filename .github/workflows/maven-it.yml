@@ -170,7 +170,7 @@ jobs:
           bash testing/it/docker/test-run-it.sh
           matrix=$(bash testing/it/docker/gen-browser-matrix.sh)
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
-          echo 'aem_matrix={"include":[{"name":"cloud-ready","type":"sdk","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:27830-v2-openjdk21"},{"name":"6.5","type":"65","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem:6.5.24.0-openjdk11"},{"name":"LTS","type":"lts","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-lts:6.6.2-openjdk21"}]}' >> "$GITHUB_OUTPUT"
+          echo 'aem_matrix={"include":[{"name":"cloud-ready","type":"sdk","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:27830-v2-openjdk21"},{"name":"6.5","type":"65","context_path":"/cp","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem:6.5.24.0-openjdk11"},{"name":"LTS","type":"lts","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-lts:6.6.2-openjdk21"}]}' >> "$GITHUB_OUTPUT"
 
   image-cache:
     name: Cache AEM ${{ matrix.name }} image
@@ -243,6 +243,8 @@ jobs:
     env:
       AEM_IMAGE: ${{ matrix.image }}
       AEM_TYPE: ${{ matrix.type }}
+      # 6.5 serves AEM under /cp, like the internal pipeline, to catch context-path bugs.
+      AEM_CONTEXT_PATH: ${{ matrix.context_path }}
       WITH_PUBLISH: 'true'
       # JaCoCo agent on author + publish; run-it.sh writes target/jacoco-it/jacoco.xml.
       IT_COVERAGE: 'true'
@@ -355,6 +357,8 @@ jobs:
     env:
       AEM_IMAGE: ${{ matrix.aem.image }}
       AEM_TYPE: ${{ matrix.aem.type }}
+      # 6.5 serves AEM under /cp, like the internal pipeline, to catch context-path bugs.
+      AEM_CONTEXT_PATH: ${{ matrix.aem.context_path }}
       WITH_E2E: 'true'
       E2E_GROUPS: ${{ matrix.group.e2e_groups }}
       E2E_IT_TEST: ${{ matrix.group.e2e_it_test }}
