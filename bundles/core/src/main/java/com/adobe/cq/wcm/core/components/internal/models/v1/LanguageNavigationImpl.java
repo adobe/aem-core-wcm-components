@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
 
@@ -45,18 +47,25 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 
+/**
+ * V1 Language Navigation model implementation.
+ */
 @Model(adaptables = SlingHttpServletRequest.class,
-       adapters = {LanguageNavigation.class, ComponentExporter.class},
-       resourceType = {LanguageNavigationImpl.RESOURCE_TYPE})
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME ,
-          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+    adapters = {LanguageNavigation.class, ComponentExporter.class},
+    resourceType = {LanguageNavigationImpl.RESOURCE_TYPE})
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
+    extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class LanguageNavigationImpl extends AbstractComponentImpl implements LanguageNavigation {
 
+    /**
+     * V2 Language Navigation resource type.
+     */
     public static final String RESOURCE_TYPE = "core/wcm/components/languagenavigation/v1/languagenavigation";
-    private static final String PN_ACCESSIBILITY_LABEL = "accessibilityLabel";
 
-    @Self
-    private SlingHttpServletRequest request;
+    /**
+     * Property name for the accessibility lavel.
+     */
+    private static final String PN_ACCESSIBILITY_LABEL = "accessibilityLabel";
 
     @ScriptVariable
     private Page currentPage;
@@ -73,23 +82,23 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
     @Nullable
     private String accessibilityLabel;
 
+    @Nullable
     private String navigationRoot;
     private int structureDepth;
-    private Page rootPage;
     private List<NavigationItem> items;
     private int startLevel;
 
     @PostConstruct
     private void initModel() {
-        navigationRoot = properties.get(PN_NAVIGATION_ROOT, currentStyle.get(PN_NAVIGATION_ROOT, String.class));
+        navigationRoot = Optional.ofNullable(properties.get(PN_NAVIGATION_ROOT, String.class))
+            .orElseGet(() -> currentStyle.get(PN_NAVIGATION_ROOT, String.class));
         structureDepth = properties.get(PN_STRUCTURE_DEPTH, currentStyle.get(PN_STRUCTURE_DEPTH, 1));
     }
 
     @Override
     public List<NavigationItem> getItems() {
         if (items == null) {
-            PageManager pageManager = currentPage.getPageManager();
-            rootPage = pageManager.getPage(navigationRoot);
+            Page rootPage = Optional.ofNullable(this.navigationRoot).map(currentPage.getPageManager()::getPage).orElse(null);
             if (rootPage != null) {
                 int rootPageLevel = rootPage.getDepth();
                 startLevel = rootPageLevel + 1;
@@ -111,44 +120,64 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
         return this.accessibilityLabel;
     }
 
-    @NotNull
-    @Override
-    public String getExportedType() {
-        return request.getResource().getResourceType();
-    }
-
-    private List<NavigationItem> getItems(Page root) {
+    /**
+     * Get localized navigation items under a given page.
+     *
+     * @param root The page.
+     * @return Localized navigation items based on the children of `Page`.
+     */
+    private List<NavigationItem> getItems(@NotNull final Page root) {
         List<NavigationItem> pages = new ArrayList<>();
         if (root.getDepth() < structureDepth) {
             Iterator<Page> it = root.listChildren(new PageFilter());
             while (it.hasNext()) {
-                Page page = it.next();
-                boolean active = currentPage.getPath().equals(page.getPath()) || currentPage.getPath().startsWith(page.getPath() + "/");
-                String title = page.getNavigationTitle();
-                if (title == null) {
-                    title = page.getTitle();
-                }
-                List<NavigationItem> children = getItems(page);
+                final Page page = it.next();
+                String title = PageListItemImpl.getTitle(page);
                 int level = page.getDepth() - startLevel;
-                Page localizedPage = getLocalizedPage(currentPage, page);
-                if (localizedPage != null) {
-                    page = localizedPage;
-                }
-                boolean current = currentPage.getPath().equals(page.getPath());
-                pages.add(newLanguageNavigationItem(page, active, current, linkManager, level, children, title, getId(), component));
+                Page targetPage = Optional.ofNullable(getLocalizedPage(currentPage, page)).orElse(page);
+                boolean current = currentPage.getPath().equals(targetPage.getPath());
+                boolean active = currentPage.getPath().equals(page.getPath()) || currentPage.getPath().startsWith(page.getPath() + "/");
+                pages.add(newLanguageNavigationItem(targetPage, active, current, linkManager, level, () -> getItems(page), title, getId(), component));
             }
         }
 
         return pages;
     }
 
-    protected LanguageNavigationItem newLanguageNavigationItem(Page page, boolean active, boolean current, @NotNull LinkManager linkManager,
-                                                               int level, List<NavigationItem> children, String title, String parentId,
-                                                               Component component) {
-        return new LanguageNavigationItemImpl(page, active, current, linkManager, level, children, title, parentId, component);
+    /**
+     * Construct a Navigation Item.
+     *
+     * @param page             The page for which to create a navigation item.
+     * @param active           Flag indicating if the navigation item is active.
+     * @param current          Flag indicating if the navigation item is current page.
+     * @param linkManager      Link manager service.
+     * @param level            Depth level of the navigation item.
+     * @param childrenSupplier The child navigation items supplier.
+     * @param title            The item title.
+     * @param parentId         ID of the parent navigation component.
+     * @param component        The parent navigation {@link Component}.
+     */
+    protected LanguageNavigationItem newLanguageNavigationItem(@NotNull final Page page,
+                                                               final boolean active,
+                                                               final boolean current,
+                                                               @NotNull final LinkManager linkManager,
+                                                               final int level,
+                                                               @NotNull final Supplier<List<NavigationItem>> childrenSupplier,
+                                                               final String title,
+                                                               final String parentId,
+                                                               final Component component) {
+        return new LanguageNavigationItemImpl(page, active, current, linkManager, level, childrenSupplier, title, parentId, component);
     }
 
-    private Page getLocalizedPage(Page page, Page languageRoot) {
+    /**
+     * Get the localized version of page found under the `languageRoot`.
+     *
+     * @param page The page for which to get the localized page.
+     * @param languageRoot The language root page for the locale under which to find the localized page.
+     * @return The localized page under languageRoot, or null if no such page exists.
+     */
+    @Nullable
+    private Page getLocalizedPage(@NotNull final Page page, @NotNull final Page languageRoot) {
         Page localizedPage;
         String path = languageRoot.getPath();
         String relativePath = page.getPath();
