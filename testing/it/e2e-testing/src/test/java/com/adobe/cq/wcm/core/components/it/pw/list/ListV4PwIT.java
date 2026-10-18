@@ -150,9 +150,18 @@ public class ListV4PwIT extends ListV3PwIT {
         Locator multifield = dialog().locator("coral-multifield[data-granite-coral-multifield-name='./static']");
         multifield.locator("button[coral-multifield-add]").last().click();
         Locator item = multifield.locator("coral-multifield-item").last();
-        typeInAutocomplete(item.locator("foundation-autocomplete").first(), link);
+        Locator autocomplete = item.locator("foundation-autocomplete").first();
+        Locator linkText = item.locator("input[name$='linkText']");
         if (text != null) {
-            item.locator("input[name$='linkText']").fill(text);
+            typeInAutocomplete(autocomplete, link);
+            linkText.fill(text);
+        } else {
+            // pick the page suggestion: typing alone does not fire the change event that fills in the
+            // (required) link text from the page title on all AEM versions
+            autocomplete.locator("input[is='coral-textfield']").first().fill(link);
+            autocomplete.locator("coral-overlay button[is='coral-buttonlist-item'][value='" + link + "']").click();
+            assertThat(autocomplete).hasJSProperty("value", link);
+            assertThat(linkText).hasValue(link.substring(link.lastIndexOf('/') + 1));
         }
     }
 }
