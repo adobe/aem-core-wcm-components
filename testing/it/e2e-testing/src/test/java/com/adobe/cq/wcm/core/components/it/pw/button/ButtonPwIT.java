@@ -44,9 +44,7 @@ public class ButtonPwIT extends ComponentPwBaseTest {
 
     private void fillLink(String property, String value) {
         // external URLs have no suggestion, so the typed value is committed by leaving the field
-        Locator input = dialog().locator("foundation-autocomplete[name='./" + property + "'] input[role='combobox']");
-        input.fill(value);
-        input.press("Tab");
+        typeInAutocomplete(dialog().locator("foundation-autocomplete[name='./" + property + "']"), value);
         closeOverlays();
     }
 

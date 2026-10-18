@@ -150,9 +150,7 @@ public class ListV4PwIT extends ListV3PwIT {
         Locator multifield = dialog().locator("coral-multifield[data-granite-coral-multifield-name='./static']");
         multifield.locator("button[coral-multifield-add]").last().click();
         Locator item = multifield.locator("coral-multifield-item").last();
-        Locator input = item.locator("foundation-autocomplete input[is='coral-textfield']").first();
-        input.fill(link);
-        input.press("Tab");
+        typeInAutocomplete(item.locator("foundation-autocomplete").first(), link);
         if (text != null) {
             item.locator("input[name$='linkText']").fill(text);
         }

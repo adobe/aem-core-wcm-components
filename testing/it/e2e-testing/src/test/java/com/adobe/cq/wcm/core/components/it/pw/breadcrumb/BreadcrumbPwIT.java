@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.pw.breadcrumb;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Tag;
@@ -31,6 +33,7 @@ import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_BREADCRUMB_V2;
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_BREADCRUMB_V3;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("playwright-group2")
 public class BreadcrumbPwIT extends ComponentPwBaseTest {
@@ -43,15 +46,20 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
     }
 
     /**
-     * The dialog field defaults to 2 through {@code value="${not empty cqDesign.startLevel ? ... : 2}"}. This is what
-     * the Selenium test asserted, and it holds on AEM as a Cloud Service. On the 6.5 and LTS images CI observed the
-     * field rendered empty (the EL default is not resolved in the edit dialog there; the rendered breadcrumb still
-     * uses the default level, which the item counts in the tests verify). The relaxed expectation is bound to
-     * exactly those two flavours, as announced by the CI through AEM_TYPE, and is an exact empty value, not a pattern.
+     * The dialog field defaults to 2 through {@code value="${not empty cqDesign.startLevel ? ... : 2}"}, which is what
+     * the Selenium test asserted. Some AEM 6.5 / LTS releases don't resolve that expression in the edit dialog and
+     * render it literally, which the number field shows as empty (the rendered breadcrumb still uses the default
+     * level, which the item counts in the tests verify). The expectation therefore follows what the server actually
+     * rendered for this dialog rather than the AEM flavour, and stays an exact value in both cases.
      */
-    private static void assertDefaultStartLevel(Locator startLevel) {
-        String aemType = System.getenv("AEM_TYPE");
-        if ("65".equals(aemType) || "lts".equals(aemType)) {
+    private void assertDefaultStartLevel(String resourceType, String componentPath, Locator startLevel)
+        throws Exception {
+        String version = resourceType.substring(resourceType.lastIndexOf('-') + 1);
+        String dialogHtml = adminClient.doGet("/mnt/override/apps/core/wcm/components/breadcrumb/" + version
+            + "/breadcrumb/_cq_dialog.html" + componentPath, 200).getContent();
+        Matcher field = Pattern.compile("<coral-numberinput[^>]*name=\"\\./startLevel\"[^>]*>").matcher(dialogHtml);
+        assertTrue(field.find(), "the dialog should render the startLevel field");
+        if (field.group().contains("${")) {
             assertThat(startLevel).hasValue("");
         } else {
             assertThat(startLevel).hasValue("2");
@@ -127,7 +135,7 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         assertThat(items()).hasCount(5);
         openEditDialog(componentPath);
         Locator startLevel = dialog().locator("input[name='./startLevel']");
-        assertDefaultStartLevel(startLevel);
+        assertDefaultStartLevel(resourceType, componentPath, startLevel);
         startLevel.fill("4");
         saveDialog();
 
@@ -141,7 +149,7 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         assertThat(items()).hasCount(5);
         openEditDialog(componentPath);
         Locator startLevel = dialog().locator("input[name='./startLevel']");
-        assertDefaultStartLevel(startLevel);
+        assertDefaultStartLevel(resourceType, componentPath, startLevel);
         startLevel.fill("0");
         clickDone();
 
@@ -156,7 +164,7 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         assertThat(items()).hasCount(5);
         assertThat(activeItem()).hasCount(1);
         openEditDialog(componentPath);
-        assertDefaultStartLevel(dialog().locator("input[name='./startLevel']"));
+        assertDefaultStartLevel(resourceType, componentPath, dialog().locator("input[name='./startLevel']"));
         dialog().locator("input[name='./startLevel']").fill("100");
         saveDialog();
 

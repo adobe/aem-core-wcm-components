@@ -78,6 +78,8 @@ public abstract class PlaywrightAuthorBaseTest {
     protected static final String CONFIG_DIALOG = ".cq-dialog.foundation-form.foundation-layout-form";
     protected static final String DONE_BUTTON = "button[is='coral-button'][title='Done']";
     private static final boolean TRACE = Boolean.parseBoolean(System.getProperty("pw.trace", "true"));
+    private static final double FIRST_EDITOR_LOAD_TIMEOUT_MS = 180_000;
+    private static volatile boolean editorLoadedOnce;
 
     private static Playwright playwright;
     private static Browser browser;
@@ -270,7 +272,14 @@ public abstract class PlaywrightAuthorBaseTest {
     }
 
     private void waitEditorReady() {
-        page.waitForFunction("() => !!(window.Granite && window.Granite.author && window.Granite.author.pageInfo)");
+        // on a fresh instance the first editor load builds every editor clientlib on demand, which can take minutes
+        Page.WaitForFunctionOptions options = new Page.WaitForFunctionOptions();
+        if (!editorLoadedOnce) {
+            options.setTimeout(FIRST_EDITOR_LOAD_TIMEOUT_MS);
+        }
+        page.waitForFunction("() => !!(window.Granite && window.Granite.author && window.Granite.author.pageInfo)",
+            null, options);
+        editorLoadedOnce = true;
     }
 
     protected FrameLocator contentFrame() {
@@ -529,6 +538,20 @@ public abstract class PlaywrightAuthorBaseTest {
             "coral-overlay coral-buttonlist button[is='coral-buttonlist-item'][value='" + value + "']");
         assertThat(suggestion).isVisible();
         suggestion.click();
+        assertThat(autocomplete).hasJSProperty("value", value);
+    }
+
+    /**
+     * Types a value in a foundation-autocomplete and leaves the field, asserting the field committed the value.
+     * The typed text is committed after the field's input debounce; leaving the field only commits it immediately on
+     * newer AEM versions, so the save could otherwise race the commit and post an empty value.
+     */
+    protected void typeInAutocomplete(Locator autocomplete, String value) {
+        Locator input = autocomplete.locator("input[is='coral-textfield']").first();
+        input.fill(value);
+        assertThat(autocomplete).hasJSProperty("value", value);
+        input.press("Tab");
+        assertThat(autocomplete).hasJSProperty("value", value);
     }
 
     /**
@@ -543,8 +566,10 @@ public abstract class PlaywrightAuthorBaseTest {
         try {
             suggestion.click(new Locator.ClickOptions().setTimeout(5000));
         } catch (TimeoutError e) {
+            assertThat(autocomplete).hasJSProperty("value", value);
             input.press("Tab");
         }
+        assertThat(autocomplete).hasJSProperty("value", value);
     }
 
     protected void selectInPicker(String prefix, String selector, String value) {
