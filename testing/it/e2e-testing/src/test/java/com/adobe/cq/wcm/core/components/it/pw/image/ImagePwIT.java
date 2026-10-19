@@ -454,7 +454,13 @@ public class ImagePwIT extends ComponentPwBaseTest {
             assertThat(alt).hasAttribute("aria-invalid", "true");
             Locator alertIcon = dialog().locator("input[name='./alt'] + coral-icon[icon='alert']");
             assertThat(alertIcon).hasCount(1);
-            assertThat(alertIcon).hasAttribute("alt", NO_DESCRIPTION_ERROR);
+            // newer Granite UI no longer sets the message as the icon's alt text, only in an inline error label
+            if (alertIcon.getAttribute("alt") != null) {
+                assertThat(alertIcon).hasAttribute("alt", NO_DESCRIPTION_ERROR);
+            } else {
+                assertThat(dialog().locator("input[name='./alt'] ~ .coral-Form-errorlabel"))
+                    .hasText(NO_DESCRIPTION_ERROR);
+            }
         }
     }
 
