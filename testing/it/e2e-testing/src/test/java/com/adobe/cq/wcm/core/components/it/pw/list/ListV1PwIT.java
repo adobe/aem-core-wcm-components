@@ -319,9 +319,6 @@ public class ListV1PwIT extends ComponentPwBaseTest {
 
     private void addStaticPage(String path) {
         dialog().locator("button[coral-multifield-add]:visible").first().click();
-        Locator input = dialog().locator(
-            "coral-multifield-item foundation-autocomplete input[is='coral-textfield']:visible").last();
-        input.fill(path);
-        input.press("Tab");
+        typeInAutocomplete(dialog().locator("coral-multifield-item:visible foundation-autocomplete").last(), path);
     }
 }

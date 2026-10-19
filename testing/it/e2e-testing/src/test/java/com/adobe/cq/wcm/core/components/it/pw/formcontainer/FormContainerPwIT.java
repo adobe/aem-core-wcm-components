@@ -178,6 +178,9 @@ public class FormContainerPwIT extends FormGroupPwBase {
             assertThat(inputs).hasCount(before + 1);
             assertThat(inputs.last()).isVisible();
             inputs.last().fill(value);
+            // validate now: newer Granite UI inserts an inline error label on blur, which would otherwise shift
+            // the next "Add" button between mousedown and mouseup
+            inputs.last().blur();
         }
     }
 
@@ -206,10 +209,13 @@ public class FormContainerPwIT extends FormGroupPwBase {
         openEditDialog(containerPath);
         setMailFields(FROM, SUBJECT, new String[] {mailTo}, new String[] {cc});
         clickDone();
+        // older Granite UI shows the message in an error tooltip, newer versions in an inline error label
         Locator mailToTooltip = dialog().locator(
-            "coral-multifield-item-content input[name='./mailto'] + coral-tooltip[variant='error']");
+            "coral-multifield-item-content input[name='./mailto'] + coral-tooltip[variant='error'],"
+                + " coral-multifield-item-content input[name='./mailto'] ~ .coral-Form-errorlabel");
         Locator ccTooltip = dialog().locator(
-            "coral-multifield-item-content input[name='./cc'] + coral-tooltip[variant='error']");
+            "coral-multifield-item-content input[name='./cc'] + coral-tooltip[variant='error'],"
+                + " coral-multifield-item-content input[name='./cc'] ~ .coral-Form-errorlabel");
         assertThat(mailToTooltip).hasText("Error: " + message);
         assertThat(ccTooltip).hasText("Error: " + message);
     }
