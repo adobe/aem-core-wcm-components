@@ -382,7 +382,8 @@ verify_aem_type() {
     else
         product=$(curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
             "${base}/system/console/status-productinfo.txt")
-        if [[ "${product}" == *".LTS"* ]]; then
+        # LTS GA reports "(6.5 LTS)", later service packs e.g. "(6.5.2.LTS)".
+        if [[ "${product}" =~ Adobe\ Experience\ Manager\ \(6\.5[.\ 0-9]*LTS\) ]]; then
             detected=lts
         elif [[ "${product}" == *"Adobe Experience Manager (6.5."* ]]; then
             detected=65
