@@ -52,11 +52,13 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
      * level, which the item counts in the tests verify). The expectation therefore follows what the server actually
      * rendered for this dialog rather than the AEM flavour, and stays an exact value in both cases.
      */
-    private void assertDefaultStartLevel(String resourceType, String componentPath, Locator startLevel)
+    private void assertDefaultStartLevel(String componentPath, Locator startLevel)
         throws Exception {
-        String version = resourceType.substring(resourceType.lastIndexOf('-') + 1);
-        String dialogHtml = adminClient.doGet("/mnt/override/apps/core/wcm/components/breadcrumb/" + version
-            + "/breadcrumb/_cq_dialog.html" + componentPath, 200).getContent();
+        // Fetch the dialog markup from the same URL the editor loads it from, which differs between AEM flavours.
+        String dialogHtml = (String) page.evaluate("path => { const editable = Granite.author.editables.find(path)[0];"
+            + " return fetch(Granite.HTTP.externalize(editable.config.dialogSrc), {credentials: 'same-origin'})"
+            + ".then(response => { if (!response.ok) { throw new Error(response.status + ' ' + response.url); }"
+            + " return response.text(); }); }", componentPath);
         Matcher field = Pattern.compile("<coral-numberinput[^>]*name=\"\\./startLevel\"[^>]*>").matcher(dialogHtml);
         assertTrue(field.find(), "the dialog should render the startLevel field");
         if (field.group().contains("${")) {
@@ -135,7 +137,7 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         assertThat(items()).hasCount(5);
         openEditDialog(componentPath);
         Locator startLevel = dialog().locator("input[name='./startLevel']");
-        assertDefaultStartLevel(resourceType, componentPath, startLevel);
+        assertDefaultStartLevel(componentPath, startLevel);
         startLevel.fill("4");
         saveDialog();
 
@@ -149,7 +151,7 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         assertThat(items()).hasCount(5);
         openEditDialog(componentPath);
         Locator startLevel = dialog().locator("input[name='./startLevel']");
-        assertDefaultStartLevel(resourceType, componentPath, startLevel);
+        assertDefaultStartLevel(componentPath, startLevel);
         startLevel.fill("0");
         clickDone();
 
@@ -164,7 +166,7 @@ public class BreadcrumbPwIT extends ComponentPwBaseTest {
         assertThat(items()).hasCount(5);
         assertThat(activeItem()).hasCount(1);
         openEditDialog(componentPath);
-        assertDefaultStartLevel(resourceType, componentPath, dialog().locator("input[name='./startLevel']"));
+        assertDefaultStartLevel(componentPath, dialog().locator("input[name='./startLevel']"));
         dialog().locator("input[name='./startLevel']").fill("100");
         saveDialog();
 
