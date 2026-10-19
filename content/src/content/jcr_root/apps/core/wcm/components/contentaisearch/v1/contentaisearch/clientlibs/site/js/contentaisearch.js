@@ -20,6 +20,7 @@
     var IS = "contentaisearch";
     var LOADING_DISPLAY_DELAY = 300;
     var REVEAL_WORD_INTERVAL_MS = 12;
+    var MAX_TOP_UP_REQUESTS = 3;
 
     var selectors = {
         self: "[data-" + NS + '-is="' + IS + '"]',
@@ -61,6 +62,8 @@
         this._allResults = [];
         this._hasMore = false;
         this._sourceCursors = {};
+        this._pageSize = 0;
+        this._visibleCount = 0;
         // Monotonic request IDs, since comparing query text alone can't tell
         // apart two requests for the identical query (e.g. double Enter).
         this._resultsRequestId = 0;
@@ -336,7 +339,16 @@
                     return;
                 }
                 self._storeResults(data);
-                self._renderResults();
+                // The server returns the configured results size per page, so that raw count is
+                // the target to restore after duplicates are dropped.
+                self._pageSize = ((data && data.results) || []).length;
+                self._visibleCount = self._pageSize;
+                return self._topUpResults(requestId, self._pageSize, MAX_TOP_UP_REQUESTS)
+                    .then(function() {
+                        if (requestId === self._resultsRequestId) {
+                            self._renderResults();
+                        }
+                    });
             })
             .catch(function() {
                 if (requestId !== self._resultsRequestId) {
@@ -386,29 +398,54 @@
                 return (b.score || 0) - (a.score || 0);
             });
         }
+        this._allResults = this._deduplicateResults(this._allResults);
         this._hasMore = !!(data && data.hasMore);
         this._sourceCursors = (data && data.sourceCursors) || {};
     };
 
-    ContentAISearch.prototype._runLoadMore = function() {
-        if (!this._hasMore || !this._currentQuery) {
-            return;
-        }
+    ContentAISearch.prototype._fetchLoadMorePage = function(query) {
+        return this._fetchJson(this._resourcePath + ".search.json?q=" + encodeURIComponent(query) +
+            "&cursors=" + encodeURIComponent(JSON.stringify(this._sourceCursors)));
+    };
+
+    // Dropping duplicates can leave a page short of the configured results size;
+    // pull follow-up pages (bounded) until it is filled or the index is exhausted.
+    ContentAISearch.prototype._topUpResults = function(requestId, targetCount, remaining) {
         var self = this;
-        var query = this._currentQuery;
-        var requestId = ++this._resultsRequestId;
-        if (this._elements.loadMore) {
-            this._elements.loadMore.disabled = true;
+        if (remaining <= 0 || !this._hasMore || this._allResults.length >= targetCount ||
+                requestId !== this._resultsRequestId) {
+            return Promise.resolve();
         }
-        var url = this._resourcePath + ".search.json?q=" + encodeURIComponent(query) +
-            "&cursors=" + encodeURIComponent(JSON.stringify(this._sourceCursors));
-        this._fetchJson(url)
+        return this._fetchLoadMorePage(this._currentQuery)
             .then(function(data) {
                 if (requestId !== self._resultsRequestId) {
                     return;
                 }
                 self._storeResults(data, true);
-                self._renderResults();
+                return self._topUpResults(requestId, targetCount, remaining - 1);
+            })
+            .catch(function() {
+                // Keep what we already have.
+            });
+    };
+
+    ContentAISearch.prototype._runLoadMore = function() {
+        var hasBuffered = this._allResults.length > this._visibleCount;
+        if ((!this._hasMore && !hasBuffered) || !this._currentQuery) {
+            return;
+        }
+        var self = this;
+        var requestId = ++this._resultsRequestId;
+        if (this._elements.loadMore) {
+            this._elements.loadMore.disabled = true;
+        }
+        var targetCount = this._visibleCount + this._pageSize;
+        this._visibleCount = targetCount;
+        this._topUpResults(requestId, targetCount, MAX_TOP_UP_REQUESTS)
+            .then(function() {
+                if (requestId === self._resultsRequestId) {
+                    self._renderResults();
+                }
             })
             .catch(function() {
                 // Keep existing results shown; don't leave Load More disabled forever.
@@ -546,11 +583,81 @@
 
     ContentAISearch.prototype._resolveItemImage = function(item) {
         var metadata = this._getItemMetadata(item);
-        var image = metadata.image;
+        var rawMetadata = metadata.meta;
+        var image = metadata.image ||
+            (rawMetadata && typeof rawMetadata === "object" ? rawMetadata.image : "");
         if (image && this._isSafeUrl(image)) {
             return image;
         }
         return "";
+    };
+
+    ContentAISearch.prototype._resolveResultIdentity = function(item) {
+        var metadata = this._getItemMetadata(item);
+        var data = (item && item.data) || {};
+        var url = resolveMetadataUrl(metadata, data.source);
+        var image = this._resolveItemImage(item);
+        // Image-less results (e.g. nav/footer anchors like page.html#sign-in) collapse
+        // by page + text; image-backed results keep the fragment as a differentiator.
+        var prefix = image ? "content:" : "image-less:";
+        var suffix = image ? "" : "|" + this._resolveImageLessIdentity(item);
+        if (!url || !this._isSafeUrl(url)) {
+            return image ? "content-image:" + image : "image-less:" +
+                this._resolveImageLessIdentity(item);
+        }
+        try {
+            var parsed = new URL(url, window.location.origin);
+            if (!image) {
+                parsed.hash = "";
+            }
+            parsed.pathname = parsed.pathname.replace(/\/+$/, "") || "/";
+            parsed.hostname = parsed.hostname.toLowerCase();
+            if ((parsed.protocol === "http:" && parsed.port === "80") ||
+                    (parsed.protocol === "https:" && parsed.port === "443")) {
+                parsed.port = "";
+            }
+            return prefix + parsed.href + suffix;
+        } catch (e) {
+            return prefix + String(url).replace(/\/+$/, "").toLowerCase() + suffix;
+        }
+    };
+
+    ContentAISearch.prototype._resolveImageLessIdentity = function(item) {
+        var title = this._resolveItemLabel(item);
+        var description = this._resolveItemDescription(item);
+        return String(title + "|" + description)
+            .replace(/\s+/g, " ")
+            .trim()
+            .toLowerCase();
+    };
+
+    ContentAISearch.prototype._deduplicateResults = function(results) {
+        var self = this;
+        var uniqueResults = [];
+        var resultIndexes = {};
+        results.forEach(function(result) {
+            var identity = self._resolveResultIdentity(result);
+            if (!identity) {
+                uniqueResults.push(result);
+                return;
+            }
+            var existingIndex = resultIndexes[identity];
+            if (existingIndex === undefined) {
+                resultIndexes[identity] = uniqueResults.length;
+                uniqueResults.push(result);
+                return;
+            }
+            var existing = uniqueResults[existingIndex];
+            var existingHasImage = !!self._resolveItemImage(existing);
+            var resultHasImage = !!self._resolveItemImage(result);
+            var existingScore = Number(existing && existing.score) || 0;
+            var resultScore = Number(result && result.score) || 0;
+            if ((resultHasImage && !existingHasImage) ||
+                    (resultHasImage === existingHasImage && resultScore > existingScore)) {
+                uniqueResults[existingIndex] = result;
+            }
+        });
+        return uniqueResults;
     };
 
     ContentAISearch.prototype._resolveHitLabel = function(hit) {
@@ -627,6 +734,7 @@
             }
         }
         if (itemRoot) {
+            itemRoot.classList.toggle("cmp-contentaisearch__item--no-image", !image);
             if (url && this._isSafeUrl(url)) {
                 itemRoot.setAttribute("href", url);
             } else {
@@ -695,7 +803,9 @@
             return;
         }
 
-        this._elements.results.innerHTML = this._generateResultItems(this._allResults);
+        // Extra deduplicated results fetched while topping up stay buffered until Load more.
+        var visible = this._allResults.slice(0, this._visibleCount || this._allResults.length);
+        this._elements.results.innerHTML = this._generateResultItems(visible);
         // Force a reflow so re-adding the class restarts the fade-in animation
         // on every render (the list has no display toggle to key an animation off of).
         this._elements.results.classList.remove("cmp-contentaisearch__results--refresh");
@@ -703,7 +813,7 @@
         this._elements.results.classList.add("cmp-contentaisearch__results--refresh");
 
         toggleShow(this._elements.resultsSection, true);
-        toggleShow(this._elements.loadMore, this._hasMore);
+        toggleShow(this._elements.loadMore, this._hasMore || visible.length < this._allResults.length);
     };
 
     // Reveals the already-fetched answer word by word (cosmetic only - a real

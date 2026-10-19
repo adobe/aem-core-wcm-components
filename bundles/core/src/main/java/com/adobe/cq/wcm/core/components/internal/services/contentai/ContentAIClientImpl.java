@@ -215,7 +215,7 @@ public class ContentAIClientImpl implements ContentAIClient {
         ArrayNode resultFieldIncludes = queryOptions.putObject("resultFields").putArray("includes");
         resultFieldIncludes.add("text").add("source").add("title").add("name")
             .add("metadata.url").add("metadata.source").add("metadata.title")
-            .add("metadata.description").add("metadata.image");
+            .add("metadata.description").add("metadata.image").add("metadata.meta.image");
         ObjectNode pagination = queryOptions.putObject("pagination");
         pagination.put("limit", limit);
         if (StringUtils.isNotBlank(cursor)) {
