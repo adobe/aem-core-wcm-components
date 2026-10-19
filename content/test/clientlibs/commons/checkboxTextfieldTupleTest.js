@@ -120,11 +120,20 @@ describe("CheckboxTextfieldTuple suite", function() {
         });
 
         it("show() should drop a disabled own property shadowing the Coral accessor", function() {
-            let coralDisabled = true;
+            // Coral rendered the shadowing value on upgrade but its own state is still enabled
+            let coralDisabled = false;
+            let renderedDisabled = true;
             Object.defineProperty(Object.getPrototypeOf(checkboxEl), "disabled", {
                 configurable: true,
                 get: function() { return coralDisabled; },
-                set: function(value) { coralDisabled = value; }
+                set: function(value) {
+                    // like Coral's default valueMustChange validator
+                    if (value === coralDisabled) {
+                        return;
+                    }
+                    coralDisabled = value;
+                    renderedDisabled = value;
+                }
             });
             // value assigned before the element was upgraded, shadowing the accessor
             Object.defineProperty(checkboxEl, "disabled", { configurable: true, writable: true, value: true });
@@ -140,6 +149,7 @@ describe("CheckboxTextfieldTuple suite", function() {
 
                 expect(Object.prototype.hasOwnProperty.call(checkboxEl, "disabled")).toBe(false);
                 expect(coralDisabled).toBe(false);
+                expect(renderedDisabled).toBe(false);
             } finally {
                 delete Object.getPrototypeOf(checkboxEl).disabled;
             }

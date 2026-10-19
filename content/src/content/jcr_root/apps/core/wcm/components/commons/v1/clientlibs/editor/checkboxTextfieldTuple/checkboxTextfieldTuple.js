@@ -254,13 +254,17 @@
      *
      * A {@code disabled} value assigned to the checkbox before Coral upgraded it is kept as an own property, which shadows
      * the Coral accessor: later updates would then never reach the rendered checkbox (e.g. it stays disabled on AEM 6.5).
+     * Coral renders the shadowing value on upgrade without storing it, so it is handed over to the accessor before
+     * applying the new state, which Coral would otherwise ignore as unchanged.
      *
      * @param {Boolean} disabled {@code true} to disable, {@code false} to enable the checkbox
      * @private
      */
     CheckboxTextfieldTuple.prototype._disableCheckbox = function(disabled) {
         if (Object.prototype.hasOwnProperty.call(this._checkbox, "disabled")) {
+            var renderedDisabled = this._checkbox.disabled;
             delete this._checkbox.disabled;
+            this._checkbox.disabled = renderedDisabled;
         }
         this._checkboxFoundation.setDisabled(disabled);
     };
