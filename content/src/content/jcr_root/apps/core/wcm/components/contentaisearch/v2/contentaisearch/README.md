@@ -151,5 +151,6 @@ data-cmp-hook-contentaisearch="prepaint"
 * **Version**: v2
 * **Compatibility**: AEM as a Cloud Service, AEM 6.5 LTS (including Adobe Managed Services) for search results.
 * **AI Mode toggle**: renders on AEM as a Cloud Service and on properly branded AEM 6.5 LTS (version qualifier `LTS`, e.g. `6.5.2.LTS`). It's hidden on a non-LTS classic AEM 6.5 (no `LTS` version qualifier, e.g. `6.5.0`).
-* **Status**: work-in-progress
-* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_list](https://www.adobe.com/go/aem_cmp_library_list)
+* **Status**: production-ready
+* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_ai\_search\_v2](https://www.adobe.com/go/aem_cmp_ai_search_v2)
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_ai\_search](https://www.adobe.com/go/aem_cmp_library_ai_search)
