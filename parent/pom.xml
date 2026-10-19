@@ -662,12 +662,6 @@
                 <version>1.0.6</version>
                 <scope>provided</scope>
             </dependency>
-            <dependency>
-                <groupId>javax.annotation</groupId>
-                <artifactId>javax.annotation-api</artifactId>
-                <version>1.3.2</version>
-                <scope>provided</scope>
-            </dependency>
 
             <!-- Servlet API -->
             <dependency>
@@ -729,27 +723,6 @@
                 <scope>provided</scope>
             </dependency>
 
-            <dependency>
-                <groupId>com.day.commons.osgi.wrapper</groupId>
-                <artifactId>com.day.commons.osgi.wrapper.commons-httpclient</artifactId>
-                <version>3.1.0.018</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.adobe.cq.wcm</groupId>
-                <artifactId>com.adobe.aem.wcm.seo</artifactId>
-                <version>1.0.10</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.adobe.granite.bundles</groupId>
-                <artifactId>json</artifactId>
-                <version>20230618_2</version>
-                <scope>provided</scope>
-            </dependency>
-
             <!--
                 AEM APIs; make sure to not move this bundle upper in the list so that newer APIs available in AEM but not in the Uber
                 Jar can be used as dependencies.
@@ -757,7 +730,7 @@
             <dependency>
                 <groupId>com.adobe.aem</groupId>
                 <artifactId>uber-jar</artifactId>
-                <version>6.5.18</version>
+                <version>6.5.21</version>
                 <scope>provided</scope>
             </dependency>
 

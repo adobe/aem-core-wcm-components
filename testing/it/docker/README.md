@@ -215,8 +215,8 @@ with product-specific report/check names and artifacts:
 | Product | Image (under `docker-adobe-cif-release.dr-uw2.adobeitc.com/`) | Package | Exclusions beyond `failing,nested` for browsers |
 | --- | --- | --- | --- |
 | SDK | `circleci-aem-cloudready:27830-v2-openjdk21` | `all-*-cloud.zip` | Browser: `IgnoreOnSDK`; HTTP: `IgnoreOnCloud` |
-| AEM 6.5 | `circleci-aem:6.5.24.0-openjdk11` | Classic `all-*.zip` | Browser and HTTP: `IgnoreOn65` |
-| AEM LTS | `circleci-aem-lts:6.6.2-openjdk21` | Classic `all-*.zip` | Browser and HTTP: `IgnoreOnLTS` |
+| AEM 6.5 | `circleci-aem:6.5.21.0-openjdk11` | Classic `all-*.zip` | Browser and HTTP: `IgnoreOn65` |
+| AEM LTS | `circleci-aem-lts:6.6.0-v2-openjdk21` | Classic `all-*.zip` | Browser and HTTP: `IgnoreOnLTS` |
 
 LTS is validated separately from 6.5: `IgnoreOn65` does not suppress LTS tests;
 use `IgnoreOnLTS` for Cloud Service-only features that LTS does not ship.
@@ -232,11 +232,11 @@ Local examples (build packages first as shown above):
 
 ```bash
 # AEM 6.5 HTTP author/publish
-AEM_IMAGE=docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem:6.5.24.0-openjdk11 \
+AEM_IMAGE=docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem:6.5.21.0-openjdk11 \
   WITH_PUBLISH=true bash testing/it/docker/run-it.sh
 
 # LTS Playwright group2
-AEM_IMAGE=docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-lts:6.6.2-openjdk21 \
+AEM_IMAGE=docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-lts:6.6.0-v2-openjdk21 \
   WITH_E2E=true E2E_GROUPS=playwright-group2 E2E_RERUN=0 \
   bash testing/it/docker/run-it.sh
 

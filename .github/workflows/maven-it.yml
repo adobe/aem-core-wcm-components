@@ -170,7 +170,7 @@ jobs:
           bash testing/it/docker/test-run-it.sh
           matrix=$(bash testing/it/docker/gen-browser-matrix.sh)
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
-          echo 'aem_matrix={"include":[{"name":"cloud-ready","type":"sdk","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:27830-v2-openjdk21"},{"name":"6.5","type":"65","context_path":"/cp","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem:6.5.24.0-openjdk11"},{"name":"LTS","type":"lts","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-lts:6.6.2-openjdk21"}]}' >> "$GITHUB_OUTPUT"
+          echo 'aem_matrix={"include":[{"name":"cloud-ready","type":"sdk","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-cloudready:27830-v2-openjdk21"},{"name":"6.5","type":"65","context_path":"/cp","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem:6.5.21.0-openjdk11"},{"name":"LTS","type":"lts","image":"docker-adobe-cif-release.dr-uw2.adobeitc.com/circleci-aem-lts:6.6.0-v2-openjdk21"}]}' >> "$GITHUB_OUTPUT"
 
   image-cache:
     name: Cache AEM ${{ matrix.name }} image
