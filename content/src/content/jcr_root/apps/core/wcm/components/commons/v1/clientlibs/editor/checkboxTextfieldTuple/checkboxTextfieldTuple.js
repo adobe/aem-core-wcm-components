@@ -58,12 +58,12 @@
                             return !self._checkboxFoundation.isDisabled();
                         },
                         show: function() {
-                            self._checkboxFoundation.setDisabled(false);
+                            self._disableCheckbox(false);
                             $(self._checkbox).parent().show();
                             self.update();
                         },
                         hide: function() {
-                            self._checkboxFoundation.setDisabled(true);
+                            self._disableCheckbox(true);
                             $(self._checkbox).parent().hide();
                             if (self._textfield) {
                                 var previousValue = self._textfield.getAttribute(self.ATTR_PREVIOUS_VALUE);
@@ -247,6 +247,22 @@
         } else {
             this._textfieldFoundation.setValue(value);
         }
+    };
+
+    /**
+     * Disables the checkbox.
+     *
+     * A {@code disabled} value assigned to the checkbox before Coral upgraded it is kept as an own property, which shadows
+     * the Coral accessor: later updates would then never reach the rendered checkbox (e.g. it stays disabled on AEM 6.5).
+     *
+     * @param {Boolean} disabled {@code true} to disable, {@code false} to enable the checkbox
+     * @private
+     */
+    CheckboxTextfieldTuple.prototype._disableCheckbox = function(disabled) {
+        if (Object.prototype.hasOwnProperty.call(this._checkbox, "disabled")) {
+            delete this._checkbox.disabled;
+        }
+        this._checkboxFoundation.setDisabled(disabled);
     };
 
     /**

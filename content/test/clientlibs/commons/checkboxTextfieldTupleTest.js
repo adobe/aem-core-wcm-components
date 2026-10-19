@@ -118,5 +118,31 @@ describe("CheckboxTextfieldTuple suite", function() {
             getRegisteredCheckboxAdapter().adapter().show();
             expect(setDisabledSpy).toHaveBeenCalledWith(false);
         });
+
+        it("show() should drop a disabled own property shadowing the Coral accessor", function() {
+            let coralDisabled = true;
+            Object.defineProperty(Object.getPrototypeOf(checkboxEl), "disabled", {
+                configurable: true,
+                get: function() { return coralDisabled; },
+                set: function(value) { coralDisabled = value; }
+            });
+            // value assigned before the element was upgraded, shadowing the accessor
+            Object.defineProperty(checkboxEl, "disabled", { configurable: true, writable: true, value: true });
+            checkboxFoundationMock.setDisabled = function(disabled) { checkboxEl.disabled = disabled; };
+
+            try {
+                new CQ.CoreComponents.CheckboxTextfieldTuple.v1(
+                    container,
+                    'coral-checkbox[name="./titleValueFromDAM"]',
+                    'input[name="./jcr:title"]'
+                );
+                getRegisteredCheckboxAdapter().adapter().show();
+
+                expect(Object.prototype.hasOwnProperty.call(checkboxEl, "disabled")).toBe(false);
+                expect(coralDisabled).toBe(false);
+            } finally {
+                delete Object.getPrototypeOf(checkboxEl).disabled;
+            }
+        });
     });
 });
