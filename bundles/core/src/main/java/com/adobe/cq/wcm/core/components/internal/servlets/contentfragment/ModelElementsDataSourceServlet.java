@@ -123,8 +123,10 @@ public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
                         valueValue = "jcr:content/data/master/" + valueValue;
                     }
                     String metaType = valueMap.get("metaType", StringUtils.EMPTY);
-                    if (!isOrderBy || StringUtils.startsWith(metaType, "text-") || StringUtils.equals(metaType, "date")
-                        || StringUtils.equals(metaType, "number")) {
+                    String valueType = valueMap.get("valueType", StringUtils.EMPTY);
+                    boolean isComposite = "composite".equals(valueType) || "composite[]".equals(valueType);
+                    if (!isComposite && (!isOrderBy || StringUtils.startsWith(metaType, "text-") || StringUtils.equals(metaType, "date")
+                        || StringUtils.equals(metaType, "number"))) {
                         Resource syntheticResource = createResource(resourceResolver, textValue, valueValue);
                         resourceList.add(syntheticResource);
                     }

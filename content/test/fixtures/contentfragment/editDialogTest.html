@@ -1,0 +1,52 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2026 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<div class="cmp-contentfragment__editor">
+    <div data-component-path="/content/test-page/jcr:content/root/cf"></div>
+
+    <coral-tabview></coral-tabview>
+
+    <input id="editDialog-fragmentPath" aria-label="Fragment path" name="./fragmentPath" value="/content/dam/test/my-fragment">
+
+    <div data-display-mode-radio-group="true">
+        <input id="editDialog-displayMode-singleText" aria-label="Display mode single text" type="radio" name="./displayMode" value="singleText">
+        <input id="editDialog-displayMode-multi" aria-label="Display mode multi" type="radio" name="./displayMode" value="multi">
+        <input id="editDialog-displayMode-vcf" aria-label="Display mode VCF" type="radio" name="./displayMode" value="vcf" checked>
+    </div>
+
+    <div data-element-mode-field="true">
+        <div data-element-names-container="true"
+             data-field-path="/apps/test/dialog/elementNames">
+            <div data-granite-coral-multifield-name="./elementNames"></div>
+            <select id="editDialog-elementNames" aria-label="Element names" data-single-text-selector="true" name="./elementNames"></select>
+        </div>
+    </div>
+
+    <div data-vcf-mode-field="true">
+        <div data-vcf-template-selector="true"></div>
+    </div>
+
+    <select id="editDialog-variationName"
+            aria-label="Variation name"
+            name="./variationName"
+            data-field-path="/apps/test/dialog/variationName"></select>
+
+    <fieldset class="cmp-contentfragment__editor-paragraph-controls">
+        <input id="editDialog-paragraphScope-all" aria-label="Paragraph scope all" type="radio" name="./paragraphScope" value="all" checked>
+        <input id="editDialog-paragraphScope-range" aria-label="Paragraph scope range" type="radio" name="./paragraphScope" value="range">
+        <input id="editDialog-paragraphRange" aria-label="Paragraph range" name="./paragraphRange">
+        <input id="editDialog-paragraphHeadings" aria-label="Paragraph headings" name="./paragraphHeadings">
+    </fieldset>
+</div>

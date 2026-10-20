@@ -18,7 +18,7 @@ on:
                 default: 'main'
 jobs:
     build:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-26.04
         steps:
             # Checkout this project into a sub folder
             - uses: actions/checkout@v3

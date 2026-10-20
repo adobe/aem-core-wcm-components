@@ -19,7 +19,8 @@
          role="search"
          data-cmp-is="search"
          data-cmp-min-length="${search.searchTermMinimumLength}"
-         data-cmp-results-size="${search.resultsSize}">
+         data-cmp-results-size="${search.resultsSize}"
+         data-i18n-messages='${search.i18nMessages}'>
     <div class="cmp_search__info" aria-live="polite" role="status"></div>
     <form class="cmp-search__form" data-cmp-hook-search="form"
           method="get" action="${currentPage.path @ addSelectors=['searchresults'], extension='json', suffix = search.relativePath}"

@@ -1,0 +1,132 @@
+{
+  "jcr:primaryType": "cq:Page",
+  "jcr:createdBy": "admin",
+  "jcr:created": "Tue Jun 16 2020 19:46:44 GMT+0200",
+  "wcm": {
+    "jcr:primaryType": "nt:unstructured",
+    "foundation": {
+      "jcr:primaryType": "nt:unstructured",
+      "components": {
+        "jcr:primaryType": "nt:unstructured",
+        "page": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:content": {
+            "jcr:primaryType": "nt:unstructured",
+            "mergeList": true
+          },
+          "default": {
+            "jcr:primaryType": "nt:unstructured",
+            "jcr:title": "Default Page",
+            "jcr:description": "Policy of the default page",
+            "clientlibs": [
+              "wcm.foundation.components.page.responsive"
+            ],
+            "sling:resourceType": "wcm/core/components/policy/policy",
+            "jcr:content": {
+              "jcr:primaryType": "nt:unstructured",
+              "mergeList": true
+            }
+          }
+        },
+        "responsivegrid": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:content": {
+            "jcr:primaryType": "nt:unstructured",
+            "mergeList": true
+          },
+          "it-default": {
+            "jcr:primaryType": "nt:unstructured",
+            "jcr:title": "IT Default Layout Container",
+            "components": [
+              "/libs/dam/cfm/components/contentfragment",
+              "/libs/foundation/components/download",
+              "/libs/wcm/foundation/components/image",
+              "/libs/foundation/components/image",
+              "/libs/wcm/foundation/components/responsivegrid",
+              "/libs/wcm/foundation/components/list",
+              "/libs/foundation/components/reference",
+              "/libs/foundation/components/table",
+              "/libs/wcm/foundation/components/text",
+              "/libs/foundation/components/text",
+              "/libs/wcm/foundation/components/textimage",
+              "/libs/wcm/foundation/components/title",
+              "/libs/foundation/components/video",
+              "/libs/cq/experience-fragments/editor/components/experiencefragment"
+            ],
+            "jcr:description": "Policy of the IT default root parsys",
+            "sling:resourceType": "wcm/core/components/policy/policy",
+            "cq:authoring": {
+              "jcr:primaryType": "nt:unstructured",
+              "assetToComponentMapping": {
+                "jcr:primaryType": "nt:unstructured",
+                "image": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "resourceType": "wcm/foundation/components/image",
+                  "assetMimetype": "image/*",
+                  "type": "Images",
+                  "droptarget": "image",
+                  "assetGroup": "media"
+                },
+                "document": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "resourceType": "foundation/components/download",
+                  "assetMimetype": [
+                    "application/vnd.openxmlformats",
+                    "application/msword",
+                    "application/vnd.ms-powerpoint",
+                    "application/mspowerpoint",
+                    "application/powerpoint",
+                    "application/x-mspowerpoint",
+                    "application/x-msexcel",
+                    "application/x-excel",
+                    "application/excel",
+                    "application/vnd.ms-excel",
+                    "application/pdf",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  ],
+                  "type": "Images",
+                  "droptarget": "file",
+                  "assetGroup": "media"
+                },
+                "video": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "resourceType": "foundation/components/video",
+                  "assetMimetype": "video/*",
+                  "type": "Images",
+                  "droptarget": "video",
+                  "assetGroup": "media"
+                },
+                "fragment": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "resourceType": "dam/cfm/components/contentfragment",
+                  "assetMimetype": "text/html",
+                  "type": "Content Fragment",
+                  "droptarget": "fragment",
+                  "assetGroup": "media"
+                },
+                "experiencefragment": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "resourceType": "cq/experience-fragments/editor/components/experiencefragment",
+                  "assetMimetype": "text/html",
+                  "type": "experiencefragment",
+                  "droptarget": "experiencefragment",
+                  "assetGroup": "content"
+                }
+              }
+            },
+            "jcr:content": {
+              "jcr:primaryType": "nt:unstructured",
+              "mergeList": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "core-component": {
+    "jcr:primaryType": "nt:unstructured",
+    "components" : {
+      "jcr:primaryType": "nt:unstructured"
+    }
+  }
+}

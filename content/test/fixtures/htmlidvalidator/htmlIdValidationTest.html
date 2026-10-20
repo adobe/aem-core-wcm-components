@@ -1,0 +1,69 @@
+<!--
+/*******************************************************************************
+ * Copyright 2025 Adobe
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+-->
+<div id="htmlIdValidationTest">
+    <!-- Test form with valid path -->
+    <form action="/content/mysite/en/page/_jcr_content/root/component">
+        <input id="htmlIdValidation-valid-path" aria-label="Valid path ID" type="text" data-validation="html-unique-id-validator" value="test-id" />
+    </form>
+    
+    <!-- Test form with path traversal attempt -->
+    <form action="/content/../../../etc/passwd/_jcr_content/root/component">
+        <input id="htmlIdValidation-traversal-path" aria-label="Traversal path ID" type="text" data-validation="html-unique-id-validator" value="traversal-id" />
+    </form>
+    
+    <!-- Test form with disallowed characters in path -->
+    <form action="/content/test<script>alert(1)</script>/_jcr_content/root/component">
+        <input id="htmlIdValidation-markup-path" aria-label="Markup path ID" type="text" data-validation="html-unique-id-validator" value="markup-path-id" />
+    </form>
+    
+    <!-- Test form with spaces in path -->
+    <form action="/content/my site/en/page with spaces/_jcr_content/root/component">
+        <input id="htmlIdValidation-space-path" aria-label="Space path ID" type="text" data-validation="html-unique-id-validator" value="space-id" />
+    </form>
+    
+    <!-- Test form with multiple slashes -->
+    <form action="/content//test///page/_jcr_content/root/component">
+        <input id="htmlIdValidation-slash-path" aria-label="Slash path ID" type="text" data-validation="html-unique-id-validator" value="slash-id" />
+    </form>
+    
+    <!-- Test form with dots in path -->
+    <form action="/content/mysite/en/page.with.dots/_jcr_content/root/component">
+        <input id="htmlIdValidation-dot-path" aria-label="Dot path ID" type="text" data-validation="html-unique-id-validator" value="dot-id" />
+    </form>
+    
+    <!-- Test form with underscores and hyphens -->
+    <form action="/content/my-site/en/page_with_underscores/_jcr_content/root/component">
+        <input id="htmlIdValidation-underscore-path" aria-label="Underscore path ID" type="text" data-validation="html-unique-id-validator" value="underscore-id" />
+    </form>
+    
+    <!-- Test form with no action (should be handled gracefully) -->
+    <form>
+        <input id="htmlIdValidation-no-action" aria-label="No action ID" type="text" data-validation="html-unique-id-validator" value="no-action-id" />
+    </form>
+    
+    <!-- Test form with relative path (should be rejected) -->
+    <form action="content/test/page/_jcr_content/root/component">
+        <input id="htmlIdValidation-relative-path" aria-label="Relative path ID" type="text" data-validation="html-unique-id-validator" value="relative-id" />
+    </form>
+    
+    <!-- Mock HTML content for AJAX responses -->
+    <div id="mock-page-content" style="display: none;">
+        <div id="existing-id">This ID already exists</div>
+        <div id="another-existing-id">Another existing ID</div>
+    </div>
+</div>
