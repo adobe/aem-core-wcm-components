@@ -45,6 +45,13 @@ for type in sdk 65 lts; do
             esac
         }
         verify_aem_type "${AEM_BASE_URL}"
+        if [[ "${type}" == lts ]]; then
+            # LTS GA reports the product without a service pack number.
+            (
+                curl() { echo 'Installed Products = Adobe Experience Manager (6.5 LTS)'; }
+                verify_aem_type "${AEM_BASE_URL}" >/dev/null
+            )
+        fi
         AEM_TYPE=wrong
         if verify_aem_type "${AEM_BASE_URL}" >/dev/null 2>&1; then
             echo 'Runtime mismatch was not rejected' >&2
