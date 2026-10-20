@@ -47,6 +47,6 @@
         }
     },
     "dependencies": {
-        "@adobe/adobe-client-data-layer": "2.0.2"
+        "@adobe/adobe-client-data-layer": "3.0.1"
     }
 }

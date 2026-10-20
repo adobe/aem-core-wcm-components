@@ -24,11 +24,11 @@ module.exports = {
             path: "src/content/jcr_root/apps/core/wcm/components/commons/datalayer/v1/clientlibs",
             serializationFormat: "xml",
             allowProxy: true,
+            dependencies: ["core.wcm.components.commons.datalayer.acdl"],
             jsProcessor: ["default:none", "min:gcc;compilationLevel=whitespace"],
             assets: {
                 js: [
                     "src/scripts/datalayer/v1/polyfill.js",
-                    "node_modules/@adobe/adobe-client-data-layer/dist/adobe-client-data-layer.min.js",
                     "src/scripts/datalayer/v1/datalayer.js"
                 ]
             }
@@ -51,7 +51,8 @@ module.exports = {
             path: "src/content/jcr_root/apps/core/wcm/components/commons/datalayer/acdl",
             serializationFormat: "xml",
             allowProxy: true,
-            jsProcessor: ["default:none", "min:gcc;compilationLevel=whitespace"],
+            // the library is distributed already minified (ES2020 syntax)
+            jsProcessor: ["default:none", "min:none"],
             assets: {
                 js: [
                     "node_modules/@adobe/adobe-client-data-layer/dist/adobe-client-data-layer.min.js"
