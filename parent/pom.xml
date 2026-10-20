@@ -61,7 +61,7 @@
         <frontend-maven-plugin.version>1.11.3</frontend-maven-plugin.version>
         <node.version>v16.13.1</node.version>
         <npm.version>8.3.0</npm.version>
-        <mockito.version>5.2.0</mockito.version>
+        <mockito.version>4.11.0</mockito.version>
         <byte-buddy.version>1.14.11</byte-buddy.version>
         <maven.compiler.source>${aem.java.version}</maven.compiler.source>
         <maven.compiler.target>${aem.java.version}</maven.compiler.target>
@@ -318,7 +318,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.5.0</version>
                     <executions>
                         <execution>
                             <id>enforce-maven</id>
@@ -781,7 +781,7 @@
             <dependency>
                 <groupId>io.wcm</groupId>
                 <artifactId>io.wcm.testing.aem-mock.junit5</artifactId>
-                <version>5.6.2</version>
+                <version>4.1.8</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
