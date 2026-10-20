@@ -20,7 +20,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -88,7 +87,7 @@ final class AemMockCompat {
                 path = path.substring(0, idx);
             }
             Resource current = resource.getResourceResolver().getResource(path);
-            while (current != null && !StringUtils.equals(current.getPath(), "/")) {
+            while (current != null && !"/".equals(current.getPath())) {
                 ValueMap props = current.getValueMap();
                 if (props.get("jcr:content/cq:isLanguageRoot", Boolean.FALSE)) {
                     String iso = props.get("jcr:content/jcr:language", "");
