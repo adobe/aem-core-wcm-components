@@ -795,11 +795,21 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <!-- aem-mock 4.x pulls the vulnerable org.apache.sling.xss 2.0.0 -->
+            <!-- override vulnerable transitive dependencies of aem-mock 4.x -->
             <dependency>
                 <groupId>org.apache.sling</groupId>
                 <artifactId>org.apache.sling.xss</artifactId>
                 <version>2.2.16</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>1.11.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.jackrabbit</groupId>
+                <artifactId>oak-core</artifactId>
+                <version>1.8.20</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.sling</groupId>
