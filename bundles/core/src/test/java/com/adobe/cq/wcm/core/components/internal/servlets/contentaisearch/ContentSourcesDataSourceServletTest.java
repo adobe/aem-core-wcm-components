@@ -16,6 +16,8 @@
 package com.adobe.cq.wcm.core.components.internal.servlets.contentaisearch;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -88,13 +90,13 @@ class ContentSourcesDataSourceServletTest {
         otherType.setType("AEM_AUTHOR");
 
         ContentSourceListResult listResult = new ContentSourceListResult();
-        listResult.setItems(List.of(acquisition, privateSource, otherType));
+        listResult.setItems(Arrays.asList(acquisition, privateSource, otherType));
         when(mockClient.listContentSources(anyString(), isNull())).thenReturn(listResult);
 
         context.create().resource("/apps/datasource",
             "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
         context.currentResource("/apps/datasource");
-        context.request().setParameterMap(java.util.Map.of("contentSourceType", "ACQUISITION"));
+        context.request().setParameterMap(Collections.singletonMap("contentSourceType", "ACQUISITION"));
         underTest.doGet(context.request(), context.response());
 
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
@@ -107,8 +109,8 @@ class ContentSourcesDataSourceServletTest {
             values.add(option.getValueMap().get(PN_VALUE, String.class));
             texts.add(option.getValueMap().get(PN_TEXT, String.class));
         }
-        assertEquals(List.of("aem-live"), values);
-        assertEquals(List.of("aem-live - Live site index"), texts);
+        assertEquals(Arrays.asList("aem-live"), values);
+        assertEquals(Arrays.asList("aem-live - Live site index"), texts);
     }
 
     @Test
@@ -124,13 +126,13 @@ class ContentSourcesDataSourceServletTest {
         acquisition.setConfig(config);
 
         ContentSourceListResult listResult = new ContentSourceListResult();
-        listResult.setItems(List.of(acquisition));
+        listResult.setItems(Arrays.asList(acquisition));
         when(mockClient.listContentSources(anyString(), isNull())).thenReturn(listResult);
 
         context.create().resource("/apps/datasource-config-desc",
             "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
         context.currentResource("/apps/datasource-config-desc");
-        context.request().setParameterMap(java.util.Map.of("contentSourceType", "ACQUISITION"));
+        context.request().setParameterMap(Collections.singletonMap("contentSourceType", "ACQUISITION"));
         underTest.doGet(context.request(), context.response());
 
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
@@ -176,7 +178,7 @@ class ContentSourcesDataSourceServletTest {
         page1Item.setName("page-1-source");
         page1Item.setType("ACQUISITION");
         ContentSourceListResult page1 = new ContentSourceListResult();
-        page1.setItems(List.of(page1Item));
+        page1.setItems(Arrays.asList(page1Item));
         page1.setCursor("cursor-page-2");
         when(mockClient.listContentSources(anyString(), isNull())).thenReturn(page1);
         when(mockClient.listContentSources(anyString(), eq("cursor-page-2"))).thenReturn(null);
@@ -184,7 +186,7 @@ class ContentSourcesDataSourceServletTest {
         context.create().resource("/apps/datasource-null-next-page",
             "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
         context.currentResource("/apps/datasource-null-next-page");
-        context.request().setParameterMap(java.util.Map.of("contentSourceType", "ACQUISITION"));
+        context.request().setParameterMap(Collections.singletonMap("contentSourceType", "ACQUISITION"));
         underTest.doGet(context.request(), context.response());
 
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
@@ -194,7 +196,7 @@ class ContentSourcesDataSourceServletTest {
         while (iterator.hasNext()) {
             values.add(iterator.next().getValueMap().get(PN_VALUE, String.class));
         }
-        assertEquals(List.of("page-1-source"), values);
+        assertEquals(Arrays.asList("page-1-source"), values);
     }
 
     @Test
@@ -219,7 +221,7 @@ class ContentSourcesDataSourceServletTest {
         page1Item.setName("page-1-source");
         page1Item.setType("ACQUISITION");
         ContentSourceListResult page1 = new ContentSourceListResult();
-        page1.setItems(List.of(page1Item));
+        page1.setItems(Arrays.asList(page1Item));
         page1.setCursor("cursor-page-2");
         when(mockClient.listContentSources(anyString(), isNull())).thenReturn(page1);
 
@@ -227,14 +229,14 @@ class ContentSourcesDataSourceServletTest {
         page2Item.setName("page-2-source");
         page2Item.setType("ACQUISITION");
         ContentSourceListResult page2 = new ContentSourceListResult();
-        page2.setItems(List.of(page2Item));
+        page2.setItems(Arrays.asList(page2Item));
         // no cursor - last page
         when(mockClient.listContentSources(anyString(), eq("cursor-page-2"))).thenReturn(page2);
 
         context.create().resource("/apps/datasource-paged",
             "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
         context.currentResource("/apps/datasource-paged");
-        context.request().setParameterMap(java.util.Map.of("contentSourceType", "ACQUISITION"));
+        context.request().setParameterMap(Collections.singletonMap("contentSourceType", "ACQUISITION"));
         underTest.doGet(context.request(), context.response());
 
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
@@ -244,7 +246,7 @@ class ContentSourcesDataSourceServletTest {
         while (iterator.hasNext()) {
             values.add(iterator.next().getValueMap().get(PN_VALUE, String.class));
         }
-        assertEquals(List.of("page-1-source", "page-2-source"), values);
+        assertEquals(Arrays.asList("page-1-source", "page-2-source"), values);
     }
 
     @Test
@@ -257,7 +259,7 @@ class ContentSourcesDataSourceServletTest {
         context.create().resource("/apps/datasource-looping",
             "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
         context.currentResource("/apps/datasource-looping");
-        context.request().setParameterMap(java.util.Map.of("contentSourceType", "ACQUISITION"));
+        context.request().setParameterMap(Collections.singletonMap("contentSourceType", "ACQUISITION"));
 
         // Must complete without hanging/OOM despite the endless cursor.
         underTest.doGet(context.request(), context.response());
@@ -278,7 +280,7 @@ class ContentSourcesDataSourceServletTest {
         item.setName("source-" + cursorSeed);
         item.setType("ACQUISITION");
         ContentSourceListResult page = new ContentSourceListResult();
-        page.setItems(List.of(item));
+        page.setItems(Arrays.asList(item));
         page.setCursor("cursor-after-" + cursorSeed); // always returns another cursor - never terminates on its own
         return page;
     }
@@ -290,13 +292,13 @@ class ContentSourcesDataSourceServletTest {
         acquisition.setType("ACQUISITION");
 
         ContentSourceListResult listResult = new ContentSourceListResult();
-        listResult.setItems(List.of(acquisition));
+        listResult.setItems(Arrays.asList(acquisition));
         when(mockClient.listContentSources(anyString(), isNull())).thenReturn(listResult);
 
         context.create().resource("/apps/datasource-null-config",
             "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
         context.currentResource("/apps/datasource-null-config");
-        context.request().setParameterMap(java.util.Map.of("contentSourceType", "ACQUISITION"));
+        context.request().setParameterMap(Collections.singletonMap("contentSourceType", "ACQUISITION"));
         underTest.doGet(context.request(), context.response());
 
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
@@ -310,13 +312,13 @@ class ContentSourcesDataSourceServletTest {
         blankName.setType("ACQUISITION");
 
         ContentSourceListResult listResult = new ContentSourceListResult();
-        listResult.setItems(List.of(blankName));
+        listResult.setItems(Arrays.asList(blankName));
         when(mockClient.listContentSources(anyString(), isNull())).thenReturn(listResult);
 
         context.create().resource("/apps/datasource-blank",
             "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
         context.currentResource("/apps/datasource-blank");
-        context.request().setParameterMap(java.util.Map.of("contentSourceType", "ACQUISITION"));
+        context.request().setParameterMap(Collections.singletonMap("contentSourceType", "ACQUISITION"));
         underTest.doGet(context.request(), context.response());
 
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
@@ -331,7 +333,7 @@ class ContentSourcesDataSourceServletTest {
         acquisition.setType("CUSTOM");
 
         ContentSourceListResult listResult = new ContentSourceListResult();
-        listResult.setItems(List.of(acquisition));
+        listResult.setItems(Arrays.asList(acquisition));
         when(mockClient.listContentSources(anyString(), isNull())).thenReturn(listResult);
 
         context.create().resource("/apps/datasource-resource-type",
@@ -352,7 +354,7 @@ class ContentSourcesDataSourceServletTest {
         acquisition.setType("CHILD");
 
         ContentSourceListResult listResult = new ContentSourceListResult();
-        listResult.setItems(List.of(acquisition));
+        listResult.setItems(Arrays.asList(acquisition));
         when(mockClient.listContentSources(anyString(), isNull())).thenReturn(listResult);
 
         context.create().resource("/apps/datasource-child-type",
@@ -374,7 +376,7 @@ class ContentSourcesDataSourceServletTest {
         acquisition.setType("PATH");
 
         ContentSourceListResult listResult = new ContentSourceListResult();
-        listResult.setItems(List.of(acquisition));
+        listResult.setItems(Arrays.asList(acquisition));
         when(mockClient.listContentSources(anyString(), isNull())).thenReturn(listResult);
 
         context.create().resource("/content/component",
@@ -397,7 +399,7 @@ class ContentSourcesDataSourceServletTest {
         acquisition.setType("ACQUISITION");
 
         ContentSourceListResult listResult = new ContentSourceListResult();
-        listResult.setItems(List.of(acquisition));
+        listResult.setItems(Arrays.asList(acquisition));
         when(mockClient.listContentSources(anyString(), isNull())).thenReturn(listResult);
 
         context.create().resource("/apps/datasource-default-type",
@@ -417,13 +419,13 @@ class ContentSourcesDataSourceServletTest {
         acquisition.setType("ACQUISITION");
 
         ContentSourceListResult listResult = new ContentSourceListResult();
-        listResult.setItems(List.of(acquisition));
+        listResult.setItems(Arrays.asList(acquisition));
         when(mockClient.listContentSources(anyString(), isNull())).thenReturn(listResult);
 
         context.create().resource("/apps/datasource-placeholder-type",
             "sling:resourceType", ContentSourcesDataSourceServlet.RESOURCE_TYPE);
         context.currentResource("/apps/datasource-placeholder-type");
-        context.request().setParameterMap(java.util.Map.of("contentSourceType", "${param.contentSourceType}"));
+        context.request().setParameterMap(Collections.singletonMap("contentSourceType", "${param.contentSourceType}"));
         underTest.doGet(context.request(), context.response());
 
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());

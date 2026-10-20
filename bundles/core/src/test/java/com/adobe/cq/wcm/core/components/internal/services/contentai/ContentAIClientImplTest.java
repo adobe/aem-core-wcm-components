@@ -36,6 +36,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicStatusLine;
+import org.apache.http.util.EntityUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
@@ -178,7 +179,7 @@ class ContentAIClientImplTest {
         client.search("my-content-source", "ACQUISITION", "electric cars", 10);
 
         HttpPost sent = (HttpPost) captureExecutedRequest();
-        String body = new String(sent.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
+        String body = EntityUtils.toString(sent.getEntity(), StandardCharsets.UTF_8);
         assertTrue(body.contains("\"type\":\"ACQUISITION\""));
     }
 
@@ -189,7 +190,7 @@ class ContentAIClientImplTest {
         client.search("my-content-source", "ACQUISITION", "electric cars", 10, "cursor-1");
 
         HttpPost sent = (HttpPost) captureExecutedRequest();
-        String body = new String(sent.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
+        String body = EntityUtils.toString(sent.getEntity(), StandardCharsets.UTF_8);
         assertTrue(body.contains("\"cursor\":\"cursor-1\""));
     }
 
@@ -246,7 +247,7 @@ class ContentAIClientImplTest {
         client.genSearch("my-content-source", contentSourceType, "electric cars");
 
         HttpPost sent = (HttpPost) captureExecutedRequest();
-        String body = new String(sent.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
+        String body = EntityUtils.toString(sent.getEntity(), StandardCharsets.UTF_8);
         assertEquals("{\"query\":\"electric cars\",\"contentSource\":{\"name\":\"my-content-source\",\"type\":\""
             + contentSourceType + "\"}}", body,
             "gensearch request body must forward the configured contentSource.type");
@@ -259,7 +260,7 @@ class ContentAIClientImplTest {
         client.genSearch("my-content-source", " ", "electric cars");
 
         HttpPost sent = (HttpPost) captureExecutedRequest();
-        String body = new String(sent.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
+        String body = EntityUtils.toString(sent.getEntity(), StandardCharsets.UTF_8);
         assertEquals("{\"query\":\"electric cars\",\"contentSource\":{\"name\":\"my-content-source\"}}", body,
             "gensearch request body must omit contentSource.type when blank");
     }
@@ -435,7 +436,7 @@ class ContentAIClientImplTest {
         client.search("my-content-source", " ", "electric cars", 10);
 
         HttpPost sent = (HttpPost) captureExecutedRequest();
-        String body = new String(sent.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
+        String body = EntityUtils.toString(sent.getEntity(), StandardCharsets.UTF_8);
         assertTrue(body.contains("\"contentSource\":{\"name\":\"my-content-source\"}"));
     }
 

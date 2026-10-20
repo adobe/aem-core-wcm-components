@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.services.contentai;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 class ContentSourceLabelFormatterTest {
@@ -40,10 +41,10 @@ class ContentSourceLabelFormatterTest {
 
     @Test
     void longDescription_truncatesWithEllipsis() {
-        String desc = "A".repeat(90);
+        String desc = StringUtils.repeat("A", 90);
         String label = ContentSourceLabelFormatter.formatLabel("x", desc);
         assertTrue(label.endsWith("..."));
-        assertEquals("x - " + "A".repeat(80) + "...", label);
+        assertEquals("x - " + StringUtils.repeat("A", 80) + "...", label);
     }
 
     @Test
