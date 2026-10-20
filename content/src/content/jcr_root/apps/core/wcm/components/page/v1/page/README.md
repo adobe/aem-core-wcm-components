@@ -28,6 +28,7 @@ Extensible page component written in HTL.
 * Blueprints and live copy
 * Closed user groups and permissions
 * Cloud services
+* Structured Data (JSON-LD) injection in the page head
 
 ## Loading of CSS/JS
 The page component automatically loads certain client libraries in the head section and at the end of the body section
@@ -77,6 +78,7 @@ media
 20. `./cq:contextHubPath` - defines the Context Path configuration used by this page.
 21. `./cq:contextHubSegmentsPath` - defines the Context Path Segments Path.
 22. `./id` - defines the component HTML ID attribute.
+23. `./cq:structuredData` - defines a list of JSON-LD blocks rendered as `<script type="application/ld+json">` tags in the page `<head>`.
 
 ## Client Libraries
 The component provides a `core.wcm.components.page.v1.sharing` client library category that contains the JavaScript

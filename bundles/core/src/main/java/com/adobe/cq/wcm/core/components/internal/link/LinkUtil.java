@@ -65,6 +65,8 @@ public class LinkUtil {
 
     private static final String TEL_PATTERN = "tel";
 
+    private static final String QUICKVIEW_PATTERN = "quickview";
+
     //SITES-18137: imitate the exact behavior of com.google.common.net.URL_FRAGMENT_ESCAPER
     private static final BitSet URL_FRAGMENT_SAFE_CHARS = new BitSet(256);
 
@@ -152,7 +154,13 @@ public class LinkUtil {
             }
 
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            if (parsed != null && isQuickviewScheme(parsed.getScheme())) {
+                // SITES-42596 Since quickview URLs are supported OOTB by the product,
+                // do not log error for them
+                LOG.debug("Quickview URL detected, using fallback construction: {}", path);
+            } else {
+                LOG.error(e.getMessage(), e);
+            }
             StringBuilder sb = new StringBuilder(path);
             if (queryString != null) {
                 sb.append("?").append(maskedQueryString);
@@ -286,5 +294,9 @@ public class LinkUtil {
         } else {
             return false;
         }
+    }
+
+    private static boolean isQuickviewScheme(String scheme) {
+        return QUICKVIEW_PATTERN.equals(scheme);
     }
 }

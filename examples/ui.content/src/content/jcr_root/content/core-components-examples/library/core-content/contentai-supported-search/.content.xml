@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
+        jcr:description="ContentAI Supported Search backed by Content AI search and generative search APIs"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="ContentAI Supported Search"
+        sling:resourceType="core-components-examples/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid">
+            <responsivegrid
+                cq:styleIds="[1545309110033]"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <text
+                    cq:styleIds="[1644862132301]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;h1>ContentAI Supported Search&lt;sub>v1&lt;/sub>&lt;/h1>"
+                    textIsRich="true"/>
+                <text_806535487
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Search component backed by the Content AI &lt;code>content-sources/search&lt;/code> and &lt;code>content-sources/gensearch&lt;/code> APIs. It merges results from configured public content sources and can optionally show a generative summary.&lt;/p>&lt;p>&lt;strong>Note:&lt;/strong> Live search and generative summary require a Content AI API configuration for the AEM environment. Without valid API credentials and content sources, examples may show empty results or errors.&lt;/p>"
+                    textIsRich="true"/>
+                <teaser
+                    cq:styleIds="[1550165685463]"
+                    jcr:description="&lt;p>GitHub&lt;/p>"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Technical Documentation"
+                    sling:resourceType="core-components-examples/components/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/github-logo.svg"
+                    linkURL="https://github.com/adobe/aem-core-wcm-components/blob/main/content/src/content/jcr_root/apps/core/wcm/components/contentaisearch/v1/contentaisearch/README.md"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <title
+                    cq:styleIds="[1544759664489]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Examples"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h2"/>
+                <title_439265523
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Card layout"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_1083667127
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>Default card layout with generative summary toggle visible and enabled by default.&lt;/p>"
+                    textIsRich="true"/>
+                <demo
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo"
+                    fullWidth="{Boolean}true">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <contentaisearch_card
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/contentaisearch"
+                            contentSourceType="ACQUISITION"
+                            contentSources="example-public-source"
+                            genSearchEnabledByDefault="{Boolean}true"
+                            genSearchToggleVisible="{Boolean}true"
+                            placeholder="Search content"
+                            resultsLayout="card"
+                            resultsSize="{Long}12"/>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo>
+                <title_439265524
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="List layout"
+                    sling:resourceType="core-components-examples/components/title"
+                    type="h3"/>
+                <text_1083667128
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/text"
+                    text="&lt;p>List layout with the generative summary toggle hidden from visitors.&lt;/p>"
+                    textIsRich="true"/>
+                <demo_2
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo"
+                    fullWidth="{Boolean}true">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <contentaisearch_list
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/contentaisearch"
+                            contentSourceType="ACQUISITION"
+                            contentSources="example-public-source"
+                            genSearchEnabledByDefault="{Boolean}false"
+                            genSearchToggleVisible="{Boolean}false"
+                            placeholder="Search content"
+                            resultsLayout="list"
+                            resultsSize="{Long}12"/>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_2>
+            </responsivegrid>
+        </root>
+    </jcr:content>
+</jcr:root>

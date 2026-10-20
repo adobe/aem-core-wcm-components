@@ -23,12 +23,12 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.30.5-SNAPSHOT</version>
+        <version>2.32.9-SNAPSHOT</version>
         <relativePath>../../parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.testing.aem-mock-plugin</artifactId>
-    <version>2.30.5-SNAPSHOT</version>
+    <version>2.32.9-SNAPSHOT</version>
     <name>Adobe Experience Manager Core WCM Components AEM Mocks Plugin</name>
 
     <description>Helps setting up mock environment for unit testing custom code based on Core Components.</description>
@@ -43,11 +43,6 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -66,13 +61,13 @@
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.core</artifactId>
-            <version>2.30.5-SNAPSHOT</version>
+            <version>2.32.9-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.junit.core</artifactId>
-            <version>2.30.5-SNAPSHOT</version>
+            <version>2.32.9-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
