@@ -18,19 +18,21 @@ function loadScript(src) {
     return new Promise(function(resolve, reject) {
         const s = document.createElement("script");
         s.src = src;
-        s.onload = function() { resolve(); };
+        s.onload = function() { resolve(s); };
         s.onerror = function() { reject(new Error("failed to load " + src)); };
         document.head.appendChild(s);
     });
 }
 
-// loads the scripts one after the other, preserving their order
+// loads the scripts one after the other, preserving their order, and resolves with the script elements
 function loadScripts(srcs) {
     return srcs.reduce(function(previous, src) {
-        return previous.then(function() {
-            return loadScript(src);
+        return previous.then(function(elements) {
+            return loadScript(src).then(function(element) {
+                return elements.concat(element);
+            });
         });
-    }, Promise.resolve());
+    }, Promise.resolve([]));
 }
 
 function createComponent(id, data, clickable) {
@@ -43,92 +45,108 @@ function createComponent(id, data, clickable) {
     return el;
 }
 
-describe("Test data layer integration (core.wcm.components.commons.datalayer.v1) for", function() {
+const ACDL = "/base/node_modules/@adobe/adobe-client-data-layer/dist/adobe-client-data-layer.min.js";
+const POLYFILL = "/base/src/scripts/datalayer/v1/polyfill.js";
+const DATALAYER = "/base/src/scripts/datalayer/v1/datalayer.js";
 
-    // same order as rendered on the page: the core.wcm.components.commons.datalayer.acdl dependency first,
-    // then the assets of the core.wcm.components.commons.datalayer.v1 clientlib (see clientlib.config.js)
-    const SCRIPTS = [
-        "/base/node_modules/@adobe/adobe-client-data-layer/dist/adobe-client-data-layer.min.js",
-        "/base/src/scripts/datalayer/v1/polyfill.js",
-        "/base/src/scripts/datalayer/v1/datalayer.js"
-    ];
+function describeDataLayerIntegration(description, scripts) {
+    describe(description, function() {
 
-    const TEASER_ID = "teaser-1234";
-    const BUTTON_ID = "button-5678";
-    const PAGE_ID = "page-abcd";
+        const TEASER_ID = "teaser-1234";
+        const BUTTON_ID = "button-5678";
+        const PAGE_ID = "page-abcd";
 
-    let events;
+        let events;
+        let scriptElements;
 
-    beforeAll(async function() {
-        events = [];
-        delete window.adobeDataLayer;
+        beforeAll(async function() {
+            events = [];
+            delete window.adobeDataLayer;
 
-        document.body.dataset.cmpDataLayerEnabled = "";
-        const page = createComponent(PAGE_ID, { "@type": "core/wcm/components/page/v3/page", "dc:title": "Page" });
-        const teaser = createComponent(TEASER_ID, { "@type": "core/wcm/components/teaser/v2/teaser", "dc:title": "Teaser" });
-        const button = createComponent(BUTTON_ID, {
-            "@type": "core/wcm/components/button/v2/button",
-            "dc:title": "Button",
-            "xdm:linkURL": "/content/foo.html"
-        }, true);
-        page.appendChild(teaser);
-        document.body.appendChild(page);
-        document.body.appendChild(button);
+            document.body.dataset.cmpDataLayerEnabled = "";
+            const page = createComponent(PAGE_ID, { "@type": "core/wcm/components/page/v3/page", "dc:title": "Page" });
+            const teaser = createComponent(TEASER_ID, { "@type": "core/wcm/components/teaser/v2/teaser", "dc:title": "Teaser" });
+            const button = createComponent(BUTTON_ID, {
+                "@type": "core/wcm/components/button/v2/button",
+                "dc:title": "Button",
+                "xdm:linkURL": "/content/foo.html"
+            }, true);
+            page.appendChild(teaser);
+            document.body.appendChild(page);
+            document.body.appendChild(button);
 
-        await loadScripts(SCRIPTS);
-        window.adobeDataLayer.push(function(dl) {
-            dl.addEventListener("cmp:click", function(event) {
-                events.push(event);
+            scriptElements = await loadScripts(scripts);
+            window.adobeDataLayer.push(function(dl) {
+                dl.addEventListener("cmp:click", function(event) {
+                    events.push(event);
+                });
             });
         });
-    });
 
-    afterAll(function() {
-        delete document.body.dataset.cmpDataLayerEnabled;
-        document.body.innerHTML = "";
-        delete window.adobeDataLayer;
-    });
-
-    it("bundles Adobe Client Data Layer 3.x", function() {
-        expect(window.adobeDataLayer.version).toMatch(/^3\./);
-        expect(typeof window.adobeDataLayer.getState).toBe("function");
-        expect(typeof window.adobeDataLayer.addEventListener).toBe("function");
-    });
-
-    it("adds the components to the data layer state", function() {
-        const state = window.adobeDataLayer.getState();
-        expect(state.component[PAGE_ID]["dc:title"]).toBe("Page");
-        expect(state.component[TEASER_ID]["dc:title"]).toBe("Teaser");
-        expect(state.component[TEASER_ID].parentId).toBe(PAGE_ID);
-        expect(state.component[BUTTON_ID]["xdm:linkURL"]).toBe("/content/foo.html");
-        expect(window.adobeDataLayer.getState("component." + BUTTON_ID + ".dc:title")).toBe("Button");
-    });
-
-    it("returns a copy of the state", function() {
-        const state = window.adobeDataLayer.getState();
-        state.component[TEASER_ID]["dc:title"] = "Changed";
-        expect(window.adobeDataLayer.getState().component[TEASER_ID]["dc:title"]).toBe("Teaser");
-    });
-
-    it("pushes the cmp:loaded event", function() {
-        const loaded = window.adobeDataLayer.filter(function(item) {
-            return item?.event === "cmp:loaded";
+        afterAll(function() {
+            [PAGE_ID, BUTTON_ID].forEach(function(id) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.remove();
+                }
+            });
+            scriptElements.forEach(function(el) {
+                el.remove();
+            });
+            delete document.body.dataset.cmpDataLayerEnabled;
+            delete window.adobeDataLayer;
         });
-        expect(loaded.length).toBe(1);
-    });
 
-    it("pushes a cmp:click event with the component path on click", function() {
-        document.getElementById(BUTTON_ID).click();
-        expect(events.length).toBe(1);
-        expect(events[0].event).toBe("cmp:click");
-        expect(events[0].eventInfo.path).toBe("component." + BUTTON_ID);
-        expect(window.adobeDataLayer.getState(events[0].eventInfo.path)["dc:title"]).toBe("Button");
-    });
+        it("bundles Adobe Client Data Layer 3.x", function() {
+            expect(window.adobeDataLayer.version).toMatch(/^3\./);
+            expect(typeof window.adobeDataLayer.getState).toBe("function");
+            expect(typeof window.adobeDataLayer.addEventListener).toBe("function");
+        });
 
-    it("merges updates into existing component data", function() {
-        window.adobeDataLayer.push({ component: { [TEASER_ID]: { "xdm:text": "Description" } } });
-        const teaser = window.adobeDataLayer.getState("component." + TEASER_ID);
-        expect(teaser["dc:title"]).toBe("Teaser");
-        expect(teaser["xdm:text"]).toBe("Description");
+        it("adds the components to the data layer state", function() {
+            const state = window.adobeDataLayer.getState();
+            expect(state.component[PAGE_ID]["dc:title"]).toBe("Page");
+            expect(state.component[TEASER_ID]["dc:title"]).toBe("Teaser");
+            expect(state.component[TEASER_ID].parentId).toBe(PAGE_ID);
+            expect(state.component[BUTTON_ID]["xdm:linkURL"]).toBe("/content/foo.html");
+            expect(window.adobeDataLayer.getState("component." + BUTTON_ID + ".dc:title")).toBe("Button");
+        });
+
+        it("returns a copy of the state", function() {
+            const state = window.adobeDataLayer.getState();
+            state.component[TEASER_ID]["dc:title"] = "Changed";
+            expect(window.adobeDataLayer.getState().component[TEASER_ID]["dc:title"]).toBe("Teaser");
+        });
+
+        it("pushes the cmp:loaded event", function() {
+            const loaded = window.adobeDataLayer.filter(function(item) {
+                return item?.event === "cmp:loaded";
+            });
+            expect(loaded.length).toBe(1);
+        });
+
+        it("pushes a cmp:click event with the component path on click", function() {
+            document.getElementById(BUTTON_ID).click();
+            expect(events.length).toBe(1);
+            expect(events[0].event).toBe("cmp:click");
+            expect(events[0].eventInfo.path).toBe("component." + BUTTON_ID);
+            expect(window.adobeDataLayer.getState(events[0].eventInfo.path)["dc:title"]).toBe("Button");
+        });
+
+        it("merges updates into existing component data", function() {
+            window.adobeDataLayer.push({ component: { [TEASER_ID]: { "xdm:text": "Description" } } });
+            const teaser = window.adobeDataLayer.getState("component." + TEASER_ID);
+            expect(teaser["dc:title"]).toBe("Teaser");
+            expect(teaser["xdm:text"]).toBe("Description");
+        });
     });
+}
+
+describe("Test data layer integration (core.wcm.components.commons.datalayer.v1)", function() {
+    // same order as rendered on the page: the core.wcm.components.commons.datalayer.acdl dependency first,
+    // then the assets of the core.wcm.components.commons.datalayer.v1 clientlib (see clientlib.config.js)
+    describeDataLayerIntegration("when the Adobe Client Data Layer is loaded first", [ACDL, POLYFILL, DATALAYER]);
+
+    // the Adobe Client Data Layer may also be loaded after the components (e.g. async includes)
+    describeDataLayerIntegration("when the Adobe Client Data Layer is loaded last", [POLYFILL, DATALAYER, ACDL]);
 });

@@ -52,6 +52,34 @@ To prevent the ACDL library from being included by the Page component:
 2. Add the `skipClientlibInclude` boolean property and set it to `true`.
 3. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
 
+The `skipClientlibInclude` property is used by the Page component v3. Custom client libraries that include the Core Components data layer integration while the ACDL library is loaded in some other way should embed `core.wcm.components.commons.datalayer.v2`, which doesn't load the ACDL library (see below).
+
+## Data Layer Client Libraries
+
+The data layer integration is provided by the following client libraries:
+
+| Client library | Content |
+|---|---|
+| `core.wcm.components.commons.datalayer.acdl` | The ACDL library, served as distributed by the ACDL project (already minified, not processed by the AEM minifier). |
+| `core.wcm.components.commons.datalayer.v2` | The Core Components data layer integration, without the ACDL library. Used by the Page component v3, which includes `core.wcm.components.commons.datalayer.acdl` separately. |
+| `core.wcm.components.commons.datalayer.v1` | The Core Components data layer integration, with a dependency on `core.wcm.components.commons.datalayer.acdl`. Used by the Page component v2. |
+
+`core.wcm.components.commons.datalayer.v1` loads the ACDL library through a client library dependency, so the ACDL library is always output as a separate `<script>` element before the client library that includes `core.wcm.components.commons.datalayer.v1`, also when it is embedded in another client library (e.g. a project `clientlib-base`). Embedding it adds one request for the ACDL library.
+
+Because the ACDL library is loaded as a dependency, it's only output when the client library is included with the standard client library include (e.g. the `core/wcm/components/commons/v1/templates/clientlib.html` template). In particular:
+
+* Inlining a client library (e.g. with `ClientLibraries#getJsInline`) doesn't include its dependencies, so the ACDL library isn't inlined.
+* Client library URLs loaded with hard-coded `<script>` elements don't load the dependencies.
+* An `onload` handler passed to the client library include template is added to every `<script>` element it outputs, so it's also called for the ACDL library.
+
+In these cases, include `core.wcm.components.commons.datalayer.acdl` explicitly, or embed `core.wcm.components.commons.datalayer.v2` and load the ACDL library separately.
+
+Embedding `core.wcm.components.commons.datalayer.acdl` directly in a project client library is not recommended: the ACDL library uses ES2020 syntax, and client libraries configured with the default AEM minifier settings (ES5) fail to minify it and are then served unminified.
+
+### Browser Support
+
+The ACDL library 3.x requires ES2020 and [`structuredClone`](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone) support: Chrome 98+, Firefox 94+ and Safari 15.4+. On older browsers the ACDL library doesn't work, and `adobeDataLayer` may remain a plain array.
+
 ## Data Layer State Structure
 
 When the data layer is enabled, a JavaScript Data Layer object will be available.  By default, the object name is `adobeDataLayer`.  If a name has been defined in the Data Layer configuration (see [Enabling the Data Layer](#enabling-the-data-layer)) the object will be named accordingly.  The Data Layer will be populated with the components and their properties that are used on the page.

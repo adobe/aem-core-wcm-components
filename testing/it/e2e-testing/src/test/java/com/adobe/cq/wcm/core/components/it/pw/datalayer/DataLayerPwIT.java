@@ -28,6 +28,7 @@ import com.microsoft.playwright.Frame;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("playwright-group2")
 public class DataLayerPwIT extends PlaywrightAuthorBaseTest {
@@ -47,6 +48,9 @@ public class DataLayerPwIT extends PlaywrightAuthorBaseTest {
         frame.waitForFunction("() => !!window.adobeDataLayer && typeof window.adobeDataLayer.getState === 'function'"
             + " && !!window.adobeDataLayer.getState().component");
         assertNotNull(frame.evaluate("() => window.adobeDataLayer"), "adobeDataLayer is undefined!");
+        String version = (String) frame.evaluate("() => window.adobeDataLayer.version");
+        assertTrue(version != null && version.startsWith("3."),
+            "expected Adobe Client Data Layer 3.x, got: " + version);
         Map<?, ?> state = (Map<?, ?>) frame.evaluate("() => window.adobeDataLayer.getState()");
         assertNotNull(state, "adobeDataLayer.getState(): returned state object is null!");
         assertNotNull(state.get("page"), "returned state is missing 'page' property!");

@@ -51,7 +51,8 @@ module.exports = {
             path: "src/content/jcr_root/apps/core/wcm/components/commons/datalayer/acdl",
             serializationFormat: "xml",
             allowProxy: true,
-            // the library is distributed already minified (ES2020 syntax)
+            // the library is distributed already minified (ES2020 syntax);
+            // its sourceMappingURL comment is removed after the build (see build/stripSourceMappingURL.js)
             jsProcessor: ["default:none", "min:none"],
             assets: {
                 js: [
