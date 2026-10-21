@@ -189,6 +189,13 @@
             <artifactId>org.apache.sling.models.api</artifactId>
             <version>1.3.8</version>
             <scope>provided</scope>
+            <!-- declared as provided upstream, so never on the classpath -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.sling</groupId>
+                    <artifactId>org.apache.sling.api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Component Exporter -->
