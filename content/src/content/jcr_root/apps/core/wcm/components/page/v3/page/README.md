@@ -29,6 +29,7 @@ Extensible page component written in HTL.
 * Closed user groups and permissions
 * Cloud services
 * [PWA support](https://experienceleague.adobe.com/docs/experience-manager-cloud-service/sites/authoring/features/enable-pwa.html)
+* Structured Data (JSON-LD) injection in the page head
 
 ## Loading of CSS/JS
 The page component automatically loads certain client libraries in the head section and at the end of the body section
@@ -103,6 +104,7 @@ The following properties are written to JCR for this Page component and are expe
 22. `./cq:featuredimage/fileReference` property or `./cq:featuredimage/file` child node - will store either a reference to the image file, or the image file of the featured image of the page.
 23. `./cq:featuredimage/alt` - defines the value of the HTML `alt` attribute of the featured image of the page.
 24. `./cq:featuredimage/altValueFromDAM` - if `true`, the HTML `alt` attribute of the featured image of the page is inherited from the DAM asset.
+25. `./cq:structuredData` - defines a list of JSON-LD blocks rendered as `<script type="application/ld+json">` tags in the page `<head>`.
 
 ## Web Resources Client Library
 A web resources client library can be defined at the template level (see `./appResourcesClientlib` component policy configuration).

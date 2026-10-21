@@ -36,6 +36,7 @@
     var presetTypeSelector = ".cmp-image__editor-dynamicmedia-presettype";
     var imagePresetDropDownSelector = ".cmp-image__editor-dynamicmedia-imagepreset";
     var smartCropRenditionDropDownSelector = ".cmp-image__editor-dynamicmedia-smartcroprendition";
+    var imageModifiersSelector = "input[name='./imageModifiers']";
     var imagePropertiesRequest;
     var imagePath;
     var smartCropRenditionFromJcr;
@@ -64,6 +65,72 @@
     var imagePresetRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='imagePreset']";
     var smartCropRadio = ".cmp-image__editor-dynamicmedia-presettype input[name='./dmPresetType'][value='smartCrop']";
     var remoteFileReference;
+    var dataSeededValueAttr = "data-seeded-value";
+
+    var CT_SITES_41279 = "CT_SITES-41279";
+    /*
+     * Granite feature toggle CT_SITES-41279 gates Image v3 editor markup helpers (Coral crop labels, Dynamic Media path checks,
+     * page-image thumbnail shell import). Helpers stay on unless the toggle is explicitly false—use false only as a short
+     * operator rollback while investigating regressions; Cloud environments should ship with this enabled.
+     */
+
+    function isImageV3AuthoringMarkupHelpersEnabled() {
+        if (!Granite || !Granite.Toggles || typeof Granite.Toggles.isEnabled !== "function") {
+            return true;
+        }
+        return Granite.Toggles.isEnabled(CT_SITES_41279) !== false;
+    }
+
+    function getImageAuthoringUtils() {
+        return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.image;
+    }
+
+    /**
+     * Label HTML for smart crop dropdown items; with CT_SITES-41279, values are prepared for Coral innerHTML rendering.
+     *
+     * @param {*} value smart crop label or related value
+     * @returns {String} label text or HTML-safe markup suitable for Coral rendering when CT_SITES-41279 applies
+     */
+    function formatSmartCropOptionLabel(value) {
+        if (isImageV3AuthoringMarkupHelpersEnabled()) {
+            var utils = getImageAuthoringUtils();
+            if (!utils) {
+                return String(value == null ? "" : value);
+            }
+            if (typeof utils.formatPlainTextForMarkup !== "function") {
+                return String(value == null ? "" : value);
+            }
+            return utils.formatPlainTextForMarkup(value);
+        }
+        if (value === undefined || value === null) {
+            return "";
+        }
+        return String(value);
+    }
+
+    /**
+     * Whether dam:scene7File can drive image service requests; with CT_SITES-41279, repository path rules from commons apply.
+     *
+     * @param {*} path dam:scene7File or equivalent metadata path
+     * @returns {Boolean} whether the path is allowed for scene7-style requests when CT_SITES-41279 applies
+     */
+    function isDamScene7FileEligible(path) {
+        if (isImageV3AuthoringMarkupHelpersEnabled()) {
+            var utils = getImageAuthoringUtils();
+            if (!utils) {
+                return true;
+            }
+            if (typeof utils.isDamScene7PathEligible !== "function") {
+                return true;
+            }
+            return utils.isDamScene7PathEligible(path);
+        }
+        return true;
+    }
+
+    function getAuthoringPathUtils() {
+        return window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.AuthoringEditorUtils && window.CQ.CoreComponents.AuthoringEditorUtils.path;
+    }
 
     $(document).on("dialog-loaded", function(e) {
         altTextFromPage = undefined;
@@ -118,8 +185,7 @@
                     fileReference = e.path;
                     // if it is a remote asset
                     remoteFileReference = $cqFileUpload.find("input[name='./fileReference']").val();
-                    if (fileReference === undefined && remoteFileReference && remoteFileReference !== "" &&
-                        remoteFileReference.includes("urn:aaid:aem")) {
+                    if (fileReference === undefined && isRemoteFileReference(remoteFileReference)) {
                         fileReference = remoteFileReference;
                         smartCropRenditionFromJcr = "NONE"; // for newly selected asset we clear the smartcrop selection dropdown
                     }
@@ -203,7 +269,6 @@
     $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
         selector: altInputSelector,
         validate: function() {
-            var seededValue = document.querySelector(altInputSelector).getAttribute("data-seeded-value");
             var imageFromPageImage = document.querySelector('coral-checkbox[name="./imageFromPageImage"]');
             var isImageFromPageImageChecked = imageFromPageImage ? (imageFromPageImage.checked || false) : false;
             var altFromDAM = document.querySelector('coral-checkbox[name="./altValueFromDAM"]');
@@ -213,7 +278,12 @@
             var isDecorativeChecked = document.querySelector("coral-checkbox[name='./isDecorative']").checked;
             var assetWithoutDescriptionErrorMessage = Granite.I18n.get("Error: Please provide an asset which has a description that can be used as alt text.");
 
-            if (!isDecorativeChecked && !seededValue &&
+            var altEl = document.querySelector(altInputSelector);
+            var dataSeededValue = altEl ? altEl.getAttribute(dataSeededValueAttr) : "";
+            var currentValue = altEl ? altEl.value : "";
+            var effectiveAlt = (currentValue && currentValue.trim()) || (dataSeededValue && dataSeededValue.trim());
+
+            if (!isDecorativeChecked && !effectiveAlt &&
                 ((isImageFromPageImageChecked && isAltFromPageImageChecked) ||
                     (!isImageFromPageImageChecked && isAltFromDAMChecked && !isAltFromDAMDisabled))) {
                 return assetWithoutDescriptionErrorMessage;
@@ -281,6 +351,38 @@
         updateImageThumbnail();
     });
 
+    // trigger alt validation after value inserted
+    $(document).on("change", dialogContentSelector + " " + altCheckboxSelector, function(e) {
+        var altEl = document.querySelector(altInputSelector);
+        if (!altEl) {
+            return;
+        }
+
+        if (e.target.checked) {
+            var useAltFromDAM = typeof altTextFromDAM === "string" && altTextFromDAM.trim() !== "";
+            var value = useAltFromDAM ? altTextFromDAM : "";
+            altEl.value = value;
+            altEl.setAttribute(dataSeededValueAttr, value);
+        } else {
+            altEl.setAttribute(dataSeededValueAttr, "");
+            if (!altEl.value.trim()) {
+                var fieldAPI = $(altEl).adaptTo("foundation-field");
+                var msg = Granite.I18n.get("Error: Alternative text for accessibility field is required");
+                fieldAPI.setInvalid(true, msg);
+            }
+        }
+
+        toggleAltTextValidity();
+    });
+
+    $(document).on("input change", altInputSelector, function() {
+        var el = this;
+        if (el && el.getAttribute) {
+            el.setAttribute(dataSeededValueAttr, "");
+        }
+        toggleAltTextValidity();
+    });
+
     $(document).on("change", dialogContentSelector + " " + presetTypeSelector, function(e) {
         switch (e.target.value) {
             case "imagePreset":
@@ -302,6 +404,17 @@
         var linkValue;
         var thumbnailConfigPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailConfigPathAttribute);
         var thumbnailComponentPath = $(dialogContentSelector).find(pageImageThumbnailSelector).attr(pageImageThumbnailComponentPathAttribute);
+        if (isImageV3AuthoringMarkupHelpersEnabled()) {
+            var pathUtils = getAuthoringPathUtils();
+            if (
+                !pathUtils ||
+                typeof pathUtils.matchesRepoPathAttributePattern !== "function" ||
+                !pathUtils.matchesRepoPathAttributePattern(thumbnailConfigPath) ||
+                !pathUtils.matchesRepoPathAttributePattern(thumbnailComponentPath)
+            ) {
+                return $.Deferred().resolve().promise();
+            }
+        }
         $firstCtaLinkField = $dialogContent.find(firstCtaLinkFieldSelector);
         if ($linkURLField && $linkURLField.adaptTo("foundation-field") && $linkURLField.adaptTo("foundation-field").getValue()) {
             linkValue = $linkURLField.adaptTo("foundation-field").getValue();
@@ -320,9 +433,20 @@
             }
         }).done(function(data) {
             if (data) {
-
-                // update the thumbnail image
-                $pageImageThumbnail.replaceWith(data);
+                if (isImageV3AuthoringMarkupHelpersEnabled()) {
+                    var imageAuthoringUtils = getImageAuthoringUtils();
+                    var thumbnailClone =
+                        imageAuthoringUtils &&
+                        typeof imageAuthoringUtils.importParsedPageImageThumbnail === "function"
+                            ? imageAuthoringUtils.importParsedPageImageThumbnail(data, document)
+                            : null;
+                    if (!thumbnailClone) {
+                        return;
+                    }
+                    $pageImageThumbnail.replaceWith(thumbnailClone);
+                } else {
+                    $pageImageThumbnail.replaceWith(data);
+                }
                 $pageImageThumbnail = $(dialogContentSelector).find(pageImageThumbnailSelector);
                 if (imageFromPageImage && imageFromPageImage.checked) {
                     $pageImageThumbnail.show();
@@ -371,9 +495,16 @@
                 altFromPageTuple.hideCheckbox(!fromPageCheckbox.checked);
                 if (fromPageCheckbox.checked) {
                     altFromPageTuple.seedTextValue(altTextFromPage);
+                    var altEl = document.querySelector(altInputSelector);
+                    var seeded = fromPageCheckbox.checked ? altTextFromPage : altTextFromDAM;
+                    if (altEl && seeded) {
+                        altEl.setAttribute(dataSeededValueAttr, seeded);
+                    }
+                    toggleAltTextValidity();
                     altFromPageTuple.update();
                 } else if (!isRemoteFileReference(remoteFileReference)) {
                     altTuple.seedTextValue(altTextFromDAM);
+                    toggleAltTextValidity();
                     altTuple.update();
                 }
             }
@@ -405,18 +536,32 @@
     }
 
     function isRemoteFileReference(fileReference) {
-        return fileReference && fileReference !== "" && fileReference.includes("urn:aaid:aem");
+        return typeof fileReference === "string" && fileReference.startsWith("/urn:aaid:aem");
+    }
+
+    function hideSmartCropRenditionField() {
+        $dynamicMediaGroup.find(smartCropRenditionDropDownSelector).parent().hide();
+        resetSelectField($dynamicMediaGroup.find(smartCropRenditionDropDownSelector));
+    }
+
+    /**
+     * Remote AEM assets (urn:aaid:aem): always show the Image Modifiers field in the dialog.
+     */
+    function showImageModifiersForRemoteAsset() {
+        if (imageFromPageImage && !imageFromPageImage.checked) {
+            $dynamicMediaGroup.show();
+        }
+        $dynamicMediaGroup.find(imageModifiersSelector).parent().show();
     }
 
     function retrieveDAMInfo(fileReference) {
-        if (fileReference.startsWith("/urn:aaid:aem")) {
-            return new Promise((resolve, reject) => {
-                fileReference = fileReference.substring(0, fileReference.lastIndexOf("/"));
-                if (isPolarisEnabled && areDMFeaturesEnabled) {
-                    var imageUrl = `https://${polarisRepositoryId}/adobe/assets${fileReference}/metadata`;
-                    getPolarisSmartCropRenditions(imageUrl);
-                    resolve();
-                }
+        if (isRemoteFileReference(fileReference) && isPolarisEnabled && areDMFeaturesEnabled) {
+            // fileReference is /urn:aaid:aem:<assetID>/seoname.format; strip the SEO suffix to get the asset UUID.
+            var polarisMetadataPath = fileReference.substring(0, fileReference.lastIndexOf("/"));
+            return new Promise(function(resolve) {
+                var imageUrl = "https://" + polarisRepositoryId + "/adobe/assets" + polarisMetadataPath + "/metadata";
+                getPolarisSmartCropRenditions(imageUrl);
+                resolve();
             });
         }
         return $.ajax({
@@ -430,6 +575,11 @@
                     }
                     altTuple.seedTextValue(altTextFromDAM);
                     altTuple.update();
+                    var altEl = document.querySelector(altInputSelector);
+                    if (altEl && altTextFromDAM) {
+                        altEl.setAttribute(dataSeededValueAttr, altTextFromDAM);
+                    }
+                    toggleAltTextValidity();
                     toggleAlternativeFieldsAndLink(imageFromPageImage, isDecorative);
                 }
                 if (captionTuple) {
@@ -446,7 +596,12 @@
                     if (!imageFromPageImage.checked) {
                         $dynamicMediaGroup.show();
                     }
-                    getSmartCropRenditions(data["dam:scene7File"]);
+                    if (isDamScene7FileEligible(data["dam:scene7File"])) {
+                        getSmartCropRenditions(data["dam:scene7File"]);
+                    } else {
+                        $dynamicMediaGroup.find(presetTypeSelector).parent().hide();
+                        selectPresetType($(presetTypeSelector), "imagePreset");
+                    }
                 }
             }
         });
@@ -471,10 +626,58 @@
             // we want to call retrieveDAMInfo after loading the dialog so that saved smartcrop rendition of remote asset
             // can be shown on initial load. Also adding condition filePath.endsWith("/cq:featuredimage") to trigger alt
             // update for page properties.
-            if (remoteFileReference && remoteFileReference !== "" && (remoteFileReference.includes("urn:aaid:aem") || filePath.endsWith("/cq:featuredimage"))) {
+            if (remoteFileReference && remoteFileReference !== "" && (isRemoteFileReference(remoteFileReference) || filePath.endsWith("/cq:featuredimage"))) {
                 retrieveDAMInfo(remoteFileReference);
             }
         });
+    }
+
+    /**
+     * Applies Polaris remote-asset metadata to Dynamic Media dialog fields (smart crops, presets, modifiers).
+     *
+     * @param {Number} status HTTP status from the metadata request
+     * @param {String} responseText JSON response body
+     */
+    function processPolarisSmartCropMetadataResponse(status, responseText) {
+        if (status < 200 || status >= 400) {
+            return;
+        }
+        // show dynamic media options only if the shown image is not inherited from page image
+        if (!imageFromPageImage.checked) {
+            $dynamicMediaGroup.show();
+        }
+        $(imagePresetRadio).parent().hide();
+        $(smartCropRadio).prop("checked", true);
+        var smartcrops;
+        if (responseText) {
+            smartcrops = JSON.parse(responseText).repositoryMetadata.smartcrops;
+        }
+        if (smartcrops !== undefined) {
+            $dynamicMediaGroup.find(presetTypeSelector).parent().show();
+            var smartcropnames = Object.keys(smartcrops);
+            if (smartCropRenditionsDropDown.items) {
+                smartCropRenditionsDropDown.items.clear();
+            }
+            addSmartCropDropDownItem("NONE", "", true);
+            // "AUTO" would trigger automatic smart crop operation; also we need to check "AUTO" was chosed in previous session
+            addSmartCropDropDownItem("Auto", "SmartCrop:Auto", (smartCropRenditionFromJcr === "SmartCrop:Auto"));
+            for (var p = 0; p < smartcropnames.length; p++) {
+                var cropName = smartcropnames[p];
+                smartCropRenditionsDropDown.items.add({
+                    content: {
+                        innerHTML: formatSmartCropOptionLabel(cropName)
+                    },
+                    disabled: false,
+                    selected: (smartCropRenditionFromJcr === cropName)
+                });
+            }
+            prepareSmartCropPanel();
+        } else {
+            $dynamicMediaGroup.find(presetTypeSelector).parent().hide();
+            $dynamicMediaGroup.find(imagePresetDropDownSelector).parent().hide();
+            hideSmartCropRenditionField();
+        }
+        showImageModifiersForRemoteAsset();
     }
 
     function getPolarisSmartCropRenditions(imageUrl) {
@@ -483,39 +686,8 @@
         }
         imagePropertiesRequest = new XMLHttpRequest();
         imagePropertiesRequest.open("GET", imageUrl, true);
-        imagePropertiesRequest.setRequestHeader("X-Adobe-Accept-Experimental", "1");
         imagePropertiesRequest.onload = function() {
-            if (imagePropertiesRequest.status >= 200 && imagePropertiesRequest.status < 400) {
-                // show dynamic media options only if the shown image is not inherited from page image
-                if (!imageFromPageImage.checked) {
-                    $dynamicMediaGroup.show();
-                }
-                $(imagePresetRadio).parent().hide();
-                $(smartCropRadio).prop("checked", true);
-                var responseText = imagePropertiesRequest.responseText;
-                var smartcrops = JSON.parse(responseText).repositoryMetadata.smartcrops;
-                if (smartcrops !== undefined) {
-                    var smartcropnames = Object.keys(smartcrops);
-                    if (smartCropRenditionsDropDown.items) {
-                        smartCropRenditionsDropDown.items.clear();
-                    }
-                    addSmartCropDropDownItem("NONE", "", true);
-                    // "AUTO" would trigger automatic smart crop operation; also we need to check "AUTO" was chosed in previous session
-                    addSmartCropDropDownItem("Auto", "SmartCrop:Auto", (smartCropRenditionFromJcr === "SmartCrop:Auto"));
-                    for (var i in smartcropnames) {
-                        smartCropRenditionsDropDown.items.add({
-                            content: {
-                                innerHTML: smartcropnames[i]
-                            },
-                            disabled: false,
-                            selected: (smartCropRenditionFromJcr === smartcropnames[i])
-                        });
-                    }
-                } else {
-                    $dynamicMediaGroup.hide();
-                }
-            }
-            prepareSmartCropPanel();
+            processPolarisSmartCropMetadataResponse(imagePropertiesRequest.status, imagePropertiesRequest.responseText);
         };
         imagePropertiesRequest.send();
     }
@@ -525,11 +697,23 @@
      * @param {String} imageUrl The link to image asset
      */
     function getSmartCropRenditions(imageUrl) {
+        if (!isDamScene7FileEligible(imageUrl)) {
+            return;
+        }
         if (imagePropertiesRequest) {
             imagePropertiesRequest.abort();
         }
         imagePropertiesRequest = new XMLHttpRequest();
         var url = window.location.origin + "/is/image/" + imageUrl + "?req=set,json";
+        if (isImageV3AuthoringMarkupHelpersEnabled()) {
+            try {
+                if (new URL(url).origin !== window.location.origin) {
+                    return;
+                }
+            } catch (err) {
+                return;
+            }
+        }
         imagePropertiesRequest.open("GET", url, true);
         imagePropertiesRequest.onload = function() {
             if (imagePropertiesRequest.status >= 200 && imagePropertiesRequest.status < 400) {
@@ -556,12 +740,15 @@
                     // "AUTO" would trigger automatic smart crop operation; also we need to check "AUTO" was chosed in previous session
                     addSmartCropDropDownItem("Auto", "SmartCrop:Auto", (smartCropRenditionFromJcr === "SmartCrop:Auto"));
                     for (var i = 0; i < payload.set.relation.length; i++) {
+                        var row = payload.set.relation[i];
+                        var userdata = row.userdata || {};
+                        var smartCropDef = userdata.SmartCropDef;
                         smartCropRenditionsDropDown.items.add({
                             content: {
-                                innerHTML: payload.set.relation[i].userdata.SmartCropDef
+                                innerHTML: formatSmartCropOptionLabel(smartCropDef)
                             },
                             disabled: false,
-                            selected: (smartCropRenditionFromJcr === payload.set.relation[i].userdata.SmartCropDef)
+                            selected: (smartCropRenditionFromJcr === smartCropDef)
                         });
                     }
                     $dynamicMediaGroup.find(presetTypeSelector).parent().show();
@@ -662,8 +849,8 @@
         var observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 if (mutation.type === "attributes") {
-                    var isAltCheckboxChecked = $(altCheckboxSelector).attr("checked");
-                    if ((mutation.attributeName === "data-seeded-value" && isAltCheckboxChecked) || ["invalid", "disabled"].includes(mutation.attributeName)) {
+                    var isAltCheckboxChecked = $(altCheckboxSelector).prop("checked");
+                    if ((mutation.attributeName === dataSeededValueAttr && isAltCheckboxChecked) || mutation.attributeName === "disabled") {
                         toggleAltTextValidity();
                     }
                 }
@@ -673,7 +860,7 @@
         var altInput = document.querySelector(altInputSelector);
         if (altInput) {
             observer.observe(altInput, {
-                attributeFilter: ["data-seeded-value", "disabled", "invalid"]
+                attributeFilter: [dataSeededValueAttr, "disabled"]
             });
         }
     }
@@ -690,17 +877,113 @@
         var assetTab = $(assetTabSelector);
         var assetTabAlertIcon = $(assetTabAlertIconSelector);
 
-        if ($(altInputSelector).val()) {
+        var $alt = $(altInputSelector);
+        var altEl = $alt.length ? $alt[0] : null;
+        var val = altEl ? altEl.value : "";
+        var seeded = altEl ? altEl.getAttribute(dataSeededValueAttr) : "";
+        var hasAlt = (val && val.trim() !== "") || (seeded && seeded.trim() !== "");
+
+        var fieldAPI = $alt.length ? $alt.adaptTo("foundation-field") : null;
+        var msg = Granite.I18n.get("Error: Alternative text for accessibility field is required");
+
+        var $wrapper = $alt.closest(".coral-Form-fieldwrapper");
+        if (!$wrapper.length) {
+            $wrapper = $alt.parent();
+        }
+        var $errorLabel = $wrapper.find("label.coral-Form-errorlabel");
+
+        if (hasAlt) {
+            if (fieldAPI) {
+                fieldAPI.setInvalid(false);
+            }
             $(altInputSelector).removeClass("is-invalid");
             alertIcon.hide();
             assetTab.removeClass("is-invalid");
             assetTabAlertIcon.hide();
+            if ($errorLabel.length) {
+                $errorLabel.remove();
+            }
         } else {
+            if (fieldAPI) {
+                fieldAPI.setInvalid(true, msg);
+            }
+            if ($errorLabel.length === 0) {
+                $('<label class="coral-Form-errorlabel" role="alert">')
+                    .text(msg)
+                    .appendTo($wrapper);
+            } else {
+                $errorLabel.text(msg);
+            }
             $(altInputSelector).addClass("is-invalid");
             alertIcon.show();
             assetTab.addClass("is-invalid");
             assetTabAlertIcon.show();
         }
+    }
+
+    var imageV3EditorTestApiHost = typeof globalThis === "undefined" ? window : globalThis;
+
+    /* Karma (mocks.js) sets __IMAGE_V3_EDITOR_TEST_API on the global object; AEM runtime leaves it undefined. */
+    if (imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API) {
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.formatSmartCropOptionLabel = formatSmartCropOptionLabel;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.isDamScene7FileEligible = isDamScene7FileEligible;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.isImageV3AuthoringMarkupHelpersEnabled = isImageV3AuthoringMarkupHelpersEnabled;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.getImageAuthoringUtils = getImageAuthoringUtils;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.getAuthoringPathUtils = getAuthoringPathUtils;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.isRemoteFileReference = isRemoteFileReference;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.processPolarisSmartCropMetadataResponse = processPolarisSmartCropMetadataResponse;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.retrieveDAMInfo = retrieveDAMInfo;
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.setRetrieveDAMTestState = function(state) {
+            if (state.isPolarisEnabled !== undefined) {
+                isPolarisEnabled = state.isPolarisEnabled;
+            }
+            if (state.areDMFeaturesEnabled !== undefined) {
+                areDMFeaturesEnabled = state.areDMFeaturesEnabled;
+            }
+            if (state.polarisRepositoryId !== undefined) {
+                polarisRepositoryId = state.polarisRepositoryId;
+            }
+        };
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.installRemoteAssetDynamicMediaTestFixture = function(rootElement) {
+            $dialogContent = $(rootElement);
+            $dynamicMediaGroup = $dialogContent.find(".cmp-image__editor-dynamicmedia");
+            smartCropRenditionsDropDown = rootElement.querySelector(".cmp-image__editor-dynamicmedia-smartcroprendition");
+            if (smartCropRenditionsDropDown) {
+                if (!smartCropRenditionsDropDown.items) {
+                    smartCropRenditionsDropDown.items = {
+                        clear: function() {
+                            this._entries = [];
+                        },
+                        add: function(entry) {
+                            if (!this._entries) {
+                                this._entries = [];
+                            }
+                            this._entries.push(entry);
+                        }
+                    };
+                }
+                if (typeof smartCropRenditionsDropDown.clear !== "function") {
+                    smartCropRenditionsDropDown.clear = function() {};
+                }
+            }
+            imageFromPageImage = rootElement.querySelector("coral-checkbox[name='./imageFromPageImage']");
+            if (!imageFromPageImage) {
+                imageFromPageImage = document.createElement("coral-checkbox");
+                imageFromPageImage.setAttribute("name", "./imageFromPageImage");
+                imageFromPageImage.checked = false;
+                rootElement.insertBefore(imageFromPageImage, rootElement.firstChild);
+            }
+        };
+        imageV3EditorTestApiHost.__IMAGE_V3_EDITOR_TEST_API.importPageImageThumbnailFromMarkup = function(markup, targetDocument) {
+            var imageAuthoringUtils = getImageAuthoringUtils();
+            if (
+                !imageAuthoringUtils ||
+                typeof imageAuthoringUtils.importParsedPageImageThumbnail !== "function"
+            ) {
+                return null;
+            }
+            return imageAuthoringUtils.importParsedPageImageThumbnail(markup, targetDocument);
+        };
     }
 
 })(jQuery, Granite);

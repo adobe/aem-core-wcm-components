@@ -42,6 +42,7 @@
             <input is="coral-textfield"
                    class="cmp-childreneditor__item-title"
                    data-cmp-hook-childreneditor="itemTitle"
+                   aria-label="${item.title @ i18n}"
                    name="./${item.name}/cq:panelTitle"
                    value="${item.value}"
                    data-sly-attribute.disabled="${item.isLiveCopy}"

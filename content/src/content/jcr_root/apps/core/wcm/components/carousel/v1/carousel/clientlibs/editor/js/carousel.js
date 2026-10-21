@@ -46,6 +46,15 @@
                 }
 
                 setupActiveSelect(dialogContent);
+
+                // Set tooltips boundary
+                var tooltips = $(selectors.autoplayGroup).find("coral-tooltip");
+                tooltips.each(function() {
+                    var tooltip = this;
+                    tooltip.set({
+                        within: $(selectors.autoplayGroup)
+                    });
+                });
             }
         }
     });
