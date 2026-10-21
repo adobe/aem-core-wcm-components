@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:deviceGroups="[/etc/mobile/groups/responsive]"
+        cq:template="/conf/core-components-examples/settings/wcm/templates/base-page"
+        jcr:primaryType="cq:PageContent"
+        sling:resourceType="core-components-examples/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid">
+            <responsivegrid_1409995310
+                cq:styleIds="[1545309104202]"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <image_1442382866
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/image"
+                    altValueFromDAM="true"
+                    displayPopupTitle="true"
+                    fileReference="/content/dam/core-components-examples/library/aem-corecomponents-logo.svg"
+                    isDecorative="false"
+                    linkURL="/content/core-components-examples/library"
+                    titleValueFromDAM="true"/>
+            </responsivegrid_1409995310>
+            <sidebar
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="core-components-examples/components/sidebar"
+                id="mainNavigation">
+                <cq:responsive jcr:primaryType="nt:unstructured"/>
+                <image_1442382866_cop
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/image"
+                    altValueFromDAM="true"
+                    displayPopupTitle="true"
+                    fileReference="/content/dam/core-components-examples/library/aem-corecomponents-logo.svg"
+                    isDecorative="false"
+                    linkURL="/content/core-components-examples/library"
+                    titleValueFromDAM="true"/>
+                <accordion
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/accordion"
+                    expandedItems="[item_1579021121673,item_1579021131667,item_1579021109267,item_1579021109268,item_1579021109269,item_1579021109270,item_1879021109280]"
+                    singleExpansion="false">
+                    <item_1579021121673
+                        cq:panelTitle="Core Structure"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/navigation"
+                        collectAllPages="false"
+                        navigationRoot="/content/core-components-examples/library/core-structure"
+                        structureDepth="1"
+                        structureStart="1"/>
+                    <item_1579021131667
+                        cq:panelTitle="Core Content"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/navigation"
+                        collectAllPages="false"
+                        navigationRoot="/content/core-components-examples/library/core-content"
+                        structureDepth="1"
+                        structureStart="1"/>
+                    <item_1579021109268
+                        cq:panelTitle="Core Form"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/navigation"
+                        collectAllPages="false"
+                        navigationRoot="/content/core-components-examples/library/core-form"
+                        structureDepth="1"
+                        structureStart="1"/>
+                    <item_1579021109269/> <!-- Commerce menu items -->
+                    <item_1579021109270/> <!-- Forms And Communications Portal menu items -->
+                    <item_1879021109280/> <!-- Adaptive Form Component Items -->
+                </accordion>
+            </sidebar>
+            <responsivegrid
+                cq:styleIds="[1545309110033]"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid"
+                editable="{Boolean}true">
+                <cq:responsive jcr:primaryType="nt:unstructured"/>
+            </responsivegrid>
+            <responsivegrid_2176569853
+                cq:styleIds="[1551382932159]"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <cq:responsive jcr:primaryType="nt:unstructured"/>
+                <separator
+                    cq:styleIds="[1550355113852]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/separator"/>
+                <footer
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/version/footer"/>
+            </responsivegrid_2176569853>
+        </root>
+        <cq:responsive jcr:primaryType="nt:unstructured">
+            <breakpoints jcr:primaryType="nt:unstructured">
+                <extrasmall
+                    jcr:primaryType="nt:unstructured"
+                    title="Extra Small"
+                    width="{Long}480"/>
+                <small
+                    jcr:primaryType="nt:unstructured"
+                    title="Small"
+                    width="{Long}768"/>
+                <medium
+                    jcr:primaryType="nt:unstructured"
+                    title="Medium"
+                    width="{Long}1024"/>
+                <large
+                    jcr:primaryType="nt:unstructured"
+                    title="Large"
+                    width="{Long}1280"/>
+            </breakpoints>
+        </cq:responsive>
+    </jcr:content>
+</jcr:root>

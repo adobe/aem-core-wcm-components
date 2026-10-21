@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:Template">
+    <jcr:content
+        cq:templateType="/conf/core-components-examples/settings/wcm/template-types/content-page"
+        jcr:description="Base content page for Core Components Library that does not load the form client libraries"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Base Page"
+        status="enabled"/>
+</jcr:root>
