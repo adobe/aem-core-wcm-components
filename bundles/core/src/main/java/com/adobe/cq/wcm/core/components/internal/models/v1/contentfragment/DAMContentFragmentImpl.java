@@ -22,7 +22,7 @@ import com.adobe.cq.dam.cfm.ContentFragment;
 import com.adobe.cq.dam.cfm.ContentFragmentException;
 import com.adobe.cq.dam.cfm.ContentVariation;
 import com.adobe.cq.dam.cfm.FragmentData;
-import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.collections4.IteratorUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
@@ -88,8 +88,12 @@ public class DAMContentFragmentImpl implements DAMContentFragment {
             final Iterator<ContentElement> contentElementIterator =
                     ContentFragmentUtils.filterElements(contentFragment, elementNames);
 
-            // Wrap elements and get their configured variation (if any)
+            // Wrap elements and get their configured variation (if any). A composite (nested/structured)
+            // element is kept in `elements` (consumed by HTL and the data layer, which render an
+            // "unsupported" hint for it) but left out of `exportedElements` (consumed by the JSON
+            // export getters), so the export omits it while the page render can still flag it.
             this.exportedElements = new LinkedHashMap<>();
+            this.elements = new ArrayList<>();
             while (contentElementIterator.hasNext()) {
                 final ContentElement contentElement = contentElementIterator.next();
                 ContentVariation variation = null;
@@ -99,11 +103,12 @@ public class DAMContentFragmentImpl implements DAMContentFragment {
                         LOG.warn("Non-existing variation '{}' of element '{}'", variationName, contentElement.getName());
                     }
                 }
-                this.exportedElements.put(contentElement.getName(),
-                        new DAMContentElementImpl(contentTypeConverter, contentElement, variation));
+                final DAMContentElement damContentElement = new DAMContentElementImpl(contentTypeConverter, contentElement, variation);
+                this.elements.add(damContentElement);
+                if (!ContentFragmentUtils.isCompositeElement(contentElement)) {
+                    this.exportedElements.put(contentElement.getName(), damContentElement);
+                }
             }
-
-            this.elements = new ArrayList<>(exportedElements.values());
         }
     }
 

@@ -39,8 +39,8 @@ describe("Common Utils suite", function() {
                 "transform": function(value) {
                     var widths = [];
                     value.split(",").forEach(function(item) {
-                        item = parseFloat(item);
-                        if (!isNaN(item)) {
+                        item = Number.parseFloat(item);
+                        if (!Number.isNaN(item)) {
                             widths.push(item);
                         }
                     });

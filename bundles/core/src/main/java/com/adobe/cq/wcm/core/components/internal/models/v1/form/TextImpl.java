@@ -17,15 +17,14 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
 import javax.annotation.PostConstruct;
 
+import com.day.cq.wcm.api.designer.Style;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.apache.sling.models.annotations.injectorspecific.*;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -33,6 +32,7 @@ import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
 import com.adobe.cq.wcm.core.components.models.form.Text;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import com.day.cq.wcm.foundation.forms.FormsHelper;
+import org.jetbrains.annotations.Nullable;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Text.class, ComponentExporter.class},
@@ -54,6 +54,8 @@ public class TextImpl extends AbstractFieldImpl implements Text, ComponentExport
     private static final boolean PROP_USE_PLACEHOLDER_DEFAULT = false;
     private static final int PROP_ROWS_DEFAULT = 2;
     private static final boolean PROP_HIDE_TITLE_DEFAULT = false;
+    public static final String PROP_DISPLAY_VALIDATION = "displayValidation";
+    public static final boolean PROP_DISPLAY_VALIDATION_DEFAULT = false;
 
     @Self
     private SlingHttpServletRequest slingRequest;
@@ -103,6 +105,16 @@ public class TextImpl extends AbstractFieldImpl implements Text, ComponentExport
     @Default(booleanValues = PROP_HIDE_TITLE_DEFAULT)
     private boolean hideTitle;
 
+    /**
+     * The current style for this component.
+     */
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @JsonIgnore
+    @Nullable
+    protected Style currentStyle;
+
+    private boolean displayValidationMassages;
+
     @PostConstruct
     private void initModel() {
         slingRequest.setAttribute(FormsHelper.REQ_ATTR_FORM_STRUCTURE_HELPER,
@@ -113,6 +125,10 @@ public class TextImpl extends AbstractFieldImpl implements Text, ComponentExport
         }
         if (usePlaceholder) {
             placeholder = helpMessage;
+        }
+
+        if (currentStyle !=null) {
+            displayValidationMassages = currentStyle.get(PROP_DISPLAY_VALIDATION, PROP_DISPLAY_VALIDATION_DEFAULT);
         }
     }
 
@@ -190,4 +206,8 @@ public class TextImpl extends AbstractFieldImpl implements Text, ComponentExport
         return hideTitle;
     }
 
+    @Override
+    public boolean displayValidation() {
+        return displayValidationMassages;
+    }
 }

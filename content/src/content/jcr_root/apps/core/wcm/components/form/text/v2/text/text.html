@@ -46,4 +46,5 @@
            required="${text.required}"
            spellcheck="true"
            data-sly-attribute.aria-describedby="${text.helpMessage ? [text.id, 'helpMessage'] : '' @ join = '-'}"/>
+    <label data-sly-test="${text.displayValidation}" for="${text.id}" class="cmp-form-text__validation-message"></label>
 </div>

@@ -36,11 +36,15 @@ public class NextGenDMImageURIBuilder {
 
     private NextGenDynamicMediaConfig config;
     private String fileReference;
-    private String smartCropAspectRatio;
+    private String smartCropName;
+    private String token;
+    private String tokenExpiry;
     private int width = DEFAULT_NGDM_ASSET_WIDTH;
 
     private int height;
     private boolean preferWebp = true;
+
+    private String modifiers;
 
     public NextGenDMImageURIBuilder(NextGenDynamicMediaConfig config, String fileReference) {
         this.config = config;
@@ -48,11 +52,11 @@ public class NextGenDMImageURIBuilder {
     }
 
     /**
-     * Smart Crop aspect ratio string.
-     * @param smartCropAspectRatio - a string in "width:height" format;
+     * Smart Crop name.
+     * @param smartCropName - a string denoting the name of the smartcrop;
      */
-    public NextGenDMImageURIBuilder withSmartCrop(String smartCropAspectRatio) {
-        this.smartCropAspectRatio = smartCropAspectRatio;
+    public NextGenDMImageURIBuilder withSmartCrop(String smartCropName) {
+        this.smartCropName = smartCropName;
         return this;
     }
 
@@ -85,6 +89,34 @@ public class NextGenDMImageURIBuilder {
     }
 
     /**
+     * Set extra image modifiers.
+     * @param modifiersStr
+     */
+    public NextGenDMImageURIBuilder withImageModifiers(String modifiersStr) {
+        this.modifiers = modifiersStr;
+        return this;
+    }
+
+    /**
+     * Set token to be set in delivery URL. It can be a preview token or a token generated
+     * with public/private key pair
+     * @param token - a token to check what version of asset should be delivered
+     */
+    public NextGenDMImageURIBuilder withToken(String token) {
+        this.token = token;
+        return this;
+    }
+
+    /**
+     * Set expiry of the token.
+     * @param tokenExpiry - a string indicating whether the token is valid
+     */
+    public NextGenDMImageURIBuilder withTokenExpiry(String tokenExpiry) {
+        this.tokenExpiry = tokenExpiry;
+        return this;
+    }
+
+    /**
      * Use this to create a NextGen Dynamic Media Image URI.
      * @return a uri.
      */
@@ -113,12 +145,14 @@ public class NextGenDMImageURIBuilder {
             if(this.preferWebp) {
                 params.put("preferwebp", "true");
             }
-            if (StringUtils.isNotEmpty(this.smartCropAspectRatio)) {
-                if (isValidSmartCrop(this.smartCropAspectRatio)) {
-                    params.put("crop", String.format("%s,smart", this.smartCropAspectRatio));
-                } else {
-                    LOGGER.info("Invalid smartCrop value at {}", this.smartCropAspectRatio);
-                }
+            if (StringUtils.isNotEmpty(this.smartCropName)) {
+                params.put("smartcrop", this.smartCropName);
+            }
+            if (StringUtils.isNotEmpty(this.token)) {
+                params.put("token", this.token);
+            }
+            if (StringUtils.isNotEmpty(this.tokenExpiry)) {
+                params.put("expiryTime", this.tokenExpiry);
             }
             if(params.size() > 0) {
                 uriBuilder.append("?");
@@ -128,23 +162,16 @@ public class NextGenDMImageURIBuilder {
                 }
                 uriBuilder.deleteCharAt(uriBuilder.length() - 1);
             }
+            if(StringUtils.isNotEmpty(this.modifiers)) {
+                if (this.modifiers.startsWith("&")) {
+                    uriBuilder.append(this.modifiers);
+                } else {
+                    uriBuilder.append("&" + this.modifiers);
+                }
+            }
             return uriBuilder.toString();
         }
         LOGGER.info("Invalid fileReference or NGDMConfig. fileReference = {}", this.fileReference);
         return null;
-    }
-
-    private boolean isValidSmartCrop(String smartCropStr) {
-        String[] crops = smartCropStr.split(":");
-        if (crops.length == 2) {
-            try {
-                Integer.parseInt(crops[0]);
-                Integer.parseInt(crops[1]);
-                return true;
-            } catch (NumberFormatException ex) {
-                return false;
-            }
-        }
-        return false;
     }
 }

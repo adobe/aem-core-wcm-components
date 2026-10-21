@@ -71,6 +71,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
 
     private static final String TEST_BASE = "/page/v2";
     protected static final String REDIRECT_PAGE = CONTENT_ROOT + "/redirect-page";
+    protected static final String REDIRECT_PAGE_EXTERNAL = CONTENT_ROOT + "/redirect-page-external";
     private static final String PN_CLIENT_LIBS = "clientlibs";
     private static final String SLING_CONFIGS_ROOT = "/conf/page/sling:configs";
 

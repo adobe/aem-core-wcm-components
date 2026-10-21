@@ -15,12 +15,29 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
+import com.adobe.cq.wcm.core.components.util.ngdm.PreviewTokenBuilderUtils;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
 import com.adobe.cq.wcm.core.components.testing.MockNextGenDynamicMediaConfig;
-import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -28,6 +45,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -43,6 +61,7 @@ import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.designer.Style;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.slf4j.LoggerFactory;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_RESIZE_WIDTH;
@@ -51,8 +70,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.any;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
@@ -82,6 +102,14 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     private static final String PAGE2_IMAGE0_PATH = PAGE2 + "/jcr:content/root/page2_image0";
     private static final String PAGE3_IMAGE0_PATH = PAGE3 + "/jcr:content/root/page3_image0";
     private static final String NGDM_IMAGE1_PATH = "/content/ngdm_test_page/jcr:content/root/ngdm_test_page_image1";
+    private static final String NGDM_SMARTCROP_IMAGE_PATH = "/content/ngdm_test_page/jcr:content/root/ngdm_test_page_smartcrop_image";
+
+    private static final String NGDM_MODIFIERS_IMAGE_PATH = "/content/ngdm_test_page/jcr:content/root/ngdm_test_page_modifiers_image";
+    private static final String NGDM_SMARTCROP_AUTO_IMAGE_PATH = "/content/ngdm_test_page/jcr:content/root/ngdm_test_page_smartcrop_image_auto";
+
+    private static final String SECRET_KEY = "testSecretKey";
+    private static final String PREVIEW_KEY = "ASSET_DELIVERY_PREVIEW_KEY";
+
 
     @BeforeEach
     @Override
@@ -112,6 +140,8 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
 
     @Mock
     private Style currentStyle;
+
+    private Logger logger;
 
     @Test
     void testImageWithLazyThreshold() {
@@ -284,7 +314,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
             assertEquals(expectedAreas[index][3], area.getHref(), "The image area's href is not as expected.");
             assertEquals(expectedAreas[index][4], area.getTarget(), "The image area's target is not as expected.");
             assertEquals(expectedAreas[index][5], area.getAlt(), "The image area's alt text is not as expected.");
-            assertValidLink(area.getLink(), (String) expectedAreas[index][3], StringUtils.trimToNull((String) expectedAreas[index][4]));
+            assertValidLink(area.getLink(), (String) expectedAreas[index][3], StringUtils.trimToNull((String) expectedAreas[index][4]),context);
             index++;
         }
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE24_PATH));
@@ -671,6 +701,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
         config.setEnabled(true);
         config.setRepositoryId("testrepo");
+        config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
         context.registerInjectActivateService(config);
 
         Image image = getImageUnderTest(NGDM_IMAGE1_PATH);
@@ -683,6 +714,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
         config.setEnabled(true);
         config.setRepositoryId("testrepo");
+        config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
         context.registerInjectActivateService(config);
         context.contentPolicyMapping(resourceType, PN_DESIGN_RESIZE_WIDTH, 800);
 
@@ -699,5 +731,99 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
 
         Image image = getImageUnderTest(NGDM_IMAGE1_PATH);
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, NGDM_IMAGE1_PATH + "_ngm_disabled"));
+    }
+
+    @Test
+    void testNgdmImageWithSmartCropRendition() {
+        MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
+        config.setEnabled(true);
+        config.setRepositoryId("testrepo");
+        config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
+        context.registerInjectActivateService(config);
+
+        Image image = getImageUnderTest(NGDM_SMARTCROP_IMAGE_PATH);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, NGDM_SMARTCROP_IMAGE_PATH));
+    }
+
+    @Test
+    void testNgdmImageWithPreviewToken() {
+        MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
+        config.setEnabled(true);
+        config.setRepositoryId("testrepo");
+        config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
+        context.registerInjectActivateService(config);
+        System.setProperty(PREVIEW_KEY, SECRET_KEY);
+
+        Image image = getImageUnderTest(NGDM_IMAGE1_PATH);
+        assertTrue(image.getSrc().contains("&token=p:"));
+        assertTrue(image.getSrc().contains("&expiryTime"));
+
+        System.clearProperty(PREVIEW_KEY);
+    }
+
+    @Test
+    void testNgdmImageExceptionWithNoPreviewSecretSet() {
+        MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
+        config.setEnabled(true);
+        config.setRepositoryId("testrepo");
+        config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
+        context.registerInjectActivateService(config);
+
+        Image image = getImageUnderTest(NGDM_IMAGE1_PATH);
+        assertFalse(image.getSrc().contains("&token=p:"));
+        assertFalse(image.getSrc().contains("&expiryTime"));
+    }
+
+    @Test
+    void testNgdmImageWithModifiers() {
+        MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
+        config.setEnabled(true);
+        config.setRepositoryId("testrepo");
+        config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
+        context.registerInjectActivateService(config);
+
+        Image image = getImageUnderTest(NGDM_MODIFIERS_IMAGE_PATH);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, NGDM_MODIFIERS_IMAGE_PATH));
+        assertTrue(image.getSrc().contains("&width=100&height=200"));
+    }
+
+    @Test
+    void testNgdmImageWithAutoSmartCropRendition() throws Exception {
+        String expectedMetadataAPIResponseJSON = "{\"assetId\":\"urn:aaid:aem:33b6255d-a978-43ad-8e2e-ef5677c64715\",\"repositoryMetadata\":{\"smartcrops\":{\"Large\":{\"height\":\"1200\",\"left\":\"0.0\",\"manualCrop\":\"false\",\"width\":\"800\",\"top\":\"0.16\"},\"Medium\":{\"height\":\"800\",\"left\":\"0.0\",\"manualCrop\":\"false\",\"width\":\"600\",\"top\":\"0.0\"}}}}";
+        MockNextGenDynamicMediaConfig config = new MockNextGenDynamicMediaConfig();
+        config.setEnabled(true);
+        config.setRepositoryId("testrepo");
+        config.setAssetMetadataPath("/adobe/assets/{asset-id}/metadata");
+        context.registerInjectActivateService(config);
+        HttpClientBuilderFactory mockBuilderFactory = mock(HttpClientBuilderFactory.class);
+        HttpClientBuilder mockBuilder = mock(HttpClientBuilder.class);
+        when(mockBuilderFactory.newBuilder()).thenReturn(mockBuilder);
+
+        CloseableHttpClient mockClient = mock(CloseableHttpClient.class);
+        when(mockBuilder.setDefaultRequestConfig(any(RequestConfig.class))).thenReturn(mockBuilder);
+        when(mockBuilder.build()).thenReturn(mockClient);
+
+        when(mockClient.execute(any(HttpGet.class), any(ResponseHandler.class))).thenReturn(expectedMetadataAPIResponseJSON);
+        context.registerService(HttpClientBuilderFactory.class, mockBuilderFactory);
+
+        Image image = getImageUnderTest(NGDM_SMARTCROP_AUTO_IMAGE_PATH);
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, NGDM_SMARTCROP_AUTO_IMAGE_PATH));
+    }
+
+    @Test
+    void testNgdmSrcsetBuilderResponseHandler() throws IOException {
+        HttpResponse httpResponse = mock(HttpResponse.class);
+        HttpEntity entity = mock(HttpEntity.class);
+        StatusLine statusLine = mock(StatusLine.class);
+        when(httpResponse.getStatusLine()).thenReturn(statusLine);
+        when(statusLine.getStatusCode()).thenReturn(HttpStatus.SC_OK);
+        String contentString = "Mocked content";
+        InputStream contentStream = new ByteArrayInputStream(contentString.getBytes());
+        when(entity.getContent()).thenReturn(contentStream);
+        when(httpResponse.getEntity()).thenReturn(entity);
+
+        ResponseHandler<String> responseHandler = new NextGenDMSrcsetBuilderResponseHandler();
+        String result = responseHandler.handleResponse(httpResponse);
+        assertEquals("Mocked content", result);
     }
 }

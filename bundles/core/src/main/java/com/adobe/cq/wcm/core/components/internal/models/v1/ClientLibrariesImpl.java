@@ -44,7 +44,6 @@ import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.RequestAttribute;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -208,6 +207,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
         jsAttributes.append(getHtmlAttr(OPTION_ONLOAD, onload));
         StringBuilder cssAttributes = new StringBuilder();
         cssAttributes.append(getHtmlAttr(OPTION_MEDIA, media));
+        cssAttributes.append(getHtmlAttr(OPTION_ONLOAD, onload));
         String updatedHtml = StringUtils.replace(html,"<script ", "<script " + jsAttributes.toString());
         return StringUtils.replace(updatedHtml,"<link ", "<link " + cssAttributes.toString());
     }

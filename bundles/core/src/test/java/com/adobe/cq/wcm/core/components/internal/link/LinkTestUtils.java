@@ -24,6 +24,8 @@ import org.jetbrains.annotations.Nullable;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.google.common.collect.ImmutableMap;
 
+import io.wcm.testing.mock.aem.junit5.AemContext;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -35,11 +37,17 @@ public final class LinkTestUtils {
     public static void assertValidLink(@NotNull Link link, @NotNull String linkURL) {
         assertValidLink(link, linkURL, (SlingHttpServletRequest)null);
     }
+    
+    public static void assertValidLink(@NotNull Link link, @NotNull String linkURL, AemContext context) {
+        assertValidLink(link, linkURL, context.request());
+    }
+    
 
     public static void assertValidLink(@NotNull Link link, @NotNull String linkURL,
                                        @Nullable SlingHttpServletRequest request) {
         assertTrue(link.isValid(), "linkValid");
-        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
+        final String mappedPath = request.getResourceResolver().map(linkURL);
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + mappedPath, link.getExternalizedURL(), "linkExternalizedUrl");
         if (request != null && StringUtils.isNotEmpty(request.getContextPath()) && !linkURL.startsWith("http")) {
             linkURL = request.getContextPath().concat(linkURL);
         }
@@ -48,15 +56,16 @@ public final class LinkTestUtils {
         assertEquals(ImmutableMap.of("href", linkURL), link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 
-    public static void assertValidLink(@NotNull Link link, @NotNull String linkURL, @Nullable String linkTarget) {
+    public static void assertValidLink(@NotNull Link link, @NotNull String linkURL, @Nullable String linkTarget, AemContext context) {
         if (linkTarget == null) {
-            assertValidLink(link,  linkURL);
+            assertValidLink(link,  linkURL, context.request());
             return;
         }
         assertTrue(link.isValid(), "linkValid");
         assertEquals(linkURL, link.getURL(), "linkUrl");
         assertEquals(linkURL.replaceAll("^\\/content\\/links\\/site1\\/(.+)","/content/site1/$1"), link.getMappedURL(), "linkMappedUrl");
-        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + linkURL, link.getExternalizedURL(), "linkExternalizedUrl");
+        final String mappedPath = context.resourceResolver().map(linkURL);
+        assertEquals(CoreComponentTestContext.EXTERNALIZER_PUBLISH_DOMAIN + mappedPath, link.getExternalizedURL(), "linkExternalizedUrl");
         assertEquals(ImmutableMap.of("href", linkURL, "target", linkTarget), link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 

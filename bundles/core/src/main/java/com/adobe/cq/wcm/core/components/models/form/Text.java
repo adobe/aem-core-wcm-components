@@ -26,7 +26,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 public interface Text extends Field {
 
     /**
-     * Checks if the this text field is mandatory.
+     * Checks if the text field is mandatory.
      *
      * @return {@code true} if the field must have a input, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
@@ -105,6 +105,16 @@ public interface Text extends Field {
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default boolean hideTitle() {
+        return false;
+    }
+
+    /**
+     * Checks if the validation messages should be displayed.
+     *
+     * @return {@code true} if the validation messages should be displayed, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models.form 14.5.0
+     */
+    default boolean displayValidation() {
         return false;
     }
 }

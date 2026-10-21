@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import com.day.cq.wcm.api.WCMMode;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -44,6 +45,7 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
      * The resource type.
      */
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/container/v1/container";
+    protected static final String GHOST_COMPONENT_RESOURCE_TYPE = "wcm/msm/components/ghost";
 
     /**
      * The layout type.
@@ -103,7 +105,10 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     @Override
     public final List<ContainerItem> getChildren() {
         if (this.items == null) {
+            WCMMode wcmMode = WCMMode.fromRequest(this.request);
+            boolean showGhostComponent = wcmMode == WCMMode.EDIT;
             this.items = ComponentUtils.getChildComponents(this.resource, this.request).stream()
+                .filter(item -> showGhostComponent || !GHOST_COMPONENT_RESOURCE_TYPE.equals(item.getResourceType()))
                 .map(ContainerItemImpl::new)
                 .collect(Collectors.toList());
         }

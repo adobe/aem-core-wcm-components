@@ -43,6 +43,7 @@ public class ClientlibsIncludeIT {
     private String testPage = "/content/core-components/clientlibs-include-page";
     private final static String REGEX_SCRIPT_ELEMENT = "<script async crossorigin=\"anonymous\" onload=\"console.log..\".*src=\".*/etc.clientlibs/core/wcm/tests/components/clientlibs-include/clientlibs/site.*.js\"></script>";
     private final static String REGEX_LINK_ELEMENT = "<link media=\"print\" rel=\"stylesheet\" href=\".*/etc.clientlibs/core/wcm/tests/components/clientlibs-include/clientlibs/site.*.css\" type=\"text/css\">";
+    private final static String REGEX_LINK_ONLOAD_ELEMENT = "<link media=\"print\" onload=\"console.log\\(\\)\" rel=\"stylesheet\" href=\".*/etc.clientlibs/core/wcm/tests/components/clientlibs-include/clientlibs/site.*.css\" type=\"text/css\">";
 
     @BeforeClass
     public static void beforeClass() {
@@ -67,7 +68,7 @@ public class ClientlibsIncludeIT {
     public void testAllInclude() throws ClientException {
         String content = adminAuthor.doGet(testPage + ".includeall.html", 200).getContent();
         GraniteAssert.assertRegExFind("Incorrect script and/or script attributes", content, REGEX_SCRIPT_ELEMENT);
-        GraniteAssert.assertRegExFind("Incorrect link and/or link attributes", content, REGEX_LINK_ELEMENT);
+        GraniteAssert.assertRegExFind("Incorrect link and/or link attributes", content, REGEX_LINK_ONLOAD_ELEMENT);
     }
 
 }

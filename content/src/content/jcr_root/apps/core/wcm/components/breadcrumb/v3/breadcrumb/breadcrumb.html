@@ -19,10 +19,12 @@
      class="cmp-breadcrumb"
      aria-label="${'Breadcrumb' @ i18n}"
      data-sly-test="${breadcrumb.items.size > 0}"
-     data-cmp-data-layer="${breadcrumb.data.json}">
+     data-cmp-data-layer="${breadcrumb.data.json}"
+     role="navigation">
     <ol class="cmp-breadcrumb__list"
         itemscope itemtype="http://schema.org/BreadcrumbList"
         data-sly-list.navItem="${breadcrumb.items}">
+        <sly data-sly-set.lang="${navItem.page.properties.contentLang}"/>
         <li class="cmp-breadcrumb__item${navItem.active ? ' cmp-breadcrumb__item--active' : ''}"
             aria-current="${navItem.active ? 'page' : false}"
             data-cmp-data-layer="${navItem.data.json}"
@@ -30,6 +32,8 @@
             <a data-sly-attribute="${navItem.link.htmlAttributes}"
                class="cmp-breadcrumb__item-link"
                itemprop="item"
+               lang="${lang}"
+               hreflang="${lang}"
                data-cmp-clickable="${breadcrumb.data ? true : false}"
                data-sly-unwrap="${navItem.active || !navItem.link.valid}">
                 <span itemprop="name">${navItem.title}</span>

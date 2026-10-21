@@ -23,7 +23,6 @@ import java.util.Map;
 import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -62,7 +61,6 @@ public class EmbedUrlProcessorServlet extends SlingSafeMethodsServlet {
     private static final String PARAM_URL = "url";
     private static final long serialVersionUID = 2187626333327104828L;
 
-    @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient List<UrlProcessor> urlProcessors = new ArrayList<>();
 
     @Override

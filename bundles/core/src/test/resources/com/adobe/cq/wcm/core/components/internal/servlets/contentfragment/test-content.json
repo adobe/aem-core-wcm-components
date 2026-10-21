@@ -84,11 +84,11 @@
                         },
                         "1538637399370": {
                             "jcr:primaryType": "nt:unstructured",
-                            "valueFormat": "YYYY-MM-DD[T]HH:mm:ss.000Z",
-                            "emptyText": "YYYY-MM-DD HH:mm",
+                            "valueFormat": "yyyy-MM-dd[T]HH:mm:ss.000Z",
+                            "emptyText": "yyyy-MM-dd HH:mm",
                             "listOrder": "5",
                             "valueType": "calendar",
-                            "displayedFormat": "YYYY-MM-DD HH:mm",
+                            "displayedFormat": "yyyy-MM-dd HH:mm",
                             "showEmptyInReadOnly": "true",
                             "metaType": "date",
                             "name": "dateAndTimeField",
@@ -124,6 +124,28 @@
                                 "variant": "default",
                                 "sling:resourceType": "dam/cfm/admin/components/datasources/optionrenderer"
                             }
+                        },
+                        "1538637484630": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "listOrder": "8",
+                            "valueType": "composite",
+                            "showEmptyInReadOnly": "true",
+                            "metaType": "composite",
+                            "name": "compositeField",
+                            "fieldLabel": "compositeFieldLabel",
+                            "sling:resourceType": "dam/cfm/models/editor/components/composite",
+                            "renderReadOnly": "false"
+                        },
+                        "1538637484631": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "listOrder": "9",
+                            "valueType": "composite[]",
+                            "showEmptyInReadOnly": "true",
+                            "metaType": "composite",
+                            "name": "multiCompositeField",
+                            "fieldLabel": "multiCompositeFieldLabel",
+                            "sling:resourceType": "dam/cfm/models/editor/components/composite/multifield",
+                            "renderReadOnly": "false"
                         }
                     }
                 }

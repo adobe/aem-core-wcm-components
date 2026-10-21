@@ -59,6 +59,7 @@ class ExperienceFragmentImplTest {
     private static final String US_EN_PAGE = SITE_ROOT + "/us/en/page";
     private static final String CH_MYSITE_FR_PAGE = SITE_ROOT + "/ch/mysite/fr/page";
     private static final String CH_FR_PAGE = SITE_ROOT + "/ch_fr/page";
+    private static final String EU_FR_PAGE = SITE_ROOT + "/eu/fr/page";
     private static final String BLUEPRINT_ROOT = "/content/mysite/blueprint";
     private static final String BLUEPRINT_PAGE = BLUEPRINT_ROOT + "/page";
     private static final String LIVECOPY_ROOT = "/content/mysite/livecopy";
@@ -553,6 +554,23 @@ class ExperienceFragmentImplTest {
             + "/jcr:content/root/xf-component-41");
         assertEquals(XF_NAME, experienceFragment.getName());
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf41"));
+    }
+
+    /**
+     * Site with region/language localization
+     * XF component is defined in the template
+     * XF component points to a different region/language branch as the page
+     * and system cannot infer correctly the language root unless page is marked with
+     * "cq:isLanguageRoot": true
+     * and
+     * "jcr:language": "fr"
+     */
+    @Test
+    void testValidXFInPageWithLocalizationWithDifferentCountry_Language_withLanguageRootMarking() {
+
+        ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-23", EU_FR_PAGE);
+        assertEquals(XF_NAME, experienceFragment.getName());
+        Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf23"));
     }
 
     /**

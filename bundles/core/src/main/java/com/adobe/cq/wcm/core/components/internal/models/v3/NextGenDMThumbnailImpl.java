@@ -70,7 +70,7 @@ public class NextGenDMThumbnailImpl implements NextGenDMThumbnail {
         Resource component = request.getResourceResolver().getResource(componentPath);
         ValueMap properties  = component.getValueMap();
         String fileReference = properties.get("fileReference", String.class);
-        String smartCrop = properties.get("smartCrop", String.class);
+        String smartCrop = properties.get("smartCropRendition", String.class);
         ValueMap configs = resource.getValueMap();
         int width = configs.get("width", 480);
         int height = configs.get("height", 480);

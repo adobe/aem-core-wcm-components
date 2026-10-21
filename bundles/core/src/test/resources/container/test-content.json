@@ -31,6 +31,12 @@
                             "jcr:description"   : "Teaser 2 description",
                             "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                         },
+                        "item_ghost": {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Ghost",
+                            "jcr:description"   : "Ghost component",
+                            "sling:resourceType": "wcm/msm/components/ghost"
+                        },
                         "item_3": {}
                     },
                     "container-2"       : {

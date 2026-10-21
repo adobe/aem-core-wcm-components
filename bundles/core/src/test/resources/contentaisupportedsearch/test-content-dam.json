@@ -1,0 +1,48 @@
+{
+  "jcr:primaryType": "cq:Page",
+  "jcr:content": {
+    "jcr:primaryType": "cq:PageContent",
+    "sling:resourceType": "core/wcm/components/page/v3/page"
+  },
+  "contentaisearch": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "core/wcm/components/contentaisearch/v1/contentaisearch",
+    "id": "contentaisearch-1",
+    "contentSource": "my-content-source",
+    "contentSources": ["my-content-source"],
+    "contentSourceType": "ACQUISITION",
+    "primaryContentSource": "my-content-source",
+    "resultsSize": 5,
+    "genSearchEnabledByDefault": true,
+    "genSearchToggleVisible": true,
+    "genSearchErrorFallback": "RESULTS_ONLY"
+  },
+  "contentaisearch-defaults": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "core/wcm/components/contentaisearch/v1/contentaisearch",
+    "id": "contentaisearch-defaults",
+    "contentSource": "my-content-source",
+    "contentSources": ["my-content-source"],
+    "contentSourceType": "ACQUISITION",
+    "primaryContentSource": "my-content-source",
+    "resultsSize": 5,
+    "genSearchEnabledByDefault": true,
+    "genSearchErrorFallback": "RESULTS_ONLY"
+  },
+  "contentaisearch-list": {
+    "jcr:primaryType": "nt:unstructured",
+    "sling:resourceType": "core/wcm/components/contentaisearch/v1/contentaisearch",
+    "id": "contentaisearch-list",
+    "contentSource": "fallback-source",
+    "contentSources": ["source-a", "source-b"],
+    "contentSourceType": "ACQUISITION",
+    "primaryContentSource": "primary-source",
+    "resultsSize": 10,
+    "resultsLayout": "list",
+    "placeholder": "Search content",
+    "disclaimerText": "AI-generated summary",
+    "genSearchEnabledByDefault": false,
+    "genSearchToggleVisible": false,
+    "genSearchErrorFallback": "SHOW_ERROR"
+  }
+}

@@ -15,11 +15,17 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
+import java.text.Collator;
 import java.util.*;
 
 import javax.annotation.PostConstruct;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.query.Row;
 
+import com.day.cq.search.eval.AbstractPredicateEvaluator;
+import com.day.cq.search.eval.EvaluationContext;
+import com.day.cq.wcm.api.Page;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -27,11 +33,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.apache.sling.models.annotations.injectorspecific.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -63,7 +65,6 @@ import static com.day.cq.dam.api.DamConstants.NT_DAM_ASSET;
 )
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ContentFragmentListImpl extends AbstractComponentImpl implements ContentFragmentList {
-
     private static final Logger LOG = LoggerFactory.getLogger(ContentFragmentListImpl.class);
 
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
@@ -72,6 +73,7 @@ public class ContentFragmentListImpl extends AbstractComponentImpl implements Co
     public static final String DEFAULT_DAM_PARENT_PATH = "/content/dam";
 
     public static final int DEFAULT_MAX_ITEMS = -1;
+    public static final String CF_COMPARATOR_REF = "ContentFragmentComparatorRef";
 
     @Self(injectionStrategy = InjectionStrategy.REQUIRED)
     private SlingHttpServletRequest slingHttpServletRequest;
@@ -110,6 +112,9 @@ public class ContentFragmentListImpl extends AbstractComponentImpl implements Co
     @Default(values = Predicate.SORT_ASCENDING)
     private String sortOrder;
 
+    @ScriptVariable
+    protected Page currentPage;
+
     private final List<DAMContentFragment> items = new ArrayList<>();
 
     @PostConstruct
@@ -144,7 +149,7 @@ public class ContentFragmentListImpl extends AbstractComponentImpl implements Co
         queryParameterMap.put("1_property.value", modelPath);
 
         if (StringUtils.isNotEmpty(orderBy)) {
-            queryParameterMap.put("orderby", "@" + orderBy);
+            queryParameterMap.put("orderby", CF_COMPARATOR_REF);
             if (StringUtils.isNotEmpty(sortOrder)) {
                 queryParameterMap.put("orderby.sort", sortOrder);
             }
@@ -168,6 +173,11 @@ public class ContentFragmentListImpl extends AbstractComponentImpl implements Co
 
         PredicateGroup predicateGroup = PredicateGroup.create(queryParameterMap);
         Query query = queryBuilder.createQuery(predicateGroup, session);
+
+        if (StringUtils.isNotEmpty(orderBy)) {
+            Locale locale = currentPage != null ? currentPage.getLanguage(false) : Locale.getDefault();
+            query.registerPredicateEvaluator(CF_COMPARATOR_REF, new ContentFragmentPredicateEvaluator(locale));
+        }
 
         SearchResult searchResult = query.getResult();
 
@@ -208,5 +218,28 @@ public class ContentFragmentListImpl extends AbstractComponentImpl implements Co
     @Override
     public String getExportedType() {
         return slingHttpServletRequest.getResource().getResourceType();
+    }
+
+    class ContentFragmentPredicateEvaluator extends AbstractPredicateEvaluator {
+        private final Comparator<String> stringComparator;
+
+        public ContentFragmentPredicateEvaluator(Locale locale) {
+            Collator collator = Collator.getInstance(locale);
+            this.stringComparator = Comparator.nullsLast(collator);
+        }
+
+        @Override
+        public Comparator<Row> getOrderByComparator(Predicate predicate, EvaluationContext context) {
+            return (row1, row2) -> stringComparator.compare(getString(row1), getString(row2));
+        }
+
+        private String getString(Row row) {
+            try {
+                String str = row.getNode().getProperty(orderBy).getString();
+                return StringUtils.isBlank(str) ? null : str;
+            } catch (RepositoryException e) {
+                return null;
+            }
+        }
     }
 }

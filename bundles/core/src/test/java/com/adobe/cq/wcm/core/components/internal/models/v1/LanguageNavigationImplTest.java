@@ -68,6 +68,14 @@ public class LanguageNavigationImplTest {
                     "/content/languagenavigation/LOCALE-4/LOCALE-9.html"},
     };
 
+    private static final Object[][] EXPECTED_COUNTRY_LIST = {
+        {"/content/countrytest/languagenavigation/ch", "ch", false, 0, "", "ch",
+            "/ch-3-vanity"},
+        {"/content/countrytest/languagenavigation/ch_zn", "ch_zn", true, 0, "", "ch",
+            "/ch_zn-3-vanity"},
+        {"/content/countrytest/languagenavigation/en", "en", false, 0, "", "en", "/en-3-vanity"},
+    };
+
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
     protected String testBase;
@@ -150,6 +158,15 @@ public class LanguageNavigationImplTest {
         };
         verifyLanguageNavigationItems(expectedPages, items);
 
+    }
+
+    @Test
+    protected void testLanguageNavigationItemsWithExtendedCountryCode() {
+        context.load().json(testBase + "/test-content-country.json", "/content/countrytest");
+        LanguageNavigation languageNavigation = getLanguageNavigationUnderTest(
+            "/content/countrytest/languagenavigation/ch_zn/jcr:content/root/languagenavigation-component-1");
+        List<NavigationItem> items = getLanguageNavigationItems(languageNavigation);
+        verifyLanguageNavigationItems(EXPECTED_COUNTRY_LIST, items);
     }
 
     protected  LanguageNavigation getLanguageNavigationUnderTest(String resourcePath) {

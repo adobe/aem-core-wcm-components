@@ -15,8 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.wcm.core.components.internal.resource.CoreResourceWrapper;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,27 +27,67 @@ import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
+import java.util.Collections;
+import java.util.Optional;
+
+import static com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl.PN_REDIRECT_TARGET;
+
+/**
+ * Navigation Item used for page redirects.
+ */
 public class RedirectItemImpl implements NavigationItem {
 
-    private final String redirectTarget;
+    /**
+     * The target page that this Redirect Item redirects to (null if page doesn't exist, or redirect does not point to a page).
+     */
     private final Page page;
-    protected final Link link;
 
-    public RedirectItemImpl(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {
-        this.redirectTarget = redirectTarget;
-        this.page = getRedirectPage(request);
-        this.link = linkManager.get(this.page).build();
+    /**
+     * Link that this Redirect Item redirects to.
+     */
+    protected final Link<?> link;
+
+    /**
+     * Construct a Redirect Item.
+     *
+     * @param redirectTarget The path or URL to redirect to.
+     * @param request The current request.
+     * @param linkManager The Link Manager.
+     */
+    public RedirectItemImpl(@NotNull final String redirectTarget,
+                            @NotNull final SlingHttpServletRequest request,
+                            @NotNull final LinkManager linkManager) {
+        Optional<Page> redirectPage = getRedirectPage(request.getResourceResolver(), redirectTarget);
+        this.link = redirectPage
+            .map(linkManager::get)
+            .orElseGet(() -> {
+                // this wrapper exists to handle the possibility that `redirectTarget` didn't come from `PN_REDIRECT_TARGET`
+                CoreResourceWrapper resourceWrapper = new CoreResourceWrapper(
+                    request.getResource(),
+                    request.getResource().getResourceType(),
+                    Collections.emptyList(),
+                    Collections.singletonMap(PN_REDIRECT_TARGET, redirectTarget));
+                return linkManager.get(resourceWrapper).withLinkUrlPropertyName(PN_REDIRECT_TARGET);
+            })
+            .build();
+
+        this.page = Optional.ofNullable(this.link.getReference())
+            .filter(ref -> ref instanceof Page)
+            .map(ref -> (Page) ref)
+            .orElse(redirectPage.orElse(null));
     }
 
-    private Page getRedirectPage(@NotNull SlingHttpServletRequest request) {
-        Page page = null;
-        ResourceResolver resourceResolver = request.getResourceResolver();
-        Resource targetResource = resourceResolver.getResource(redirectTarget);
-        PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
-        if (pageManager != null && targetResource != null) {
-            page = pageManager.getContainingPage(targetResource);
-        }
-        return page;
+    /**
+     * Get the redirect target page.
+     *
+     * @param resourceResolver A ResourceResolver.
+     * @param redirectTarget The target path.
+     * @return The target page is redirectTarget references a page, otherwise empty.
+     */
+    private Optional<Page> getRedirectPage(@NotNull final ResourceResolver resourceResolver, @NotNull final String redirectTarget) {
+        return Optional.ofNullable(resourceResolver.getResource(redirectTarget))
+            .flatMap(targetResource -> Optional.ofNullable(resourceResolver.adaptTo(PageManager.class))
+                .map(pm -> pm.getContainingPage(targetResource)));
     }
 
     @Override
@@ -59,6 +99,7 @@ public class RedirectItemImpl implements NavigationItem {
 
     @Override
     @Nullable
+    @Deprecated
     public String getURL() {
         return link.getURL();
     }

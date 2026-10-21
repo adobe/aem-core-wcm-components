@@ -85,22 +85,28 @@ public class NextgenDMImageURIBuilderTest {
 
     @Test
     public void testUriWithSmartCrop() {
-        uriBuilder.withSmartCrop("2:3");
+        uriBuilder.withSmartCrop("Medium");
         String uri = uriBuilder.build();
-        assertTrue(uri.contains("crop=2:3,smart"));
-    }
-
-
-    @Test
-    public void testUriWithInvalidSmartCrop() {
-        uriBuilder.withSmartCrop("x:y");
-        String uri = uriBuilder.build();
-        assertEquals(baseUri, uri);
+        assertTrue(uri.contains("smartcrop=Medium"));
     }
 
     @Test
     public void testNoFileReference() {
         uriBuilder = new NextGenDMImageURIBuilder(config, "");
         assertTrue(uriBuilder.build() == null);
+    }
+
+    @Test
+    public void testUrlWithPreviewToken() {
+        uriBuilder.withToken("p:RandomToken");
+        String uri = uriBuilder.build();
+        assertTrue(uri.contains("token=p:RandomToken"));
+    }
+
+    @Test
+    public void testUrlWithPreviewTokenExpiry() {
+        uriBuilder.withTokenExpiry("2025-02-27T10:17:59.300Z");
+        String uri = uriBuilder.build();
+        assertTrue(uri.contains("expiryTime=2025-02-27T10:17:59.300Z"));
     }
 }

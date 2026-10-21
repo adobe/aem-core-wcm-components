@@ -45,6 +45,10 @@ public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/pdfviewer/v1/pdfviewer";
     protected static final String FIELD_EMBED_MODE = "embedMode";
+    /**
+     * Field that needs to be passed to Embed API to control full screen button in full-window mode
+     */
+    protected static final String FIELD_SHOW_FULL_SCREEN_VIEW_BUTTON = "showFullScreenViewButton";
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
@@ -180,6 +184,7 @@ public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
             jsonObjectBuilder.add(PN_DEFAULT_VIEW_MODE, defaultViewMode);
             jsonObjectBuilder.add(PN_SHOW_ANNOTATION_TOOLS, showAnnotationTools);
             jsonObjectBuilder.add(PN_SHOW_LEFT_HAND_PANEL, showLeftHandPanel);
+            jsonObjectBuilder.add(FIELD_SHOW_FULL_SCREEN_VIEW_BUTTON, showFullScreen);
         }
 
         if (StringUtils.equals(type, SIZED_CONTAINER)) {

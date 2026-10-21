@@ -23,13 +23,13 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.24.3-SNAPSHOT</version>
+        <version>2.32.9-SNAPSHOT</version>
         <relativePath>parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.reactor</artifactId>
     <packaging>pom</packaging>
-    <version>2.24.3-SNAPSHOT</version>
+    <version>2.32.9-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Reactor</name>
 
@@ -48,6 +48,7 @@
             <plugin>
                 <groupId>org.apache.rat</groupId>
                 <artifactId>apache-rat-plugin</artifactId>
+                <version>0.16.1</version>
                 <configuration>
                     <excludes combine.children="append">
                         <!-- Ignore lint-files -->
@@ -57,6 +58,8 @@
                         <exclude>**/*.eslintignore</exclude>
                         <!-- Ignore target folders -->
                         <exclude>**/target/**</exclude>
+                        <!-- not a module when building with Java 8, checked by its own build otherwise -->
+                        <exclude>testing/it/http/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -68,11 +71,9 @@
         <module>bundles/core</module>
         <module>testing/junit/core</module>
         <module>testing/aem-mock-plugin</module>
-        <module>testing/it/http</module>
-        <module>testing/it/e2e-selenium-utils</module>
-        <module>testing/it/e2e-selenium</module>
         <module>testing/it/it.core</module>
         <module>testing/it/it.ui.apps</module>
+        <module>testing/it/it.ui.config</module>
         <module>testing/it/it.ui.content</module>
         <module>content</module>
         <module>config</module>
@@ -80,5 +81,26 @@
         <module>examples</module>
         <module>extensions/amp</module>
     </modules>
+
+    <profiles>
+        <!-- The HTTP ITs require Java 11+, so they are left out when building with Java 8. -->
+        <profile>
+            <id>it-http</id>
+            <activation>
+                <jdk>[11,)</jdk>
+            </activation>
+            <modules>
+                <module>testing/it/http</module>
+            </modules>
+        </profile>
+        <!-- The Playwright browser ITs pull in a large driver bundle, so they are only part of the
+             build on demand (CI integration tests, releases to keep the module version in step). -->
+        <profile>
+            <id>e2e-testing</id>
+            <modules>
+                <module>testing/it/e2e-testing</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>

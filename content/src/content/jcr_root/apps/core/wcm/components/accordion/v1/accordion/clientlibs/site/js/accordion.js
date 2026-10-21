@@ -577,7 +577,7 @@
         dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
         if (dataLayerEnabled) {
             dataLayerName = document.body.getAttribute("data-cmp-data-layer-name") || "adobeDataLayer";
-            dataLayer = window[dataLayerName];
+            dataLayer = window[dataLayerName] = window[dataLayerName] || [];
         }
 
         var elements = document.querySelectorAll(selectors.self);

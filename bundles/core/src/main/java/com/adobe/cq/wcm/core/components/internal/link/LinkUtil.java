@@ -61,6 +61,12 @@ public class LinkUtil {
             .collect(Collectors.toList()));
     }
 
+    private static final String MAIL_TO_PATTERN = "mailto";
+
+    private static final String TEL_PATTERN = "tel";
+
+    private static final String QUICKVIEW_PATTERN = "quickview";
+
     //SITES-18137: imitate the exact behavior of com.google.common.net.URL_FRAGMENT_ESCAPER
     private static final BitSet URL_FRAGMENT_SAFE_CHARS = new BitSet(256);
 
@@ -111,7 +117,7 @@ public class LinkUtil {
      */
     public static String escape(final String path, final String queryString, final String fragment) {
         boolean pathContainsFragment = false;
-        if (StringUtils.contains(path, fragment)) {
+        if (StringUtils.contains(path, "#" + fragment)) {
             pathContainsFragment = true;
         }
         final Map<String, String> placeholders = new LinkedHashMap<>();
@@ -127,7 +133,7 @@ public class LinkUtil {
             LOG.error(e.getMessage(), e);
         }
         try {
-            if (parsed != null) {
+            if (parsed != null && !isMailToLink(parsed.getScheme()) && !isTelLink(parsed.getScheme())) {
                 escaped = new URI(parsed.getScheme(), parsed.getAuthority(), parsed.getPath(), maskedQueryString, null).toString();
             } else {
                 escaped = new URI(null, null, path, maskedQueryString, null).toString();
@@ -148,7 +154,13 @@ public class LinkUtil {
             }
 
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            if (parsed != null && isQuickviewScheme(parsed.getScheme())) {
+                // SITES-42596 Since quickview URLs are supported OOTB by the product,
+                // do not log error for them
+                LOG.debug("Quickview URL detected, using fallback construction: {}", path);
+            } else {
+                LOG.error(e.getMessage(), e);
+            }
             StringBuilder sb = new StringBuilder(path);
             if (queryString != null) {
                 sb.append("?").append(maskedQueryString);
@@ -266,5 +278,25 @@ public class LinkUtil {
             .replace("%2C", ",")
             .replace("%2F", "/")
             .replace("%3F", "?");
+    }
+
+    private static boolean isMailToLink(String link) {
+        if (link != null) {
+            return link.startsWith(MAIL_TO_PATTERN);
+        } else {
+            return false;
+        }
+    }
+
+    private static boolean isTelLink(String link) {
+        if (link != null) {
+            return link.startsWith(TEL_PATTERN);
+        } else {
+            return false;
+        }
+    }
+
+    private static boolean isQuickviewScheme(String scheme) {
+        return QUICKVIEW_PATTERN.equals(scheme);
     }
 }

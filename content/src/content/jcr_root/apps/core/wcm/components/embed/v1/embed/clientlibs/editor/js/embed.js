@@ -415,7 +415,7 @@
             var toggleable = $(urlStatus).adaptTo("foundation-toggleable");
             if (provider && urlValidation.isValidUrl()) {
                 var capitalized = provider.charAt(0).toUpperCase() + provider.slice(1);
-                urlStatus.innerText = Granite.I18n.get(capitalized + " URL can be processed.");
+                urlStatus.innerText = Granite.I18n.get("{0} URL can be processed.", capitalized);
                 toggleable.show();
             } else {
                 urlStatus.innerText = "";

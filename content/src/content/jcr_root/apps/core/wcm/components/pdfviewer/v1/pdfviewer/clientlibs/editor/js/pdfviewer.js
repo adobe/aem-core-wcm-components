@@ -74,7 +74,7 @@
                 break;
             case "FULL_WINDOW":
             default:
-                showControls(["defaultViewMode", "borderless", "annotationTools", "leftHandPanel", "downloadPdf", "printPdf", "pageControls", "dockPageControls"]);
+                showControls(["defaultViewMode", "borderless", "showFullScreen", "annotationTools", "leftHandPanel", "downloadPdf", "printPdf", "pageControls", "dockPageControls"]);
         }
         onPageControlChange();
     }

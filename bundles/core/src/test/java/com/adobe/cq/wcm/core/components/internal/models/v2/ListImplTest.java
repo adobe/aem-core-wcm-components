@@ -72,7 +72,7 @@ public class ListImplTest {
         Utils.enableDataLayer(context, true);
         Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
-            throw new IllegalStateException("Did you forget to defines test resource " + resourcePath + "?");
+            throw new IllegalStateException("Did you forget to define test resource " + resourcePath + "?");
         }
         context.request().setContextPath(CONTEXT_PATH);
         context.currentResource(resource);

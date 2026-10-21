@@ -126,7 +126,7 @@
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                         fieldDescription="Toggle for viewer to take up full height/width of viewport."
                                                         name="./borderless"
-                                                        text="Full Screen"
+                                                        text="Borderless"
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                     <showAnnotationTools
@@ -153,9 +153,9 @@
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                         checked="{Boolean}true"
-                                                        fieldDescription="Toggle to display left hand panel."
+                                                        fieldDescription="Toggle to allow full screen mode."
                                                         name="./showFullScreen"
-                                                        text="Fullscreen Mode"
+                                                        text="Allow Fullscreen Mode"
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                     <showDownloadPdf
