@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import java.util.List;
-
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -30,16 +28,28 @@ import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 
+/**
+ * V3 Breadcrumb model implementation.
+ */
 @Model(adaptables = SlingHttpServletRequest.class,
         adapters = {Breadcrumb.class, ComponentExporter.class},
         resourceType = BreadcrumbImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class BreadcrumbImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.BreadcrumbImpl implements Breadcrumb {
 
+    /**
+     * V3 Breadcrumb component resource type.
+     */
     protected static final String RESOURCE_TYPE = "core/wcm/components/breadcrumb/v3/breadcrumb";
 
-    protected NavigationItem newBreadcrumbItem(Page page, boolean active, @NotNull LinkManager linkManager, int level, List<NavigationItem> children, String parentId, Component component) {
-        return new BreadcrumbItemImpl(page, active, linkManager, level, children, parentId, component);
+    @Override
+    protected NavigationItem newBreadcrumbItem(@NotNull final Page page,
+                                               final boolean active,
+                                               @NotNull final LinkManager linkManager,
+                                               final int level,
+                                               final String parentId,
+                                               final Component component) {
+        return new BreadcrumbItemImpl(page, active, linkManager, level, parentId, component);
     }
 
 }
