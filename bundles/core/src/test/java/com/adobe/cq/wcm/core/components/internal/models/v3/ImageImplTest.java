@@ -88,6 +88,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
     private static final String IMAGE56_PATH = PAGE + "/jcr:content/root/image56";
     private static final String IMAGE57_PATH = PAGE + "/jcr:content/root/image57";
     private static final String IMAGE58_PATH = PAGE + "/jcr:content/root/image58";
+    private static final String IMAGE59_PATH = PAGE + "/jcr:content/root/image59";
     private static final String IMAGE42_PATH = PAGE + "/jcr:content/root/image42";
 
     private static String PAGE0 = TEST_ROOT + "/test_page0";
@@ -825,5 +826,52 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v2.
         ResponseHandler<String> responseHandler = new NextGenDMSrcsetBuilderResponseHandler();
         String result = responseHandler.handleResponse(httpResponse);
         assertEquals("Mocked content", result);
+    }
+
+    @Test
+    void testFetchPriorityDefault() {
+        // Test default behavior (no fetch priority set)
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
+        assertNull(image.getFetchPriority());
+    }
+
+    @Test
+    void testFetchPriorityFromPolicy() {
+        // Test fetch priority from design dialog policy
+        context.contentPolicyMapping(resourceType, Image.PN_DESIGN_FETCH_PRIORITY, "high");
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
+        assertEquals("high", image.getFetchPriority());
+    }
+
+    @Test
+    void testFetchPriorityComponentOverride() {
+        // Test component-level override when policy allows
+        context.contentPolicyMapping(resourceType,
+            Image.PN_DESIGN_FETCH_PRIORITY, "auto",
+            Image.PN_DESIGN_ALLOW_FETCH_PRIORITY_OVERRIDE, true);
+
+        context.currentResource(IMAGE59_PATH);
+        Image image = context.request().adaptTo(Image.class);
+        assertEquals("high", image.getFetchPriority());
+    }
+
+    @Test
+    void testFetchPriorityOverrideDisabled() {
+        // Test that component override is ignored when policy disallows
+        context.contentPolicyMapping(resourceType,
+            Image.PN_DESIGN_FETCH_PRIORITY, "auto",
+            Image.PN_DESIGN_ALLOW_FETCH_PRIORITY_OVERRIDE, false);
+
+        context.currentResource(IMAGE59_PATH);
+        Image image = context.request().adaptTo(Image.class);
+        assertEquals("auto", image.getFetchPriority());
+    }
+
+    @Test
+    void testFetchPriorityInHtmlAttributes() {
+        // Test that fetch priority appears in HTML attributes
+        context.contentPolicyMapping(resourceType, Image.PN_DESIGN_FETCH_PRIORITY, "high");
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
+        assertEquals("high", image.getHtmlAttributes().get("fetchpriority"));
     }
 }

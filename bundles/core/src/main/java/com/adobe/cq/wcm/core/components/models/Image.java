@@ -216,6 +216,27 @@ public interface Image extends Component {
     String PN_DESIGN_RESIZE_WIDTH = "resizeWidth";
 
     /**
+     * Name of the configuration policy property that controls the default fetch priority for images.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.31.0
+     */
+    String PN_DESIGN_FETCH_PRIORITY = "fetchPriority";
+
+    /**
+     * Name of the configuration policy property that controls whether authors can override the fetch priority.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.31.0
+     */
+    String PN_DESIGN_ALLOW_FETCH_PRIORITY_OVERRIDE = "allowFetchPriorityOverride";
+
+    /**
+     * Name of the resource property that will indicate the fetch priority of the image.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.31.0
+     */
+    String PN_FETCH_PRIORITY = "fetchPriority";
+
+    /**
      * Returns the value for the {@code src} attribute of the image.
      *
      * @return the image's URL
@@ -238,15 +259,29 @@ public interface Image extends Component {
     /**
      * Returns a Map with attributes for HTML {@code img} tag if the attributes have a non-empty value.
      * If an attribute has empty value the attribute is not added to the map.
-     * Currently only alt is returned by this method in order to properly render alt="" in HTL.
+     * Currently only alt and fetchpriority are returned by this method.
      *
      * @return {@link Map} with HTML-specific {@code img} attributes with non-empty values*
      * @since com.adobe.cq.wcm.core.components.models 12.30.0
      */
     @NotNull
+    @JsonIgnore
     default Map<String, String> getHtmlAttributes() {
         final String alt = getAlt();
-        return StringUtils.isBlank(alt) ? Collections.emptyMap() : Collections.singletonMap("alt", alt);
+        final String fetchPriority = getFetchPriority();
+
+        if (StringUtils.isBlank(alt) && StringUtils.isBlank(fetchPriority)) {
+            return Collections.emptyMap();
+        }
+
+        java.util.Map<String, String> attributes = new java.util.HashMap<>();
+        if (StringUtils.isNotBlank(alt)) {
+            attributes.put("alt", alt);
+        }
+        if (StringUtils.isNotBlank(fetchPriority)) {
+            attributes.put("fetchpriority", fetchPriority);
+        }
+        return attributes;
     }
 
     /**
@@ -437,6 +472,18 @@ public interface Image extends Component {
      */
     default boolean isDecorative() {
         return false;
+    }
+
+    /**
+     * Returns the fetch priority hint for the image.
+     * This helps the browser prioritize image fetching. Valid values are "high", "low", or "auto".
+     * A value of "high" is useful for Largest Contentful Paint (LCP) images like hero images.
+     *
+     * @return the fetch priority value ("high", "low", "auto"), or null if not set
+     * @since com.adobe.cq.wcm.core.components.models 12.31.0
+     */
+    default String getFetchPriority() {
+        return null;
     }
 
     default String getSmartCropRendition() {
