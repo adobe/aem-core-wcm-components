@@ -45,11 +45,12 @@ function createComponent(id, data, clickable) {
     return el;
 }
 
-const ACDL = "/base/node_modules/@adobe/adobe-client-data-layer/dist/adobe-client-data-layer.min.js";
+const ACDL2 = "/base/target/acdl/adobe-client-data-layer.min.js";
+const ACDL3 = "/base/node_modules/adobe-client-data-layer-3/dist/adobe-client-data-layer.min.js";
 const POLYFILL = "/base/src/scripts/datalayer/v1/polyfill.js";
 const DATALAYER = "/base/src/scripts/datalayer/v1/datalayer.js";
 
-function describeDataLayerIntegration(description, scripts) {
+function describeDataLayerIntegration(description, scripts, majorVersion) {
     describe(description, function() {
 
         const TEASER_ID = "teaser-1234";
@@ -97,8 +98,8 @@ function describeDataLayerIntegration(description, scripts) {
             delete window.adobeDataLayer;
         });
 
-        it("bundles Adobe Client Data Layer 3.x", function() {
-            expect(window.adobeDataLayer.version).toMatch(/^3\./);
+        it("loads Adobe Client Data Layer " + majorVersion + ".x", function() {
+            expect(window.adobeDataLayer.version).toMatch(new RegExp("^" + majorVersion + "\\."));
             expect(typeof window.adobeDataLayer.getState).toBe("function");
             expect(typeof window.adobeDataLayer.addEventListener).toBe("function");
         });
@@ -143,10 +144,18 @@ function describeDataLayerIntegration(description, scripts) {
 }
 
 describe("Test data layer integration (core.wcm.components.commons.datalayer.v1)", function() {
-    // same order as rendered on the page: the core.wcm.components.commons.datalayer.acdl dependency first,
-    // then the assets of the core.wcm.components.commons.datalayer.v1 clientlib (see clientlib.config.js)
-    describeDataLayerIntegration("when the Adobe Client Data Layer is loaded first", [ACDL, POLYFILL, DATALAYER]);
+    // same order as the assets of the core.wcm.components.commons.datalayer.v1 clientlib (see clientlib.config.js)
+    describeDataLayerIntegration("when the Adobe Client Data Layer is loaded first", [POLYFILL, ACDL2, DATALAYER], 2);
 
-    // the Adobe Client Data Layer may also be loaded after the components (e.g. async includes)
-    describeDataLayerIntegration("when the Adobe Client Data Layer is loaded last", [POLYFILL, DATALAYER, ACDL]);
+    // the Adobe Client Data Layer may also be loaded after the components (e.g. async includes, see page v3)
+    describeDataLayerIntegration("when the Adobe Client Data Layer is loaded last", [POLYFILL, DATALAYER, ACDL2], 2);
+});
+
+describe("Test data layer integration (core.wcm.components.commons.datalayer.v1.acdl3)", function() {
+    // same order as rendered on the page: the core.wcm.components.commons.datalayer.acdl3 dependency first,
+    // then the assets of the core.wcm.components.commons.datalayer.v1.acdl3 clientlib (see clientlib.config.js)
+    describeDataLayerIntegration("when the Adobe Client Data Layer is loaded first", [ACDL3, POLYFILL, DATALAYER], 3);
+
+    // the Adobe Client Data Layer may also be loaded after the components (e.g. async includes, see page v3)
+    describeDataLayerIntegration("when the Adobe Client Data Layer is loaded last", [POLYFILL, DATALAYER, ACDL3], 3);
 });

@@ -15,9 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.pw.datalayer;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -33,12 +37,43 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Tag("playwright-group2")
 public class DataLayerPwIT extends PlaywrightAuthorBaseTest {
 
+    private static final String DATA_LAYER_CONFIG =
+        "/conf/core-components/sling:configs/com.adobe.cq.wcm.core.components.internal.DataLayerConfig";
+    private static final String USE_ACDL3 = "useAcdl3";
+
     private String testPage;
+    private boolean acdl3Configured;
 
     @Test
     public void testDataLayerInitialized() throws Exception {
+        // page v2, with core.wcm.components.commons.datalayer.v1 embedded in the page clientlibs (cmp-test.base.forms)
+        Map<?, ?> state = openTestPage("/conf/core-components/settings/wcm/templates/simple-template", "2.", "component");
+        assertNotNull(state.get("page"), "returned state is missing 'page' property!");
+        assertNotNull(state.get("component"), "returned state is missing 'component' property!");
+        assertEquals(2, ((Map<?, ?>) state.get("component")).size(),
+            "returned state.components should have 2 entries!");
+    }
+
+    @Test
+    public void testDataLayerInitializedPageV3() throws Exception {
+        Map<?, ?> state = openTestPage("/conf/core-components/settings/wcm/templates/simple-template-v3", "2.", "page");
+        assertNotNull(state.get("page"), "returned state is missing 'page' property!");
+    }
+
+    @Test
+    public void testDataLayerInitializedPageV3Acdl3() throws Exception {
+        List<NameValuePair> properties = Arrays.asList(
+            new BasicNameValuePair(USE_ACDL3, "true"),
+            new BasicNameValuePair(USE_ACDL3 + "@TypeHint", "Boolean"));
+        adminClient.setPropertiesString(DATA_LAYER_CONFIG, properties, HttpStatus.SC_OK);
+        acdl3Configured = true;
+        Map<?, ?> state = openTestPage("/conf/core-components/settings/wcm/templates/simple-template-v3", "3.", "page");
+        assertNotNull(state.get("page"), "returned state is missing 'page' property!");
+    }
+
+    private Map<?, ?> openTestPage(String template, String expectedVersionPrefix, String stateProperty) throws Exception {
         testPage = adminClient.createPage("testPage-" + System.currentTimeMillis(), "Test Page Title",
-            "/content/core-components", "/conf/core-components/settings/wcm/templates/simple-template")
+            "/content/core-components", template)
             .getSlingPath();
 
         openEditor(testPage);
@@ -46,21 +81,22 @@ public class DataLayerPwIT extends PlaywrightAuthorBaseTest {
         Frame frame = contentFrame().owner().elementHandle().contentFrame();
         // the content frame may reload when switching to preview mode, so wait until the data layer is initialized
         frame.waitForFunction("() => !!window.adobeDataLayer && typeof window.adobeDataLayer.getState === 'function'"
-            + " && !!window.adobeDataLayer.getState().component");
+            + " && !!window.adobeDataLayer.getState()." + stateProperty);
         assertNotNull(frame.evaluate("() => window.adobeDataLayer"), "adobeDataLayer is undefined!");
         String version = (String) frame.evaluate("() => window.adobeDataLayer.version");
-        assertTrue(version != null && version.startsWith("3."),
-            "expected Adobe Client Data Layer 3.x, got: " + version);
+        assertTrue(version != null && version.startsWith(expectedVersionPrefix),
+            "expected Adobe Client Data Layer " + expectedVersionPrefix + "x, got: " + version);
         Map<?, ?> state = (Map<?, ?>) frame.evaluate("() => window.adobeDataLayer.getState()");
         assertNotNull(state, "adobeDataLayer.getState(): returned state object is null!");
-        assertNotNull(state.get("page"), "returned state is missing 'page' property!");
-        assertNotNull(state.get("component"), "returned state is missing 'component' property!");
-        assertEquals(2, ((Map<?, ?>) state.get("component")).size(),
-            "returned state.components should have 2 entries!");
+        return state;
     }
 
     @AfterEach
     void cleanupDataLayerPage() throws Exception {
+        if (acdl3Configured) {
+            adminClient.setPropertyString(DATA_LAYER_CONFIG, USE_ACDL3 + "@Delete", "", HttpStatus.SC_OK);
+            acdl3Configured = false;
+        }
         if (testPage != null) {
             adminClient.deletePageWithRetry(testPage, true, false, RequestConstants.TIMEOUT_TIME_MS,
                 RequestConstants.RETRY_TIME_INTERVAL, HttpStatus.SC_OK);

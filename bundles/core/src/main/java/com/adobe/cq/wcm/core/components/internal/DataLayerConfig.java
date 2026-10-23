@@ -49,4 +49,12 @@ public @interface DataLayerConfig {
     @Property(label = "Data Layer object name")
     String name() default DATALAYER_OBJECT_NAME_ADOBE;
 
+    /**
+     *
+     * @return {@code true} if the Core Page component should include the data layer client libraries based on the
+     * Adobe Client Data Layer 3.x, {@code false} otherwise. It defaults to {@code false} (Adobe Client Data Layer 2.x).
+     */
+    @Property(label = "Use Adobe Client Data Layer 3.x")
+    boolean useAcdl3() default false;
+
 }

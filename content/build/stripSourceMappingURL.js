@@ -23,8 +23,8 @@
 const fs = require("fs");
 const path = require("path");
 
-const FILE = path.join(__dirname, "..", "src/content/jcr_root/apps/core/wcm/components/commons/datalayer/acdl",
-    "core.wcm.components.commons.datalayer.acdl/js/adobe-client-data-layer.min.js");
+const FILE = path.join(__dirname, "..", "src/content/jcr_root/apps/core/wcm/components/commons/datalayer/acdl3",
+    "core.wcm.components.commons.datalayer.acdl3/js/adobe-client-data-layer.min.js");
 
 const content = fs.readFileSync(FILE, "utf8");
 const stripped = content.replace(/\n?\/\/# sourceMappingURL=\S+\s*$/, "\n");

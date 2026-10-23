@@ -60,25 +60,40 @@ The data layer integration is provided by the following client libraries:
 
 | Client library | Content |
 |---|---|
-| `core.wcm.components.commons.datalayer.acdl` | The ACDL library, served as distributed by the ACDL project (already minified, not processed by the AEM minifier). |
-| `core.wcm.components.commons.datalayer.v2` | The Core Components data layer integration, without the ACDL library. Used by the Page component v3, which includes `core.wcm.components.commons.datalayer.acdl` separately. |
-| `core.wcm.components.commons.datalayer.v1` | The Core Components data layer integration, with a dependency on `core.wcm.components.commons.datalayer.acdl`. Used by the Page component v2. |
+| `core.wcm.components.commons.datalayer.v1` | The Core Components data layer integration, with the ACDL library 2.x embedded. Used by the Page component v2. |
+| `core.wcm.components.commons.datalayer.v2` | The Core Components data layer integration, without the ACDL library. Used by the Page component v3. |
+| `core.wcm.components.commons.datalayer.acdl` | The ACDL library 2.x. Included by the Page component v3, unless `skipClientlibInclude` is set. |
+| `core.wcm.components.commons.datalayer.v1.acdl3` | The Core Components data layer integration, with a dependency on `core.wcm.components.commons.datalayer.acdl3`. Used by the Page component v2 when `useAcdl3` is set. |
+| `core.wcm.components.commons.datalayer.acdl3` | The ACDL library 3.x, served as distributed by the ACDL project (already minified, not processed by the AEM minifier). Included by the Page component v3 when `useAcdl3` is set, unless `skipClientlibInclude` is set. |
 
-`core.wcm.components.commons.datalayer.v1` loads the ACDL library through a client library dependency, so the ACDL library is always output as a separate `<script>` element before the client library that includes `core.wcm.components.commons.datalayer.v1`, also when it is embedded in another client library (e.g. a project `clientlib-base`). Embedding it adds one request for the ACDL library.
+The ACDL library 2.x included in Core Components is built from the sources of the ACDL library 2.0.2 with an up-to-date version of [Lodash](https://lodash.com/), instead of the Lodash 4.17.5 custom build bundled by the ACDL project. Its API and behavior are the ones of the ACDL library 2.0.2 and it supports the same browsers (ES5).
 
-Because the ACDL library is loaded as a dependency, it's only output when the client library is included with the standard client library include (e.g. the `core/wcm/components/commons/v1/templates/clientlib.html` template). In particular:
+## Using the Adobe Client Data Layer 3.x
+
+By default, the Page component includes the ACDL library 2.x. To include the ACDL library 3.x instead:
+
+1. Create the following structure below the `/conf` node:
+   `/conf/<my-site>/sling:configs/com.adobe.cq.wcm.core.components.internal.DataLayerConfig`
+2. Add the `useAcdl3` boolean property and set it to `true`.
+3. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
+
+The `useAcdl3` property is used by the Page component v2 and v3. Custom client libraries that embed `core.wcm.components.commons.datalayer.v1` still include the ACDL library 2.x, and need to embed `core.wcm.components.commons.datalayer.v1.acdl3` instead. Only one version of the ACDL library should be loaded on a page: the first one that is loaded initializes the data layer.
+
+The ACDL library 3.x has some differences compared to the ACDL library 2.x:
+
+* It requires ES2020 and [`structuredClone`](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone) support: Chrome 98+, Firefox 94+ and Safari 15.4+. On older browsers the ACDL library doesn't work, and `adobeDataLayer` may remain a plain array.
+* Arrays in the data layer state are replaced instead of merged by index.
+* The data pushed to the data layer is cloned with `structuredClone`, so pushing data that can't be cloned (e.g. functions or DOM elements) throws a `DataCloneError` when an event listener matches it.
+
+`core.wcm.components.commons.datalayer.v1.acdl3` loads the ACDL library through a client library dependency, so the ACDL library is always output as a separate `<script>` element before the client library that includes `core.wcm.components.commons.datalayer.v1.acdl3`, also when it is embedded in another client library (e.g. a project `clientlib-base`). Because of this, the ACDL library is only output when the client library is included with the standard client library include (e.g. the `core/wcm/components/commons/v1/templates/clientlib.html` template). In particular:
 
 * Inlining a client library (e.g. with `ClientLibraries#getJsInline`) doesn't include its dependencies, so the ACDL library isn't inlined.
 * Client library URLs loaded with hard-coded `<script>` elements don't load the dependencies.
 * An `onload` handler passed to the client library include template is added to every `<script>` element it outputs, so it's also called for the ACDL library.
 
-In these cases, include `core.wcm.components.commons.datalayer.acdl` explicitly, or embed `core.wcm.components.commons.datalayer.v2` and load the ACDL library separately.
+In these cases, include `core.wcm.components.commons.datalayer.acdl3` explicitly, or embed `core.wcm.components.commons.datalayer.v2` and load the ACDL library separately.
 
-Embedding `core.wcm.components.commons.datalayer.acdl` directly in a project client library is not recommended: the ACDL library uses ES2020 syntax, and client libraries configured with the default AEM minifier settings (ES5) fail to minify it and are then served unminified.
-
-### Browser Support
-
-The ACDL library 3.x requires ES2020 and [`structuredClone`](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone) support: Chrome 98+, Firefox 94+ and Safari 15.4+. On older browsers the ACDL library doesn't work, and `adobeDataLayer` may remain a plain array.
+Embedding `core.wcm.components.commons.datalayer.acdl3` directly in a project client library is not recommended: the ACDL library 3.x uses ES2020 syntax, and client libraries configured with the default AEM minifier settings (ES5) fail to minify it and are then served unminified.
 
 ## Data Layer State Structure
 

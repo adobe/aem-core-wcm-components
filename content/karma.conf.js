@@ -53,7 +53,13 @@ module.exports = function(config) {
                 served: true
             },
             {
-                pattern: 'node_modules/@adobe/adobe-client-data-layer/dist/adobe-client-data-layer.min.js',
+                // Adobe Client Data Layer 2.x, built by build/acdl.js
+                pattern: 'target/acdl/adobe-client-data-layer.min.js',
+                included: false,
+                served: true
+            },
+            {
+                pattern: 'node_modules/adobe-client-data-layer-3/dist/adobe-client-data-layer.min.js',
                 included: false,
                 served: true
             },
