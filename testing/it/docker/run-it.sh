@@ -568,7 +568,31 @@ provision_packages() {
     if [[ "${AEM_TYPE}" == "sdk" ]]; then
         dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.core" "${all_zip}"
         dedupe_bundle "${base}" "com.adobe.cq.core.wcm.components.extensions.amp" "${all_zip}"
+        remove_precompiled_scripts "${base}"
     fi
+}
+
+# The SDK also ships the product's HTL scripts precompiled in the `aem-precompiled-scripts`
+# bundle, and those take precedence over the scripts installed under /libs by the `all`
+# package. Uninstall it (stopping is not enough, see dedupe_bundle) so the ITs exercise
+# this repo's HTL. Args: <base-url>
+remove_precompiled_scripts() {
+    local base="$1" ids id
+    ids=$(curl -fsS -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" "${base}/system/console/bundles.json" \
+        | python3 -c '
+import json, sys
+print(" ".join(str(b["id"]) for b in json.load(sys.stdin).get("data", []) if b.get("symbolicName") == "aem-precompiled-scripts"))
+') || return 1
+    if [[ -z "${ids}" ]]; then
+        log "No precompiled scripts bundle installed at ${base}"
+        return 0
+    fi
+    for id in ${ids}; do
+        log "Uninstalling the precompiled scripts bundle (id ${id}) so this repo's HTL is used"
+        curl -sSf -u "${AEM_ADMIN_USER}:${AEM_ADMIN_PASSWORD}" \
+            -X POST "${base}/system/console/bundles/${id}" -d action=uninstall >/dev/null
+    done
+    wait_for_bundles_settled "${base}"
 }
 
 product_version() {
