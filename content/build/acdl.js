@@ -55,6 +55,28 @@ function checkVersions() {
 }
 
 /**
+ * Recursively copies a directory, skipping test folders (fs.cpSync is not available in Node 14).
+ *
+ * @param {String} source the directory to copy
+ * @param {String} target the destination directory
+ */
+function copyDir(source, target) {
+    fs.mkdirSync(target, { recursive: true });
+    fs.readdirSync(source, { withFileTypes: true }).forEach(function(entry) {
+        if (entry.name === "__tests__") {
+            return;
+        }
+        const from = path.join(source, entry.name);
+        const to = path.join(target, entry.name);
+        if (entry.isDirectory()) {
+            copyDir(from, to);
+        } else {
+            fs.copyFileSync(from, to);
+        }
+    });
+}
+
+/**
  * Copies the ACDL sources and creates the custom-lodash.js module they require.
  *
  * @param {String} workDir the directory to prepare the sources in
@@ -63,12 +85,7 @@ function checkVersions() {
 function prepareSources(workDir) {
     fs.rmSync(workDir, { recursive: true, force: true });
     fs.mkdirSync(workDir, { recursive: true });
-    fs.cpSync(path.join(ACDL_ROOT, "src"), path.join(workDir, "src"), {
-        recursive: true,
-        filter: function(source) {
-            return path.basename(source) !== "__tests__";
-        }
-    });
+    copyDir(path.join(ACDL_ROOT, "src"), path.join(workDir, "src"));
     fs.copyFileSync(path.join(ACDL_ROOT, "version.json"), path.join(workDir, "version.json"));
     // resolved from the node_modules folder of this project
     const customLodash = "module.exports = {\n" + LODASH_FUNCTIONS.map(function(name) {
