@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -429,34 +430,53 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     }
 
     /**
-     * Checks if a PNG asset has transparency based on its bits per pixel metadata.
-     * 
+     * Checks if a PNG asset has transparency, using the same metadata rules as Dynamic Media:
+     * <ul>
+     *     <li>{@value Image#DAM_BITS_PER_PIXEL} equal to 32 indicates an alpha channel;</li>
+     *     <li>{@value Image#TIFF_BITS_PER_SAMPLE} with more than 3 values indicates an alpha channel;</li>
+     *     <li>if both properties are missing, the PNG is assumed to have an alpha channel.</li>
+     * </ul>
+     * If at least one property is present and none indicates an alpha channel, the PNG is considered opaque. Values that
+     * cannot be interpreted count as present without an alpha channel.
+     *
      * @param asset The DAM asset to check
-     * @return true if the PNG has transparency (32 bits), false otherwise
+     * @return true if the asset is a PNG with transparency, false otherwise (including for {@code null} or non-PNG assets)
      */
     protected boolean hasPngTransparency(Asset asset) {
-        if (asset == null) {
+        if (asset == null || !StandardImageHandler.PNG1_MIMETYPE.equals(asset.getMimeType())) {
             return false;
         }
-        
-        String mimeType = asset.getMimeType();
-        if (!StandardImageHandler.PNG1_MIMETYPE.equals(mimeType)) {
-            return false;
-        }
-        
+
         String bitsPerPixel = asset.getMetadataValue(Image.DAM_BITS_PER_PIXEL);
+        Object bitsPerSample = asset.getMetadata(Image.TIFF_BITS_PER_SAMPLE);
+        if (StringUtils.isEmpty(bitsPerPixel) && bitsPerSample == null) {
+            LOGGER.debug("No bits per pixel or bits per sample metadata found for PNG asset, assuming transparency");
+            return true;
+        }
+        return hasAlphaBitsPerPixel(bitsPerPixel) || hasAlphaBitsPerSample(bitsPerSample);
+    }
+
+    private boolean hasAlphaBitsPerPixel(String bitsPerPixel) {
         if (StringUtils.isEmpty(bitsPerPixel)) {
-            LOGGER.debug("No bits per pixel metadata found for PNG asset");
             return false;
         }
-        
         try {
-            int bits = Integer.parseInt(bitsPerPixel);
-            return bits == 32; // 32 bits indicates PNG with alpha channel
+            return Integer.parseInt(StringUtils.trim(bitsPerPixel)) == 32;
         } catch (NumberFormatException e) {
             LOGGER.debug("Could not parse bits per pixel value: {}", bitsPerPixel);
             return false;
         }
+    }
+
+    private boolean hasAlphaBitsPerSample(Object bitsPerSample) {
+        if (bitsPerSample == null) {
+            return false;
+        }
+        if (!bitsPerSample.getClass().isArray()) {
+            LOGGER.debug("Bits per sample value is not multi-valued: {}", bitsPerSample);
+            return false;
+        }
+        return Array.getLength(bitsPerSample) > 3;
     }
 
 }
