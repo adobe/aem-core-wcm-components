@@ -44,7 +44,7 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 3. [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v2/languagenavigation)
 4. [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v3/breadcrumb)
 5. [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v3/search)
-6. [ContentAI Supported Search](content/src/content/jcr_root/apps/core/wcm/components/contentaisearch/v1/contentaisearch)
+6. [ContentAI Supported Search](content/src/content/jcr_root/apps/core/wcm/components/contentaisearch/v2/contentaisearch)
 7. [Table of Contents](content/src/content/jcr_root/apps/core/wcm/components/tableofcontents/v1/tableofcontents)
 
 ### Page Authoring Components
@@ -94,6 +94,7 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 Core Components | AEM as a Cloud Service | AEM 6.5 LTS | AEM 6.5 | Java SE | Maven
 ----------------|------------------------|-------------|---------|---------|-------
+[>= 2.33.x](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.33.0) | Continual              | >= 6.5 LTS GA | \>= 6.5.21.0 | 8, 11,<br/>17, 21 | \>= 3.3.9
 [>= 2.32.x](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.32.0) | Continual              | >= 6.5 LTS GA | \>= 6.5.21.0 | 8, 11,<br/>17, 21 | \>= 3.3.9
 [>= 2.31.x](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.31.0) | Continual              | >= 6.5 LTS GA | \>= 6.5.21.0 | 8, 11,<br/>17, 21 | \>= 3.3.9
 [>= 2.29.x](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.29.0) | Continual              | >= 6.5 LTS GA | \>= 6.5.21.0 | 8, 11,<br/>17, 21 | \>= 3.3.9
