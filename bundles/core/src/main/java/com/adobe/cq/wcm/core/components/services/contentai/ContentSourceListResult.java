@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class ContentSourceListResult {
 
     private List<ContentSourceListItem> items = new ArrayList<>();
+    private String cursor;
 
     public List<ContentSourceListItem> getItems() {
         return items;
@@ -36,5 +37,17 @@ public class ContentSourceListResult {
 
     public void setItems(List<ContentSourceListItem> items) {
         this.items = items != null ? items : new ArrayList<>();
+    }
+
+    /**
+     * @return the opaque cursor to pass to the next {@code GET /content-sources} call to fetch the next page,
+     *         or {@code null}/blank when this is the last page.
+     */
+    public String getCursor() {
+        return cursor;
+    }
+
+    public void setCursor(String cursor) {
+        this.cursor = cursor;
     }
 }

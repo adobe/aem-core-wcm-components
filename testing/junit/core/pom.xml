@@ -151,20 +151,11 @@
         </dependency>
 
         <!-- JCR -->
-        <dependency>
-            <groupId>javax.jcr</groupId>
-            <artifactId>jcr</artifactId>
-            <scope>provided</scope>
-        </dependency>
 
         <!-- Utilities -->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
@@ -173,11 +164,6 @@
         </dependency>
 
         <!-- Servlet -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
 
         <!-- Testing -->
         <dependency>
@@ -203,6 +189,13 @@
             <artifactId>org.apache.sling.models.api</artifactId>
             <version>1.3.8</version>
             <scope>provided</scope>
+            <!-- declared as provided upstream, so never on the classpath -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.sling</groupId>
+                    <artifactId>org.apache.sling.api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Component Exporter -->

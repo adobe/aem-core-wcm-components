@@ -216,6 +216,29 @@ class ContentAISearchResultsServletTest {
     }
 
     @Test
+    void doGetWorksForV2ResourceType() throws Exception {
+        ContentSourceSearchResult expected = new ContentSourceSearchResult();
+        ContentSourceSearchResult.Item item = new ContentSourceSearchResult.Item();
+        item.setId("doc_1");
+        item.setScore(0.75);
+        expected.setResults(Collections.singletonList(item));
+        when(mockClient.search(eq("wknd"), eq("ACQUISITION"), eq("electric cars"), eq(10), isNull())).thenReturn(expected);
+
+        context.create().resource("/content/jcr:content/par/contentaisearch-v2",
+            "sling:resourceType", "core/wcm/components/contentaisearch/v2/contentaisearch",
+            "contentSources", new String[] {"wknd"},
+            "resultsSize", 10);
+        context.currentResource("/content/jcr:content/par/contentaisearch-v2");
+        context.request().setQueryString("q=electric+cars");
+
+        underTest.doGet(context.request(), context.response());
+
+        assertEquals(200, context.response().getStatus());
+        String output = context.response().getOutputAsString();
+        assertTrue(output.contains("\"id\":\"doc_1\""));
+    }
+
+    @Test
     void parseSourceCursors_returnsEmptyMapForBlankInput() {
         assertTrue(ContentAISearchResultsServlet.parseSourceCursors(null).isEmpty());
         assertTrue(ContentAISearchResultsServlet.parseSourceCursors("").isEmpty());

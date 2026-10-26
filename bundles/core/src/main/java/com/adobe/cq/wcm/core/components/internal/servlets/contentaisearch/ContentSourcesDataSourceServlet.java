@@ -51,7 +51,8 @@ import com.adobe.granite.ui.components.ds.EmptyDataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
 
 /**
- * Author dialog datasource listing Content AI content sources from {@code GET /content-sources}.
+ * Author dialog datasource listing Content AI content sources of a given type from the generic
+ * {@code GET /content-sources?type={type}} listing (e.g. {@code type=AEM_PUBLISH}, {@code type=ACQUISITION}).
  */
 @Component(
     service = Servlet.class,
@@ -69,6 +70,12 @@ public class ContentSourcesDataSourceServlet extends SlingSafeMethodsServlet {
 
     private static final String PARAM_CONTENT_SOURCE_TYPE = "contentSourceType";
 
+    /**
+     * Safety cap on the number of {@code GET /content-sources} pages followed per request, so a misbehaving
+     * Content AI response (e.g. a cursor that never comes back blank) can't turn this into an unbounded loop.
+     */
+    private static final int MAX_PAGES = 50;
+
     private static final long serialVersionUID = 1L;
 
     @Reference
@@ -82,20 +89,17 @@ public class ContentSourcesDataSourceServlet extends SlingSafeMethodsServlet {
         List<Resource> options = new ArrayList<>();
 
         try {
-            ContentSourceListResult listResult = contentAIClient.listContentSources();
-            if (listResult != null && listResult.getItems() != null) {
-                ResourceResolver resolver = request.getResourceResolver();
-                for (ContentSourceListItem item : listResult.getItems()) {
-                    if (!matchesType(item, contentSourceType) || !isPublicSource(item)) {
-                        continue;
-                    }
-                    String indexName = ContentSourceLabelFormatter.resolveIndexName(item.getName(), item.getId());
-                    if (StringUtils.isBlank(indexName)) {
-                        continue;
-                    }
-                    String label = ContentSourceLabelFormatter.formatLabel(indexName, item.getResolvableDescription());
-                    options.add(new ContentSourceOptionResource(resolver, label, indexName));
+            ResourceResolver resolver = request.getResourceResolver();
+            for (ContentSourceListItem item : fetchAllContentSources(contentSourceType)) {
+                if (!matchesType(item, contentSourceType) || !isPublicSource(item)) {
+                    continue;
                 }
+                String indexName = ContentSourceLabelFormatter.resolveIndexName(item.getName(), item.getId());
+                if (StringUtils.isBlank(indexName)) {
+                    continue;
+                }
+                String label = ContentSourceLabelFormatter.formatLabel(indexName, item.getResolvableDescription());
+                options.add(new ContentSourceOptionResource(resolver, label, indexName));
             }
         } catch (ContentAIClientException e) {
             LOGGER.error("Failed to list Content AI content sources", e);
@@ -105,6 +109,44 @@ public class ContentSourcesDataSourceServlet extends SlingSafeMethodsServlet {
             ? EmptyDataSource.instance()
             : new SimpleDataSource(options.iterator());
         request.setAttribute(DataSource.class.getName(), dataSource);
+    }
+
+    /**
+     * Fetches every Content AI content source of the given type across all cursor pages, so the picker isn't
+     * silently truncated to just the first page {@code GET /content-sources?type={type}} returns.
+     *
+     * @param contentSourceType the Content AI content source type to list, e.g. {@code "AEM_PUBLISH"} or
+     *                           {@code "ACQUISITION"}
+     * @return the combined items from every page, in the order returned by the API
+     * @throws ContentAIClientException if any page request fails
+     */
+    @NotNull
+    private List<ContentSourceListItem> fetchAllContentSources(@NotNull String contentSourceType)
+        throws ContentAIClientException {
+        List<ContentSourceListItem> allItems = new ArrayList<>();
+
+        ContentSourceListResult page = contentAIClient.listContentSources(contentSourceType, null);
+        appendItems(allItems, page);
+        String cursor = page != null ? page.getCursor() : null;
+
+        int pagesFetched = 1;
+        while (StringUtils.isNotBlank(cursor) && pagesFetched < MAX_PAGES) {
+            page = contentAIClient.listContentSources(contentSourceType, cursor);
+            appendItems(allItems, page);
+            cursor = page != null ? page.getCursor() : null;
+            pagesFetched++;
+        }
+        if (StringUtils.isNotBlank(cursor)) {
+            LOGGER.warn("Stopped listing Content AI content sources after {} pages ({} items); the API is still "
+                + "returning a cursor, so the list may be incomplete", pagesFetched, allItems.size());
+        }
+        return allItems;
+    }
+
+    private void appendItems(@NotNull List<ContentSourceListItem> allItems, @Nullable ContentSourceListResult page) {
+        if (page != null && page.getItems() != null) {
+            allItems.addAll(page.getItems());
+        }
     }
 
     @NotNull
