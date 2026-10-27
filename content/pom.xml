@@ -175,6 +175,8 @@
                         <exclude>**/core.wcm.components.commons.datalayer.v1/**</exclude>
                         <exclude>**/core.wcm.components.commons.datalayer.v2/**</exclude>
                         <exclude>**/core.wcm.components.commons.datalayer.acdl/**</exclude>
+                        <exclude>**/core.wcm.components.commons.datalayer.v1.acdl3/**</exclude>
+                        <exclude>**/core.wcm.components.commons.datalayer.acdl3/**</exclude>
                         <!-- Ignore karma -->
                         <exclude>**/coverage/**</exclude>
                     </excludes>

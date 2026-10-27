@@ -53,6 +53,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemConfig;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
+import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.LazyValue;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
@@ -284,6 +285,19 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             redirectTarget = newRedirectItem(redirectTargetValue, request, linkManager);
         }
         return redirectTarget;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isDataLayerAcdl3Used() {
+        return getDataLayerConfig()
+            .map(DataLayerConfig::useAcdl3)
+            .orElse(false);
+    }
+
+    protected Optional<DataLayerConfig> getDataLayerConfig() {
+        return Optional.ofNullable(resource.adaptTo(ConfigurationBuilder.class))
+            .map(builder -> builder.as(DataLayerConfig.class));
     }
 
     @Override

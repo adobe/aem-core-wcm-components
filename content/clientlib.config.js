@@ -16,6 +16,9 @@
 /* global
     module, __dirname
  */
+// ACDL 2.x, built by build/acdl.js
+const ACDL_V2 = "target/acdl/adobe-client-data-layer.min.js";
+
 module.exports = {
     context: __dirname,
     libs: [
@@ -28,7 +31,7 @@ module.exports = {
             assets: {
                 js: [
                     "src/scripts/datalayer/v1/polyfill.js",
-                    "node_modules/@adobe/adobe-client-data-layer/dist/adobe-client-data-layer.min.js",
+                    ACDL_V2,
                     "src/scripts/datalayer/v1/datalayer.js"
                 ]
             }
@@ -54,7 +57,35 @@ module.exports = {
             jsProcessor: ["default:none", "min:gcc;compilationLevel=whitespace"],
             assets: {
                 js: [
-                    "node_modules/@adobe/adobe-client-data-layer/dist/adobe-client-data-layer.min.js"
+                    ACDL_V2
+                ]
+            }
+        },
+        {
+            name: "core.wcm.components.commons.datalayer.v1.acdl3",
+            path: "src/content/jcr_root/apps/core/wcm/components/commons/datalayer/v1/clientlibs",
+            serializationFormat: "xml",
+            allowProxy: true,
+            dependencies: ["core.wcm.components.commons.datalayer.acdl3"],
+            jsProcessor: ["default:none", "min:gcc;compilationLevel=whitespace"],
+            assets: {
+                js: [
+                    "src/scripts/datalayer/v1/polyfill.js",
+                    "src/scripts/datalayer/v1/datalayer.js"
+                ]
+            }
+        },
+        {
+            name: "core.wcm.components.commons.datalayer.acdl3",
+            path: "src/content/jcr_root/apps/core/wcm/components/commons/datalayer/acdl3",
+            serializationFormat: "xml",
+            allowProxy: true,
+            // the library is distributed already minified (ES2020 syntax);
+            // its sourceMappingURL comment is removed after the build (see build/stripSourceMappingURL.js)
+            jsProcessor: ["default:none", "min:none"],
+            assets: {
+                js: [
+                    "node_modules/adobe-client-data-layer-3/dist/adobe-client-data-layer.min.js"
                 ]
             }
         }
