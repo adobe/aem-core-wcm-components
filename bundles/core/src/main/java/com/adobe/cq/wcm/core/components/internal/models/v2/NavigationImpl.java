@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
@@ -30,16 +31,29 @@ import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
 
+/**
+ * V2 Navigation model implementation.
+ */
 @Model(adaptables = SlingHttpServletRequest.class,
         adapters = {Navigation.class, ComponentExporter.class},
         resourceType = {NavigationImpl.RESOURCE_TYPE})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class NavigationImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.NavigationImpl {
 
+    /**
+     * V2 Navigation resource type.
+     */
     public static final String RESOURCE_TYPE = "core/wcm/components/navigation/v2/navigation";
 
-    protected NavigationItem newNavigationItem(Page page, boolean active, boolean current, @NotNull LinkManager linkManager, int level,
-                                               List<NavigationItem> children, String parentId, Component component) {
+    @Override
+    protected NavigationItem newNavigationItem(@NotNull final Page page,
+                                               final boolean active,
+                                               final boolean current,
+                                               @NotNull final LinkManager linkManager,
+                                               final int level,
+                                               @NotNull final Supplier<@NotNull List<NavigationItem>> children,
+                                               final String parentId,
+                                               final Component component) {
         return new NavigationItemImpl(page, active, current, linkManager, level, children, parentId, component);
     }
 
