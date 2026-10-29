@@ -1012,6 +1012,145 @@
             }
         }
     },
+    "png_alpha_DM_32bpp.png": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "dam:AssetContent",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "renditions"        : {
+                "jcr:primaryType": "nt:folder",
+                "original"       : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content"    : {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:mimeType"   : "image/png",
+                        ":jcr:data"      : 49069
+                    }
+                }
+            },
+            "metadata"          : {
+                "jcr:primaryType"  : "nt:unstructured",
+                "dam:Fileformat"   : "PNG",
+                "dam:MIMEtype"     : "image/png",
+                "dam:Bitsperpixel" : 32,
+                "tiff:ImageLength" : 2000,
+                "tiff:ImageWidth"  : 2000,
+                "dam:scene7Domain" : "https://s7d9.scene7.com/",
+                "dam:scene7File"   : "dmtestcompany/png_alpha_DM_32bpp"
+            }
+        }
+    },
+    "png_alpha_DM_24bpp.png": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "dam:AssetContent",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "renditions"        : {
+                "jcr:primaryType": "nt:folder",
+                "original"       : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content"    : {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:mimeType"   : "image/png",
+                        ":jcr:data"      : 49069
+                    }
+                }
+            },
+            "metadata"          : {
+                "jcr:primaryType"  : "nt:unstructured",
+                "dam:Fileformat"   : "PNG",
+                "dam:MIMEtype"     : "image/png",
+                "dam:Bitsperpixel" : 24,
+                "tiff:ImageLength" : 2000,
+                "tiff:ImageWidth"  : 2000,
+                "dam:scene7Domain" : "https://s7d9.scene7.com/",
+                "dam:scene7File"   : "dmtestcompany/png_alpha_DM_24bpp"
+            }
+        }
+    },
+    "png_alpha_DM_rgba.png": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "dam:AssetContent",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "renditions"        : {
+                "jcr:primaryType": "nt:folder",
+                "original"       : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content"    : {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:mimeType"   : "image/png",
+                        ":jcr:data"      : 49069
+                    }
+                }
+            },
+            "metadata"          : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "dam:Fileformat"    : "PNG",
+                "dam:MIMEtype"      : "image/png",
+                "tiff:BitsPerSample": [8, 8, 8, 8],
+                "tiff:ImageLength"  : 2000,
+                "tiff:ImageWidth"   : 2000,
+                "dam:scene7Domain"  : "https://s7d9.scene7.com/",
+                "dam:scene7File"    : "dmtestcompany/png_alpha_DM_rgba"
+            }
+        }
+    },
+    "png_alpha_DM_rgb.png": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "dam:AssetContent",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "renditions"        : {
+                "jcr:primaryType": "nt:folder",
+                "original"       : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content"    : {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:mimeType"   : "image/png",
+                        ":jcr:data"      : 49069
+                    }
+                }
+            },
+            "metadata"          : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "dam:Fileformat"    : "PNG",
+                "dam:MIMEtype"      : "image/png",
+                "tiff:BitsPerSample": [8, 8, 8],
+                "tiff:ImageLength"  : 2000,
+                "tiff:ImageWidth"   : 2000,
+                "dam:scene7Domain"  : "https://s7d9.scene7.com/",
+                "dam:scene7File"    : "dmtestcompany/png_alpha_DM_rgb"
+            }
+        }
+    },
+    "png_alpha_DM_nometa.png": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "dam:AssetContent",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "renditions"        : {
+                "jcr:primaryType": "nt:folder",
+                "original"       : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content"    : {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:mimeType"   : "image/png",
+                        ":jcr:data"      : 49069
+                    }
+                }
+            },
+            "metadata"          : {
+                "jcr:primaryType"  : "nt:unstructured",
+                "dam:Fileformat"   : "PNG",
+                "dam:MIMEtype"     : "image/png",
+                "tiff:ImageLength" : 2000,
+                "tiff:ImageWidth"  : 2000,
+                "dam:scene7Domain" : "https://s7d9.scene7.com/",
+                "dam:scene7File"   : "dmtestcompany/png_alpha_DM_nometa"
+            }
+        }
+    },
     "Adobe_Systems_logo_and_wordmark_DM.gif": {
         "jcr:primaryType": "dam:Asset",
         "jcr:mixinTypes" : [
