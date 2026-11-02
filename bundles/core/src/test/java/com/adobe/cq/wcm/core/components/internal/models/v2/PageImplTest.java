@@ -56,6 +56,7 @@ import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static com.adobe.cq.wcm.core.components.Utils.configureDataLayer;
 import static com.adobe.cq.wcm.core.components.Utils.getTestExporterJSONPath;
 import static com.adobe.cq.wcm.core.components.Utils.testJSONExport;
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -407,5 +408,25 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         });
 
         assertTrue(page.getAlternateLanguageLinks().isEmpty());
+    }
+
+    @Test
+    protected void testIsDataLayerAcdl3Used_caconfig_undefined() {
+        Page page = getPageUnderTest(PAGE);
+        assertFalse(page.isDataLayerAcdl3Used(), "The ACDL 2.x data layer clientlibs should be included.");
+    }
+
+    @Test
+    protected void testIsDataLayerAcdl3Used_caconfig_true() {
+        Page page = getPageUnderTest(PAGE);
+        configureDataLayer(context, true, false, "adobeDataLayer", true);
+        assertTrue(page.isDataLayerAcdl3Used(), "The ACDL 3.x data layer clientlibs should be included.");
+    }
+
+    @Test
+    protected void testIsDataLayerAcdl3Used_caconfig_false() {
+        Page page = getPageUnderTest(PAGE);
+        configureDataLayer(context, true, false, "adobeDataLayer", false);
+        assertFalse(page.isDataLayerAcdl3Used(), "The ACDL 2.x data layer clientlibs should be included.");
     }
 }

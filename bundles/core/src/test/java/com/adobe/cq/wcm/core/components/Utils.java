@@ -198,11 +198,16 @@ public class Utils {
     }
 
     public static void configureDataLayer(AemContext context, boolean enabled, boolean skip, String name) {
+        configureDataLayer(context, enabled, skip, name, false);
+    }
+
+    public static void configureDataLayer(AemContext context, boolean enabled, boolean skip, String name, boolean useAcdl3) {
         ConfigurationBuilder builder = Mockito.mock(ConfigurationBuilder.class);
         DataLayerConfig dataLayerConfig = Mockito.mock(DataLayerConfig.class);
         lenient().when(dataLayerConfig.enabled()).thenReturn(enabled);
         lenient().when(dataLayerConfig.skipClientlibInclude()).thenReturn(skip);
         lenient().when(dataLayerConfig.name()).thenReturn(name);
+        lenient().when(dataLayerConfig.useAcdl3()).thenReturn(useAcdl3);
         lenient().when(builder.as(DataLayerConfig.class)).thenReturn(dataLayerConfig);
         context.registerAdapter(Resource.class, ConfigurationBuilder.class, builder);
     }

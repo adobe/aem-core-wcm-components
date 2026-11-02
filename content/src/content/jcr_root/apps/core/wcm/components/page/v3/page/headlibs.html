@@ -27,5 +27,6 @@
     <sly data-sly-test="${clientLibCategories}" data-sly-call="${clientlib.css @ categories=clientLibCategories}"></sly>
     <link data-sly-test="${staticDesignPath}" href="${staticDesignPath}" rel="stylesheet" type="text/css" />
     <sly data-sly-test="${page.data}" data-sly-call="${clientlib.js @ categories='core.wcm.components.commons.datalayer.v2', async=true}"/>
-    <sly data-sly-test="${page.data && page.dataLayerClientlibIncluded}" data-sly-call="${clientlib.js @ categories='core.wcm.components.commons.datalayer.acdl', async=true}"/>
+    <sly data-sly-test="${page.data && page.dataLayerClientlibIncluded && !page.dataLayerAcdl3Used}" data-sly-call="${clientlib.js @ categories='core.wcm.components.commons.datalayer.acdl', async=true}"/>
+    <sly data-sly-test="${page.data && page.dataLayerClientlibIncluded && page.dataLayerAcdl3Used}" data-sly-call="${clientlib.js @ categories='core.wcm.components.commons.datalayer.acdl3', async=true}"/>
 </template>

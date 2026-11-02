@@ -47,6 +47,22 @@ module.exports = function(config) {
                 included: false,
                 served: true
             },
+            {
+                pattern: 'src/scripts/datalayer/v1/*.js',
+                included: false,
+                served: true
+            },
+            {
+                // Adobe Client Data Layer 2.x, built by build/acdl.js
+                pattern: 'target/acdl/adobe-client-data-layer.min.js',
+                included: false,
+                served: true
+            },
+            {
+                pattern: 'node_modules/adobe-client-data-layer-3/dist/adobe-client-data-layer.min.js',
+                included: false,
+                served: true
+            },
             'src/content/jcr_root/apps/core/wcm/components/image/v2/image/clientlibs/editor/js/image.js',
             'src/content/jcr_root/apps/core/wcm/components/image/v3/image/clientlibs/editor/js/image.js',
             'test/**/*Test.js',
