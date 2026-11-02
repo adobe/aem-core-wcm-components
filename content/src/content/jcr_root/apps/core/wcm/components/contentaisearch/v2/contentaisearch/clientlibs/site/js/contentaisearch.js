@@ -436,7 +436,7 @@
         if (this._elements.loadMore) {
             this._elements.loadMore.disabled = true;
         }
-        var targetCount = this._visibleCount + this._pageSize;
+        var targetCount = Math.min(this._visibleCount, this._allResults.length) + this._pageSize;
         this._visibleCount = targetCount;
         this._topUpResults(requestId, targetCount, MAX_TOP_UP_REQUESTS)
             .then(function() {
