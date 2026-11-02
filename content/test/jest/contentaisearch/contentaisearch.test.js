@@ -362,4 +362,35 @@ describe("contentaisearch.js result images, dedup and top-up", function() {
         });
         expect(images).toEqual(["https://x.test/a.jpg", "https://x.test/b.jpg", "https://x.test/c.jpg"]);
     });
+
+    test("a failed Load more does not make the retry over-fetch", async function() {
+        const ui = loadComponent({});
+
+        submit(ui.form, ui.input, "surf");
+        resolveFetch(".search.json", {
+            results: [result("1", 0.9, "https://x.test/a.html", { image: "https://x.test/a.jpg" }),
+                result("2", 0.8, "https://x.test/b.html", { image: "https://x.test/b.jpg" })],
+            hasMore: true,
+            sourceCursors: { s: "c1" }
+        });
+        resolveFetch(".gensearch.json", { result: "", hits: [] });
+        await flush();
+
+        ui.loadMore.click();
+        pendingFetches.splice(pendingFetches.findIndex(function(e) { return e.url.indexOf("cursors=") !== -1; }), 1)[0]
+            .reject(new Error("network"));
+        await flush();
+
+        ui.loadMore.click();
+        resolveFetch("cursors=", {
+            results: [result("3", 0.7, "https://x.test/c.html", { image: "https://x.test/c.jpg" }),
+                result("4", 0.6, "https://x.test/d.html", { image: "https://x.test/d.jpg" })],
+            hasMore: true,
+            sourceCursors: { s: "c2" }
+        });
+        await flush();
+
+        expect(pendingFetchesMatching("cursors=").length).toBe(0);
+        expect(ui.results.querySelectorAll("li").length).toBe(4);
+    });
 });
