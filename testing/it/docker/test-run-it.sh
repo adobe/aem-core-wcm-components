@@ -61,12 +61,13 @@ for type in sdk 65 lts; do
         find_zip() { printf '%s\n' "$*"; }
         install_package() { printf '%s\n' "$2"; }
         dedupe_bundle() { echo "dedupe $2"; }
+        remove_precompiled_scripts() { echo "precompiled"; }
         packages=$(provision_packages "${AEM_BASE_URL}")
         if [[ "${type}" == sdk ]]; then
-            [[ "${packages}" == *"all-*-cloud.zip"* && "${packages}" == *"dedupe "* ]]
+            [[ "${packages}" == *"all-*-cloud.zip"* && "${packages}" == *"dedupe "* && "${packages}" == *precompiled* ]]
             [[ "${IT_EXCLUDED_GROUPS}" == *IgnoreOnCloud && "${E2E_EXCLUDED_GROUPS}" == *IgnoreOnSDK ]]
         else
-            [[ "${packages}" == *"all-*.zip"* && "${packages}" != *"dedupe "* ]]
+            [[ "${packages}" == *"all-*.zip"* && "${packages}" != *"dedupe "* && "${packages}" != *precompiled* ]]
             [[ "${E2E_EXCLUDED_GROUPS}" != *IgnoreOnSDK* && "${IT_EXCLUDED_GROUPS}" != *IgnoreOnCloud* ]]
             [[ "${E2E_EXCLUDED_GROUPS}" != *IgnoreOn64* && "${IT_EXCLUDED_GROUPS}" != *IgnoreOn64* ]]
             if [[ "${type}" == 65 ]]; then
@@ -208,6 +209,28 @@ PY
     fi
 )
 echo 'Passed bundle de-duplication by package version.'
+
+(
+    export AEM_TYPE=sdk
+    source "${SCRIPT_DIR}/run-it.sh"
+    work=$(mktemp -d)
+    trap 'rm -rf "${work}"' EXIT
+    wait_for_bundles_settled() { echo settled >> "${work}/calls"; }
+    curl() {
+        case "$*" in
+            */bundles.json) echo '{"data":[{"id":7,"symbolicName":"aem-precompiled-scripts","version":"1.0.0"},{"id":8,"symbolicName":"com.example.core","version":"2.0.0"}]}' ;;
+            *) echo "$*" >> "${work}/calls" ;;
+        esac
+    }
+    remove_precompiled_scripts "${AEM_BASE_URL}" >/dev/null
+    calls=$(cat "${work}/calls")
+    [[ "${calls}" == *"bundles/7 -d action=uninstall"* && "${calls}" != *"bundles/8 "* && "${calls}" == *settled* ]]
+    rm -f "${work}/calls"
+    curl() { echo '{"data":[{"id":8,"symbolicName":"com.example.core","version":"2.0.0"}]}'; }
+    remove_precompiled_scripts "${AEM_BASE_URL}" >/dev/null
+    [[ ! -e "${work}/calls" ]]
+)
+echo 'Passed precompiled scripts removal.'
 
 (
     export AEM_TYPE=sdk WITH_PUBLISH=true
