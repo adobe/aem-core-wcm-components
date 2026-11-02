@@ -42,11 +42,14 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 
 import com.adobe.cq.wcm.core.components.services.contentai.ContentAIClientException;
 import com.adobe.cq.wcm.core.components.services.contentai.ContentSourceSearchResult;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -194,6 +197,48 @@ class ContentAIClientImplTest {
         assertTrue(body.contains("\"cursor\":\"cursor-1\""));
     }
 
+    @ParameterizedTest
+    @CsvSource({
+        "insurance, 1.0",
+        "'  insurance  ', 1.0",
+        "term insurance, 0.1",
+        "'  what   is term life insurance?  ', 0.04"
+    })
+    void searchWeightsFulltextByTokenCount(String query, double expectedBoost) throws Exception {
+        respondWith(200, "{\"totalResults\":0,\"results\":[]}");
+
+        client.search("my-content-source", "ACQUISITION", query, 10);
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        JsonNode body = new ObjectMapper().readTree(sent.getEntity().getContent());
+        JsonNode composite = body.path("query");
+        assertEquals("OR", composite.path("operator").asText());
+        JsonNode vector = composite.path("queries").get(0);
+        assertEquals(1.0, vector.path("options").path("boost").asDouble());
+        assertEquals(query, vector.path("text").asText());
+        JsonNode fulltext = composite.path("queries").get(1);
+        assertEquals(query, fulltext.path("text").asText());
+        assertEquals(expectedBoost, fulltext.path("options").path("boost").asDouble(), 0.000001);
+        assertEquals("AND", fulltext.path("options").path("operator").asText());
+        assertEquals("COMBINED_FIELDS", fulltext.path("options").path("matchStrategy").asText());
+    }
+
+    @Test
+    void searchRestrictsResultFieldsWithoutChangingPagination() throws Exception {
+        respondWith(200, "{\"totalResults\":0,\"results\":[]}");
+
+        client.search("my-content-source", "ACQUISITION", "term insurance", 5, "cursor-1");
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode options = mapper.readTree(sent.getEntity().getContent()).path("queryOptions");
+        assertEquals(mapper.readTree("[\"text\",\"source\",\"title\",\"name\",\"metadata.url\",\"metadata.source\","
+            + "\"metadata.title\",\"metadata.description\",\"metadata.image\",\"metadata.meta.image\"]"),
+            options.path("resultFields").path("includes"));
+        assertEquals(5, options.path("pagination").path("limit").asInt());
+        assertEquals("cursor-1", options.path("pagination").path("cursor").asText());
+    }
+
     @Test
     void searchReturnsParsedResult() throws Exception {
         respondWith(200, "{\"totalResults\":1,\"results\":[{\"id\":\"doc_1\",\"score\":0.75,\"data\":{\"title\":\"Electric Cars\"}}],\"cursor\":\"abc\"}");
@@ -226,6 +271,11 @@ class ContentAIClientImplTest {
         assertEquals("Electric cars are efficient.", result.getResult());
         assertEquals(2, result.getHits().size());
         assertEquals("doc_1", result.getHits().get(0).getId());
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        JsonNode body = new ObjectMapper().readTree(sent.getEntity().getContent());
+        assertEquals("electric cars", body.path("query").asText());
+        assertFalse(body.has("queryOptions"));
     }
 
     @Test

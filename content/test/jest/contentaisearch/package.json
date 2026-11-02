@@ -1,0 +1,13 @@
+{
+    "name": "contentaisearch-jest-tests",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Standalone Jest harness for contentaisearch.js. Deliberately kept separate from the project's main Karma/Jasmine suite (content/karma.conf.js) and its package.json/npm scripts - not wired into the Maven build or CI, run locally on demand.",
+    "scripts": {
+        "test": "jest"
+    },
+    "devDependencies": {
+        "jest": "^29.7.0",
+        "jest-environment-jsdom": "^29.7.0"
+    }
+}

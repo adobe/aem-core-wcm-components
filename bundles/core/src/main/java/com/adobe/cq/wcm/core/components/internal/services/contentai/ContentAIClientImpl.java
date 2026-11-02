@@ -201,9 +201,22 @@ public class ContentAIClientImpl implements ContentAIClient {
         ObjectNode fulltextQuery = queries.addObject();
         fulltextQuery.put("type", "fulltext");
         fulltextQuery.put("text", query);
-        fulltextQuery.putObject("options").put("boost", 1.5);
+        ObjectNode fulltextOptions = fulltextQuery.putObject("options");
+        fulltextOptions.put("boost", fulltextBoost(query));
+        // AND requires every query term to be present (vs. OR, which matches on any term) - trades recall for
+        // precision now that boost already deboosts full-text's influence for longer queries.
+        fulltextOptions.put("operator", "AND");
+        // COMBINED_FIELDS scores all target fields as one unified blob of text, avoiding the scoring skew
+        // INDEPENDENT_FIELDS can produce when short fields (e.g. title) are scored separately from long ones (body).
+        fulltextOptions.put("matchStrategy", "COMBINED_FIELDS");
 
-        ObjectNode pagination = body.putObject("queryOptions").putObject("pagination");
+        ObjectNode queryOptions = body.putObject("queryOptions");
+        // Keep result-display fields and title/link/snippet fallbacks. Paths are relative to each result's "data" object.
+        ArrayNode resultFieldIncludes = queryOptions.putObject("resultFields").putArray("includes");
+        resultFieldIncludes.add("text").add("source").add("title").add("name")
+            .add("metadata.url").add("metadata.source").add("metadata.title")
+            .add("metadata.description").add("metadata.image").add("metadata.meta.image");
+        ObjectNode pagination = queryOptions.putObject("pagination");
         pagination.put("limit", limit);
         if (StringUtils.isNotBlank(cursor)) {
             pagination.put("cursor", cursor);
@@ -237,6 +250,21 @@ public class ContentAIClientImpl implements ContentAIClient {
         } catch (IOException e) {
             throw new ContentAIClientException("Failed to parse Content AI gensearch response", e);
         }
+    }
+
+    /**
+     * Deboosts the full-text query as the number of tokens in the query text grows, since longer/multi-word
+     * queries are generally better served by the semantic vector match (kept at its default boost of 1) than by
+     * literal term matching. Single-token queries keep full-text at full weight, since vector search alone is
+     * less reliable for very short queries.
+     *
+     * @param query the validated, non-blank user query
+     * @return the full-text query's boost factor
+     */
+    // TODO: make configurable (e.g. via ContentAIConfig) once we have data on the right divisor for production traffic
+    private static double fulltextBoost(String query) {
+        int tokens = query.trim().split("\\s+").length;
+        return (tokens > 1) ? 1.0d / (5 * tokens) : 1.0d;
     }
 
     private JsonNode executeGet(String path) throws ContentAIClientException {
