@@ -63,7 +63,9 @@ module.exports = {
         },
         {
             name: "core.wcm.components.commons.datalayer.v1.acdl3",
-            path: "src/content/jcr_root/apps/core/wcm/components/commons/datalayer/v1/clientlibs",
+            // not next to core.wcm.components.commons.datalayer.v1: the /etc.clientlibs proxy fails to resolve a
+            // client library folder whose name starts with the name of a sibling client library folder
+            path: "src/content/jcr_root/apps/core/wcm/components/commons/datalayer/v1/acdl3",
             serializationFormat: "xml",
             allowProxy: true,
             dependencies: ["core.wcm.components.commons.datalayer.acdl3"],
