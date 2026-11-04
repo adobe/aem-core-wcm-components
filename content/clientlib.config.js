@@ -63,8 +63,9 @@ module.exports = {
         },
         {
             name: "core.wcm.components.commons.datalayer.v1.acdl3",
-            // not next to core.wcm.components.commons.datalayer.v1: the /etc.clientlibs proxy fails to resolve a
-            // client library folder whose name starts with the name of a sibling client library folder
+            // not next to core.wcm.components.commons.datalayer.v1: the /etc.clientlibs proxy does not resolve a client
+            // library folder whose name is the name of a sibling client library folder followed by a dot
+            // (see test/guardrails/clientlibFolderNames.js)
             path: "src/content/jcr_root/apps/core/wcm/components/commons/datalayer/v1/acdl3",
             serializationFormat: "xml",
             allowProxy: true,
