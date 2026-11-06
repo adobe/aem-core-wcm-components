@@ -32,6 +32,11 @@ Text form field component written in HTL.
 ### Use Object
 The Form Text component uses the `com.adobe.cq.wcm.core.components.models.form.Text` Sling Model for its Use-object.
 
+### Component Policy Configuration Properties
+The following configuration properties are used:
+
+1. `./displayValidation` - defines whether the text field should display a label for the validation messages.
+
 ### Edit Dialog Properties
 The following properties are written to JCR for this Form Text component and are expected to be available as `Resource` properties:
 
@@ -63,6 +68,7 @@ BLOCK cmp-form-text
     ELEMENT cmp-form-text__help-block
     ELEMENT cmp-form-text__textarea
     ELEMENT cmp-form-text__text
+    ELEMENT cmp-form-text__validation-message
 ```
 
 ## JavaScript Data Attribute Bindings

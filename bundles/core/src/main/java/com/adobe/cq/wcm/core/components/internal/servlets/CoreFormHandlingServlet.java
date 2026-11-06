@@ -110,6 +110,11 @@ public class CoreFormHandlingServlet
     @Override
     protected void doPost(@NotNull SlingHttpServletRequest request, @NotNull final SlingHttpServletResponse response)
             throws ServletException, IOException {
+        // response will have content type text/html since it is represented by a JSP without another content type set
+        // JSPs have this content type by default
+        // So set this content type in advance inside response, in order to avoid breaking request dispatcher contract
+        // More info https://jakarta.ee/specifications/servlet/4.0/apidocs/javax/servlet/requestdispatcher#include-javax.servlet.ServletRequest-javax.servlet.ServletResponse-
+        response.setContentType("text/html");
         formsHandlingServletHelper.doPost(request, response);
     }
 

@@ -95,4 +95,18 @@ public class NextgenDMImageURIBuilderTest {
         uriBuilder = new NextGenDMImageURIBuilder(config, "");
         assertTrue(uriBuilder.build() == null);
     }
+
+    @Test
+    public void testUrlWithPreviewToken() {
+        uriBuilder.withToken("p:RandomToken");
+        String uri = uriBuilder.build();
+        assertTrue(uri.contains("token=p:RandomToken"));
+    }
+
+    @Test
+    public void testUrlWithPreviewTokenExpiry() {
+        uriBuilder.withTokenExpiry("2025-02-27T10:17:59.300Z");
+        String uri = uriBuilder.build();
+        assertTrue(uri.contains("expiryTime=2025-02-27T10:17:59.300Z"));
+    }
 }

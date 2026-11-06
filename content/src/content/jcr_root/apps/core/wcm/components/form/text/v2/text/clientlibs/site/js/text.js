@@ -19,10 +19,14 @@
     var NS = "cmp";
     var IS = "formText";
     var IS_DASH = "form-text";
+    var SELF_SELECTOR = "[data-" + NS + '-is="' + IS + '"]';
 
     var selectors = {
-        self: "[data-" + NS + '-is="' + IS + '"]'
+        self: SELF_SELECTOR,
+        validationMessage: SELF_SELECTOR + " .cmp-form-text__validation-message"
     };
+
+    var displayValidationMessage = false;
 
     var properties = {
         /**
@@ -75,6 +79,9 @@
 
         this._elements.input.addEventListener("invalid", this._onInvalid.bind(this));
         this._elements.input.addEventListener("input", this._onInput.bind(this));
+        if (displayValidationMessage) {
+            this._elements.input.checkValidity();
+        }
     }
 
     FormText.prototype._onInvalid = function(event) {
@@ -88,10 +95,19 @@
                 event.target.setCustomValidity(this._properties.requiredMessage);
             }
         }
+        if (displayValidationMessage) {
+            var validationMessage = event.target.parentElement.querySelector(".cmp-form-text__validation-message");
+            if (validationMessage) {
+                validationMessage.innerText = event.target.validationMessage;
+            }
+        }
     };
 
     FormText.prototype._onInput = function(event) {
         event.target.setCustomValidity("");
+        if (displayValidationMessage) {
+            event.target.checkValidity();
+        }
     };
 
     FormText.prototype._cacheElements = function(wrapper) {
@@ -127,6 +143,11 @@
     };
 
     function onDocumentReady() {
+        var validationMessages = document.querySelectorAll(selectors.validationMessage);
+        if (validationMessages && validationMessages.length > 0) {
+            displayValidationMessage = true;
+        }
+
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
             new FormText({ element: elements[i], options: readData(elements[i]) });

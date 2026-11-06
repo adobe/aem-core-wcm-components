@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
+import com.adobe.cq.wcm.core.components.util.ngdm.PreviewTokenBuilderUtils;
 import java.awt.*;
 import java.io.IOException;
 import java.io.StringReader;
@@ -331,13 +332,28 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         properties = resource.getValueMap();
         String fileReference = properties.get("fileReference", String.class);
         String smartCrop = properties.get("smartCropRendition", String.class);
+        String modifiers = properties.get("imageModifiers", String.class);
         if (isNgdmImageReference(fileReference)) {
+            Scanner scanner = new Scanner(fileReference);
+            scanner.useDelimiter("/");
+            String assetId = scanner.next();
             int width = currentStyle.get(PN_DESIGN_RESIZE_WIDTH, DEFAULT_NGDM_ASSET_WIDTH);
             NextGenDMImageURIBuilder builder = new NextGenDMImageURIBuilder(nextGenDynamicMediaConfig, fileReference)
                 .withPreferWebp(true)
                 .withWidth(width);
             if(StringUtils.isNotEmpty(smartCrop) && !StringUtils.equals(smartCrop, SMART_CROP_AUTO)) {
                 builder.withSmartCrop(smartCrop);
+            }
+            if (StringUtils.isNotEmpty(modifiers)) {
+                builder.withImageModifiers(modifiers);
+            }
+
+            Map.Entry<String, String> previewTokenMap = PreviewTokenBuilderUtils.buildPreviewToken(assetId);
+            if (null != previewTokenMap) {
+                // append p: to indicate that this is a preview token.
+                // it can also be a token generated using private/public key pair or any other way
+                builder.withToken("p:" + previewTokenMap.getKey());
+                builder.withTokenExpiry(previewTokenMap.getValue());
             }
             src = builder.build();
             ngdmImage = true;
@@ -346,9 +362,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 client = clientBuilderFactory.newBuilder().build();
             }
             metadataDeliveryEndpoint = nextGenDynamicMediaConfig.getAssetMetadataPath();
-            Scanner scanner = new Scanner(fileReference);
-            scanner.useDelimiter("/");
-            String assetId = scanner.next();
             metadataDeliveryEndpoint = metadataDeliveryEndpoint.replace(PATH_PLACEHOLDER_ASSET_ID, assetId);
         }
     }

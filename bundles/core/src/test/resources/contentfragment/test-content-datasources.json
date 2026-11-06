@@ -59,6 +59,16 @@
         "fragmentPath"      : "/content/dam/contentfragments/structured",
         "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/non-existing"
     },
+    "elements-fragment-path-composite"             : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/components/contentfragment/v1/datasource/elements",
+        "fragmentPath"      : "/content/dam/contentfragments/structured-composite"
+    },
+    "elements-component-path-composite-display-mode-single" : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/components/contentfragment/v1/datasource/elements",
+        "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/structured-composite-display-mode-single"
+    },
     "variations-no-config"                           : {
         "jcr:primaryType"   : "nt:unstructured",
         "sling:resourceType": "core/wcm/components/contentfragment/v1/datasource/variations"

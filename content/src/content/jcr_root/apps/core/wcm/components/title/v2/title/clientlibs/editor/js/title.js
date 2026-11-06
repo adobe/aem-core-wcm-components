@@ -30,7 +30,6 @@
     var DEFAULT_SIZE_SELECTOR       = "coral-select.core-title-size-default";
     var DEFAULT_SIZES_SELECTOR      = "coral-select.core-title-sizes-default";
     var ALLOWED_SIZES_SELECTOR      = ".core-title-sizes-allowed coral-checkbox";
-    var DATA_ATTR_VALIDATION_STATE  = "checkboxes.validation.state";
     var SIZES_SELECTOR              = "coral-select.core-title-sizes";
     var LINK_URL_SELECTOR           = ".cmp-title-link-url";
     var LINK_LABEL_SELECTOR         = ".cmp-title-link-label";
@@ -42,6 +41,7 @@
         var select = $(DEFAULT_SIZE_SELECTOR).get(0);
         var $checkboxes = $(ALLOWED_SIZES_SELECTOR);
         var checkedTotal = 0;
+        var firstCheckedValue = "";
         var selectValue = "";
 
         if (select === null || select === undefined) {
@@ -62,9 +62,18 @@
             }
         });
 
+        // get the value of the first checked box
+        $checkboxes.each(function(i, checkbox) {
+            if (checkbox.checked) {
+                firstCheckedValue = checkbox.value;
+                return false;
+            }
+        });
+
         // set the default value of the size dropdown
         if (checkboxToggled) {
-            selectValue = getAppropriateCheckedBoxValue($checkboxes, select.value);
+            // the default value is the first checked box
+            selectValue = firstCheckedValue;
         } else {
             // the default value is read from the repository
             selectValue = select.value;
@@ -80,31 +89,6 @@
                 $(select).parent().show();
             }
         });
-    }
-
-    // get the appropriate checked box value by checking if the current value of the default type is a valid option in the list of allowed types/sizes
-    function getAppropriateCheckedBoxValue(checkboxes, currentDefaultTypeValue) {
-        var isCurrentDefaultTypeValueValidOption = false;
-        checkboxes.each(function(i, checkbox) {
-            if (checkbox.checked && checkbox.value === currentDefaultTypeValue) {
-                isCurrentDefaultTypeValueValidOption = true;
-                return false;
-            }
-        });
-        // if the current value of the default type is a valid option, it will return it
-        if (isCurrentDefaultTypeValueValidOption) {
-            return currentDefaultTypeValue;
-        } else {
-            // if the current value of the default type is a not valid option, it will return the value of the first checked box
-            var firstCheckedValue = "";
-            checkboxes.each(function(i, checkbox) {
-                if (checkbox.checked) {
-                    firstCheckedValue = checkbox.value;
-                    return false;
-                }
-            });
-            return firstCheckedValue;
-        }
     }
 
     // toggles the disable attribute of the Link Label and Link Title Attribute inputs, based on the Link Url existence
@@ -134,7 +118,31 @@
 
     // Update the default size select when an allowed size is checked/unchecked
     $document.on("change", ALLOWED_SIZES_SELECTOR, function(e) {
+        // Update the default-size dropdown (existing behavior)
         updateDefaultSizeSelect(true);
+
+        // Re-validate all Allowed Types / Sizes checkboxes in the same group
+        var $checkboxes = $(this)
+            .closest(".core-title-sizes-allowed")
+            .find(ALLOWED_SIZES_SELECTOR);
+
+        $checkboxes.each(function(index, field) {
+            var api = $(field).adaptTo("foundation-validation");
+            if (api) {
+                api.checkValidity();
+                api.updateUI();
+            }
+        });
+
+        // Trigger form-level validation so the dialog can enable/disable the Done button
+        var $form = $(this).closest("form.foundation-form");
+        if ($form.length) {
+            var formApi = $form.adaptTo("foundation-validation");
+            if (formApi) {
+                formApi.checkValidity();
+                formApi.updateUI();
+            }
+        }
     });
 
     $document.on("foundation-contentloaded", function(e) {
@@ -177,40 +185,58 @@
         toggleDisableAttributeOnLinkLabelAndTitleInputs();
     });
 
+    function toggleDialogDoneState(sourceEl, disable) {
+        // find the closest dialog around the field
+        var $dialog = $(sourceEl).closest(".cq-dialog, coral-dialog, [role='dialog']");
+        if (!$dialog.length) {
+            return;
+        }
+
+        // find the Done/submit button inside the dialog
+        var $doneButtons = $dialog.find(".cq-dialog-submit, [type='submit']");
+        if (!$doneButtons.length) {
+            return;
+        }
+
+        // enable/disable the button
+        $doneButtons.prop("disabled", disable);
+    }
+
     // Display an error if all checkboxes are empty
     $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
         selector: ALLOWED_SIZES_SELECTOR,
         validate: function(el) {
 
-            var $checkboxes = $(el).parent().children(ALLOWED_SIZES_SELECTOR);
-            var firstEl = $checkboxes.get(0);
-            var isValid = $(firstEl).data(DATA_ATTR_VALIDATION_STATE);
-            var validationDone = isValid !== undefined;
-
-            // if the validation has already been done, we get the status from the first checkbox
-            if (validationDone) {
-                $(firstEl).removeData(DATA_ATTR_VALIDATION_STATE);
-                if (!isValid) {
-                    return Granite.I18n.get("Select at least one size option.");
-                } else {
-                    return;
-                }
+            // all Allowed Types / Sizes checkboxes in the same group
+            var $group = $(el).closest(".core-title-sizes-allowed");
+            if ($group.length === 0) {
+                return;
             }
 
-            // set the validation status on the first checkbox
-            isValid = false;
-            $checkboxes.each(function(i, checkbox) {
-                if (checkbox.checked) {
-                    isValid = true;
-                    return false;
+            var $inputs = $group.find('input[type="checkbox"][name="./allowedTypes"]');
+            if ($inputs.length === 0) {
+                return;
+            }
+
+            // check if at least one checkbox is selected
+            var anyChecked = false;
+            $inputs.each(function(index, inputEl) {
+                if ($(inputEl).prop("checked") === true) {
+                    anyChecked = true;
+                    return false; // break
                 }
             });
-            $(firstEl).data(DATA_ATTR_VALIDATION_STATE, isValid);
 
-            // trigger the validation on the first checkbox
-            var api = $(firstEl).adaptTo("foundation-validation");
-            api.checkValidity();
-            api.updateUI();
+            // if all are unchecked, return error message and disable Done button
+            if (!anyChecked) {
+                toggleDialogDoneState(el, true);
+                return Granite.I18n.get("Select at least one size option.");
+            }
+
+            // at least one is checked: make sure Done button is enabled again
+            toggleDialogDoneState(el, false);
+
+            // no return = valid
         },
         show: function(el, message) {
             var $el = $(el);

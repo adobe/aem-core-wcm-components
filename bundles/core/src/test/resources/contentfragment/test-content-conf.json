@@ -73,6 +73,26 @@
                                     "renderReadOnly"    : true,
                                     "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield"
                                 }
+                            },
+                            "1498121452012"  : {
+                                "jcr:primaryType"    : "nt:unstructured",
+                                "showEmptyInReadOnly": "true",
+                                "metaType"           : "composite",
+                                "name"               : "composite",
+                                "fieldLabel"         : "Composite",
+                                "sling:resourceType" : "dam/cfm/admin/components/authoring/contenteditor/compositeeditor",
+                                "renderReadOnly"     : "false",
+                                "valueType"          : "composite"
+                            },
+                            "1498121452013"  : {
+                                "jcr:primaryType"    : "nt:unstructured",
+                                "showEmptyInReadOnly": "true",
+                                "metaType"           : "composite",
+                                "name"               : "compositeMulti",
+                                "fieldLabel"         : "Composite Multi",
+                                "sling:resourceType" : "dam/cfm/admin/components/authoring/contenteditor/compositeeditor/multifield",
+                                "renderReadOnly"     : "false",
+                                "valueType"          : "composite[]"
                             }
                         }
                     }

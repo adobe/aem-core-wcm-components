@@ -28,7 +28,7 @@
      data-cmp-delay="${carousel.delay}"
      data-cmp-autopause-disabled="${carousel.autopauseDisabled}"
      data-cmp-data-layer="${carousel.data.json}"
-     data-placeholder-text="${wcmmode.edit && 'Please add Carousel components here' @ i18n}">
+     data-placeholder-text="${wcmmode.edit && 'Please add Carousel components here' @ i18n, locale=request.locale}">
     <sly data-sly-call="${controlsTemplate.controls @ carousel=carousel}" data-sly-test="${carousel.controlsPrepended}"></sly>
     <div data-sly-set.items="${carousel.children || carousel.items}"
          data-sly-test="${items && items.size > 0}"

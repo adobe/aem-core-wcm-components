@@ -60,7 +60,7 @@ class DownloadServletTest {
         context.requestPathInfo().setExtension("pdf");
         downloadServlet.doGet(context.request(), context.response());
         assertTrue(context.response().containsHeader("Content-Disposition"));
-        assertEquals("attachment; filename=\"Download_Test_PDF.pdf\"", context.response().getHeader("Content-Disposition"));
+        assertEquals("attachment; filename=\"Download_Test_PDF.pdf\"; filename*=UTF-8''Download_Test_PDF.pdf", context.response().getHeader("Content-Disposition"));
         assertEquals(8192, context.response().getBufferSize());
     }
 
@@ -73,7 +73,7 @@ class DownloadServletTest {
         context.requestPathInfo().setSuffix("Download_Test_PDF.pdf");
         downloadServlet.doGet(context.request(), context.response());
         assertTrue(context.response().containsHeader("Content-Disposition"));
-        assertEquals("attachment; filename=\"Download_Test_PDF.pdf\"", context.response().getHeader("Content-Disposition"));
+        assertEquals("attachment; filename=\"Download_Test_PDF.pdf\"; filename*=UTF-8''Download_Test_PDF.pdf", context.response().getHeader("Content-Disposition"));
         assertEquals(8192, context.response().getBufferSize());
     }
 
@@ -85,7 +85,7 @@ class DownloadServletTest {
         context.requestPathInfo().setExtension("pdf");
         downloadServlet.doGet(context.request(), context.response());
         assertTrue(context.response().containsHeader("Content-Disposition"));
-        assertEquals("inline", context.response().getHeader("Content-Disposition"));
+        assertEquals("inline; filename=\"Download_Test_PDF.pdf\"; filename*=UTF-8''Download_Test_PDF.pdf", context.response().getHeader("Content-Disposition"));
         assertTrue(context.response().containsHeader("Content-Security-Policy"));
         assertEquals("sandbox", context.response().getHeader("Content-Security-Policy"));
         assertEquals(8192, context.response().getBufferSize());

@@ -26,14 +26,17 @@ import com.day.cq.commons.Externalizer;
 import io.wcm.testing.mock.aem.MockExternalizer;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.models.impl.ResourceTypeBasedResourcePicker;
 import org.apache.sling.models.spi.ImplementationPicker;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
+import org.osgi.framework.Constants;
 
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.internal.link.DefaultPathProcessor;
 import com.adobe.cq.wcm.core.components.testing.MockResponsiveGrid;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
+import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.msm.api.MSMNameConstants;
 import com.google.common.collect.ImmutableMap;
@@ -97,9 +100,22 @@ public final class CoreComponentTestContext {
                         if (externalizer instanceof MockExternalizer) {
                             ((MockExternalizer) externalizer).setMapping(Externalizer.PUBLISH, EXTERNALIZER_PUBLISH_DOMAIN);
                         }
+                        context.registerService(Externalizer.class, AemMockCompat.mappingExternalizer(externalizer),
+                                Constants.SERVICE_RANKING, Integer.MAX_VALUE);
                     }));
+                    Optional.ofNullable(context.getService(LanguageManager.class)).ifPresent(languageManager ->
+                            context.registerService(LanguageManager.class, AemMockCompat.contentAwareLanguageManager(languageManager),
+                                    Constants.SERVICE_RANKING, Integer.MAX_VALUE));
                     context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                             "vanityConfig", DefaultPathProcessor.VanityConfig.ALWAYS.getValue()));
+                }
+            )
+            // the Sling Mocks tear down expects the request bindings to be MockSlingBindings, drop plain ones set by the code under test
+            .<AemContext>beforeTearDown(context -> {
+                    Object bindings = context.request().getAttribute(SlingBindings.class.getName());
+                    if (bindings != null && bindings.getClass() == SlingBindings.class) {
+                        context.request().removeAttribute(SlingBindings.class.getName());
+                    }
                 }
             )
             .build();
