@@ -126,7 +126,8 @@ public class PageIT {
         // Check for clientlibs and static resources
         JsonArray pwaOfflineClientlibs = swconfigJson.get("pwaOfflineClientlibs").getAsJsonArray();
         assertNotNull(pwaOfflineClientlibs);
-        assertEquals(2, pwaOfflineClientlibs.size());
+        // AEMaaCS can add its own clientlibs to the list, so only require the page v2 pwa ones
+        assertTrue(pwaOfflineClientlibs.size() >= 2);
         assertTrue(containsMatchingRegex(pwaOfflineClientlibs, ".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.css"));
         assertTrue(containsMatchingRegex(pwaOfflineClientlibs, ".*/etc.clientlibs/core/wcm/components/page/v2/page/clientlibs/site/pwa.*.js"));
     }
