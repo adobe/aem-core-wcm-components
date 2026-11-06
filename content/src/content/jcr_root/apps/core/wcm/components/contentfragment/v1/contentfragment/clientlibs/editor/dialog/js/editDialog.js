@@ -490,12 +490,14 @@
      * to a binary string before being passed to btoa().
      *
      * @param {String} str - the string to encode
-     * @returns {String} base64 encoding of the UTF-8 bytes of {@code str}
+     * @returns {String} unpadded base64 encoding of the UTF-8 bytes of {@code str}, as
+     * expected by the Content Fragment Visualization API's model ID format
      */
     function base64EncodeUtf8(str) {
-        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, hex) {
+        var base64 = btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, hex) {
             return String.fromCharCode(parseInt(hex, 16));
         }));
+        return base64.replace(/=+$/, "");
     }
 
     /**

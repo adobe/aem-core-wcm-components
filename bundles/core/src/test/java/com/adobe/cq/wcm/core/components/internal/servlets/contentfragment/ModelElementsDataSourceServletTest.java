@@ -87,6 +87,9 @@ public class ModelElementsDataSourceServletTest {
                 hasItem(resourceWithPropertiesTextAndValue("Last Modified", "jcr:content/jcr:lastModified")),
                 hasItem(resourceWithPropertiesTextAndValue("textFieldLabel", "jcr:content/data/master/textField")),
                 hasItem(resourceWithPropertiesTextAndValue("Multi Text Field", "jcr:content/data/master/multiTextField"))));
+        assertThat(resourceList, allOf(
+                not(hasItem(resourceWithPropertiesTextAndValue("compositeFieldLabel", "jcr:content/data/master/compositeField"))),
+                not(hasItem(resourceWithPropertiesTextAndValue("multiCompositeFieldLabel", "jcr:content/data/master/multiCompositeField")))));
     }
 
     @Test
@@ -114,6 +117,9 @@ public class ModelElementsDataSourceServletTest {
                 hasItem(resourceWithPropertiesTextAndValue("Multi Text Field", "jcr:content/data/master/multiTextField")),
                 hasItem(resourceWithPropertiesTextAndValue("dateAndTimeFieldLabel", "jcr:content/data/master/dateAndTimeField")),
                 hasItem(resourceWithPropertiesTextAndValue("numberFieldLabel", "jcr:content/data/master/numberField"))));
+        assertThat(resourceList, allOf(
+                not(hasItem(resourceWithPropertiesTextAndValue("compositeFieldLabel", "jcr:content/data/master/compositeField"))),
+                not(hasItem(resourceWithPropertiesTextAndValue("multiCompositeFieldLabel", "jcr:content/data/master/multiCompositeField")))));
     }
 
     @Test
@@ -141,6 +147,9 @@ public class ModelElementsDataSourceServletTest {
                 hasItem(resourceWithPropertiesTextAndValue("booleanField", "booleanField")),
                 hasItem(resourceWithPropertiesTextAndValue("dateAndTimeFieldLabel", "dateAndTimeField")),
                 hasItem(resourceWithPropertiesTextAndValue("enumerationFieldLabel", "enumerationField"))));
+        assertThat(resourceList, allOf(
+                not(hasItem(resourceWithPropertiesTextAndValue("compositeFieldLabel", "compositeField"))),
+                not(hasItem(resourceWithPropertiesTextAndValue("multiCompositeFieldLabel", "multiCompositeField")))));
     }
 
     /**

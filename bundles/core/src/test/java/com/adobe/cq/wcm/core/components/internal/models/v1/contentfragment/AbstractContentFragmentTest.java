@@ -80,6 +80,7 @@ public abstract class AbstractContentFragmentTest<T> {
     static final String CF_STRUCTURED_SINGLE_ELEMENT = "structured-single-element";
     static final String CF_STRUCTURED_SINGLE_ELEMENT_MAIN = "structured-single-element-main";
     static final String CF_STRUCTURED_MULTIPLE_ELEMENTS = "structured-multiple-elements";
+    static final String CF_STRUCTURED_COMPOSITE = "structured-composite";
 
     /* contents of the text-only and structured content fragments referenced by the above components */
 

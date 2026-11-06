@@ -276,6 +276,26 @@
     }
 
     /**
+     * Parses datasource HTML, sanitizes the body subtree, and returns the sanitized first body child element
+     * for direct import into a live document. Returning a Node instead of serializing to a string avoids a
+     * second HTML parse under a different scripting context
+     *
+     * @param {String} markup - HTML document string from a datasource response
+     * @returns {Element|null} sanitized element to import into a live document, or null when absent
+     */
+    function sanitizeAuthoringEditorResponseMarkupNode(markup) {
+        var doc = parseMarkupDocument(String(markup == null ? "" : markup));
+        if (doc.body) {
+            sanitizeAuthoringMarkupSubtree(doc.body);
+        }
+        var body = doc.body;
+        if (!body || !body.firstElementChild) {
+            return null;
+        }
+        return body.firstElementChild;
+    }
+
+    /**
      * Parses datasource HTML into a document whose body subtree is normalised the same way as for
      * {@code sanitizeAuthoringEditorResponseMarkup}, without collapsing to the first child inner string.
      *
@@ -430,6 +450,7 @@
         stripAsciiControlsAndWhitespaceForSchemeCheck: stripAsciiControlsAndWhitespaceForSchemeCheck,
         buildPageImageThumbnailShellForEditor: buildPageImageThumbnailShellForEditor,
         sanitizeAuthoringEditorResponseMarkup: sanitizeAuthoringEditorResponseMarkup,
+        sanitizeAuthoringEditorResponseMarkupNode: sanitizeAuthoringEditorResponseMarkupNode,
         parseAndNormalizeAuthoringDatasourceMarkup: parseAndNormalizeAuthoringDatasourceMarkup,
         parseAuthoringMarkupStripEventHandlersOnly: parseAuthoringMarkupStripEventHandlersOnly
     };

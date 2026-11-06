@@ -18,19 +18,19 @@
 
     <coral-tabview></coral-tabview>
 
-    <input name="./fragmentPath" value="/content/dam/test/my-fragment">
+    <input id="editDialog-fragmentPath" aria-label="Fragment path" name="./fragmentPath" value="/content/dam/test/my-fragment">
 
     <div data-display-mode-radio-group="true">
-        <input type="radio" name="./displayMode" value="singleText">
-        <input type="radio" name="./displayMode" value="multi">
-        <input type="radio" name="./displayMode" value="vcf" checked>
+        <input id="editDialog-displayMode-singleText" aria-label="Display mode single text" type="radio" name="./displayMode" value="singleText">
+        <input id="editDialog-displayMode-multi" aria-label="Display mode multi" type="radio" name="./displayMode" value="multi">
+        <input id="editDialog-displayMode-vcf" aria-label="Display mode VCF" type="radio" name="./displayMode" value="vcf" checked>
     </div>
 
     <div data-element-mode-field="true">
         <div data-element-names-container="true"
              data-field-path="/apps/test/dialog/elementNames">
             <div data-granite-coral-multifield-name="./elementNames"></div>
-            <select data-single-text-selector="true" name="./elementNames"></select>
+            <select id="editDialog-elementNames" aria-label="Element names" data-single-text-selector="true" name="./elementNames"></select>
         </div>
     </div>
 
@@ -38,13 +38,15 @@
         <div data-vcf-template-selector="true"></div>
     </div>
 
-    <select name="./variationName"
+    <select id="editDialog-variationName"
+            aria-label="Variation name"
+            name="./variationName"
             data-field-path="/apps/test/dialog/variationName"></select>
 
     <fieldset class="cmp-contentfragment__editor-paragraph-controls">
-        <input type="radio" name="./paragraphScope" value="all" checked>
-        <input type="radio" name="./paragraphScope" value="range">
-        <input name="./paragraphRange">
-        <input name="./paragraphHeadings">
+        <input id="editDialog-paragraphScope-all" aria-label="Paragraph scope all" type="radio" name="./paragraphScope" value="all" checked>
+        <input id="editDialog-paragraphScope-range" aria-label="Paragraph scope range" type="radio" name="./paragraphScope" value="range">
+        <input id="editDialog-paragraphRange" aria-label="Paragraph range" name="./paragraphRange">
+        <input id="editDialog-paragraphHeadings" aria-label="Paragraph headings" name="./paragraphHeadings">
     </fieldset>
 </div>

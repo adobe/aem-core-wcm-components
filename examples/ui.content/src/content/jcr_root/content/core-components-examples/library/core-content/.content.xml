@@ -22,6 +22,8 @@
     <pdf-viewer/>
     <progress-bar/>
     <search/>
+    <search-v3/>
+    <contentai-supported-search/>
     <separator/>
     <tabs/>
     <teaser/>

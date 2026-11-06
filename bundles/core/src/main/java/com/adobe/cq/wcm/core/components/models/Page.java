@@ -475,4 +475,14 @@ public interface Page extends ContainerExporter, Component {
      * @since om.adobe.cq.wcm.core.components.models 12.24.0
      */
     default String getDataLayerName() { return DataLayerConfig.DATALAYER_OBJECT_NAME_ADOBE; }
+
+    /**
+     * Checks if the data layer client libraries based on the Adobe Client Data Layer 3.x should be included instead of
+     * the ones based on the Adobe Client Data Layer 2.x.
+     *
+     * @return {@code true} if the Adobe Client Data Layer 3.x should be used, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.34.0
+     */
+    @JsonIgnore
+    default boolean isDataLayerAcdl3Used() {return false;}
 }

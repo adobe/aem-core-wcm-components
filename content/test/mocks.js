@@ -20,8 +20,11 @@ class JQueryArray extends Array {
     }
 
     find(selector) {
-        const elem = this[0] ? this[0].querySelector(selector) : null;
-        return elem ? new JQueryArray(elem) : new JQueryArray();
+        if (!this[0]) {
+            return new JQueryArray();
+        }
+        const nodes = this[0].querySelectorAll(selector);
+        return nodes.length ? new JQueryArray(...nodes) : new JQueryArray();
     }
 
     attr(name) {
@@ -32,8 +35,70 @@ class JQueryArray extends Array {
         return this;
     }
 
-    val() {
+    val(value) {
+        if (value !== undefined) {
+            if (this[0]) {
+                this[0].value = value;
+            }
+            return this;
+        }
         return this[0] ? this[0].value : '';
+    }
+
+    show() {
+        for (let i = 0; i < this.length; i++) {
+            if (this[i]) {
+                this[i].style.display = '';
+            }
+        }
+        return this;
+    }
+
+    hide() {
+        for (let i = 0; i < this.length; i++) {
+            if (this[i]) {
+                this[i].style.display = 'none';
+            }
+        }
+        return this;
+    }
+
+    parent() {
+        const parentElement = this[0]?.parentElement;
+        if (!parentElement) {
+            return new JQueryArray();
+        }
+        return new JQueryArray(parentElement);
+    }
+
+    prop(name, value) {
+        if (value !== undefined) {
+            for (let i = 0; i < this.length; i++) {
+                if (!this[i]) {
+                    continue;
+                }
+                if (name === 'checked') {
+                    this[i].checked = value;
+                } else {
+                    this[i].setAttribute(name, value);
+                }
+            }
+            return this;
+        }
+        if (!this[0]) {
+            return undefined;
+        }
+        if (name === 'checked') {
+            return this[0].checked;
+        }
+        return this[0].getAttribute(name);
+    }
+
+    each(callback) {
+        for (let i = 0; i < this.length; i++) {
+            callback.call(this[i], i, this[i]);
+        }
+        return this;
     }
 
     on(event, handler) {
@@ -61,11 +126,41 @@ class JQueryArray extends Array {
         }
         return this;
     }
+
+    adaptTo(type) {
+        if (type === 'foundation-field') {
+            return this[0]?.__foundationField ?? null;
+        }
+        if (type === 'foundation-registry') {
+            return globalThis.foundationRegistry;
+        }
+        if (type === 'foundation-toggleable') {
+            var adapters = globalThis.foundationRegistry?._adapters;
+            if (!adapters || !this[0]) return null;
+            for (var i = 0; i < adapters.length; i++) {
+                var cfg = adapters[i];
+                if (cfg.type === 'foundation-toggleable') {
+                    try {
+                        if (this[0]?.matches?.(cfg.selector)) {
+                            return cfg.adapter();
+                        }
+                    } catch (e) { /* ignore invalid selectors */ }
+                }
+            }
+            return null;
+        }
+        return null;
+    }
 }
 
 function jQuery(obj) {
     if (obj?.__jqWrapped) {
         return obj.__jqWrapped;
+    }
+
+    if (typeof obj === 'string') {
+        const nodes = document.querySelectorAll(obj);
+        return new JQueryArray(...nodes);
     }
 
     const result = new JQueryArray(obj);
@@ -234,16 +329,30 @@ jQuery.when = function() {
 
 jQuery.ajax = function(options) {
     let _resolve, _reject;
+    const doneCallbacks = [];
     const deferred = {
         then: function(onResolve, onReject) { // NOSONAR - mimicking jQuery deferred API
             _resolve = onResolve;
             _reject = onReject;
             return deferred;
+        },
+        done: function(callback) {
+            doneCallbacks.push(callback);
+            return deferred;
         }
     };
+    function notifySuccess() {
+        const args = Array.prototype.slice.call(arguments);
+        doneCallbacks.forEach(function(cb) {
+            cb(...args);
+        });
+        if (_resolve) {
+            _resolve(...args);
+        }
+    }
     if (jQuery._ajaxHandler) {
         setTimeout(function() {
-            jQuery._ajaxHandler(options, _resolve, _reject);
+            jQuery._ajaxHandler(options, notifySuccess, _reject);
         }, 0);
     }
     return deferred;
@@ -332,6 +441,22 @@ Granite = {
                     }
                 }
             }
+        },
+        ui: {
+            ToolbarAction: function (config) {
+                Object.assign(this, config);
+            }
+        },
+        editableHelper: {
+            getEditableDisplayableName: function (editable) {
+                return (editable && editable.displayName) || "Panel";
+            }
+        },
+        EditorFrame: {
+            editableToolbar: {
+                registerAction: function () {
+                }
+            }
         }
     },
     Toggles: {
@@ -348,6 +473,9 @@ Granite = {
     I18n: {
         get: function(message) {
             return message;
+        },
+        getVar: function(value) {
+            return value;
         }
     }
 };
@@ -355,9 +483,13 @@ Granite = {
 // Mock foundation registry
 globalThis.foundationRegistry = {
     validators: [],
+    _adapters: [],
     register: function(type, config) {
         if (type === 'foundation.validation.validator') {
             this.validators.push(config);
+        }
+        if (type === 'foundation.adapters') {
+            this._adapters.push(config);
         }
     }
 };
