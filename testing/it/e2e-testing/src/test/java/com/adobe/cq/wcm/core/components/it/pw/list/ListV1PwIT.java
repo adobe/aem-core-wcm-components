@@ -65,10 +65,26 @@ public class ListV1PwIT extends ComponentPwBaseTest {
 
     private void saveAndAssertVisible(String... titles) {
         saveDialog();
+        // lists built from queries only show the new pages once they are indexed, which is asynchronous
+        long deadline = System.currentTimeMillis() + 60_000;
         page.navigate(baseUrl + testPage + ".html");
+        while (!containsAll(String.join("", page.locator(LIST).allTextContents()), titles)
+            && System.currentTimeMillis() < deadline) {
+            page.waitForTimeout(2000);
+            page.navigate(baseUrl + testPage + ".html");
+        }
         for (String title : titles) {
             assertThat(page.locator(LIST)).containsText(title);
         }
+    }
+
+    private static boolean containsAll(String text, String... values) {
+        for (String value : values) {
+            if (!text.contains(value)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void saveAndAssertOrder(int startIndex, String... titles) {

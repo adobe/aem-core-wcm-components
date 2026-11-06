@@ -582,15 +582,27 @@ public abstract class PlaywrightAuthorBaseTest {
 
         Locator picker = page.locator("coral-dialog:visible").last();
         assertThat(picker).isVisible();
-        for (int i = 0; i < segments.length - 1; i++) {
+        assertThat(picker.locator("[data-foundation-collection-item-id]").first()).isVisible();
+        String[] paths = new String[segments.length];
+        for (int i = 0; i < segments.length; i++) {
             currentPath += "/" + segments[i];
-            Locator folder = picker.locator("[data-foundation-collection-item-id='" + currentPath + "']");
+            paths[i] = currentPath;
+        }
+        // a reopened picker can restore the last browsed folder, so continue from the deepest item already shown
+        int start = 0;
+        for (int i = segments.length - 1; i > 0; i--) {
+            if (picker.locator("[data-foundation-collection-item-id='" + paths[i] + "']").count() > 0) {
+                start = i;
+                break;
+            }
+        }
+        for (int i = start; i < segments.length - 1; i++) {
+            Locator folder = picker.locator("[data-foundation-collection-item-id='" + paths[i] + "']");
             assertThat(folder).isVisible();
             folder.click();
         }
 
-        currentPath += "/" + segments[segments.length - 1];
-        Locator asset = picker.locator("[data-foundation-collection-item-id='" + currentPath + "']");
+        Locator asset = picker.locator("[data-foundation-collection-item-id='" + paths[segments.length - 1] + "']");
         assertThat(asset).isVisible();
         Locator checkbox = asset.locator("coral-checkbox");
         if (checkbox.count() > 0 && checkbox.isVisible()) {

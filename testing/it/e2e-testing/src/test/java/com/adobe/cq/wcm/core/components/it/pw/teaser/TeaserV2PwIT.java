@@ -101,6 +101,24 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         openEditor(testPage);
     }
 
+    /**
+     * Sets a checkbox state, retrying when the click lands while the dialog re-renders the page image fields after
+     * the link was changed.
+     */
+    private void setCheckbox(String name, boolean checked) {
+        for (int attempt = 1; ; attempt++) {
+            try {
+                checkbox(name).setChecked(checked);
+                return;
+            } catch (com.microsoft.playwright.PlaywrightException e) {
+                if (attempt == 3) {
+                    throw e;
+                }
+                page.waitForTimeout(1000);
+            }
+        }
+    }
+
     private void setLinkedPage() {
         openLinkTab();
         selectAutocomplete("[name='./linkURL']", secondPage);
@@ -333,7 +351,7 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         openEditDialog(teaserPath);
         setLinkedPage();
         openAssetsTab();
-        checkbox("./imageFromPageImage").check();
+        setCheckbox("./imageFromPageImage", true);
         saveDialog();
         assertThat(rendered(".cmp-teaser img")).hasAttribute("alt", SURFING_ALT);
     }
@@ -345,8 +363,8 @@ public class TeaserV2PwIT extends TeaserV1PwIT {
         openEditDialog(teaserPath);
         setLinkedPage();
         openAssetsTab();
-        checkbox("./imageFromPageImage").check();
-        checkbox("./altValueFromPageImage").uncheck();
+        setCheckbox("./imageFromPageImage", true);
+        setCheckbox("./altValueFromPageImage", false);
         dialog().locator("input[name='./alt']").fill("Teaser alt text");
         saveDialog();
         assertThat(rendered(".cmp-teaser img")).hasAttribute("alt", "Teaser alt text");
