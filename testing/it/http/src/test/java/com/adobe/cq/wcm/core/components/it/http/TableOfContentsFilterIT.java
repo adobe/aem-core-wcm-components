@@ -23,6 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.Header;
 import org.apache.sling.testing.clients.ClientException;
@@ -141,9 +143,9 @@ public class TableOfContentsFilterIT {
                 FormEntityBuilder.create().addParameter("versionId", versionId).build(), 200).getContent().trim();
             assertTrue("Expected a version-history preview page: " + previewPath, previewPath.startsWith("/tmp/versionhistory/"));
             previewPage = previewPath;
-            int contentPathIndex = previewPath.indexOf("/content/");
-            assertTrue("Expected the preview page under a content subtree: " + previewPath, contentPathIndex > 0);
-            previewRoot = previewPath.substring(0, contentPathIndex);
+            Matcher previewRootMatcher = Pattern.compile("(/tmp/versionhistory/[^/]+/[^/]+)/.+").matcher(previewPath);
+            assertTrue("Expected a user- and version-scoped preview page: " + previewPath, previewRootMatcher.matches());
+            previewRoot = previewRootMatcher.group(1);
             assertTableOfContents(previewPage, "Versioned heading");
         } finally {
             try {
