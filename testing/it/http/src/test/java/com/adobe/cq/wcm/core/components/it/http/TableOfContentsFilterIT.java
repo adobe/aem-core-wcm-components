@@ -45,10 +45,12 @@ import com.adobe.cq.testing.client.VersioningClient;
 import com.adobe.cq.testing.junit.rules.CQAuthorClassRule;
 import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
 import com.adobe.cq.testing.junit.rules.CQRule;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -103,6 +105,7 @@ public class TableOfContentsFilterIT {
         String page = author.createPage("toc-" + UUID.randomUUID(), "Table of contents test", "/content/core-components",
             "/conf/core-components/settings/wcm/templates/simple-template").getSlingPath();
         String previewPage = null;
+        String previewRoot = null;
         try {
             String container = page + "/jcr:content/root/container";
             String toc = container + "/toc";
@@ -121,20 +124,32 @@ public class TableOfContentsFilterIT {
 
             author.createVersion(page, "Table of contents regression test", "toc-test");
             VersioningClient versioning = cqBaseClassRule.authorRule.getAdminClient(VersioningClient.class);
-            String versionId = versioning.getPageVersions(page).get(0).path("id").asText();
-            assertTrue("Expected a saved page version", !versionId.isEmpty());
+            String versionId = "";
+            for (JsonNode version : versioning.getPageVersions(page)) {
+                if ("toc-test".equals(version.path("label").asText())) {
+                    versionId = version.path("id").asText();
+                    break;
+                }
+            }
+            assertFalse("Expected a saved page version labeled toc-test", versionId.isEmpty());
 
             author.setPropertyString(title, "jcr:title", "Current heading");
             assertTableOfContents(page, "Current heading");
 
+            // Simulate the Sites version history "Preview version" action.
             String previewPath = author.doPost("/mnt/overlay/wcm/core/content/sites/versionhistory/_jcr_content.txt",
                 FormEntityBuilder.create().addParameter("versionId", versionId).build(), 200).getContent().trim();
             assertTrue("Expected a version-history preview page: " + previewPath, previewPath.startsWith("/tmp/versionhistory/"));
             previewPage = previewPath;
+            int contentPathIndex = previewPath.indexOf("/content/");
+            assertTrue("Expected the preview page under a content subtree: " + previewPath, contentPathIndex > 0);
+            previewRoot = previewPath.substring(0, contentPathIndex);
             assertTableOfContents(previewPage, "Versioned heading");
         } finally {
             try {
-                if (previewPage != null) {
+                if (previewRoot != null) {
+                    author.deletePath(previewRoot);
+                } else if (previewPage != null) {
                     author.deletePath(previewPage);
                 }
             } finally {

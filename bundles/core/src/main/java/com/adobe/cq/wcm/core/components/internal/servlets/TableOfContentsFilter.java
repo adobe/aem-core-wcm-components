@@ -55,7 +55,7 @@ import com.adobe.cq.wcm.core.components.models.TableOfContents;
 import com.day.cq.wcm.api.WCMMode;
 
 /**
- * Intercepts all the HTTP requests made to /editor.html or a html page inside /content/.
+ * Intercepts HTML GET requests for pages under {@code /content/} and {@code /tmp/versionhistory/}.
  * Creates a response wrapper - {@link CharResponseWrapper} in which all the servlets/filters called after this filter,
  * store the response content.
  * Gets the response content from this wrapper, modifies it and copies it into the original response object.
@@ -70,7 +70,7 @@ import com.day.cq.wcm.api.WCMMode;
 )
 @SlingServletFilter(
     scope = {SlingServletFilterScope.REQUEST},
-    pattern = "(/content|/tmp/versionhistory)/.*",
+    pattern = "(?:/content|/tmp/versionhistory)/.*",
     resourceTypes = "cq:Page",
     extensions = {"html"},
     methods = {"GET"}
