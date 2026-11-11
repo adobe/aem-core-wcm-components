@@ -766,6 +766,41 @@
           "jcr:title"         : "Adobe Logo",
           "linkURL"           : "/content/test"
         },
+        "image60"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "fileReference"     : "/content/dam/core/images/png_alpha_DM_32bpp.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "alt"               : "PNG with dam:Bitsperpixel 32"
+        },
+        "image61"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "fileReference"     : "/content/dam/core/images/png_alpha_DM_24bpp.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "alt"               : "PNG with dam:Bitsperpixel 24"
+        },
+        "image62"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "fileReference"     : "/content/dam/core/images/png_alpha_DM_rgba.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "alt"               : "PNG with four bits per sample values"
+        },
+        "image63"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "fileReference"     : "/content/dam/core/images/png_alpha_DM_rgb.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "alt"               : "PNG with three bits per sample values"
+        },
+        "image64"            : {
+          "jcr:primaryType"   : "nt:unstructured",
+          "sling:resourceType": "core/wcm/components/image/v3/image",
+          "fileReference"     : "/content/dam/core/images/png_alpha_DM_nometa.png",
+          "imageServerUrl"    : "https://s7d9.scene7.com/is/image/",
+          "alt"               : "PNG without transparency metadata"
+        },
         "container"             : {
           "jcr:primaryType"   : "nt:unstructured",
           "sling:resourceType": "wcm/foundation/components/responsivegrid",

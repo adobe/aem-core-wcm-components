@@ -216,6 +216,35 @@ public interface Image extends Component {
     String PN_DESIGN_RESIZE_WIDTH = "resizeWidth";
 
     /**
+     * Name of the configuration policy property that controls automatic PNG transparency preservation.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.34.0
+     */
+    String PN_DESIGN_AUTO_PRESERVE_PNG_TRANSPARENCY = "autoPreservePngTransparency";
+
+    /**
+     * Dynamic Media image modifier for preserving PNG transparency.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.34.0
+     */
+    String PNG_ALPHA_FORMAT_MODIFIER = "fmt=png-alpha";
+
+    /**
+     * DAM metadata property for bits per pixel information.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.34.0
+     */
+    String DAM_BITS_PER_PIXEL = "dam:Bitsperpixel";
+
+    /**
+     * DAM metadata property holding the bits per sample of each channel (multi-value).
+     * More than 3 values indicates an alpha channel.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.34.0
+     */
+    String TIFF_BITS_PER_SAMPLE = "tiff:BitsPerSample";
+
+    /**
      * Returns the value for the {@code src} attribute of the image.
      *
      * @return the image's URL
