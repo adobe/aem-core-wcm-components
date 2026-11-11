@@ -69,7 +69,7 @@
                                 text="Disable shadowing"
                                 name="./disableShadowing"
                                 value="{Boolean}true"
-                                checked="{Boolean}false}"
+                                checked="{Boolean}false"
                                 uncheckedValue="{Boolean}false"/>
                         </items>
                     </properties>
