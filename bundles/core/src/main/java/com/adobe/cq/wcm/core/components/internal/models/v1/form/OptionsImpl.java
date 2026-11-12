@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Named;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
@@ -62,7 +61,7 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
     private static final String OPTION_ITEMS_PATH = "items";
     private static final String ID_PREFIX = "form-options";
 
-    @ChildResource(injectionStrategy = InjectionStrategy.OPTIONAL) @Named(OPTION_ITEMS_PATH)
+    @ChildResource(injectionStrategy = InjectionStrategy.OPTIONAL, name = OPTION_ITEMS_PATH)
     @Nullable
     private List<Resource> itemResources;
 

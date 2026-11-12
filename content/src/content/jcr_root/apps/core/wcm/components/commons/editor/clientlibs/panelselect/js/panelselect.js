@@ -25,6 +25,37 @@
         indexMarker: ".cmp-panelselector__indexMarker"
     };
 
+    var CT_SITES_49051 = "CT_SITES-49051";
+
+    /**
+     * Granite feature toggle CT_SITES-49051 gates sanitization of the authored panel title before it is
+     * inserted into the selector markup. When Granite or {@code Toggles} is unavailable, sanitization is
+     * treated as enabled. When the toggle is explicitly disabled, behaviour matches earlier revisions.
+     *
+     * @returns {Boolean}
+     */
+    function isPanelTitleSanitizationEnabled() {
+        if (typeof Granite === "undefined" || !Granite.Toggles || typeof Granite.Toggles.isEnabled !== "function") {
+            return true;
+        }
+        return Granite.Toggles.isEnabled(CT_SITES_49051) !== false;
+    }
+
+    /**
+     * Encodes a string for safe insertion into an HTML context.
+     *
+     * @param {String} value - raw input value
+     * @returns {String} the HTML-encoded value
+     */
+    function encodeHtml(value) {
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#x27;");
+    }
+
     /**
      * @typedef {Object} PanelSelectorConfig Represents a Panel Selector configuration object
      * @property {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} against which to create the panel selector
@@ -37,7 +68,7 @@
      * which allows selection of panel container items for editing, as well as other operations such as reordering of panels.
      * @param {PanelSelectorConfig} config The Panel Selector configuration object
      */
-    var PanelSelector = ns.util.createClass({
+    window.CQ.CoreComponents.PanelSelector = ns.util.createClass({
 
         /**
          * The Panel Selector configuration Object
@@ -178,7 +209,7 @@
                     items.push({
                         id: child.path,
                         name: child.name,
-                        title: getTitle(child, panelContainerItems[child.name], index + 1)
+                        title: that.getTitle(child, panelContainerItems[child.name], index + 1)
                     });
                 });
 
@@ -379,6 +410,38 @@
                 that._unbindEvents();
                 that._elements.popover.parentNode.removeChild(that._elements.popover);
             }
+        },
+
+        /**
+         * Retrieves a title from item data. If no item data exists, or it doesn't have a title
+         * instead lookup the editable display name of the corresponding [Editable]{@link Granite.author.Editable}.
+         * Prefixes each title with an index.
+         *
+         * @param {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} representing the item
+         * @param {Object} item The item data
+         * @param {Number} index Index of the item
+         * @returns {String} The title
+         */
+        getTitle: function(editable, item, index)  {
+            var title = "<span class='foundation-layout-util-subtletext cmp-panelselector__indexMarker'>" + index + "</span>&nbsp;&nbsp;";
+            var subTitle = "";
+
+            title = title + " " + Granite.I18n.getVar(ns.editableHelper.getEditableDisplayableName(editable));
+
+            if (item) {
+                if (item[PN_PANEL_TITLE]) {
+                    subTitle = item[PN_PANEL_TITLE];
+                } else if (item.title) {
+                    subTitle = item.title;
+                }
+            }
+
+            if (subTitle) {
+                var safeSubTitle = isPanelTitleSanitizationEnabled() ? encodeHtml(subTitle) : subTitle;
+                title = title + ": <span class='foundation-layout-util-subtletext'>" + safeSubTitle + "</span>";
+            }
+
+            return title;
         }
     });
 
@@ -393,7 +456,7 @@
         order: "before COPY",
         execute: function(editable, param, target) {
             if (!panelSelector || !panelSelector.isOpen()) {
-                panelSelector = new PanelSelector({
+                panelSelector = new window.CQ.CoreComponents.PanelSelector({
                     "editable": editable,
                     "target": target[0]
                 });
@@ -422,36 +485,5 @@
             ns.EditorFrame.editableToolbar.registerAction("PANEL_SELECT", panelSelect);
         }
     });
-
-    /**
-     * Retrieves a title from item data. If no item data exists, or it doesn't have a title
-     * instead lookup the editable display name of the corresponding [Editable]{@link Granite.author.Editable}.
-     * Prefixes each title with an index.
-     *
-     * @param {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} representing the item
-     * @param {Object} item The item data
-     * @param {Number} index Index of the item
-     * @returns {String} The title
-     */
-    function getTitle(editable, item, index) {
-        var title = "<span class='foundation-layout-util-subtletext cmp-panelselector__indexMarker'>" + index + "</span>&nbsp;&nbsp;";
-        var subTitle = "";
-
-        title = title + " " + Granite.I18n.getVar(ns.editableHelper.getEditableDisplayableName(editable));
-
-        if (item) {
-            if (item[PN_PANEL_TITLE]) {
-                subTitle = item[PN_PANEL_TITLE];
-            } else if (item.title) {
-                subTitle = item.title;
-            }
-        }
-
-        if (subTitle) {
-            title = title + ": <span class='foundation-layout-util-subtletext'>" + subTitle + "</span>";
-        }
-
-        return title;
-    }
 
 }(jQuery, Granite.author, jQuery(document), this));

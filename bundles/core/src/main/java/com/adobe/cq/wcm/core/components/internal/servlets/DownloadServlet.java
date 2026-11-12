@@ -17,16 +17,18 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.TimeZone;
 
-import javax.annotation.Nonnull;
 import javax.jcr.Binary;
 import javax.jcr.Node;
 import javax.jcr.Property;
@@ -43,6 +45,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,10 +70,11 @@ public class DownloadServlet extends SlingAllMethodsServlet {
     public static final String INLINE_SELECTOR = "inline";
 
     private static final String CONTENT_DISPOSITION_HEADER = "Content-Disposition";
+    private static final String CSP_HEADER = "Content-Security-Policy";
     private static final String RFC_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
     @Override
-    protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
+    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
             throws IOException {
         Asset asset = request.getResource().adaptTo(Asset.class);
         if (asset == null) {
@@ -181,6 +185,10 @@ public class DownloadServlet extends SlingAllMethodsServlet {
         return Optional.ofNullable(fileResource.getValueMap().get(JcrConstants.JCR_DATA, InputStream.class));
     }
 
+    private String encodeFileName(String fileName) throws UnsupportedEncodingException {
+        return URLEncoder.encode(fileName, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20");  
+    }
+
     private void sendResponse(InputStream stream, long size, String mimeType, String filename, long lastModifiedDate, SlingHttpServletResponse response,
             boolean inline) throws IOException {
         response.setContentType(mimeType);
@@ -190,9 +198,10 @@ public class DownloadServlet extends SlingAllMethodsServlet {
             response.setContentLength((int) size);
         }
         if (inline) {
-            response.setHeader(CONTENT_DISPOSITION_HEADER, "inline");
+            response.setHeader(CONTENT_DISPOSITION_HEADER, String.format("inline; filename=\"%s\"; filename*=UTF-8''%s", filename, encodeFileName(filename)));
+            response.setHeader(CSP_HEADER, "sandbox");
         } else {
-            response.setHeader(CONTENT_DISPOSITION_HEADER, "attachment; filename=\"" + filename + "\"");
+            response.setHeader(CONTENT_DISPOSITION_HEADER, String.format("attachment; filename=\"%s\"; filename*=UTF-8''%s", filename, encodeFileName(filename)));
         }
         if (lastModifiedDate > 0) {
             response.setHeader(HttpConstants.HEADER_LAST_MODIFIED, getLastModifiedDate(lastModifiedDate));

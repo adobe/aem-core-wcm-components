@@ -82,6 +82,11 @@
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
                             "fragmentVariationPath": "/content/experience-fragments/mysite/us/en/footer/master/undefined"
                         },
+                        "xf-component-23": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/language-masters/en/footer/master"
+                        },
                         "xf-component-30a": {
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",

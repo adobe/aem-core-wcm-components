@@ -7,6 +7,10 @@
         "Coral": false,
         "Granite": false,
         "CMP": false,
-        "Promise": false
+        "Promise": false,
+        "globalThis": false
+    },
+    "parserOptions": {
+      "ecmaVersion": 2020
     }
 }

@@ -15,7 +15,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.element="${@ date='The date', format='The format'}">
     <!--/* set a default format if none was provided */-->
-    <sly data-sly-test.format="${format ? format : 'YYYY-MM-dd HH:mm'}"></sly>
+    <sly data-sly-test.format="${format ? format : 'yyyy-MM-dd HH:mm'}"></sly>
     <!--/* i18n will allow to customise format based on locale as it's applied to the formatting string before the actual date formatting is done */-->
     ${format @ format=date, type='date', i18n}
 </template>

@@ -15,10 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v3;
 
-import java.util.Optional;
-
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.jetbrains.annotations.NotNull;
@@ -55,14 +53,20 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Override
     @JsonIgnore
     public boolean isDataLayerClientlibIncluded() {
-        return Optional.ofNullable(resource.adaptTo(ConfigurationBuilder.class))
-                .map(builder -> builder.as(DataLayerConfig.class))
-                .map(config -> !config.skipClientlibInclude())
-                .orElse(true);
+        return getDataLayerConfig()
+            .map(config -> !config.skipClientlibInclude())
+            .orElse(true);
+    }
+
+    @Override
+    @JsonIgnore
+    public String getDataLayerName() {
+        String name = getDataLayerConfig().map(DataLayerConfig::name)
+            .orElse("");
+        return StringUtils.isEmpty(name) ? DataLayerConfig.DATALAYER_OBJECT_NAME_ADOBE : name;
     }
 
     protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {
         return new RedirectItemImpl(redirectTarget, request, linkManager);
     }
-
 }

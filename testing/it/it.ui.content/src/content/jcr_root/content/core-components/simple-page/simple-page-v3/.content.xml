@@ -19,6 +19,7 @@
     <jcr:content
         cq:lastModified="{Date}2022-02-28T21:41:13.599+01:00"
         cq:lastModifiedBy="admin"
+        cq:structuredData="[{&quot;@context&quot;:&quot;https://schema.org&quot;\,&quot;@type&quot;:&quot;Organization&quot;\,&quot;name&quot;:&quot;Acme&quot;}]"
         cq:template="/conf/core-components/settings/wcm/templates/simple-template-v3"
         jcr:primaryType="cq:PageContent"
         jcr:title="Simple Page V3"

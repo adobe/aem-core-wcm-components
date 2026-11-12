@@ -1,0 +1,50 @@
+{
+    "id": "list-dc1f6a2ea5",
+    "dateFormatString": "yyyy-MM-dd",
+    "items": [
+        {
+            "id": "list-dc1f6a2ea5-item-b1f4d722d9",
+            "path": "/content/list/pages/page_7/page_7_1",
+            "link": {
+                "valid": true,
+                "url": "/content/list/pages/page_7/page_7_1.html"
+            },
+            "title": "Page 7.1",
+            "dataLayer": {
+                "list-dc1f6a2ea5-item-b1f4d722d9": {
+                    "@type": "core/wcm/components/list/v3/list/item",
+                    "dc:title": "Page 7.1",
+                    "xdm:linkURL": "/content/list/pages/page_7/page_7_1.html"
+                }
+            },
+            ":type": "cq:PageContent"
+        },
+        {
+            "id": "list-dc1f6a2ea5-item-e85a27c407",
+            "path": "/content/list/pages/page_7/page_7_2",
+            "link": {
+                "valid": true,
+                "url": "/content/list/pages/page_7/page_7_2.html"
+            },
+            "title": "Page 7.2",
+            "dataLayer": {
+                "list-dc1f6a2ea5-item-e85a27c407": {
+                    "@type": "core/wcm/components/list/v3/list/item",
+                    "dc:title": "Page 7.2",
+                    "xdm:linkURL": "/content/list/pages/page_7/page_7_2.html"
+                }
+            },
+            ":type": "cq:PageContent"
+        }
+    ],
+    "showDescription": false,
+    "showModificationDate": false,
+    "linkItems": false,
+    "displayItemAsTeaser": true,
+    "dataLayer": {
+        "list-dc1f6a2ea5": {
+            "@type": "core/wcm/components/list/v3/list"
+        }
+    },
+    ":type": "core/wcm/components/list/v3/list"
+}

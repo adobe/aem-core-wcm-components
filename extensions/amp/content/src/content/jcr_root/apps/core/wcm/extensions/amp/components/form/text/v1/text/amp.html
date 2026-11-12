@@ -24,6 +24,7 @@
               required="${text.required}"
               readonly="${text.readOnly}"
               rows="${text.rows}"
+              spellcheck="true"
               placeholder="${text.placeholder}"
               aria-label="${text.hideTitle && text.title}">${text.value}</textarea>
     <input data-sly-test="${!useTextarea}"
@@ -34,6 +35,7 @@
            value="${text.value}"
            required="${text.required}"
            readonly="${text.readOnly}"
+           spellcheck="true"
            placeholder="${text.placeholder}"
            aria-label="${text.hideTitle && text.title}"/>
     <span visible-when-invalid="valueMissing"

@@ -16,7 +16,6 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
@@ -28,6 +27,7 @@ import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,6 +45,10 @@ public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/pdfviewer/v1/pdfviewer";
     protected static final String FIELD_EMBED_MODE = "embedMode";
+    /**
+     * Field that needs to be passed to Embed API to control full screen button in full-window mode
+     */
+    protected static final String FIELD_SHOW_FULL_SCREEN_VIEW_BUTTON = "showFullScreenViewButton";
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
@@ -82,7 +86,7 @@ public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private boolean dockPageControls;
 
-    @Inject
+    @ScriptVariable
     private Resource resource;
 
     private PdfViewerCaConfig caConfig;
@@ -180,6 +184,7 @@ public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
             jsonObjectBuilder.add(PN_DEFAULT_VIEW_MODE, defaultViewMode);
             jsonObjectBuilder.add(PN_SHOW_ANNOTATION_TOOLS, showAnnotationTools);
             jsonObjectBuilder.add(PN_SHOW_LEFT_HAND_PANEL, showLeftHandPanel);
+            jsonObjectBuilder.add(FIELD_SHOW_FULL_SCREEN_VIEW_BUTTON, showFullScreen);
         }
 
         if (StringUtils.equals(type, SIZED_CONTAINER)) {

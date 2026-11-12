@@ -20,6 +20,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -37,7 +38,6 @@ import com.adobe.cq.wcm.core.components.services.link.PathProcessor;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.designer.Style;
-import com.google.common.collect.ImmutableSet;
 
 import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
 
@@ -50,7 +50,7 @@ public class LinkManagerImpl implements LinkManager {
      * <code>_self</code> is used in the edit dialog but not listed as allowed here as we do not
      * want to render a target attribute at all when <code>_self</code> is selected.
      */
-    public static final Set<String> VALID_LINK_TARGETS = ImmutableSet.of("_blank", "_parent", "_top");
+    public static final Set<String> VALID_LINK_TARGETS = SetUtils.unmodifiableSet("_blank", "_parent", "_top");
 
     /**
      * Name of the resource property that for redirecting pages will indicate if original page or redirect target page should be returned.

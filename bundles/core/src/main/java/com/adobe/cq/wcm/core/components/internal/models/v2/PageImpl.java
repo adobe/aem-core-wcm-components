@@ -53,6 +53,8 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemConfig;
 import com.adobe.cq.wcm.core.components.config.HtmlPageItemsConfig;
 import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
+import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
+import com.adobe.cq.wcm.core.components.internal.LazyValue;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.HtmlPageItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
@@ -157,7 +159,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      * The proxy path of the first client library listed in the style under the
      * &quot;{@value Page#PN_APP_RESOURCES_CLIENTLIB}&quot; property.
      */
-    private String appResourcesPath;
+    private LazyValue<String> appResourcesPath;
 
     /**
      * The redirect target as a NavigationItem.
@@ -182,14 +184,14 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @PostConstruct
     protected void initModel() {
         super.initModel();
-        this.appResourcesPath = Optional.ofNullable(currentStyle)
+        this.appResourcesPath = new LazyValue<>(() -> Optional.ofNullable(currentStyle)
                 .map(style -> style.get(PN_APP_RESOURCES_CLIENTLIB, String.class))
                 .map(resourcesClientLibrary -> htmlLibraryManager.getLibraries(new String[]{resourcesClientLibrary}, LibraryType.CSS, true, false))
                 .map(Collection::stream)
                 .orElse(Stream.empty())
                 .findFirst()
                 .map(this::getProxyPath)
-                .orElse(null);
+                .orElse(null));
     }
 
     protected NavigationItem newRedirectItem(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkManager linkManager) {
@@ -216,7 +218,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     }
 
     @Override
-    protected void loadFavicons(String designPath) {
+    protected void loadFavicons(Resource designPath) {
     }
 
     @Override
@@ -255,7 +257,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     @Override
     public String getAppResourcesPath() {
-        return appResourcesPath;
+        return appResourcesPath.get();
     }
 
     @Override
@@ -283,6 +285,19 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             redirectTarget = newRedirectItem(redirectTargetValue, request, linkManager);
         }
         return redirectTarget;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isDataLayerAcdl3Used() {
+        return getDataLayerConfig()
+            .map(DataLayerConfig::useAcdl3)
+            .orElse(false);
+    }
+
+    protected Optional<DataLayerConfig> getDataLayerConfig() {
+        return Optional.ofNullable(resource.adaptTo(ConfigurationBuilder.class))
+            .map(builder -> builder.as(DataLayerConfig.class));
     }
 
     @Override

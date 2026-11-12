@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import org.apache.sling.testing.clients.ClientException;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
@@ -28,6 +29,7 @@ import com.adobe.cq.testing.client.CQClient;
 import com.adobe.cq.testing.junit.assertion.GraniteAssert;
 import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
 import com.adobe.cq.testing.junit.rules.CQRule;
+import com.adobe.cq.testing.junit.rules.toggles.RunIfToggleEnabled;
 
 public class PageIT {
 
@@ -76,6 +78,16 @@ public class PageIT {
         // async loading is enabled in the page policy
         String content = adminAuthor.doGet("/content/core-components/simple-page/simple-page-v3-clientlibs-async.html", 200).getContent();
         Pattern pattern = Pattern.compile("<script async src=\".*/etc.clientlibs/core/wcm/components/accordion/v1/accordion/clientlibs/site.*.js\"></script>");
+        GraniteAssert.assertRegExFind(message, content, pattern);
+    }
+
+    @Test
+    @Ignore("Disabled until the feature is available in cq/foundation (SITES-42542).")
+    @RunIfToggleEnabled("FT_SITES-42542")
+    public void testStructuredData() throws ClientException {
+        String message = "The page head should contain the JSON-LD script tag for the cq:structuredData block";
+        String content = adminAuthor.doGet("/content/core-components/simple-page/simple-page-v3.html", 200).getContent();
+        Pattern pattern = Pattern.compile("<script type=\"application/ld\\+json\">\\{\"@context\":\"https://schema\\.org\",\"@type\":\"Organization\",\"name\":\"Acme\"}</script>");
         GraniteAssert.assertRegExFind(message, content, pattern);
     }
 

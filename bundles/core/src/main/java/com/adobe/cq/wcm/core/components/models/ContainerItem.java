@@ -53,4 +53,16 @@ public interface ContainerItem {
     default String getName() {
         return "";
     }
+
+    /**
+     * Returns the path of this container item.
+     *
+     * @return the container item path or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 12.28.0
+     */
+    @Nullable
+    default String getPath() {
+        return null;
+    }
+
 }

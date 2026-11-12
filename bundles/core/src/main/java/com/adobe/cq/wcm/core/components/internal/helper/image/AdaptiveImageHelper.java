@@ -32,7 +32,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
-import com.google.common.base.Joiner;
 
 public class AdaptiveImageHelper {
 
@@ -68,7 +67,9 @@ public class AdaptiveImageHelper {
                         .map(Page::getTemplate)
                         .map(template -> ResourceUtil.normalize(template.getPath() + suffixPath))
                         .map(resourceResolver::getResource).orElse(null);
-            } else {
+            }
+
+            if (componentCandidate == null) {
                 // image coming from external resource
                 Resource externalImageResource = resourceResolver.getResource(suffixPath);
                 if (externalImageResource != null && externalImageResource.isResourceType(IMAGE_RESOURCE_TYPE)) {
@@ -122,12 +123,12 @@ public class AdaptiveImageHelper {
         }
         if (lastModifiedSuffix > 0) {
             suffix = StringUtils.replace(suffix, String.valueOf(lastModifiedSuffix), String.valueOf(lastModifiedEpoch));
-            redirectLocation = Joiner.on('.').join(Text.escapePath(request.getContextPath() + requestPathInfo.getResourcePath()),
-                    requestPathInfo.getSelectorString(), requestPathInfo.getExtension() + Text.escapePath(suffix));
+            redirectLocation = Text.escapePath(request.getContextPath() + requestPathInfo.getResourcePath()) + "." +
+                    requestPathInfo.getSelectorString() + "." + requestPathInfo.getExtension() + Text.escapePath(suffix);
         } else if (request.getResource().isResourceType(IMAGE_RESOURCE_TYPE)) {
-            redirectLocation = Joiner.on('.').join(Text.escapePath(request.getContextPath() + requestPathInfo.getResourcePath()),
-                    requestPathInfo.getSelectorString(), requestPathInfo.getExtension() + "/" + lastModifiedEpoch,
-                    requestPathInfo.getExtension());
+            redirectLocation = Text.escapePath(request.getContextPath() + requestPathInfo.getResourcePath()) + "." +
+                    requestPathInfo.getSelectorString() + "." + requestPathInfo.getExtension() + "/" +
+                    lastModifiedEpoch + "." + requestPathInfo.getExtension();
         } else {
             String resourcePath = request.getPathInfo();
             String extension = FilenameUtils.getExtension(resourcePath);

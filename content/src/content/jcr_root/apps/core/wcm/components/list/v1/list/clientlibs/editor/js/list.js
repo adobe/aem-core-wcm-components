@@ -18,7 +18,7 @@
 
     $(document).on("foundation-contentloaded", function(e) {
         $(".cmp-list--editor coral-select.cq-dialog-dropdown-showhide", e.target).each(function(i, element) {
-            var target = $(element).data("cqDialogDropdownShowhideTarget");
+            var target = window.Granite.UI.Foundation.Utils.sanitizeHtml($(element).data("cqDialogDropdownShowhideTarget"));
             if (target) {
                 Coral.commons.ready(element, function(component) {
                     showHide(component, target);

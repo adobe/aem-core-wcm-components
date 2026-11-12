@@ -40,6 +40,7 @@ import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import com.adobe.cq.wcm.core.components.internal.models.v1.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
+import com.adobe.cq.wcm.core.components.internal.link.LinkUtil;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.dam.api.Asset;
@@ -47,7 +48,6 @@ import com.day.cq.dam.api.DamConstants;
 import com.day.cq.dam.scene7.api.constants.Scene7AssetType;
 import com.day.cq.dam.scene7.api.constants.Scene7Constants;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.common.net.UrlEscapers;
 
 /**
  * V2 Image model implementation.
@@ -187,7 +187,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     //check DM asset - check for "dam:scene7File" metadata value
                     String dmAssetName = asset.getMetadataValue(Scene7Constants.PN_S7_FILE);
                     if(isDmFeaturesEnabled && (!StringUtils.isEmpty(dmAssetName))){
-                        dmAssetName = UrlEscapers.urlFragmentEscaper().escape(dmAssetName);
+                        dmAssetName = LinkUtil.escapeFragment(dmAssetName);
                         //image is DM
                         dmImage = true;
                         useAssetDelivery = false;
@@ -221,7 +221,10 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                             request.getResource().getPath());
                 }
             } else {
-                LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, request.getResource().getPath());
+                // handle the case where the image is not coming from DAM but from a different source (e.g. NGDM)
+                if (!hasContent) {
+                    LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, request.getResource().getPath());
+                }
             }
         }
         if (hasContent) {

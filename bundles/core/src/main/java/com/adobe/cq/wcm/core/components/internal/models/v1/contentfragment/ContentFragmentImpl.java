@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -31,11 +30,13 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.models.factory.ModelFactory;
+import org.apache.sling.settings.SlingSettingsService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,13 +46,14 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
-import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContentFragmentDataImpl;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContentFragmentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
+import com.adobe.cq.wcm.core.components.services.contentfragment.VcfUrlProvider;
+import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
 
 @Model(
         adaptables = SlingHttpServletRequest.class,
@@ -72,17 +74,28 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
      */
     public static final String RESOURCE_TYPE = "core/wcm/components/contentfragment/v1/contentfragment";
 
+    private static final String MASTER_VARIATION = "master";
+    private static final String PUBLISH_RUN_MODE = "publish";
+    private static final String VCF_DISPLAY_MODE = "vcf";
+
     @Self(injectionStrategy = InjectionStrategy.REQUIRED)
     private SlingHttpServletRequest slingHttpServletRequest;
 
-    @Inject
+    @OSGiService
     private FragmentRenderService renderService;
 
-    @Inject
+    @OSGiService
     private ContentTypeConverter contentTypeConverter;
 
-    @Inject
+    @OSGiService
     private ModelFactory modelFactory;
+
+    @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private SlingSettingsService slingSettingsService;
+
+    @OSGiService(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    private VcfUrlProvider vcfUrlProvider;
 
     @SlingObject
     private ResourceResolver resourceResolver;
@@ -106,7 +119,13 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
     @Nullable
     private String displayMode;
 
+    @ValueMapValue(name = ContentFragment.PN_VCF_TEMPLATE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
+    private String vcfTemplate;
+
     private DAMContentFragment damContentFragment = new EmptyContentFragment();
+
+    private String fragmentId;
 
     @PostConstruct
     private void initModel() {
@@ -114,6 +133,13 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
             Resource fragmentResource = resourceResolver.getResource(fragmentPath);
             if (fragmentResource != null) {
                 damContentFragment = new DAMContentFragmentImpl(fragmentResource, contentTypeConverter, variationName, elementNames);
+                fragmentId = fragmentResource.getValueMap().get("jcr:uuid", String.class);
+                if (fragmentId == null) {
+                    Resource jcrContent = fragmentResource.getChild("jcr:content");
+                    if (jcrContent != null) {
+                        fragmentId = jcrContent.getValueMap().get("jcr:uuid", String.class);
+                    }
+                }
             }
         }
     }
@@ -222,6 +248,72 @@ public class ContentFragmentImpl extends AbstractComponentImpl implements Conten
 
         // split into paragraphs
         return content.split("(?=(<p>|<h1>|<h2>|<h3>|<h4>|<h5>|<h6>))");
+    }
+
+    @Nullable
+    @Override
+    public String getFragmentId() {
+        return fragmentId;
+    }
+
+    @Nullable
+    @Override
+    public String getVcfRenderUrl() {
+        VcfUrlProvider urls = vcfUrlProvider;
+        if (!isVcfMode() || StringUtils.isEmpty(fragmentId) || urls == null) {
+            return null;
+        }
+        return isPublishRunMode() ? buildPublishUrl(urls) : buildAuthorPreviewUrl(urls);
+    }
+
+    @Override
+    public boolean isVcfAuthRequired() {
+        VcfUrlProvider urls = vcfUrlProvider;
+        return isVcfMode() && !isPublishRunMode() && urls != null;
+    }
+
+    @Nullable
+    @Override
+    public String getVcfTemplatesApiBase() {
+        VcfUrlProvider urls = vcfUrlProvider;
+        return urls == null ? null : urls.getVcfTemplatesApiBase();
+    }
+
+    private boolean isVcfMode() {
+        return VCF_DISPLAY_MODE.equals(displayMode);
+    }
+
+    private String buildPublishUrl(VcfUrlProvider urls) {
+        String format = urls.getVcfPublishUrlFormat();
+        if (format == null || StringUtils.isEmpty(vcfTemplate)) {
+            return null;
+        }
+        String variation = hasNonMasterVariation() ? variationName : "main";
+        return String.format(format, vcfTemplate, fragmentId, variation);
+    }
+
+    private String buildAuthorPreviewUrl(VcfUrlProvider urls) {
+        String authorFormat = urls.getVcfAuthorUrlFormat();
+        if (authorFormat == null) {
+            return null;
+        }
+        String url = String.format(authorFormat, fragmentId);
+        List<String> params = new ArrayList<>();
+        if (StringUtils.isNotEmpty(vcfTemplate)) {
+            params.add("templateId=" + vcfTemplate);
+        }
+        if (hasNonMasterVariation()) {
+            params.add("variation=" + variationName);
+        }
+        return params.isEmpty() ? url : url + "?" + String.join("&", params);
+    }
+
+    private boolean hasNonMasterVariation() {
+        return StringUtils.isNotEmpty(variationName) && !MASTER_VARIATION.equals(variationName);
+    }
+
+    private boolean isPublishRunMode() {
+        return slingSettingsService != null && slingSettingsService.getRunModes().contains(PUBLISH_RUN_MODE);
     }
 
     @Override

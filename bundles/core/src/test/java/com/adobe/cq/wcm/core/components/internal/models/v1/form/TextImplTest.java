@@ -39,6 +39,8 @@ public class TextImplTest {
     private static final String TEXTINPUT1_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text";
     private static final String TEXTINPUT2_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text_185087333";
     private static final String TEXTINPUT3_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text-v2";
+    private static final String TEXTINPUT4_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text-v2-2";
+    private static final String TEXTINPUT5_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text-v2-3";
 
 
     public final AemContext context = CoreComponentTestContext.newAemContext();
@@ -79,6 +81,7 @@ public class TextImplTest {
         assertEquals(3, text.getRows());
         assertEquals("Custom help/placeholder message", text.getHelpMessage());
         assertTrue(text.hideTitle());
+        assertFalse(text.displayValidation());
         Utils.testJSONExport(text, Utils.getTestExporterJSONPath(TEST_BASE, TEXTINPUT2_PATH));
     }
 
@@ -86,6 +89,24 @@ public class TextImplTest {
     public void testV2JSONExport() {
         Text text = getTextUnderTest(TEXTINPUT3_PATH);
         Utils.testJSONExport(text, Utils.getTestExporterJSONPath(TEST_BASE, TEXTINPUT3_PATH));
+    }
+
+    @Test
+    public void testInputWithPolicyDisplayValidationFalse() {
+        context.contentPolicyMapping("core/wcm/components/form/text/v2/text", "displayValidation", false);
+        Text text = getTextUnderTest(TEXTINPUT4_PATH);
+        assertEquals("Custom Name", text.getName());
+        assertEquals("Custom title", text.getTitle());
+        assertFalse(text.displayValidation());
+    }
+
+    @Test
+    public void testInputWithPolicyDisplayValidationTrue() {
+        context.contentPolicyMapping("core/wcm/components/form/text/v2/text", "displayValidation", true);
+        Text text = getTextUnderTest(TEXTINPUT5_PATH);
+        assertEquals("Custom Name", text.getName());
+        assertEquals("Custom title", text.getTitle());
+        assertTrue(text.displayValidation());
     }
 
     private Text getTextUnderTest(String resourcePath) {

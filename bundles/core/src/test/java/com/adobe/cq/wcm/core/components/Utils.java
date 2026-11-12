@@ -33,6 +33,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.mockito.Mockito;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.jackson.DefaultMethodSkippingModuleProvider;
@@ -68,11 +70,22 @@ public class Utils {
         } catch (IOException e) {
             fail(String.format("Unable to generate JSON export for model %s: %s", model.getClass().getName(), e.getMessage()));
         }
-        JsonReader outputReader = Json.createReader(IOUtils.toInputStream(writer.toString(), StandardCharsets.UTF_8));
+        String actualJString = writer.toString();
         InputStream is = Utils.class.getResourceAsStream(expectedJsonResource);
         if (is != null) {
-            JsonReader expectedReader = Json.createReader(is);
-            assertEquals(expectedReader.read(), outputReader.read());
+            String expectedJString = "";
+            try {
+                expectedJString = IOUtils.toString(is, StandardCharsets.UTF_8);
+            }
+            catch(IOException e) {
+                fail("Error reading expected JSON resource: " + e.getMessage());
+            }
+            try {
+                JSONAssert.assertEquals(expectedJString, actualJString, JSONCompareMode.NON_EXTENSIBLE);
+            }
+            catch (org.json.JSONException e) {
+                fail(e.getMessage() + ": expected: " + expectedJString + " but was: " + actualJString);
+            }
         } else {
             fail("Unable to find test file " + expectedJsonResource + ".");
         }
@@ -156,7 +169,18 @@ public class Utils {
      * @param enabled {@code true} to enable the data layer, {@code false} to disable it
      */
     public static void enableDataLayer(AemContext context, boolean enabled) {
-        configureDataLayer(context, enabled, false);
+        configureDataLayer(context, enabled, false, "adobeDataLayer");
+    }
+
+    /**
+     * Sets the data layer context aware configuration of the AEM test context to enable the data layer, including a configured name.
+     *
+     * @param context The AEM test context
+     * @param enabled {@code true} to enable the data layer, {@code false} to disable it
+     * @param name a configured name for the data layer
+     */
+    public static void enableDataLayer(AemContext context, boolean enabled, String name) {
+        configureDataLayer(context, enabled, false, name);
     }
 
     /**
@@ -166,14 +190,24 @@ public class Utils {
      * @param skip {@code true} to not include the data layer clientlib, {@code false} to include it
      */
     public static void skipDataLayerInclude(AemContext context, boolean skip) {
-        configureDataLayer(context, true, skip);
+        configureDataLayer(context, true, skip, "adobeDataLayer");
     }
 
-    private static void configureDataLayer(AemContext context, boolean enabled, boolean skip) {
+    public static void configureDataLayer(AemContext context, boolean enabled, boolean skip) {
+        configureDataLayer(context,enabled,skip,"adobeDataLayer");
+    }
+
+    public static void configureDataLayer(AemContext context, boolean enabled, boolean skip, String name) {
+        configureDataLayer(context, enabled, skip, name, false);
+    }
+
+    public static void configureDataLayer(AemContext context, boolean enabled, boolean skip, String name, boolean useAcdl3) {
         ConfigurationBuilder builder = Mockito.mock(ConfigurationBuilder.class);
         DataLayerConfig dataLayerConfig = Mockito.mock(DataLayerConfig.class);
         lenient().when(dataLayerConfig.enabled()).thenReturn(enabled);
         lenient().when(dataLayerConfig.skipClientlibInclude()).thenReturn(skip);
+        lenient().when(dataLayerConfig.name()).thenReturn(name);
+        lenient().when(dataLayerConfig.useAcdl3()).thenReturn(useAcdl3);
         lenient().when(builder.as(DataLayerConfig.class)).thenReturn(dataLayerConfig);
         context.registerAdapter(Resource.class, ConfigurationBuilder.class, builder);
     }

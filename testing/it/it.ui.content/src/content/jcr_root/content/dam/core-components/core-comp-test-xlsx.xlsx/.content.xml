@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="d59dfca8-2c84-4ea6-ba7d-c187b24440d3">
+    <jcr:content
+        dam:assetState="processed"
+        jcr:lastModified="{Date}2024-04-01T18:08:30.637+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:Application="Microsoft Excel"
+            dam:AppVersion="{Decimal}14.0300"
+            dam:created="{Date}2017-08-03T11:50:33.000Z"
+            dam:DocSecurity="{Long}0"
+            dam:extracted="{Date}2024-04-01T18:08:30.599+02:00"
+            dam:modified="{Date}2017-08-04T11:27:53.000Z"
+            dam:revision="{Long}4"
+            dam:sha1="524d370df08e2543a52ddb5c907e017e0df12a42"
+            dam:size="{Long}8227"
+            dam:TotalTime="{Long}84507"
+            dc:format="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            dc:language="[en-US]"
+            dc:title="Test Xlsx"
+            dc:language_xmpArrayType="rdf:Bag"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

@@ -19,13 +19,13 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.PWA;
 import com.day.cq.wcm.api.Page;
@@ -127,7 +127,7 @@ public class PWAImpl implements PWA {
         }
     }
 
-    private String replaceSuffix(@Nonnull String url, @Nonnull String newSuffix) {
+    private String replaceSuffix(@NotNull String url, @NotNull String newSuffix) {
         int index = url.lastIndexOf(".");
         if (index == -1) {
             return url + (url.endsWith("/") ? newSuffix : "/" + newSuffix);

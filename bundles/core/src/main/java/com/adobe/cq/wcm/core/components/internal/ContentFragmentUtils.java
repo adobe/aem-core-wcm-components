@@ -26,6 +26,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
+import com.adobe.cq.dam.cfm.ElementTemplate;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -71,6 +72,13 @@ public class ContentFragmentUtils {
      * including other components via XFs).
      */
     public final static String ATTR_RESOURCE_CALLER_PATH = "resourceCallerPath";
+
+    /**
+     * Value type string ({@link com.adobe.cq.dam.cfm.DataType#getValueType()}) used by the Content
+     * Fragment platform to mark a composite (nested/structured) field, independent of cardinality.
+     * There is no public API constant for this value.
+     */
+    private static final String COMPOSITE_VALUE_TYPE = "composite";
 
     /* Hide the constructor of utility classes */
     private ContentFragmentUtils() {
@@ -300,5 +308,36 @@ public class ContentFragmentUtils {
         }
 
         return componentExporterMap;
+    }
+
+    /**
+     * Returns the {@code metaType} propery of an element in the content fragment model.
+     *
+     * @param element the content element
+     *
+     * @return the meta type of the element
+     */
+    public static String getElementMetaType(ContentElement element) {
+        ElementTemplate elementTemplate = element.adaptTo(ElementTemplate.class);
+        if (elementTemplate != null) {
+            Resource resource = elementTemplate.adaptTo(Resource.class);
+            if (resource != null) {
+                ValueMap valueMap = resource.getValueMap();
+                return valueMap.get("metaType", String.class);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Checks whether the given element is a composite (nested/structured) field. This component
+     * cannot render or export such a field's value and must therefore treat it as absent (excluded
+     * from the JSON export and the edit-dialog element picker).
+     *
+     * @param element the content element
+     * @return {@code true} if the element is a composite field
+     */
+    public static boolean isCompositeElement(@NotNull ContentElement element) {
+        return COMPOSITE_VALUE_TYPE.equals(element.getValue().getDataType().getValueType());
     }
 }

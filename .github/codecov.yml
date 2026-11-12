@@ -23,3 +23,17 @@ flags:
   unittests:
     paths:
       - bundles/core/
+      - extensions/amp/bundle/
+  # Integration tests (.github/workflows/maven-it.yml): JaCoCo agent on the Dockerized
+  # AEM. Carried forward because the IT workflow skips documentation-only changes.
+  # No status checks: they are reported for visibility, not gating.
+  httpits:
+    paths:
+      - bundles/core/
+      - extensions/amp/bundle/
+    carryforward: true
+  browserits:
+    paths:
+      - bundles/core/
+      - extensions/amp/bundle/
+    carryforward: true

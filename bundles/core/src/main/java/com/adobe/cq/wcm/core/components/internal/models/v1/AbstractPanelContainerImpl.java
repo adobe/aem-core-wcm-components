@@ -28,6 +28,7 @@ import com.adobe.cq.wcm.core.components.models.PanelContainer;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
 
+import com.day.cq.wcm.api.WCMMode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -49,6 +50,7 @@ public abstract class AbstractPanelContainerImpl extends AbstractContainerImpl i
      * The resource type.
      */
     public static final String RESOURCE_TYPE = "core/wcm/components/panelcontainer/v1/panelcontainer";
+    public static final String GHOST_COMPONENT_RESOURCE_TYPE = "wcm/msm/components/ghost";
 
     /**
      * The active item property.
@@ -85,7 +87,10 @@ public abstract class AbstractPanelContainerImpl extends AbstractContainerImpl i
     @Override
     public final List<PanelContainerItemImpl> getChildren() {
         if (this.panelItems == null) {
+            WCMMode wcmMode = WCMMode.fromRequest(this.request);
+            boolean showGhostComponent = wcmMode == WCMMode.EDIT;
             this.panelItems = ComponentUtils.getChildComponents(this.resource, this.request).stream()
+                .filter(item -> showGhostComponent || !GHOST_COMPONENT_RESOURCE_TYPE.equals(item.getResourceType()))
                 .map(item -> new PanelContainerItemImpl(item, this))
                 .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
         }

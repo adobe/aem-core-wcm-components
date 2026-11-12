@@ -48,7 +48,7 @@ class ButtonImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1
     protected void testGetLink() {
         Button button = getButtonUnderTest(BUTTON_1);
         assertEquals("https://www.adobe.com", button.getLink());
-        assertValidLink(button.getButtonLink(), "https://www.adobe.com", "_blank");
+        assertValidLink(button.getButtonLink(), "https://www.adobe.com", "_blank", context);
         Utils.testJSONExport(button, Utils.getTestExporterJSONPath(testBase, "button1"));
     }
 
@@ -56,7 +56,7 @@ class ButtonImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1
     protected void testGetLink_withOldLinkProp() {
         Button button = getButtonUnderTest(BUTTON_2);
         assertEquals("https://www.adobe.com", button.getLink());
-        assertValidLink(button.getButtonLink(), "https://www.adobe.com", "_blank");
+        assertValidLink(button.getButtonLink(), "https://www.adobe.com", "_blank", context);
         Utils.testJSONExport(button, Utils.getTestExporterJSONPath(testBase, "button2"));
     }
 

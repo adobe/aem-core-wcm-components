@@ -20,7 +20,7 @@
      data-cmp-is="accordion"
      data-cmp-data-layer="${accordion.data.json}"
      data-cmp-single-expansion="${accordion.singleExpansion}"
-     data-placeholder-text="${wcmmode.edit && 'Please drag Accordion item components here' @ i18n}">
+     data-placeholder-text="${wcmmode.edit && 'Please drag Accordion item components here' @ i18n, locale=request.locale}">
     <div data-sly-set.items="${accordion.children || accordion.items}"
          data-sly-test="${items.size > 0}"
          data-sly-repeat.item="${items}"

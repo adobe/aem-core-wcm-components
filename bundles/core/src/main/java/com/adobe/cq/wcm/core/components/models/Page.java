@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
@@ -467,4 +468,21 @@ public interface Page extends ContainerExporter, Component {
      */
     default boolean isDataLayerClientlibIncluded() {return true;}
 
+    /**
+     * Returns the name of the data layer.
+     *
+     * {@code true} if the data layer client library should be included.
+     * @since om.adobe.cq.wcm.core.components.models 12.24.0
+     */
+    default String getDataLayerName() { return DataLayerConfig.DATALAYER_OBJECT_NAME_ADOBE; }
+
+    /**
+     * Checks if the data layer client libraries based on the Adobe Client Data Layer 3.x should be included instead of
+     * the ones based on the Adobe Client Data Layer 2.x.
+     *
+     * @return {@code true} if the Adobe Client Data Layer 3.x should be used, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.34.0
+     */
+    @JsonIgnore
+    default boolean isDataLayerAcdl3Used() {return false;}
 }

@@ -64,6 +64,8 @@
                 var options = CMP.utils.readData(component, IS);
                 that._properties = CMP.utils.setupProperties(options, properties);
                 if (that._properties.dmimage) {
+                    // use encoded src for dynamic media
+                    that._properties.src = options["src"];
                     CMP.image.dynamicMedia.setDMAttributes(component, that._properties);
                 }
             };
@@ -108,11 +110,5 @@
     var documentReady = document.readyState !== "loading" ? Promise.resolve() : new Promise(function(resolve) {
         document.addEventListener("DOMContentLoaded", resolve);
     });
-    var utilsReady = (window.CMP && window.CMP.utils) ? Promise.resolve() : new Promise(function(resolve) {
-        document.addEventListener("core.wcm.components.commons.site.utils.loaded", resolve);
-    });
-    var dynamicMediaReady = (window.CMP && window.CMP.image && window.CMP.image.dynamicMedia) ? Promise.resolve() : new Promise(function(resolve) {
-        document.addEventListener("core.wcm.components.commons.site.image.dynamic-media.loaded", resolve);
-    });
-    Promise.all([documentReady, utilsReady, dynamicMediaReady]).then(window.CMP.image.v3.init);
+    Promise.all([documentReady]).then(window.CMP.image.v3.init);
 }(window.document));

@@ -935,5 +935,52 @@
       },
       "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
     }
+  },
+  "ngdm_test_page"           : {
+      "jcr:primaryType": "cq:Page",
+      "jcr:content"    : {
+          "jcr:primaryType": "cq:PageContent",
+          "cq:featuredimage": {
+              "jcr:primaryType": "nt:unstructured",
+              "jcr:createdBy": "admin",
+              "altValueFromDAM"   : true,
+              "alt"               : "featured image alt",
+              "fileReference": "/content/dam/core/images/asset1.png",
+              "sling:resourceType": "core/wcm/components/image/v3/image"
+          },
+          "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate",
+          "root": {
+              "jcr:primaryType": "nt:unstructured",
+              "sling:resourceType": "wcm/foundation/components/responsivegrid",
+              "ngdm_test_page_image1": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "jcr:createdBy": "admin",
+                  "sling:resourceType": "core/wcm/components/image/v3/image",
+                  "fileReference": "/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png"
+              },
+              "ngdm_test_page_smartcrop_image": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "jcr:createdBy": "admin",
+                  "sling:resourceType": "core/wcm/components/image/v3/image",
+                  "fileReference": "/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png",
+                  "smartCropRendition": "Medium"
+              },
+              "ngdm_test_page_modifiers_image": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "jcr:createdBy": "admin",
+                  "sling:resourceType": "core/wcm/components/image/v3/image",
+                  "fileReference": "/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png",
+                  "imageModifiers": "&width=100&height=200"
+              },
+              "ngdm_test_page_smartcrop_image_auto": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "jcr:createdBy": "admin",
+                  "sling:resourceType": "core/wcm/components/image/v3/image",
+                  "fileReference": "/urn:aaid:aem:e82c3c87-1453-48f5-844b-1822fb610911/cutfruits.png",
+                  "smartCropRendition": "SmartCrop:Auto",
+                  "linkURL"           : "https://www.adobe.com"
+              }
+          }
+      }
   }
 }

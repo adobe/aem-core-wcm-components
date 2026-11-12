@@ -16,33 +16,92 @@ limitations under the License.
 
 # Data Layer Integration with the Core Components
 
-The Core Components provide an out-of-the-box integration with the [Adobe Client Data Layer](https://github.com/adobe/adobe-client-data-layer), which for convenience is called data layer in this page.
+The Core Components provide an out-of-the-box integration with the [Adobe Client Data Layer](https://github.com/adobe/adobe-client-data-layer) and Google Tag Manager Data Layers. For convenience these are referred to in the page as ACDL and GDL.
 
 ## Enabling the Data Layer
 
-The data layer is disabled by default. 
+The data layer is disabled by default.
 
 To enable the data layer for your site:
 1. Create the following structure below the `/conf` node:
     `/conf/<my-site>/sling:configs/com.adobe.cq.wcm.core.components.internal.DataLayerConfig`
-1. Add the `enabled` boolean property and set it to `true`.
-1. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
+2. Add the `enabled` boolean property and set it to `true`.
+3. If a datalayer object name other than `adobeDataLayer` is required (e.g. `dataLayer` for most GDLs), add a string property `name` to the same node, with the required Data Layer object name as the value.
+4. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
 
-## Preventing the Data Layer client library from being included
+## Google Data Layer Creation
 
-The data layer client library is included by default by the Page component. As there are other ways to include this library (e.g. through Adobe Launch), it might be needed to prevent its inclusion through the Page component.
+While Core Components includes the ACDL Library unless explicitly disabled (below), it does not include the GDL library.  The Core Components code will create an appropriately named Data Layer array, but a standard Google Tag Manager code snippet must be included in the page to consume this array and create a full GDL.  This is done according to Google documentation and is not directly related to Core Components.
 
-To prevent the data layer client library from being included by the Page component:
+## Google Global Tag - GTag
+
+Google's GTag code is not currently supported.
+
+## Generic Data Layer Use
+
+The Core Components Data Layer integration supports Data Layer name configuration, and the logic uses the standard JavaScript array push() method.  If the Data Layer is enabled, but the ACDL library is not loaded, and the Data Layer is not consumed by a Google solution, there will still be a plain JavaScript array available with the configured name, and containing Core Components data, although with 'event' entries that are intended for an Event-Driven Data Layer like the ACDL or GDL.  This plain array Data Layer is generic and may be suitable for other Data Layer providers or consumers.
+
+## Preventing the Adobe Data Layer client library from being included
+
+The ACDL library is included by default by the Page component.  If using a GDL, or already including the ACDL library in some other way such as using AEP Data Collection Tags, the ACDL library should not be loaded.
+
+To prevent the ACDL library from being included by the Page component:
+
 1. Create the following structure below the `/conf` node:
    `/conf/<my-site>/sling:configs/com.adobe.cq.wcm.core.components.internal.DataLayerConfig`
-1. Add the `skipClientlibInclude` boolean property and set it to `true`.
-1. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
+2. Add the `skipClientlibInclude` boolean property and set it to `true`.
+3. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
+
+The `skipClientlibInclude` property is used by the Page component v3. Custom client libraries that include the Core Components data layer integration while the ACDL library is loaded in some other way should embed `core.wcm.components.commons.datalayer.v2`, which doesn't load the ACDL library (see below).
+
+## Data Layer Client Libraries
+
+The data layer integration is provided by the following client libraries:
+
+| Client library | Content |
+|---|---|
+| `core.wcm.components.commons.datalayer.v1` | The Core Components data layer integration, with the ACDL library 2.x embedded. Used by the Page component v2. |
+| `core.wcm.components.commons.datalayer.v2` | The Core Components data layer integration, without the ACDL library. Used by the Page component v3. |
+| `core.wcm.components.commons.datalayer.acdl` | The ACDL library 2.x. Included by the Page component v3, unless `skipClientlibInclude` is set. |
+| `core.wcm.components.commons.datalayer.v1.acdl3` | The Core Components data layer integration, with a dependency on `core.wcm.components.commons.datalayer.acdl3`. Used by the Page component v2 when `useAcdl3` is set. |
+| `core.wcm.components.commons.datalayer.acdl3` | The ACDL library 3.x, served as distributed by the ACDL project (already minified, not processed by the AEM minifier). Included by the Page component v3 when `useAcdl3` is set, unless `skipClientlibInclude` is set. |
+
+The ACDL library 2.x included in Core Components is built from the sources of the ACDL library 2.0.2 with an up-to-date version of [Lodash](https://lodash.com/), instead of the Lodash 4.17.5 custom build bundled by the ACDL project. Its API and behavior are the ones of the ACDL library 2.0.2 and it supports the same browsers (ES5).
+
+## Using the Adobe Client Data Layer 3.x
+
+By default, the Page component includes the ACDL library 2.x. To include the ACDL library 3.x instead:
+
+1. Create the following structure below the `/conf` node:
+   `/conf/<my-site>/sling:configs/com.adobe.cq.wcm.core.components.internal.DataLayerConfig`
+2. Add the `useAcdl3` boolean property and set it to `true`.
+3. Add a `sling:configRef` property to the `jcr:content` node of your site below `/content` (e.g. `/content/<my-site>/jcr:content`) and set it to `/conf/<my-site>`
+
+The `useAcdl3` property is used by the Page component v2 and v3. Custom client libraries that embed `core.wcm.components.commons.datalayer.v1` still include the ACDL library 2.x, and need to embed `core.wcm.components.commons.datalayer.v1.acdl3` instead. Only one version of the ACDL library should be loaded on a page: the first one that is loaded initializes the data layer.
+
+The ACDL library 3.x has some differences compared to the ACDL library 2.x:
+
+* It requires ES2020 and [`structuredClone`](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone) support: Chrome 98+, Firefox 94+ and Safari 15.4+. On older browsers the ACDL library doesn't work, and `adobeDataLayer` may remain a plain array.
+* Arrays in the data layer state are replaced instead of merged by index.
+* The data pushed to the data layer is cloned with `structuredClone`, so pushing data that can't be cloned (e.g. functions or DOM elements) throws a `DataCloneError` when an event listener matches it.
+
+`core.wcm.components.commons.datalayer.v1.acdl3` loads the ACDL library through a client library dependency, so the ACDL library is always output as a separate `<script>` element before the client library that includes `core.wcm.components.commons.datalayer.v1.acdl3`, also when it is embedded in another client library (e.g. a project `clientlib-base`). Because of this, the ACDL library is only output when the client library is included with the standard client library include (e.g. the `core/wcm/components/commons/v1/templates/clientlib.html` template). In particular:
+
+* Inlining a client library (e.g. with `ClientLibraries#getJsInline`) doesn't include its dependencies, so the ACDL library isn't inlined.
+* Client library URLs loaded with hard-coded `<script>` elements don't load the dependencies.
+* An `onload` handler passed to the client library include template is added to every `<script>` element it outputs, so it's also called for the ACDL library.
+
+In these cases, include `core.wcm.components.commons.datalayer.acdl3` explicitly, or embed `core.wcm.components.commons.datalayer.v2` and load the ACDL library separately.
+
+Embedding `core.wcm.components.commons.datalayer.acdl3` directly in a project client library is not recommended: the ACDL library 3.x uses ES2020 syntax, and client libraries configured with the default AEM minifier settings (ES5) fail to minify it and are then served unminified.
 
 ## Data Layer State Structure
 
-When the data layer is enabled, the javascript `adobeDataLayer` object is available on the page and is populated with the components and their properties that are used on the page.
+When the data layer is enabled, a JavaScript Data Layer object will be available.  By default, the object name is `adobeDataLayer`.  If a name has been defined in the Data Layer configuration (see [Enabling the Data Layer](#enabling-the-data-layer)) the object will be named accordingly.  The Data Layer will be populated with the components and their properties that are used on the page.
 
-The data layer state (returned by calling `adobeDataLayer.getState()`) is an object with two objects (`page` and `component`). All the components are stored below the `component` object as a flat structure. The structure looks as follows:
+### Data Layer State - ACDL
+
+If an ACDL is used the data layer state (returned by calling `adobeDataLayer.getState()`) is an object with two objects (`page` and `component`). All the components are stored below the `component` object as a flat structure. The structure looks as follows:
 ```
 {
   "page": {
@@ -122,6 +181,9 @@ Calling `adobeDataLayer.getState()` in the browser console will return e.g.:
   }
 }
 ```
+### Data Layer State - GDL
+
+Google Data Layers do not have a getState() method which can provide a consolidated _computed state_ of the Data Layer.  To view the raw Data Layer enter the name of the Data Layer in the browser console, e.g. `dataLayer`.  The computed state can be viewed using Google and third party debugging tools.
 
 ## Components supporting the Data Layer
 

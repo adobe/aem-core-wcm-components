@@ -86,7 +86,10 @@ public class ModelElementsDataSourceServletTest {
                 hasItem(resourceWithPropertiesTextAndValue("Created", "jcr:created")),
                 hasItem(resourceWithPropertiesTextAndValue("Last Modified", "jcr:content/jcr:lastModified")),
                 hasItem(resourceWithPropertiesTextAndValue("textFieldLabel", "jcr:content/data/master/textField")),
-                hasItem(resourceWithPropertiesTextAndValue("multiTextField", "jcr:content/data/master/multiTextField"))));
+                hasItem(resourceWithPropertiesTextAndValue("Multi Text Field", "jcr:content/data/master/multiTextField"))));
+        assertThat(resourceList, allOf(
+                not(hasItem(resourceWithPropertiesTextAndValue("compositeFieldLabel", "jcr:content/data/master/compositeField"))),
+                not(hasItem(resourceWithPropertiesTextAndValue("multiCompositeFieldLabel", "jcr:content/data/master/multiCompositeField")))));
     }
 
     @Test
@@ -111,9 +114,12 @@ public class ModelElementsDataSourceServletTest {
                 hasItem(resourceWithPropertiesTextAndValue("Created", "jcr:created")),
                 hasItem(resourceWithPropertiesTextAndValue("Last Modified", "jcr:content/jcr:lastModified")),
                 hasItem(resourceWithPropertiesTextAndValue("textFieldLabel", "jcr:content/data/master/textField")),
-                hasItem(resourceWithPropertiesTextAndValue("multiTextField", "jcr:content/data/master/multiTextField")),
+                hasItem(resourceWithPropertiesTextAndValue("Multi Text Field", "jcr:content/data/master/multiTextField")),
                 hasItem(resourceWithPropertiesTextAndValue("dateAndTimeFieldLabel", "jcr:content/data/master/dateAndTimeField")),
                 hasItem(resourceWithPropertiesTextAndValue("numberFieldLabel", "jcr:content/data/master/numberField"))));
+        assertThat(resourceList, allOf(
+                not(hasItem(resourceWithPropertiesTextAndValue("compositeFieldLabel", "jcr:content/data/master/compositeField"))),
+                not(hasItem(resourceWithPropertiesTextAndValue("multiCompositeFieldLabel", "jcr:content/data/master/multiCompositeField")))));
     }
 
     @Test
@@ -135,12 +141,15 @@ public class ModelElementsDataSourceServletTest {
         assertThat(resourceList, allOf(
                 hasItem(resourceWithPropertiesTextAndValue("textFieldLabel", "textField")),
                 // Multi text field doesn't have the 'fieldLabel' property, instead label is stored as 'cfm-element':
-                hasItem(resourceWithPropertiesTextAndValue("multiTextField", "multiTextField")),
+                hasItem(resourceWithPropertiesTextAndValue("Multi Text Field", "multiTextField")),
                 hasItem(resourceWithPropertiesTextAndValue("numberFieldLabel", "numberField")),
                 // Boolean field is a checkbox and therefore doesn't have a 'fieldLabel', instead there is a 'text' property
                 hasItem(resourceWithPropertiesTextAndValue("booleanField", "booleanField")),
                 hasItem(resourceWithPropertiesTextAndValue("dateAndTimeFieldLabel", "dateAndTimeField")),
                 hasItem(resourceWithPropertiesTextAndValue("enumerationFieldLabel", "enumerationField"))));
+        assertThat(resourceList, allOf(
+                not(hasItem(resourceWithPropertiesTextAndValue("compositeFieldLabel", "compositeField"))),
+                not(hasItem(resourceWithPropertiesTextAndValue("multiCompositeFieldLabel", "multiCompositeField")))));
     }
 
     /**

@@ -169,7 +169,7 @@ class PdfViewerImplTest {
     @Test
     void testGetViewerConfigJson() {
         PdfViewer dcv = getDcvUnderTest(PATH_DCV_1);
-        String json = "{\"embedMode\":\"FULL_WINDOW\",\"defaultViewMode\":\"FIT_PAGE\",\"showAnnotationTools\":true,\"showLeftHandPanel\":true,\"showPageControls\":true,\"dockPageControls\":true,\"showDownloadPDF\":true,\"showPrintPDF\":true}";
+        String json = "{\"embedMode\":\"FULL_WINDOW\",\"defaultViewMode\":\"FIT_PAGE\",\"showAnnotationTools\":true,\"showLeftHandPanel\":true,\"showFullScreenViewButton\":true,\"showPageControls\":true,\"dockPageControls\":true,\"showDownloadPDF\":true,\"showPrintPDF\":true}";
         assertEquals(json, dcv.getViewerConfigJson());
     }
 

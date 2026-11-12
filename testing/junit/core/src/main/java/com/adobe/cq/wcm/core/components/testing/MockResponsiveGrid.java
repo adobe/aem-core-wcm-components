@@ -16,7 +16,6 @@
 package com.adobe.cq.wcm.core.components.testing;
 
 import org.jetbrains.annotations.NotNull;
-import javax.inject.Inject;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -25,6 +24,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
 
@@ -42,10 +42,10 @@ public class MockResponsiveGrid implements ContainerExporter {
     @Self
     private SlingHttpServletRequest request;
 
-    @Inject
+    @OSGiService
     SlingModelFilter slingModelFilter;
 
-    @Inject
+    @OSGiService
     ModelFactory modelFactory;
 
     /**

@@ -88,10 +88,14 @@ class DefaultPathProcessorTest {
                 underTest.sanitize("https://test.com?categ=cat1|cat2", request));
         assertEquals("https://test.com?categ=cat1%7Ccat2#top",
                 underTest.sanitize("https://test.com?categ=cat1|cat2#top", request));
-        assertEquals("https://test.com?categ=cat1%7Ccat2#top%20level",
+        assertEquals("https://test.com?categ=cat1%7Ccat2#top+level",
                 underTest.sanitize("https://test.com?categ=cat1|cat2#top level", request));
         assertEquals("https://test.com?recipient=<%= recipient.id %>",
                 underTest.sanitize("https://test.com?recipient=<%= recipient.id %>", request));
+        assertEquals("https://test.com/#/downloads/file.html?name=/content/file.zip",
+                underTest.sanitize("https://test.com/#/downloads/file.html?name=/content/file.zip", request));
+        assertEquals("https://test.com#page=1-._~!$&'()*+,;=:@",
+                underTest.sanitize("https://test.com#page=1-._~!$&'()*+,;=:@", request));
     }
 
     @Test
@@ -113,7 +117,7 @@ class DefaultPathProcessorTest {
         DefaultPathProcessor underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                 "vanityConfig", "shouldBeDefault"));
         assertEquals("/content/site1/en.html", underTest.map(page.getPath() + HTML_EXTENSION, context.request()));
-        assertEquals("https://example.org/content/links/site1/en.html", underTest.externalize(page.getPath() + HTML_EXTENSION, context.request()));
+        assertEquals("https://example.org/content/site1/en.html", underTest.externalize(page.getPath() + HTML_EXTENSION, context.request()));
         context.request().setContextPath("/cp");
         underTest = context.registerInjectActivateService(new DefaultPathProcessor(), ImmutableMap.of(
                 "vanityConfig", DefaultPathProcessor.VanityConfig.ALWAYS.getValue()));

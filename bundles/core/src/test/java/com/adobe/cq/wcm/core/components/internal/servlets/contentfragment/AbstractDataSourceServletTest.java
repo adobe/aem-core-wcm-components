@@ -15,10 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 
-import javax.annotation.Nonnull;
-
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -36,7 +35,7 @@ public class AbstractDataSourceServletTest {
         String value = "qux";
 
         AbstractDataSourceServlet dataSource = new AbstractDataSourceServlet() {
-            @Nonnull
+            @NotNull
             @Override
             protected ExpressionResolver getExpressionResolver() {
                 return Mockito.mock(ExpressionResolver.class);

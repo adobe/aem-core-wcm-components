@@ -15,14 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import org.apache.sling.i18n.ResourceBundleProvider;
+import org.apache.sling.i18n.impl.RootResourceBundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Search;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -50,6 +55,10 @@ public class SearchImplTest {
         context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         LiveRelationshipManager relationshipManager = mock(LiveRelationshipManager.class);
         context.registerService(LiveRelationshipManager.class, relationshipManager);
+        ResourceBundleProvider resourceBundleProvider = mock(ResourceBundleProvider.class);
+        Mockito.when(resourceBundleProvider.getResourceBundle(Mockito.any())).thenReturn(new RootResourceBundle());
+        Mockito.when(resourceBundleProvider.getResourceBundle(Mockito.any(), Mockito.any())).thenReturn(new RootResourceBundle());
+        context.registerService(ResourceBundleProvider.class, resourceBundleProvider);
     }
 
     @Test
@@ -74,6 +83,16 @@ public class SearchImplTest {
         assertEquals(SEARCH_PAGE_DE, search.getSearchRootPagePath());
         assertSame(search.getSearchRootPagePath(), search.getSearchRootPagePath());
         Utils.testJSONExport(search, Utils.getTestExporterJSONPath(testBase, "search2"));
+    }
+
+    @Test
+    protected void testGetI18nMessages() throws Exception {
+        SearchImpl search = (SearchImpl) getSearchUnderTest(SEARCH_PAGE + "/jcr:content/search");
+        String json = search.getI18nMessages();
+        JsonNode node = new ObjectMapper().readTree(json);
+        assertEquals("{0} result", node.get("{0} result").asText());
+        assertEquals("{0} results", node.get("{0} results").asText());
+        assertEquals("No results", node.get("No results").asText());
     }
 
     private Search getSearchUnderTest(String contentPath) {

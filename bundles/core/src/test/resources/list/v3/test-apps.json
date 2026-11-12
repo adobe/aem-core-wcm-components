@@ -1,4 +1,18 @@
 {
+  "image": {
+    "jcr:primaryType": "sling:Folder",
+    "v2" : {
+      "jcr:primaryType": "nt:unstructured",
+      "image" : {
+        "jcr:primaryType" : "cq:Component",
+        "jcr:title" : "Image (v2)",
+        "sling:resourceSuperType": "core/wcm/components/image",
+        "jcr:description" : "Smart Adaptive Image",
+        "cq:icon" : "image",
+        "componentGroup" : ".core-wcm"
+      }
+    }
+  },
   "list": {
     "jcr:primaryType": "sling:Folder",
     "v3" : {
@@ -10,6 +24,21 @@
         "jcr:description" : "List Component",
         "cq:icon" : "list",
         "teaserDelegate": "core/wcm/components/teaser/v2/teaser",
+        "componentGroup" : ".core-wcm"
+      }
+    }
+  },
+  "teaser": {
+    "jcr:primaryType": "sling:Folder",
+    "v2" : {
+      "jcr:primaryType": "nt:unstructured",
+      "teaser" : {
+        "jcr:primaryType" : "cq:Component",
+        "jcr:title" : "Teaser (v2)",
+        "sling:resourceSuperType": "core/wcm/components/teaser",
+        "jcr:description" : "Teaser Component",
+        "cq:icon" : "teaser",
+        "imageDelegate": "core/wcm/components/image/v3/image",
         "componentGroup" : ".core-wcm"
       }
     }

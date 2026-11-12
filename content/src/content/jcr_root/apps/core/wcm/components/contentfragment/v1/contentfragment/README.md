@@ -16,7 +16,7 @@ limitations under the License.
 
 Content Fragment (v1)
 ====
-Content Fragment component written in HTL that displays the elements of a Content Fragment or a selection thereof.
+Content Fragment component written in HTL that displays the elements of a Content Fragment or a selection thereof. Note that composite elements are not supported.
 
 ## Features
 * Displays the elements of a Content Fragment as an HTML description list

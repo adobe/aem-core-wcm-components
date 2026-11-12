@@ -20,6 +20,7 @@ import org.apache.sling.testing.mock.osgi.context.ContextPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.internal.link.DefaultPathProcessor;
+import com.adobe.cq.wcm.core.components.internal.services.LatestVersionImplementationPicker;
 
 import io.wcm.testing.mock.aem.context.AemContextImpl;
 
@@ -49,7 +50,10 @@ public final class ContextPlugins {
     static void setUp(AemContextImpl context) {
 
         // register default path processor for core components link handling
-        context.registerInjectActivateService(new DefaultPathProcessor());
+        context.registerInjectActivateService(DefaultPathProcessor.class);
+
+        // sling models implementation picker for core component-specific version preferences
+        context.registerInjectActivateService(LatestVersionImplementationPicker.class);
 
     }
 

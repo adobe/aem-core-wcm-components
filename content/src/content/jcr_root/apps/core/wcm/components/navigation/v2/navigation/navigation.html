@@ -21,7 +21,8 @@
      id="${navigation.id}"
      class="cmp-navigation"
      itemscope itemtype="http://schema.org/SiteNavigationElement"
-	 data-cmp-data-layer="${navigation.data.json}"
-     aria-label="${navigation.accessibilityLabel}">
+     data-cmp-data-layer="${navigation.data.json}"
+     aria-label="${navigation.accessibilityLabel}"
+     role="navigation">
 </nav>
 <sly data-sly-call="${template.placeholder @ isEmpty=!hasContent, classAppend='cmp-navigation'}"></sly>

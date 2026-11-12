@@ -23,8 +23,8 @@
      data-cmp-document-path="${pdfViewer.documentPath}"
      data-cmp-document-file-name="${pdfViewer.documentFileName}"
      data-cmp-viewer-config-json="${pdfViewer.viewerConfigJson}"
-     data-sly-set.clientIdError="${'Please setup Context Aware Configuration (com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig) in /conf and link it using sling:configRef on any current/parent node.' @ i18n}"
-     data-sly-set.documentPathError="${'Please select a document to display.' @ i18n}"
+     data-sly-set.clientIdError="${'Please setup Context Aware Configuration (com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig) in /conf and link it using sling:configRef on any current/parent node.' @ i18n, locale=request.locale}"
+     data-sly-set.documentPathError="${'Please select a document to display.' @ i18n, locale=request.locale}"
      data-sly-set.error="${!pdfViewer.clientId ? clientIdError : (!pdfViewer.documentPath ? documentPathError : false)}"
      data-sly-test="${!error}"
      data-cmp-data-layer="${pdfViewer.data.json}">

@@ -24,9 +24,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 
+import static com.adobe.cq.wcm.core.components.Utils.configureDataLayer;
 import static com.adobe.cq.wcm.core.components.Utils.skipDataLayerInclude;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -55,6 +57,17 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         assertEquals("Templated Page", redirectTarget.getPage().getTitle());
         assertEquals("/core/content/page/templated-page.html", redirectTarget.getURL());
         assertValidLink(redirectTarget.getLink(), "/content/page/templated-page.html", context.request());
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    protected void testRedirectTarget_external() {
+        Page page = getPageUnderTest(REDIRECT_PAGE_EXTERNAL);
+        NavigationItem redirectTarget = page.getRedirectTarget();
+        assertNotNull(redirectTarget);
+        assertNull(redirectTarget.getPage());
+        assertEquals("https://www.adobe.com/", redirectTarget.getURL());
+        assertValidLink(redirectTarget.getLink(), "https://www.adobe.com/", context.request());
     }
 
     @Test
@@ -110,5 +123,20 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         skipDataLayerInclude(context,false);
         assertTrue(page.isDataLayerClientlibIncluded(), "The data layer clientlib should be included.");
     }
+
+    @Test
+    protected void testIsDataLayerName_caconfig_empty() {
+        Page page = getPageUnderTest(PAGE);
+        configureDataLayer(context,false, true, "");
+        assertTrue(page.getDataLayerName().equals("adobeDataLayer"), "The data layer name should be the default adobeDataLayer.");
+    }
+
+    @Test
+    protected void testIsDataLayerName_caconfig_configured() {
+        Page page = getPageUnderTest(PAGE);
+        configureDataLayer(context,false, true, "dataLayer");
+        assertTrue(page.getDataLayerName().equals("dataLayer"), "The data layer name should be the configured 'dataLayer'.");
+    }
+
 
 }

@@ -18,7 +18,7 @@
 
     var NS = "cmp";
     var IS = "pdfviewer";
-    var SDK_URL = "https://documentservices.adobe.com/view-sdk/viewer.js";
+    var SDK_URL = "https://acrobatservices.adobe.com/view-sdk/viewer.js";
     var SDK_READY_EVENT = "adobe_dc_view_sdk.ready";
 
     var selectors = {
@@ -59,7 +59,8 @@
         var adobeDCView = new window.AdobeDC.View({
             clientId: component.dataset.cmpClientId,
             divId: component.id + "-content",
-            reportSuiteId: component.dataset.cmpReportSuiteId
+            reportSuiteId: component.dataset.cmpReportSuiteId,
+            locale: typeof Granite !== "undefined" && Granite && Granite.I18n ? Granite.I18n.getLocale() : navigator.language || navigator.userLanguage
         });
         adobeDCView.previewFile({
             content: { location: { url: component.dataset.cmpDocumentPath } },

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:dam="http://www.day.com/dam/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="4a72941d-6041-4dbe-88b3-a006cfcf0a95">
+    <jcr:content
+        dam:assetState="processed"
+        jcr:lastModified="{Date}2024-04-16T14:14:21.311+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:Application="Microsoft Office PowerPoint"
+            dam:AppVersion="{Decimal}14.0000"
+            dam:created="{Date}2011-12-30T10:34:04.000Z"
+            dam:extracted="{Date}2024-04-16T14:14:20.604+02:00"
+            dam:HeadingPairs="Theme1Slide Titles1"
+            dam:HiddenSlides="{Long}0"
+            dam:HyperlinksChanged="false"
+            dam:i4="{Long}1"
+            dam:lastModifiedBy="muthu"
+            dam:LinksUpToDate="false"
+            dam:lpstr="PowerPoint Presentation"
+            dam:MMClips="{Long}0"
+            dam:modified="{Date}2011-12-30T10:40:39.000Z"
+            dam:Notes="{Long}0"
+            dam:numPages="{Long}1"
+            dam:Paragraphs="{Long}7"
+            dam:PresentationFormat="On-screen Show (4:3)"
+            dam:revision="{Long}3"
+            dam:ScaleCrop="false"
+            dam:sha1="590aa4b373f559f8e4e2a01f6de12e5702211af1"
+            dam:SharedDoc="false"
+            dam:size="{Long}60908"
+            dam:Slides="{Long}1"
+            dam:TitlesOfParts="Office ThemePowerPoint Presentation"
+            dam:TotalTime="{Long}6"
+            dam:variant="{Long}1"
+            dam:vector="Office ThemePowerPoint Presentation"
+            dam:Words="{Long}37"
+            dc:creator="[muthu]"
+            dc:creator_xmpArrayType="rdf:Bag"
+            dc:format="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            dc:modified="{Date}2024-04-16T14:14:20.501+02:00"
+            dc:title="Test PPTX"
+            jcr:lastModified="{Date}2024-04-16T14:14:20.501+02:00"
+            jcr:lastModifiedBy="admin"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"
+            jcr:title="Test PPTX"/>
+        <related jcr:primaryType="nt:unstructured">
+            <pages
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="sling/collection">
+                <sling:members
+                    jcr:primaryType="nt:unstructured"
+                    sling:resources="[/content/dam/core-components/core-comp-test-pptx.pptx/subassets/slide_1.pptx]">
+                    <slide_1.pptx
+                        jcr:primaryType="nt:unstructured"
+                        sling:resource="/content/dam/core-components/core-comp-test-pptx.pptx/subassets/slide_1.pptx"/>
+                </sling:members>
+            </pages>
+        </related>
+    </jcr:content>
+</jcr:root>

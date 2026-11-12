@@ -16,4 +16,6 @@
 
 #base=js
 
+utils.js
+imageDynamicMedia.js
 image.js

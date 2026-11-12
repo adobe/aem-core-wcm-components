@@ -17,12 +17,11 @@ package com.adobe.cq.wcm.core.components.testing;
 
 import java.util.Collection;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.caconfig.resource.ConfigurationResourceResolver;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.service.component.annotations.Component;
 
 @Component(
@@ -38,9 +37,9 @@ public class MockConfigurationResourceResolver implements ConfigurationResourceR
         this.configRoot = configRoot;
     }
 
-    @CheckForNull
+    @Nullable
     @Override
-    public Resource getResource(@Nonnull Resource resource, @Nonnull String bucketName, @Nonnull String configName) {
+    public Resource getResource(@NotNull Resource resource, @NotNull String bucketName, @NotNull String configName) {
         if (configRoot == null && resourceResolver == null) {
             return null;
         }
@@ -51,20 +50,20 @@ public class MockConfigurationResourceResolver implements ConfigurationResourceR
         return configRootResource.getChild(configName);
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public Collection<Resource> getResourceCollection(@Nonnull Resource resource, @Nonnull String bucketName, @Nonnull String configName) {
+    public Collection<Resource> getResourceCollection(@NotNull Resource resource, @NotNull String bucketName, @NotNull String configName) {
         return null;
     }
 
     @Override
-    public String getContextPath(@Nonnull Resource resource) {
+    public String getContextPath(@NotNull Resource resource) {
         return null;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    public Collection<String> getAllContextPaths(@Nonnull Resource resource) {
+    public Collection<String> getAllContextPaths(@NotNull Resource resource) {
         return null;
     }
 }
