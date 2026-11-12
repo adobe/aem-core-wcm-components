@@ -7,8 +7,9 @@ fixtures through HTTP).
 # Requirements
 
 ## Test Content
-Some of the tests rely on predefined test content/assets. Install the `it.ui.content` package
-(`testing/it/it.ui.content`) on your test environment.
+The component tests require the proxy components from `it.ui.apps` (`testing/it/it.ui.apps`).
+Some tests also rely on predefined content/assets from `it.ui.content` (`testing/it/it.ui.content`).
+Install these packages on your test environment.
 
 ## Java version
 Use JDK 11 to compile.
@@ -34,6 +35,13 @@ Running a specific test using the `it.test` parameter:
 
 ```
 mvn clean verify -Ptest-all -Dit.test=<classname>#testName
+```
+
+The Image v2/v3 policy-dialog regression checks that DAM options are visible and enabled on initial
+open, both before and after the Image edit dialog has loaded its clientlibs:
+
+```
+mvn verify -Ptest-all -Dit.test=ImagePwIT#testPolicyDamOptionsVisibleOnOpen -Dpw.headless=true
 ```
 
 Running a group of tests using the `groups` parameter (JUnit 5 tag selection, `playwright-group1` ... `playwright-groupN`):
