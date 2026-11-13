@@ -113,6 +113,21 @@ public class PageV1PwIT extends PlaywrightAuthorBaseTest {
         page.waitForLoadState(LoadState.NETWORKIDLE);
     }
 
+    /**
+     * Reopens the page properties until a tab that depends on asynchronously indexed content (e.g. the Blueprint
+     * tab, shown once the live relationships of the page can be queried) is rendered, then opens it.
+     */
+    protected void openPropertiesAndTabWhenAvailable(String label) {
+        Locator tab = page.locator("coral-tab").filter(new Locator.FilterOptions().setHasText(label));
+        long deadline = System.currentTimeMillis() + 60_000;
+        openProperties();
+        while (tab.count() == 0 && System.currentTimeMillis() < deadline) {
+            page.waitForTimeout(2000);
+            openProperties();
+        }
+        tab.first().click();
+    }
+
     protected void openTab(String label) {
         page.locator("coral-tab").filter(new Locator.FilterOptions().setHasText(label)).first().click();
     }
