@@ -293,7 +293,7 @@ public class TeaserV1PwIT extends ComponentPwBaseTest {
         setImage();
         openLinkTab();
         checkbox("./actionsEnabled").check();
-        nextActionLinkInput().fill("http://www.adobe.com");
+        typeInAutocomplete(dialog().locator(actionHook("actionLink")).first(), "http://www.adobe.com");
         setActionTitle("Adobe");
         addActionLink(secondPage);
         setActionTitle("Action Text 2");
