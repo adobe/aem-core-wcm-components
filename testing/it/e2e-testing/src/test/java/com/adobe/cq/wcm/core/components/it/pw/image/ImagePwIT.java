@@ -15,7 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.pw.image;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -23,6 +25,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.adobe.cq.wcm.core.components.it.pw.ComponentPwBaseTest;
@@ -34,6 +37,7 @@ import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_IMAGE_V1;
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_IMAGE_V2;
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_IMAGE_V3;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("playwright-group2")
 public class ImagePwIT extends ComponentPwBaseTest {
@@ -201,6 +205,54 @@ public class ImagePwIT extends ComponentPwBaseTest {
     private void cancelDialog() {
         dialog().locator("button.cq-dialog-cancel, button[is='coral-button'][title='Cancel']").first().click();
         assertThat(dialog()).isHidden();
+    }
+
+    static Stream<Arguments> policyDialogs() {
+        return Stream.of(
+            Arguments.of(RT_IMAGE_V2, false),
+            Arguments.of(RT_IMAGE_V2, true),
+            Arguments.of(RT_IMAGE_V3, false),
+            Arguments.of(RT_IMAGE_V3, true));
+    }
+
+    @ParameterizedTest
+    @MethodSource("policyDialogs")
+    public void testPolicyDamOptionsVisibleOnOpen(String resourceType, boolean openImageDialogFirst) throws Exception {
+        String path = addImage(resourceType);
+        String policyPath = createComponentPolicy(resourceType.substring(resourceType.lastIndexOf("/")),
+            new HashMap<>(java.util.Collections.singletonMap("isDecorative", "false")));
+        if (openImageDialogFirst) {
+            openEditDialog(path);
+            page.waitForFunction("() => window.jQuery && window.jQuery.active === 0");
+            cancelDialog();
+        }
+
+        List<String> errors = new ArrayList<>();
+        page.onPageError(errors::add);
+        String policyDialog = contextPath + "/mnt/override/apps/" + resourceType + "/_cq_design_dialog.html" + policyPath;
+        page.evaluate("([src, resourceType]) => Granite.author.DialogFrame.openDialog({"
+            + "getConfig: () => ({src, loadingMode: 'auto', layout: 'floating'}),"
+            + "getRequestData: () => ({resourceType})"
+            + "})", List.of(policyDialog, resourceType));
+        assertThat(dialog()).isVisible();
+        page.waitForFunction("() => window.jQuery && window.jQuery.active === 0");
+        // Flush the editor's deferred dialog-loaded callbacks before checking the rendered options.
+        page.evaluate("() => new Promise(resolve => setTimeout(resolve, 0))");
+
+        Locator altFromDam = dialog().locator("coral-checkbox[name='./altValueFromDAM']");
+        Locator captionFromDam = dialog().locator("coral-checkbox[name='./titleValueFromDAM']");
+        assertThat(altFromDam).isVisible();
+        assertThat(altFromDam).isEnabled();
+        assertThat(captionFromDam).isVisible();
+        assertThat(captionFromDam).isEnabled();
+
+        Locator decorative = dialog().locator("coral-checkbox[name='./isDecorative'] input[type='checkbox']");
+        decorative.check();
+        decorative.uncheck();
+        assertThat(altFromDam).isVisible();
+        assertThat(captionFromDam).isVisible();
+        assertTrue(errors.isEmpty(), () -> String.join("\n", errors));
+        cancelDialog();
     }
 
     @ParameterizedTest
