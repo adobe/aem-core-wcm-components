@@ -158,7 +158,7 @@ public abstract class PlaywrightAuthorBaseTest {
         responsiveGridPath = testContentBuilder.getTopLevelComponentPath();
         configPath = testContentBuilder.getConfigPath();
         label = testContentBuilder.getLabel();
-        new DisableTour(authorClient).disableDefaultTours();
+        new DisableTour(authorClient, testContentBuilder.getUserHomePath()).disableDefaultTours();
 
         context = browser.newContext(new Browser.NewContextOptions()
             .setViewportSize(1920, 1080)
