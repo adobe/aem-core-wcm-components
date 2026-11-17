@@ -84,8 +84,14 @@ amp-selector [option][selected] {
     }
 }
 
-.cmp-tabs[role="tablist"] .cmp-tabs__tab:focus {
-    border-radius: .125rem;
-    outline: .125rem solid #1473e6;
-    outline-offset: .125rem;
+.cmp-tabs {
+    &[role="tablist"] {
+        .cmp-tabs__tab {
+            &:focus {
+                border-radius: .125rem;
+                outline: .125rem solid #1473e6;
+                outline-offset: .125rem;
+            }
+        }
+    }
 }
