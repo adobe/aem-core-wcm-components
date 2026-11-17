@@ -66,7 +66,7 @@ public class ContentAIClientImpl implements ContentAIClient {
     private static final String CONTENT_AI_PATH = "/adobe/experimental/aemcontentai-expires-20261231/contentAI";
 
     private static final String CONSUMER_ID_HEADER = "X-Content-AI-Consumer";
-    private static final String CONSUMER_ID = "aem-site-search";
+    private static final String CONSUMER_ID = "content-ai-site-search";
 
     /**
      * AEM as a Cloud Service environment variables (sourced from pod annotations aemProgramId/aemEnvId/aemService)

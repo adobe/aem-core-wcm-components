@@ -196,7 +196,7 @@ class ContentAIClientImplTest {
         Header apiKeyHeader = sent.getFirstHeader("X-Api-Key");
         assertNotNull(consumerHeader);
         assertNotNull(apiKeyHeader);
-        assertEquals("aem-site-search", consumerHeader.getValue());
+        assertEquals("content-ai-site-search", consumerHeader.getValue());
         assertEquals(TEST_API_KEY, apiKeyHeader.getValue());
     }
 
@@ -256,7 +256,7 @@ class ContentAIClientImplTest {
         Header apiKeyHeader = sent.getFirstHeader("X-Api-Key");
         assertNotNull(consumerHeader);
         assertNotNull(apiKeyHeader);
-        assertEquals("aem-site-search", consumerHeader.getValue());
+        assertEquals("content-ai-site-search", consumerHeader.getValue());
         assertEquals(TEST_API_KEY, apiKeyHeader.getValue());
     }
 
