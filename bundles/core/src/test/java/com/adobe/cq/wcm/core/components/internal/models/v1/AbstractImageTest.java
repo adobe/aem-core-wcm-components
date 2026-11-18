@@ -77,6 +77,7 @@ public class AbstractImageTest {
     protected static final String IMAGE28_PATH = PAGE + "/jcr:content/root/image28";
     protected static final String IMAGE29_PATH = PAGE + "/jcr:content/root/image29";
     protected static final String IMAGE30_PATH = PAGE + "/jcr:content/root/image30";
+    protected static final String IMAGE31_PATH = PAGE + "/jcr:content/root/image31";
     protected static final String IMAGE45_PATH = PAGE + "/jcr:content/root/image45";
     protected static final String IMAGE59_PATH = PAGE + "/jcr:content/root/image59";
     protected static final String LIST01_PATH = PAGE + "/jcr:content/root/list01";
@@ -89,6 +90,7 @@ public class AbstractImageTest {
     protected static final String PNG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.png";
     protected static final String GIF_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.gif";
     protected static final String JPG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.jpg";
+    protected static final String JPG_FULL_QUALITY_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark_full_quality.jpg";
     protected static final String _1PX_IMAGE_BINARY_NAME = "1x1.png";
     protected static final String _40MPX_IMAGE_BINARY_NAME = "20000x20000.png";
     protected static final String TRANSPARENT_IMAGE_BINARY_NAME = "transparent_hd.png";
@@ -99,6 +101,7 @@ public class AbstractImageTest {
     protected static final String GIF_ASSET_PATH = "/content/dam/core/images/" + GIF_IMAGE_BINARY_NAME;
     protected static final String TIFF_ASSET_PATH = "/content/dam/core/images/" + TIFF_IMAGE_BINARY_NAME;
     protected static final String SVG_ASSET_PATH = "/content/dam/core/images/" + SVG_IMAGE_BINARY_NAME;
+    protected static final String JPG_FULL_QUALITY_ASSET_PATH = "/content/dam/core/images/" + JPG_FULL_QUALITY_IMAGE_BINARY_NAME;
     protected static final String GIF5_FILE_PATH = IMAGE5_PATH + "/file";
     protected static final String PNG3_FILE_PATH = IMAGE3_PATH + "/file";
     protected static final String PNG10_FILE_PATH = IMAGE10_PATH + "/file";
@@ -147,6 +150,8 @@ public class AbstractImageTest {
         context.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + GIF_IMAGE_BINARY_NAME, GIF_ASSET_PATH +
                 "/jcr:content/renditions/cq5dam.web.1280.1280.gif");
         context.load().binaryFile("/image/" + SVG_IMAGE_BINARY_NAME, SVG_ASSET_PATH + "/jcr:content/renditions/original");
+        context.load().binaryFile("/image/" + JPG_FULL_QUALITY_IMAGE_BINARY_NAME, JPG_FULL_QUALITY_ASSET_PATH +
+                "/jcr:content/renditions/original");
         context.load().binaryFile("/image/" + GIF_IMAGE_BINARY_NAME, GIF5_FILE_PATH, StandardImageHandler.GIF_MIMETYPE);
         context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG3_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
         context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG10_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
