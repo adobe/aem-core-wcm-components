@@ -10,7 +10,7 @@ Set of standardized Web Content Management (WCM) components for [Adobe Experienc
 ## Welcome
 
 * **Contributions** are welcome, read our [contributing guide](CONTRIBUTING.md) for more information.
-* **Ideas and questions** are discussed on our [public mailing list](https://groups.google.com/forum/#!forum/aem-core-components-dev); you can also [subscribe via email](mailto:aem-core-components-dev+subscribe@googlegroups.com).
+* **Ideas and questions** are discussed on our [public mailing list](https://groups.google.com/forum/#!forum/aem-core-components-dev) and on [GitHub Discussions](https://github.com/adobe/aem-core-wcm-components/discussions); you can also [subscribe via email](mailto:aem-core-components-dev+subscribe@googlegroups.com) to the mailing list.
 
 ## Documentation
 
