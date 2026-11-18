@@ -19,6 +19,7 @@
         <button class="cmp-carousel__action cmp-carousel__action--previous"
                 type="button"
                 aria-label="${carousel.accessibilityPrevious || 'Previous' @ i18n}"
+				title="${carousel.accessibilityPrevious || 'Previous' @ i18n}"
                 data-cmp-hook-carousel="previous">
             <span class="cmp-carousel__action-icon"></span>
             <span class="cmp-carousel__action-text">${carousel.accessibilityPrevious || 'Previous' @ i18n}</span>
@@ -26,6 +27,7 @@
         <button class="cmp-carousel__action cmp-carousel__action--next"
                 type="button"
                 aria-label="${carousel.accessibilityNext || 'Next' @ i18n}"
+				title="${carousel.accessibilityNext || 'Next' @ i18n}"
                 data-cmp-hook-carousel="next">
             <span class="cmp-carousel__action-icon"></span>
             <span class="cmp-carousel__action-text">${carousel.accessibilityNext || 'Next' @ i18n}</span>
@@ -34,6 +36,7 @@
                 class="cmp-carousel__action cmp-carousel__action--pause"
                 type="button"
                 aria-label="${carousel.accessibilityPause || 'Pause' @ i18n}"
+				title="${carousel.accessibilityPause || 'Pause' @ i18n}"
                 data-cmp-hook-carousel="pause">
             <span class="cmp-carousel__action-icon"></span>
             <span class="cmp-carousel__action-text">${carousel.accessibilityPause || 'Pause' @ i18n}</span>
@@ -42,6 +45,7 @@
                 class="cmp-carousel__action cmp-carousel__action--play cmp-carousel__action--disabled"
                 type="button"
                 aria-label="${carousel.accessibilityPlay || 'Play' @ i18n}"
+				title="${carousel.accessibilityPlay || 'Play' @ i18n}"
                 data-cmp-hook-carousel="play">
             <span class="cmp-carousel__action-icon"></span>
             <span class="cmp-carousel__action-text">${carousel.accessibilityPlay || 'Play' @ i18n}</span>
