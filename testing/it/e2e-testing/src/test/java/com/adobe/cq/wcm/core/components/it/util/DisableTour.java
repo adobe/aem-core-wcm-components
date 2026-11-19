@@ -29,6 +29,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingClient;
+import org.apache.sling.testing.clients.util.JsonUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public final class DisableTour {
     };
 
     private final SlingClient client;
-    private final User adminUser;
+    private final String homePath;
 
     private JsonNode originalPreferences;
 
@@ -57,16 +58,27 @@ public final class DisableTour {
         SecurityClient securityClient = client.adaptTo(SecurityClient.class);
         String user = securityClient.getUser();
         CQAuthorizableManager authorizableManager = new CQAuthorizableManager(securityClient);
-        adminUser = authorizableManager.getUser(user);
-        CQPreferences cqPreferences = new CQPreferences(adminUser);
-        originalPreferences = cqPreferences.getJson(HttpStatus.SC_OK);
+        User adminUser = authorizableManager.getUser(user);
+        homePath = adminUser.getHomePath();
+        originalPreferences = new CQPreferences(adminUser).getJson(HttpStatus.SC_OK);
+    }
+
+    /**
+     * Uses the known home path of the client's user instead of looking the user up, as the authorizable query can lag
+     * behind the creation of a new user (e.g. on AEM as a Cloud Service).
+     */
+    public DisableTour(final SlingClient c, final String userHomePath) throws ClientException {
+        client = c;
+        homePath = userHomePath;
+        originalPreferences = JsonUtils.getJsonNodeFromString(
+            client.doGet(homePath + "." + PREFERENCES_NODE + ".json", HttpStatus.SC_OK).getContent());
     }
 
     public void disableTours(final String... tourProperties) throws ClientException, UnsupportedEncodingException {
         ArrayList<NameValuePair> parameters = new ArrayList();
         Arrays.stream(tourProperties).forEach(tourProperty -> parameters.add(new BasicNameValuePair(tourProperty, "false")));
         HttpEntity entity = new UrlEncodedFormEntity(parameters);
-        client.doPost(adminUser.getHomePath() + "/" + PREFERENCES_NODE, entity, HttpStatus.SC_OK, HttpStatus.SC_CREATED);
+        client.doPost(homePath + "/" + PREFERENCES_NODE, entity, HttpStatus.SC_OK, HttpStatus.SC_CREATED);
     }
 
     public void disableDefaultTours() throws UnsupportedEncodingException, ClientException {
@@ -75,6 +87,6 @@ public final class DisableTour {
 
     public void restoreDefaults() throws ClientException {
         StringEntity jsonEntity = new StringEntity(originalPreferences.toString(), APPLICATION_JSON);
-        client.doPost(adminUser.getHomePath() + "/" + PREFERENCES_NODE, jsonEntity, HttpStatus.SC_OK, HttpStatus.SC_CREATED);
+        client.doPost(homePath + "/" + PREFERENCES_NODE, jsonEntity, HttpStatus.SC_OK, HttpStatus.SC_CREATED);
     }
 }

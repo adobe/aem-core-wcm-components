@@ -57,6 +57,7 @@ public class TableOfContentsPwIT extends ComponentPwBaseTest {
     }
 
     @Test
+    @Tag("IgnoreOnCloud") // the TableOfContentsFilter is enabled by the config package, which is not deployed to AEMaaCS
     public void testTocRendering() throws Exception {
         addTableOfContents();
         addComponentToAllowedPolicy(RT_TITLE_V3);
@@ -94,6 +95,7 @@ public class TableOfContentsPwIT extends ComponentPwBaseTest {
     }
 
     @Test
+    @Tag("IgnoreOnCloud") // the TableOfContentsFilter is enabled by the config package, which is not deployed to AEMaaCS
     public void testTocIdConfig() throws Exception {
         String componentPath = addTableOfContents();
         openEditDialog(componentPath);

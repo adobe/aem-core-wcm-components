@@ -85,8 +85,7 @@ public class PageV2PwIT extends PageV1PwIT {
     public void testBlueprintPageProperties() throws Exception {
         liveCopyPage = Commons.createLiveCopy(adminClient, testPage, rootPage, "testLiveCopy", "testLiveCopy", 200);
 
-        openProperties();
-        openTab("Blueprint");
+        openPropertiesAndTabWhenAvailable("Blueprint");
         assertThat(page.locator("coral-tab[selected]").filter(new Locator.FilterOptions().setHasText("Blueprint")))
             .hasCount(1);
 
