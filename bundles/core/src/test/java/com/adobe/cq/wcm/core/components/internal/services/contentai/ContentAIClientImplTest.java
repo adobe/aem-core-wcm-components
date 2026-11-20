@@ -169,10 +169,12 @@ class ContentAIClientImplTest {
 
         com.adobe.cq.wcm.core.components.services.contentai.ContentSourceListResult result =
             client.listContentSources();
+        HttpGet sent = (HttpGet) captureExecutedRequest();
 
         assertEquals(1, result.getItems().size());
         assertEquals("aem-live", result.getItems().get(0).getName());
         assertTrue(result.getItems().get(0).isPublicAccess());
+        assertNull(sent.getFirstHeader("X-Content-AI-Consumer"));
     }
 
     @Test
@@ -184,6 +186,21 @@ class ContentAIClientImplTest {
         HttpPost sent = (HttpPost) captureExecutedRequest();
         String body = EntityUtils.toString(sent.getEntity(), StandardCharsets.UTF_8);
         assertTrue(body.contains("\"type\":\"ACQUISITION\""));
+    }
+
+    @Test
+    void searchSendsConsumerAttributionHeader() throws Exception {
+        respondWith(200, "{\"totalResults\":0,\"results\":[]}");
+
+        client.search("my-content-source", "electric cars", 10);
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        Header consumerHeader = sent.getFirstHeader("X-Content-AI-Consumer");
+        Header apiKeyHeader = sent.getFirstHeader("X-Api-Key");
+        assertNotNull(consumerHeader);
+        assertNotNull(apiKeyHeader);
+        assertEquals("content-ai-site-search", consumerHeader.getValue());
+        assertEquals(TEST_API_KEY, apiKeyHeader.getValue());
     }
 
     @Test
@@ -276,6 +293,21 @@ class ContentAIClientImplTest {
         JsonNode body = new ObjectMapper().readTree(sent.getEntity().getContent());
         assertEquals("electric cars", body.path("query").asText());
         assertFalse(body.has("queryOptions"));
+    }
+
+    @Test
+    void genSearchSendsConsumerAttributionHeader() throws Exception {
+        respondWith(200, "{\"query\":\"electric cars\",\"result\":\"Electric cars are efficient.\",\"hits\":[]}");
+
+        client.genSearch("my-content-source", "electric cars");
+
+        HttpPost sent = (HttpPost) captureExecutedRequest();
+        Header consumerHeader = sent.getFirstHeader("X-Content-AI-Consumer");
+        Header apiKeyHeader = sent.getFirstHeader("X-Api-Key");
+        assertNotNull(consumerHeader);
+        assertNotNull(apiKeyHeader);
+        assertEquals("content-ai-site-search", consumerHeader.getValue());
+        assertEquals(TEST_API_KEY, apiKeyHeader.getValue());
     }
 
     @Test

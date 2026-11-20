@@ -65,6 +65,9 @@ public class ContentAIClientImpl implements ContentAIClient {
      */
     private static final String CONTENT_AI_PATH = "/adobe/contentAI";
 
+    private static final String CONSUMER_ID_HEADER = "X-Content-AI-Consumer";
+    private static final String CONSUMER_ID = "content-ai-site-search";
+
     /**
      * AEM as a Cloud Service environment variables (sourced from pod annotations aemProgramId/aemEnvId/aemService)
      * used to derive the instance's own Content AI bucket. NOTE: {@code AEM_DOMAIN_PUBLISH} is deliberately NOT used —
@@ -222,7 +225,7 @@ public class ContentAIClientImpl implements ContentAIClient {
             pagination.put("cursor", cursor);
         }
 
-        JsonNode response = executeRequest("/content-sources/search", body);
+        JsonNode response = executeRequest("/content-sources/search", body, true);
         try {
             return mapper.treeToValue(response, ContentSourceSearchResult.class);
         } catch (IOException e) {
@@ -244,7 +247,7 @@ public class ContentAIClientImpl implements ContentAIClient {
             contentSourceNode.put("type", contentSourceType);
         }
 
-        JsonNode response = executeRequest("/content-sources/gensearch", body);
+        JsonNode response = executeRequest("/content-sources/gensearch", body, true);
         try {
             return mapper.treeToValue(response, ContentSourceQueryResult.class);
         } catch (IOException e) {
@@ -286,7 +289,8 @@ public class ContentAIClientImpl implements ContentAIClient {
         }
     }
 
-    private JsonNode executeRequest(String path, ObjectNode body) throws ContentAIClientException {
+    private JsonNode executeRequest(String path, ObjectNode body, boolean includeConsumerHeader)
+        throws ContentAIClientException {
         // See executeGet's comment on why config is snapshotted once per request.
         ContentAIConfig config = this.config;
         String apiKey = config.apiKey();
@@ -300,6 +304,9 @@ public class ContentAIClientImpl implements ContentAIClient {
             post.setHeader("Content-Type", "application/json");
             // Anonymous, public-index access uses X-Api-Key (a Developer Console client ID), never a bearer token.
             post.setHeader("X-Api-Key", apiKey);
+            if (includeConsumerHeader) {
+                post.setHeader(CONSUMER_ID_HEADER, CONSUMER_ID);
+            }
             post.setEntity(new StringEntity(mapper.writeValueAsString(body), StandardCharsets.UTF_8));
 
             return executeAndParse(httpClient, post, path);
