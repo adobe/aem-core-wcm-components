@@ -161,6 +161,18 @@ public interface Page extends ContainerExporter, Component {
     }
 
     /**
+     * Returns the text direction of this page, derived from its language (see {@link #getLanguage()}).
+     *
+     * @return {@code "rtl"} if the language of the page is written from right to left, {@code "ltr"} otherwise; suitable as value of the
+     * HTML {@code dir} attribute
+     * @since com.adobe.cq.wcm.core.components.models 12.34.0
+     */
+    @JsonIgnore
+    default String getTextDirection() {
+        return null;
+    }
+
+    /**
      * Returns the last modified date of this page.
      *
      * @return {@link Calendar} representing the last modified date of this page

@@ -109,6 +109,7 @@ public class PageImplTest {
         calendar.setTime(sdf.parse("2016-01-20T10:33:36.000+0100"));
         assertEquals(page.getLastModifiedDate().getTime(), calendar.getTime());
         assertEquals("en-GB", page.getLanguage());
+        assertEquals("ltr", page.getTextDirection());
         assertEquals("Templated Page", page.getTitle());
         assertEquals("Description", page.getDescription());
         assertEquals("Brand Slug", page.getBrandSlug());
@@ -122,6 +123,29 @@ public class PageImplTest {
         assertEquals("coretest.product-page", page.getClientLibCategories()[0]);
         assertEquals("product-page", page.getTemplateName());
         Utils.testJSONExport(page, Utils.getTestExporterJSONPath(testBase, PAGE));
+    }
+
+    /**
+     * Tests that the text direction is derived from the language of the page.
+     */
+    @Test
+    protected void testTextDirection() throws PersistenceException {
+        assertEquals("ltr", getTextDirectionForLanguage("en_US"));
+        assertEquals("ltr", getTextDirectionForLanguage("de"));
+        assertEquals("ltr", getTextDirectionForLanguage("zh_CN"));
+        assertEquals("rtl", getTextDirectionForLanguage("ar"));
+        assertEquals("rtl", getTextDirectionForLanguage("ar_EG"));
+        assertEquals("rtl", getTextDirectionForLanguage("he_IL"));
+        assertEquals("rtl", getTextDirectionForLanguage("fa_IR"));
+        assertEquals("rtl", getTextDirectionForLanguage("ur"));
+    }
+
+    private String getTextDirectionForLanguage(String language) throws PersistenceException {
+        Resource content = context.resourceResolver().getResource(PAGE + "/" + JcrConstants.JCR_CONTENT);
+        ModifiableValueMap properties = content.adaptTo(ModifiableValueMap.class);
+        properties.put(JcrConstants.JCR_LANGUAGE, language);
+        context.resourceResolver().commit();
+        return getPageUnderTest(PAGE).getTextDirection();
     }
 
     /**

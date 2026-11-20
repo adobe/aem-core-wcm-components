@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -116,6 +117,11 @@ public class PageImpl extends AbstractComponentImpl implements Page {
 
     protected static final String PN_BRANDSLUG = "brandSlug";
 
+    /**
+     * Languages that are written from right to left (ISO 639 codes; {@code iw} is the legacy code of Hebrew).
+     */
+    private static final Set<String> RTL_LANGUAGES = new HashSet<>(Arrays.asList("ar", "dv", "fa", "he", "iw", "ps", "sd", "ug", "ur", "yi"));
+
     private Map<String, ComponentExporter> childModels = null;
     private String resourceType;
     private Set<String> resourceTypes;
@@ -174,6 +180,13 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     public String getLanguage() {
         return currentPage == null ? Locale.getDefault().toLanguageTag()
                 : currentPage.getLanguage(false).toLanguageTag();
+    }
+
+    @Override
+    @JsonIgnore
+    public String getTextDirection() {
+        Locale locale = currentPage == null ? Locale.getDefault() : currentPage.getLanguage(false);
+        return RTL_LANGUAGES.contains(locale.getLanguage()) ? "rtl" : "ltr";
     }
 
     @Override

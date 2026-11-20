@@ -92,7 +92,7 @@ The following properties are written to JCR for this Page component and are expe
 10. `./offTime` - defines when the page should no longer be available.
 11. `./sling:vanityPath` - defines a vanity URL at which the page could be accessed.
 12. `./sling:redirect` - if `true`, the page will redirect to its defined vanity URL.
-13. `./jcr:language` - defines the language set for this page, to help with `i18n`.
+13. `./jcr:language` - defines the language set for this page, to help with `i18n`. The language also determines the text direction (`dir` attribute) rendered on the `html` element: `rtl` for right-to-left languages such as Arabic, Hebrew, Persian or Urdu, `ltr` otherwise.
 14. `./cq:designPath` - defines where the design for the page is stored.
 15. `./sling:alias` - defines a Sling alias for the page, so that it can be accessed at a different resource path.
 16. `./cq:allowedTemplates` - defines a template or a list of templates that the page should use.
