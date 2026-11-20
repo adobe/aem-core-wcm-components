@@ -223,6 +223,20 @@ public class AccordionPwIT extends ComponentPwBaseTest {
     }
 
     @Test
+    public void testFocusIndicator() throws Exception {
+        createItems();
+        page.navigate(baseUrl + testPage + ".html?wcmmode=disabled");
+        Locator button = page.locator(".cmp-accordion__button").first();
+        button.focus();
+
+        assertThat(button).hasCSS("border-radius", "2px");
+        assertThat(button).hasCSS("outline-style", "solid");
+        assertThat(button).hasCSS("outline-width", "2px");
+        assertThat(button).hasCSS("outline-color", "rgb(20, 115, 230)");
+        assertThat(button).hasCSS("outline-offset", "2px");
+    }
+
+    @Test
     public void testAddItem() throws Exception {
         createItems();
         openEditDialog(accordionPath);
