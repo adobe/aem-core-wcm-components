@@ -32,6 +32,7 @@ import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.adobe.cq.wcm.core.components.testing.MockAssetDelivery;
+import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.WCMMode;
 import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -43,6 +44,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
 public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImplTest {
@@ -63,6 +66,11 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     private static final String IMAGE42_PATH = PAGE + "/jcr:content/root/image42";
     private static final String IMAGE43_PATH = PAGE + "/jcr:content/root/image43";
     private static final String IMAGE44_PATH = PAGE + "/jcr:content/root/image44";
+    private static final String IMAGE60_PATH = PAGE + "/jcr:content/root/image60";
+    private static final String IMAGE61_PATH = PAGE + "/jcr:content/root/image61";
+    private static final String IMAGE62_PATH = PAGE + "/jcr:content/root/image62";
+    private static final String IMAGE63_PATH = PAGE + "/jcr:content/root/image63";
+    private static final String IMAGE64_PATH = PAGE + "/jcr:content/root/image64";
 
     @BeforeEach
     @Override
@@ -595,6 +603,87 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         assertTrue(image.isDmImage());
         assertEquals("https://s7d9.scene7.com/is/image/dmtestcompany/Adobe%20Systems%20logo%20and%20wordmark%20DM?ts=1490005239000&dpr=on,{dpr}", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE42_PATH));
+    }
+
+
+    @Test
+    void testPngAlphaModifierAppliedForBitsPerPixel32() {
+        assertPngAlphaModifier(IMAGE60_PATH, true, true);
+    }
+
+    @Test
+    void testPngAlphaModifierNotAppliedForBitsPerPixel24() {
+        assertPngAlphaModifier(IMAGE61_PATH, true, false);
+    }
+
+    @Test
+    void testPngAlphaModifierAppliedForFourBitsPerSample() {
+        assertPngAlphaModifier(IMAGE62_PATH, true, true);
+    }
+
+    @Test
+    void testPngAlphaModifierNotAppliedForThreeBitsPerSample() {
+        assertPngAlphaModifier(IMAGE63_PATH, true, false);
+    }
+
+    @Test
+    void testPngAlphaModifierAppliedWhenTransparencyMetadataMissing() {
+        assertPngAlphaModifier(IMAGE64_PATH, true, true);
+    }
+
+    @Test
+    void testPngAlphaModifierNotAppliedForJpeg() {
+        assertPngAlphaModifier(IMAGE44_PATH, true, false);
+    }
+
+    @Test
+    void testPngAlphaModifierNotAppliedWhenPolicyDisabled() {
+        assertPngAlphaModifier(IMAGE60_PATH, false, false);
+        assertPngAlphaModifier(IMAGE64_PATH, false, false);
+    }
+
+    private void assertPngAlphaModifier(String imagePath, boolean policyEnabled, boolean expected) {
+        context.contentPolicyMapping(resourceType,
+                Image.PN_DESIGN_DYNAMIC_MEDIA_ENABLED, true,
+                Image.PN_DESIGN_AUTO_PRESERVE_PNG_TRANSPARENCY, policyEnabled);
+        Image image = getImageUnderTest(imagePath);
+        assertTrue(image.isDmImage());
+        assertEquals(expected, image.getSrc().contains(Image.PNG_ALPHA_FORMAT_MODIFIER), image.getSrc());
+    }
+
+    @Test
+    void testHasPngTransparencyForNullOrNonPngAsset() {
+        ImageImpl imageModel = new ImageImpl();
+        assertFalse(imageModel.hasPngTransparency(null));
+        assertFalse(imageModel.hasPngTransparency(mockAsset("image/jpeg", null, null)));
+    }
+
+    @Test
+    void testHasPngTransparencyForPrimitiveBitsPerSampleArray() {
+        ImageImpl imageModel = new ImageImpl();
+        assertTrue(imageModel.hasPngTransparency(mockAsset("image/png", null, new long[]{8, 8, 8, 8})));
+        assertFalse(imageModel.hasPngTransparency(mockAsset("image/png", null, new long[]{8, 8, 8})));
+    }
+
+    @Test
+    void testHasPngTransparencyForSingleValuedBitsPerSample() {
+        assertFalse(new ImageImpl().hasPngTransparency(mockAsset("image/png", null, 8L)));
+    }
+
+    @Test
+    void testHasPngTransparencyForUnparseableBitsPerPixel() {
+        ImageImpl imageModel = new ImageImpl();
+        assertFalse(imageModel.hasPngTransparency(mockAsset("image/png", "n/a", null)));
+        assertTrue(imageModel.hasPngTransparency(mockAsset("image/png", "n/a", new Long[]{8L, 8L, 8L, 8L})));
+        assertTrue(imageModel.hasPngTransparency(mockAsset("image/png", " 32 ", null)));
+    }
+
+    private Asset mockAsset(String mimeType, String bitsPerPixel, Object bitsPerSample) {
+        Asset asset = mock(Asset.class);
+        when(asset.getMimeType()).thenReturn(mimeType);
+        when(asset.getMetadataValue(Image.DAM_BITS_PER_PIXEL)).thenReturn(bitsPerPixel);
+        when(asset.getMetadata(Image.TIFF_BITS_PER_SAMPLE)).thenReturn(bitsPerSample);
+        return asset;
     }
 
     @Test
