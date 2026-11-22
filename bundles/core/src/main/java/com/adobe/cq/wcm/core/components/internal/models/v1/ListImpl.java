@@ -32,6 +32,7 @@ import javax.annotation.PostConstruct;
 import javax.jcr.RepositoryException;
 
 import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
+import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.result.SearchResult;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -90,6 +91,11 @@ public class ListImpl extends AbstractComponentImpl implements List {
      * Children depth property name (only used if the source type is children).
      */
     private static final String PN_CHILD_DEPTH = "childDepth";
+
+    /**
+     * Property name for flag that indicates if current page should be excluded.
+     */
+    private static final String PN_EXCLUDE_CURRENT_PAGE = "excludeCurrentPage";
 
     /**
      * Search query property name.
@@ -176,6 +182,11 @@ public class ListImpl extends AbstractComponentImpl implements List {
     protected boolean linkItems;
 
     /**
+     * Flag indicating if the current request page should be excluded.
+     */
+    protected boolean excludeCurrentPage;
+
+    /**
      * The list items.
      */
     private java.util.List<Page> listItems;
@@ -191,6 +202,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
             PN_SHOW_MODIFICATION_DATE, currentStyle.get(PN_SHOW_MODIFICATION_DATE, SHOW_MODIFICATION_DATE_DEFAULT));
         linkItems = properties.get(PN_LINK_ITEMS, currentStyle.get(PN_LINK_ITEMS, LINK_ITEMS_DEFAULT));
         dateFormatString = properties.get(PN_DATE_FORMAT, currentStyle.get(PN_DATE_FORMAT, DATE_FORMAT_DEFAULT));
+        excludeCurrentPage = properties.get(PN_EXCLUDE_CURRENT_PAGE, Boolean.FALSE);
     }
 
     @Override
@@ -277,6 +289,11 @@ public class ListImpl extends AbstractComponentImpl implements List {
             default:
                 itemStream = Stream.empty();
                 break;
+        }
+
+        // filter out current page
+        if (this.excludeCurrentPage) {
+            itemStream = itemStream.filter(page -> !page.getPath().equals(this.currentPage.getPath()));
         }
 
         // order the results
@@ -376,6 +393,17 @@ public class ListImpl extends AbstractComponentImpl implements List {
                 search.setQuery(query);
                 search.setSearchIn(searchRoot.get().getPath());
                 search.addPredicate(new Predicate("type", "type").set("type", NameConstants.NT_PAGE));
+
+                if (this.excludeCurrentPage) {
+                    PredicateGroup pg = new PredicateGroup();
+                    pg.setNegated(true);
+                    pg.add(new Predicate("path")
+                        .set("path", this.currentPage.getPath())
+                        .set("exact", Boolean.TRUE.toString())
+                        .set("self", Boolean.TRUE.toString()));
+                    search.addPredicate(pg);
+                }
+
                 int limit = properties.get(PN_SEARCH_LIMIT, SEARCH_LIMIT_DEFAULT);
                 search.setHitsPerPage(limit);
                 return safeGetSearchResult(search)
