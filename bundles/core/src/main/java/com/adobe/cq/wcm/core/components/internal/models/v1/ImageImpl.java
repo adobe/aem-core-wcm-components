@@ -53,6 +53,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.commons.link.LinkManager;
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.helper.image.AdaptiveImageHelper;
 import com.adobe.cq.wcm.core.components.internal.helper.image.AssetDeliveryHelper;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
@@ -221,9 +222,18 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
             // Check for the suffix and remove as necessary.
             mimeType = mimeType.split(";")[0];
             extension = mimeTypeService.getExtension(mimeType);
-            Calendar lastModified = properties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
+            ValueMap lastModifiedProperties = properties;
+            if (hasExternalImageResource) {
+                // the AdaptiveImageServlet reads the timestamp from the external image resource, so the model has to do the same;
+                // otherwise the src is redirected on every request when the two timestamps differ
+                Resource externalImageResource = request.getResourceResolver().getResource(externalImageResourcePath);
+                if (externalImageResource != null && externalImageResource.isResourceType(AdaptiveImageHelper.IMAGE_RESOURCE_TYPE)) {
+                    lastModifiedProperties = externalImageResource.getValueMap();
+                }
+            }
+            Calendar lastModified = lastModifiedProperties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
             if (lastModified == null) {
-                lastModified = properties.get(NameConstants.PN_PAGE_LAST_MOD, Calendar.class);
+                lastModified = lastModifiedProperties.get(NameConstants.PN_PAGE_LAST_MOD, Calendar.class);
             }
             if (lastModified != null) {
                 lastModifiedDate = lastModified.getTimeInMillis();

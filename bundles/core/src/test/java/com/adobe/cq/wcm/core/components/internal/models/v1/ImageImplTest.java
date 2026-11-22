@@ -357,6 +357,42 @@ public class ImageImplTest extends AbstractImageTest {
                 ".png/content/test/jcr:content/root/image0/1490005239000/adobe-systems-logo-and-wordmark.png"));
     }
 
+    @Test
+    void testExternalImageResourceUsesLastModifiedOfExternalResource() {
+        // the timestamp in the src has to match the one the AdaptiveImageServlet computes from the external image resource
+        Image image = getImageUnderTest(IMAGE46_PATH);
+        assertTrue(image.getSrc().matches("/core/content/test/_jcr_content/root/image46.(core)?img" +
+                ".png/content/test/jcr:content/root/image46external/1577836800000/adobe-systems-logo-and-wordmark.png"),
+                "Unexpected src: " + image.getSrc());
+    }
+
+    @Test
+    void testMissingExternalImageResourceFallsBackToOwnLastModified() {
+        // external resource does not exist: keep the timestamp of the component itself
+        Image image = getImageUnderTest(IMAGE47_PATH);
+        assertTrue(image.getSrc().matches("/core/content/test/_jcr_content/root/image47.(core)?img" +
+                ".png/content/test/jcr:content/root/does-not-exist/1609459200000/adobe-systems-logo-and-wordmark.png"),
+                "Unexpected src: " + image.getSrc());
+    }
+
+    @Test
+    void testNonImageExternalImageResourceFallsBackToOwnLastModified() {
+        // external resource is not an image: the servlet ignores it, so keep the timestamp of the component itself
+        Image image = getImageUnderTest(IMAGE48_PATH);
+        assertTrue(image.getSrc().matches("/core/content/test/_jcr_content/root/image48.(core)?img" +
+                ".png/content/test/jcr:content/root/image48external/1622505600000/adobe-systems-logo-and-wordmark.png"),
+                "Unexpected src: " + image.getSrc());
+    }
+
+    @Test
+    void testExternalImageResourceOlderThanAssetUsesAssetLastModified() {
+        // the newer one of the external resource and the asset wins, as in the servlet
+        Image image = getImageUnderTest(IMAGE49_PATH);
+        assertTrue(image.getSrc().matches("/core/content/test/_jcr_content/root/image49.(core)?img" +
+                ".png/content/test/jcr:content/root/image49external/1490005239000/adobe-systems-logo-and-wordmark.png"),
+                "Unexpected src: " + image.getSrc());
+    }
+
     protected void compareJSON(String expectedJson, String json) {
         JsonReader expected = Json.createReader(new StringReader(expectedJson));
         JsonReader actual = Json.createReader(new StringReader(json));

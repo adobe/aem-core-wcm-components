@@ -421,6 +421,57 @@
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
                     "externalImageResourcePath": "/content/test/jcr:content/root/image0"
                 },
+                "image46"            : {
+                  "jcr:primaryType"   : "nt:unstructured",
+                  "jcr:createdBy"     : "admin",
+                  "sling:resourceType": "core/wcm/components/image/v1/image",
+                  "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                  "externalImageResourcePath": "/content/test/jcr:content/root/image46external"
+                },
+                "image46external"    : {
+                  "jcr:primaryType"   : "nt:unstructured",
+                  "jcr:createdBy"     : "admin",
+                  "sling:resourceType": "core/wcm/components/image/v1/image",
+                  "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                  "jcr:lastModified"  : "2020-01-01T00:00:00.000Z"
+                },
+                "image47"            : {
+                  "jcr:primaryType"   : "nt:unstructured",
+                  "jcr:createdBy"     : "admin",
+                  "sling:resourceType": "core/wcm/components/image/v1/image",
+                  "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                  "jcr:lastModified"  : "2021-01-01T00:00:00.000Z",
+                  "externalImageResourcePath": "/content/test/jcr:content/root/does-not-exist"
+                },
+                "image48"            : {
+                  "jcr:primaryType"   : "nt:unstructured",
+                  "jcr:createdBy"     : "admin",
+                  "sling:resourceType": "core/wcm/components/image/v1/image",
+                  "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                  "jcr:lastModified"  : "2021-06-01T00:00:00.000Z",
+                  "externalImageResourcePath": "/content/test/jcr:content/root/image48external"
+                },
+                "image48external"    : {
+                  "jcr:primaryType"   : "nt:unstructured",
+                  "jcr:createdBy"     : "admin",
+                  "sling:resourceType": "core/wcm/components/text/v2/text",
+                  "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                  "jcr:lastModified"  : "2022-01-01T00:00:00.000Z"
+                },
+                "image49"            : {
+                  "jcr:primaryType"   : "nt:unstructured",
+                  "jcr:createdBy"     : "admin",
+                  "sling:resourceType": "core/wcm/components/image/v1/image",
+                  "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                  "externalImageResourcePath": "/content/test/jcr:content/root/image49external"
+                },
+                "image49external"    : {
+                  "jcr:primaryType"   : "nt:unstructured",
+                  "jcr:createdBy"     : "admin",
+                  "sling:resourceType": "core/wcm/components/image/v1/image",
+                  "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                  "jcr:lastModified"  : "2010-01-01T00:00:00.000Z"
+                },
                 "image59"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
