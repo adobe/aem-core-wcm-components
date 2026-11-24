@@ -25,12 +25,14 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.http.cookie.Cookie;
 import org.apache.sling.testing.clients.ClientException;
+import org.awaitility.core.ConditionTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import org.apache.sling.testing.clients.util.ResourceUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,6 +64,7 @@ import static org.awaitility.Awaitility.await;
 public final class TestContentBuilder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestContentBuilder.class);
+    private static final Duration AUDIT_CLEANUP_TIMEOUT = Duration.ofSeconds(30);
 
     private static final String VAR_AUDIT_BASEPATH = "/var/audit/";
     private static final String VAR_AUDIT_WCM = VAR_AUDIT_BASEPATH + "com.day.cq.wcm.core.page";
@@ -242,16 +245,24 @@ public final class TestContentBuilder {
         });
     }
 
+    /**
+     * Best-effort removal of the audit log entries written for the test content. Audit events are written
+     * asynchronously and may still be in flight, so deletion is retried; a failure here must not fail the test.
+     */
     public void cleanupAudit(final String path) {
         String[] audits = new String[] {VAR_AUDIT_DAM, VAR_AUDIT_WCM, VAR_AUDIT_REPLICATION};
         Arrays.stream(audits).forEach(s -> {
             String auditPath = s + path;
             try {
-                if (client.exists(auditPath)) {
-                    await().untilAsserted(() -> client.deletePath(auditPath, HttpStatus.SC_OK));
-                }
-            } catch (ClientException e) {
-                LOGGER.error(e.getMessage(), e);
+                await().atMost(AUDIT_CLEANUP_TIMEOUT).pollInterval(Duration.ofSeconds(1)).ignoreExceptions()
+                    .until(() -> {
+                        if (client.exists(auditPath)) {
+                            client.deletePath(auditPath, HttpStatus.SC_OK);
+                        }
+                        return true;
+                    });
+            } catch (ConditionTimeoutException e) {
+                LOGGER.warn("Could not clean up audit log {}", auditPath, e);
             }
         });
     }

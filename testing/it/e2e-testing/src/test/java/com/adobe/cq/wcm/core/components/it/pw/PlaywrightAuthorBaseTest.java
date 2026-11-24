@@ -239,9 +239,18 @@ public abstract class PlaywrightAuthorBaseTest {
     // ---------------------------------------------------------------- editor helpers
 
     protected void openEditor(String pagePath) {
-        page.navigate(baseUrl + "/editor.html" + pagePath + ".html",
-            new Page.NavigateOptions().setWaitUntil(WaitUntilState.COMMIT));
-        waitEditorReady();
+        String editorUrl = baseUrl + "/editor.html" + pagePath + ".html";
+        Page.NavigateOptions options = new Page.NavigateOptions().setWaitUntil(WaitUntilState.COMMIT);
+        page.navigate(editorUrl, options);
+        try {
+            waitEditorReady();
+        } catch (TimeoutError e) {
+            // a stalled editor request (e.g. the i18n dictionary answering 503 after 60s on AEMaaCS) leaves the
+            // editor uninitialized; a fresh load usually succeeds
+            LOG.warn("Editor did not become ready for {}, reloading once", pagePath);
+            page.navigate(editorUrl, options);
+            waitEditorReady();
+        }
     }
 
     /** Switches the page editor to preview mode through the global bar, like a user would. */
