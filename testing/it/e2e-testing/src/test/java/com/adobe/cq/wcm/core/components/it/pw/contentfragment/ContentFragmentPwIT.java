@@ -126,7 +126,8 @@ public class ContentFragmentPwIT extends ComponentPwBaseTest {
         selectFragment(SIMPLE_FRAGMENT);
         dialog().locator("coral-radio[name='./displayMode'][value='singleText']").click();
         clickDone();
-        selectFragment(IMAGE_FRAGMENT);
+        // a reopened picker starts at the selected fragment, which lists nothing on AEMaaCS, so type the new path
+        typeInAutocomplete(dialog().locator("foundation-autocomplete[name='./fragmentPath']"), IMAGE_FRAGMENT);
         com.microsoft.playwright.Locator replacementDialog = page.locator("[role='alertdialog']:visible").last();
         assertThat(replacementDialog).isVisible();
         replacementDialog.locator("button[variant='primary']").click();

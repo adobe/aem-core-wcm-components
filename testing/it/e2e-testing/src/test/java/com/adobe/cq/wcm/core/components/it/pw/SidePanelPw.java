@@ -16,6 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.it.pw;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
@@ -115,11 +117,26 @@ public final class SidePanelPw {
         }
     }
 
-    /** Drags the asset card onto the editable's overlay in the editor. */
+    /**
+     * Drags the asset card onto the editable's overlay in the editor and waits until the editor persisted the drop,
+     * retrying the gesture as it is occasionally ignored.
+     */
     public void dragAssetToComponent(String assetPath, String componentPath) {
         Locator overlay = page.locator("#OverlayWrapper [data-type='Editable'][data-path='" + componentPath + "']");
-        overlay.scrollIntoViewIfNeeded();
-        dragAssetTo(assetPath, overlay);
+        for (int attempt = 1; ; attempt++) {
+            overlay.scrollIntoViewIfNeeded();
+            try {
+                page.waitForResponse(r -> "POST".equals(r.request().method())
+                        && URLDecoder.decode(r.url(), StandardCharsets.UTF_8).contains(componentPath),
+                    new Page.WaitForResponseOptions().setTimeout(5_000),
+                    () -> dragAssetTo(assetPath, overlay));
+                return;
+            } catch (TimeoutError e) {
+                if (attempt == 3) {
+                    throw e;
+                }
+            }
+        }
     }
 
     /** Selects the asset type in the side panel type selector, e.g. "Documents". */

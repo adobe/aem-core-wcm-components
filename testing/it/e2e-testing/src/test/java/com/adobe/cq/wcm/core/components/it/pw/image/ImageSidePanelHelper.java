@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.it.pw.image;
 import com.adobe.cq.wcm.core.components.it.pw.SidePanelPw;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.PlaywrightException;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -98,10 +99,34 @@ public final class ImageSidePanelHelper {
         assertThat(page.locator("input[name='./cq:featuredimage/fileReference']"))
             .hasValue(TEST_ASSETS_PATH + "/" + assetName);
         if (altFromDam) {
-            page.locator(".cq-siteadmin-admin-properties coral-checkbox[name='./cq:featuredimage/altValueFromDAM']"
-                + " input[type='checkbox']").check();
+            checkAltFromDam(page);
         }
         saveAndClose(page);
+    }
+
+    /**
+     * Checks "inherit alt text from DAM". The image editor enables the checkbox once the DAM metadata of the picked
+     * asset is loaded, but resets it to its initial state in a deferred callback right after; a click landing in
+     * between (seen on slower instances such as AEMaaCS) is undone, so the check is repeated until it sticks.
+     */
+    private static void checkAltFromDam(Page page) {
+        Locator checkbox = page.locator(".cq-siteadmin-admin-properties"
+            + " coral-checkbox[name='./cq:featuredimage/altValueFromDAM'] input[type='checkbox']");
+        assertThat(checkbox).isEnabled();
+        for (int attempt = 1; attempt <= 3; attempt++) {
+            try {
+                checkbox.check();
+            } catch (PlaywrightException e) {
+                if (attempt == 3) {
+                    throw e;
+                }
+            }
+            page.waitForTimeout(500);
+            if (checkbox.isChecked()) {
+                return;
+            }
+        }
+        assertThat(checkbox).isChecked();
     }
 
     /** Sets the alt text of the page's featured image through the page properties dialog. */

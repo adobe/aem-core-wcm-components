@@ -59,8 +59,14 @@ public class TextV1PwIT extends ComponentPwBaseTest {
         return ".cmp-text";
     }
 
-    /** The dialog's rich text widget is backed by a hidden input, which is what gets submitted. */
+    /**
+     * The dialog's rich text widget is backed by a hidden input, which is what gets submitted. The editor copies its
+     * own content into that input while it starts, so wait for it to be started before setting the value.
+     */
     protected void setDialogText(String value) {
+        Locator editable = dialog().locator(".cq-RichText-editable");
+        page.waitForFunction("e => !!window.jQuery && !!jQuery(e).data('rteinstance')"
+            + " && !e.classList.contains('is-initializing')", editable.elementHandle());
         dialog().locator("input[name='./text']").evaluate("(e, v) => e.value = v", value);
     }
 

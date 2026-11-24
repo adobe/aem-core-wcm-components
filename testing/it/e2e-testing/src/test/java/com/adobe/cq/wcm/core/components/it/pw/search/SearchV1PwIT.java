@@ -15,8 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.it.pw.search;
 
+import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -26,6 +30,7 @@ import com.microsoft.playwright.Locator;
 
 import static com.adobe.cq.wcm.core.components.it.util.Commons.RT_SEARCH_V1;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("playwright-group3")
@@ -59,10 +64,20 @@ public class SearchV1PwIT extends ComponentPwBaseTest {
         createPagePolicy(Map.of("clientlibs", searchClientlib()));
         searchPath = Commons.addComponentWithRetry(authorClient, searchResourceType(),
             searchPage + Commons.relParentCompPath, "search");
+        waitForSearchIndex();
         testPage = searchRoot;
         openEditor(searchPage);
         page.navigate(baseUrl + searchPage + ".html");
         return searchPath;
+    }
+
+    /** The fulltext index is updated asynchronously (with a noticeable lag on AEMaaCS), so wait for the new pages. */
+    private void waitForSearchIndex() {
+        String resultsPath = searchPage + ".searchresults.json"
+            + searchPath.substring(searchPage.length()).replace("/jcr:content/", "/_jcr_content/");
+        List<NameValuePair> params = List.of(new BasicNameValuePair("fulltext", "Page 1.1.1"));
+        await().atMost(Duration.ofSeconds(60)).pollInterval(Duration.ofSeconds(2)).ignoreExceptions()
+            .until(() -> authorClient.doGet(resultsPath, params, 200).getContent().contains("page_1_1_1"));
     }
 
     private Locator searchInput() {
