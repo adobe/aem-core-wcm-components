@@ -43,6 +43,9 @@ The following properties are written to JCR for the component:
 
 Compared to v1: `genSearchEnabledByDefault` is removed (the default tab is always Search Results); `genSearchToggleVisible` is renamed to `aiSearchModeEnabled`; `genSearchErrorFallback`'s three states are replaced by the two-state `genSearchErrorRetryVisible`.
 
+### Result images, de-duplication and top-up
+Same as v1: card images resolve from `metadata.image`, falling back to `metadata.meta.image` (the page's `og:image`, which requires `image` in the content source `fieldMapping.properties`). Results are de-duplicated client-side (by page URL, or by title/description for image-less results), and up to three follow-up pages are fetched so the configured results size is still filled. Items without an image get the `cmp-contentaisearch__item--no-image` class as a styling hook.
+
 ## Configuration - Content AI API Access
 Shares the same `ContentAIClient` OSGi service and configuration as v1 — see the [v1 README](../../v1/contentaisearch/README.md#configuration---content-ai-api-access) for the full `apiKey`/Cloud Manager secret setup. No v2-specific configuration exists; both versions call the same backend.
 
@@ -151,5 +154,6 @@ data-cmp-hook-contentaisearch="prepaint"
 * **Version**: v2
 * **Compatibility**: AEM as a Cloud Service, AEM 6.5 LTS (including Adobe Managed Services) for search results.
 * **AI Mode toggle**: renders on AEM as a Cloud Service and on properly branded AEM 6.5 LTS (version qualifier `LTS`, e.g. `6.5.2.LTS`). It's hidden on a non-LTS classic AEM 6.5 (no `LTS` version qualifier, e.g. `6.5.0`).
-* **Status**: work-in-progress
-* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_list](https://www.adobe.com/go/aem_cmp_library_list)
+* **Status**: production-ready
+* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_ai\_search\_v2](https://www.adobe.com/go/aem_cmp_ai_search_v2)
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_ai\_search](https://www.adobe.com/go/aem_cmp_library_ai_search)

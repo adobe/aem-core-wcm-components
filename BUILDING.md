@@ -55,6 +55,11 @@ For the main content package there's an extra script:
 The `main` branch is the trunk development branch, where regular releases are cut from. Please send all pull requests
 to `main` branch!
 
+The latest state of `main` is deployed to the DEV environment of the Component Library
+([dev.aemcomponents.dev](https://dev.aemcomponents.dev)) by an Adobe-internal Jenkins job, which internally releases the
+Core Components artifacts, bumps the Core Components version in the Component Library Cloud Manager repository and
+deploys a matching AEM as a Cloud Service release.
+
 ### Other branches
 
 We normally use branches such as:

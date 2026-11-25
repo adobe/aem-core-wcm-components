@@ -21,12 +21,19 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeoutException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.Header;
 import org.apache.sling.testing.clients.ClientException;
 import org.apache.sling.testing.clients.SlingHttpResponse;
 import org.apache.sling.testing.clients.osgi.OsgiConsoleClient;
+import org.apache.sling.testing.clients.util.FormEntityBuilder;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -36,14 +43,18 @@ import org.junit.experimental.categories.Category;
 import org.junit.rules.ErrorCollector;
 
 import com.adobe.cq.testing.client.CQClient;
+import com.adobe.cq.testing.client.VersioningClient;
 import com.adobe.cq.testing.junit.rules.CQAuthorClassRule;
 import com.adobe.cq.testing.junit.rules.CQAuthorPublishClassRule;
 import com.adobe.cq.testing.junit.rules.CQRule;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @Category({ IgnoreOnCloud.class })
 public class TableOfContentsFilterIT {
@@ -77,7 +88,7 @@ public class TableOfContentsFilterIT {
         // enable the TableOfContentsFilter
         osgiConfigurationsToDelete.put(authorOsgiConsole, authorOsgiConsole.editConfiguration(
             "com.adobe.cq.wcm.core.components.internal.servlets.TableOfContentsFilter", null,
-            Collections.singletonMap("enabled", Boolean.TRUE)));
+            Collections.singletonMap("enabled", "true")));
         authorOsgiConsole.waitComponentRegistered(
             "com.adobe.cq.wcm.core.components.internal.servlets.TableOfContentsFilter",
             5000,
@@ -89,6 +100,78 @@ public class TableOfContentsFilterIT {
         for (Map.Entry<OsgiConsoleClient, String> entry : osgiConfigurationsToDelete.entries()) {
             entry.getKey().deleteConfiguration(entry.getValue());
         }
+    }
+
+    @Test
+    public void testTableOfContentsRenderedInVersionHistory() throws ClientException {
+        String page = author.createPage("toc-" + UUID.randomUUID(), "Table of contents test", "/content/core-components",
+            "/conf/core-components/settings/wcm/templates/simple-template").getSlingPath();
+        String previewPage = null;
+        String previewRoot = null;
+        try {
+            String container = page + "/jcr:content/root/container";
+            String toc = container + "/toc";
+            author.createNode(toc, "nt:unstructured");
+            author.setPropertyString(toc, "sling:resourceType", "core/wcm/components/tableofcontents/v1/tableofcontents");
+            author.setPropertyString(toc, "startLevel", "h2");
+            author.setPropertyString(toc, "stopLevel", "h2");
+
+            String title = container + "/title";
+            author.createNode(title, "nt:unstructured");
+            author.setPropertyString(title, "sling:resourceType", "core/wcm/components/title/v3/title");
+            author.setPropertyString(title, "jcr:title", "Versioned heading");
+            author.setPropertyString(title, "type", "h2");
+
+            assertTableOfContents(page, "Versioned heading");
+
+            author.createVersion(page, "Table of contents regression test", "toc-test");
+            VersioningClient versioning = cqBaseClassRule.authorRule.getAdminClient(VersioningClient.class);
+            String versionId = "";
+            for (JsonNode version : versioning.getPageVersions(page)) {
+                if ("toc-test".equals(version.path("label").asText())) {
+                    versionId = version.path("id").asText();
+                    break;
+                }
+            }
+            assertFalse("Expected a saved page version labeled toc-test", versionId.isEmpty());
+
+            author.setPropertyString(title, "jcr:title", "Current heading");
+            assertTableOfContents(page, "Current heading");
+
+            // Simulate the Sites version history "Preview version" action.
+            String previewPath = author.doPost("/mnt/overlay/wcm/core/content/sites/versionhistory/_jcr_content.txt",
+                FormEntityBuilder.create().addParameter("versionId", versionId).build(), 200).getContent().trim();
+            assertTrue("Expected a version-history preview page: " + previewPath, previewPath.startsWith("/tmp/versionhistory/"));
+            previewPage = previewPath;
+            Matcher previewRootMatcher = Pattern.compile("(/tmp/versionhistory/[^/]+/[^/]+)/.+").matcher(previewPath);
+            assertTrue("Expected a user- and version-scoped preview page: " + previewPath, previewRootMatcher.matches());
+            previewRoot = previewRootMatcher.group(1);
+            assertTableOfContents(previewPage, "Versioned heading");
+        } finally {
+            try {
+                if (previewRoot != null) {
+                    author.deletePath(previewRoot);
+                } else if (previewPage != null) {
+                    author.deletePath(previewPage);
+                }
+            } finally {
+                author.deletePage(new String[] {page}, true, false);
+            }
+        }
+    }
+
+    private void assertTableOfContents(String page, String expectedHeading) throws ClientException {
+        Document document = Jsoup.parse(author.doGet(page + ".html", 200).getContent());
+        assertEquals("The filter must replace the TOC placeholder", 0, document.select(".cmp-toc__placeholder").size());
+        assertEquals("Expected one generated table of contents", 1, document.select(".cmp-toc__content").size());
+        assertEquals("Expected one TOC heading link", 1, document.select(".cmp-toc__content a").size());
+        Element link = document.select(".cmp-toc__content a").first();
+        assertEquals(expectedHeading, link.text());
+        assertTrue("Expected a non-empty fragment link", link.attr("href").startsWith("#") && link.attr("href").length() > 1);
+        Element heading = document.getElementById(link.attr("href").substring(1));
+        assertNotNull("The TOC link must point to a rendered heading", heading);
+        assertEquals("h2", heading.tagName());
+        assertEquals(expectedHeading, heading.text());
     }
 
     /**
