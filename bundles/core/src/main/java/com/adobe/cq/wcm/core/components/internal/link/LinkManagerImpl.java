@@ -20,6 +20,8 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.commons.link.LinkHandler;
 import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -39,11 +41,9 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.designer.Style;
 
-import static com.adobe.cq.wcm.core.components.commons.link.Link.PN_LINK_URL;
-
 @Model(adaptables = SlingHttpServletRequest.class,
-        adapters = LinkManager.class)
-public class LinkManagerImpl implements LinkManager {
+    adapters = {LinkManager.class, LinkHandler.class})
+public class LinkManagerImpl implements LinkManager, LinkHandler {
 
     /**
      * List of allowed/supported values for link target.
@@ -93,6 +93,11 @@ public class LinkManagerImpl implements LinkManager {
      */
     private Boolean shadowingDisabled;
 
+    /**
+     * Constant for suppressing unchecked warnings in Link annotations.
+     */
+    public static final String SUPPRESS_WARNINGS_UNCHECKED = "unchecked";
+
     @PostConstruct
     private void initModel() {
         shadowingDisabled = PROP_DISABLE_SHADOWING_DEFAULT;
@@ -133,5 +138,29 @@ public class LinkManagerImpl implements LinkManager {
      */
     public static boolean isExternalLink(String url) {
         return StringUtils.isNotBlank(url) && !url.startsWith("/");
+    }
+
+    @Override
+    @SuppressWarnings(SUPPRESS_WARNINGS_UNCHECKED)
+    public @NotNull Link<Page> getLink(@NotNull Page page) {
+        return (Link<Page>) get(page).build();
+    }
+
+    @Override
+    @SuppressWarnings(SUPPRESS_WARNINGS_UNCHECKED)
+    public @NotNull Link<Page> getLink(@NotNull Resource resource) {
+        return (Link<Page>) get(resource).build();
+    }
+
+    @Override
+    @SuppressWarnings(SUPPRESS_WARNINGS_UNCHECKED)
+    public @NotNull Link<Asset> getLink(@NotNull Asset asset) {
+        return (Link<Asset>) get(asset).build();
+    }
+
+    @Override
+    @SuppressWarnings(SUPPRESS_WARNINGS_UNCHECKED)
+    public @NotNull Link<String> getLink(@NotNull String url) {
+        return (Link<String>) get(url).build();
     }
 }
