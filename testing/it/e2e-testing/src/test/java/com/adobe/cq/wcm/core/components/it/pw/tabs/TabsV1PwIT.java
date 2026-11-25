@@ -128,6 +128,20 @@ public class TabsV1PwIT extends ComponentPwBaseTest {
             .hasClass(Pattern.compile(".*cmp-tabs__tabpanel--active.*"));
     }
 
+    @Test
+    public void testFocusIndicator() throws Exception {
+        createTabs();
+        addItems();
+        Locator tab = disabledModeTabs().first();
+        tab.focus();
+
+        assertThat(tab).hasCSS("border-radius", "2px");
+        assertThat(tab).hasCSS("outline-style", "solid");
+        assertThat(tab).hasCSS("outline-width", "2px");
+        assertThat(tab).hasCSS("outline-color", "rgb(20, 115, 230)");
+        assertThat(tab).hasCSS("outline-offset", "2px");
+    }
+
     private void assertTabTitles(String... titles) {
         assertThat(tabItems()).hasCount(titles.length);
         for (int i = 0; i < titles.length; i++) {

@@ -17,8 +17,8 @@
         "stylelint": "stylelint \"**/*.css\" \"**/*.less\"",
         "stylelint:fix": "stylelint \"**/*.css\" \"**/*.less\" --fix",
         "sync-pom-version": "sync-pom-version",
-        "build": "node build/acdl.js && clientlib --verbose && node build/stripSourceMappingURL.js",
-        "guardrails": "node test/guardrails/clientlibDependencies.js && node test/guardrails/contentFragmentCompositeRendering.js",
+        "build": "node build/clean.js && node build/acdl.js && clientlib --verbose && node build/stripSourceMappingURL.js",
+        "guardrails": "node test/guardrails/clientlibDependencies.js && node test/guardrails/clientlibFolderNames.js && node test/guardrails/contentFragmentCompositeRendering.js",
         "unit": "npm run guardrails && npm run build:acdl && karma start karma.conf.js",
         "test": "npm run unit --",
         "build:acdl": "node build/acdl.js"

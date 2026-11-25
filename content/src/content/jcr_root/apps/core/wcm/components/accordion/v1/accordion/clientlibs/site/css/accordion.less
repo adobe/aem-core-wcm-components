@@ -25,6 +25,16 @@
     text-align: left;
 }
 
+.cmp-accordion {
+    .cmp-accordion__button {
+        &:focus {
+            border-radius: .125rem;
+            outline: .125rem solid #1473e6;
+            outline-offset: .125rem;
+        }
+    }
+}
+
 .cmp-accordion__panel {
     &--hidden {
         display: none;
